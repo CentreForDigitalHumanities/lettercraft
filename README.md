@@ -2,7 +2,7 @@
 
 [![Actions Status](https://github.com/UUDigitalHumanitieslab/lettercraft/workflows/Unit%20tests/badge.svg)](https://github.com/UUDigitalHumanitieslab/lettercraft/actions)
 
-Lettercraft & Epistolary Performance in Medieval Europe :)
+Lettercraft & Epistolary Performance in Medieval Europe
 
 
 ## Before you start
