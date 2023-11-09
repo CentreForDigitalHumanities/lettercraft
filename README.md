@@ -2,7 +2,7 @@
 
 [![Actions Status](https://github.com/UUDigitalHumanitieslab/lettercraft/workflows/Unit%20tests/badge.svg)](https://github.com/UUDigitalHumanitieslab/lettercraft/actions)
 
-Lettercraft & Epistolary Performance in Medieval Europe
+Lettercraft & Epistolary Performance in Medieval Europe :)
 
 
 ## Before you start
@@ -27,9 +27,9 @@ You need to install the following software:
 This project integrates three isolated subprojects, each inside its own subdirectory with its own code, package dependencies and tests:
 
  - **backend**: the server side web application based on [Django][3] and [DRF][4]
- 
+
  - **frontend**: the client side web application based on [Angular](https://angular.io)
- 
+
  - **functional-tests**: the functional test suite based on [Selenium][6] and [pytest][7]
 
 [3]: https://www.djangoproject.com
