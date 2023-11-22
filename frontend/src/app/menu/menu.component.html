@@ -1,25 +1,25 @@
-<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <strong class="navbar-item" i18n>
-                Lettercraft & Epistolary Performance in Medieval Europe
-            </strong>
-
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
-                data-target="navbarBasicExample" (click)="toggleBurger()"
-                [ngClass]="{'is-active': burgerActive}">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+<nav class="navbar navbar-expand-lg bg-dark" aria-label="main navigation"
+    data-bs-theme="dark">
+    <div class="container-fluid">
+        <div class="navbar-brand" i18n>
+            Lettercraft & Epistolary Performance in Medieval Europe
         </div>
 
-        <div id="navbarBasicExample" class="navbar-menu" [ngClass]="{'is-active': burgerActive}" [@slideInOut]="burgerShow">
-            <div class="navbar-start">
-                <a [routerLink]="['/home']" routerLinkActive="is-active" class="navbar-item" i18n>
-                    Home
-                </a>
-            </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+            aria-controls="navbarLink"
+            [attr.aria-expanded]="burgerActive" aria-label="Toggle navigation"
+            (click)="toggleBurger()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="navbarLinks" class="navbar-collapse" [ngbCollapse]="!burgerActive">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link" i18n>
+                        Home
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
