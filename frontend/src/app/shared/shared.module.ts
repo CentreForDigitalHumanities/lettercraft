@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -21,6 +22,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
             headerName: 'X-CSRFToken'
         }),
         NgbModule,
+        RouterModule,
+    ], exports: [
+        CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        FontAwesomeModule,
+        HttpClientModule,
+        HttpClientXsrfModule,
+        NgbModule,
+        RouterModule,
     ]
 })
 export class SharedModule { }
