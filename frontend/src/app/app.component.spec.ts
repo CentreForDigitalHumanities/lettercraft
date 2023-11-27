@@ -4,8 +4,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AppComponent } from './app.component';
-import { FooterComponent } from './footer/footer.component';
-import { MenuComponent } from './menu/menu.component';
+import { FooterComponent } from './core/footer/footer.component';
+import { MenuComponent } from './core/menu/menu.component';
+import { SharedTestingModule } from './shared/shared-testing.module';
 
 describe('AppComponent', () => {
     beforeEach(waitForAsync(() => {
@@ -15,7 +16,7 @@ describe('AppComponent', () => {
                 MenuComponent,
                 FooterComponent
             ],
-            imports: [NoopAnimationsModule, RouterTestingModule, HttpClientTestingModule]
+            imports: [SharedTestingModule]
         }).compileComponents();
     }));
 
@@ -35,6 +36,6 @@ describe('AppComponent', () => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('.navbar-brand .navbar-item').textContent).toContain('Lettercraft & Epistolary Performance in Medieval Europe');
+        expect(compiled.querySelector('.navbar-brand').textContent).toContain('Lettercraft & Epistolary Performance in Medieval Europe');
     });
 });

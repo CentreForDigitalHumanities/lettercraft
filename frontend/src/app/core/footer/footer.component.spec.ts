@@ -1,6 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FooterComponent } from './footer.component';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 
 describe('FooterComponent', () => {
     let component: FooterComponent;
@@ -9,7 +9,7 @@ describe('FooterComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [FooterComponent],
-            imports: [HttpClientTestingModule]
+            imports: [SharedTestingModule]
         })
             .compileComponents();
     }));

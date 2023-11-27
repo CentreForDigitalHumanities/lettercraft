@@ -1,8 +1,5 @@
 @import 'variables';
-@import 'bulma/bulma';
-@import 'primeicons/primeicons.css';
-@import 'primeng/resources/themes/fluent-light/theme.css';
-@import 'primeng/resources/primeng.css';
+@import 'bootstrap';
 
 @media print {
 
@@ -13,15 +10,5 @@
 
     .is-print-paddingless {
         padding: 0 !important;
-    }
-
-    .ui-table .ui-table-thead,
-    .ui-table .ui-table-tbody,
-    .ui-table .ui-table-tfoot {
-
-        >tr>th,
-        >tr>td {
-            border: solid 1px $dark !important;
-        }
     }
 }

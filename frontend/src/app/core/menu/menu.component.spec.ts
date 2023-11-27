@@ -1,9 +1,6 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-
 import { MenuComponent } from './menu.component';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 
 describe('MenuComponent', () => {
     let component: MenuComponent;
@@ -12,7 +9,7 @@ describe('MenuComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [MenuComponent],
-            imports: [NoopAnimationsModule, RouterTestingModule, HttpClientTestingModule]
+            imports: [SharedTestingModule]
         }).compileComponents();
     }));
 

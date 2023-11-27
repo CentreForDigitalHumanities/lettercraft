@@ -1,0 +1,31 @@
+<footer class="is-hidden-print text-bg-light p-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg">
+                <p i18n>Lettercraft & Epistolary Performance in Medieval Europe</p>
+
+                <p>
+                    <a href="https://github.com/CentreForDigitalHumanities/lettercraft" i18n>
+                        Source code
+                    </a>
+                    <span i18n>(BSD 3-Clause License)</span>
+                </p>
+
+                <p>
+                    <em><ng-container i18n>Version: </ng-container>
+                    <span [title]="environment.buildTime">{{environment.version}} </span>
+                    <a [href]="environment.sourceUrl" i18n>(source)</a></em>
+                </p>
+            </div>
+            <div class="col-lg-auto">
+                <a class="lab-logo image"
+                    href="https://cdh.uu.nl/centre-for-digital-humanities/research-software-lab/">
+                    <img src="{{environment.assets}}/uu-cdh.svg"
+                        alt="Centre for Digital Humanities, Utrecht University"
+                        i18n-alt
+                        height="100" />
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
