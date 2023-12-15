@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: 'Lettercraft & Epistolary Performance in Medieval Europe'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: 'Research Software Lab, Centre for Digital Humanities, Utrecht University'
+    website: 'https://cdh.uu.nl/rsl/'
+repository-code: 'https://github.com/CentreForDigitalHumanities/lettercraft'
+license: BSD-3
