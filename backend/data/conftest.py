@@ -1,23 +1,50 @@
 import pytest
-
-from . import models
+from data.models import (
+    CaseStudy,
+    Letter,
+    EpistolaryEvent,
+    LetterAction,
+    LetterActionCategory,
+    Person,
+)
 
 
 @pytest.fixture()
 def letter(db):
-    letter = models.Letter.objects.create()
+    letter = Letter.objects.create()
     return letter
 
 
 @pytest.fixture()
-def epistolary_event(db, letter):
-    event = models.EpistolaryEvent.objects.create()
+def person(db):
+    person = Person.objects.create()
+    return person
 
-    models.EpistolaryEventCategory.objects.create(
-        value='write',
-        event=event
+
+@pytest.fixture()
+def letter_action(db, letter, person):
+    letter_action = LetterAction.objects.create()
+    letter_action.letters.add(letter)
+    letter_action.actors.add(person)
+
+    LetterActionCategory.objects.create(
+        letter_action=letter_action,
+        value="write",
     )
 
-    event.letters.add(letter)
+    return letter_action
 
-    return event
+
+@pytest.fixture()
+def case_study(db):
+    case_study = CaseStudy.objects.create(name="Test Case Study")
+    return case_study
+
+
+@pytest.fixture()
+def epistolary_event(db, letter, case_study):
+    epistolary_event = EpistolaryEvent.objects.create(
+        name="Test Epistolary event", note="Test note", case_studies=[case_study]
+    )
+
+    return epistolary_event
