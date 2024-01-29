@@ -1,12 +1,13 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
 class Field(models.Model):
     certainty = models.IntegerField(
         choices=[
-            (0, 'uncertain'),
-            (1, 'somewhat certain'),
-            (2, 'certain'),
+            (0, "uncertain"),
+            (1, "somewhat certain"),
+            (2, "certain"),
         ],
         default=2,
         help_text="How certain are you of this value?",
@@ -24,16 +25,16 @@ class Field(models.Model):
 
 class Letter(models.Model):
     def __str__(self):
-        return f'letter #{self.id}'
+        return f"letter #{self.id}"
 
 
 class LetterMaterial(Field, models.Model):
     surface = models.CharField(
         choices=[
-            ('parchment', 'parchment'),
-            ('papyrus', 'papyrus'),
-            ('other', 'other'),
-            ('unknown', 'unknown'),
+            ("parchment", "parchment"),
+            ("papyrus", "papyrus"),
+            ("other", "other"),
+            ("unknown", "unknown"),
         ],
         null=False,
         blank=False,
@@ -46,9 +47,9 @@ class LetterMaterial(Field, models.Model):
 
     def __str__(self):
         if self.letter:
-            return f'material of {self.letter}'
+            return f"material of {self.letter}"
         else:
-            return f'material #{self.id}'
+            return f"material #{self.id}"
 
 
 class Person(models.Model):
@@ -56,7 +57,7 @@ class Person(models.Model):
         if self.names.count():
             return self.names.first().value
         else:
-            return f'Unknown person #{self.id}'
+            return f"Unknown person #{self.id}"
 
 
 class PersonName(Field, models.Model):
@@ -69,7 +70,7 @@ class PersonName(Field, models.Model):
         to=Person,
         on_delete=models.CASCADE,
         null=False,
-        related_name='names',
+        related_name="names",
         unique=True,
     )
 
@@ -77,50 +78,106 @@ class PersonName(Field, models.Model):
         return self.value
 
 
+class CaseStudy(models.Model):
+    """
+    A case study is an overarching collection of epistolary events, bound together by a common theme, e.g. `The Saga of St. Boniface` or `The  Nun Rebellion of Poitiers`.
+    """
+
+    class Meta:
+        verbose_name = "case study"
+        verbose_name_plural = "case studies"
+
+    name = models.CharField(
+        max_length=256,
+        null=False,
+        blank=False,
+    )
+
+    def __str__(self):
+        return self.name
+
+
 class EpistolaryEvent(models.Model):
+    """
+    Epistolary events are groups of related letter actions that are connected in some way.
+
+    For instance, a political campaign (epistolary event) may consist of the writing, transporting and reading of individual letters (letter actions).
+    """
+
+    name = models.CharField(
+        max_length=256,
+        null=False,
+        blank=False,
+    )
+
+    case_studies = models.ManyToManyField(
+        to=CaseStudy,
+        related_name="epistolary_events",
+        help_text="case studies this event belongs to",
+    )
+
+    note = models.TextField(
+        null=False,
+        blank=True,
+        help_text="Additional notes that describe the event and what connects the letter actions it comprises."
+    )
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class LetterAction(models.Model):
+    """
+    A letter action is an atomic action performed on a letter, e.g. writing, delivering, reading.
+
+    These can be grouped into epistolary events.
+    """
+
     letters = models.ManyToManyField(
         to=Letter,
-        related_name='events',
-        help_text='letters involved in this event',
+        related_name="events",
+        help_text="letters involved in this event",
     )
 
     actors = models.ManyToManyField(
         to=Person,
-        through='Role',
-        related_name='events',
+        through="Role",
+        related_name="events",
+    )
+
+    epistolary_events = models.ManyToManyField(
+        to=EpistolaryEvent,
+        related_name="letter_actions",
+        help_text="epistolary events this letter action belongs to",
     )
 
     def __str__(self):
         categories = self.categories.all()
-        category_names = [
-            category.get_value_display()
-            for category in categories
-        ]
-        category_desc = ', '.join(category_names)
-        letters = ', '.join(letter.__str__() for letter in self.letters.all())
-        return f'{category_desc} of {letters}'
+        category_names = [category.get_value_display() for category in categories]
+        category_desc = ", ".join(category_names)
+        letters = ", ".join(letter.__str__() for letter in self.letters.all())
+        return f"{category_desc} of {letters}"
 
 
-
-class EpistolaryEventCategory(Field, models.Model):
+class LetterActionCategory(Field, models.Model):
     value = models.CharField(
         choices=[
-            ('write', 'writing'),
-            ('transport', 'transporting'),
-            ('deliver', 'delivering'),
-            ('read', 'reading'),
-            ('sign', 'signing'),
-            ('eat', 'eating'),
+            ("write", "writing"),
+            ("transport", "transporting"),
+            ("deliver", "delivering"),
+            ("read", "reading"),
+            ("sign", "signing"),
+            ("eat", "eating"),
         ],
         null=False,
         blank=False,
-        help_text='The type of event'
+        help_text="The type of event",
     )
 
-    event = models.ForeignKey(
-        to=EpistolaryEvent,
+    letter_action = models.ForeignKey(
+        to=LetterAction,
         on_delete=models.CASCADE,
-        related_name='categories',
+        related_name="categories",
         null=False,
         blank=False,
     )
@@ -128,17 +185,16 @@ class EpistolaryEventCategory(Field, models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                'value',
-                'event',
-                name='unique_categories_for_event'
+                "value", "letter_action", name="unique_categories_for_letter_action"
             )
         ]
-        verbose_name_plural = 'epistolary event categories'
+        verbose_name_plural = "letter action categories"
 
     def __str__(self):
-        return f'{self.event}: {self.get_value_display()}'
+        return f"{self.letter_action}: {self.get_value_display()}"
 
-class EpistolaryEventDate(Field, models.Model):
+
+class LetterEventDate(Field, models.Model):
     MIN_YEAR = 400
     MAX_YEAR = 800
 
@@ -148,7 +204,7 @@ class EpistolaryEventDate(Field, models.Model):
             MaxValueValidator(MAX_YEAR),
         ],
         default=MIN_YEAR,
-        help_text='The earliest possible year for the event'
+        help_text="The earliest possible year for the letter action",
     )
 
     year_upper = models.IntegerField(
@@ -157,7 +213,7 @@ class EpistolaryEventDate(Field, models.Model):
             MaxValueValidator(MAX_YEAR),
         ],
         default=MAX_YEAR,
-        help_text='The latest possible year for the event',
+        help_text="The latest possible year for the letter action",
     )
 
     year_exact = models.IntegerField(
@@ -167,13 +223,11 @@ class EpistolaryEventDate(Field, models.Model):
             MinValueValidator(MIN_YEAR),
             MaxValueValidator(MAX_YEAR),
         ],
-        help_text='The exact year of the event (if known)'
+        help_text="The exact year of the letter action (if known)",
     )
 
-    event = models.OneToOneField(
-        to=EpistolaryEvent,
-        on_delete=models.CASCADE,
-        related_name='date'
+    letter_action = models.OneToOneField(
+        to=LetterAction, on_delete=models.CASCADE, related_name="date"
     )
 
     def clean(self):
@@ -181,45 +235,52 @@ class EpistolaryEventDate(Field, models.Model):
             self.year_lower = self.year_exact
             self.year_upper = self.year_exact
 
+    def __str__(self):
+        date = self.year_exact or f"{self.year_lower}–{self.year_upper}"
+        return f"{self.letter_action} in {date}"
+
 
 class Role(Field, models.Model):
+    """
+    Describes the involvement of a person in a letter action.
+    """
     person = models.ForeignKey(
         to=Person,
         on_delete=models.CASCADE,
         null=False,
     )
-    event = models.ForeignKey(
-        to=EpistolaryEvent,
+    letter_action = models.ForeignKey(
+        to=LetterAction,
         on_delete=models.CASCADE,
         null=False,
     )
     present = models.BooleanField(
         null=False,
         default=True,
-        help_text='Whether this person was physically present',
+        help_text="Whether this person was physically present",
     )
     role = models.CharField(
         choices=[
-            ('author', 'Author'),
-            ('scribe', 'Scribe'),
-            ('reader', 'Reader'),
-            ('witness', 'Witness'),
-            ('messenger', 'Messenger'),
-            ('recipient', 'Recipient'),
-            ('intended_recipient', 'Intended recipient'),
-            ('audience', 'Audience'),
-            ('intended_audience', 'Intended audience'),
-            ('other', 'Other'),
+            ("author", "Author"),
+            ("scribe", "Scribe"),
+            ("reader", "Reader"),
+            ("witness", "Witness"),
+            ("messenger", "Messenger"),
+            ("recipient", "Recipient"),
+            ("intended_recipient", "Intended recipient"),
+            ("audience", "Audience"),
+            ("intended_audience", "Intended audience"),
+            ("other", "Other"),
         ],
         null=False,
         blank=False,
-        help_text='Role of this person in the event'
+        help_text="Role of this person in the event",
     )
     description = models.TextField(
         null=False,
         blank=True,
-        help_text='Longer description of this person\'s involvement',
+        help_text="Longer description of this person's involvement",
     )
 
     def __str__(self):
-        return f'role of {self.person} in {self.event}'
+        return f"role of {self.person} in {self.letter_action}"
