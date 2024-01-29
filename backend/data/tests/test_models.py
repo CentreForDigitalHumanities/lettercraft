@@ -1,6 +1,6 @@
 
 
-def test_event_name(letter, epistolary_event):
-    letter_str = str(letter)
+def test_letter_action_name(letter, letter_action):
+    action_str = str(letter_action)
 
-    assert str(epistolary_event) == f'writing of {letter_str}'
+    assert str(action_str) == f'writing of {str(letter)}'
