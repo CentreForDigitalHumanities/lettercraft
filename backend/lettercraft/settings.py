@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'revproxy',
-    'data',
+    'core',
+    'case_study',
+    'event',
+    'example',
+    'letter',
+    'person',
 ]
 
 MIDDLEWARE = [
