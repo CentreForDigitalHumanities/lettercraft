@@ -14,7 +14,7 @@ class LetterMaterialAdmin(admin.StackedInline):
 
 class LetterCategoryAdmin(admin.StackedInline):
     model = models.LetterCategory
-    fields = ["letter", "category"]
+    fields = ["letter", "category", "certainty", "note"]
 
 
 @admin.register(models.Letter)
