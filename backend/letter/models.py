@@ -18,6 +18,10 @@ class Category(models.Model):
     label = models.CharField(max_length=200, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
 
+    class Meta:
+        verbose_name = "letter category"
+        verbose_name_plural = "letter categories"
+
     def __str__(self):
         return self.label
 
@@ -29,6 +33,9 @@ class LetterCategory(Field, models.Model):
         on_delete=models.CASCADE,
         null=False,
     )
+
+    def __str__(self):
+        return f"category of {self.letter}"
 
 
 class LetterMaterial(Field, models.Model):
