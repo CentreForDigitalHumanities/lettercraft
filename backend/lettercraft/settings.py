@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'core',
     'case_study',
     'event',
-    'example',
     'letter',
     'person',
 ]
