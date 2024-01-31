@@ -13,6 +13,21 @@ class Letter(models.Model):
     def __str__(self):
         return self.name
 
+    def date_written(self):
+        """Date range in which the letter was written"""
+        return self._aggregate_dates(self.events.filter(categories__value="write"))
+
+    def date_active(self):
+        """Date range in which anything happened with the letter"""
+        return self._aggregate_dates(self.events.all())
+
+    def _aggregate_dates(actions):
+        """Calculate a date range based on the dates of related actions"""
+        dates = [action.date for action in actions]
+        lower = min(date.year_lower for date in dates)
+        upper = max(data.year_upper for data in dates)
+        return lower, upper
+
 
 class Category(models.Model):
     label = models.CharField(max_length=200, blank=False, null=False, unique=True)
