@@ -1,5 +1,3 @@
-
-
 def test_letter_action_name(letter, letter_action):
     action_str = str(letter_action)
 
