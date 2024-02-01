@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import Field
+from person.models import Person
 
 
 class Letter(models.Model):
@@ -75,3 +76,41 @@ class LetterMaterial(Field, models.Model):
             return f"material of {self.letter}"
         else:
             return f"material #{self.id}"
+
+
+class LetterSenders(Field, models.Model):
+    senders = models.ManyToManyField(
+        to=Person,
+        blank=True,
+        help_text="persons that the letter names as the sender",
+    )
+    letter = models.OneToOneField(
+        to=Letter,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+
+    def __str__(self):
+        if self.letter:
+            return f"senders of {self.letter}"
+        else:
+            return f"senders #{self.id}"
+
+
+class LetterAddressees(Field, models.Model):
+    addressees = models.ManyToManyField(
+        to=Person,
+        blank=True,
+        help_text="persons that the letter names as the addressee",
+    )
+    letter = models.OneToOneField(
+        to=Letter,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+
+    def __str__(self):
+        if self.letter:
+            return f"addressees of {self.letter}"
+        else:
+            return f"addressees #{self.id}"

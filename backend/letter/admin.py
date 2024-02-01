@@ -17,9 +17,23 @@ class LetterCategoryAdmin(admin.StackedInline):
     fields = ["letter", "category", "certainty", "note"]
 
 
+class LetterSenderAdmin(admin.StackedInline):
+    model = models.LetterSenders
+    fields = ["letter", "senders", "certainty", "note"]
+    filter_horizontal = ["senders"]
+
+
+class LetterAddresseesAdmin(admin.StackedInline):
+    model = models.LetterAddressees
+    fields = ["letter", "addressees", "certainty", "note"]
+    filter_horizontal = ["addressees"]
+
+
 @admin.register(models.Letter)
 class LetterAdmin(admin.ModelAdmin):
     inlines = [
         LetterCategoryAdmin,
         LetterMaterialAdmin,
+        LetterSenderAdmin,
+        LetterAddresseesAdmin,
     ]
