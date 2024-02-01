@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 from core.models import Field
 from person.models import Person
 
@@ -14,15 +15,19 @@ class Letter(models.Model):
     def __str__(self):
         return self.name
 
-    def date_written(self):
-        """Date range in which the letter was written"""
-        return self._aggregate_dates(self.events.filter(categories__value="write"))
-
+    @admin.display(
+        description="Date range of actions involving this letter",
+    )
     def date_active(self):
-        """Date range in which anything happened with the letter"""
         return self._aggregate_dates(self.events.all())
 
-    def _aggregate_dates(actions):
+    @admin.display(
+        description="Date range in which this letter was written",
+    )
+    def date_written(self):
+        return self._aggregate_dates(self.events.filter(categories__value="write"))
+
+    def _aggregate_dates(self, actions):
         """Calculate a date range based on the dates of related actions"""
         dates = [action.date for action in actions]
         lower = min(date.year_lower for date in dates)

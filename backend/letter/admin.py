@@ -31,6 +31,7 @@ class LetterAddresseesAdmin(admin.StackedInline):
 
 @admin.register(models.Letter)
 class LetterAdmin(admin.ModelAdmin):
+    readonly_fields = ["date_active", "date_written"]
     inlines = [
         LetterCategoryAdmin,
         LetterMaterialAdmin,
