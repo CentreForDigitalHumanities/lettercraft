@@ -2,7 +2,7 @@ import pytest
 from case_study.models import CaseStudy
 from letter.models import Letter
 from event.models import EpistolaryEvent, LetterAction, LetterActionCategory
-from person.models import Person
+from person.models import Person, PersonName
 
 
 @pytest.fixture()
@@ -44,3 +44,25 @@ def epistolary_event(db, letter, case_study):
     )
 
     return epistolary_event
+
+
+@pytest.fixture()
+def person_unnamed(db):
+    person = Person.objects.create()
+    return person
+
+
+@pytest.fixture()
+def person_single_name(db):
+    person = Person.objects.create()
+    PersonName.objects.create(person=person, value="Bert")
+    return person
+
+
+@pytest.fixture()
+def person_multiple_names(db):
+    person = Person.objects.create()
+    PersonName.objects.create(person=person, value="Bert")
+    PersonName.objects.create(person=person, value="Ernie")
+    PersonName.objects.create(person=person, value="Oscar")
+    return person
