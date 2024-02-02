@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from core.models import Field
+from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
 from person.models import Person
 from letter.models import Letter
@@ -105,46 +105,11 @@ class LetterActionCategory(Field, models.Model):
         return f"{self.letter_action}: {self.get_value_display()}"
 
 
-class LetterEventDate(Field, models.Model):
-    MIN_YEAR = 400
-    MAX_YEAR = 800
-
-    year_lower = models.IntegerField(
-        validators=[
-            MinValueValidator(MIN_YEAR),
-            MaxValueValidator(MAX_YEAR),
-        ],
-        default=MIN_YEAR,
-        help_text="The earliest possible year for the letter action",
-    )
-
-    year_upper = models.IntegerField(
-        validators=[
-            MinValueValidator(MIN_YEAR),
-            MaxValueValidator(MAX_YEAR),
-        ],
-        default=MAX_YEAR,
-        help_text="The latest possible year for the letter action",
-    )
-
-    year_exact = models.IntegerField(
-        null=True,
-        blank=True,
-        validators=[
-            MinValueValidator(MIN_YEAR),
-            MaxValueValidator(MAX_YEAR),
-        ],
-        help_text="The exact year of the letter action (if known)",
-    )
+class LetterEventDate(Field, LettercraftDate, models.Model):
 
     letter_action = models.OneToOneField(
         to=LetterAction, on_delete=models.CASCADE, related_name="date"
     )
-
-    def clean(self):
-        if self.year_exact:
-            self.year_lower = self.year_exact
-            self.year_upper = self.year_exact
 
     def __str__(self):
         date = self.year_exact or f"{self.year_lower}–{self.year_upper}"
