@@ -1,8 +1,34 @@
 from django.db import models
-from core.models import Field
+from core.models import Field, LettercraftDate
 
+
+class Office(models.Model):
+    """
+    A job or position that a person can take.
+    """
+
+    name = models.CharField(
+        max_length=256,
+        help_text="The name of the office (e.g. 'bishop of Toulouse', 'king of France')",
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="A description of the office (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
+    )
+
+    def __str__(self):
+        return self.name
 
 class Person(models.Model):
+    class Gender(models.TextChoices):
+        FEMALE = "FEMALE", "Female"
+        MALE = "MALE", "Male"
+        UNKNOWN = "UNKNOWN", "Unknown"
+        OTHER = "OTHER", "Other"
+
+    gender = models.CharField(
+        max_length=8, choices=Gender.choices, default=Gender.UNKNOWN
+    )
 
     def __str__(self):
         if self.names.count() == 1:
@@ -21,8 +47,7 @@ class PersonName(Field, models.Model):
         blank=True,
     )
     person = models.ForeignKey(
-        to=Person, 
-        on_delete=models.CASCADE, related_name="names"
+        to=Person, on_delete=models.CASCADE, related_name="names"
     )
 
     class Meta:
@@ -32,3 +57,18 @@ class PersonName(Field, models.Model):
 
     def __str__(self):
         return self.value
+
+class Occupation(Field, LettercraftDate, models.Model):
+    """
+    A relationship between a person and an occupation.
+    """
+
+    person = models.ForeignKey(
+        to=Person, on_delete=models.CASCADE, related_name="occupations"
+    )
+    office = models.ForeignKey(
+        to=Office, on_delete=models.CASCADE, related_name="occupations"
+    )
+
+    def __str__(self):
+        return f"{self.person} as {self.office}"
