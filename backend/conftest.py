@@ -2,7 +2,7 @@ import pytest
 from case_study.models import CaseStudy
 from letter.models import Letter
 from event.models import EpistolaryEvent, LetterAction, LetterActionCategory
-from person.models import Person, PersonName
+from person.models import Person, PersonDateOfBirth, PersonName
 
 
 @pytest.fixture()
@@ -65,4 +65,16 @@ def person_multiple_names(db):
     PersonName.objects.create(person=person, value="Bert")
     PersonName.objects.create(person=person, value="Ernie")
     PersonName.objects.create(person=person, value="Oscar")
+    return person
+
+@pytest.fixture()
+def person_with_exact_dob(db):
+    person = Person.objects.create()
+    PersonDateOfBirth.objects.create(person=person, year_exact=512)
+    return person
+
+@pytest.fixture()
+def person_with_approx_dob(db):
+    person = Person.objects.create()
+    PersonDateOfBirth.objects.create(person=person, year_lower=500, year_upper=525)
     return person

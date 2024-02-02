@@ -4,7 +4,7 @@ from core.models import Field, LettercraftDate
 
 class Office(models.Model):
     """
-    A job or position that a person can take.
+    A job or position that a person can hold.
     """
 
     name = models.CharField(
@@ -18,6 +18,7 @@ class Office(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Person(models.Model):
     class Gender(models.TextChoices):
@@ -57,6 +58,35 @@ class PersonName(Field, models.Model):
 
     def __str__(self):
         return self.value
+
+
+class PersonDateOfBirth(LettercraftDate, Field, models.Model):
+    """
+    A relationship between a person and their date of birth.
+    """
+
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        if self.year_exact:
+            return f"{self.person} born in {self.year_exact}"
+        else:
+            return f"{self.person} born c. {self.year_lower}–{self.year_upper}"
+
+
+class PersonDateOfDeath(LettercraftDate, Field, models.Model):
+    """ "
+    A relationship between a person and their date of death.
+    """
+
+    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+
+    def __str__(self):
+        if self.year_exact:
+            return f"{self.person} died in {self.year_exact}"
+        else:
+            return f"{self.person} died c. {self.year_lower}–{self.year_upper}"
+
 
 class Occupation(Field, LettercraftDate, models.Model):
     """
