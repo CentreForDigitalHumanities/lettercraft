@@ -65,7 +65,9 @@ class PersonDateOfBirth(LettercraftDate, Field, models.Model):
     A relationship between a person and their date of birth.
     """
 
-    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    person = models.OneToOneField(
+        Person, related_name="date_of_birth", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         if self.year_exact:
@@ -79,7 +81,9 @@ class PersonDateOfDeath(LettercraftDate, Field, models.Model):
     A relationship between a person and their date of death.
     """
 
-    person = models.OneToOneField(Person, on_delete=models.CASCADE)
+    person = models.OneToOneField(
+        Person, related_name="date_of_death", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         if self.year_exact:
