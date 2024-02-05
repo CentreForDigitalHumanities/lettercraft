@@ -44,37 +44,3 @@ def epistolary_event(db, letter, case_study):
     )
 
     return epistolary_event
-
-
-@pytest.fixture()
-def person_unnamed(db):
-    person = Person.objects.create()
-    return person
-
-
-@pytest.fixture()
-def person_single_name(db):
-    person = Person.objects.create()
-    PersonName.objects.create(person=person, value="Bert")
-    return person
-
-
-@pytest.fixture()
-def person_multiple_names(db):
-    person = Person.objects.create()
-    PersonName.objects.create(person=person, value="Bert")
-    PersonName.objects.create(person=person, value="Ernie")
-    PersonName.objects.create(person=person, value="Oscar")
-    return person
-
-@pytest.fixture()
-def person_with_exact_dob(db):
-    person = Person.objects.create()
-    PersonDateOfBirth.objects.create(person=person, year_exact=512)
-    return person
-
-@pytest.fixture()
-def person_with_approx_dob(db):
-    person = Person.objects.create()
-    PersonDateOfBirth.objects.create(person=person, year_lower=500, year_upper=525)
-    return person
