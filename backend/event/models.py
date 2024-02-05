@@ -159,3 +159,53 @@ class Role(Field, models.Model):
 
     def __str__(self):
         return f"role of {self.person} in {self.letter_action}"
+
+
+class WorldEvent(LettercraftDate, models.Model):
+    """
+    World events are events that are not directly related to a specific letter
+    or letter action, but are relevant to the context of the letters.
+    """
+
+    name = models.CharField(
+        max_length=256,
+        null=False,
+        blank=False,
+        help_text="The name of the event, e.g. 'The Great Fire of London' or 'The Battle of Hastings'.",
+    )
+
+    note = models.TextField(
+        null=False,
+        blank=True,
+        help_text="Additional notes that describe the event and its relevance to the letters.",
+    )
+
+    epistolary_events = models.ManyToManyField(
+        to=EpistolaryEvent,
+        through="EpistolaryEventTrigger",
+        related_name="triggers",
+    )
+
+    def __str__(self):
+        return f"{self.name} ({self.display_date})"
+
+
+class EpistolaryEventTrigger(models.Model):
+    """
+    A relationship between an epistolary event and a world event that triggered it.
+    """
+
+    epistolary_event = models.ForeignKey(
+        to=EpistolaryEvent,
+        on_delete=models.CASCADE,
+        help_text="The epistolary event that was triggered by a world event",
+    )
+
+    world_event = models.ForeignKey(
+        to=WorldEvent,
+        on_delete=models.CASCADE,
+        help_text="The world event that triggered an epistolary event",
+    )
+
+    def __str__(self):
+        return f"{self.world_event} triggered {self.epistolary_event}"

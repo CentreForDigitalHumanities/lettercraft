@@ -72,10 +72,23 @@ class EpistolaryEventLetterActionInline(admin.StackedInline):
     verbose_name = "relationship between a epistolary event and a letter action"
 
 
+class WorldEventInline(admin.StackedInline):
+    model = models.EpistolaryEvent.triggers.through
+    extra = 0
+    verbose_name = "Triggering world events"
+    verbose_name_plural = "Triggering world events"
+
+
 @admin.register(models.EpistolaryEvent)
 class EpistolaryEventAdmin(admin.ModelAdmin):
     fields = ["name", "note"]
     inlines = [
         EpistolaryEventCaseStudyInline,
-        EpistolaryEventLetterActionInline
+        EpistolaryEventLetterActionInline,
+        WorldEventInline,
     ]
+
+
+@admin.register(models.WorldEvent)
+class WorldEventAdmin(admin.ModelAdmin):
+    fields = ["name", "note", "year_exact", "year_lower", "year_upper"]
