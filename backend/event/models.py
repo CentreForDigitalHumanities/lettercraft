@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
@@ -29,7 +28,7 @@ class EpistolaryEvent(models.Model):
     note = models.TextField(
         null=False,
         blank=True,
-        help_text="Additional notes that describe the event and what connects the letter actions it comprises."
+        help_text="Additional notes that describe the event and what connects the letter actions it comprises.",
     )
 
     def __str__(self):
@@ -112,14 +111,14 @@ class LetterEventDate(Field, LettercraftDate, models.Model):
     )
 
     def __str__(self):
-        date = self.year_exact or f"{self.year_lower}–{self.year_upper}"
-        return f"{self.letter_action} in {date}"
+        return f"{self.letter_action} ({self.display_date})"
 
 
 class Role(Field, models.Model):
     """
     Describes the involvement of a person in a letter action.
     """
+
     person = models.ForeignKey(
         to=Person,
         on_delete=models.CASCADE,
