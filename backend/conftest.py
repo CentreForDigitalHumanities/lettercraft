@@ -2,7 +2,7 @@ import pytest
 from case_study.models import CaseStudy
 from letter.models import Letter
 from event.models import EpistolaryEvent, LetterAction, LetterActionCategory
-from person.models import Person
+from person.models import Person, PersonDateOfBirth, PersonName
 
 
 @pytest.fixture()
