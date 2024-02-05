@@ -1,100 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
-class Field(models.Model):
-    certainty = models.IntegerField(
-        choices=[
-            (0, "uncertain"),
-            (1, "somewhat certain"),
-            (2, "certain"),
-        ],
-        default=2,
-        help_text="How certain are you of this value?",
-    )
-
-    note = models.TextField(
-        null=False,
-        blank=True,
-        help_text="Additional notes",
-    )
-
-    class Meta:
-        abstract = True
-
-
-class Letter(models.Model):
-    def __str__(self):
-        return f"letter #{self.id}"
-
-
-class LetterMaterial(Field, models.Model):
-    surface = models.CharField(
-        choices=[
-            ("parchment", "parchment"),
-            ("papyrus", "papyrus"),
-            ("other", "other"),
-            ("unknown", "unknown"),
-        ],
-        null=False,
-        blank=False,
-    )
-    letter = models.OneToOneField(
-        to=Letter,
-        on_delete=models.CASCADE,
-        null=False,
-    )
-
-    def __str__(self):
-        if self.letter:
-            return f"material of {self.letter}"
-        else:
-            return f"material #{self.id}"
-
-
-class Person(models.Model):
-    def __str__(self):
-        if self.names.count():
-            return self.names.first().value
-        else:
-            return f"Unknown person #{self.id}"
-
-
-class PersonName(Field, models.Model):
-    value = models.CharField(
-        max_length=256,
-        null=False,
-        blank=True,
-    )
-    person = models.ForeignKey(
-        to=Person,
-        on_delete=models.CASCADE,
-        null=False,
-        related_name="names",
-        unique=True,
-    )
-
-    def __str__(self):
-        return self.value
-
-
-class CaseStudy(models.Model):
-    """
-    A case study is an overarching collection of epistolary events, bound together by a common theme, e.g. `The Saga of St. Boniface` or `The  Nun Rebellion of Poitiers`.
-    """
-
-    class Meta:
-        verbose_name = "case study"
-        verbose_name_plural = "case studies"
-
-    name = models.CharField(
-        max_length=256,
-        null=False,
-        blank=False,
-    )
-
-    def __str__(self):
-        return self.name
+from core.models import Field
+from case_study.models import CaseStudy
+from person.models import Person
+from letter.models import Letter
 
 
 class EpistolaryEvent(models.Model):
@@ -153,7 +63,8 @@ class LetterAction(models.Model):
 
     def __str__(self):
         categories = self.categories.all()
-        category_names = [category.get_value_display() for category in categories]
+        category_names = [category.get_value_display()
+                          for category in categories]
         category_desc = ", ".join(category_names)
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
         return f"{category_desc} of {letters}"

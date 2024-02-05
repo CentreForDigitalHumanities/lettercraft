@@ -1,12 +1,8 @@
 import pytest
-from data.models import (
-    CaseStudy,
-    Letter,
-    EpistolaryEvent,
-    LetterAction,
-    LetterActionCategory,
-    Person,
-)
+from case_study.models import CaseStudy
+from letter.models import Letter
+from event.models import EpistolaryEvent, LetterAction, LetterActionCategory
+from person.models import Person
 
 
 @pytest.fixture()

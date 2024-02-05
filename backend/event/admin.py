@@ -2,16 +2,6 @@ from django.contrib import admin
 from . import models
 
 
-class PersonNameAdmin(admin.StackedInline):
-    model = models.PersonName
-    fields = ["value", "certainty", "note"]
-
-
-@admin.register(models.Person)
-class PersonAdmin(admin.ModelAdmin):
-    inlines = [PersonNameAdmin]
-
-
 class LetterActionCategoryAdmin(admin.StackedInline):
     model = models.LetterActionCategory
     fields = ["value", "certainty", "note"]
@@ -68,13 +58,6 @@ class EpistolaryEventInline(admin.StackedInline):
     verbose_name_plural = "epistolary events"
 
 
-@admin.register(models.CaseStudy)
-class CaseStudyAdmin(admin.ModelAdmin):
-    fields = ["name"]
-    inlines = [EpistolaryEventInline]
-    extra = 0
-
-
 class EpistolaryEventCaseStudyInline(admin.StackedInline):
     model = models.EpistolaryEvent.case_studies.through
     extra = 0
@@ -88,28 +71,11 @@ class EpistolaryEventLetterActionInline(admin.StackedInline):
     verbose_name_plural = "letter actions"
     verbose_name = "relationship between a epistolary event and a letter action"
 
+
 @admin.register(models.EpistolaryEvent)
 class EpistolaryEventAdmin(admin.ModelAdmin):
     fields = ["name", "note"]
     inlines = [
         EpistolaryEventCaseStudyInline,
         EpistolaryEventLetterActionInline
-    ]
-
-
-class LetterMaterialAdmin(admin.StackedInline):
-    model = models.LetterMaterial
-    fields = ["surface", "certainty", "note"]
-
-# For use in LetterForm
-class LetterActionInline(admin.StackedInline):
-    model = models.LetterAction
-    inlines = [RoleAdmin, EpistolaryEventAdmin]
-    extra = 0
-
-
-@admin.register(models.Letter)
-class LetterAdmin(admin.ModelAdmin):
-    inlines = [
-        LetterMaterialAdmin,
     ]
