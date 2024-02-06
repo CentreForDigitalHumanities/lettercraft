@@ -38,7 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'revproxy',
-    'data',
+    'core',
+    'case_study',
+    'event',
+    'letter',
+    'person',
 ]
 
 MIDDLEWARE = [
@@ -115,8 +119,6 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Amsterdam'
 
 USE_I18N = True
-
-USE_L10N = True
 
 USE_TZ = True
 
