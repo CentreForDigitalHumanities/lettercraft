@@ -71,5 +71,8 @@ class Reference(models.Model):
         help_text="how is this entity presented in the text?",
     )
 
+    def __str__(self):
+        return f"reference to {self.content_object} ({self.content_type.model}) in {self.source}"
+
     class Meta:
         indexes = [models.Index(fields=["content_type", "object_id"])]

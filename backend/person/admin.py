@@ -1,4 +1,5 @@
 from django.contrib import admin
+from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -35,6 +36,7 @@ class PersonAdmin(admin.ModelAdmin):
         OccupationAdmin,
         PersonDateOfBirthAdmin,
         PersonDateOfDeathAdmin,
+        ReferenceInlineAdmin,
     ]
 
 
