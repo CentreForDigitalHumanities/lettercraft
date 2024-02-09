@@ -1,8 +1,8 @@
 from event.models import LetterEventDate
 
 
-def test_letter_action_name(letter, letter_action):
-    action_str = str(letter_action)
+def test_letter_action_name(letter, letter_action_writing):
+    action_str = str(letter_action_writing)
 
     assert str(action_str) == f"writing of {str(letter)}"
 
@@ -41,6 +41,5 @@ def test_world_event_trigger(world_event, epistolary_event):
     world_event.save()
 
     trigger = world_event.epistolary_events.through.objects.first()
-    
+
     assert str(trigger) == "Test World Event (612) triggered Test Epistolary event"
-    
