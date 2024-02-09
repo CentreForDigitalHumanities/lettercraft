@@ -3,7 +3,7 @@ from django.db import models
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
 from person.models import Person
-from letter.models import Letter
+from letter.models import Gift, Letter
 
 
 class EpistolaryEvent(models.Model):
@@ -58,6 +58,12 @@ class LetterAction(models.Model):
         to=EpistolaryEvent,
         related_name="letter_actions",
         help_text="epistolary events this letter action belongs to",
+    )
+
+    gifts = models.ManyToManyField(
+        to=Gift,
+        related_name="letter_actions",
+        help_text="Gifts associated to this letter action",
     )
 
     def __str__(self):

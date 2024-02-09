@@ -4,6 +4,50 @@ from core.models import Field
 from person.models import Person
 
 
+class Gift(models.Model):
+    """
+    A gift presented alongside a letter.
+    """
+
+    name = models.CharField(
+        max_length=256, help_text="A short name for the gift (for identification)"
+    )
+
+    description = models.TextField(
+        blank=True,
+        help_text="A longer description of the gift",
+    )
+
+    material = models.CharField(
+        choices=[
+            ("precious metal", "precious metal"),
+            ("textile", "textile"),
+            ("wood", "wood"),
+            ("glass", "glass"),
+            ("ceramic", "ceramic"),
+            ("animal product", "animal product"),
+            ("livestock", "livestock"),
+            ("paper", "paper"),
+            ("other", "other"),
+            ("unknown", "unknown"),
+        ],
+        help_text="The material the gift consists of",
+    )
+
+    gifted_by = models.ForeignKey(
+        to=Person,
+        on_delete=models.CASCADE,
+        related_name="gifts_given",
+        help_text="The person who gave the gift. Leave empty if unknown.",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        gifter = self.gifted_by.names.first() or "unknown"
+        return f"{self.name} ({self.material}), gifted by {gifter}"
+
+
 class Letter(models.Model):
     name = models.CharField(
         max_length=200,

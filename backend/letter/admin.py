@@ -38,3 +38,16 @@ class LetterAdmin(admin.ModelAdmin):
         LetterSenderAdmin,
         LetterAddresseesAdmin,
     ]
+
+
+class GiftLetterActionInline(admin.StackedInline):
+    model = models.Gift.letter_actions.through
+    extra = 0
+    verbose_name_plural = "letter actions"
+    verbose_name = "relationship between a gift and an associated letter action"
+
+
+@admin.register(models.Gift)
+class GiftAdmin(admin.ModelAdmin):
+    fields = ["name", "description", "material", "gifted_by"]
+    filter_horizontal = ["letter_actions"]

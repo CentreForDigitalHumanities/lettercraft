@@ -38,12 +38,18 @@ class LetterActionLettersAdmin(admin.StackedInline):
     verbose_name = "letter"
     verbose_name_plural = "letters"
 
+class LetterActionGiftsAdmin(admin.StackedInline):
+    model = models.LetterAction.gifts.through
+    extra = 0
+    verbose_name = "gift"
+    verbose_name_plural = "gifts"
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
     inlines = [
         LetterActionLettersAdmin,
         LetterActionCategoryAdmin,
+        LetterActionGiftsAdmin,
         EventDateAdmin,
         RoleAdmin,
     ]
