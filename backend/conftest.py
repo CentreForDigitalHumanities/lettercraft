@@ -8,6 +8,7 @@ from event.models import (
     LetterEventDate,
 )
 from person.models import Person
+from person.models import Person, PersonDateOfBirth, PersonName
 
 
 @pytest.fixture()
