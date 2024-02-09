@@ -145,6 +145,7 @@ class Role(Field, models.Model):
             ("intended_recipient", "Intended recipient"),
             ("audience", "Audience"),
             ("intended_audience", "Intended audience"),
+            ("instigator", "Instigator"),
             ("other", "Other"),
         ],
         null=False,
