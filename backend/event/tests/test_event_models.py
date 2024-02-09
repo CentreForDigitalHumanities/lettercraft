@@ -2,31 +2,30 @@ from event.models import LetterEventDate
 
 
 def test_letter_action_name(letter, letter_action_writing):
+    letter_action_writing.date.year_exact = 500
+    letter_action_writing.save()
     action_str = str(letter_action_writing)
 
-    assert str(action_str) == f"writing of {str(letter)}"
+    assert str(action_str) == f"writing of {str(letter)} (500)"
 
 
-def test_letter_event_date_with_exact_date(letter_action):
-    letter_event_date = LetterEventDate.objects.create(
-        letter_action=letter_action,
-        year_exact=500,
-    )
+def test_letter_event_date_with_exact_date(letter_action_reading):
+    letter_action_reading.date.year_exact = 500
+    letter_action_reading.save()
     assert (
-        str(letter_event_date)
-        == f"writing of {str(letter_action.letters.first())} (500)"
+        str(letter_action_reading)
+        == f"reading of {str(letter_action_reading.letters.first())} (500)"
     )
 
 
-def test_letter_event_date_with_date_range(letter_action):
-    letter_event_date = LetterEventDate.objects.create(
-        letter_action=letter_action,
-        year_lower=500,
-        year_upper=600,
-    )
+def test_letter_event_date_with_date_range(letter_action_reading):
+    letter_action_reading.date.year_lower = 500
+    letter_action_reading.date.year_upper = 600
+    letter_action_reading.save()
+
     assert (
-        str(letter_event_date)
-        == f"writing of {str(letter_action.letters.first())} (c. 500–600)"
+        str(letter_action_reading)
+        == f"reading of {str(letter_action_reading.letters.first())} (c. 500–600)"
     )
 
 

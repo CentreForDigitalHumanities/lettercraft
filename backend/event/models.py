@@ -72,7 +72,7 @@ class LetterAction(models.Model):
                           for category in categories]
         category_desc = ", ".join(category_names)
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        return f"{category_desc} of {letters}"
+        return f"{category_desc} of {letters} ({self.date.display_date})"
 
 
 class LetterActionCategory(Field, models.Model):
