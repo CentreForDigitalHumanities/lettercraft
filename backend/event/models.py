@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib import admin
 
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
@@ -80,17 +81,25 @@ class LetterAction(models.Model):
         to=Gift,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
+        blank=True,
     )
 
-    def __str__(self):
+    @property
+    @admin.display(description="Date")
+    def display_date(self):
+        return self.date.display_date if hasattr(self, "date") else "unknown date"
+
+    @property
+    @admin.display(description="Description")
+    def description(self):
         categories = self.categories.all()
         category_names = [category.get_value_display() for category in categories]
         category_desc = ", ".join(category_names)
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        display_date = (
-            self.date.display_date if hasattr(self, "date") else "unknown date"
-        )
-        return f"{category_desc} of {letters} ({display_date})"
+        return f"{category_desc} of {letters}"
+
+    def __str__(self):
+        return f"{self.description} ({self.display_date})"
 
 
 class LetterActionCategory(Field, models.Model):

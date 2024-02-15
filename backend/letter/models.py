@@ -44,8 +44,10 @@ class Gift(models.Model):
     )
 
     def __str__(self):
-        gifter = self.gifted_by.names.first() or "unknown"
-        return f"{self.name} ({self.material}), gifted by {gifter}"
+        gifter_name = (
+            self.gifted_by.names.first() if self.gifted_by is not None else "unknown"
+        )
+        return f"{self.name} ({self.material}), gifted by {gifter_name}"
 
 
 class Letter(models.Model):

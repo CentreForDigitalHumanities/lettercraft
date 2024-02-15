@@ -46,6 +46,7 @@ class LetterActionGiftsAdmin(admin.StackedInline):
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
+    list_display=["description", "display_date"]
     inlines = [
         LetterActionLettersAdmin,
         LetterActionCategoryAdmin,
