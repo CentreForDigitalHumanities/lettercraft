@@ -31,6 +31,22 @@ class EpistolaryEvent(models.Model):
         help_text="Additional notes that describe the event and what connects the letter actions it comprises.",
     )
 
+    triggered_world_events = models.ManyToManyField(
+        to="WorldEvent",
+        through="EpistolaryEventTrigger",
+        symmetrical=False,
+        related_name="world_event_triggers",
+        help_text="World events triggered by this epistolary event",
+    )
+
+    triggered_epistolary_events = models.ManyToManyField(
+        to="self",
+        through="EpistolaryEventSelfTrigger",
+        through_fields=("triggering_epistolary_event", "triggered_epistolary_event"),
+        symmetrical=False,
+        help_text="Other epistolary events triggered by this epistolary event",
+    )
+
     def __str__(self):
         return f"{self.name}"
 
@@ -68,11 +84,13 @@ class LetterAction(models.Model):
 
     def __str__(self):
         categories = self.categories.all()
-        category_names = [category.get_value_display()
-                          for category in categories]
+        category_names = [category.get_value_display() for category in categories]
         category_desc = ", ".join(category_names)
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        return f"{category_desc} of {letters} ({self.date.display_date})"
+        display_date = (
+            self.date.display_date if hasattr(self, "date") else "unknown date"
+        )
+        return f"{category_desc} of {letters} ({display_date})"
 
 
 class LetterActionCategory(Field, models.Model):
@@ -187,32 +205,113 @@ class WorldEvent(LettercraftDate, models.Model):
         help_text="Additional notes that describe the event and its relevance to the letters.",
     )
 
-    epistolary_events = models.ManyToManyField(
+    triggered_epistolary_events = models.ManyToManyField(
         to=EpistolaryEvent,
-        through="EpistolaryEventTrigger",
-        related_name="triggers",
+        through="WorldEventTrigger",
+        symmetrical=False,
+        related_name="epistolary_event_triggers",
+        help_text="Epistolary events triggered by this world event",
+    )
+
+    triggered_world_events = models.ManyToManyField(
+        to="self",
+        through="WorldEventSelfTrigger",
+        through_fields=("triggering_world_event", "triggered_world_event"),
+        symmetrical=False,
+        help_text="Other world events triggered by this world event",
     )
 
     def __str__(self):
         return f"{self.name} ({self.display_date})"
 
 
-class EpistolaryEventTrigger(models.Model):
+class WorldEventTrigger(Field, models.Model):
     """
-    A relationship between an epistolary event and a world event that triggered it.
+    A relationship between an epistolary event and a world event where a world event triggers an epistolary event.
     """
 
     epistolary_event = models.ForeignKey(
         to=EpistolaryEvent,
         on_delete=models.CASCADE,
+        related_name="triggers_by_world_events",
         help_text="The epistolary event that was triggered by a world event",
     )
 
     world_event = models.ForeignKey(
         to=WorldEvent,
         on_delete=models.CASCADE,
+        related_name="triggers_for_epistolary_events",
         help_text="The world event that triggered an epistolary event",
     )
 
     def __str__(self):
         return f"{self.world_event} triggered {self.epistolary_event}"
+
+
+class EpistolaryEventTrigger(Field, models.Model):
+    """
+    A relationship between an epistolary event and a world event where an epistolary event triggers a world event.
+    """
+
+    epistolary_event = models.ForeignKey(
+        to=EpistolaryEvent,
+        on_delete=models.CASCADE,
+        related_name="triggers_by_epistolary_events",
+        help_text="The epistolary event that triggered a world event",
+    )
+
+    world_event = models.ForeignKey(
+        to=WorldEvent,
+        on_delete=models.CASCADE,
+        related_name="triggers_for_world_events",
+        help_text="The world event that was triggered by an epistolary event",
+    )
+
+    def __str__(self):
+        return f"{self.epistolary_event} triggered {self.world_event}"
+
+
+class WorldEventSelfTrigger(Field, models.Model):
+    """
+    A relationship between a world event and another world event where one world event triggers another.
+    """
+
+    triggered_world_event = models.ForeignKey(
+        to=WorldEvent,
+        on_delete=models.CASCADE,
+        related_name="self_triggers_for_world_events",
+        help_text="The world event that was triggered by another world event",
+    )
+
+    triggering_world_event = models.ForeignKey(
+        to=WorldEvent,
+        on_delete=models.CASCADE,
+        related_name="self_triggered_by_world_events",
+        help_text="The world event that triggered another world event",
+    )
+
+    def __str__(self):
+        return f"{self.triggering_world_event} triggered {self.triggered_world_event}"
+
+
+class EpistolaryEventSelfTrigger(Field, models.Model):
+    """
+    A relationship between an epistolary event and another epistolary event where one epistolary event triggers another.
+    """
+
+    triggered_epistolary_event = models.ForeignKey(
+        to=EpistolaryEvent,
+        on_delete=models.CASCADE,
+        related_name="self_triggers_for_epistolary_events",
+        help_text="The epistolary event that was triggered by another epistolary event",
+    )
+
+    triggering_epistolary_event = models.ForeignKey(
+        to=EpistolaryEvent,
+        on_delete=models.CASCADE,
+        related_name="self_triggered_by_epistolary_events",
+        help_text="The epistolary event that triggered another epistolary event",
+    )
+
+    def __str__(self):
+        return f"{self.triggering_epistolary_event} triggered {self.triggered_epistolary_event}"
