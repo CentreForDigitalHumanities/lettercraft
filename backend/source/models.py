@@ -43,7 +43,7 @@ class Reference(models.Model):
     source = models.ForeignKey(
         to=Source,
         on_delete=models.CASCADE,
-        help_text="the source text in which this references occurs",
+        help_text="The source text in which this references occurs",
     )
 
     # description of the reference
@@ -51,28 +51,31 @@ class Reference(models.Model):
     location = models.CharField(
         max_length=200,
         blank=True,
-        help_text="specific location of the reference in the source text",
+        help_text="Specific location of the reference in the source text",
     )
 
     terminology = ArrayField(
         models.CharField(
             max_length=200,
         ),
-        default=[],
+        default=list,
         blank=True,
         size=5,
-        help_text="terminology used in the source text to describe this entity",
+        help_text="Terminology used in the source text to describe this entity",
     )
 
     mention = models.CharField(
         max_length=32,
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
-        help_text="how is this entity presented in the text?",
+        help_text="How is this information presented in the text?",
     )
 
     def __str__(self):
-        return f"reference to {self.content_object} ({self.content_type.model}) in {self.source}"
+        object = f"{self.content_object} ({self.content_type.model})"
+        source = f"{self.source}"
+        loc = f" ({self.location})" if self.location else ""
+        return f"reference to {object} in {source}{loc}"
 
     class Meta:
         indexes = [models.Index(fields=["content_type", "object_id"])]
