@@ -29,20 +29,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'livereload',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'revproxy',
-    'core',
-    'case_study',
-    'event',
-    'letter',
-    'person',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "livereload",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "revproxy",
+    "core",
+    "case_study",
+    "event",
+    "letter",
+    "person",
+    "source",
 ]
 
 MIDDLEWARE = [
