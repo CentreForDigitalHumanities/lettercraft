@@ -1,4 +1,5 @@
 from django.contrib import admin
+from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -38,14 +39,22 @@ class LetterActionLettersAdmin(admin.StackedInline):
     verbose_name = "letter"
     verbose_name_plural = "letters"
 
+class LetterActionGiftsAdmin(admin.StackedInline):
+    model = models.LetterAction.gifts.through
+    extra = 0
+    verbose_name = "gift"
+    verbose_name_plural = "gifts"
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
+    list_display=["description", "display_date"]
     inlines = [
         LetterActionLettersAdmin,
         LetterActionCategoryAdmin,
+        LetterActionGiftsAdmin,
         EventDateAdmin,
         RoleAdmin,
+        ReferenceInlineAdmin,
     ]
     exclude = ["letters"]
 
@@ -71,11 +80,54 @@ class EpistolaryEventLetterActionInline(admin.StackedInline):
     verbose_name_plural = "letter actions"
     verbose_name = "relationship between a epistolary event and a letter action"
 
+    
+class EpistolaryEventsTriggeredWorldEventsInline(admin.StackedInline):
+    model = models.EpistolaryEvent.triggered_world_events.through
+    fields = ["world_event", "certainty", "note"]
+    extra = 0
+    verbose_name = "World event triggered by this epistolary event"
+    verbose_name_plural = "World events triggered by this epistolary event"
+
+class EpistolaryEventsTriggeredEpistolaryEventsInline(admin.StackedInline):
+    model = models.EpistolaryEvent.triggered_epistolary_events.through
+    fk_name = "triggering_epistolary_event"
+    fields = ["triggered_epistolary_event", "certainty", "note"]
+    extra = 0
+    verbose_name = "Epistolary event triggered by this epistolary event"
+    verbose_name_plural = "Epistolary events triggered by this epistolary event"
+
 
 @admin.register(models.EpistolaryEvent)
 class EpistolaryEventAdmin(admin.ModelAdmin):
     fields = ["name", "note"]
     inlines = [
         EpistolaryEventCaseStudyInline,
-        EpistolaryEventLetterActionInline
+        EpistolaryEventLetterActionInline,
+        EpistolaryEventsTriggeredWorldEventsInline,
+        EpistolaryEventsTriggeredEpistolaryEventsInline
+    ]
+
+class WorldEventsTriggeredEpistolaryEventsInline(admin.StackedInline):
+    model = models.WorldEvent.triggered_epistolary_events.through
+    fields = ["epistolary_event", "certainty", "note"]
+    extra = 0
+    verbose_name = "Epistolary event triggered by this world event"
+    verbose_name_plural = "Epistolary events triggered by this world event"
+
+
+class WorldEventsTriggeredWorldEventsInline(admin.StackedInline):
+    model = models.WorldEvent.triggered_world_events.through
+    fk_name = "triggering_world_event"
+    fields = ["triggered_world_event", "certainty", "note"]
+    extra = 0
+    verbose_name = "World event triggered by this world event"
+    verbose_name_plural = "World events triggered by this world event"
+
+
+@admin.register(models.WorldEvent)
+class WorldEventAdmin(admin.ModelAdmin):
+    fields = ["name", "note", "year_exact", "year_lower", "year_upper"]
+    inlines = [
+        WorldEventsTriggeredEpistolaryEventsInline,
+        WorldEventsTriggeredWorldEventsInline
     ]

@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 
 
-class EventConfig(AppConfig):
+class SourceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'event'
-    verbose_name = 'events and actions'
+    name = 'source'
