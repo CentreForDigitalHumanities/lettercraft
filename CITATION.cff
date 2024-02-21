@@ -8,4 +8,6 @@ authors:
   - name: 'Research Software Lab, Centre for Digital Humanities, Utrecht University'
     website: 'https://cdh.uu.nl/rsl/'
 repository-code: 'https://github.com/CentreForDigitalHumanities/lettercraft'
-license: BSD-3
+license: BSD-3-Clause
+version: 0.1.0
+date-released: '2024-02-21'
