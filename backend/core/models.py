@@ -53,6 +53,12 @@ class LettercraftDate(models.Model):
         help_text="The exact year of the value (if known). This will override the values in the lower and upper bounds fields.",
     )
 
+    @property
+    def display_date(self):
+        if self.year_exact:
+            return str(self.year_exact)
+        return f"c. {self.year_lower}–{self.year_upper}"
+
     class Meta:
         abstract = True
 
