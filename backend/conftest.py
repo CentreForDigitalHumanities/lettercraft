@@ -5,10 +5,10 @@ from event.models import (
     EpistolaryEvent,
     LetterAction,
     LetterActionCategory,
+    WorldEvent,
     LetterEventDate,
 )
 from person.models import Person
-from person.models import Person, PersonDateOfBirth, PersonName
 
 
 @pytest.fixture()
@@ -80,7 +80,16 @@ def case_study(db):
 @pytest.fixture()
 def epistolary_event(db, letter, case_study):
     epistolary_event = EpistolaryEvent.objects.create(
-        name="Test Epistolary event", note="Test note", case_studies=[case_study]
+        name="Test Epistolary event", note="Test note"
     )
+    epistolary_event.case_studies.add(case_study)
 
     return epistolary_event
+
+
+@pytest.fixture()
+def world_event(db):
+    world_event = WorldEvent.objects.create(
+        name="Test World Event", note="Test World Event note", year_exact=612
+    )
+    return world_event
