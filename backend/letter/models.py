@@ -9,6 +9,18 @@ class Gift(models.Model):
     A gift presented alongside a letter.
     """
 
+    class Material(models.TextChoices):
+        PRECIOUS_METAL = "precious metal", "precious metal"
+        WRITE = "textile", "textile"
+        WOOD = "wood", "wood"
+        GLASS = "glass", "glass"
+        CERAMIC = "ceramic", "ceramic"
+        ANIMAL_PRODUCT = "animal product", "animal product"
+        LIVESTOCK = "livestock", "livestock"
+        PAPER = "paper", "paper"
+        OTHER = "other", "other"
+        UNKNOWN = "unknown", "unknown"
+
     name = models.CharField(
         max_length=256, help_text="A short name for the gift (for identification)"
     )
@@ -19,18 +31,7 @@ class Gift(models.Model):
     )
 
     material = models.CharField(
-        choices=[
-            ("precious metal", "precious metal"),
-            ("textile", "textile"),
-            ("wood", "wood"),
-            ("glass", "glass"),
-            ("ceramic", "ceramic"),
-            ("animal product", "animal product"),
-            ("livestock", "livestock"),
-            ("paper", "paper"),
-            ("other", "other"),
-            ("unknown", "unknown"),
-        ],
+        choices=Material.choices,
         help_text="The material the gift consists of",
     )
 

@@ -1,7 +1,7 @@
-from typing import List
+from typing import List, Optional
 from django.db import transaction
 from django.conf import settings
-from django.db.models import Model
+from django.db.models import Model, QuerySet
 from django.core.management.base import CommandError, BaseCommand
 from functools import wraps
 from faker import Faker
@@ -10,10 +10,15 @@ from source.models import Reference, Source
 from case_study.models import CaseStudy
 from event.models import (
     EpistolaryEvent,
+    EpistolaryEventSelfTrigger,
+    EpistolaryEventTrigger,
     LetterAction,
     LetterActionCategory,
     LetterEventDate,
     Role,
+    WorldEvent,
+    WorldEventSelfTrigger,
+    WorldEventTrigger,
 )
 from person.models import (
     Person,
@@ -21,9 +26,11 @@ from person.models import (
     Occupation,
     PersonDateOfBirth,
     PersonDateOfDeath,
+    PersonName,
 )
 from letter.models import (
     Category,
+    Gift,
     Letter,
     LetterAddressees,
     LetterCategory,
@@ -40,6 +47,7 @@ from .fixtures import (
     epistolary_event_names,
     letter_category_names,
     source_names,
+    world_event_names,
 )
 
 
@@ -70,6 +78,50 @@ def get_unique_name(
         if not model.objects.filter(**filter).exists():
             return unique_name
     raise ValueError("Could not find a unique name")
+
+
+def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
+    """
+    Returns a random object from the given model.
+
+    If `allow_null` is True, None may also be returned.
+
+    If there are no objects of the specified model, a `ValueError` will be raised.
+    """
+    if allow_null and random.choice([True, False]):
+        return None
+
+    if model.objects.exists():
+        return model.objects.order_by("?").first()
+    raise ValueError(
+        f"No objects of type {model._meta.verbose_name_plural} found. Please create at least one."
+    )
+
+
+def get_random_model_objects(
+    model: Model, min_amount=0, max_amount=10, exact=False
+) -> List[Model]:
+    """
+    Get a list of random model objects from the specified model.
+
+    If `exact` is True, exactly `max_amount` objects will be returned.
+
+    Else, a random number of objects between `min_amount` and `max_amount` will be returned.
+
+    If there are not enough objects of the specified model, a `ValueError` will be raised.
+    """
+    all_random_objects = model.objects.order_by("?")
+    if all_random_objects.count() < max_amount:
+        raise ValueError(
+            f"Not enough objects of type {model._meta.verbose_name_plural} for requested amount. Please create more."
+        )
+
+    if min_amount > max_amount:
+        raise ValueError("min_amount cannot be greater than max_amount")
+
+    if exact is True:
+        return list(all_random_objects[:max_amount].all())
+    return list(all_random_objects[: random.randint(min_amount, max_amount)].all())
 
 
 class Command(BaseCommand):
@@ -127,23 +179,32 @@ class Command(BaseCommand):
         fake = Faker("en_GB")
 
         with transaction.atomic():
-            # Create Letter Actions
-            # Create Sources
-
             self.info("-" * 80)
             self.info("Creating Lettercraft development dataset")
             self.info("-" * 80)
 
-            # self._create_case_studies(fake, options, total=10, model=CaseStudy)
-            # self._create_epistolary_events(
-            #     fake, options, total=40, model=EpistolaryEvent
-            # )
-            # self._create_offices(fake, options, total=50, model=Office)
-            # self._create_persons(fake, options, total=100, model=Person)
-            # self._create_letter_categories(fake, options, total=10, model=Category)
-            # self._create_letters(fake, options, total=200, model=Letter)
-            # self._create_letter_actions(fake, options, total=200, model=LetterAction)
-            # self._create_sources(fake, options, total=50, model=Source)
+            # The order of these function calls is important.
+
+            self._create_case_studies(fake, options, total=10, model=CaseStudy)
+            self._create_epistolary_events(
+                fake, options, total=40, model=EpistolaryEvent
+            )
+            self._create_offices(fake, options, total=50, model=Office)
+            self._create_persons(fake, options, total=100, model=Person)
+            self._create_letter_categories(fake, options, total=10, model=Category)
+            self._create_letters(fake, options, total=200, model=Letter)
+            self._create_gifts(fake, options, total=50, model=Gift)
+            self._create_letter_actions(fake, options, total=200, model=LetterAction)
+            self._create_world_events(fake, options, total=50, model=WorldEvent)
+            self._create_world_event_triggers(
+                fake, options, total=50, model=WorldEventTrigger
+            )
+            self._create_epistolary_event_triggers(
+                fake, options, total=50, model=EpistolaryEventTrigger
+            )
+            self._create_world_event_self_triggers(fake, options, total=50, model=WorldEventSelfTrigger)
+            self._create_epistolary_event_self_trigger(fake, options, total=50, model=EpistolaryEventSelfTrigger)
+            self._create_sources(fake, options, total=50, model=Source)
             self._create_references(fake, options, total=250, model=Reference)
 
             self.info("-" * 80)
@@ -160,10 +221,9 @@ class Command(BaseCommand):
 
         event = EpistolaryEvent.objects.create(name=unique_name, note=fake.text())
 
-        number_of_case_studies = random.randint(0, 3)
-        if number_of_case_studies > 0:
-            case_studies = CaseStudy.objects.order_by("?")[:number_of_case_studies]
-            event.case_studies.set(case_studies)
+        event.case_studies.set(
+            get_random_model_objects(CaseStudy, min_amount=0, max_amount=3)
+        )
 
     @track_progress
     def _create_offices(self, fake, options, total, model):
@@ -173,8 +233,11 @@ class Command(BaseCommand):
     def _create_persons(self, fake: Faker, options, total, model):
         person = Person.objects.create(gender=random.choice(Person.Gender.values))
         for _ in range(random.randint(0, 3)):
-            person.names.create(value=fake.name())
-        person.save()
+            PersonName.objects.create(
+                person=person,
+                value=fake.name(),
+                **self.fake_field_value(fake),
+            )
 
         if random.choice([True, False]):
             PersonDateOfBirth.objects.create(
@@ -192,7 +255,7 @@ class Command(BaseCommand):
 
         for _ in range(random.randint(0, 2)):
             person.occupations.create(
-                office=Office.objects.order_by("?").first(),
+                office=get_random_model_object(Office),
                 **self.fake_date_value(fake),
                 **self.fake_field_value(fake),
             )
@@ -206,8 +269,8 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letters(self, fake: Faker, *args, **kwargs):
-        senders = Person.objects.order_by("?")[: random.randint(2, 5)]
-        addressees = Person.objects.order_by("?")[: random.randint(2, 5)]
+        senders = get_random_model_objects(Person, min_amount=2, max_amount=5)
+        addressees = get_random_model_objects(Person, min_amount=2, max_amount=5)
 
         subject = ", ".join(fake.words(nb=3, unique=True))
         letter = Letter.objects.create(
@@ -224,7 +287,7 @@ class Command(BaseCommand):
         if random.choice([True, False]):
             LetterCategory.objects.create(
                 letter=letter,
-                category=Category.objects.order_by("?").first(),
+                category=get_random_model_object(Category),
                 **self.fake_field_value(fake),
             )
 
@@ -243,10 +306,12 @@ class Command(BaseCommand):
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
         action = LetterAction.objects.create()
-        action.letters.set(Letter.objects.order_by("?")[: random.randint(1, 5)])
+        action.letters.set(get_random_model_objects(Letter, min_amount=1, max_amount=5))
+
+        action.gifts.set(get_random_model_objects(Gift, min_amount=0, max_amount=5))
 
         action.epistolary_events.set(
-            EpistolaryEvent.objects.order_by("?")[: random.randint(0, 5)]
+            get_random_model_objects(EpistolaryEvent, min_amount=0, max_amount=5)
         )
 
         LetterEventDate.objects.create(
@@ -262,19 +327,75 @@ class Command(BaseCommand):
         for i in range(no_of_categories):
             LetterActionCategory.objects.create(
                 letter_action=action,
-                value=random_categories[i],
+                value=random_categories[i][0],
                 **self.fake_field_value(fake),
             )
 
         for _ in range(random.randint(1, 5)):
             Role.objects.create(
-                person=Person.objects.order_by("?").first(),
+                person=get_random_model_object(Person),
                 letter_action=action,
                 present=random.choice([True, False]),
-                role=random.choice(Role.RoleOptions.choices),
+                role=random.choice(Role.RoleOptions.choices)[0],
                 description=fake.text(),
                 **self.fake_field_value(fake),
             )
+
+    @track_progress
+    def _create_gifts(self, fake, options, total, model):
+        unique_name = get_unique_name(gift_names, Gift)
+
+        gifter = get_random_model_object(Person, allow_null=True)
+
+        Gift.objects.create(
+            name=unique_name,
+            material=random.choice(Gift.Material.choices)[0],
+            gifted_by=gifter,
+            description=fake.text(),
+        )
+
+    @track_progress
+    def _create_world_events(self, fake, options, total, model):
+        unique_name = get_unique_name(world_event_names, WorldEvent)
+        WorldEvent.objects.create(
+            name=unique_name, 
+            note=fake.text(),
+            **self.fake_date_value(fake)
+        )
+
+    @track_progress
+    def _create_world_event_triggers(self, fake, options, total, model):
+        WorldEventTrigger.objects.create(
+            world_event=get_random_model_object(WorldEvent),
+            epistolary_event=get_random_model_object(EpistolaryEvent),
+            **self.fake_field_value(fake),
+        )
+
+    @track_progress
+    def _create_epistolary_event_triggers(self, fake, options, total, model):
+        EpistolaryEventTrigger.objects.create(
+            epistolary_event=get_random_model_object(EpistolaryEvent),
+            world_event=get_random_model_object(WorldEvent),
+            **self.fake_field_value(fake),
+        )
+
+    @track_progress
+    def _create_world_event_self_triggers(self, fake, options, total, model):
+        [triggering, triggered] = get_random_model_objects(WorldEvent, max_amount=2, exact=True)
+        WorldEventSelfTrigger.objects.create(
+            triggered_world_event=triggering,
+            triggering_world_event=triggered,
+            **self.fake_field_value(fake),
+        )
+
+    @track_progress
+    def _create_epistolary_event_self_trigger(self, fake, options, total, model):
+        [triggering, triggered] = get_random_model_objects(EpistolaryEvent, max_amount=2, exact=True)
+        EpistolaryEventSelfTrigger.objects.create(
+            triggering_epistolary_event=triggering,
+            triggered_epistolary_event=triggered,
+            **self.fake_field_value(fake),
+        )
 
     @track_progress
     def _create_sources(self, fake, options, total, model):
@@ -291,9 +412,12 @@ class Command(BaseCommand):
             .first()
         )
 
-        random_object_id = (
-            random_content_type.model_class().objects.order_by("?").first().id
-        )
+        random_objects = random_content_type.model_class().objects.all()
+
+        if not random_objects.exists():
+            return
+
+        random_object_id = random_objects.order_by("?").first().id
 
         random_source = Source.objects.order_by("?").first()
 
@@ -302,7 +426,7 @@ class Command(BaseCommand):
             object_id=random_object_id,
             source=random_source,
             location=f"chapter {random.randint(1, 10)}, page {random.randint(1, 100)}",
-            terminology=[fake.words(nb=3, unique=True)],
+            terminology=fake.words(nb=3, unique=True),
             mention=random.choice(["direct", "implied"]),
         )
 
