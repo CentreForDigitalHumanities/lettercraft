@@ -3,11 +3,13 @@ from functools import wraps
 from typing import List, Optional
 from django.db.models import Model
 
+
 def track_progress(func):
     """
     Decorator to track the progress of a creator function.
     Prints a progress bar to the console.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         total = kwargs.get("total", 15)
@@ -19,6 +21,7 @@ def track_progress(func):
         for n in range(1, total + 1):
             progress(n, total)
             func(*args, **kwargs)
+
     return wrapper
 
 
@@ -40,8 +43,8 @@ def get_unique_name(
     """
     Returns a unique name from a given list of names.
     Checks with the database to ensure the name is unique.
-    
-    If no unique name can be found after `retries` attempts, 
+
+    If no unique name can be found after `retries` attempts,
     a `ValueError` is raised to avoid an endless loop.
     """
     for _ in range(retries):
@@ -58,7 +61,7 @@ def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
     Returns a random object from the given model.
 
     If `allow_null` is True, `None` may also be returned.
-    
+
     If there are no objects of the specified model, a `ValueError` will be raised.
     """
     if allow_null and random.choice([True, False]):
@@ -81,7 +84,7 @@ def get_random_model_objects(
 
     Else, a random number of objects between `min_amount` and `max_amount` will be returned.
 
-    If there are not enough objects of the specified model exist in the databsase, 
+    If there are not enough objects of the specified model exist in the database,
     a `ValueError` is raised.
     """
     all_random_objects = model.objects.order_by("?")
@@ -96,4 +99,3 @@ def get_random_model_objects(
     if exact is True:
         return list(all_random_objects[:max_amount].all())
     return list(all_random_objects[: random.randint(min_amount, max_amount)].all())
-
