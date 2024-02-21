@@ -1,9 +1,6 @@
-from typing import List, Optional
 from django.db import transaction
 from django.conf import settings
-from django.db.models import Model, QuerySet
 from django.core.management.base import CommandError, BaseCommand
-from functools import wraps
 from faker import Faker
 from source.models import Reference, Source
 
@@ -23,7 +20,6 @@ from event.models import (
 from person.models import (
     Person,
     Office,
-    Occupation,
     PersonDateOfBirth,
     PersonDateOfDeath,
     PersonName,
@@ -49,79 +45,12 @@ from .fixtures import (
     source_names,
     world_event_names,
 )
-
-
-# Track progress decorator
-def track_progress(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        total = kwargs.get("total", 15)
-        model = kwargs.get("model", None)
-        if model:
-            print(f"Creating {model._meta.verbose_name_plural}...")
-        else:
-            print(f"Creating objects...")
-        for n in range(1, total + 1):
-            progress(n, total)
-            func(*args, **kwargs)
-
-    return wrapper
-
-
-def get_unique_name(
-    list_of_names: List[str], model: Model, name_field="name", retries=1000
-):
-    for _ in range(retries):
-        unique_name = random.choice(list_of_names)
-
-        filter = {f"{name_field}": unique_name}
-        if not model.objects.filter(**filter).exists():
-            return unique_name
-    raise ValueError("Could not find a unique name")
-
-
-def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
-    """
-    Returns a random object from the given model.
-
-    If `allow_null` is True, None may also be returned.
-
-    If there are no objects of the specified model, a `ValueError` will be raised.
-    """
-    if allow_null and random.choice([True, False]):
-        return None
-
-    if model.objects.exists():
-        return model.objects.order_by("?").first()
-    raise ValueError(
-        f"No objects of type {model._meta.verbose_name_plural} found. Please create at least one."
-    )
-
-
-def get_random_model_objects(
-    model: Model, min_amount=0, max_amount=10, exact=False
-) -> List[Model]:
-    """
-    Get a list of random model objects from the specified model.
-
-    If `exact` is True, exactly `max_amount` objects will be returned.
-
-    Else, a random number of objects between `min_amount` and `max_amount` will be returned.
-
-    If there are not enough objects of the specified model, a `ValueError` will be raised.
-    """
-    all_random_objects = model.objects.order_by("?")
-    if all_random_objects.count() < max_amount:
-        raise ValueError(
-            f"Not enough objects of type {model._meta.verbose_name_plural} for requested amount. Please create more."
-        )
-
-    if min_amount > max_amount:
-        raise ValueError("min_amount cannot be greater than max_amount")
-
-    if exact is True:
-        return list(all_random_objects[:max_amount].all())
-    return list(all_random_objects[: random.randint(min_amount, max_amount)].all())
+from .create_dev_dataset_utils import (
+    get_unique_name,
+    get_random_model_object,
+    track_progress,
+    get_random_model_objects,
+)
 
 
 class Command(BaseCommand):
@@ -130,15 +59,10 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--force", action="store_true")
 
-    def info(self, *args, **kwargs):
-        self.stdout.write(*args, **kwargs)
-
-    def error(self, *args, **kwargs):
-        self.stderr.write(*args, **kwargs)
-
     def fake_field_value(self, fake):
         """
-        Provides fake values for the core.Field abstract class.
+        Provides fake values for models inheriting
+        the core.Field abstract class.
         """
         return {
             "certainty": random.choice([0, 1, 2]),
@@ -147,7 +71,8 @@ class Command(BaseCommand):
 
     def fake_date_value(self, fake):
         """
-        Provides fake values for the core.LettercraftDate abstract class.
+        Provides fake values for models inheriting
+        the core.LettercraftDate abstract class.
         """
         exact_date = random.choice([True, False])
         if exact_date is True:
@@ -178,13 +103,15 @@ class Command(BaseCommand):
 
         fake = Faker("en_GB")
 
+        # Ensures that creation can be rolled back if an error occurs,
         with transaction.atomic():
-            self.info("-" * 80)
-            self.info("Creating Lettercraft development dataset")
-            self.info("-" * 80)
+            print("-" * 80)
+            print("Creating Lettercraft development dataset")
+            print("-" * 80)
 
-            # The order of these function calls is important.
-
+            # Comment out the function calls below as needed.
+            # Adjust the `total` parameter to create more or less data.
+            # NB: the order of these function calls is important.
             self._create_case_studies(fake, options, total=10, model=CaseStudy)
             self._create_epistolary_events(
                 fake, options, total=40, model=EpistolaryEvent
@@ -202,13 +129,17 @@ class Command(BaseCommand):
             self._create_epistolary_event_triggers(
                 fake, options, total=50, model=EpistolaryEventTrigger
             )
-            self._create_world_event_self_triggers(fake, options, total=50, model=WorldEventSelfTrigger)
-            self._create_epistolary_event_self_trigger(fake, options, total=50, model=EpistolaryEventSelfTrigger)
+            self._create_world_event_self_triggers(
+                fake, options, total=50, model=WorldEventSelfTrigger
+            )
+            self._create_epistolary_event_self_trigger(
+                fake, options, total=50, model=EpistolaryEventSelfTrigger
+            )
             self._create_sources(fake, options, total=50, model=Source)
             self._create_references(fake, options, total=250, model=Reference)
 
-            self.info("-" * 80)
-            self.info("Development dataset created successfully.")
+            print("-" * 80)
+            print("Development dataset created successfully.")
 
     @track_progress
     def _create_case_studies(self, fake: Faker, options, total, model):
@@ -358,9 +289,7 @@ class Command(BaseCommand):
     def _create_world_events(self, fake, options, total, model):
         unique_name = get_unique_name(world_event_names, WorldEvent)
         WorldEvent.objects.create(
-            name=unique_name, 
-            note=fake.text(),
-            **self.fake_date_value(fake)
+            name=unique_name, note=fake.text(), **self.fake_date_value(fake)
         )
 
     @track_progress
@@ -381,7 +310,9 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_world_event_self_triggers(self, fake, options, total, model):
-        [triggering, triggered] = get_random_model_objects(WorldEvent, max_amount=2, exact=True)
+        [triggering, triggered] = get_random_model_objects(
+            WorldEvent, max_amount=2, exact=True
+        )
         WorldEventSelfTrigger.objects.create(
             triggered_world_event=triggering,
             triggering_world_event=triggered,
@@ -390,7 +321,9 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_epistolary_event_self_trigger(self, fake, options, total, model):
-        [triggering, triggered] = get_random_model_objects(EpistolaryEvent, max_amount=2, exact=True)
+        [triggering, triggered] = get_random_model_objects(
+            EpistolaryEvent, max_amount=2, exact=True
+        )
         EpistolaryEventSelfTrigger.objects.create(
             triggering_epistolary_event=triggering,
             triggered_epistolary_event=triggered,
@@ -429,15 +362,3 @@ class Command(BaseCommand):
             terminology=fake.words(nb=3, unique=True),
             mention=random.choice(["direct", "implied"]),
         )
-
-
-def progress(iteration, total, width=80, start="\r", newline_on_complete=True):
-    width = width - 2
-    tally = f" {iteration}/{total}"
-    width -= len(tally)
-    filled_length = int(width * iteration // total)
-    bar = "█" * filled_length + "-" * (width - filled_length)
-    print(f"{start}|{bar}|{tally}", end="")
-    # Print New Line on Complete
-    if newline_on_complete and iteration == total:
-        print()
