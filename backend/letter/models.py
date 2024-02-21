@@ -60,13 +60,14 @@ class LetterCategory(Field, models.Model):
 
 
 class LetterMaterial(Field, models.Model):
+    class Surface(models.TextChoices):
+        PARCHMENT = "parchment", "parchment"
+        PAPYRUS = "papyrus", "papyrus"
+        OTHER = "other", "other"
+        UNKNOWN = "unknown", "unknown"
+
     surface = models.CharField(
-        choices=[
-            ("parchment", "parchment"),
-            ("papyrus", "papyrus"),
-            ("other", "other"),
-            ("unknown", "unknown"),
-        ],
+        choices=Surface.choices,
         null=False,
         blank=False,
     )

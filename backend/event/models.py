@@ -71,15 +71,17 @@ class LetterAction(models.Model):
 
 
 class LetterActionCategory(Field, models.Model):
+
+    class CategoryOptions(models.TextChoices):
+        WRITE = "write", "writing"
+        TRANSPORT = "transport", "transporting"
+        DELIVER = "deliver", "delivering"
+        READ = "read", "reading"
+        SIGN = "sign", "signing"
+        EAT = "eat", "eating"
+
     value = models.CharField(
-        choices=[
-            ("write", "writing"),
-            ("transport", "transporting"),
-            ("deliver", "delivering"),
-            ("read", "reading"),
-            ("sign", "signing"),
-            ("eat", "eating"),
-        ],
+        choices=CategoryOptions.choices,
         null=False,
         blank=False,
         help_text="The type of event",
@@ -120,6 +122,19 @@ class Role(Field, models.Model):
     """
     Describes the involvement of a person in a letter action.
     """
+
+    class RoleOptions(models.TextChoices):
+        AUTHOR = "author", "Author"
+        SCRIBE = "scribe", "Scribe"
+        READER = "reader", "Reader"
+        WITNESS = "witness", "Witness"
+        MESSENGER = "messenger", "Messenger"
+        RECIPIENT = "recipient", "Recipient"
+        INTENDED_RECIPIENT = "intended_recipient", "Intended recipient"
+        AUDIENCE = "audience", "Audience"
+        INTENDED_AUDIENCE = "intended_audience", "Intended audience"
+        OTHER = "other", "Other"
+
     person = models.ForeignKey(
         to=Person,
         on_delete=models.CASCADE,
@@ -136,18 +151,7 @@ class Role(Field, models.Model):
         help_text="Whether this person was physically present",
     )
     role = models.CharField(
-        choices=[
-            ("author", "Author"),
-            ("scribe", "Scribe"),
-            ("reader", "Reader"),
-            ("witness", "Witness"),
-            ("messenger", "Messenger"),
-            ("recipient", "Recipient"),
-            ("intended_recipient", "Intended recipient"),
-            ("audience", "Audience"),
-            ("intended_audience", "Intended audience"),
-            ("other", "Other"),
-        ],
+        choices=RoleOptions.choices,
         null=False,
         blank=False,
         help_text="Role of this person in the event",
