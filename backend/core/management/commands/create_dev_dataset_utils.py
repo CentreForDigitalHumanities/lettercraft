@@ -8,17 +8,33 @@ def track_progress(func):
     """
     Decorator to track the progress of a creator function.
     Prints a progress bar to the console.
+
+    Wrap this around a function that creates one model instance, and make sure that the function is called with a `total` and `model` parameter.
+
+    This decorator makes sure that the inner function is run `total` amount of times.
+
+    Example:
+
+    ```
+    @track_progress
+    def create_books(self, fake, total, model)
+        ...
+
+    create_books(total=20, model=Book)
+
+    ```
+
     """
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        total = kwargs.get("total", 15)
+        total = kwargs.get("total", 10)
         model = kwargs.get("model", None)
         if model:
             print(f"Creating {model._meta.verbose_name_plural}...")
         else:
             print(f"Creating objects...")
-        for n in range(1, total + 1):
+        for n in range(total + 1):
             progress(n, total)
             func(*args, **kwargs)
 
@@ -42,7 +58,7 @@ def get_unique_name(
 ):
     """
     Returns a unique name from a given list of names.
-    Checks with the database to ensure the name is unique.
+    Checks that there are currently no other instances of `model` where the specified field (`name` by default) has that value.
 
     If no unique name can be found after `retries` attempts,
     a `ValueError` is raised to avoid an endless loop.
@@ -60,9 +76,9 @@ def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
     """
     Returns a random object from the given model.
 
-    If `allow_null` is True, `None` may also be returned.
+    If `allow_null` is True, `None` is returned half of the time.
 
-    If there are no objects of the specified model, a `ValueError` will be raised.
+    If there are no objects of the specified model, a `ValueError` is raised.
     """
     if allow_null and random.choice([True, False]):
         return None
@@ -80,12 +96,11 @@ def get_random_model_objects(
     """
     Get a list of random model objects from the specified model.
 
-    If `exact` is True, exactly `max_amount` objects will be returned.
+    If `exact` is set to `True`, exactly `max_amount` objects will be returned.
 
     Else, a random number of objects between `min_amount` and `max_amount` will be returned.
 
-    If there are not enough objects of the specified model exist in the database,
-    a `ValueError` is raised.
+    If there are not enough objects of the specified model exist in the database, a `ValueError` is raised.
     """
     all_random_objects = model.objects.order_by("?")
     if all_random_objects.count() < max_amount:
