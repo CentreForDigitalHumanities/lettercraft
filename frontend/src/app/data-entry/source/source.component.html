@@ -2,78 +2,218 @@
 
 <p>Fill in what agents, places, and objects are described in Fortunatus, Life of Radegund. Then describe the epistolary actions in the work, and how the agents, places, and objects are involved in these actions.</p>
 
-<h2 class="mb-3">
-    <fa-icon [icon]="icons.hide"></fa-icon>
-    Agents
-</h2>
-
-<p>What people and groups act as agents in the text?</p>
-
-<div class="list-group mb-4">
-    <div class="list-group-item"
-        [routerLink]="['source/', 1]">
-        <h5 class="mb-1">St. Radegund</h5>
-        <p>Founder of the Abbey in Poitiers</p>
-        <div class="btn-group">
-            <button class="btn btn-primary">
-                <fa-icon [icon]="icons.edit"></fa-icon>
-                Edit
-            </button>
-            <button class="btn btn-danger">
-                <fa-icon [icon]="icons.delete"></fa-icon>
-                Delete
-            </button>
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Agents</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p>What people and groups act as agents in the text?</p>
+                    <div class="list-group mb-4">
+                        <div class="list-group-item"
+                            [routerLink]="['source/', 1]">
+                            <h5 class="mb-1">St. Radegund</h5>
+                            <p>Founder of the Abbey in Poitiers</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Unknown messenger</h5>
+                            <p>Messenger who delivers the letter to the nuns</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">The nuns of Poitiers</h5>
+                            <p>Nuns in the abbey of Poitiers</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mb-4">
+                        <button class="btn btn-success">
+                            <fa-icon [icon]="icons.create"></fa-icon>
+                            Add a new agent
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
-    <div class="list-group-item">
-        <h5 class="mb-1">Unknown messenger</h5>
-        <p>Messenger who delivers the letter to the nuns</p>
-        <div class="btn-group">
-            <button class="btn btn-primary">
-                <fa-icon [icon]="icons.edit"></fa-icon>
-                Edit
-            </button>
-            <button class="btn btn-danger">
-                <fa-icon [icon]="icons.delete"></fa-icon>
-                Delete
-            </button>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Places</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p>What locations are described in the text? Where do actions take place?</p>
+                    <div class="list-group mb-4">
+                        <div class="list-group-item"
+                            [routerLink]="['source/', 1]">
+                            <h5 class="mb-1">The Abbey of the Holy Cross</h5>
+                            <p>Abbey in Poitiers</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">A cave</h5>
+                            <p>A cave somewhere in France, where Radegund had a vision</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mb-4">
+                        <button class="btn btn-success">
+                            <fa-icon [icon]="icons.create"></fa-icon>
+                            Add a new place
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
-    <div class="list-group-item">
-        <h5 class="mb-1">The nuns of Poitiers</h5>
-        <p>Nuns in the abbey of Poitiers</p>
-        <div class="btn-group">
-            <button class="btn btn-primary">
-                <fa-icon [icon]="icons.edit"></fa-icon>
-                Edit
-            </button>
-            <button class="btn btn-danger">
-                <fa-icon [icon]="icons.delete"></fa-icon>
-                Delete
-            </button>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Objects</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p>What objects are sent and received?</p>
+                    <div class="list-group mb-4">
+                        <div class="list-group-item"
+                            [routerLink]="['source/', 1]">
+                            <h5 class="mb-1">Letter from Radegund</h5>
+                            <p>A letter written by Radegund describing her vision</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Hairshirt</h5>
+                            <p>A penitent gift</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Letter from Heaven</h5>
+                            <p>A letter delivered in a vision</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mb-4">
+                        <button class="btn btn-success">
+                            <fa-icon [icon]="icons.create"></fa-icon>
+                            Add a new object
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Actions</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p>Describe the events of the text in singular "actions".
+                        A single single letter-exchange often involves several actions; e.g.
+                        the writing, transporting, delivering, and reading of the letter.
+                    </p>
+                    <div class="list-group mb-4">
+                        <div class="list-group-item"
+                            [routerLink]="['source/', 1]">
+                            <h5 class="mb-1">Delivering of the letter from Radegund</h5>
+                            <p>An unknown messenger delivers a letter to the nuns of Poitiers.</p>
+                            <div class="btn-group">
+                                <button class="btn btn-primary">
+                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                    Edit
+                                </button>
+                                <button class="btn btn-danger">
+                                    <fa-icon [icon]="icons.delete"></fa-icon>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group mb-4">
+                        <button class="btn btn-success">
+                            <fa-icon [icon]="icons.create"></fa-icon>
+                            Add a new action
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="btn-group mb-4">
-    <button class="btn btn-success">
-        <fa-icon [icon]="icons.create"></fa-icon>
-        Add a new agent
-    </button>
-</div>
-
-
-<h2 class="mb-3">
-    <fa-icon [icon]="icons.show"></fa-icon>
-    Places
-</h2>
-
-<h2 class="mb-3">
-    <fa-icon [icon]="icons.show"></fa-icon>
-    Objects
-</h2>
-
-<h2 class="mb-3">
-    <fa-icon [icon]="icons.show"></fa-icon>
-    Actions
-</h2>
