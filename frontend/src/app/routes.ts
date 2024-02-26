@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SourcesComponent } from './data-entry/sources/sources.component';
 import { SourceComponent } from './data-entry/source/source.component';
+import { AgentComponent } from './data-entry/agent/agent.component';
 
 const routes: Routes = [
     {
@@ -13,7 +14,11 @@ const routes: Routes = [
         path: 'data-entry',
         children: [
             {
-                path: 'source/:id',
+                path: 'source/:sourceID/agent/:agentID',
+                component: AgentComponent,
+            },
+            {
+                path: 'source/:sourceID',
                 component: SourceComponent,
             },
             {
