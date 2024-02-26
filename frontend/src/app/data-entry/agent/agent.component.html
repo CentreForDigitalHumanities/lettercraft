@@ -14,131 +14,177 @@
 
 <p class="lead">Founder of the abbey of Poitiers</p>
 
-<form>
-    <h2>Basics</h2>
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" value="St. Radegund">
 
-    <div class="mb-3">
-        <label class="form-label">
-            Name
-        </label>
-        <input type="text" class="form-control" value="St. Radegund">
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the agent in the overview of the source.
+                                For example: "Radegund", "messenger from Poitiers", "the citizens of Arles".
+                            </small>
+                        </p>
+                    </div>
 
-        <p>
-            <small class="text-body-secondary">
-                This is a name to identify the agent in the overview of the source.
-                For example: "Radegund", "messenger from Poitiers", "the citizens of Arles".
-            </small>
-        </p>
-    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Description
+                        </label>
+                        <input type="text" class="form-control" value="Founder of the Abbey in Poitiers">
 
-    <div class="mb-3">
-        <label class="form-label">
-            Description
-        </label>
-        <input type="text" class="form-control" value="Founder of the Abbey in Poitiers">
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this agent.
+                            </small>
+                        </p>
+                    </div>
 
-        <p>
-            <small class="text-body-secondary">
-                Add a description to help identify this agent.
-            </small>
-        </p>
-    </div>
-
-    <div class="mb-4">
-        <label class="form-label">
-            Is this agent a person or a group?
-        </label>
-        <select class="form-select">
-            <option selected>Person</option>
-            <option>Group</option>
-        </select>
-    </div>
-
-    <h2>Description in the source</h2>
-
-    <div class="mb-5">
-        <h3>Name</h3>
-
-        <label class="form-label">
-            Name(s)
-        </label>
-
-        <div class="input-group mb-4">
-            <input type="text" class="form-control" value="St. Radegund">
-            <button class="btn btn-outline-secondary">
-                <fa-icon [icon]="icons.remove"></fa-icon>
-            </button>
-        </div>
-
-        <div class="input-group mb-4">
-            <input type="text" class="form-control" placeholder="Add a new name">
-        </div>
-
-        <div class="mb-4">
-            <label class="form-label">
-                Additional notes
-            </label>
-            <textarea class="form-control" rows="2"></textarea>
+                    <div class="mb-4">
+                        <label class="form-label">
+                            Is this agent a person or a group?
+                        </label>
+                        <select class="form-select">
+                            <option selected>Person</option>
+                            <option>Group</option>
+                        </select>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Name</h3>
 
-    <div class="mb-5">
-        <h3>Gender</h3>
-        <div class="mb-4">
-            <label class="form-label">
-                How does the text present the gender of this agent?
-            </label>
-            <select class="form-select">
-                <option selected>Female</option>
-                <option>Male</option>
-                <option>Other</option>
-                <option>Unknown</option>
-            </select>
-        </div>
-        <div class="mb-4">
-            <label class="form-label">
-                How is this information presented in the text?
-            </label>
+                        <label class="form-label">
+                            Name(s)
+                        </label>
 
-            <select class="form-select">
-                <option>Implied</option>
-                <option selected>Mentioned</option>
-                <option>Described</option>
-            </select>
-        </div>
-        <div class="mb-4">
-            <label class="form-label">
-                Additional notes
-            </label>
-            <textarea class="form-control" rows="2"></textarea>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" value="St. Radegund">
+                            <button class="btn btn-outline-secondary">
+                                <fa-icon [icon]="icons.remove"></fa-icon>
+                            </button>
+                        </div>
+
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" placeholder="Add a new name">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Gender</h3>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How does the text present the gender of this agent?
+                            </label>
+                            <select class="form-select">
+                                <option selected>Female</option>
+                                <option>Male</option>
+                                <option>Other</option>
+                                <option>Unknown</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Social status</h3>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                What is the social status of this agent?
+                            </label>
+                            <input class="form-control">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
-
-    <div class="mb-5">
-        <h3>Social status</h3>
-
-        <div class="mb-4">
-            <label class="form-label">
-                What is the social status of this agent?
-            </label>
-            <input class="form-control">
-        </div>
-        <div class="mb-4">
-            <label class="form-label">
-                How is this information presented in the text?
-            </label>
-
-            <select class="form-select">
-                <option>Implied</option>
-                <option selected>Mentioned</option>
-                <option>Described</option>
-            </select>
-        </div>
-        <div class="mb-4">
-            <label class="form-label">
-                Additional notes
-            </label>
-            <textarea class="form-control" rows="2"></textarea>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Connections</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-4">
+                        <label class="form-label">
+                            Can we cross-reference this agent with other sources?
+                        </label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" checked="true">
+                            <label class="form-check-label">
+                                Yes, this person is a historical or religious figure;
+                                they may appear in other sources
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio">
+                            <label class="form-check-label">
+                                No, this person is an unknown individual
+                            </label>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
         </div>
     </div>
-</form>
+</div>
