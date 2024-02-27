@@ -3,16 +3,23 @@
         <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/data-entry/source', 1]">Fortunatus, Life of Radegund</a></li>
-        <li class="breadcrumb-item active">St. Radegund</li>
+        <li class="breadcrumb-item active">
+            <span *ngIf="agent === 1">St. Radegund</span>
+            <span *ngIf="agent === 3">The nuns of Poitiers</span>
+        </li>
     </ol>
 </nav>
 
 <h1 class="mb-4">
-    St. Radegund
+    <span *ngIf="agent === 1">St. Radegund</span>
+    <span *ngIf="agent === 3">The nuns of Poitiers</span>
     <small class="text-body-secondary">(<i>Fortunatus, Life of Radegund</i>)</small>
 </h1>
 
-<p class="lead">Founder of the abbey of Poitiers</p>
+<p class="lead">
+    <span *ngIf="agent === 1">Founder of the abbey of Poitiers</span>
+    <span *ngIf="agent === 3">Nuns in the abbey of Poitiers</span>
+</p>
 
 <div ngbAccordion [closeOthers]="true">
     <div ngbAccordionItem>
@@ -26,7 +33,8 @@
                         <label class="form-label">
                             Name
                         </label>
-                        <input type="text" class="form-control" value="St. Radegund">
+                        <input type="text" class="form-control"
+                            [value]="agent === 1 ? 'St. Radegund' : 'The nuns of Poitiers'">
 
                         <p>
                             <small class="text-body-secondary">
@@ -40,7 +48,8 @@
                         <label class="form-label">
                             Description
                         </label>
-                        <input type="text" class="form-control" value="Founder of the Abbey in Poitiers">
+                        <input type="text" class="form-control"
+                            [value]="agent === 1 ? 'Founder of the Abbey in Poitiers' : 'Nuns in the abbey of Poitiers'">
 
                         <p>
                             <small class="text-body-secondary">
@@ -54,8 +63,8 @@
                             Is this agent a person or a group?
                         </label>
                         <select class="form-select">
-                            <option selected>Person</option>
-                            <option>Group</option>
+                            <option [selected]="agent === 1">Person</option>
+                            <option [selected]="agent === 3">Group</option>
                         </select>
                     </div>
                 </ng-template>
@@ -69,7 +78,7 @@
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
                 <ng-template>
-                    <div class="mb-5">
+                    <div class="mb-5" *ngIf="agent === 1">
                         <h3>Name</h3>
 
                         <label class="form-label">
@@ -99,12 +108,14 @@
                         <h3>Gender</h3>
                         <div class="mb-4">
                             <label class="form-label">
-                                How does the text present the gender of this agent?
+                                How does the text present the gender of
+                                <span *ngIf="agent === 1">this person</span><span *ngIf="agent === 3">the members of this group</span>?
                             </label>
                             <select class="form-select">
                                 <option selected>Female</option>
                                 <option>Male</option>
                                 <option>Other</option>
+                                <option *ngIf="agent === 3">Mixed</option>
                                 <option>Unknown</option>
                             </select>
                         </div>
@@ -132,9 +143,53 @@
 
                         <div class="mb-4">
                             <label class="form-label">
-                                What is the social status of this agent?
+                                What is the social status of
+                                <span *ngIf="agent === 1">this person</span><span *ngIf="agent === 3">the members of this group</span>?
+                                How does the text describe them?
                             </label>
                             <input class="form-control">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5" *ngIf="agent === 3">
+                        <h3>Place</h3>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Is this group defined by their connection to a place?
+                            </label>
+
+                            <select class="form-select">
+                                <option selected>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Select one of the places that are represented in the source.
+                            </label>
+
+                            <select class="form-select">
+                                <option selected>The Abbey of the Holy Cross</option>
+                                <option>A cave</option>
+                            </select>
                         </div>
                         <div class="mb-4">
                             <label class="form-label">
@@ -158,7 +213,7 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem>
+    <div ngbAccordionItem *ngIf="agent === 1">
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Connections</button>
         </h2>
