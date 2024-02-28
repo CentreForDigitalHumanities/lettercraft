@@ -16,6 +16,35 @@ class SpaceDescription(models.Model):
         help_text="A name to identify this space when entering data",
     )
 
+    description = models.TextField(
+        blank=True,
+        help_text="Longer description of this place that can be used to identify it",
+    )
+
+    political_regions = models.ManyToManyField(
+        to="PoliticalRegion",
+        through="PoliticalRegionField",
+        help_text="political regions referenced in this description",
+    )
+
+    ecclesiastical_regions = models.ManyToManyField(
+        to="EcclesiasticalRegion",
+        through="EcclesiasticalRegionField",
+        help_text="ecclesiastical regions referenced in this description",
+    )
+
+    geographical_regions = models.ManyToManyField(
+        to="GeographicalRegion",
+        through="GeographicalRegionField",
+        help_text="geographical regions referenced in this description",
+    )
+
+    settlements = models.ManyToManyField(
+        to="Settlement",
+        through="SettlementField",
+        help_text="settlements referenced in this description",
+    )
+
     def __str__(self):
         return self.name
 
@@ -71,34 +100,34 @@ class GeographicalRegion(NamedSpace, models.Model):
 class Settlement(NamedSpace, models.Model):
     """
     A settlement is a population centre or fortification, e.g. "Poitiers",
-    "monastery of Tolouse", or "a village"
+    "the monastery of Tolouse"
     """
 
     pass
 
 
 class PoliticalRegionField(Field, models.Model):
-    political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
 
 
-class EcceclesiasticalRegionField(Field, models.Model):
+class EcclesiasticalRegionField(Field, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     ecclesiastical_region = models.ForeignKey(
         to=EcclesiasticalRegion, on_delete=models.CASCADE
     )
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
 
 
 class GeographicalRegionField(Field, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     geographical_region = models.ForeignKey(
         to=GeographicalRegion, on_delete=models.CASCADE
     )
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
 
 
 class SettlementField(Field, models.Model):
-    settlement = models.ForeignKey(to=Settlement, on_delete=models.CASCADE)
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    settlement = models.ForeignKey(to=Settlement, on_delete=models.CASCADE)
 
 
 class LandscapeFeature(Field, models.Model):
@@ -107,8 +136,10 @@ class LandscapeFeature(Field, models.Model):
     space, e.g. "a forest", "a hill", "a cave".
     """
 
-    description = models.CharField(max_length=512, blank=False)
-
+    space = models.ForeignKey(
+        to=SpaceDescription, on_delete=models.CASCADE, related_name="landscape_features"
+    )
+    landscape = models.CharField(max_length=512, blank=False)
 
 class Spot(Field, models.Model):
     """
@@ -121,4 +152,7 @@ class Spot(Field, models.Model):
     architectural features rather than natural ones.
     """
 
-    description = models.CharField(max_length=512, blank=False)
+    space = models.ForeignKey(
+        to=SpaceDescription, on_delete=models.CASCADE, related_name="spots"
+    )
+    spot = models.CharField(max_length=512, blank=False)
