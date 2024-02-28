@@ -53,6 +53,7 @@ class SpotInlineAdmin(admin.StackedInline):
 
 @admin.register(models.SpaceDescription)
 class SpaceDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description"]
     fields = ["name", "description"]
     inlines = [
         PoliticalRegionFieldInlineAdmin,
