@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+import itertools
 
 from core.models import Field
 from space import validators
@@ -131,7 +133,23 @@ class Structure(NamedSpace, models.Model):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        verbose_name="parent structure",
+        help_text="The structure containing this structure, e.g. the building containing a room.",
     )
+
+    @admin.display()
+    def ancestors(self):
+        if self.parent:
+            return [self.parent] + self.parent.ancestors()
+        else:
+            return []
+
+    @admin.display()
+    def descendants(self):
+        iterate_descendants = (
+            [child] + child.descendants() for child in self.children.all()
+        )
+        return list(itertools.chain.from_iterable(iterate_descendants))
 
     def clean(self):
         if self.parent:

@@ -23,6 +23,7 @@ class GeographicalRegionAdmin(admin.ModelAdmin):
 
 @admin.register(models.Structure)
 class StructureAdmin(admin.ModelAdmin):
+    readonly_fields = ["ancestors", "descendants"]
     list_display = ["name", "description", "identifiable"]
     list_filter = ["identifiable"]
 
