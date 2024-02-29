@@ -18,6 +18,11 @@ class GeographicalRegionAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(models.Structure)
+class StructureAdmin(admin.ModelAdmin):
+    pass
+
+
 class PoliticalRegionFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Political region reference"
     model = models.PoliticalRegionField

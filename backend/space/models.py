@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.models import Field
-
+from space import validators
 
 class SpaceDescription(models.Model):
     """
@@ -120,16 +120,22 @@ class Structure(NamedSpace, models.Model):
         SETTLEMENT = 0, "settlement, population centre"
         ROAD = 1, "road, square, crossroad"
         FORTIFICATION = 2, "fortification"
-        BUILDING = 3, "building"
+        BUILDING = 3, "building, vessel"
         ROOM = 4, "room"
         SPOT = 5, "spot, object"
 
     level = models.IntegerField(choices=LevelOptions.choices)
-    contains = models.ManyToManyField(
+    parent = models.ForeignKey(
         to="self",
-        related_name="contained_in",
-        symmetrical=False,
+        related_name="children",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
+
+    def clean(self):
+        if self.parent:
+            validators.validate_level_deeper_than_parent(self.level, self.parent)
 
 
 class PoliticalRegionField(Field, models.Model):
