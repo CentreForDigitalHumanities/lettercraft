@@ -17,5 +17,5 @@ def test_validate_structure_incorrect_hierarchy(road_structure, building_structu
     message = e.value.args[0]
     assert (
         message
-        == "cannot add a structure of level 1 as a child to a structure of level 3"
+        == "cannot add a structure of level 1 (road, square, crossroad) as a child to a structure of level 3 (building, vessel)"
     )

@@ -135,7 +135,9 @@ class Structure(NamedSpace, models.Model):
 
     def clean(self):
         if self.parent:
-            validators.validate_level_deeper_than_parent(self.level, self.parent)
+            validators.validate_level_deeper_than_parent(
+                self.level, self.parent, self.LevelOptions
+            )
 
 
 class PoliticalRegionField(Field, models.Model):
