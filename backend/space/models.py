@@ -39,10 +39,10 @@ class SpaceDescription(models.Model):
         help_text="geographical regions referenced in this description",
     )
 
-    settlements = models.ManyToManyField(
-        to="Settlement",
-        through="SettlementField",
-        help_text="settlements referenced in this description",
+    structures = models.ManyToManyField(
+        to="Structure",
+        through="StructureField",
+        help_text="sites referenced in this description",
     )
 
     def __str__(self):
@@ -59,6 +59,16 @@ class NamedSpace(models.Model):
         max_length=200,
         unique=True,
         blank=False,
+    )
+
+    description = models.TextField(
+        blank=True,
+    )
+
+    identifiable = models.BooleanField(
+        default=True,
+        null=False,
+        help_text="Whether this place is an identifiable location that can be cross-referenced between descriptions, or a generic description",
     )
 
     # may be expanded with geo data?
@@ -97,13 +107,29 @@ class GeographicalRegion(NamedSpace, models.Model):
     pass
 
 
-class Settlement(NamedSpace, models.Model):
+class Structure(NamedSpace, models.Model):
     """
-    A settlement is a population centre or fortification, e.g. "Poitiers",
-    "the monastery of Tolouse"
+    A structure is a man-made site.
+
+    This can be a population centre ("Poitiers"), fortification
+    ("the monastery of Toulouse"), building ("a church"), room,
+    road, or even a specific object ("a desk").
     """
 
-    pass
+    class LevelOptions(models.IntegerChoices):
+        SETTLEMENT = 0, "settlement, population centre"
+        ROAD = 1, "road, square, crossroad"
+        FORTIFICATION = 2, "fortification"
+        BUILDING = 3, "building"
+        ROOM = 4, "room"
+        SPOT = 5, "spot, object"
+
+    level = models.IntegerField(choices=LevelOptions.choices)
+    contains = models.ManyToManyField(
+        to="self",
+        related_name="contained_in",
+        symmetrical=False,
+    )
 
 
 class PoliticalRegionField(Field, models.Model):
@@ -125,9 +151,9 @@ class GeographicalRegionField(Field, models.Model):
     )
 
 
-class SettlementField(Field, models.Model):
+class StructureField(Field, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    settlement = models.ForeignKey(to=Settlement, on_delete=models.CASCADE)
+    structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
 
 
 class LandscapeFeature(Field, models.Model):
@@ -140,19 +166,3 @@ class LandscapeFeature(Field, models.Model):
         to=SpaceDescription, on_delete=models.CASCADE, related_name="landscape_features"
     )
     landscape = models.CharField(max_length=512, blank=False)
-
-class Spot(Field, models.Model):
-    """
-    A spot provides detail about the precise location, e.g. a room or a road.
-
-    It is purely descriptive, and captures information too detailed to enter
-    as a "named region".
-
-    Spots are distinct from landscape features in that they usually describe
-    architectural features rather than natural ones.
-    """
-
-    space = models.ForeignKey(
-        to=SpaceDescription, on_delete=models.CASCADE, related_name="spots"
-    )
-    spot = models.CharField(max_length=512, blank=False)

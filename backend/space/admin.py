@@ -45,12 +45,6 @@ class LandscapeFeatureInlineAdmin(admin.StackedInline):
     extra = 0
 
 
-class SpotInlineAdmin(admin.StackedInline):
-    model = models.Spot
-    fields = ["spot", "certainty", "note"]
-    extra = 0
-
-
 @admin.register(models.SpaceDescription)
 class SpaceDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
@@ -60,6 +54,5 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         EcclesiasticalRegionFieldInlineAdmin,
         GeographicalRegionFieldInlineAdmin,
         LandscapeFeatureInlineAdmin,
-        SpotInlineAdmin,
         ReferenceInlineAdmin,
     ]
