@@ -5,22 +5,26 @@ from . import models
 
 @admin.register(models.PoliticalRegion)
 class PoliticalRegion(admin.ModelAdmin):
-    pass
+    list_display = ["name", "identifiable"]
+    list_filter = ["identifiable"]
 
 
 @admin.register(models.EcclesiasticalRegion)
 class EccleciasticalRegion(admin.ModelAdmin):
-    pass
+    list_display = ["name", "identifiable"]
+    list_filter = ["identifiable"]
 
 
 @admin.register(models.GeographicalRegion)
 class GeographicalRegionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "identifiable"]
+    list_filter = ["identifiable"]
 
 
 @admin.register(models.Structure)
 class StructureAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["name", "description", "identifiable"]
+    list_filter = ["identifiable"]
 
 
 class PoliticalRegionFieldInlineAdmin(admin.StackedInline):
@@ -44,6 +48,13 @@ class GeographicalRegionFieldInlineAdmin(admin.StackedInline):
     extra = 0
 
 
+class StructureFieldInlineAdmin(admin.StackedInline):
+    verbose_name = "Structure reference"
+    model = models.StructureField
+    fields = ["space", "structure", "certainty", "note"]
+    extra = 0
+
+
 class LandscapeFeatureInlineAdmin(admin.StackedInline):
     model = models.LandscapeFeature
     fields = ["landscape", "certainty", "note"]
@@ -58,6 +69,7 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         PoliticalRegionFieldInlineAdmin,
         EcclesiasticalRegionFieldInlineAdmin,
         GeographicalRegionFieldInlineAdmin,
+        StructureFieldInlineAdmin,
         LandscapeFeatureInlineAdmin,
         ReferenceInlineAdmin,
     ]
