@@ -5,7 +5,7 @@ from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
 from person.models import Person
 from letter.models import Gift, Letter
-
+from space.models import SpaceDescription
 
 class EpistolaryEvent(models.Model):
     """
@@ -81,6 +81,12 @@ class LetterAction(models.Model):
         to=Gift,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
+        blank=True,
+    )
+
+    space_descriptions = models.ManyToManyField(
+        to=SpaceDescription,
+        help_text="Descriptions of the space in which this action took place",
         blank=True,
     )
 
