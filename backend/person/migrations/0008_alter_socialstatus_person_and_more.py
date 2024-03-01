@@ -21,4 +21,8 @@ class Migration(migrations.Migration):
             name='status_marker',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='social_statuses', to='person.statusmarker'),
         ),
+        migrations.AlterModelOptions(
+            name='socialstatus',
+            options={'verbose_name_plural': 'Social statuses'},
+        ),
     ]

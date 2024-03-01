@@ -40,7 +40,7 @@ class Person(models.Model):
 
     is_group = models.BooleanField(
         default=False,
-        help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers') or a single person.",
+        help_text="Check if this entity is a group of people (e.g. 'the nuns of Poitiers'). If checked, leave the Date of Birth and Date of Death fields empty.",
     )
 
     class Meta:

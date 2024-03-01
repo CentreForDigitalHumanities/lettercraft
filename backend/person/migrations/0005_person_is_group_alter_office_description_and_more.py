@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='person',
             name='is_group',
-            field=models.BooleanField(default=False, help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers') or a single person."),
+            field=models.BooleanField(default=False, help_text="Check if this entity is a group of people (e.g. 'the nuns of Poitiers'). If checked, leave the Date of Birth and Date of Death fields empty."),
         ),
         migrations.AlterField(
             model_name='office',
