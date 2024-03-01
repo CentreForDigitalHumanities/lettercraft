@@ -11,9 +11,9 @@ class PersonNameAdmin(admin.StackedInline):
     verbose_name_plural = "(Alternative) person names"
 
 
-class OccupationAdmin(admin.StackedInline):
-    model = models.Occupation
-    fields = ["office", "certainty", "note", "year_lower", "year_upper", "year_exact"]
+class SocialStatusAdmin(admin.StackedInline):
+    model = models.SocialStatus
+    fields = ["status_marker", "certainty", "note", "year_lower", "year_upper", "year_exact"]
     extra = 0
 
 
@@ -33,13 +33,13 @@ class PersonDateOfDeathAdmin(admin.StackedInline):
 class PersonAdmin(admin.ModelAdmin):
     inlines = [
         PersonNameAdmin,
-        OccupationAdmin,
+        SocialStatusAdmin,
         PersonDateOfBirthAdmin,
         PersonDateOfDeathAdmin,
         ReferenceInlineAdmin,
     ]
 
 
-@admin.register(models.Office)
-class Office(admin.ModelAdmin):
+@admin.register(models.StatusMarker)
+class StatusMarkerAdmin(admin.ModelAdmin):
     pass

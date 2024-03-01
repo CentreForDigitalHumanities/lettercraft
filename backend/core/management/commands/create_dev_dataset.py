@@ -20,9 +20,9 @@ from event.models import (
 from person.models import (
     Gender,
     Person,
-    Office,
     PersonDateOfBirth,
     PersonDateOfDeath,
+    StatusMarker,
 )
 from letter.models import (
     Category,
@@ -44,7 +44,7 @@ from .fixtures import (
     letter_category_names,
     source_names,
     world_event_names,
-    group_names
+    group_names,
 )
 from .create_dev_dataset_utils import (
     get_unique_name,
@@ -117,7 +117,7 @@ class Command(BaseCommand):
             self._create_epistolary_events(
                 fake, options, total=40, model=EpistolaryEvent
             )
-            self._create_offices(fake, options, total=50, model=Office)
+            self._create_status_markers(fake, options, total=50, model=StatusMarker)
             self._create_persons(fake, options, total=100, model=Person)
             self._create_letter_categories(fake, options, total=10, model=Category)
             self._create_letters(fake, options, total=200, model=Letter)
@@ -158,23 +158,24 @@ class Command(BaseCommand):
         )
 
     @track_progress
-    def _create_offices(self, fake, options, total, model):
-        Office.objects.create(name=fake.job(), description=fake.text())
+    def _create_status_markers(self, fake, options, total, model):
+        StatusMarker.objects.create(name=fake.job(), description=fake.text())
 
     @track_progress
     def _create_persons(self, fake: Faker, options, total, model):
         is_group = random.choice([True, False])
 
         if is_group is True:
-            gender_options = [gender for gender in Gender.values if gender != Gender.MIXED]
+            gender_options = [
+                gender for gender in Gender.values if gender != Gender.MIXED
+            ]
             person_names = random.sample(group_names, k=random.randint(0, 3))
         else:
             gender_options = Gender.values
             person_names = [fake.name() for _ in range(random.randint(0, 3))]
 
         person = Person.objects.create(
-            is_group=is_group,
-            gender=random.choice(gender_options)
+            is_group=is_group, gender=random.choice(gender_options)
         )
 
         for name in person_names:
@@ -199,8 +200,8 @@ class Command(BaseCommand):
                 )
 
         for _ in range(random.randint(0, 2)):
-            person.occupations.create(
-                office=get_random_model_object(Office),
+            person.social_statuses.create(
+                status_marker=get_random_model_object(StatusMarker),
                 **self.fake_date_value(fake),
                 **self.fake_field_value(fake),
             )
