@@ -1,5 +1,7 @@
 from django.db import models
+from django.forms import ValidationError
 from core.models import Field, LettercraftDate
+from django.db.models import Q, CheckConstraint
 
 
 class Office(models.Model):
@@ -9,27 +11,54 @@ class Office(models.Model):
 
     name = models.CharField(
         max_length=256,
-        help_text="The name of the office (e.g. 'bishop of Toulouse', 'king of France')",
+        help_text="The name of the marker or job (e.g. 'bishop of Toulouse', 'peasantry of France')",
     )
     description = models.TextField(
         blank=True,
-        help_text="A description of the office (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
+        help_text="A description of what the marker means (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
     )
 
     def __str__(self):
         return self.name
 
 
+class Gender(models.TextChoices):
+    FEMALE = "FEMALE", "Female"
+    MALE = "MALE", "Male"
+    UNKNOWN = "UNKNOWN", "Unknown"
+    MIXED = "MIXED", "Mixed"
+    OTHER = "OTHER", "Other"
+
+
 class Person(models.Model):
-    class Gender(models.TextChoices):
-        FEMALE = "FEMALE", "Female"
-        MALE = "MALE", "Male"
-        UNKNOWN = "UNKNOWN", "Unknown"
-        OTHER = "OTHER", "Other"
 
     gender = models.CharField(
-        max_length=8, choices=Gender.choices, default=Gender.UNKNOWN
+        max_length=8,
+        choices=Gender.choices,
+        default=Gender.UNKNOWN,
+        help_text="The gender of this person or the group members. The option Mixed is only used for groups.",
     )
+
+    is_group = models.BooleanField(
+        default=False,
+        help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers') or a single person.",
+    )
+
+    class Meta:
+        constraints = [
+            CheckConstraint(
+                check=~Q(gender=Gender.MIXED, is_group=True),
+                name="gender_group_constraint",
+                violation_error_message="The 'mixed' gender option is reserved for groups",
+            )
+        ]
+
+    def clean(self):
+        if self.is_group and getattr(self, 'date_of_birth', None) is not None:
+            raise ValidationError("A group cannot have a date of birth")
+
+        if self.is_group and getattr(self, 'date_of_death', None) is not None:
+            raise ValidationError("A group cannot have a date of death")
 
     def __str__(self):
         if self.names.count() == 1:
@@ -39,7 +68,7 @@ class Person(models.Model):
             aliases = ", ".join(name.value for name in self.names.all()[1:])
             return f"{main_name} (aka {aliases})"
         else:
-            return f"Unknown person #{self.id}"
+            return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
 
 
 class PersonName(Field, models.Model):

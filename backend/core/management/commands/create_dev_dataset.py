@@ -18,11 +18,11 @@ from event.models import (
     WorldEventTrigger,
 )
 from person.models import (
+    Gender,
     Person,
     Office,
     PersonDateOfBirth,
     PersonDateOfDeath,
-    PersonName,
 )
 from letter.models import (
     Category,
@@ -44,6 +44,7 @@ from .fixtures import (
     letter_category_names,
     source_names,
     world_event_names,
+    group_names
 )
 from .create_dev_dataset_utils import (
     get_unique_name,
@@ -162,27 +163,40 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_persons(self, fake: Faker, options, total, model):
-        person = Person.objects.create(gender=random.choice(Person.Gender.values))
-        for _ in range(random.randint(0, 3)):
-            PersonName.objects.create(
-                person=person,
-                value=fake.name(),
+        is_group = random.choice([True, False])
+
+        if is_group is True:
+            gender_options = [gender for gender in Gender.values if gender != Gender.MIXED]
+            person_names = random.sample(group_names, k=random.randint(0, 3))
+        else:
+            gender_options = Gender.values
+            person_names = [fake.name() for _ in range(random.randint(0, 3))]
+
+        person = Person.objects.create(
+            is_group=is_group,
+            gender=random.choice(gender_options)
+        )
+
+        for name in person_names:
+            person.names.create(
+                value=name,
                 **self.fake_field_value(fake),
             )
 
-        if random.choice([True, False]):
-            PersonDateOfBirth.objects.create(
-                person=person,
-                **self.fake_date_value(fake),
-                **self.fake_field_value(fake),
-            )
+        if is_group is False:
+            if random.choice([True, False]):
+                PersonDateOfBirth.objects.create(
+                    person=person,
+                    **self.fake_date_value(fake),
+                    **self.fake_field_value(fake),
+                )
 
-        if random.choice([True, False]):
-            PersonDateOfDeath.objects.create(
-                person=person,
-                **self.fake_date_value(fake),
-                **self.fake_field_value(fake),
-            )
+            if random.choice([True, False]):
+                PersonDateOfDeath.objects.create(
+                    person=person,
+                    **self.fake_date_value(fake),
+                    **self.fake_field_value(fake),
+                )
 
         for _ in range(random.randint(0, 2)):
             person.occupations.create(
@@ -190,6 +204,9 @@ class Command(BaseCommand):
                 **self.fake_date_value(fake),
                 **self.fake_field_value(fake),
             )
+
+        person.clean()
+        person.save()
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):

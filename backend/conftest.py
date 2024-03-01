@@ -36,6 +36,15 @@ def person_2(db):
 
 
 @pytest.fixture()
+def person_group(db):
+    person_group = Person.objects.create()
+    person_group.name = "The Muppets"
+    person_group.is_group = True
+    person_group.save()
+    return person_group
+
+
+@pytest.fixture()
 def letter_action_writing(db, letter, person):
     letter_action = LetterAction.objects.create()
     letter_action.letters.add(letter)
