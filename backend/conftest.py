@@ -8,7 +8,7 @@ from event.models import (
     WorldEvent,
     LetterEventDate,
 )
-from person.models import Person
+from person.models import Agent
 
 
 @pytest.fixture()
@@ -20,35 +20,35 @@ def letter(db):
 
 
 @pytest.fixture()
-def person(db):
-    person = Person.objects.create()
-    person.name = "Bert"
-    person.save()
-    return person
+def agent(db):
+    agent = Agent.objects.create()
+    agent.name = "Bert"
+    agent.save()
+    return agent
 
 
 @pytest.fixture()
-def person_2(db):
-    person = Person.objects.create()
-    person.name = "Ernie"
-    person.save()
-    return person
+def agent_2(db):
+    agent = Agent.objects.create()
+    agent.name = "Ernie"
+    agent.save()
+    return agent
 
 
 @pytest.fixture()
-def person_group(db):
-    person_group = Person.objects.create()
-    person_group.name = "The Muppets"
-    person_group.is_group = True
-    person_group.save()
-    return person_group
+def agent_group(db):
+    agent_group = Agent.objects.create()
+    agent_group.name = "The Muppets"
+    agent_group.is_group = True
+    agent_group.save()
+    return agent_group
 
 
 @pytest.fixture()
-def letter_action_writing(db, letter, person):
+def letter_action_writing(db, letter, agent):
     letter_action = LetterAction.objects.create()
     letter_action.letters.add(letter)
-    letter_action.actors.add(person)
+    letter_action.actors.add(agent)
 
     LetterActionCategory.objects.create(
         letter_action=letter_action,
@@ -63,10 +63,10 @@ def letter_action_writing(db, letter, person):
 
 
 @pytest.fixture()
-def letter_action_reading(db, letter, person_2):
+def letter_action_reading(db, letter, agent_2):
     letter_action = LetterAction.objects.create()
     letter_action.letters.add(letter)
-    letter_action.actors.add(person_2)
+    letter_action.actors.add(agent_2)
 
     LetterActionCategory.objects.create(
         letter_action=letter_action,

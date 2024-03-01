@@ -30,17 +30,17 @@ class Gender(models.TextChoices):
     OTHER = "OTHER", "Other"
 
 
-class Person(models.Model):
+class Agent(models.Model):
     gender = models.CharField(
         max_length=8,
         choices=Gender.choices,
         default=Gender.UNKNOWN,
-        help_text="The gender of this person or the group members. The option Mixed is only used for groups.",
+        help_text="The gender of this agent or group of agents. The option Mixed is only used for groups.",
     )
 
     is_group = models.BooleanField(
         default=False,
-        help_text="Check if this entity is a group of people (e.g. 'the nuns of Poitiers'). If checked, leave the Date of Birth and Date of Death fields empty.",
+        help_text="Check if this entity is a group of agents (e.g. 'the nuns of Poitiers'). If checked, the date of birth and date of death fields should be left empty.",
     )
 
     class Meta:
@@ -67,67 +67,67 @@ class Person(models.Model):
             aliases = ", ".join(name.value for name in self.names.all()[1:])
             return f"{main_name} (aka {aliases})"
         else:
-            return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
+            return f"Unknown {'agent' if self.is_group is False else 'group of agents'} #{self.id}"
 
 
-class PersonName(Field, models.Model):
+class AgentName(Field, models.Model):
     value = models.CharField(
         max_length=256,
         blank=True,
     )
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, related_name="names"
+    agent = models.ForeignKey(
+        to=Agent, on_delete=models.CASCADE, related_name="names"
     )
 
     class Meta:
         constraints = [
-            models.UniqueConstraint("value", "person", name="unique_names_for_person")
+            models.UniqueConstraint("value", "agent", name="unique_names_for_agent")
         ]
 
     def __str__(self):
         return self.value
 
 
-class PersonDateOfBirth(LettercraftDate, Field, models.Model):
+class AgentDateOfBirth(LettercraftDate, Field, models.Model):
     """
-    A relationship between a person and their date of birth.
+    A relationship between a agent and their date of birth.
     """
 
-    person = models.OneToOneField(
-        Person, related_name="date_of_birth", on_delete=models.CASCADE
+    agent = models.OneToOneField(
+        Agent, related_name="date_of_birth", on_delete=models.CASCADE
     )
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.person} born in {self.year_exact}"
+            return f"{self.agent} born in {self.year_exact}"
         else:
-            return f"{self.person} born c. {self.year_lower}–{self.year_upper}"
+            return f"{self.agent} born c. {self.year_lower}–{self.year_upper}"
 
 
-class PersonDateOfDeath(LettercraftDate, Field, models.Model):
+class AgentDateOfDeath(LettercraftDate, Field, models.Model):
     """ "
-    A relationship between a person and their date of death.
+    A relationship between a agent and their date of death.
     """
 
-    person = models.OneToOneField(
-        Person, related_name="date_of_death", on_delete=models.CASCADE
+    agent = models.OneToOneField(
+        Agent, related_name="date_of_death", on_delete=models.CASCADE
     )
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.person} died in {self.year_exact}"
+            return f"{self.agent} died in {self.year_exact}"
         else:
-            return f"{self.person} died c. {self.year_lower}–{self.year_upper}"
+            return f"{self.agent} died c. {self.year_lower}–{self.year_upper}"
 
 
 class SocialStatus(Field, LettercraftDate, models.Model):
     """
-    A relationship between a person or group and a social status marker,
-    indicating that the person or group is of a certain social status.
+    A relationship between a agent or group and a social status marker,
+    indicating that the agent or group is of a certain social status.
     """
 
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, related_name="social_statuses"
+    agent = models.ForeignKey(
+        to=Agent, on_delete=models.CASCADE, related_name="social_statuses"
     )
     status_marker = models.ForeignKey(
         to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
@@ -137,4 +137,4 @@ class SocialStatus(Field, LettercraftDate, models.Model):
         verbose_name_plural = "Social statuses"
 
     def __str__(self):
-        return f"{self.person} as {self.status_marker}"
+        return f"{self.agent} as {self.status_marker}"

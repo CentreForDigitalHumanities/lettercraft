@@ -18,10 +18,10 @@ from event.models import (
     WorldEventTrigger,
 )
 from person.models import (
+    Agent,
+    AgentDateOfBirth,
+    AgentDateOfDeath,
     Gender,
-    Person,
-    PersonDateOfBirth,
-    PersonDateOfDeath,
     StatusMarker,
 )
 from letter.models import (
@@ -118,7 +118,7 @@ class Command(BaseCommand):
                 fake, options, total=40, model=EpistolaryEvent
             )
             self._create_status_markers(fake, options, total=50, model=StatusMarker)
-            self._create_persons(fake, options, total=100, model=Person)
+            self._create_agents(fake, options, total=100, model=Agent)
             self._create_letter_categories(fake, options, total=10, model=Category)
             self._create_letters(fake, options, total=200, model=Letter)
             self._create_gifts(fake, options, total=50, model=Gift)
@@ -162,52 +162,52 @@ class Command(BaseCommand):
         StatusMarker.objects.create(name=fake.job(), description=fake.text())
 
     @track_progress
-    def _create_persons(self, fake: Faker, options, total, model):
+    def _create_agents(self, fake: Faker, options, total, model):
         is_group = random.choice([True, False])
 
         if is_group is True:
             gender_options = [
                 gender for gender in Gender.values if gender != Gender.MIXED
             ]
-            person_names = random.sample(group_names, k=random.randint(0, 3))
+            agent_names = random.sample(group_names, k=random.randint(0, 3))
         else:
             gender_options = Gender.values
-            person_names = [fake.name() for _ in range(random.randint(0, 3))]
+            agent_names = [fake.name() for _ in range(random.randint(0, 3))]
 
-        person = Person.objects.create(
+        agent = Agent.objects.create(
             is_group=is_group, gender=random.choice(gender_options)
         )
 
-        for name in person_names:
-            person.names.create(
+        for name in agent_names:
+            agent.names.create(
                 value=name,
                 **self.fake_field_value(fake),
             )
 
         if is_group is False:
             if random.choice([True, False]):
-                PersonDateOfBirth.objects.create(
-                    person=person,
+                AgentDateOfBirth.objects.create(
+                    agent=agent,
                     **self.fake_date_value(fake),
                     **self.fake_field_value(fake),
                 )
 
             if random.choice([True, False]):
-                PersonDateOfDeath.objects.create(
-                    person=person,
+                AgentDateOfDeath.objects.create(
+                    agent=agent,
                     **self.fake_date_value(fake),
                     **self.fake_field_value(fake),
                 )
 
         for _ in range(random.randint(0, 2)):
-            person.social_statuses.create(
+            agent.social_statuses.create(
                 status_marker=get_random_model_object(StatusMarker),
                 **self.fake_date_value(fake),
                 **self.fake_field_value(fake),
             )
 
-        person.clean()
-        person.save()
+        agent.clean()
+        agent.save()
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
@@ -218,8 +218,8 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letters(self, fake: Faker, *args, **kwargs):
-        senders = get_random_model_objects(Person, min_amount=2, max_amount=5)
-        addressees = get_random_model_objects(Person, min_amount=2, max_amount=5)
+        senders = get_random_model_objects(Agent, min_amount=2, max_amount=5)
+        addressees = get_random_model_objects(Agent, min_amount=2, max_amount=5)
 
         subject = ", ".join(fake.words(nb=3, unique=True))
         letter = Letter.objects.create(
@@ -282,7 +282,7 @@ class Command(BaseCommand):
 
         for _ in range(random.randint(1, 5)):
             Role.objects.create(
-                person=get_random_model_object(Person),
+                agent=get_random_model_object(Agent),
                 letter_action=action,
                 present=random.choice([True, False]),
                 role=random.choice(Role.RoleOptions.choices)[0],
@@ -294,7 +294,7 @@ class Command(BaseCommand):
     def _create_gifts(self, fake, options, total, model):
         unique_name = get_unique_name(gift_names, Gift)
 
-        gifter = get_random_model_object(Person, allow_null=True)
+        gifter = get_random_model_object(Agent, allow_null=True)
 
         Gift.objects.create(
             name=unique_name,

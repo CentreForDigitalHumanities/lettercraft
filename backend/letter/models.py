@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from core.models import Field
-from person.models import Person
+from person.models import Agent
 
 
 class Gift(models.Model):
@@ -36,10 +36,10 @@ class Gift(models.Model):
     )
 
     gifted_by = models.ForeignKey(
-        to=Person,
+        to=Agent,
         on_delete=models.CASCADE,
         related_name="gifts_given",
-        help_text="The person who gave the gift. Leave empty if unknown.",
+        help_text="The agent who gave the gift. Leave empty if unknown.",
         null=True,
         blank=True,
     )
@@ -133,9 +133,9 @@ class LetterMaterial(Field, models.Model):
 
 class LetterSenders(Field, models.Model):
     senders = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         blank=True,
-        help_text="persons that the letter names as the sender",
+        help_text="Agents whom the letter names as the sender",
     )
     letter = models.OneToOneField(
         to=Letter,
@@ -152,9 +152,9 @@ class LetterSenders(Field, models.Model):
 
 class LetterAddressees(Field, models.Model):
     addressees = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         blank=True,
-        help_text="persons that the letter names as the addressee",
+        help_text="Agents whom the letter names as the addressee",
     )
     letter = models.OneToOneField(
         to=Letter,
