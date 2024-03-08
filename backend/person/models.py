@@ -35,12 +35,12 @@ class Agent(models.Model):
         max_length=8,
         choices=Gender.choices,
         default=Gender.UNKNOWN,
-        help_text="The gender of this agent or group of agents. The option Mixed is only used for groups.",
+        help_text="The gender of this person or group of people. The option Mixed is only used for groups.",
     )
 
     is_group = models.BooleanField(
         default=False,
-        help_text="Check if this entity is a group of agents (e.g. 'the nuns of Poitiers'). If checked, the date of birth and date of death fields should be left empty.",
+        help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers'). If true, the date of birth and date of death fields should be left empty.",
     )
 
     class Meta:
@@ -67,7 +67,7 @@ class Agent(models.Model):
             aliases = ", ".join(name.value for name in self.names.all()[1:])
             return f"{main_name} (aka {aliases})"
         else:
-            return f"Unknown {'agent' if self.is_group is False else 'group of agents'} #{self.id}"
+            return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
 
 
 class AgentName(Field, models.Model):
@@ -75,9 +75,7 @@ class AgentName(Field, models.Model):
         max_length=256,
         blank=True,
     )
-    agent = models.ForeignKey(
-        to=Agent, on_delete=models.CASCADE, related_name="names"
-    )
+    agent = models.ForeignKey(to=Agent, on_delete=models.CASCADE, related_name="names")
 
     class Meta:
         constraints = [
@@ -94,8 +92,15 @@ class AgentDateOfBirth(LettercraftDate, Field, models.Model):
     """
 
     agent = models.OneToOneField(
-        Agent, related_name="date_of_birth", on_delete=models.CASCADE
+        Agent,
+        related_name="date_of_birth",
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_group": False},
     )
+
+    def clean(self):
+        if self.agent.is_group:
+            raise ValidationError("A group cannot have a date of birth.")
 
     def __str__(self):
         if self.year_exact:
@@ -110,8 +115,15 @@ class AgentDateOfDeath(LettercraftDate, Field, models.Model):
     """
 
     agent = models.OneToOneField(
-        Agent, related_name="date_of_death", on_delete=models.CASCADE
+        Agent,
+        related_name="date_of_death",
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_group": False},
     )
+
+    def clean(self):
+        if self.agent.is_group:
+            raise ValidationError("A group cannot have a date of death.")
 
     def __str__(self):
         if self.year_exact:
@@ -122,8 +134,8 @@ class AgentDateOfDeath(LettercraftDate, Field, models.Model):
 
 class SocialStatus(Field, LettercraftDate, models.Model):
     """
-    A relationship between a agent or group and a social status marker,
-    indicating that the agent or group is of a certain social status.
+    A relationship between a person or group and a social status marker,
+    indicating that the person or group is of a certain social status.
     """
 
     agent = models.ForeignKey(

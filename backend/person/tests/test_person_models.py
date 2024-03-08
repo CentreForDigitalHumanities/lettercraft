@@ -5,12 +5,12 @@ from person.models import AgentDateOfBirth, AgentName, Gender
 
 
 def test_agent_name_for_unnamed_agent(agent):
-    assert agent.__str__().startswith("Unknown agent #")
+    assert agent.__str__().startswith("Unknown person #")
 
 
 def test_agent_name_for_unnamed_agent_group(agent_group):
     agent_group.name = ""
-    assert agent_group.__str__().startswith("Unknown group of agents #")
+    assert agent_group.__str__().startswith("Unknown group of people #")
 
 
 def test_agent_name_for_agent_with_single_name(agent):
