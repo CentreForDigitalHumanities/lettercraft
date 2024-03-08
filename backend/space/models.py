@@ -134,7 +134,6 @@ class Structure(NamedSpace, models.Model):
         help_text="The structure containing this structure, e.g. the building containing a room.",
     )
 
-    @admin.display()
     @property
     def ancestors(self):
         if self.parent:
@@ -142,13 +141,20 @@ class Structure(NamedSpace, models.Model):
         else:
             return []
 
-    @admin.display()
+    @admin.display(description="Contained in structures")
+    def ancestors_display(self):
+        return ", ".join(str(a) for a in self.ancestors)
+
     @property
     def descendants(self):
         iterate_descendants = (
             [child] + child.descendants for child in self.children.all()
         )
         return list(itertools.chain.from_iterable(iterate_descendants))
+
+    @admin.display(description="Contains structures")
+    def descendants_display(self):
+        return ", ".join(str(a) for a in self.descendants)
 
     def clean(self):
         if self.parent:
