@@ -44,7 +44,7 @@ def structure_tree(
 def test_structure_ancestors(
     spot_structure, room_structure, building_structure, road_structure, structure_tree
 ):
-    assert spot_structure.ancestors() == [
+    assert spot_structure.ancestors == [
         room_structure,
         building_structure,
         road_structure,
@@ -59,7 +59,7 @@ def test_structure_descendants(
     spot_structure,
     structure_tree,
 ):
-    assert road_structure.descendants() == [
+    assert road_structure.descendants == [
         building_structure,
         room_structure,
         spot_structure,

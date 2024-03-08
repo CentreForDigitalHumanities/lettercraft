@@ -26,25 +26,25 @@ class SpaceDescription(models.Model):
     political_regions = models.ManyToManyField(
         to="PoliticalRegion",
         through="PoliticalRegionField",
-        help_text="political regions referenced in this description",
+        help_text="Political regions referenced in this description",
     )
 
     ecclesiastical_regions = models.ManyToManyField(
         to="EcclesiasticalRegion",
         through="EcclesiasticalRegionField",
-        help_text="ecclesiastical regions referenced in this description",
+        help_text="Ecclesiastical regions referenced in this description",
     )
 
     geographical_regions = models.ManyToManyField(
         to="GeographicalRegion",
         through="GeographicalRegionField",
-        help_text="geographical regions referenced in this description",
+        help_text="Geographical regions referenced in this description",
     )
 
     structures = models.ManyToManyField(
         to="Structure",
         through="StructureField",
-        help_text="sites referenced in this description",
+        help_text="Man-made structures referenced in this description",
     )
 
     def __str__(self):
@@ -92,7 +92,7 @@ class PoliticalRegion(NamedSpace, models.Model):
 
 class EcclesiasticalRegion(NamedSpace, models.Model):
     """
-    An ecclesiastical region, e.g. a dioceses
+    An ecclesiastical region, e.g. a diocese
     """
 
     pass
@@ -100,10 +100,7 @@ class EcclesiasticalRegion(NamedSpace, models.Model):
 
 class GeographicalRegion(NamedSpace, models.Model):
     """
-    A geographical region or location.
-
-    Unlike political or ecclesiastical regions, geographic locations
-    may be recognised today, e.g. "the Pyrenees".
+    A geographical region or location, e.g. "the Pyrenees".
     """
 
     pass
@@ -138,16 +135,18 @@ class Structure(NamedSpace, models.Model):
     )
 
     @admin.display()
+    @property
     def ancestors(self):
         if self.parent:
-            return [self.parent] + self.parent.ancestors()
+            return [self.parent] + self.parent.ancestors
         else:
             return []
 
     @admin.display()
+    @property
     def descendants(self):
         iterate_descendants = (
-            [child] + child.descendants() for child in self.children.all()
+            [child] + child.descendants for child in self.children.all()
         )
         return list(itertools.chain.from_iterable(iterate_descendants))
 
