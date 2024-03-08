@@ -1,1 +1,94 @@
-<p>agents works!</p>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/']">Lettercraft</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/browse']">Browse</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a [routerLink]="['/browse/agents']">Agents</a>
+        </li>
+    </ol>
+</nav>
+
+<h1>Agents</h1>
+
+<p>Select an agent from the table below to view its sources.</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                <span>Names</span>
+                <fa-icon class="ms-2" [icon]="icons.sort"/>
+            </th>
+            <th scope="col">
+                <span>Status</span>
+                <fa-icon class="ms-2" [icon]="icons.filter" />
+            </th>
+            <th scope="col">
+                <span>Born</span>
+                <fa-icon class="ms-2" [icon]="icons.sortNum" />
+            </th>
+            <th scope="col">
+                <span>Died</span>
+                <fa-icon class="ms-2" [icon]="icons.sortNum" />
+            </th>
+            <th scope="col">
+                <span>
+                    <fa-icon [icon]="icons.person"/>/<fa-icon [icon]="icons.group"/>
+                </span>
+                <fa-icon class="ms-2" [icon]="icons.filter"/>
+            </th>
+            <th scope="col">
+                <span>Gender</span>
+                <fa-icon class="ms-2" [icon]="icons.filter"/>
+            </th>
+            <th scope="col">
+                <span>Sources</span>
+                <fa-icon class="ms-2" [icon]="icons.sortNum"/>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <a [routerLink]="['1']">
+                    <div>
+                        <span>St. Radegund</span>
+                        <span class="badge rounded-pill text-bg-secondary ms-2">2</span>
+                    </div>
+                    <div>
+                        <span>Radegundis</span>
+                        <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                    </div>
+                </a>
+                </td>
+            <td>Saint of Poitiers</td>
+            <td>unknown</td>
+            <td>
+                <div>
+                    <span>463--467</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+                <div>
+                    <span>463--467</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+            </td>
+            <td><fa-icon [icon]="icons.person" /></td>
+            <td><fa-icon [icon]="icons.female" /></td>
+            <td>3</td>
+        </tr>
+        <tr>
+            <td><a [routerLink]="['']">Nuns of Poitiers</a></td>
+            <td>Clergy, nuns</td>
+            <td>-</td>
+            <td>-</td>
+            <td><fa-icon [icon]="icons.group" /></td>
+            <td><fa-icon [icon]="icons.female" /></td>
+            <td>5</td>
+        </tr>
+    </tbody>
+</table>

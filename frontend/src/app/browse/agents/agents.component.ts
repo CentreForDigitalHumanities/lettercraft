@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faCaretUp, faCaretDown, faTrash, faPencil, faPlus, faPerson, faPeopleGroup, faLocationDot, faEnvelope, faCube, faHand, faFilter, faSort, faSortAlphaAsc, faSortAmountAsc, faFemale, faVenus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lc-agents',
@@ -6,5 +7,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./agents.component.scss']
 })
 export class AgentsComponent {
+
+    icons = {
+        hide: faCaretUp,
+        show: faCaretDown,
+        delete: faTrash,
+        edit: faPencil,
+        create: faPlus,
+        person: faPerson,
+        group: faPeopleGroup,
+        place: faLocationDot,
+        letter: faEnvelope,
+        object: faCube,
+        action: faHand,
+        filter: faFilter,
+        sort: faSortAlphaAsc,
+        sortNum: faSortAmountAsc,
+        female: faVenus
+    }
 
 }

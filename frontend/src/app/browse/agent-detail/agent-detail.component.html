@@ -1,1 +1,55 @@
-<p>agent-detail works!</p>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/']">Lettercraft</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/browse']">Browse</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a [routerLink]="['/browse/agents']">Agents</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a [routerLink]="['/browse/agents/1']">St. Radegund</a>
+        </li>
+    </ol>
+</nav>
+
+<h1>St. Radegund</h1>
+
+<p>Mentioned in <strong>3</strong> sources. <span class="text-muted">Click to (de)select</span></p>
+
+<ul class="d-flex flex-wrap gap-2" style="list-style-type: none;">
+    <li role="button" (click)="selectSource(1)">
+        <span [class]="selectedSources.includes(1) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Fortunatus, <i>Vita Sanctae Radegundis</i>, Bk. 2, 1299--1301</span>
+    </li>
+    <li role="button" (click)="selectSource(2)">
+        <span [class]="selectedSources.includes(2) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Gaius Sidonius, <i>Radegundis Regina</i>, pp. 310--322</span>
+    </li>
+    <li role="button" (click)="selectSource(3)">
+        <span [class]="selectedSources.includes(3) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Aurelius Cassiodorus, <i>Miracula et Virtutes Sanctissimae Radegundis</i>, pp. 5--7, 18--19</span>
+    </li>
+</ul>
+
+<h2>Names</h2>
+
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <li *ngIf="selectedSources.length === 1 && selectedSources.includes(2)" class="list-group-item text-muted">No info in selected sources</li>
+    <li *ngIf="selectedSources.includes(1)" class="list-group-item d-flex justify-content-between">
+        <span>St. Radegund</span>
+        <span class="badge rounded-pill text-bg-primary">Fortunatus, <i>Vita Sanctae Radegundis</i>, Bk. 2, 1299</span>
+    </li>
+    <li *ngIf="selectedSources.includes(3)" class="list-group-item d-flex justify-content-between">
+        <span>Radegundis</span>
+        <span class="badge rounded-pill text-bg-primary">Aurelius Cassiodorus, <i>Miracula et Virtutes Sanctissimae Radegundis</i>, p 5</span>
+    </li>
+</ul>
+
+<h2>Status</h2>
+
+<h2>Date of Birth</h2>
+
+<h2>Date of Death</h2>
+
+<h2>Gender</h2>

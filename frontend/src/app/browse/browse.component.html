@@ -1,1 +1,38 @@
-<p>browse works!</p>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/']">Lettercraft</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <a [routerLink]="['/browse']">Browse</a>
+        </li>
+    </ol>
+</nav>
+
+<h1>Browse entities</h1>
+
+<p>Select a category to begin</p>
+
+<div class="list-group">
+    <a class="d-flex justify-content-between list-group-item list-group-item-action" [routerLink]="['/browse/agents']">
+        <div>
+            <fa-icon class="d-inline-block" style="width: 30px" [icon]="icons.person" />
+            <span>Agents</span>
+        </div>
+        <div class="badge text-bg-primary rounded-pill">3 entities</div>
+    </a>
+    <a class="d-flex justify-content-between list-group-item list-group-item-action" [routerLink]="['/browse/agents']">
+        <div>
+            <fa-icon class="d-inline-block" style="width: 30px" [icon]="icons.place" />
+            <span>Places</span>
+        </div>
+        <div class="badge text-bg-primary rounded-pill">6 entities</div>
+    </a>
+    <a class="d-flex justify-content-between list-group-item list-group-item-action" [routerLink]="['/browse/agents']">
+        <div>
+            <fa-icon class="d-inline-block" style="width: 30px" [icon]="icons.object" />
+            <span>Objects</span>
+        </div>
+        <div class="badge text-bg-primary rounded-pill">12 entities</div>
+    </a>
+</div>
