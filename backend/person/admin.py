@@ -3,43 +3,43 @@ from source.admin import ReferenceInlineAdmin
 from . import models
 
 
-class PersonNameAdmin(admin.StackedInline):
-    model = models.PersonName
+class AgentNameAdmin(admin.StackedInline):
+    model = models.AgentName
     fields = ["value", "certainty", "note"]
     extra = 0
-    verbose_name = "(Alternative) person name"
-    verbose_name_plural = "(Alternative) person names"
+    verbose_name = "(Alternative) agent name"
+    verbose_name_plural = "(Alternative) agent names"
 
 
-class OccupationAdmin(admin.StackedInline):
-    model = models.Occupation
-    fields = ["office", "certainty", "note", "year_lower", "year_upper", "year_exact"]
+class SocialStatusAdmin(admin.StackedInline):
+    model = models.SocialStatus
+    fields = ["status_marker", "certainty", "note", "year_lower", "year_upper", "year_exact"]
     extra = 0
 
 
-class PersonDateOfBirthAdmin(admin.StackedInline):
-    model = models.PersonDateOfBirth
+class AgentDateOfBirthAdmin(admin.StackedInline):
+    model = models.AgentDateOfBirth
     fields = ["year_lower", "year_upper", "year_exact", "certainty", "note"]
     extra = 0
 
 
-class PersonDateOfDeathAdmin(admin.StackedInline):
-    model = models.PersonDateOfDeath
+class AgentDateOfDeathAdmin(admin.StackedInline):
+    model = models.AgentDateOfDeath
     fields = ["year_lower", "year_upper", "year_exact", "certainty", "note"]
     extra = 0
 
 
-@admin.register(models.Person)
-class PersonAdmin(admin.ModelAdmin):
+@admin.register(models.Agent)
+class AgentAdmin(admin.ModelAdmin):
     inlines = [
-        PersonNameAdmin,
-        OccupationAdmin,
-        PersonDateOfBirthAdmin,
-        PersonDateOfDeathAdmin,
+        AgentNameAdmin,
+        SocialStatusAdmin,
+        AgentDateOfBirthAdmin,
+        AgentDateOfDeathAdmin,
         ReferenceInlineAdmin,
     ]
 
 
-@admin.register(models.Office)
-class Office(admin.ModelAdmin):
+@admin.register(models.StatusMarker)
+class StatusMarkerAdmin(admin.ModelAdmin):
     pass
