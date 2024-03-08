@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCaretUp, faCaretDown, faTrash, faPencil, faPlus, faPerson, faPeopleGroup, faLocationDot, faEnvelope, faCube, faHand, faFilter, faSort, faSortAlphaAsc, faSortAmountAsc, faFemale, faVenus } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faCaretDown, faTrash, faPencil, faPlus, faPerson, faPeopleGroup, faLocationDot, faEnvelope, faCube, faHand, faFilter, faSortAlphaAsc, faSortAmountAsc, faVenus, faMars } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lc-agents',
@@ -23,7 +23,8 @@ export class AgentsComponent {
         filter: faFilter,
         sort: faSortAlphaAsc,
         sortNum: faSortAmountAsc,
-        female: faVenus
+        female: faVenus,
+        male: faMars
     }
 
 }

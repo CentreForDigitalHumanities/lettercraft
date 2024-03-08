@@ -14,7 +14,13 @@
 
 <h1>Agents</h1>
 
-<p>Select an agent from the table below to view its sources.</p>
+<div class="d-flex justify-content-between align-items-center">
+    <span>Select an agent from the table below to view its sources.</span>
+    <div class="form-floating">
+        <input type="text" class="form-control" id="floatingInput" placeholder="e.g. Pippin">
+        <label for="floatingInput">Search by name</label>
+      </div>
+</div>
 
 <table class="table">
     <thead>
@@ -64,8 +70,17 @@
                         <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
                     </div>
                 </a>
-                </td>
-            <td>Abbess of the Convent of the Holy Cross; Saint</td>
+            </td>
+            <td>
+                <div>
+                    <span>Abbess of the Convent of the Holy Cross</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+                <div>
+                    <span>Saint</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+            </td>
             <td>unknown</td>
             <td>
                 <div>
@@ -89,6 +104,37 @@
             <td><fa-icon [icon]="icons.group" /></td>
             <td><fa-icon [icon]="icons.female" /></td>
             <td>5</td>
+        </tr>
+        <tr>
+            <td><a [routerLink]="['']">Baldwin of Troyes</a></td>
+            <td>
+                <div>
+                    <span>Duke of Troyes</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">3</span>
+                </div>
+                <div>
+                    <span>Count of Toulouse</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">3</span>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <span>513--515</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">3</span>
+                </div>
+                <div>
+                    <span>516--517</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+                <div>
+                    <span>522</span>
+                    <span class="badge rounded-pill text-bg-secondary ms-2">1</span>
+                </div>
+            </td>
+            <td>Unknown</td>
+            <td><fa-icon [icon]="icons.person" /></td>
+            <td><fa-icon [icon]="icons.male" /></td>
+            <td>8</td>
         </tr>
     </tbody>
 </table>
