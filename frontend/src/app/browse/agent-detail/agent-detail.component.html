@@ -17,39 +17,76 @@
 
 <h1>St. Radegund</h1>
 
-<p>Mentioned in <strong>3</strong> sources. <span class="text-muted">Click to (de)select</span></p>
+<p>Mentioned in <strong>3</strong> sources.
 
-<ul class="d-flex flex-wrap gap-2" style="list-style-type: none;">
-    <li role="button" (click)="selectSource(1)">
-        <span [class]="selectedSources.includes(1) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Fortunatus, <i>Vita Sanctae Radegundis</i>, Bk. 2, 1299--1301</span>
-    </li>
-    <li role="button" (click)="selectSource(2)">
-        <span [class]="selectedSources.includes(2) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Gaius Sidonius, <i>Radegundis Regina</i>, pp. 310--322</span>
-    </li>
-    <li role="button" (click)="selectSource(3)">
-        <span [class]="selectedSources.includes(3) ? 'text-bg-dark' : 'text-bg-secondary'" class="badge rounded-pill">Aurelius Cassiodorus, <i>Miracula et Virtutes Sanctissimae Radegundis</i>, pp. 5--7, 18--19</span>
-    </li>
-</ul>
-
-<h2>Names</h2>
+<h3 class="mt-4">Sources</h3>
 
 <ul class="list-group">
-    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
-    <li *ngIf="selectedSources.length === 1 && selectedSources.includes(2)" class="list-group-item text-muted">No info in selected sources</li>
-    <li *ngIf="selectedSources.includes(1)" class="list-group-item d-flex justify-content-between">
-        <span>St. Radegund</span>
-        <span class="badge rounded-pill text-bg-primary">Fortunatus, <i>Vita Sanctae Radegundis</i>, Bk. 2, 1299</span>
-    </li>
-    <li *ngIf="selectedSources.includes(3)" class="list-group-item d-flex justify-content-between">
-        <span>Radegundis</span>
-        <span class="badge rounded-pill text-bg-primary">Aurelius Cassiodorus, <i>Miracula et Virtutes Sanctissimae Radegundis</i>, p 5</span>
+    <li *ngFor="let source of sources; index as i" class="list-group-item" style="cursor: pointer;" (click)="selectSource(i)">
+      <input class="form-check-input me-3" type="checkbox" [checked]="selectedSources.includes(i)">
+      <span>{{ source.author }}, <i>{{ source.work }}</i>, {{source.part}} {{ source.pages }}</span>
     </li>
 </ul>
 
-<h2>Status</h2>
+<h3 class="mt-4">Names</h3>
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <ng-container *ngFor="let source of sources; index as i">
+        <li *ngIf="selectedSources.includes(i) && source.name !== ''" class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ source.name }}</span>
+            <span class="badge rounded-pill text-bg-secondary">{{ source.author }}, <i>{{source.work}}</i></span>
+        </li>
+    </ng-container>
+</ul>
 
-<h2>Date of Birth</h2>
+<h3 class="mt-4">Status</h3>
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <ng-container *ngFor="let source of sources; index as i">
+        <li *ngIf="selectedSources.includes(i) && source.status.length > 0" class="list-group-item d-flex justify-content-between align-items-center">
+            <ul class="list-group">
+                <li *ngFor="let status of source.status" class="list-group-item">
+                    {{ status.name }} ({{ status.date }})
+                </li>
+            </ul>
+            <span class="badge rounded-pill text-bg-secondary">{{ source.author }}, <i>{{source.work}}</i></span>
+        </li>
+    </ng-container>
+</ul>
 
-<h2>Date of Death</h2>
+<h3 class="mt-4">Date of Birth</h3>
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <ng-container *ngFor="let source of sources; index as i">
+        <li *ngIf="selectedSources.includes(i) && source.dateOfBirth !== ''" class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ source.dateOfBirth }}</span>
+            <span class="badge rounded-pill text-bg-secondary">{{ source.author }}, <i>{{source.work}}</i></span>
+        </li>
+    </ng-container>
+</ul>
 
-<h2>Gender</h2>
+
+<h3 class="mt-4">Date of Death</h3>
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <ng-container *ngFor="let source of sources; index as i">
+        <li *ngIf="selectedSources.includes(i) && source.dateOfDeath !== ''" class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ source.dateOfDeath }}</span>
+            <span class="badge rounded-pill text-bg-secondary">{{ source.author }}, <i>{{source.work}}</i></span>
+        </li>
+    </ng-container>
+</ul>
+
+
+<h3 class="mt-4">Gender</h3>
+<ul class="list-group">
+    <li *ngIf="selectedSources.length === 0" class="list-group-item text-muted">No sources selected</li>
+    <li *ngIf="selectedSources.length !== 0" class="list-group-item d-flex justify-content-between align-items-center">
+        <span>Female</span>
+        <div class="d-flex justify-content-end gap-2">
+            <ng-container *ngFor="let source of sources; index as i">
+                <span *ngIf="selectedSources.includes(i)" class="badge rounded-pill text-bg-secondary">{{ source.author }}, <i>{{source.work}}</i></span>
+            </ng-container>
+        </div>
+    </li>
+</ul>
