@@ -11,5 +11,5 @@ def validate_level_deeper_than_parent(level, parent, options: IntegerChoices):
         level_label = get_label(level, options)
         parent_level_label = get_label(parent.level, options)
         raise ValidationError(
-            f"cannot add a structure of level {level} ({level_label}) as a child to a structure of level {parent.level} ({parent_level_label})"
+            f"Cannot add a structure of level {level} ({level_label}) as a child to a structure of level {parent.level} ({parent_level_label})"
         )
