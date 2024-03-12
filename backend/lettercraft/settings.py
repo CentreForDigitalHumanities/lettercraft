@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "letter",
     "person",
     "source",
+    "space",
 ]
 
 MIDDLEWARE = [

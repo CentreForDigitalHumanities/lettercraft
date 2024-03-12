@@ -47,6 +47,7 @@ class LetterActionGiftsAdmin(admin.StackedInline):
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
+    filter_horizontal = ["epistolary_events", "gifts", "space_descriptions"]
     list_display=["description", "display_date"]
     inlines = [
         LetterActionLettersAdmin,
