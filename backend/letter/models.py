@@ -1,13 +1,25 @@
 from django.db import models
 from django.contrib import admin
 from core.models import Field
-from person.models import Person
+from person.models import Agent
 
 
 class Gift(models.Model):
     """
     A gift presented alongside a letter.
     """
+
+    class Material(models.TextChoices):
+        PRECIOUS_METAL = "precious metal", "precious metal"
+        WRITE = "textile", "textile"
+        WOOD = "wood", "wood"
+        GLASS = "glass", "glass"
+        CERAMIC = "ceramic", "ceramic"
+        ANIMAL_PRODUCT = "animal product", "animal product"
+        LIVESTOCK = "livestock", "livestock"
+        PAPER = "paper", "paper"
+        OTHER = "other", "other"
+        UNKNOWN = "unknown", "unknown"
 
     name = models.CharField(
         max_length=256, help_text="A short name for the gift (for identification)"
@@ -19,26 +31,15 @@ class Gift(models.Model):
     )
 
     material = models.CharField(
-        choices=[
-            ("precious metal", "precious metal"),
-            ("textile", "textile"),
-            ("wood", "wood"),
-            ("glass", "glass"),
-            ("ceramic", "ceramic"),
-            ("animal product", "animal product"),
-            ("livestock", "livestock"),
-            ("paper", "paper"),
-            ("other", "other"),
-            ("unknown", "unknown"),
-        ],
+        choices=Material.choices,
         help_text="The material the gift consists of",
     )
 
     gifted_by = models.ForeignKey(
-        to=Person,
+        to=Agent,
         on_delete=models.CASCADE,
         related_name="gifts_given",
-        help_text="The person who gave the gift. Leave empty if unknown.",
+        help_text="The agent who gave the gift. Leave empty if unknown.",
         null=True,
         blank=True,
     )
@@ -106,13 +107,14 @@ class LetterCategory(Field, models.Model):
 
 
 class LetterMaterial(Field, models.Model):
+    class Surface(models.TextChoices):
+        PARCHMENT = "parchment", "parchment"
+        PAPYRUS = "papyrus", "papyrus"
+        OTHER = "other", "other"
+        UNKNOWN = "unknown", "unknown"
+
     surface = models.CharField(
-        choices=[
-            ("parchment", "parchment"),
-            ("papyrus", "papyrus"),
-            ("other", "other"),
-            ("unknown", "unknown"),
-        ],
+        choices=Surface.choices,
         null=False,
         blank=False,
     )
@@ -131,9 +133,9 @@ class LetterMaterial(Field, models.Model):
 
 class LetterSenders(Field, models.Model):
     senders = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         blank=True,
-        help_text="persons that the letter names as the sender",
+        help_text="Agents whom the letter names as the sender",
     )
     letter = models.OneToOneField(
         to=Letter,
@@ -150,9 +152,9 @@ class LetterSenders(Field, models.Model):
 
 class LetterAddressees(Field, models.Model):
     addressees = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         blank=True,
-        help_text="persons that the letter names as the addressee",
+        help_text="Agents whom the letter names as the addressee",
     )
     letter = models.OneToOneField(
         to=Letter,

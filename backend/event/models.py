@@ -3,9 +3,9 @@ from django.contrib import admin
 
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
-from person.models import Person
+from person.models import Agent
 from letter.models import Gift, Letter
-
+from space.models import SpaceDescription
 
 class EpistolaryEvent(models.Model):
     """
@@ -66,7 +66,7 @@ class LetterAction(models.Model):
     )
 
     actors = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         through="Role",
         related_name="events",
     )
@@ -81,6 +81,12 @@ class LetterAction(models.Model):
         to=Gift,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
+        blank=True,
+    )
+
+    space_descriptions = models.ManyToManyField(
+        to=SpaceDescription,
+        help_text="Descriptions of the space in which this action took place",
         blank=True,
     )
 
@@ -103,15 +109,17 @@ class LetterAction(models.Model):
 
 
 class LetterActionCategory(Field, models.Model):
+
+    class CategoryOptions(models.TextChoices):
+        WRITE = "write", "writing"
+        TRANSPORT = "transport", "transporting"
+        DELIVER = "deliver", "delivering"
+        READ = "read", "reading"
+        SIGN = "sign", "signing"
+        EAT = "eat", "eating"
+
     value = models.CharField(
-        choices=[
-            ("write", "writing"),
-            ("transport", "transporting"),
-            ("deliver", "delivering"),
-            ("read", "reading"),
-            ("sign", "signing"),
-            ("eat", "eating"),
-        ],
+        choices=CategoryOptions.choices,
         null=False,
         blank=False,
         help_text="The type of event",
@@ -149,11 +157,24 @@ class LetterEventDate(Field, LettercraftDate, models.Model):
 
 class Role(Field, models.Model):
     """
-    Describes the involvement of a person in a letter action.
+    Describes the involvement of an agent in a letter action.
     """
 
-    person = models.ForeignKey(
-        to=Person,
+    class RoleOptions(models.TextChoices):
+        AUTHOR = "author", "Author"
+        SCRIBE = "scribe", "Scribe"
+        READER = "reader", "Reader"
+        WITNESS = "witness", "Witness"
+        MESSENGER = "messenger", "Messenger"
+        RECIPIENT = "recipient", "Recipient"
+        INTENDED_RECIPIENT = "intended_recipient", "Intended recipient"
+        AUDIENCE = "audience", "Audience"
+        INTENDED_AUDIENCE = "intended_audience", "Intended audience"
+        INSTIGATOR = "instigator", "Instigator"
+        OTHER = "other", "Other"
+
+    agent = models.ForeignKey(
+        to=Agent,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -165,34 +186,22 @@ class Role(Field, models.Model):
     present = models.BooleanField(
         null=False,
         default=True,
-        help_text="Whether this person was physically present",
+        help_text="Whether this agent was physically present",
     )
     role = models.CharField(
-        choices=[
-            ("author", "Author"),
-            ("scribe", "Scribe"),
-            ("reader", "Reader"),
-            ("witness", "Witness"),
-            ("messenger", "Messenger"),
-            ("recipient", "Recipient"),
-            ("intended_recipient", "Intended recipient"),
-            ("audience", "Audience"),
-            ("intended_audience", "Intended audience"),
-            ("instigator", "Instigator"),
-            ("other", "Other"),
-        ],
+        choices=RoleOptions.choices,
         null=False,
         blank=False,
-        help_text="Role of this person in the event",
+        help_text="Role of this agent in the event",
     )
     description = models.TextField(
         null=False,
         blank=True,
-        help_text="Longer description of this person's involvement",
+        help_text="Longer description of this agent's involvement",
     )
 
     def __str__(self):
-        return f"role of {self.person} in {self.letter_action}"
+        return f"role of {self.agent} in {self.letter_action}"
 
 
 class WorldEvent(LettercraftDate, models.Model):
