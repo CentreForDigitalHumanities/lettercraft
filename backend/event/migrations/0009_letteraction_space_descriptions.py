@@ -6,8 +6,8 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('space', '0001_initial'),
-        ('event', '0007_alter_letteraction_gifts'),
+        ("space", "0001_initial"),
+        ("event", "0008_rename_person_role_agent_alter_role_description_and_more"),
     ]
 
     operations = [
