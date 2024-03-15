@@ -5,7 +5,27 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - name: 'Research Software Lab, Centre for Digital Humanities, Utrecht University'
+  - given-names: Robert
+    family-names: Flierman
+    email: r.flierman@uu.nl
+    affiliation: >-
+      Departement Talen, Literatuur en Communicatie Keltisch
+      en Klassieken, Utrecht University
+    orcid: 'https://orcid.org/0000-0002-6480-2462'
+  - given-names: Hope
+    family-names: Williard
+    email: h.d.williard@uu.nl
+    affiliation: >-
+      Departement Talen, Literatuur en Communicatie Keltisch
+      en Klassieken, Utrecht University
+    orcid: 'https://orcid.org/0000-0001-6249-7591'
+  - given-names: Anne
+    family-names: Sieberichs
+    email: a.p.sieberichs@uu.nl
+    affiliation: 'Departement Talen, Literatuur en Communicatie'
+  - name: >-
+      Research Software Lab, Centre for Digital Humanities,
+      Utrecht University
     website: 'https://cdh.uu.nl/rsl/'
 repository-code: 'https://github.com/CentreForDigitalHumanities/lettercraft'
 license: BSD-3-Clause
