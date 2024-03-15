@@ -33,7 +33,7 @@ export class SpaceComponent {
 
     private findMatches(term: string, values: string[]): string[] {
         if (term.length > 2) {
-            const match = (value: string) => value.toLowerCase().startsWith(term.toLowerCase());
+            const match = (value: string) => value.toLowerCase().includes(term.toLowerCase());
             return values.filter(match);
         }
         return [];
