@@ -3,6 +3,7 @@ import { SourcesComponent } from './sources/sources.component';
 import { SharedModule } from '../shared/shared.module';
 import { SourceComponent } from './source/source.component';
 import { AgentComponent } from './agent/agent.component';
+import { SpaceComponent } from './space/space.component';
 
 
 
@@ -10,7 +11,8 @@ import { AgentComponent } from './agent/agent.component';
     declarations: [
         SourcesComponent,
         SourceComponent,
-        AgentComponent
+        AgentComponent,
+        SpaceComponent
     ],
     imports: [
         SharedModule,
