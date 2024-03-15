@@ -21,7 +21,7 @@ class EventDateAdmin(admin.StackedInline):
 class RoleAdmin(admin.StackedInline):
     model = models.Role
     fields = [
-        "person",
+        "agent",
         "present",
         "role",
         "description",
@@ -29,8 +29,8 @@ class RoleAdmin(admin.StackedInline):
         "note",
     ]
     extra = 0
-    verbose_name = "person/role"
-    verbose_name_plural = "persons/roles involved"
+    verbose_name = "agent/role"
+    verbose_name_plural = "agents/roles involved"
 
 
 class LetterActionLettersAdmin(admin.StackedInline):
@@ -47,6 +47,7 @@ class LetterActionGiftsAdmin(admin.StackedInline):
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
+    filter_horizontal = ["epistolary_events", "gifts", "space_descriptions"]
     list_display=["description", "display_date"]
     inlines = [
         LetterActionLettersAdmin,
@@ -80,7 +81,7 @@ class EpistolaryEventLetterActionInline(admin.StackedInline):
     verbose_name_plural = "letter actions"
     verbose_name = "relationship between a epistolary event and a letter action"
 
-    
+
 class EpistolaryEventsTriggeredWorldEventsInline(admin.StackedInline):
     model = models.EpistolaryEvent.triggered_world_events.through
     fields = ["world_event", "certainty", "note"]

@@ -1,35 +1,63 @@
 from django.db import models
+from django.forms import ValidationError
 from core.models import Field, LettercraftDate
+from django.db.models import Q, CheckConstraint
 
 
-class Office(models.Model):
+class StatusMarker(models.Model):
     """
-    A job or position that a person can hold.
+    A marker of someone's social status. This can be a job title or a social group someone belongs to.
     """
 
     name = models.CharField(
         max_length=256,
-        help_text="The name of the office (e.g. 'bishop of Toulouse', 'king of France')",
+        help_text="The name of the marker or job (e.g. 'bishop of Toulouse', 'peasantry of France')",
     )
     description = models.TextField(
         blank=True,
-        help_text="A description of the office (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
+        help_text="A description of what the marker means (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
     )
 
     def __str__(self):
         return self.name
 
 
-class Person(models.Model):
-    class Gender(models.TextChoices):
-        FEMALE = "FEMALE", "Female"
-        MALE = "MALE", "Male"
-        UNKNOWN = "UNKNOWN", "Unknown"
-        OTHER = "OTHER", "Other"
+class Gender(models.TextChoices):
+    FEMALE = "FEMALE", "Female"
+    MALE = "MALE", "Male"
+    UNKNOWN = "UNKNOWN", "Unknown"
+    MIXED = "MIXED", "Mixed"
+    OTHER = "OTHER", "Other"
 
+
+class Agent(models.Model):
     gender = models.CharField(
-        max_length=8, choices=Gender.choices, default=Gender.UNKNOWN
+        max_length=8,
+        choices=Gender.choices,
+        default=Gender.UNKNOWN,
+        help_text="The gender of this person or group of people. The option Mixed is only used for groups.",
     )
+
+    is_group = models.BooleanField(
+        default=False,
+        help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers'). If true, the date of birth and date of death fields should be left empty.",
+    )
+
+    class Meta:
+        constraints = [
+            CheckConstraint(
+                check=~Q(gender=Gender.MIXED, is_group=True),
+                name="gender_group_constraint",
+                violation_error_message="The 'mixed' gender option is reserved for groups",
+            )
+        ]
+
+    def clean(self):
+        if self.is_group and getattr(self, "date_of_birth", None) is not None:
+            raise ValidationError("A group cannot have a date of birth")
+
+        if self.is_group and getattr(self, "date_of_death", None) is not None:
+            raise ValidationError("A group cannot have a date of death")
 
     def __str__(self):
         if self.names.count() == 1:
@@ -39,70 +67,86 @@ class Person(models.Model):
             aliases = ", ".join(name.value for name in self.names.all()[1:])
             return f"{main_name} (aka {aliases})"
         else:
-            return f"Unknown person #{self.id}"
+            return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
 
 
-class PersonName(Field, models.Model):
+class AgentName(Field, models.Model):
     value = models.CharField(
         max_length=256,
         blank=True,
     )
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, related_name="names"
-    )
+    agent = models.ForeignKey(to=Agent, on_delete=models.CASCADE, related_name="names")
 
     class Meta:
         constraints = [
-            models.UniqueConstraint("value", "person", name="unique_names_for_person")
+            models.UniqueConstraint("value", "agent", name="unique_names_for_agent")
         ]
 
     def __str__(self):
         return self.value
 
 
-class PersonDateOfBirth(LettercraftDate, Field, models.Model):
+class AgentDateOfBirth(LettercraftDate, Field, models.Model):
     """
-    A relationship between a person and their date of birth.
+    A relationship between a agent and their date of birth.
     """
 
-    person = models.OneToOneField(
-        Person, related_name="date_of_birth", on_delete=models.CASCADE
+    agent = models.OneToOneField(
+        Agent,
+        related_name="date_of_birth",
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_group": False},
     )
+
+    def clean(self):
+        if self.agent.is_group:
+            raise ValidationError("A group cannot have a date of birth.")
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.person} born in {self.year_exact}"
+            return f"{self.agent} born in {self.year_exact}"
         else:
-            return f"{self.person} born c. {self.year_lower}–{self.year_upper}"
+            return f"{self.agent} born c. {self.year_lower}–{self.year_upper}"
 
 
-class PersonDateOfDeath(LettercraftDate, Field, models.Model):
+class AgentDateOfDeath(LettercraftDate, Field, models.Model):
     """ "
-    A relationship between a person and their date of death.
+    A relationship between a agent and their date of death.
     """
 
-    person = models.OneToOneField(
-        Person, related_name="date_of_death", on_delete=models.CASCADE
+    agent = models.OneToOneField(
+        Agent,
+        related_name="date_of_death",
+        on_delete=models.CASCADE,
+        limit_choices_to={"is_group": False},
     )
+
+    def clean(self):
+        if self.agent.is_group:
+            raise ValidationError("A group cannot have a date of death.")
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.person} died in {self.year_exact}"
+            return f"{self.agent} died in {self.year_exact}"
         else:
-            return f"{self.person} died c. {self.year_lower}–{self.year_upper}"
+            return f"{self.agent} died c. {self.year_lower}–{self.year_upper}"
 
 
-class Occupation(Field, LettercraftDate, models.Model):
+class SocialStatus(Field, LettercraftDate, models.Model):
     """
-    A relationship between a person and an occupation.
+    A relationship between a person or group and a social status marker,
+    indicating that the person or group is of a certain social status.
     """
 
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, related_name="occupations"
+    agent = models.ForeignKey(
+        to=Agent, on_delete=models.CASCADE, related_name="social_statuses"
     )
-    office = models.ForeignKey(
-        to=Office, on_delete=models.CASCADE, related_name="occupations"
+    status_marker = models.ForeignKey(
+        to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
     )
+
+    class Meta:
+        verbose_name_plural = "Social statuses"
 
     def __str__(self):
-        return f"{self.person} as {self.office}"
+        return f"{self.agent} as {self.status_marker}"

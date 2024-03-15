@@ -3,9 +3,9 @@ from django.contrib import admin
 
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
-from person.models import Person
+from person.models import Agent
 from letter.models import Gift, Letter
-
+from space.models import SpaceDescription
 
 class EpistolaryEvent(models.Model):
     """
@@ -66,7 +66,7 @@ class LetterAction(models.Model):
     )
 
     actors = models.ManyToManyField(
-        to=Person,
+        to=Agent,
         through="Role",
         related_name="events",
     )
@@ -81,6 +81,12 @@ class LetterAction(models.Model):
         to=Gift,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
+        blank=True,
+    )
+
+    space_descriptions = models.ManyToManyField(
+        to=SpaceDescription,
+        help_text="Descriptions of the space in which this action took place",
         blank=True,
     )
 
@@ -151,7 +157,7 @@ class LetterEventDate(Field, LettercraftDate, models.Model):
 
 class Role(Field, models.Model):
     """
-    Describes the involvement of a person in a letter action.
+    Describes the involvement of an agent in a letter action.
     """
 
     class RoleOptions(models.TextChoices):
@@ -167,8 +173,8 @@ class Role(Field, models.Model):
         INSTIGATOR = "instigator", "Instigator"
         OTHER = "other", "Other"
 
-    person = models.ForeignKey(
-        to=Person,
+    agent = models.ForeignKey(
+        to=Agent,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -180,22 +186,22 @@ class Role(Field, models.Model):
     present = models.BooleanField(
         null=False,
         default=True,
-        help_text="Whether this person was physically present",
+        help_text="Whether this agent was physically present",
     )
     role = models.CharField(
         choices=RoleOptions.choices,
         null=False,
         blank=False,
-        help_text="Role of this person in the event",
+        help_text="Role of this agent in the event",
     )
     description = models.TextField(
         null=False,
         blank=True,
-        help_text="Longer description of this person's involvement",
+        help_text="Longer description of this agent's involvement",
     )
 
     def __str__(self):
-        return f"role of {self.person} in {self.letter_action}"
+        return f"role of {self.agent} in {self.letter_action}"
 
 
 class WorldEvent(LettercraftDate, models.Model):
