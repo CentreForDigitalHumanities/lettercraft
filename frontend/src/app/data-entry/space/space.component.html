@@ -148,7 +148,8 @@
                                         Poitiers (town)
                                     </span>
                                     <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary">
+                                        <button class="btn btn-primary"
+                                            (click)="open(editStructure)">
                                             <fa-icon [icon]="icons.edit"></fa-icon>
                                         </button>
                                         <button class="btn btn-danger">
@@ -247,3 +248,13 @@
         </div>
     </div>
 </div>
+
+<ng-template #editStructure let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Edit structure</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <lc-structure></lc-structure>
+    </div>
+</ng-template>

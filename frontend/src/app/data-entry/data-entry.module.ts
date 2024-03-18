@@ -4,6 +4,7 @@ import { SharedModule } from '../shared/shared.module';
 import { SourceComponent } from './source/source.component';
 import { AgentComponent } from './agent/agent.component';
 import { SpaceComponent } from './space/space.component';
+import { StructureComponent } from './space/structure/structure.component';
 
 
 
@@ -12,7 +13,8 @@ import { SpaceComponent } from './space/space.component';
         SourcesComponent,
         SourceComponent,
         AgentComponent,
-        SpaceComponent
+        SpaceComponent,
+        StructureComponent
     ],
     imports: [
         SharedModule,
