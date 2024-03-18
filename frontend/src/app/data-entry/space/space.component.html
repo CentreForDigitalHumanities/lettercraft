@@ -135,11 +135,50 @@
 
                     <div class="mb-5">
                         <h3>Structures</h3>
+                        <p class="form-text">
+                            Human-made structures, such as towns, roads, and buildings.
+                        </p>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Structures
+                            </label>
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        Poitiers (town)
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        The Abbey of the Holy Cross (building)
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="btn btn-success">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a structure
+                            </button>
+                        </div>
                         <div class="mb-4">
                             <label class="form-label">
                                 How is this information presented in the text?
                             </label>
-
                             <select class="form-select">
                                 <option>Implied</option>
                                 <option selected>Mentioned</option>

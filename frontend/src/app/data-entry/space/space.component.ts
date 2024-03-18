@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCancel, faCheck, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
@@ -11,7 +11,9 @@ export class SpaceComponent {
     icons = {
         confirm: faCheck,
         cancel: faCancel,
+        add: faPlus,
         remove: faTimes,
+        edit: faPencil,
     }
 
     politicalRegions = [
