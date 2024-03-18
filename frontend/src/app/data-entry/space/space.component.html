@@ -76,7 +76,8 @@
                                         Aquitaine
                                     </span>
                                     <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary">
+                                        <button class="btn btn-primary"
+                                            (click)="open(editPoliticalRegion)">
                                             <fa-icon [icon]="icons.edit"></fa-icon>
                                         </button>
                                         <button class="btn btn-danger">
@@ -275,5 +276,35 @@
     </div>
     <div class="offcanvas-body">
         <lc-structure></lc-structure>
+    </div>
+</ng-template>
+
+<ng-template #editPoliticalRegion let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Edit political region</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="mb-4 card">
+            <div class="card-body">
+                <fa-icon [icon]="icons.info"></fa-icon>
+                This region is described in <b>3</b> sources.
+                Changes in this form will affect all of them.
+            </div>
+        </div>
+        <form>
+            <div class="mb-4">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" value="Aquitaine">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3">Kingdom in Southwest France</textarea>
+            </div>
+            <button class="btn btn-success">
+                <fa-icon [icon]="icons.confirm"></fa-icon>
+                Save
+            </button>
+        </form>
     </div>
 </ng-template>

@@ -1,5 +1,5 @@
 import { Component, TemplateRef } from '@angular/core';
-import { faCancel, faCheck, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCancel, faCheck, faInfo, faInfoCircle, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
@@ -11,6 +11,7 @@ import { Observable, OperatorFunction, debounceTime, distinctUntilChanged, map }
 })
 export class SpaceComponent {
     icons = {
+        info: faInfoCircle,
         confirm: faCheck,
         cancel: faCancel,
         add: faPlus,
