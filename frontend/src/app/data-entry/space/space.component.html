@@ -63,13 +63,35 @@
             <div ngbAccordionBody>
                 <ng-template>
                     <div class="mb-5">
-                        <h3>Political region</h3>
+                        <h3>Political regions</h3>
 
                         <p class="mb-4 form-text">Kingdoms, duchies, etc.</p>
 
                         <div class="mb-4">
-                            <label class="form-label">Political region</label>
-                            <input type="text" class="form-control" [ngbTypeahead]="searchPoliticalRegion">
+                            <label class="form-label">Political regions</label>
+
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        Aquitaine
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary"
+                                            (click)="open(editStructure)">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <button class="btn btn-success">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a political region
+                            </button>
+                            <!-- <input type="text" class="form-control" [ngbTypeahead]="searchPoliticalRegion"> -->
                         </div>
 
                         <div class="mb-4">
