@@ -5,6 +5,7 @@ import { SourceComponent } from './source/source.component';
 import { AgentComponent } from './agent/agent.component';
 import { SpaceComponent } from './space/space.component';
 import { StructureComponent } from './space/structure/structure.component';
+import { StructureTreeComponent } from './space/structure/structure-tree/structure-tree.component';
 
 
 
@@ -14,7 +15,8 @@ import { StructureComponent } from './space/structure/structure.component';
         SourceComponent,
         AgentComponent,
         SpaceComponent,
-        StructureComponent
+        StructureComponent,
+        StructureTreeComponent
     ],
     imports: [
         SharedModule,
