@@ -1,0 +1,321 @@
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry/source', 1]">Fortunatus, Life of Radegund</a></li>
+        <li class="breadcrumb-item active">
+            The Abbey of the Holy Cross
+        </li>
+    </ol>
+</nav>
+
+<h1 class="mb-4">
+    The Abbey of the Holy Cross
+    <small class="text-body-secondary">(<i>Fortunatus, Life of Radegund</i>)</small>
+</h1>
+
+<p class="lead">
+    Abbey in Poitiers
+</p>
+
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" value="The Abbey of the Holy Cross">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the space in the overview of the source.
+                                For example: "Poitiers", "The scriptorium", "unknown crossroads".
+                            </small>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Description
+                        </label>
+                        <input type="text" class="form-control" value="Abbey in Poitiers">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this space.
+                            </small>
+                        </p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Political regions</h3>
+
+                        <p class="mb-4 form-text">Kingdoms, duchies, etc.</p>
+
+                        <div class="mb-4">
+                            <label class="form-label">Political regions</label>
+
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        Aquitaine
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary"
+                                            (click)="open(editPoliticalRegion)">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <button class="btn btn-primary" type="button"
+                                (click)="open(newPoliticalRegion)">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a political region
+                            </button>
+                            <!-- <input type="text" class="form-control" [ngbTypeahead]="searchPoliticalRegion"> -->
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Ecclesiastical region</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Ecclesiastical regions</label>
+                            <ul class="list-group"></ul>
+                            <button class="btn btn-primary" type="button">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add an ecclesiastical region
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select" disabled>
+                                <option selected>No information given</option>
+                                <option>Implied</option>
+                                <option>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2" disabled></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Geographical region</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Geographical regions</label>
+                            <ul class="list-group"></ul>
+                            <button class="btn btn-primary" type="button">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a geographical region
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select" disabled>
+                                <option selected>No information given</option>
+                                <option>Implied</option>
+                                <option>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2" disabled></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Structures</h3>
+                        <p class="form-text">
+                            Human-made structures, such as towns, roads, and buildings.
+                        </p>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Structures
+                            </label>
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        Poitiers (town)
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary"
+                                            (click)="open(editStructure)">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="list-group-item hstack">
+                                    <span>
+                                        The Abbey of the Holy Cross (building)
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-primary">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger">
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a structure
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <h3>Landscape features</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Landscape features</label>
+                            <ul class="list-group"></ul>
+                            <button class="btn btn-primary" type="button">
+                                <fa-icon [icon]="icons.add"></fa-icon>
+                                Add a feature
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select" disabled>
+                                <option selected>No information given</option>
+                                <option>Implied</option>
+                                <option>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2" disabled></textarea>
+                        </div>
+                    </div>
+
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editStructure let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Edit structure</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <lc-structure></lc-structure>
+    </div>
+</ng-template>
+
+<ng-template #editPoliticalRegion let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Edit political region</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="mb-4 card">
+            <div class="card-body">
+                <fa-icon [icon]="icons.info"></fa-icon>
+                This region is described in <b>3</b> sources.
+                Changes in this form will affect all of them.
+            </div>
+        </div>
+        <form>
+            <div class="mb-4">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" value="Aquitaine">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Description</label>
+                <textarea class="form-control" rows="3">Kingdom in Southwest France</textarea>
+            </div>
+            <button class="btn btn-success">
+                <fa-icon [icon]="icons.confirm"></fa-icon>
+                Save
+            </button>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #newPoliticalRegion let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Add political region</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <lc-political-region></lc-political-region>
+    </div>
+</ng-template>

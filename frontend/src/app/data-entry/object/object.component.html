@@ -1,0 +1,179 @@
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry/source', 1]">Fortunatus, Life of Radegund</a></li>
+        <li class="breadcrumb-item active">
+            Letter from Radegund
+        </li>
+    </ol>
+</nav>
+
+<h1 class="mb-4">
+    Letter from Radegund
+    <small class="text-body-secondary">(<i>Fortunatus, Life of Radegund</i>)</small>
+</h1>
+
+<p class="lead">
+    A letter from Radegund describing her vision
+</p>
+
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" value="Letter from Radegund">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the object in the overview of the source.
+                                For example: "letter from Radegund to Germanus", "Radegund's first letter", "a ring".
+                            </small>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Description
+                        </label>
+                        <input type="text" class="form-control" value="A letter from Radegund describing her vision">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this object
+                            </small>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Is this object a letter or a gift?
+                        </label>
+                        <select class="form-select">
+                            <option selected>Letter</option>
+                            <option>Gift</option>
+                        </select>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Sender</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Who is described as the (original) sender?</label>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" checked>
+                                <label class="form-check-label">St. Radegund</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input">
+                                <label class="form-check-label">Unknown messenger</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input">
+                                <label class="form-check-label">The nuns of Poitiers</label>
+                            </div>
+                            <div class="form-text">
+                                You can choose between the agents that have been added for this source.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <h3>Addressee</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Who is describe as the addressee?</label>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input">
+                                <label class="form-check-label">St. Radegund</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input">
+                                <label class="form-check-label">Unknown messenger</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" checked>
+                                <label class="form-check-label">The nuns of Poitiers</label>
+                            </div>
+                            <div class="form-text">
+                                You can choose between the agents that have been added for this source.
+                            </div>
+
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <h3>Material properties</h3>
+                        <div class="mb-4">
+                            <label class="form-label">Material</label>
+                            <input class="form-control" value="parchment">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                                <option>Described</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

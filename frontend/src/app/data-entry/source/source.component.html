@@ -45,7 +45,7 @@
                             </h5>
                             <p>Messenger who delivers the letter to the nuns</p>
                             <div class="btn-group">
-                                <a class="btn btn-primary" [routerLink]="['agent', 1]">
+                                <a class="btn btn-primary">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </a>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary">
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new agent
                         </button>
@@ -100,10 +100,10 @@
                             </h5>
                             <p>Abbey in Poitiers</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary" [routerLink]="['space', 1]">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
+                                </a>
                                 <button class="btn btn-danger">
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary">
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new place
                         </button>
@@ -154,10 +154,11 @@
                             </h5>
                             <p>A letter written by Radegund describing her vision</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary"
+                                    [routerLink]="['object/', 1]">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
+                                </a>
                                 <button class="btn btn-danger">
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
@@ -171,10 +172,10 @@
                             </h5>
                             <p>A penitent gift</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
+                                </a>
                                 <button class="btn btn-danger">
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
@@ -188,10 +189,10 @@
                             </h5>
                             <p>A letter delivered in a vision</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
+                                </a>
                                 <button class="btn btn-danger">
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
@@ -200,7 +201,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary">
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new object
                         </button>
@@ -242,7 +243,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary">
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new action
                         </button>

@@ -1,0 +1,54 @@
+<form>
+    <div class="mb-4 card">
+        <div class="card-body">
+            <fa-icon [icon]="icons.info"></fa-icon>
+            This structure is described in <b>3</b> sources.
+            Changes in this form will affect all of them.
+        </div>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">
+            Name
+        </label>
+        <input type="text" class="form-control" value="Poitiers">
+    </div>
+    <div class="mb-4">
+        <label class="form-label">
+            Type of structure
+        </label>
+        <select class="form-select">
+            <option selected>Settlement, population centre</option>
+            <option>Road, town square, or crossroad</option>
+            <option>Compound building (e.g. a castle or monastery)</option>
+            <option>Building or vessel</option>
+            <option>Room</option>
+            <option>Object (e.g. a desk)</option>
+        </select>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">
+            Could this structure be identified across multiple sources?
+        </label>
+        <select class="form-select">
+            <option selected>Yes</option>
+            <option>No</option>
+        </select>
+        <p class="form-text">
+            Select <i>yes</i> for named historical places, e.g. "Tours", and <i>no</i>
+            for generic descriptions, e.g. "a house in Tours".
+        </p>
+    </div>
+    <div class="mb-4">
+        <label class="form-label">
+            Containing structure
+        </label>
+        <lc-structure-tree></lc-structure-tree>
+    </div>
+
+    <div class="">
+        <button class="btn btn-success" type="submit">
+            <fa-icon [icon]="icons.confirm"></fa-icon>
+            Save
+        </button>
+    </div>
+</form>
