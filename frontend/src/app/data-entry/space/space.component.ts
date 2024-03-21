@@ -19,34 +19,9 @@ export class SpaceComponent {
         edit: faPencil,
     }
 
-    politicalRegions = [
-        'Burgundy',
-        'Provence',
-        'Austrasia',
-        'Aquitaine',
-        'Neustria',
-        'Alamannia',
-        'Bavaria',
-    ];
-
     constructor(private offcanvasService: NgbOffcanvas) { }
-
-    searchPoliticalRegion: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-        text$.pipe(
-            debounceTime(200),
-            distinctUntilChanged(),
-            map(term => this.findMatches(term, this.politicalRegions))
-        );
 
     open(content: TemplateRef<any>) {
         this.offcanvasService.open(content, { position: 'end' });
-    }
-
-    private findMatches(term: string, values: string[]): string[] {
-        if (term.length > 2) {
-            const match = (value: string) => value.toLowerCase().includes(term.toLowerCase());
-            return values.filter(match);
-        }
-        return [];
     }
 }

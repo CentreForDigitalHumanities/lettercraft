@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
         BrowserModule,
         BrowserAnimationsModule,
         FontAwesomeModule,
+        FormsModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
             cookieName: 'csrftoken',
@@ -28,6 +30,7 @@ import { RouterModule } from '@angular/router';
         BrowserModule,
         BrowserAnimationsModule,
         FontAwesomeModule,
+        FormsModule,
         HttpClientModule,
         HttpClientXsrfModule,
         NgbModule,

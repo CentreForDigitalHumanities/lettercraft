@@ -6,6 +6,7 @@ import { AgentComponent } from './agent/agent.component';
 import { SpaceComponent } from './space/space.component';
 import { StructureComponent } from './space/structure/structure.component';
 import { StructureTreeComponent } from './space/structure/structure-tree/structure-tree.component';
+import { PoliticalRegionComponent } from './space/political-region/political-region.component';
 
 
 
@@ -16,7 +17,8 @@ import { StructureTreeComponent } from './space/structure/structure-tree/structu
         AgentComponent,
         SpaceComponent,
         StructureComponent,
-        StructureTreeComponent
+        StructureTreeComponent,
+        PoliticalRegionComponent,
     ],
     imports: [
         SharedModule,

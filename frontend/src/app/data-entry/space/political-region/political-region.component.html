@@ -1,0 +1,27 @@
+<form>
+    <div class="mb-4">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" name="name"
+            [ngbTypeahead]="searchPoliticalRegion"
+            [(ngModel)]="nameInput">
+    </div>
+
+    <ng-container *ngIf="name$ | async as name">
+            <ng-template #loadingSpinner>
+                <div class="spinner-border">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </ng-template>
+
+            <div *ngIf="!(isLoading$ | async); else loadingSpinner">
+                <div class="mb-4">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="3">{{description(name)}}</textarea>
+                </div>
+                <button class="btn btn-success">
+                    <fa-icon [icon]="icons.confirm"></fa-icon>
+                    Save
+                </button>
+            </div>
+    </ng-container>
+</form>
