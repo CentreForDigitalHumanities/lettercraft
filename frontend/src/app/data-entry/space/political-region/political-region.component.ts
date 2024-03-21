@@ -50,11 +50,15 @@ export class PoliticalRegionComponent {
             );
 
     description(name: string): string {
-        if (this.politicalRegions.includes(name)) {
+        if (this.exists(name)) {
             return 'Merovingian kingdom';
         } else {
             return ''
         }
+    }
+
+    exists(name: string): boolean {
+        return this.politicalRegions.includes(name);
     }
 
     private findMatches(term: string, values: string[]): string[] {

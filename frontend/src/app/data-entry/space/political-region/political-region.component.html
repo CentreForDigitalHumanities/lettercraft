@@ -14,6 +14,22 @@
             </ng-template>
 
             <div *ngIf="!(isLoading$ | async); else loadingSpinner">
+                <div class="mb-4 card">
+                    <div class="card-body">
+                        <fa-icon [icon]="icons.info"></fa-icon>
+                        <ng-container *ngIf="exists(name); else notifyNew">
+                            You're linking this description to the existing region
+                            <i>{{name}}</i>.
+                            This region is described in <b>3</b> other sources.
+                            If you edit the description below, it will be updated for
+                            all sources.
+                        </ng-container>
+                        <ng-template #notifyNew>
+                            You're creating a new region named <i>{{name}}</i>.
+                        </ng-template>
+                    </div>
+                </div>
+
                 <div class="mb-4">
                     <label class="form-label">Description</label>
                     <textarea class="form-control" rows="3">{{description(name)}}</textarea>
