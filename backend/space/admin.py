@@ -1,5 +1,4 @@
 from django.contrib import admin
-from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -72,5 +71,4 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         GeographicalRegionFieldInlineAdmin,
         StructureFieldInlineAdmin,
         LandscapeFeatureInlineAdmin,
-        ReferenceInlineAdmin,
     ]
