@@ -1,5 +1,4 @@
 from django.contrib import admin
-from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -38,7 +37,6 @@ class LetterAdmin(admin.ModelAdmin):
         LetterMaterialAdmin,
         LetterSenderAdmin,
         LetterAddresseesAdmin,
-        ReferenceInlineAdmin,
     ]
 
 

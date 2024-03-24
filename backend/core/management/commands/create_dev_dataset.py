@@ -2,7 +2,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Reference, Source
+from source.models import Source
 
 from case_study.models import CaseStudy
 from event.models import (
@@ -137,7 +137,6 @@ class Command(BaseCommand):
                 fake, options, total=50, model=EpistolaryEventSelfTrigger
             )
             self._create_sources(fake, options, total=50, model=Source)
-            self._create_references(fake, options, total=250, model=Reference)
 
             print("-" * 80)
             print("Development dataset created successfully.")
@@ -352,31 +351,3 @@ class Command(BaseCommand):
     def _create_sources(self, fake, options, total, model):
         unique_name = get_unique_name(source_names, Source)
         Source.objects.create(name=unique_name, bibliographical_info=fake.text())
-
-    @track_progress
-    def _create_references(self, fake, options, total, model):
-        random_content_type = (
-            ContentType.objects.exclude(
-                app_label__in=["admin", "auth", "contenttypes", "sessions", "source"]
-            )
-            .order_by("?")
-            .first()
-        )
-
-        random_objects = random_content_type.model_class().objects.all()
-
-        if not random_objects.exists():
-            return
-
-        random_object_id = random_objects.order_by("?").first().id
-
-        random_source = Source.objects.order_by("?").first()
-
-        Reference.objects.create(
-            content_type=random_content_type,
-            object_id=random_object_id,
-            source=random_source,
-            location=f"chapter {random.randint(1, 10)}, page {random.randint(1, 100)}",
-            terminology=fake.words(nb=3, unique=True),
-            mention=random.choice(["direct", "implied"]),
-        )

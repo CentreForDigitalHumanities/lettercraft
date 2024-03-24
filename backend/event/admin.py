@@ -1,5 +1,4 @@
 from django.contrib import admin
-from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -55,7 +54,6 @@ class LetterActionAdmin(admin.ModelAdmin):
         LetterActionGiftsAdmin,
         EventDateAdmin,
         RoleAdmin,
-        ReferenceInlineAdmin,
     ]
     exclude = ["letters"]
 
