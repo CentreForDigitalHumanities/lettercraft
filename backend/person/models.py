@@ -1,6 +1,6 @@
 from django.db import models
 from django.forms import ValidationError
-from core.models import Field, LettercraftDate
+from core.models import Field, Historical, LettercraftDate, SourceDescription
 from django.db.models import Q, CheckConstraint
 
 
@@ -30,7 +30,7 @@ class Gender(models.TextChoices):
     OTHER = "OTHER", "Other"
 
 
-class Agent(models.Model):
+class AgentBase(models.Model):
     gender = models.CharField(
         max_length=8,
         choices=Gender.choices,
@@ -75,7 +75,7 @@ class AgentName(Field, models.Model):
         max_length=256,
         blank=True,
     )
-    agent = models.ForeignKey(to=Agent, on_delete=models.CASCADE, related_name="names")
+    agent = models.ForeignKey(to=AgentBase, on_delete=models.CASCADE, related_name="names")
 
     class Meta:
         constraints = [
@@ -92,7 +92,7 @@ class AgentDateOfBirth(LettercraftDate, Field, models.Model):
     """
 
     agent = models.OneToOneField(
-        Agent,
+        AgentBase,
         related_name="date_of_birth",
         on_delete=models.CASCADE,
         limit_choices_to={"is_group": False},
@@ -104,9 +104,9 @@ class AgentDateOfBirth(LettercraftDate, Field, models.Model):
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.agent} born in {self.year_exact}"
+            return f"born in {self.year_exact}"
         else:
-            return f"{self.agent} born c. {self.year_lower}–{self.year_upper}"
+            return f"born c. {self.year_lower}–{self.year_upper}"
 
 
 class AgentDateOfDeath(LettercraftDate, Field, models.Model):
@@ -115,7 +115,7 @@ class AgentDateOfDeath(LettercraftDate, Field, models.Model):
     """
 
     agent = models.OneToOneField(
-        Agent,
+        AgentBase,
         related_name="date_of_death",
         on_delete=models.CASCADE,
         limit_choices_to={"is_group": False},
@@ -127,9 +127,9 @@ class AgentDateOfDeath(LettercraftDate, Field, models.Model):
 
     def __str__(self):
         if self.year_exact:
-            return f"{self.agent} died in {self.year_exact}"
+            return f"died in {self.year_exact}"
         else:
-            return f"{self.agent} died c. {self.year_lower}–{self.year_upper}"
+            return f"died c. {self.year_lower}–{self.year_upper}"
 
 
 class SocialStatus(Field, LettercraftDate, models.Model):
@@ -139,7 +139,7 @@ class SocialStatus(Field, LettercraftDate, models.Model):
     """
 
     agent = models.ForeignKey(
-        to=Agent, on_delete=models.CASCADE, related_name="social_statuses"
+        to=AgentBase, on_delete=models.CASCADE, related_name="social_statuses"
     )
     status_marker = models.ForeignKey(
         to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
@@ -150,3 +150,32 @@ class SocialStatus(Field, LettercraftDate, models.Model):
 
     def __str__(self):
         return f"{self.agent} as {self.status_marker}"
+
+
+class Agent(Historical, AgentBase, models.Model):
+    """
+    An aggregate model that represents an agent (person or group) in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+    pass
+
+
+class AgentDescription(SourceDescription, AgentBase, models.Model):
+    """
+    A description of an agent (person or group) as it is described in a source.
+    """
+
+    target = models.ForeignKey(
+        to=Agent,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        agent_str = super().__str__()
+        return f"Description of {agent_str} in {self.source}"
+
+
+
+
