@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from . import models
 from django.utils.html import format_html
+from core.admin import source_information_fieldset, cross_reference_fieldset
 
 
 class AgentNameAdmin(admin.StackedInline):
@@ -46,24 +47,8 @@ class AgentDescriptionAdmin(admin.ModelAdmin):
         AgentDateOfDeathAdmin,
     ]
     fieldsets = (
-        (
-            "Source information",
-            {
-                "description": "Information about the source from which this description is taken.",
-                "fields": [
-                    "source",
-                    "location",
-                    "terminology",
-                    "mention",
-                ],
-            },
-        ),
-        (
-            "Cross-reference:",
-            {
-                "fields": ["target"],
-            },
-        ),
+        source_information_fieldset,
+        cross_reference_fieldset,
         (
             "Agent information",
             {

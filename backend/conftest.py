@@ -1,6 +1,6 @@
 import pytest
 from case_study.models import CaseStudy
-from letter.models import Letter
+from letter.models import LetterBase
 from event.models import (
     EpistolaryEvent,
     LetterAction,
@@ -13,7 +13,7 @@ from person.models import Agent
 
 @pytest.fixture()
 def letter(db):
-    letter = Letter.objects.create()
+    letter = LetterBase.objects.create()
     letter.name = "letter for testing"
     letter.save()
     return letter

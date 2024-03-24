@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib import admin
 import itertools
 
-from core.models import Field
+from core.models import Field, Historical, SourceDescription
 from space import validators
 
-class SpaceDescription(models.Model):
+
+class SpaceDescriptionBase(models.Model):
     """
     The representation of a space within a source text.
 
@@ -164,26 +165,26 @@ class Structure(NamedSpace, models.Model):
 
 
 class PoliticalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
     political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
 
 
 class EcclesiasticalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
     ecclesiastical_region = models.ForeignKey(
         to=EcclesiasticalRegion, on_delete=models.CASCADE
     )
 
 
 class GeographicalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
     geographical_region = models.ForeignKey(
         to=GeographicalRegion, on_delete=models.CASCADE
     )
 
 
 class StructureField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
 
 
@@ -194,6 +195,38 @@ class LandscapeFeature(Field, models.Model):
     """
 
     space = models.ForeignKey(
-        to=SpaceDescription, on_delete=models.CASCADE, related_name="landscape_features"
+        to=SpaceDescriptionBase,
+        on_delete=models.CASCADE,
+        related_name="landscape_features",
     )
     landscape = models.CharField(max_length=512, blank=False)
+
+
+class SpaceDescription(Historical, SpaceDescriptionBase, models.Model):
+    """
+    An aggregate model that represents a space in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+
+    pass
+
+
+class SpaceDescriptionDescription(
+    SourceDescription, SpaceDescriptionBase, models.Model
+):
+    """
+    A description of a space description in a source.
+    """
+
+    target = models.ForeignKey(
+        to=SpaceDescription,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        """
+        Inherits the __str__ method from the base model and adds the source to it.
+        """
+        return f"Description of {super().__str__()} in  {self.name}"

@@ -75,7 +75,9 @@ class AgentName(Field, models.Model):
         max_length=256,
         blank=True,
     )
-    agent = models.ForeignKey(to=AgentBase, on_delete=models.CASCADE, related_name="names")
+    agent = models.ForeignKey(
+        to=AgentBase, on_delete=models.CASCADE, related_name="names"
+    )
 
     class Meta:
         constraints = [
@@ -161,7 +163,7 @@ class Agent(Historical, AgentBase, models.Model):
 
 class AgentDescription(SourceDescription, AgentBase, models.Model):
     """
-    A description of an agent (person or group) as it is described in a source.
+    A description of an agent (person or group) in a source.
     """
 
     target = models.ForeignKey(
@@ -173,9 +175,7 @@ class AgentDescription(SourceDescription, AgentBase, models.Model):
     )
 
     def __str__(self):
-        agent_str = super().__str__()
-        return f"Description of {agent_str} in {self.source}"
-
-
-
-
+        """
+        Inherits the __str__ method from the base model and adds the source to it.
+        """
+        return f"Description of {super().__str__()} in {self.source}"

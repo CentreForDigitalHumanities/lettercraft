@@ -4,8 +4,9 @@ from django.contrib import admin
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
 from person.models import Agent
-from letter.models import Gift, Letter
-from space.models import SpaceDescription
+from letter.models import GiftBase, LetterBase
+from space.models import SpaceDescriptionBase
+
 
 class EpistolaryEvent(models.Model):
     """
@@ -60,7 +61,7 @@ class LetterAction(models.Model):
     """
 
     letters = models.ManyToManyField(
-        to=Letter,
+        to=LetterBase,
         related_name="events",
         help_text="letters involved in this event",
     )
@@ -78,14 +79,14 @@ class LetterAction(models.Model):
     )
 
     gifts = models.ManyToManyField(
-        to=Gift,
+        to=GiftBase,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
         blank=True,
     )
 
     space_descriptions = models.ManyToManyField(
-        to=SpaceDescription,
+        to=SpaceDescriptionBase,
         help_text="Descriptions of the space in which this action took place",
         blank=True,
     )

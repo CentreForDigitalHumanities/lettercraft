@@ -26,8 +26,8 @@ from person.models import (
 )
 from letter.models import (
     Category,
-    Gift,
-    Letter,
+    GiftBase,
+    LetterBase,
     LetterAddressees,
     LetterCategory,
     LetterMaterial,
@@ -120,8 +120,8 @@ class Command(BaseCommand):
             self._create_status_markers(fake, options, total=50, model=StatusMarker)
             self._create_agents(fake, options, total=100, model=Agent)
             self._create_letter_categories(fake, options, total=10, model=Category)
-            self._create_letters(fake, options, total=200, model=Letter)
-            self._create_gifts(fake, options, total=50, model=Gift)
+            self._create_letters(fake, options, total=200, model=LetterBase)
+            self._create_gifts(fake, options, total=50, model=GiftBase)
             self._create_letter_actions(fake, options, total=200, model=LetterAction)
             self._create_world_events(fake, options, total=50, model=WorldEvent)
             self._create_world_event_triggers(
@@ -221,7 +221,7 @@ class Command(BaseCommand):
         addressees = get_random_model_objects(Agent, min_amount=2, max_amount=5)
 
         subject = ", ".join(fake.words(nb=3, unique=True))
-        letter = Letter.objects.create(
+        letter = LetterBase.objects.create(
             name=f"Letter about {subject}",
         )
 
@@ -254,9 +254,11 @@ class Command(BaseCommand):
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
         action = LetterAction.objects.create()
-        action.letters.set(get_random_model_objects(Letter, min_amount=1, max_amount=5))
+        action.letters.set(
+            get_random_model_objects(LetterBase, min_amount=1, max_amount=5)
+        )
 
-        action.gifts.set(get_random_model_objects(Gift, min_amount=0, max_amount=5))
+        action.gifts.set(get_random_model_objects(GiftBase, min_amount=0, max_amount=5))
 
         action.epistolary_events.set(
             get_random_model_objects(EpistolaryEvent, min_amount=0, max_amount=5)
@@ -291,13 +293,13 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_gifts(self, fake, options, total, model):
-        unique_name = get_unique_name(gift_names, Gift)
+        unique_name = get_unique_name(gift_names, GiftBase)
 
         gifter = get_random_model_object(Agent, allow_null=True)
 
-        Gift.objects.create(
+        GiftBase.objects.create(
             name=unique_name,
-            material=random.choice(Gift.Material.choices)[0],
+            material=random.choice(GiftBase.Material.choices)[0],
             gifted_by=gifter,
             description=fake.text(),
         )

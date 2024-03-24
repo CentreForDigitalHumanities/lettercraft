@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib import admin
-from core.models import Field
-from person.models import Agent
+from core.models import Field, Historical, SourceDescription
+from person.models import AgentBase
 
 
-class Gift(models.Model):
+class GiftBase(models.Model):
     """
     A gift presented alongside a letter.
     """
@@ -36,7 +36,7 @@ class Gift(models.Model):
     )
 
     gifted_by = models.ForeignKey(
-        to=Agent,
+        to=AgentBase,
         on_delete=models.CASCADE,
         related_name="gifts_given",
         help_text="The agent who gave the gift. Leave empty if unknown.",
@@ -51,7 +51,34 @@ class Gift(models.Model):
         return f"{self.name} ({self.material}), gifted by {gifter_name}"
 
 
-class Letter(models.Model):
+class GiftDescription(SourceDescription, GiftBase, models.Model):
+    """
+    A description of a gift in a source.
+    """
+
+    target = models.ForeignKey(
+        to=GiftBase,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        """
+        Inherits the __str__ method from the base model and adds the source to it.
+        """
+        return f"Description of {super().__str__()} in {self.source}"
+
+
+class Gift(Historical, GiftBase, models.Model):
+    """
+    An aggregate model that represents a gift in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+    pass
+
+
+class LetterBase(models.Model):
     name = models.CharField(
         max_length=200,
         blank=False,
@@ -97,7 +124,7 @@ class Category(models.Model):
 class LetterCategory(Field, models.Model):
     category = models.ForeignKey(to=Category, null=True, on_delete=models.SET_NULL)
     letter = models.OneToOneField(
-        to=Letter,
+        to=LetterBase,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -119,7 +146,7 @@ class LetterMaterial(Field, models.Model):
         blank=False,
     )
     letter = models.OneToOneField(
-        to=Letter,
+        to=LetterBase,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -133,12 +160,12 @@ class LetterMaterial(Field, models.Model):
 
 class LetterSenders(Field, models.Model):
     senders = models.ManyToManyField(
-        to=Agent,
+        to=AgentBase,
         blank=True,
         help_text="Agents whom the letter names as the sender",
     )
     letter = models.OneToOneField(
-        to=Letter,
+        to=LetterBase,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -152,12 +179,12 @@ class LetterSenders(Field, models.Model):
 
 class LetterAddressees(Field, models.Model):
     addressees = models.ManyToManyField(
-        to=Agent,
+        to=AgentBase,
         blank=True,
         help_text="Agents whom the letter names as the addressee",
     )
     letter = models.OneToOneField(
-        to=Letter,
+        to=LetterBase,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -167,3 +194,30 @@ class LetterAddressees(Field, models.Model):
             return f"addressees of {self.letter}"
         else:
             return f"addressees #{self.id}"
+
+
+class Letter(Historical, LetterBase, models.Model):
+    """
+    An aggregate model that represents a letter in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+    pass
+
+
+class LetterDescription(SourceDescription, LetterBase, models.Model):
+    """
+    A description of a letter in a source.
+    """
+
+    target = models.ForeignKey(
+        to=Letter,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        """
+        Inherits the __str__ method from the base model and adds the source to it.
+        """
+        return f"Description of {super().__str__()} in {self.source}"
