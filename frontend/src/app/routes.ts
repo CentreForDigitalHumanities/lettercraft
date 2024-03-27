@@ -4,6 +4,9 @@ import { HomeComponent } from './home/home.component';
 import { SourcesComponent } from './data-entry/sources/sources.component';
 import { SourceComponent } from './data-entry/source/source.component';
 import { AgentComponent } from './data-entry/agent/agent.component';
+import { BrowseComponent } from './browse/browse.component';
+import { AgentDetailComponent } from './browse/agent-detail/agent-detail.component';
+import { AgentsComponent } from './browse/agents/agents.component';
 
 const routes: Routes = [
     {
@@ -25,6 +28,23 @@ const routes: Routes = [
                 path: '',
                 component: SourcesComponent,
             },
+        ]
+    },
+    {
+        path: 'browse',
+        children: [
+            {
+                path: 'agents/:agentID',
+                component: AgentDetailComponent,
+            },
+            {
+                path: 'agents',
+                component: AgentsComponent,
+            },
+            {
+                path: '',
+                component: BrowseComponent,
+            }
         ]
     },
     {
