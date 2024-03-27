@@ -68,7 +68,7 @@ class GiftDescription(SourceDescription, GiftBase, models.Model):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"Description of {super().__str__()} in {self.source}"
+        return f"{super().__str__()} (description in {self.source})"
 
 
 class Gift(Historical, GiftBase, models.Model):
@@ -202,6 +202,9 @@ class Letter(Historical, LetterBase, models.Model):
     """
     pass
 
+    def __str__(self) -> str:
+        return f"{super().__str__()} (historical)"
+
 
 class LetterDescription(SourceDescription, LetterBase, models.Model):
     """
@@ -220,4 +223,4 @@ class LetterDescription(SourceDescription, LetterBase, models.Model):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"Description of {super().__str__()} in {self.source}"
+        return f"{super().__str__()} (description in {self.source})"

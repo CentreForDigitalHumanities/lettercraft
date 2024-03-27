@@ -178,4 +178,4 @@ class AgentDescription(SourceDescription, AgentBase):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"Description of {super().__str__()} in {self.source}"
+        return f"{super().__str__()} (description in {self.source})"
