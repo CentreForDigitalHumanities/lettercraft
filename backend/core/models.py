@@ -1,5 +1,8 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator, MaxValueValidator
+from source.models import Source
+
 
 class Field(models.Model):
     certainty = models.IntegerField(
@@ -20,6 +23,7 @@ class Field(models.Model):
 
     class Meta:
         abstract = True
+
 
 class LettercraftDate(models.Model):
     MIN_YEAR = 400
@@ -66,3 +70,50 @@ class LettercraftDate(models.Model):
         if self.year_exact:
             self.year_lower = self.year_exact
             self.year_upper = self.year_exact
+
+
+class Historical(models.Model):
+    """
+    An abstract model that represents a historical entity. This may be based on one or multiple SourceDescriptions.
+    """
+
+    class Meta:
+        abstract = True
+
+
+class SourceDescription(models.Model):
+    """
+    An abstract model that contains information about a historical entity (agent, object, space etc.) as it is described in a source.
+    """
+
+    source = models.ForeignKey(
+        Source,
+        on_delete=models.CASCADE,
+        help_text="The source in which this description occurs.",
+    )
+
+    location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location of the reference in the source text",
+    )
+
+    terminology = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Terminology used in the source text to describe this entity",
+    )
+
+    mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this information presented in the text?",
+    )
+
+    class Meta:
+        abstract = True

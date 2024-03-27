@@ -1,14 +1,16 @@
 import pytest
+from source.models import Source
 from case_study.models import CaseStudy
-from letter.models import Letter
+from letter.models import Letter, LetterDescription
 from event.models import (
     EpistolaryEvent,
     LetterAction,
     LetterActionCategory,
+    LetterActionDescription,
     WorldEvent,
     LetterEventDate,
 )
-from person.models import Agent
+from person.models import Agent, AgentDescription
 
 
 @pytest.fixture()
@@ -20,11 +22,29 @@ def letter(db):
 
 
 @pytest.fixture()
+def letter_description(db, source):
+    letter_description = LetterDescription.objects.create(
+        source=source, location="Hoofdstuk 3"
+    )
+    letter_description.name = "description of letter for testing"
+    letter_description.save()
+    return letter_description
+
+
+@pytest.fixture()
 def agent(db):
     agent = Agent.objects.create()
     agent.name = "Bert"
     agent.save()
     return agent
+
+
+@pytest.fixture()
+def agent_description(db, source):
+    agent_description = AgentDescription.objects.create(source=source)
+    agent_description.name = "Bertus"
+    agent_description.save()
+    return agent_description
 
 
 @pytest.fixture()
@@ -42,6 +62,25 @@ def agent_group(db):
     agent_group.is_group = True
     agent_group.save()
     return agent_group
+
+
+@pytest.fixture()
+def letter_action(db, letter, agent):
+    letter_action = LetterAction.objects.create()
+    letter_action.letters.add(letter)
+    letter_action.actors.add(agent)
+    return letter_action
+
+
+@pytest.fixture()
+def letter_action_description(db, letter_description, agent_description, source):
+    letter_action_description = LetterActionDescription.objects.create(
+        source=source, location="Hoofdstuk 2"
+    )
+    letter_action_description.letters.add(letter_description)
+    letter_action_description.actors.add(agent_description)
+
+    return letter_action_description
 
 
 @pytest.fixture()
@@ -102,3 +141,11 @@ def world_event(db):
         name="Test World Event", note="Test World Event note", year_exact=612
     )
     return world_event
+
+
+@pytest.fixture()
+def source(db):
+    source = Source.objects.create(
+        name="De Fabeltjeskrant", bibliographical_info="first edition"
+    )
+    return source

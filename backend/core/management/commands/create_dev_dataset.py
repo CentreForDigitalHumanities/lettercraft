@@ -2,14 +2,14 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Reference, Source
+from source.models import Source
 
 from case_study.models import CaseStudy
 from event.models import (
     EpistolaryEvent,
     EpistolaryEventSelfTrigger,
     EpistolaryEventTrigger,
-    LetterAction,
+    LetterActionBase,
     LetterActionCategory,
     LetterEventDate,
     Role,
@@ -26,8 +26,8 @@ from person.models import (
 )
 from letter.models import (
     Category,
-    Gift,
-    Letter,
+    GiftBase,
+    LetterBase,
     LetterAddressees,
     LetterCategory,
     LetterMaterial,
@@ -120,9 +120,11 @@ class Command(BaseCommand):
             self._create_status_markers(fake, options, total=50, model=StatusMarker)
             self._create_agents(fake, options, total=100, model=Agent)
             self._create_letter_categories(fake, options, total=10, model=Category)
-            self._create_letters(fake, options, total=200, model=Letter)
-            self._create_gifts(fake, options, total=50, model=Gift)
-            self._create_letter_actions(fake, options, total=200, model=LetterAction)
+            self._create_letters(fake, options, total=200, model=LetterBase)
+            self._create_gifts(fake, options, total=50, model=GiftBase)
+            self._create_letter_actions(
+                fake, options, total=200, model=LetterActionBase
+            )
             self._create_world_events(fake, options, total=50, model=WorldEvent)
             self._create_world_event_triggers(
                 fake, options, total=50, model=WorldEventTrigger
@@ -137,7 +139,6 @@ class Command(BaseCommand):
                 fake, options, total=50, model=EpistolaryEventSelfTrigger
             )
             self._create_sources(fake, options, total=50, model=Source)
-            self._create_references(fake, options, total=250, model=Reference)
 
             print("-" * 80)
             print("Development dataset created successfully.")
@@ -222,7 +223,7 @@ class Command(BaseCommand):
         addressees = get_random_model_objects(Agent, min_amount=2, max_amount=5)
 
         subject = ", ".join(fake.words(nb=3, unique=True))
-        letter = Letter.objects.create(
+        letter = LetterBase.objects.create(
             name=f"Letter about {subject}",
         )
 
@@ -254,10 +255,12 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
-        action = LetterAction.objects.create()
-        action.letters.set(get_random_model_objects(Letter, min_amount=1, max_amount=5))
+        action = LetterActionBase.objects.create()
+        action.letters.set(
+            get_random_model_objects(LetterBase, min_amount=1, max_amount=5)
+        )
 
-        action.gifts.set(get_random_model_objects(Gift, min_amount=0, max_amount=5))
+        action.gifts.set(get_random_model_objects(GiftBase, min_amount=0, max_amount=5))
 
         action.epistolary_events.set(
             get_random_model_objects(EpistolaryEvent, min_amount=0, max_amount=5)
@@ -292,13 +295,13 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_gifts(self, fake, options, total, model):
-        unique_name = get_unique_name(gift_names, Gift)
+        unique_name = get_unique_name(gift_names, GiftBase)
 
         gifter = get_random_model_object(Agent, allow_null=True)
 
-        Gift.objects.create(
+        GiftBase.objects.create(
             name=unique_name,
-            material=random.choice(Gift.Material.choices)[0],
+            material=random.choice(GiftBase.Material.choices)[0],
             gifted_by=gifter,
             description=fake.text(),
         )
@@ -352,31 +355,3 @@ class Command(BaseCommand):
     def _create_sources(self, fake, options, total, model):
         unique_name = get_unique_name(source_names, Source)
         Source.objects.create(name=unique_name, bibliographical_info=fake.text())
-
-    @track_progress
-    def _create_references(self, fake, options, total, model):
-        random_content_type = (
-            ContentType.objects.exclude(
-                app_label__in=["admin", "auth", "contenttypes", "sessions", "source"]
-            )
-            .order_by("?")
-            .first()
-        )
-
-        random_objects = random_content_type.model_class().objects.all()
-
-        if not random_objects.exists():
-            return
-
-        random_object_id = random_objects.order_by("?").first().id
-
-        random_source = Source.objects.order_by("?").first()
-
-        Reference.objects.create(
-            content_type=random_content_type,
-            object_id=random_object_id,
-            source=random_source,
-            location=f"chapter {random.randint(1, 10)}, page {random.randint(1, 100)}",
-            terminology=fake.words(nb=3, unique=True),
-            mention=random.choice(["direct", "implied"]),
-        )

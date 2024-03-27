@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib import admin
 
-from core.models import Field, LettercraftDate
+from core.models import Field, Historical, LettercraftDate, SourceDescription
 from case_study.models import CaseStudy
-from person.models import Agent
-from letter.models import Gift, Letter
-from space.models import SpaceDescription
+from person.models import AgentBase
+from letter.models import GiftBase, LetterBase
+from space.models import SpaceDescriptionBase
+
 
 class EpistolaryEvent(models.Model):
     """
@@ -52,7 +53,7 @@ class EpistolaryEvent(models.Model):
         return f"{self.name}"
 
 
-class LetterAction(models.Model):
+class LetterActionBase(models.Model):
     """
     A letter action is an atomic action performed on a letter, e.g. writing, delivering, reading.
 
@@ -60,13 +61,13 @@ class LetterAction(models.Model):
     """
 
     letters = models.ManyToManyField(
-        to=Letter,
+        to=LetterBase,
         related_name="events",
         help_text="letters involved in this event",
     )
 
     actors = models.ManyToManyField(
-        to=Agent,
+        to=AgentBase,
         through="Role",
         related_name="events",
     )
@@ -78,14 +79,14 @@ class LetterAction(models.Model):
     )
 
     gifts = models.ManyToManyField(
-        to=Gift,
+        to=GiftBase,
         related_name="letter_actions",
         help_text="Gifts associated to this letter action",
         blank=True,
     )
 
     space_descriptions = models.ManyToManyField(
-        to=SpaceDescription,
+        to=SpaceDescriptionBase,
         help_text="Descriptions of the space in which this action took place",
         blank=True,
     )
@@ -100,9 +101,12 @@ class LetterAction(models.Model):
     def description(self):
         categories = self.categories.all()
         category_names = [category.get_value_display() for category in categories]
-        category_desc = ", ".join(category_names)
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        return f"{category_desc} of {letters}"
+        if len(category_names) > 0:
+            category_desc = ", ".join(category_names)
+            return f"{category_desc} of {letters}"
+        else:
+            return f"unknown action involving {letters}"
 
     def __str__(self):
         return f"{self.description} ({self.display_date})"
@@ -126,7 +130,7 @@ class LetterActionCategory(Field, models.Model):
     )
 
     letter_action = models.ForeignKey(
-        to=LetterAction,
+        to=LetterActionBase,
         on_delete=models.CASCADE,
         related_name="categories",
         null=False,
@@ -148,11 +152,36 @@ class LetterActionCategory(Field, models.Model):
 class LetterEventDate(Field, LettercraftDate, models.Model):
 
     letter_action = models.OneToOneField(
-        to=LetterAction, on_delete=models.CASCADE, related_name="date"
+        to=LetterActionBase, on_delete=models.CASCADE, related_name="date"
     )
 
     def __str__(self):
         return f"{self.letter_action} ({self.display_date})"
+
+
+class LetterAction(Historical, LetterActionBase, models.Model):
+    """
+    An aggregate model that represents a letter action in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+
+    pass
+
+
+class LetterActionDescription(SourceDescription, LetterActionBase, models.Model):
+    """
+    A description of a letter action in a source.
+    """
+
+    target = models.ForeignKey(
+        to=LetterAction,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"{super().__str__()} (described in {self.source})"
 
 
 class Role(Field, models.Model):
@@ -174,12 +203,12 @@ class Role(Field, models.Model):
         OTHER = "other", "Other"
 
     agent = models.ForeignKey(
-        to=Agent,
+        to=AgentBase,
         on_delete=models.CASCADE,
         null=False,
     )
     letter_action = models.ForeignKey(
-        to=LetterAction,
+        to=LetterActionBase,
         on_delete=models.CASCADE,
         null=False,
     )
