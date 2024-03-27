@@ -1,12 +1,25 @@
 from event.models import (
     EpistolaryEvent,
     WorldEvent,
-    WorldEventSelfTrigger,
-    WorldEventTrigger,
 )
 
 
-def test_letter_action_name(letter, letter_action_writing):
+def test_letter_action_name(letter, letter_action):
+    action_str = str(letter_action)
+    assert (
+        str(action_str) == f"unknown action involving letter for testing (unknown date)"
+    )
+
+
+def test_letter_action_description_name(letter_description, letter_action_description):
+    action_str = str(letter_action_description)
+    assert (
+        str(action_str)
+        == f"unknown action involving description of letter for testing (unknown date) (described in De Fabeltjeskrant)"
+    )
+
+
+def test_letter_action_name_with_action(letter, letter_action_writing):
     letter_action_writing.date.year_exact = 500
     letter_action_writing.save()
     action_str = str(letter_action_writing)

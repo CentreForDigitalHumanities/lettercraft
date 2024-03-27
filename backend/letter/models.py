@@ -68,13 +68,14 @@ class GiftDescription(SourceDescription, GiftBase, models.Model):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"{super().__str__()} (description in {self.source})"
+        return f"{super().__str__()} (described in {self.source})"
 
 
 class Gift(Historical, GiftBase, models.Model):
     """
     An aggregate model that represents a gift in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
     """
+
     pass
 
 
@@ -200,10 +201,11 @@ class Letter(Historical, LetterBase, models.Model):
     """
     An aggregate model that represents a letter in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
     """
+
     pass
 
     def __str__(self) -> str:
-        return f"{super().__str__()} (historical)"
+        return f"{super().__str__()}"
 
 
 class LetterDescription(SourceDescription, LetterBase, models.Model):
@@ -223,4 +225,4 @@ class LetterDescription(SourceDescription, LetterBase, models.Model):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"{super().__str__()} (description in {self.source})"
+        return f"{super().__str__()} (described in {self.source})"

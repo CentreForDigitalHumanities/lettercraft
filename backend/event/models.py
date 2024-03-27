@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from core.models import Field, Historical, LettercraftDate, SourceDescription
 from case_study.models import CaseStudy
-from person.models import Agent
+from person.models import AgentBase
 from letter.models import GiftBase, LetterBase
 from space.models import SpaceDescriptionBase
 
@@ -67,7 +67,7 @@ class LetterActionBase(models.Model):
     )
 
     actors = models.ManyToManyField(
-        to=Agent,
+        to=AgentBase,
         through="Role",
         related_name="events",
     )
@@ -102,12 +102,11 @@ class LetterActionBase(models.Model):
         categories = self.categories.all()
         category_names = [category.get_value_display() for category in categories]
         letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        if len(category_names) > 1:
+        if len(category_names) > 0:
             category_desc = ", ".join(category_names)
             return f"{category_desc} of {letters}"
         else:
             return f"unknown action involving {letters}"
-
 
     def __str__(self):
         return f"{self.description} ({self.display_date})"
@@ -159,10 +158,12 @@ class LetterEventDate(Field, LettercraftDate, models.Model):
     def __str__(self):
         return f"{self.letter_action} ({self.display_date})"
 
+
 class LetterAction(Historical, LetterActionBase, models.Model):
     """
     An aggregate model that represents a letter action in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
     """
+
     pass
 
 
@@ -180,7 +181,8 @@ class LetterActionDescription(SourceDescription, LetterActionBase, models.Model)
     )
 
     def __str__(self):
-        return f"Description of {super().__str__()} in {self.source}"
+        return f"{super().__str__()} (described in {self.source})"
+
 
 class Role(Field, models.Model):
     """
@@ -201,7 +203,7 @@ class Role(Field, models.Model):
         OTHER = "other", "Other"
 
     agent = models.ForeignKey(
-        to=Agent,
+        to=AgentBase,
         on_delete=models.CASCADE,
         null=False,
     )

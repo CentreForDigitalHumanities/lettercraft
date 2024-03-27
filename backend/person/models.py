@@ -158,6 +158,7 @@ class Agent(Historical, AgentBase):
     """
     An aggregate model that represents an agent (person or group) in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
     """
+
     pass
 
 
@@ -178,4 +179,4 @@ class AgentDescription(SourceDescription, AgentBase):
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"{super().__str__()} (description in {self.source})"
+        return f"{super().__str__()} (described in {self.source})"

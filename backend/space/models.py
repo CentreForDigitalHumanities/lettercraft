@@ -229,4 +229,4 @@ class SpaceDescriptionDescription(
         """
         Inherits the __str__ method from the base model and adds the source to it.
         """
-        return f"{super().__str__()} (description in {self.source})"
+        return f"{super().__str__()} (described in {self.source})"
