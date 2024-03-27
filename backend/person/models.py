@@ -154,14 +154,14 @@ class SocialStatus(Field, LettercraftDate, models.Model):
         return f"{self.agent} as {self.status_marker}"
 
 
-class Agent(Historical, AgentBase, models.Model):
+class Agent(Historical, AgentBase):
     """
     An aggregate model that represents an agent (person or group) in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
     """
     pass
 
 
-class AgentDescription(SourceDescription, AgentBase, models.Model):
+class AgentDescription(SourceDescription, AgentBase):
     """
     A description of an agent (person or group) in a source.
     """

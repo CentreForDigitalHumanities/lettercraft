@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib import admin
 
-from core.models import Field, LettercraftDate
+from core.models import Field, Historical, LettercraftDate, SourceDescription
 from case_study.models import CaseStudy
 from person.models import Agent
 from letter.models import GiftBase, LetterBase
@@ -53,7 +53,7 @@ class EpistolaryEvent(models.Model):
         return f"{self.name}"
 
 
-class LetterAction(models.Model):
+class LetterActionBase(models.Model):
     """
     A letter action is an atomic action performed on a letter, e.g. writing, delivering, reading.
 
@@ -127,7 +127,7 @@ class LetterActionCategory(Field, models.Model):
     )
 
     letter_action = models.ForeignKey(
-        to=LetterAction,
+        to=LetterActionBase,
         on_delete=models.CASCADE,
         related_name="categories",
         null=False,
@@ -149,12 +149,34 @@ class LetterActionCategory(Field, models.Model):
 class LetterEventDate(Field, LettercraftDate, models.Model):
 
     letter_action = models.OneToOneField(
-        to=LetterAction, on_delete=models.CASCADE, related_name="date"
+        to=LetterActionBase, on_delete=models.CASCADE, related_name="date"
     )
 
     def __str__(self):
         return f"{self.letter_action} ({self.display_date})"
 
+class LetterAction(Historical, LetterActionBase, models.Model):
+    """
+    An aggregate model that represents a letter action in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    """
+    pass
+
+
+class LetterActionDescription(SourceDescription, LetterActionBase, models.Model):
+    """
+    A description of a letter action in a source.
+    """
+
+    target = models.ForeignKey(
+        to=LetterAction,
+        on_delete=models.CASCADE,
+        related_name="source_descriptions",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return f"Description of {super().__str__()} in {self.source}"
 
 class Role(Field, models.Model):
     """
@@ -180,7 +202,7 @@ class Role(Field, models.Model):
         null=False,
     )
     letter_action = models.ForeignKey(
-        to=LetterAction,
+        to=LetterActionBase,
         on_delete=models.CASCADE,
         null=False,
     )

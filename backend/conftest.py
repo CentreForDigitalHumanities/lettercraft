@@ -3,7 +3,7 @@ from case_study.models import CaseStudy
 from letter.models import LetterBase
 from event.models import (
     EpistolaryEvent,
-    LetterAction,
+    LetterActionBase,
     LetterActionCategory,
     WorldEvent,
     LetterEventDate,
@@ -46,7 +46,7 @@ def agent_group(db):
 
 @pytest.fixture()
 def letter_action_writing(db, letter, agent):
-    letter_action = LetterAction.objects.create()
+    letter_action = LetterActionBase.objects.create()
     letter_action.letters.add(letter)
     letter_action.actors.add(agent)
 
@@ -64,7 +64,7 @@ def letter_action_writing(db, letter, agent):
 
 @pytest.fixture()
 def letter_action_reading(db, letter, agent_2):
-    letter_action = LetterAction.objects.create()
+    letter_action = LetterActionBase.objects.create()
     letter_action.letters.add(letter)
     letter_action.actors.add(agent_2)
 

@@ -9,7 +9,7 @@ from event.models import (
     EpistolaryEvent,
     EpistolaryEventSelfTrigger,
     EpistolaryEventTrigger,
-    LetterAction,
+    LetterActionBase,
     LetterActionCategory,
     LetterEventDate,
     Role,
@@ -122,7 +122,9 @@ class Command(BaseCommand):
             self._create_letter_categories(fake, options, total=10, model=Category)
             self._create_letters(fake, options, total=200, model=LetterBase)
             self._create_gifts(fake, options, total=50, model=GiftBase)
-            self._create_letter_actions(fake, options, total=200, model=LetterAction)
+            self._create_letter_actions(
+                fake, options, total=200, model=LetterActionBase
+            )
             self._create_world_events(fake, options, total=50, model=WorldEvent)
             self._create_world_event_triggers(
                 fake, options, total=50, model=WorldEventTrigger
@@ -253,7 +255,7 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
-        action = LetterAction.objects.create()
+        action = LetterActionBase.objects.create()
         action.letters.set(
             get_random_model_objects(LetterBase, min_amount=1, max_amount=5)
         )

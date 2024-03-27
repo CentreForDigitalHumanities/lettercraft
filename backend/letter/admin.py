@@ -75,7 +75,7 @@ class LetterDescriptionInline(admin.TabularInline):
         return f"{obj.source} ({obj.location})"
 
     def edit(self, obj):
-        html = f'<a href="{reverse("admin:letter_giftdescription_change", args=[obj.pk])}">Edit</a>'
+        html = f'<a href="{reverse("admin:letter_letterdescription_change", args=[obj.pk])}">Edit</a>'
         return format_html(html)
 
 

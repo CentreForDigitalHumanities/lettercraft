@@ -1,5 +1,9 @@
 from django.contrib import admin
+from django.urls import reverse
+
 from . import models
+from core.admin import source_information_fieldset, cross_reference_fieldset
+from django.utils.html import format_html
 
 
 class LetterActionCategoryAdmin(admin.StackedInline):
@@ -33,10 +37,11 @@ class RoleAdmin(admin.StackedInline):
 
 
 class LetterActionLettersAdmin(admin.StackedInline):
-    model = models.LetterAction.letters.through
+    model = models.LetterActionBase.letters.through
     extra = 0
     verbose_name = "letter"
     verbose_name_plural = "letters"
+
 
 class LetterActionGiftsAdmin(admin.StackedInline):
     model = models.LetterAction.gifts.through
@@ -44,10 +49,11 @@ class LetterActionGiftsAdmin(admin.StackedInline):
     verbose_name = "gift"
     verbose_name_plural = "gifts"
 
-@admin.register(models.LetterAction)
-class LetterActionAdmin(admin.ModelAdmin):
+
+@admin.register(models.LetterActionDescription)
+class LetterActionDescriptionAdmin(admin.ModelAdmin):
     filter_horizontal = ["epistolary_events", "gifts", "space_descriptions"]
-    list_display=["description", "display_date"]
+    list_display = ["description", "display_date"]
     inlines = [
         LetterActionLettersAdmin,
         LetterActionCategoryAdmin,
@@ -56,6 +62,57 @@ class LetterActionAdmin(admin.ModelAdmin):
         RoleAdmin,
     ]
     exclude = ["letters"]
+    fieldsets = (
+        source_information_fieldset,
+        cross_reference_fieldset,
+        (
+            "Letter action information",
+            {"fields": ["epistolary_events", "gifts", "space_descriptions"]},
+        ),
+    )
+
+
+class LetterActionDescriptionInline(admin.TabularInline):
+    model = models.LetterActionDescription
+    fk_name = "target"
+    exclude = ["source", "location", "terminology"]
+    readonly_fields = [
+        "source_information",
+        "mention",
+        "people_involved",
+        "letters_involved",
+        "gifts_involved",
+        "edit",
+    ]
+    extra = 0
+
+    def source_information(self, obj):
+        return f"{obj.source} ({obj.location})"
+
+    def people_involved(self, obj):
+        return ", ".join([str(role.agent) for role in obj.roles.all()])
+
+    def letters_involved(self, obj):
+        return ", ".join([str(letter) for letter in obj.letters.all()])
+
+    def gifts_involved(self, obj):
+        return ", ".join([str(gift) for gift in obj.gifts.all()])
+
+    def edit(self, obj):
+        html = f'<a href="{reverse("admin:event_letteractiondescription_change", args=[obj.pk])}">Edit</a>'
+        return format_html(html)
+
+
+@admin.register(models.LetterAction)
+class LetterActionAdmin(admin.ModelAdmin):
+    inlines = [
+        LetterActionDescriptionInline,
+        LetterActionLettersAdmin,
+        LetterActionCategoryAdmin,
+        LetterActionGiftsAdmin,
+        EventDateAdmin,
+        RoleAdmin,
+    ]
 
 
 # For use in Case Study form
@@ -87,6 +144,7 @@ class EpistolaryEventsTriggeredWorldEventsInline(admin.StackedInline):
     verbose_name = "World event triggered by this epistolary event"
     verbose_name_plural = "World events triggered by this epistolary event"
 
+
 class EpistolaryEventsTriggeredEpistolaryEventsInline(admin.StackedInline):
     model = models.EpistolaryEvent.triggered_epistolary_events.through
     fk_name = "triggering_epistolary_event"
@@ -103,8 +161,9 @@ class EpistolaryEventAdmin(admin.ModelAdmin):
         EpistolaryEventCaseStudyInline,
         EpistolaryEventLetterActionInline,
         EpistolaryEventsTriggeredWorldEventsInline,
-        EpistolaryEventsTriggeredEpistolaryEventsInline
+        EpistolaryEventsTriggeredEpistolaryEventsInline,
     ]
+
 
 class WorldEventsTriggeredEpistolaryEventsInline(admin.StackedInline):
     model = models.WorldEvent.triggered_epistolary_events.through
@@ -128,5 +187,5 @@ class WorldEventAdmin(admin.ModelAdmin):
     fields = ["name", "note", "year_exact", "year_lower", "year_upper"]
     inlines = [
         WorldEventsTriggeredEpistolaryEventsInline,
-        WorldEventsTriggeredWorldEventsInline
+        WorldEventsTriggeredWorldEventsInline,
     ]
