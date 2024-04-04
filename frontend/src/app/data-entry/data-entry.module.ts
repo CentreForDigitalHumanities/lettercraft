@@ -8,6 +8,7 @@ import { StructureComponent } from './space/structure/structure.component';
 import { StructureTreeComponent } from './space/structure/structure-tree/structure-tree.component';
 import { PoliticalRegionComponent } from './space/political-region/political-region.component';
 import { ObjectComponent } from './object/object.component';
+import { EventComponent } from './event/event.component';
 
 
 
@@ -21,6 +22,7 @@ import { ObjectComponent } from './object/object.component';
         StructureTreeComponent,
         PoliticalRegionComponent,
         ObjectComponent,
+        EventComponent,
     ],
     imports: [
         SharedModule,
