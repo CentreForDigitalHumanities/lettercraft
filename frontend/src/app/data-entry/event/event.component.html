@@ -110,35 +110,78 @@
                         <h3>Agents</h3>
                         <p class="form-label">Which agents are involved?</p>
                         <div class="mb-4">
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        Unknown messenger
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary">
-                                            <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </button>
-                                        <button class="btn btn-danger">
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            Unknown messenger
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-primary">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </button>
+                                            <button class="btn btn-danger">
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        The nuns of Potiers
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <a class="btn btn-primary"
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            The nuns of Poitiers
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <a class="btn btn-primary"
                                                 [routerLink]="['../..', 'agent', 3]">
                                                 <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </a>
-                                        <button class="btn btn-danger">
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
+                                            </a>
+                                            <button class="btn btn-danger">
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
                                     </div>
-                                </li>
-                            </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div ngbDropdown>
                                 <button type="button" class="btn btn-primary" ngbDropdownToggle>
@@ -157,22 +200,42 @@
                         <div class="mb-4">
                             <p class="form-label">Which places are involved?</p>
                             <div class="mb-4">
-                                <ul class="list-group mb-3">
-                                    <li class="list-group-item hstack">
-                                        <span>
-                                            The Abbey of the Holy Cross
-                                        </span>
-                                        <div class="ms-auto btn-group">
-                                            <a class="btn btn-primary"
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="hstack">
+                                            <span>
+                                                The Abbey of the Holy Cross
+                                            </span>
+                                            <div class="ms-auto btn-group">
+                                                <a class="btn btn-primary"
                                                 [routerLink]="['../..', 'space', 1]">
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
-                                            </a>
-                                            <button class="btn btn-danger">
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
-                                            </button>
+                                                    <fa-icon [icon]="icons.edit"></fa-icon>
+                                                </a>
+                                                <button class="btn btn-danger">
+                                                    <fa-icon [icon]="icons.remove"></fa-icon>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                How is this information presented in the text?
+                                            </label>
+                                            <select class="form-select">
+                                                <option>Implied</option>
+                                                <option selected>Mentioned</option>
+                                                <option>Described</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Additional notes
+                                            </label>
+                                            <textarea class="form-control" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div ngbDropdown>
                                     <button type="button" class="btn btn-primary" ngbDropdownToggle>
@@ -192,22 +255,42 @@
                         <div class="mb-4">
                             <p class="form-label">Which objects are involved?</p>
                             <div class="mb-4">
-                                <ul class="list-group mb-3">
-                                    <li class="list-group-item hstack">
-                                        <span>
-                                            Letter from Radegund
-                                        </span>
-                                        <div class="ms-auto btn-group">
-                                            <a class="btn btn-primary"
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <div class="hstack">
+                                            <span>
+                                                Letter from Radegund
+                                            </span>
+                                            <div class="ms-auto btn-group">
+                                                <a class="btn btn-primary"
                                                 [routerLink]="['../..', 'object', 1]">
                                                 <fa-icon [icon]="icons.edit"></fa-icon>
                                             </a>
-                                            <button class="btn btn-danger">
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
-                                            </button>
+                                                <button class="btn btn-danger">
+                                                    <fa-icon [icon]="icons.remove"></fa-icon>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                How is this information presented in the text?
+                                            </label>
+                                            <select class="form-select">
+                                                <option>Implied</option>
+                                                <option selected>Mentioned</option>
+                                                <option>Described</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Additional notes
+                                            </label>
+                                            <textarea class="form-control" rows="2"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div ngbDropdown>
                                     <button type="button" class="btn btn-primary" ngbDropdownToggle>
