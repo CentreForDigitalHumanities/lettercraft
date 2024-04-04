@@ -55,9 +55,26 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem [collapsed]="false">
+    <div ngbAccordionItem>
         <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>Description in source text</button>
+            <button ngbAccordionButton>Reference in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Location
+                        </label>
+                        <input type="text" class="form-control" value="chapter 3, verse 5">
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem >
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description</button>
         </h2>
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
