@@ -7,6 +7,7 @@ import { AgentComponent } from './data-entry/agent/agent.component';
 import { SpaceComponent } from './data-entry/space/space.component';
 import { StructureComponent } from './data-entry/space/structure/structure.component';
 import { ObjectComponent } from './data-entry/object/object.component';
+import { EventComponent } from './data-entry/event/event.component';
 
 const routes: Routes = [
     {
@@ -27,6 +28,10 @@ const routes: Routes = [
             {
                 path: 'source/:sourceID/object/:objectID',
                 component: ObjectComponent,
+            },
+            {
+                path: 'source/:sourceID/event/:eventID',
+                component: EventComponent,
             },
             {
                 path: 'source/:sourceID',
