@@ -79,7 +79,7 @@
                                                 (click)="open(editPoliticalRegion)">
                                                 <fa-icon [icon]="icons.edit"></fa-icon>
                                             </button>
-                                            <button class="btn btn-danger">
+                                            <button class="btn btn-danger" disabled>
                                                 <fa-icon [icon]="icons.remove"></fa-icon>
                                             </button>
                                         </div>
@@ -106,7 +106,7 @@
                             </div>
 
                             <button class="btn btn-primary" type="button"
-                                (click)="open(newPoliticalRegion)">
+                                (click)="open(newPoliticalRegion)" disabled>
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a political region
                             </button>
@@ -118,7 +118,7 @@
                         <h3>Ecclesiastical region</h3>
                         <p class="form-text">(Arch)dioceses, parishes</p>
                         <div class="mb-4">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="button" disabled>
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add an ecclesiastical region
                             </button>
@@ -129,7 +129,7 @@
                         <h3>Geographical region</h3>
                         <p class="form-text">Mountain ranges, valleys, islands, continents, etc.</p>
                         <div class="mb-4">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="button" disabled>
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a geographical region
                             </button>
@@ -153,7 +153,7 @@
                                                 (click)="open(editStructure)">
                                                 <fa-icon [icon]="icons.edit"></fa-icon>
                                             </button>
-                                            <button class="btn btn-danger">
+                                            <button class="btn btn-danger" disabled>
                                                 <fa-icon [icon]="icons.remove"></fa-icon>
                                             </button>
                                         </div>
@@ -186,10 +186,10 @@
                                             The Abbey of the Holy Cross (building)
                                         </span>
                                         <div class="ms-auto btn-group">
-                                            <button class="btn btn-primary">
+                                            <button class="btn btn-primary" disabled>
                                                 <fa-icon [icon]="icons.edit"></fa-icon>
                                             </button>
-                                            <button class="btn btn-danger">
+                                            <button class="btn btn-danger" disabled>
                                                 <fa-icon [icon]="icons.remove"></fa-icon>
                                             </button>
                                         </div>
@@ -215,7 +215,7 @@
                                 </div>
                             </div>
 
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" disabled>
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a structure
                             </button>
@@ -225,13 +225,12 @@
                         <h3>Landscape features</h3>
                         <p class="form-text">Natural features, such as a forest, a swamp, a hill</p>
                         <div class="mb-4">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="button" disabled>
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a feature
                             </button>
                         </div>
                     </div>
-
                 </ng-template>
             </div>
         </div>

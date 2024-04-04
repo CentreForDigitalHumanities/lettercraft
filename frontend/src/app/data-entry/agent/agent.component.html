@@ -87,7 +87,7 @@
 
                         <div class="input-group mb-4">
                             <input type="text" class="form-control" value="St. Radegund">
-                            <button class="btn btn-outline-secondary">
+                            <button class="btn btn-outline-secondary" disabled>
                                 <fa-icon [icon]="icons.remove"></fa-icon>
                             </button>
                         </div>
@@ -224,19 +224,15 @@
                         <label class="form-label">
                             Can we cross-reference this agent with other sources?
                         </label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" checked="true">
-                            <label class="form-check-label">
+                        <select class="form-select">
+                            <option value="yes" selected>
                                 Yes, this person is a historical or religious figure;
                                 they may appear in other sources
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio">
-                            <label class="form-check-label">
+                            </option>
+                            <option>
                                 No, this person is an unknown individual
-                            </label>
-                        </div>
+                            </option>
+                        </select>
                     </div>
                 </ng-template>
             </div>
