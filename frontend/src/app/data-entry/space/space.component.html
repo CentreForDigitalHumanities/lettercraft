@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem>
+    <div ngbAccordionItem [collapsed]="false">
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Description in source text</button>
         </h2>
@@ -68,24 +68,42 @@
                         <p class="mb-4 form-text">Kingdoms, duchies, etc.</p>
 
                         <div class="mb-4">
-                            <label class="form-label">Political regions</label>
-
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        Aquitaine
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary"
-                                            (click)="open(editPoliticalRegion)">
-                                            <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </button>
-                                        <button class="btn btn-danger">
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            Aquitaine
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-primary"
+                                                (click)="open(editPoliticalRegion)">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </button>
+                                            <button class="btn btn-danger">
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
                                     </div>
-                                </li>
-                            </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
                             <button class="btn btn-primary" type="button"
                                 (click)="open(newPoliticalRegion)">
@@ -94,83 +112,27 @@
                             </button>
                             <!-- <input type="text" class="form-control" [ngbTypeahead]="searchPoliticalRegion"> -->
                         </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
                     </div>
 
                     <div class="mb-5">
                         <h3>Ecclesiastical region</h3>
+                        <p class="form-text">(Arch)dioceses, parishes</p>
                         <div class="mb-4">
-                            <label class="form-label">Ecclesiastical regions</label>
-                            <ul class="list-group"></ul>
                             <button class="btn btn-primary" type="button">
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add an ecclesiastical region
                             </button>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select" disabled>
-                                <option selected>No information given</option>
-                                <option>Implied</option>
-                                <option>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2" disabled></textarea>
-                        </div>
                     </div>
 
                     <div class="mb-5">
                         <h3>Geographical region</h3>
+                        <p class="form-text">Mountain ranges, valleys, islands, continents, etc.</p>
                         <div class="mb-4">
-                            <label class="form-label">Geographical regions</label>
-                            <ul class="list-group"></ul>
                             <button class="btn btn-primary" type="button">
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a geographical region
                             </button>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select" disabled>
-                                <option selected>No information given</option>
-                                <option>Implied</option>
-                                <option>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2" disabled></textarea>
                         </div>
                     </div>
 
@@ -180,87 +142,93 @@
                             Human-made structures, such as towns, roads, and buildings.
                         </p>
                         <div class="mb-4">
-                            <label class="form-label">
-                                Structures
-                            </label>
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        Poitiers (town)
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary"
-                                            (click)="open(editStructure)">
-                                            <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </button>
-                                        <button class="btn btn-danger">
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            Poitiers (town)
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-primary"
+                                                (click)="open(editStructure)">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </button>
+                                            <button class="btn btn-danger">
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        The Abbey of the Holy Cross (building)
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary">
-                                            <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </button>
-                                        <button class="btn btn-danger">
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
                                     </div>
-                                </li>
-                            </ul>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            The Abbey of the Holy Cross (building)
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-primary">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </button>
+                                            <button class="btn btn-danger">
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                             <button class="btn btn-primary">
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a structure
                             </button>
                         </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
                     </div>
                     <div class="mb-5">
                         <h3>Landscape features</h3>
+                        <p class="form-text">Natural features, such as a forest, a swamp, a hill</p>
                         <div class="mb-4">
-                            <label class="form-label">Landscape features</label>
-                            <ul class="list-group"></ul>
                             <button class="btn btn-primary" type="button">
                                 <fa-icon [icon]="icons.add"></fa-icon>
                                 Add a feature
                             </button>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select" disabled>
-                                <option selected>No information given</option>
-                                <option>Implied</option>
-                                <option>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2" disabled></textarea>
                         </div>
                     </div>
 
