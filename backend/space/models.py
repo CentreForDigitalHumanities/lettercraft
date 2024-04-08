@@ -37,9 +37,6 @@ class SpaceDescription(SourceDescription, models.Model):
         help_text="Man-made structures referenced in this description",
     )
 
-    def __str__(self):
-        return self.name
-
 
 class NamedSpace(Historical, models.Model):
     """
@@ -158,7 +155,7 @@ class StructureField(DescriptionField, models.Model):
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
 
 
-class LandscapeFeature(Field, models.Model):
+class LandscapeFeature(DescriptionField, models.Model):
     """
     A landscape feature describes natural or geological aspects of a
     space, e.g. "a forest", "a hill", "a cave".

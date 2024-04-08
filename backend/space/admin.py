@@ -1,24 +1,22 @@
 from django.contrib import admin
-from django.urls import reverse
 from . import models
-from django.utils.html import format_html
-from core.admin import description_source_fieldset
+from core.admin import description_source_fieldset, description_field_fields
 
 @admin.register(models.PoliticalRegion)
 class PoliticalRegion(admin.ModelAdmin):
-    list_display = ["name", "identifiable"]
+    list_display = ["name", "description", "identifiable"]
     list_filter = ["identifiable"]
 
 
 @admin.register(models.EcclesiasticalRegion)
 class EccleciasticalRegion(admin.ModelAdmin):
-    list_display = ["name", "identifiable"]
+    list_display = ["name", "description", "identifiable"]
     list_filter = ["identifiable"]
 
 
 @admin.register(models.GeographicalRegion)
 class GeographicalRegionAdmin(admin.ModelAdmin):
-    list_display = ["name", "identifiable"]
+    list_display = ["name", "description", "identifiable"]
     list_filter = ["identifiable"]
 
 
@@ -32,40 +30,40 @@ class StructureAdmin(admin.ModelAdmin):
 class PoliticalRegionFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Political region reference"
     model = models.PoliticalRegionField
-    fields = ["space", "political_region", "certainty", "note"]
+    fields = ["space", "political_region"] + description_field_fields
     extra = 0
 
 
 class EcclesiasticalRegionFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Ecclesiastical region reference"
     model = models.EcclesiasticalRegionField
-    fields = ["space", "ecclesiastical_region", "certainty", "note"]
+    fields = ["space", "ecclesiastical_region"] + description_field_fields
     extra = 0
 
 
 class GeographicalRegionFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Geographical region reference"
     model = models.GeographicalRegionField
-    fields = ["space", "geographical_region", "certainty", "note"]
+    fields = ["space", "geographical_region"] + description_field_fields
     extra = 0
 
 
 class StructureFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Structure reference"
     model = models.StructureField
-    fields = ["space", "structure", "certainty", "note"]
+    fields = ["space", "structure"] + description_field_fields
     extra = 0
 
 
 class LandscapeFeatureInlineAdmin(admin.StackedInline):
     model = models.LandscapeFeature
-    fields = ["landscape", "certainty", "note"]
+    fields = ["landscape"] + description_field_fields
     extra = 0
 
 
 @admin.register(models.SpaceDescription)
 class SpaceDescriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "description"]
+    list_display = ["name", "description", "source"]
     inlines = [
         PoliticalRegionFieldInlineAdmin,
         EcclesiasticalRegionFieldInlineAdmin,
@@ -74,7 +72,6 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         LandscapeFeatureInlineAdmin,
     ]
     fieldsets = (
-        description_source_fieldset,
         (
             "Space description information",
             {
@@ -84,4 +81,5 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
                 ]
             },
         ),
+        description_source_fieldset,
     )
