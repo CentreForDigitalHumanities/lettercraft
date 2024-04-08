@@ -10,8 +10,15 @@ description_source_fieldset = (
         "fields": [
             "source",
             "location",
-            "terminology",
             "mention",
         ],
     },
 )
+
+field_fields = ["certainty", "note"]
+
+description_field_fields = [
+    "mention",
+    "location",
+    "terminology",
+] + field_fields

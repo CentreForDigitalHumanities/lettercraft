@@ -73,6 +73,17 @@ class PersonDateOfDeath(LettercraftDate, Field, models.Model):
             return f"died c. {self.year_lower}–{self.year_upper}"
 
 
+class PersonDescriptionReference(Field, models.Model):
+    person = models.ForeignKey(
+        to=Person,
+        on_delete=models.CASCADE,
+    )
+    description = models.ForeignKey(
+        to="AgentDescription",
+        on_delete=models.CASCADE,
+    )
+
+
 class AgentDescription(SourceDescription, models.Model):
     """
     A description of an agent (person or group) in a source.
@@ -80,6 +91,7 @@ class AgentDescription(SourceDescription, models.Model):
 
     describes = models.ManyToManyField(
         to=Person,
+        through=PersonDescriptionReference,
         related_name="source_descriptions",
         help_text="Historical individuals that this description refers to. "
         "If the agent is a group, this can be multiple individuals.",
@@ -91,14 +103,9 @@ class AgentDescription(SourceDescription, models.Model):
     )
 
     def clean(self):
-        if (not self.is_group) and self.describes.count() > 1:
+        # ID check is needed to evaluate the m2m relationship
+        if self.id and (not self.is_group) and self.describes.count() > 1:
             raise ValidationError("Only groups can include multiple historical figures")
-
-    def __str__(self):
-        """
-        Inherits the __str__ method from the base model and adds the source to it.
-        """
-        return f"{super().__str__()} (described in {self.source})"
 
 
 class AgentName(DescriptionField, models.Model):

@@ -55,12 +55,10 @@ class EventDescriptionAgent(DescriptionField, models.Model):
     agent = models.ForeignKey(
         to=AgentDescription,
         on_delete=models.CASCADE,
-        null=False,
     )
     event = models.ForeignKey(
         to=EventDescription,
         on_delete=models.CASCADE,
-        null=False,
     )
 
     def __str__(self):

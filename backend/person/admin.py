@@ -1,48 +1,49 @@
 from django.contrib import admin
-from django.urls import reverse
 from . import models
-from django.utils.html import format_html
-from core.admin import description_source_fieldset
+from core.admin import (
+    description_source_fieldset,
+    description_field_fields,
+    field_fields,
+)
 
 
 class AgentNameAdmin(admin.StackedInline):
     model = models.AgentName
-    fields = ["value", "certainty", "note"]
+    fields = ["value"] + description_field_fields
     extra = 0
-    verbose_name = "Name used in text"
-    verbose_name_plural = "Names used in text"
+    verbose_name = "name used in text"
+    verbose_name_plural = "names used in text"
 
 
 class AgentGenderAdmin(admin.StackedInline):
     model = models.AgentGender
-    fields = ["gender", "certainty", "note"]
+    fields = ["gender"] + description_field_fields
     extra = 0
 
 
 class SocialStatusAdmin(admin.StackedInline):
     model = models.SocialStatus
-    fields = [
-        "status_marker",
-        "certainty",
-        "note",
-        "year_lower",
-        "year_upper",
-        "year_exact",
-    ]
+    fields = ["status_marker"] + description_field_fields
+    extra = 0
+
+
+class PersonReferenceAdmin(admin.StackedInline):
+    model = models.PersonDescriptionReference
+    fields = ["person", "description"] + field_fields
     extra = 0
 
 
 @admin.register(models.AgentDescription)
 class AgentDescriptionAdmin(admin.ModelAdmin):
     inlines = [
+        PersonReferenceAdmin,
         AgentNameAdmin,
         AgentGenderAdmin,
         SocialStatusAdmin,
     ]
     fieldsets = (
-        description_source_fieldset,
         (
-            "Agent information",
+            "Identification",
             {
                 "fields": [
                     "name",
@@ -51,32 +52,8 @@ class AgentDescriptionAdmin(admin.ModelAdmin):
                 ]
             },
         ),
+        description_source_fieldset,
     )
-
-
-class AgentDescriptionInline(admin.StackedInline):
-    model = models.AgentDescription.describes.through
-    # exclude = ["source", "location", "terminology"]
-    # readonly_fields = [
-    #     "source_information",
-    #     "mention",
-    #     "names",
-    #     "gender",
-    #     "edit",
-    # ]
-    # extra = 0
-
-    # def source_information(self, obj):
-    #     return f"{obj.source} ({obj.location})"
-
-    # def names(self, obj):
-    #     names = obj.names.all()
-    #     return ", ".join([name.value for name in names])
-
-    # # Creates a link to the edit page of the related AgentDescription object
-    # def edit(self, obj):
-    #     html = f'<a href="{reverse("admin:person_agentdescription_change", args=[obj.pk])}">Edit</a>'
-    #     return format_html(html)
 
 
 class PersonDateOfBirthAdmin(admin.StackedInline):
@@ -96,7 +73,7 @@ class PersonAdmin(admin.ModelAdmin):
     fields = ["name", "description"]
     search_fields = ["name", "description"]
     inlines = [
-        AgentDescriptionInline,
+        PersonReferenceAdmin,
         PersonDateOfBirthAdmin,
         PersonDateOfDeathAdmin,
     ]

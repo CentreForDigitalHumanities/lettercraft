@@ -63,7 +63,6 @@ class LetterDescriptionAdmin(admin.ModelAdmin):
 @admin.register(models.GiftDescription)
 class GiftDescriptionAdmin(admin.ModelAdmin):
     fields = ["name", "description"]
-    # inlines = [GiftDescriptionInline, GiftLetterActionInline]
 
     # def formfield_for_foreignkey(self, db_field, request, **kwargs):
     #     if db_field.name == "gifted_by":

@@ -160,5 +160,11 @@ class PreservedLetterRole(Field, models.Model):
     Involvement of a historical figure with a preserved letter.
     """
 
-    letter = models.ForeignKey(to=PreservedLetter, on_delete=models.CASCADE)
-    person = models.ForeignKey(to=Person, on_delete=models.CASCADE)
+    letter = models.ForeignKey(
+        to=PreservedLetter,
+        on_delete=models.CASCADE,
+    )
+    person = models.ForeignKey(
+        to=Person,
+        on_delete=models.CASCADE,
+    )
