@@ -52,6 +52,7 @@ class EventDescriptionSpaceAdmin(admin.StackedInline):
 class EventDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "source"]
     list_filter = ["source"]
+    search_fields = ["name", "description"]
     inlines = [
         EventDescriptionAgentAdmin,
         EventDescriptionLettersAdmin,

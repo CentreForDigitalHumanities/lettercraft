@@ -34,6 +34,9 @@ class LetterAddresseesDescriptionAdmin(admin.StackedInline):
 
 @admin.register(models.LetterDescription)
 class LetterDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
     inlines = [
         LetterCategoryAdmin,
         LetterMaterialAdmin,
@@ -60,6 +63,9 @@ class GiftMaterialAdmin(admin.StackedInline):
 
 @admin.register(models.GiftDescription)
 class GiftDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
     inlines = [
         GiftSenderAdmin,
         GiftMaterialAdmin,

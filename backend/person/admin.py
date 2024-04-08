@@ -35,6 +35,9 @@ class PersonReferenceAdmin(admin.StackedInline):
 
 @admin.register(models.AgentDescription)
 class AgentDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
     inlines = [
         PersonReferenceAdmin,
         AgentNameAdmin,

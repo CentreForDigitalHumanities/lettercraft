@@ -64,6 +64,8 @@ class LandscapeFeatureInlineAdmin(admin.StackedInline):
 @admin.register(models.SpaceDescription)
 class SpaceDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
     inlines = [
         PoliticalRegionFieldInlineAdmin,
         EcclesiasticalRegionFieldInlineAdmin,
