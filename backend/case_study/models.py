@@ -1,5 +1,5 @@
 from django.db import models
-
+from event import models as event_models
 
 class CaseStudy(models.Model):
     """
@@ -14,7 +14,6 @@ class CaseStudy(models.Model):
         max_length=256,
         unique=True,
     )
-
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -29,10 +28,19 @@ class Episode(models.Model):
     name = models.CharField(
         max_length=256,
     )
-
-    description = models.TextField(blank=True)
-
-    case_studies = models.ManyToManyField(to=CaseStudy, related_name="episodes")
+    description = models.TextField(
+        blank=True,
+    )
+    case_studies = models.ManyToManyField(
+        to=CaseStudy,
+        blank=True,
+        related_name="episodes",
+    )
+    event_descriptions = models.ManyToManyField(
+        to=event_models.EventDescription,
+        blank=True,
+        related_name="episodes",
+    )
 
     def __str__(self):
         return self.name
