@@ -1,11 +1,10 @@
 from django.contrib import admin
-from django.urls import reverse
-from letter.models import GiftDescription
-from event.models import EventDescription
-from person.models import AgentDescription
 from . import models
-from core.admin import description_source_fieldset
-from django.utils.html import format_html
+from core.admin import (
+    description_id_fieldset,
+    description_source_fieldset,
+    description_field_fields,
+)
 
 
 @admin.register(models.Category)
@@ -16,32 +15,22 @@ class CategoryAdmin(admin.ModelAdmin):
 class LetterMaterialAdmin(admin.StackedInline):
     model = models.LetterMaterial
     fields = ["surface", "certainty", "note"]
-
+    extra = 0
 
 class LetterCategoryAdmin(admin.StackedInline):
     model = models.LetterCategory
     fields = ["letter", "category", "certainty", "note"]
-
+    extra = 0
 
 class LetterSenderDescriptionAdmin(admin.StackedInline):
     model = models.LetterSender
-    fields = ["letter", "sender", "certainty", "note"]
-
-    # def formfield_for_manytomany(self, db_field, request, **kwargs):
-    #     if db_field.name == "senders":
-    #         kwargs["queryset"] = AgentDescription.objects.all()
-    #     return super().formfield_for_manytomany(db_field, request, **kwargs)
-
+    fields = ["letter", "agent"] + description_field_fields
+    extra = 0
 
 class LetterAddresseesDescriptionAdmin(admin.StackedInline):
     model = models.LetterAddressee
-    fields = ["letter", "addressee", "certainty", "note"]
-
-    # def formfield_for_manytomany(self, db_field, request, **kwargs):
-    #     if db_field.name == "addressees":
-    #         kwargs["queryset"] = AgentDescription.objects.all()
-    #     return super().formfield_for_manytomany(db_field, request, **kwargs)
-
+    fields = ["letter", "agent"] + description_field_fields
+    extra = 0
 
 @admin.register(models.LetterDescription)
 class LetterDescriptionAdmin(admin.ModelAdmin):
@@ -52,19 +41,31 @@ class LetterDescriptionAdmin(admin.ModelAdmin):
         LetterAddresseesDescriptionAdmin,
     ]
     fieldsets = (
+        description_id_fieldset,
         description_source_fieldset,
-        (
-            "Letter information",
-            {"fields": ["name", "description"]},
-        ),
     )
+
+
+class GiftSenderAdmin(admin.StackedInline):
+    model = models.GiftSender
+    fields = ["gift", "agent"] + description_field_fields
+    extra = 0
+
+
+class GiftMaterialAdmin(admin.StackedInline):
+    model = models.GiftMaterial
+    fields = ["gift", "material"] + description_field_fields
+    extra = 0
 
 
 @admin.register(models.GiftDescription)
 class GiftDescriptionAdmin(admin.ModelAdmin):
-    fields = ["name", "description"]
+    inlines = [
+        GiftSenderAdmin,
+        GiftMaterialAdmin,
+    ]
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "gifted_by":
-    #         kwargs["queryset"] = Agent.objects.all()
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    fieldsets = (
+        description_id_fieldset,
+        description_source_fieldset,
+    )

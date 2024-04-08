@@ -2,6 +2,13 @@ from django.contrib import admin
 
 # Register your models here.
 
+description_id_fieldset = (
+    "Identification",
+    {
+        "description": "Basic information to help identify this description",
+        "fields": ["name", "description"],
+    },
+)
 
 description_source_fieldset = (
     "Source information",
