@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
 from core.models import Field, Historical, SourceDescription, DescriptionField
 from person.models import AgentDescription, Person
 
@@ -54,6 +56,12 @@ class GiftSender(DescriptionField, models.Model):
         help_text="agent described as a sender of the gift",
     )
 
+    def clean(self):
+        if self.agent.source != self.gift.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
+
 
 class GiftAddressee(DescriptionField, models.Model):
     gift = models.ForeignKey(
@@ -65,6 +73,12 @@ class GiftAddressee(DescriptionField, models.Model):
         on_delete=models.CASCADE,
         help_text="agent described as an addressee of the gift",
     )
+
+    def clean(self):
+        if self.agent.source != self.gift.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
 
 
 class LetterDescription(SourceDescription, models.Model):
@@ -136,6 +150,12 @@ class LetterSender(DescriptionField, models.Model):
         help_text="agent described as a sender of the letter",
     )
 
+    def clean(self):
+        if self.agent.source != self.letter.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
+
 
 class LetterAddressee(DescriptionField, models.Model):
     letter = models.ForeignKey(
@@ -147,6 +167,12 @@ class LetterAddressee(DescriptionField, models.Model):
         on_delete=models.CASCADE,
         help_text="agent described as an addressee of the letter",
     )
+
+    def clean(self):
+        if self.agent.source != self.letter.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
 
 
 class PreservedLetter(Historical, models.Model):

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from core.models import DescriptionField, LettercraftDate, SourceDescription
 from person.models import AgentDescription
@@ -64,6 +65,12 @@ class EventDescriptionAgent(DescriptionField, models.Model):
     def __str__(self):
         return f"role of {self.agent} in {self.event}"
 
+    def clean(self):
+        if self.agent.source != self.event.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
+
 
 class EventDescriptionLetter(DescriptionField, models.Model):
     """
@@ -81,6 +88,12 @@ class EventDescriptionLetter(DescriptionField, models.Model):
         null=False,
     )
 
+    def clean(self):
+        if self.letter.source != self.event.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
+
 
 class EventDescriptionGift(DescriptionField, models.Model):
     """
@@ -97,6 +110,11 @@ class EventDescriptionGift(DescriptionField, models.Model):
         on_delete=models.CASCADE,
         null=False,
     )
+    def clean(self):
+        if self.gift.source != self.event.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
 
 
 class EventDescriptionSpace(DescriptionField, models.Model):
@@ -114,3 +132,9 @@ class EventDescriptionSpace(DescriptionField, models.Model):
         on_delete=models.CASCADE,
         null=False,
     )
+
+    def clean(self):
+        if self.space.source != self.event.source:
+            raise ValidationError(
+                "Linked descriptions must be from the same source text"
+            )
