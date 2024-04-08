@@ -141,7 +141,6 @@ class SourceDescription(Named, models.Model):
 
     source = models.ForeignKey(
         Source,
-        default="",
         on_delete=models.CASCADE,
         help_text="The source in which this description occurs.",
     )
