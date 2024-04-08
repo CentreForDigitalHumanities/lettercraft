@@ -4,6 +4,7 @@ from core.admin import (
     description_id_fieldset,
     description_source_fieldset,
     description_field_fields,
+    field_fields,
 )
 
 
@@ -75,3 +76,18 @@ class GiftDescriptionAdmin(admin.ModelAdmin):
         description_id_fieldset,
         description_source_fieldset,
     )
+
+
+class PreservedLetterRoleAdmin(admin.StackedInline):
+    model = models.PreservedLetterRole
+    fields = ["person"] + field_fields
+    extra = 0
+    verbose_name = "involved person"
+    verbose_name_plural = "involved persons"
+
+
+@admin.register(models.PreservedLetter)
+class PreservedLetterAdmin(admin.ModelAdmin):
+    list_display = ["name", "description"]
+    exclude = ["identifiable"]
+    inlines = [PreservedLetterRoleAdmin]
