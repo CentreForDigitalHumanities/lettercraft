@@ -1,13 +1,29 @@
 from django.db import models
-from django.contrib import admin
-from core.models import Field, Historical, SourceDescription
-from person.models import AgentBase
+from core.models import Field, Historical, SourceDescription, DescriptionField
+from person.models import AgentDescription, Person
 
 
-class GiftBase(models.Model):
+class GiftDescription(SourceDescription, models.Model):
     """
-    A gift presented alongside a letter.
+    A gift described in a source text
     """
+
+    gifted_by = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        related_name="gifts_given",
+        help_text="The agent who gave the gift. Leave empty if unknown.",
+        null=True,
+        blank=True,
+    )
+
+
+class GiftMaterial(DescriptionField, models.Model):
+    gift = models.ForeignKey(
+        to=GiftDescription,
+        on_delete=models.CASCADE,
+        related_name="materials",
+    )
 
     class Material(models.TextChoices):
         PRECIOUS_METAL = "precious metal", "precious metal"
@@ -21,93 +37,42 @@ class GiftBase(models.Model):
         OTHER = "other", "other"
         UNKNOWN = "unknown", "unknown"
 
-    name = models.CharField(
-        max_length=256, help_text="A short name for the gift (for identification)"
-    )
-
-    description = models.TextField(
-        blank=True,
-        help_text="A longer description of the gift",
-    )
-
     material = models.CharField(
         choices=Material.choices,
         help_text="The material the gift consists of",
     )
 
-    gifted_by = models.ForeignKey(
-        to=AgentBase,
+
+class GiftSender(DescriptionField, models.Model):
+    gift = models.ForeignKey(
+        to=GiftDescription,
         on_delete=models.CASCADE,
-        related_name="gifts_given",
-        help_text="The agent who gave the gift. Leave empty if unknown.",
-        null=True,
-        blank=True,
+    )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        help_text="agent described as a sender of the gift",
     )
 
-    def __str__(self):
-        gifter_name = (
-            self.gifted_by.names.first() if self.gifted_by is not None else "unknown"
-        )
-        return f"{self.name} ({self.material}), gifted by {gifter_name}"
 
-
-class GiftDescription(SourceDescription, GiftBase, models.Model):
-    """
-    A description of a gift in a source.
-    """
-
-    target = models.ForeignKey(
-        to=GiftBase,
+class GiftAddressee(DescriptionField, models.Model):
+    gift = models.ForeignKey(
+        to=GiftDescription,
         on_delete=models.CASCADE,
-        related_name="source_descriptions",
-        null=True,
-        blank=True,
+    )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        help_text="agent described as an addressee of the gift",
     )
 
-    def __str__(self):
-        """
-        Inherits the __str__ method from the base model and adds the source to it.
-        """
-        return f"{super().__str__()} (described in {self.source})"
 
-
-class Gift(Historical, GiftBase, models.Model):
+class LetterDescription(SourceDescription, models.Model):
     """
-    An aggregate model that represents a gift in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
+    A description of a letter in a source text.
     """
 
     pass
-
-
-class LetterBase(models.Model):
-    name = models.CharField(
-        max_length=200,
-        blank=False,
-        unique=True,
-        help_text="a unique name to identify this letter in the database",
-    )
-
-    def __str__(self):
-        return self.name
-
-    @admin.display(
-        description="Date range of actions involving this letter",
-    )
-    def date_active(self):
-        return self._aggregate_dates(self.events.all())
-
-    @admin.display(
-        description="Date range in which this letter was written",
-    )
-    def date_written(self):
-        return self._aggregate_dates(self.events.filter(categories__value="write"))
-
-    def _aggregate_dates(self, actions):
-        """Calculate a date range based on the dates of related actions"""
-        dates = [action.date for action in actions]
-        lower = min(date.year_lower for date in dates)
-        upper = max(data.year_upper for data in dates)
-        return lower, upper
 
 
 class Category(models.Model):
@@ -125,7 +90,7 @@ class Category(models.Model):
 class LetterCategory(Field, models.Model):
     category = models.ForeignKey(to=Category, null=True, on_delete=models.SET_NULL)
     letter = models.OneToOneField(
-        to=LetterBase,
+        to=LetterDescription,
         on_delete=models.CASCADE,
         null=False,
     )
@@ -141,15 +106,16 @@ class LetterMaterial(Field, models.Model):
         OTHER = "other", "other"
         UNKNOWN = "unknown", "unknown"
 
+    letter = models.OneToOneField(
+        to=LetterDescription,
+        on_delete=models.CASCADE,
+        null=False,
+    )
     surface = models.CharField(
         choices=Surface.choices,
         null=False,
         blank=False,
-    )
-    letter = models.OneToOneField(
-        to=LetterBase,
-        on_delete=models.CASCADE,
-        null=False,
+        help_text="surface material, as described in the source text",
     )
 
     def __str__(self):
@@ -159,70 +125,40 @@ class LetterMaterial(Field, models.Model):
             return f"material #{self.id}"
 
 
-class LetterSenders(Field, models.Model):
-    senders = models.ManyToManyField(
-        to=AgentBase,
-        blank=True,
-        help_text="Agents whom the letter names as the sender",
-    )
-    letter = models.OneToOneField(
-        to=LetterBase,
+class LetterSender(DescriptionField, models.Model):
+    letter = models.ForeignKey(
+        to=LetterDescription,
         on_delete=models.CASCADE,
-        null=False,
     )
-
-    def __str__(self):
-        if self.letter:
-            return f"senders of {self.letter}"
-        else:
-            return f"senders #{self.id}"
-
-
-class LetterAddressees(Field, models.Model):
-    addressees = models.ManyToManyField(
-        to=AgentBase,
-        blank=True,
-        help_text="Agents whom the letter names as the addressee",
-    )
-    letter = models.OneToOneField(
-        to=LetterBase,
+    agent = models.ForeignKey(
+        to=AgentDescription,
         on_delete=models.CASCADE,
-        null=False,
+        help_text="agent described as a sender of the letter",
     )
 
-    def __str__(self):
-        if self.letter:
-            return f"addressees of {self.letter}"
-        else:
-            return f"addressees #{self.id}"
 
-
-class Letter(Historical, LetterBase, models.Model):
-    """
-    An aggregate model that represents a letter in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
-    """
-
-    pass
-
-    def __str__(self) -> str:
-        return f"{super().__str__()}"
-
-
-class LetterDescription(SourceDescription, LetterBase, models.Model):
-    """
-    A description of a letter in a source.
-    """
-
-    target = models.ForeignKey(
-        to=Letter,
+class LetterAddressee(DescriptionField, models.Model):
+    letter = models.ForeignKey(
+        to=LetterDescription,
         on_delete=models.CASCADE,
-        related_name="source_descriptions",
-        null=True,
-        blank=True,
+    )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        help_text="agent described as an addressee of the letter",
     )
 
-    def __str__(self):
-        """
-        Inherits the __str__ method from the base model and adds the source to it.
-        """
-        return f"{super().__str__()} (described in {self.source})"
+
+class PreservedLetter(Historical, models.Model):
+    """
+    A letter that has been preserved.
+    """
+
+
+class PreservedLetterRole(Field, models.Model):
+    """
+    Involvement of a historical figure with a preserved letter.
+    """
+
+    letter = models.ForeignKey(to=PreservedLetter, on_delete=models.CASCADE)
+    person = models.ForeignKey(to=Person, on_delete=models.CASCADE)

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from . import models
 from django.utils.html import format_html
-from core.admin import source_information_fieldset, cross_reference_fieldset
+from core.admin import description_source_fieldset
 
 @admin.register(models.PoliticalRegion)
 class PoliticalRegion(admin.ModelAdmin):
@@ -63,8 +63,8 @@ class LandscapeFeatureInlineAdmin(admin.StackedInline):
     extra = 0
 
 
-@admin.register(models.SpaceDescriptionDescription)
-class SpaceDescriptionDescriptionAdmin(admin.ModelAdmin):
+@admin.register(models.SpaceDescription)
+class SpaceDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     inlines = [
         PoliticalRegionFieldInlineAdmin,
@@ -74,8 +74,7 @@ class SpaceDescriptionDescriptionAdmin(admin.ModelAdmin):
         LandscapeFeatureInlineAdmin,
     ]
     fieldsets = (
-        source_information_fieldset,
-        cross_reference_fieldset,
+        description_source_fieldset,
         (
             "Space description information",
             {
@@ -86,32 +85,3 @@ class SpaceDescriptionDescriptionAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-
-class SpaceDescriptionDescriptionInline(admin.TabularInline):
-    model = models.SpaceDescriptionDescription
-    fk_name = "target"
-    exclude = ["source", "location", "terminology"]
-    readonly_fields = ["source_information", "mention", "name", "description", "edit"]
-    extra = 0
-
-    def source_information(self, obj):
-        return f"{obj.source} ({obj.location})"
-
-    def edit(self, obj):
-        html = f'<a href="{reverse("admin:space_spacedescriptiondescription_change", args=[obj.pk])}">Edit</a>'
-        return format_html(html)
-
-
-@admin.register(models.SpaceDescription)
-class SpaceDescriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "description"]
-    fields = ["name", "description"]
-    inlines = [
-        SpaceDescriptionDescriptionInline,
-        PoliticalRegionFieldInlineAdmin,
-        EcclesiasticalRegionFieldInlineAdmin,
-        GeographicalRegionFieldInlineAdmin,
-        StructureFieldInlineAdmin,
-        LandscapeFeatureInlineAdmin,
-    ]

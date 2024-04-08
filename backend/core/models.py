@@ -25,6 +25,36 @@ class Field(models.Model):
         abstract = True
 
 
+class DescriptionField(Field, models.Model):
+    """
+    A piece of information in a source description
+    """
+
+    mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this information presented in the text?",
+    )
+    location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location of the information in the source text",
+    )
+    terminology = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant terminology used in the source text",
+    )
+
+    class Meta:
+        abstract = True
+
+
 class LettercraftDate(models.Model):
     MIN_YEAR = 400
     MAX_YEAR = 800
@@ -72,48 +102,63 @@ class LettercraftDate(models.Model):
             self.year_upper = self.year_exact
 
 
-class Historical(models.Model):
-    """
-    An abstract model that represents a historical entity. This may be based on one or multiple SourceDescriptions.
-    """
+class Named(models.Model):
+    name = models.CharField(
+        max_length=128, help_text="a name to help identify this object"
+    )
+    description = models.TextField(
+        blank=True, help_text="longer description to help identify this object"
+    )
 
     class Meta:
         abstract = True
 
 
-class SourceDescription(models.Model):
+class Historical(Named, models.Model):
     """
-    An abstract model that contains information about a historical entity (agent, object, space etc.) as it is described in a source.
+    An abstract model that represents a historical entity.
+
+    These are typically connected to one or more SourceDescriptions.
+    """
+
+    identifiable = models.BooleanField(
+        default=True,
+        null=False,
+        help_text="Whether this entity is identifiable, meaning they (or it) can be cross-referenced between sources",
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        abstract = True
+
+
+class SourceDescription(Named, models.Model):
+    """
+    An abstract model of an entity (agent, object, space etc.) as it is described in a source.
     """
 
     source = models.ForeignKey(
         Source,
+        default="",
         on_delete=models.CASCADE,
         help_text="The source in which this description occurs.",
     )
-
     location = models.CharField(
         max_length=200,
         blank=True,
-        help_text="Specific location of the reference in the source text",
+        help_text="Specific location(s) where the entity is mentioned or described in the source text",
     )
-
-    terminology = ArrayField(
-        models.CharField(
-            max_length=200,
-        ),
-        default=list,
-        blank=True,
-        size=5,
-        help_text="Terminology used in the source text to describe this entity",
-    )
-
     mention = models.CharField(
         max_length=32,
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
-        help_text="How is this information presented in the text?",
+        help_text="How is the entity presented in the text?",
     )
 
     class Meta:
         abstract = True
+
+    def __str__(self) -> str:
+        return f"{self.name} ({self.source.name})"

@@ -2,27 +2,16 @@ from django.db import models
 from django.contrib import admin
 import itertools
 
-from core.models import Field, Historical, SourceDescription
+from core.models import Field, Historical, SourceDescription, DescriptionField
 from space import validators
 
 
-class SpaceDescriptionBase(models.Model):
+class SpaceDescription(SourceDescription, models.Model):
     """
     The representation of a space within a source text.
 
     This model compounds all different aspects of space (geographical, political, etc.).
     """
-
-    name = models.CharField(
-        max_length=200,
-        blank=False,
-        help_text="A name to identify this space when entering data",
-    )
-
-    description = models.TextField(
-        blank=True,
-        help_text="Longer description of this place that can be used to identify it",
-    )
 
     political_regions = models.ManyToManyField(
         to="PoliticalRegion",
@@ -52,32 +41,13 @@ class SpaceDescriptionBase(models.Model):
         return self.name
 
 
-class NamedSpace(models.Model):
+class NamedSpace(Historical, models.Model):
     """
     Abstract class for "Named" regions, i.e. ones that can be
     identified as named entities.
     """
 
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        blank=False,
-    )
-
-    description = models.TextField(
-        blank=True,
-    )
-
-    identifiable = models.BooleanField(
-        default=True,
-        null=False,
-        help_text="Whether this place is an identifiable location that can be cross-referenced between descriptions, or a generic description",
-    )
-
     # may be expanded with geo data?
-
-    def __str__(self):
-        return self.name
 
     class Meta:
         abstract = True
@@ -164,27 +134,27 @@ class Structure(NamedSpace, models.Model):
             )
 
 
-class PoliticalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
+class PoliticalRegionField(DescriptionField, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
 
 
-class EcclesiasticalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
+class EcclesiasticalRegionField(DescriptionField, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     ecclesiastical_region = models.ForeignKey(
         to=EcclesiasticalRegion, on_delete=models.CASCADE
     )
 
 
-class GeographicalRegionField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
+class GeographicalRegionField(DescriptionField, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     geographical_region = models.ForeignKey(
         to=GeographicalRegion, on_delete=models.CASCADE
     )
 
 
-class StructureField(Field, models.Model):
-    space = models.ForeignKey(to=SpaceDescriptionBase, on_delete=models.CASCADE)
+class StructureField(DescriptionField, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
 
 
@@ -195,38 +165,8 @@ class LandscapeFeature(Field, models.Model):
     """
 
     space = models.ForeignKey(
-        to=SpaceDescriptionBase,
+        to=SpaceDescription,
         on_delete=models.CASCADE,
         related_name="landscape_features",
     )
     landscape = models.CharField(max_length=512, blank=False)
-
-
-class SpaceDescription(Historical, SpaceDescriptionBase, models.Model):
-    """
-    An aggregate model that represents a space in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
-    """
-
-    pass
-
-
-class SpaceDescriptionDescription(
-    SourceDescription, SpaceDescriptionBase, models.Model
-):
-    """
-    A description of a space description in a source.
-    """
-
-    target = models.ForeignKey(
-        to=SpaceDescription,
-        on_delete=models.CASCADE,
-        related_name="source_descriptions",
-        null=True,
-        blank=True,
-    )
-
-    def __str__(self):
-        """
-        Inherits the __str__ method from the base model and adds the source to it.
-        """
-        return f"{super().__str__()} (described in {self.source})"

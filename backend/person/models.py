@@ -1,7 +1,12 @@
 from django.db import models
 from django.forms import ValidationError
-from core.models import Field, Historical, LettercraftDate, SourceDescription
-from django.db.models import Q, CheckConstraint
+from core.models import (
+    Field,
+    Historical,
+    LettercraftDate,
+    SourceDescription,
+    DescriptionField,
+)
 
 
 class StatusMarker(models.Model):
@@ -22,20 +27,62 @@ class StatusMarker(models.Model):
         return self.name
 
 
-class Gender(models.TextChoices):
-    FEMALE = "FEMALE", "Female"
-    MALE = "MALE", "Male"
-    UNKNOWN = "UNKNOWN", "Unknown"
-    MIXED = "MIXED", "Mixed"
-    OTHER = "OTHER", "Other"
+class Person(Historical):
+    """
+    An aggregate model that represents a historical individual.
+    This model is based on one or multiple SourceDescriptions and other sources
+    that are not part of this database.
+    """
+
+    pass
 
 
-class AgentBase(models.Model):
-    gender = models.CharField(
-        max_length=8,
-        choices=Gender.choices,
-        default=Gender.UNKNOWN,
-        help_text="The gender of this person or group of people. The option Mixed is only used for groups.",
+class PersonDateOfBirth(LettercraftDate, Field, models.Model):
+    """
+    A relationship between a agent and their date of birth.
+    """
+
+    person = models.OneToOneField(
+        Person,
+        related_name="date_of_birth",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        if self.year_exact:
+            return f"born in {self.year_exact}"
+        else:
+            return f"born c. {self.year_lower}–{self.year_upper}"
+
+
+class PersonDateOfDeath(LettercraftDate, Field, models.Model):
+    """ "
+    A relationship between a agent and their date of death.
+    """
+
+    person = models.OneToOneField(
+        Person,
+        related_name="date_of_death",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        if self.year_exact:
+            return f"died in {self.year_exact}"
+        else:
+            return f"died c. {self.year_lower}–{self.year_upper}"
+
+
+class AgentDescription(SourceDescription, models.Model):
+    """
+    A description of an agent (person or group) in a source.
+    """
+
+    describes = models.ManyToManyField(
+        to=Person,
+        related_name="source_descriptions",
+        help_text="Historical individuals that this description refers to. "
+        "If the agent is a group, this can be multiple individuals.",
     )
 
     is_group = models.BooleanField(
@@ -43,40 +90,28 @@ class AgentBase(models.Model):
         help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers'). If true, the date of birth and date of death fields should be left empty.",
     )
 
-    class Meta:
-        constraints = [
-            CheckConstraint(
-                check=~Q(gender=Gender.MIXED, is_group=True),
-                name="gender_group_constraint",
-                violation_error_message="The 'mixed' gender option is reserved for groups",
-            )
-        ]
-
     def clean(self):
-        if self.is_group and getattr(self, "date_of_birth", None) is not None:
-            raise ValidationError("A group cannot have a date of birth")
-
-        if self.is_group and getattr(self, "date_of_death", None) is not None:
-            raise ValidationError("A group cannot have a date of death")
+        if (not self.is_group) and self.describes.count() > 1:
+            raise ValidationError("Only groups can include multiple historical figures")
 
     def __str__(self):
-        if self.names.count() == 1:
-            return self.names.first().value
-        elif self.names.count() > 1:
-            main_name = self.names.first().value
-            aliases = ", ".join(name.value for name in self.names.all()[1:])
-            return f"{main_name} (aka {aliases})"
-        else:
-            return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
+        """
+        Inherits the __str__ method from the base model and adds the source to it.
+        """
+        return f"{super().__str__()} (described in {self.source})"
 
 
-class AgentName(Field, models.Model):
+class AgentName(DescriptionField, models.Model):
+    """
+    A name used for an agent a source
+    """
+
+    agent = models.ForeignKey(
+        to=AgentDescription, on_delete=models.CASCADE, related_name="names"
+    )
     value = models.CharField(
         max_length=256,
         blank=True,
-    )
-    agent = models.ForeignKey(
-        to=AgentBase, on_delete=models.CASCADE, related_name="names"
     )
 
     class Meta:
@@ -88,60 +123,43 @@ class AgentName(Field, models.Model):
         return self.value
 
 
-class AgentDateOfBirth(LettercraftDate, Field, models.Model):
+class Gender(models.TextChoices):
+    FEMALE = "FEMALE", "Female"
+    MALE = "MALE", "Male"
+    UNKNOWN = "UNKNOWN", "Unknown"
+    MIXED = "MIXED", "Mixed"
+    OTHER = "OTHER", "Other"
+
+
+class AgentGender(DescriptionField, models.Model):
     """
-    A relationship between a agent and their date of birth.
-    """
-
-    agent = models.OneToOneField(
-        AgentBase,
-        related_name="date_of_birth",
-        on_delete=models.CASCADE,
-        limit_choices_to={"is_group": False},
-    )
-
-    def clean(self):
-        if self.agent.is_group:
-            raise ValidationError("A group cannot have a date of birth.")
-
-    def __str__(self):
-        if self.year_exact:
-            return f"born in {self.year_exact}"
-        else:
-            return f"born c. {self.year_lower}–{self.year_upper}"
-
-
-class AgentDateOfDeath(LettercraftDate, Field, models.Model):
-    """ "
-    A relationship between a agent and their date of death.
+    An source text's description of an agent's gender.
     """
 
     agent = models.OneToOneField(
-        AgentBase,
-        related_name="date_of_death",
-        on_delete=models.CASCADE,
-        limit_choices_to={"is_group": False},
+        to=AgentDescription, on_delete=models.CASCADE, related_name="gender"
+    )
+    gender = models.CharField(
+        max_length=8,
+        choices=Gender.choices,
+        default=Gender.UNKNOWN,
+        help_text="The gender of this person or group of people. The option Mixed is ' \
+            'only used for groups.",
     )
 
     def clean(self):
-        if self.agent.is_group:
-            raise ValidationError("A group cannot have a date of death.")
-
-    def __str__(self):
-        if self.year_exact:
-            return f"died in {self.year_exact}"
-        else:
-            return f"died c. {self.year_lower}–{self.year_upper}"
+        if self.gender == Gender.MIXED and not self.agent.is_group:
+            raise ValidationError("Mixed gender is only applicable to groups")
 
 
-class SocialStatus(Field, LettercraftDate, models.Model):
+class SocialStatus(DescriptionField, LettercraftDate, models.Model):
     """
     A relationship between a person or group and a social status marker,
     indicating that the person or group is of a certain social status.
     """
 
     agent = models.ForeignKey(
-        to=AgentBase, on_delete=models.CASCADE, related_name="social_statuses"
+        to=AgentDescription, on_delete=models.CASCADE, related_name="social_statuses"
     )
     status_marker = models.ForeignKey(
         to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
@@ -152,31 +170,3 @@ class SocialStatus(Field, LettercraftDate, models.Model):
 
     def __str__(self):
         return f"{self.agent} as {self.status_marker}"
-
-
-class Agent(Historical, AgentBase):
-    """
-    An aggregate model that represents an agent (person or group) in history. This model is based on one or multiple SourceDescriptions and other sources that are not part of this database.
-    """
-
-    pass
-
-
-class AgentDescription(SourceDescription, AgentBase):
-    """
-    A description of an agent (person or group) in a source.
-    """
-
-    target = models.ForeignKey(
-        to=Agent,
-        on_delete=models.CASCADE,
-        related_name="source_descriptions",
-        null=True,
-        blank=True,
-    )
-
-    def __str__(self):
-        """
-        Inherits the __str__ method from the base model and adds the source to it.
-        """
-        return f"{super().__str__()} (described in {self.source})"
