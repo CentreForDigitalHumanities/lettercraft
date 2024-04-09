@@ -20,6 +20,8 @@ description_source_fieldset = (
     },
 )
 
+date_fields = ["year_lower", "year_upper", "year_exact"]
+
 field_fields = ["certainty", "note"]
 
 description_field_fields = [

@@ -1,43 +1,75 @@
 from django.contrib import admin
+
 from . import models
+from core import admin as core_admin
 
 
-# class AgentNameAdmin(admin.StackedInline):
-#     model = models.AgentName
-#     fields = ["value", "certainty", "note"]
-#     extra = 0
-#     verbose_name = "(Alternative) agent name"
-#     verbose_name_plural = "(Alternative) agent names"
+class PersonDateOfBirthAdmin(admin.StackedInline):
+    model = models.PersonDateOfBirth
+    fields = core_admin.date_fields + core_admin.field_fields
+    extra = 0
 
 
-# class SocialStatusAdmin(admin.StackedInline):
-#     model = models.SocialStatus
-#     fields = ["status_marker", "certainty", "note", "year_lower", "year_upper", "year_exact"]
-#     extra = 0
+class PersonDateOfDeathAdmin(admin.StackedInline):
+    model = models.PersonDateOfDeath
+    fields = core_admin.date_fields + core_admin.field_fields
+    extra = 0
 
 
-# class AgentDateOfBirthAdmin(admin.StackedInline):
-#     model = models.AgentDateOfBirth
-#     fields = ["year_lower", "year_upper", "year_exact", "certainty", "note"]
-#     extra = 0
+@admin.register(models.HistoricalPerson)
+class HistoricalPersonAdmin(admin.ModelAdmin):
+    list_display = ["name", "description"]
+    search_fields = ["name", "description"]
+    fieldsets = [
+        core_admin.named_fieldset,
+    ]
+    inlines = [
+        PersonDateOfBirthAdmin,
+        PersonDateOfDeathAdmin,
+    ]
 
 
-# class AgentDateOfDeathAdmin(admin.StackedInline):
-#     model = models.AgentDateOfDeath
-#     fields = ["year_lower", "year_upper", "year_exact", "certainty", "note"]
-#     extra = 0
+class AgentDescriptionNameAdmin(admin.StackedInline):
+    model = models.AgentDescriptionName
+    fields = ["name"] + core_admin.description_field_fields
+    extra = 0
 
 
-# @admin.register(models.Agent)
-# class AgentAdmin(admin.ModelAdmin):
-#     inlines = [
-#         AgentNameAdmin,
-#         SocialStatusAdmin,
-#         AgentDateOfBirthAdmin,
-#         AgentDateOfDeathAdmin,
-#     ]
+class AgentDescriptionGenderAdmin(admin.StackedInline):
+    model = models.AgentDescriptionGender
+    fields = ["gender"] + core_admin.description_field_fields
+    extra = 0
 
 
-# @admin.register(models.StatusMarker)
-# class StatusMarkerAdmin(admin.ModelAdmin):
-#     pass
+class AgentDescriptionSocialStatusAdmin(admin.StackedInline):
+    model = models.AgentDescriptionSocialStatus
+    fields = ["status_marker"] + core_admin.description_field_fields
+    extra = 0
+
+
+class AgentDescriptionLocationAdmin(admin.StackedInline):
+    model = models.AgentDescriptionLocation
+    fields = ["location"] + core_admin.description_field_fields
+    extra = 0
+
+
+@admin.register(models.AgentDescription)
+class AgentDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
+    fieldsets = [
+        core_admin.named_fieldset,
+        core_admin.description_source_fieldset,
+    ]
+    inlines = [
+        AgentDescriptionNameAdmin,
+        AgentDescriptionGenderAdmin,
+        AgentDescriptionSocialStatusAdmin,
+        AgentDescriptionLocationAdmin,
+    ]
+
+
+@admin.register(models.StatusMarker)
+class StatusMarkerAdmin(admin.ModelAdmin):
+    pass
