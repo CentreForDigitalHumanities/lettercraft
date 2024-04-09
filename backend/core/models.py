@@ -116,7 +116,6 @@ class EntityDescription(Named, models.Model):
 
     source = models.ForeignKey(
         to=Source,
-        null=True,
         on_delete=models.CASCADE,
         help_text="Source text containing this description",
     )
