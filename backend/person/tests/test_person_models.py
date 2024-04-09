@@ -1,47 +1,53 @@
-from django.db import IntegrityError
 from django.forms import ValidationError
 import pytest
-# from person.models import AgentDateOfBirth, AgentName, Gender
+
+from person import models
 
 
-# def test_agent_name_for_unnamed_agent(agent):
-#     assert agent.__str__().startswith("Unknown person #")
+def test_agent_description_model(agent_description):
+    assert str(agent_description) == "Bert (Sesame Street)"
 
 
-# def test_agent_name_for_unnamed_agent_group(agent_group):
-#     agent_group.name = ""
-#     assert agent_group.__str__().startswith("Unknown group of people #")
+def test_only_groups_can_describe_multiple_people(
+    db, agent_description, agent_group_description
+):
+    person = models.HistoricalPerson.objects.create(name="Elmo")
+
+    agent_group_description.describes.add(person)
+    agent_description.clean()
+
+    with pytest.raises(ValidationError):
+        agent_description.describes.add(person)
+        agent_description.clean()
 
 
-# def test_agent_name_for_agent_with_single_name(agent):
-#     AgentName.objects.create(agent=agent, value="Bert")
-#     assert agent.__str__() == "Bert"
+def test_mixed_gender_only_for_groups(db, agent_description, agent_group_description):
+    gender = models.AgentDescriptionGender(
+        agent=agent_description,
+        gender=models.Gender.MALE,
+    )
+    gender.clean()
+
+    with pytest.raises(ValidationError):
+        gender.gender = models.Gender.MIXED
+        gender.clean()
+
+    gender = models.AgentDescriptionGender(
+        agent=agent_group_description,
+        gender=models.Gender.MIXED,
+    )
+    gender.clean()
 
 
-# def test_agent_name_for_agent_with_multiple_names(agent):
-#     AgentName.objects.create(agent=agent, value="Bert")
-#     AgentName.objects.create(agent=agent, value="Ernie")
-#     AgentName.objects.create(agent=agent, value="Oscar")
-#     assert agent.__str__() == "Bert (aka Ernie, Oscar)"
+def test_agent_with_exact_date_of_birth(db, historical_person):
+    models.PersonDateOfBirth.objects.create(person=historical_person, year_exact=512)
+    assert historical_person.date_of_birth.__str__().endswith("born in 512")
 
 
-# def test_agent_with_exact_date_of_birth(agent):
-#     AgentDateOfBirth.objects.create(agent=agent, year_exact=512)
-#     assert agent.date_of_birth.__str__().endswith("born in 512")
-
-
-# def test_agent_with_approx_date_of_birth(agent):
-#     AgentDateOfBirth.objects.create(agent=agent, year_lower=500, year_upper=525)
-#     assert agent.date_of_birth.__str__().endswith("born c. 500–525")
-
-
-# def test_agent_group_date_of_birth_constraint(agent_group):
-#     with pytest.raises(ValidationError):
-#         AgentDateOfBirth.objects.create(agent=agent_group, year_exact=512)
-#         agent_group.clean()
-
-
-# def test_agent_group_mixed_gender_constraint(agent_group):
-#     with pytest.raises(IntegrityError):
-#         agent_group.gender = Gender.MIXED
-#         agent_group.save()
+def test_agent_with_approx_date_of_birth(db, historical_person):
+    models.PersonDateOfBirth.objects.create(
+        person=historical_person,
+        year_lower=500,
+        year_upper=525,
+    )
+    assert historical_person.date_of_birth.__str__().endswith("born c. 500-525")
