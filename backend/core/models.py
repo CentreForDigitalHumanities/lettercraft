@@ -2,6 +2,10 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Field(models.Model):
+    """
+    A piece of information about an entity.
+    """
+
     certainty = models.IntegerField(
         choices=[
             (0, "uncertain"),
@@ -20,6 +24,7 @@ class Field(models.Model):
 
     class Meta:
         abstract = True
+
 
 class LettercraftDate(models.Model):
     MIN_YEAR = 400
@@ -66,3 +71,59 @@ class LettercraftDate(models.Model):
         if self.year_exact:
             self.year_lower = self.year_exact
             self.year_upper = self.year_exact
+
+
+class Named(models.Model):
+    """
+    An object with a name and description
+    """
+
+    name = models.CharField(
+        max_length=200,
+        blank=False,
+        help_text="A name to identify this space when entering data",
+    )
+    description = models.TextField(
+        blank=True,
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class HistoricalEntity(Named, models.Model):
+
+    identifiable = models.BooleanField(
+        default=True,
+        null=False,
+        help_text="Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class EntityDescription(Named, models.Model):
+    """
+    A description of an entity (person, object, location, event) in a narrative source.
+
+    Descriptions may refer to HistoricalEntity targets.
+    """
+
+    class Meta:
+        abstract = True
+
+
+class DescriptionField(Field, models.Model):
+    """
+    A piece of information contained in an EntityDescription.
+
+    An extension of Field that can contain extra information about how and where the
+    information is presented in the source.
+    """
+
+    class Meta:
+        abstract = True
