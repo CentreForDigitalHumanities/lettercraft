@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from source.models import Source
 
 class Field(models.Model):
     """
@@ -112,6 +113,13 @@ class EntityDescription(Named, models.Model):
 
     Descriptions may refer to HistoricalEntity targets.
     """
+
+    source = models.ForeignKey(
+        to=Source,
+        null=True,
+        on_delete=models.CASCADE,
+        help_text="Source text containing this description",
+    )
 
     class Meta:
         abstract = True
