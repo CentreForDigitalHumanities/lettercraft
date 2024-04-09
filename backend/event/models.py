@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from core.models import Field, LettercraftDate
 from case_study.models import CaseStudy
-from person.models import Agent
+# from person.models import Agent
 from letter.models import Gift, Letter
 from space.models import SpaceDescription
 
@@ -65,11 +65,11 @@ class LetterAction(models.Model):
         help_text="letters involved in this event",
     )
 
-    actors = models.ManyToManyField(
-        to=Agent,
-        through="Role",
-        related_name="events",
-    )
+    # actors = models.ManyToManyField(
+    #     to=Agent,
+    #     through="Role",
+    #     related_name="events",
+    # )
 
     epistolary_events = models.ManyToManyField(
         to=EpistolaryEvent,
@@ -155,53 +155,53 @@ class LetterEventDate(Field, LettercraftDate, models.Model):
         return f"{self.letter_action} ({self.display_date})"
 
 
-class Role(Field, models.Model):
-    """
-    Describes the involvement of an agent in a letter action.
-    """
+# class Role(Field, models.Model):
+#     """
+#     Describes the involvement of an agent in a letter action.
+#     """
 
-    class RoleOptions(models.TextChoices):
-        AUTHOR = "author", "Author"
-        SCRIBE = "scribe", "Scribe"
-        READER = "reader", "Reader"
-        WITNESS = "witness", "Witness"
-        MESSENGER = "messenger", "Messenger"
-        RECIPIENT = "recipient", "Recipient"
-        INTENDED_RECIPIENT = "intended_recipient", "Intended recipient"
-        AUDIENCE = "audience", "Audience"
-        INTENDED_AUDIENCE = "intended_audience", "Intended audience"
-        INSTIGATOR = "instigator", "Instigator"
-        OTHER = "other", "Other"
+#     class RoleOptions(models.TextChoices):
+#         AUTHOR = "author", "Author"
+#         SCRIBE = "scribe", "Scribe"
+#         READER = "reader", "Reader"
+#         WITNESS = "witness", "Witness"
+#         MESSENGER = "messenger", "Messenger"
+#         RECIPIENT = "recipient", "Recipient"
+#         INTENDED_RECIPIENT = "intended_recipient", "Intended recipient"
+#         AUDIENCE = "audience", "Audience"
+#         INTENDED_AUDIENCE = "intended_audience", "Intended audience"
+#         INSTIGATOR = "instigator", "Instigator"
+#         OTHER = "other", "Other"
 
-    agent = models.ForeignKey(
-        to=Agent,
-        on_delete=models.CASCADE,
-        null=False,
-    )
-    letter_action = models.ForeignKey(
-        to=LetterAction,
-        on_delete=models.CASCADE,
-        null=False,
-    )
-    present = models.BooleanField(
-        null=False,
-        default=True,
-        help_text="Whether this agent was physically present",
-    )
-    role = models.CharField(
-        choices=RoleOptions.choices,
-        null=False,
-        blank=False,
-        help_text="Role of this agent in the event",
-    )
-    description = models.TextField(
-        null=False,
-        blank=True,
-        help_text="Longer description of this agent's involvement",
-    )
+#     agent = models.ForeignKey(
+#         to=Agent,
+#         on_delete=models.CASCADE,
+#         null=False,
+#     )
+#     letter_action = models.ForeignKey(
+#         to=LetterAction,
+#         on_delete=models.CASCADE,
+#         null=False,
+#     )
+#     present = models.BooleanField(
+#         null=False,
+#         default=True,
+#         help_text="Whether this agent was physically present",
+#     )
+#     role = models.CharField(
+#         choices=RoleOptions.choices,
+#         null=False,
+#         blank=False,
+#         help_text="Role of this agent in the event",
+#     )
+#     description = models.TextField(
+#         null=False,
+#         blank=True,
+#         help_text="Longer description of this agent's involvement",
+#     )
 
-    def __str__(self):
-        return f"role of {self.agent} in {self.letter_action}"
+#     def __str__(self):
+#         return f"role of {self.agent} in {self.letter_action}"
 
 
 class WorldEvent(LettercraftDate, models.Model):

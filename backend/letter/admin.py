@@ -17,16 +17,16 @@ class LetterCategoryAdmin(admin.StackedInline):
     fields = ["letter", "category", "certainty", "note"]
 
 
-class LetterSenderAdmin(admin.StackedInline):
-    model = models.LetterSenders
-    fields = ["letter", "senders", "certainty", "note"]
-    filter_horizontal = ["senders"]
+# class LetterSenderAdmin(admin.StackedInline):
+#     model = models.LetterSenders
+#     fields = ["letter", "senders", "certainty", "note"]
+#     filter_horizontal = ["senders"]
 
 
-class LetterAddresseesAdmin(admin.StackedInline):
-    model = models.LetterAddressees
-    fields = ["letter", "addressees", "certainty", "note"]
-    filter_horizontal = ["addressees"]
+# class LetterAddresseesAdmin(admin.StackedInline):
+#     model = models.LetterAddressees
+#     fields = ["letter", "addressees", "certainty", "note"]
+#     filter_horizontal = ["addressees"]
 
 
 @admin.register(models.Letter)
@@ -34,9 +34,9 @@ class LetterAdmin(admin.ModelAdmin):
     readonly_fields = ["date_active", "date_written"]
     inlines = [
         LetterCategoryAdmin,
-        LetterMaterialAdmin,
-        LetterSenderAdmin,
-        LetterAddresseesAdmin,
+        # LetterMaterialAdmin,
+        # LetterSenderAdmin,
+        # LetterAddresseesAdmin,
     ]
 
 
@@ -49,5 +49,5 @@ class GiftLetterActionInline(admin.StackedInline):
 
 @admin.register(models.Gift)
 class GiftAdmin(admin.ModelAdmin):
-    fields = ["name", "description", "material", "gifted_by"]
+    fields = ["name", "description", "material"]
     filter_horizontal = ["letter_actions"]

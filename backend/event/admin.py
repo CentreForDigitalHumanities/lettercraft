@@ -17,19 +17,19 @@ class EventDateAdmin(admin.StackedInline):
     verbose_name_plural = "dates"
 
 
-class RoleAdmin(admin.StackedInline):
-    model = models.Role
-    fields = [
-        "agent",
-        "present",
-        "role",
-        "description",
-        "certainty",
-        "note",
-    ]
-    extra = 0
-    verbose_name = "agent/role"
-    verbose_name_plural = "agents/roles involved"
+# class RoleAdmin(admin.StackedInline):
+#     model = models.Role
+#     fields = [
+#         "agent",
+#         "present",
+#         "role",
+#         "description",
+#         "certainty",
+#         "note",
+#     ]
+#     extra = 0
+#     verbose_name = "agent/role"
+#     verbose_name_plural = "agents/roles involved"
 
 
 class LetterActionLettersAdmin(admin.StackedInline):
@@ -53,7 +53,7 @@ class LetterActionAdmin(admin.ModelAdmin):
         LetterActionCategoryAdmin,
         LetterActionGiftsAdmin,
         EventDateAdmin,
-        RoleAdmin,
+        # RoleAdmin,
     ]
     exclude = ["letters"]
 
