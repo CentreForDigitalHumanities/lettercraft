@@ -1,7 +1,14 @@
 from django.db import models
 from django.forms import ValidationError
-from core.models import Field, LettercraftDate
-from django.db.models import Q, CheckConstraint
+from core.models import (
+    Field,
+    LettercraftDate,
+    HistoricalEntity,
+    EntityDescription,
+    DescriptionField,
+)
+
+from space.models import SpaceDescription
 
 
 class StatusMarker(models.Model):
@@ -22,6 +29,82 @@ class StatusMarker(models.Model):
         return self.name
 
 
+class HistoricalPerson(HistoricalEntity, models.Model):
+    """
+    A historical figure, which may be referenced in narrative sources or preserved letters
+    """
+
+    pass
+
+
+class PersonDateOfBirth(Field, LettercraftDate, models.Model):
+    person = models.ForeignKey(
+        to=HistoricalPerson,
+        on_delete=models.CASCADE,
+        help_text="date on which this person was born",
+    )
+
+    def __str__(self):
+        if self.year_exact:
+            return f"{self.person} born in {self.year_exact}"
+        else:
+            return f"{self.person} born c. {self.year_lower}-{self.year_upper}"
+
+
+class PersonDateOfDeath(Field, LettercraftDate, models.Model):
+    person = models.ForeignKey(
+        to=HistoricalPerson,
+        on_delete=models.CASCADE,
+        help_text="date on which this person died",
+    )
+
+    def __str__(self):
+        if self.year_exact:
+            return f"{self.person} died in {self.year_exact}"
+        else:
+            return f"{self.person} died c. {self.year_lower}-{self.year_upper}"
+
+
+class PersonReference(Field, models.Model):
+    """
+    Link between a historical person and a description in a source text.
+    """
+
+    person = models.ForeignKey(
+        to=HistoricalPerson,
+        on_delete=models.CASCADE,
+    )
+    description = models.ForeignKey(
+        to="AgentDescription",
+        on_delete=models.CASCADE,
+    )
+
+
+class AgentDescription(EntityDescription, models.Model):
+    """
+    A description of an agent in a source text; can be a single person or a group
+    """
+
+    describes = models.ManyToManyField(
+        to=HistoricalPerson,
+        through=PersonReference,
+        blank=True,
+        help_text="Historical figure(s) referenced by this description. For groups, this can be multiple people.",
+    )
+
+    is_group = models.BooleanField(
+        default=False,
+        help_text="Whether this agent is a group of people (e.g. 'the nuns of Poitiers').",
+    )
+
+    def clean(self):
+        # ID check is needed to evaluate the m2m relationship
+        if self.id and (not self.is_group) and self.describes.count() > 1:
+            raise ValidationError(
+                "Only groups can describe multiple historical figures"
+            )
+
+
 class Gender(models.TextChoices):
     FEMALE = "FEMALE", "Female"
     MALE = "MALE", "Male"
@@ -30,123 +113,104 @@ class Gender(models.TextChoices):
     OTHER = "OTHER", "Other"
 
 
-# class Agent(models.Model):
-#     gender = models.CharField(
-#         max_length=8,
-#         choices=Gender.choices,
-#         default=Gender.UNKNOWN,
-#         help_text="The gender of this person or group of people. The option Mixed is only used for groups.",
-#     )
+class AgentDescriptionGender(DescriptionField, models.Model):
+    """
+    Characterisation of an agent's gender in a source text description
+    """
 
-#     is_group = models.BooleanField(
-#         default=False,
-#         help_text="Whether this entity is a group of people (e.g. 'the nuns of Poitiers'). If true, the date of birth and date of death fields should be left empty.",
-#     )
+    agent = models.OneToOneField(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        related_name="gender",
+    )
+    gender = models.CharField(
+        max_length=8,
+        choices=Gender.choices,
+        default=Gender.UNKNOWN,
+        help_text="The gender of this agent. The option Mixed is only applicable for groups.",
+    )
 
-#     class Meta:
-#         constraints = [
-#             CheckConstraint(
-#                 check=~Q(gender=Gender.MIXED, is_group=True),
-#                 name="gender_group_constraint",
-#                 violation_error_message="The 'mixed' gender option is reserved for groups",
-#             )
-#         ]
+    class Meta:
+        verbose_name = "gender description"
 
-#     def clean(self):
-#         if self.is_group and getattr(self, "date_of_birth", None) is not None:
-#             raise ValidationError("A group cannot have a date of birth")
+    def __str__(self) -> str:
+        return self.gender
 
-#         if self.is_group and getattr(self, "date_of_death", None) is not None:
-#             raise ValidationError("A group cannot have a date of death")
-
-#     def __str__(self):
-#         if self.names.count() == 1:
-#             return self.names.first().value
-#         elif self.names.count() > 1:
-#             main_name = self.names.first().value
-#             aliases = ", ".join(name.value for name in self.names.all()[1:])
-#             return f"{main_name} (aka {aliases})"
-#         else:
-#             return f"Unknown {'person' if self.is_group is False else 'group of people'} #{self.id}"
+    def clean(self):
+        if self.gender == Gender.MIXED and not self.agent.is_group:
+            raise ValidationError("Mixed gender can only be used for groups")
 
 
-# class AgentName(Field, models.Model):
-#     value = models.CharField(
-#         max_length=256,
-#         blank=True,
-#     )
-#     agent = models.ForeignKey(to=Agent, on_delete=models.CASCADE, related_name="names")
+class AgentDescriptionName(DescriptionField, models.Model):
+    """
+    A name used for an agent in a source text description
+    """
 
-#     class Meta:
-#         constraints = [
-#             models.UniqueConstraint("value", "agent", name="unique_names_for_agent")
-#         ]
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        related_name="names",
+    )
+    name = models.CharField(
+        max_length=256,
+    )
 
-#     def __str__(self):
-#         return self.value
+    class Meta:
+        verbose_name = "name used in description"
+        verbose_name_plural = "names used in description"
+        constraints = [
+            models.UniqueConstraint("name", "agent", name="unique_names_for_agent")
+        ]
 
-
-# class AgentDateOfBirth(LettercraftDate, Field, models.Model):
-#     """
-#     A relationship between a agent and their date of birth.
-#     """
-
-#     agent = models.OneToOneField(
-#         Agent,
-#         related_name="date_of_birth",
-#         on_delete=models.CASCADE,
-#         limit_choices_to={"is_group": False},
-#     )
-
-#     def clean(self):
-#         if self.agent.is_group:
-#             raise ValidationError("A group cannot have a date of birth.")
-
-#     def __str__(self):
-#         if self.year_exact:
-#             return f"{self.agent} born in {self.year_exact}"
-#         else:
-#             return f"{self.agent} born c. {self.year_lower}–{self.year_upper}"
+    def __str__(self):
+        return self.name
 
 
-# class AgentDateOfDeath(LettercraftDate, Field, models.Model):
-#     """ "
-#     A relationship between a agent and their date of death.
-#     """
+class AgentDescriptionSocialStatus(DescriptionField, models.Model):
+    """
+    A characterisation of an agent's social status in a source text.
+    """
 
-#     agent = models.OneToOneField(
-#         Agent,
-#         related_name="date_of_death",
-#         on_delete=models.CASCADE,
-#         limit_choices_to={"is_group": False},
-#     )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        related_name="social_statuses",
+    )
+    status_marker = models.ForeignKey(
+        to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
+    )
 
-#     def clean(self):
-#         if self.agent.is_group:
-#             raise ValidationError("A group cannot have a date of death.")
+    class Meta:
+        verbose_name = "social status description"
 
-#     def __str__(self):
-#         if self.year_exact:
-#             return f"{self.agent} died in {self.year_exact}"
-#         else:
-#             return f"{self.agent} died c. {self.year_lower}–{self.year_upper}"
+    def __str__(self):
+        return str(self.status_marker)
 
 
-# class SocialStatus(Field, LettercraftDate, models.Model):
-#     """
-#     A relationship between a person or group and a social status marker,
-#     indicating that the person or group is of a certain social status.
-#     """
+class AgentDescriptionLocation(DescriptionField, models.Model):
+    """
+    A characterisation of a location as a fundamental property of an agent.
 
-#     agent = models.ForeignKey(
-#         to=Agent, on_delete=models.CASCADE, related_name="social_statuses"
-#     )
-#     status_marker = models.ForeignKey(
-#         to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
-#     )
+    May be used for groups ("the nuns of Poitiers").
+    """
 
-#     class Meta:
-#         verbose_name_plural = "Social statuses"
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+        related_name="locations",
+    )
+    location = models.ForeignKey(
+        to=SpaceDescription,
+        on_delete=models.CASCADE,
+        help_text="location by which the agent is identified",
+    )
 
-#     def __str__(self):
-#         return f"{self.agent} as {self.status_marker}"
+    class Meta:
+        verbose_name = "location description"
+
+    def __str__(self):
+        return str(self.location)
+
+    def clean(self):
+        if self.location.source != self.agent.source:
+            raise ValidationError("Can only link descriptions in the same source text")
