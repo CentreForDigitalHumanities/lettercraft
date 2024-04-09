@@ -38,9 +38,10 @@ class HistoricalPerson(HistoricalEntity, models.Model):
 
 
 class PersonDateOfBirth(Field, LettercraftDate, models.Model):
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         to=HistoricalPerson,
         on_delete=models.CASCADE,
+        related_name="date_of_birth",
         help_text="date on which this person was born",
     )
 
@@ -52,9 +53,10 @@ class PersonDateOfBirth(Field, LettercraftDate, models.Model):
 
 
 class PersonDateOfDeath(Field, LettercraftDate, models.Model):
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         to=HistoricalPerson,
         on_delete=models.CASCADE,
+        related_name="date_of_death",
         help_text="date on which this person died",
     )
 
