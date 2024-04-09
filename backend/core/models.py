@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from source.models import Source
+from django.contrib.postgres.fields import ArrayField
 
 class Field(models.Model):
     """
@@ -82,10 +83,11 @@ class Named(models.Model):
     name = models.CharField(
         max_length=200,
         blank=False,
-        help_text="A name to identify this space when entering data",
+        help_text="A name to help identify this object",
     )
     description = models.TextField(
         blank=True,
+        help_text="Longer description to help identify this object",
     )
 
     class Meta:
@@ -119,6 +121,17 @@ class EntityDescription(Named, models.Model):
         on_delete=models.CASCADE,
         help_text="Source text containing this description",
     )
+    source_mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this entity presented in the text?",
+    )
+    source_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location(s) where the entity is mentioned or described in the source text",
+    )
 
     class Meta:
         abstract = True
@@ -131,6 +144,27 @@ class DescriptionField(Field, models.Model):
     An extension of Field that can contain extra information about how and where the
     information is presented in the source.
     """
+
+    source_mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this information presented in the text?",
+    )
+    source_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location of the information in the source text",
+    )
+    source_terminology = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant terminology used in the source text",
+    )
 
     class Meta:
         abstract = True
