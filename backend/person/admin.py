@@ -1,5 +1,4 @@
 from django.contrib import admin
-from source.admin import ReferenceInlineAdmin
 from . import models
 
 
@@ -36,7 +35,6 @@ class AgentAdmin(admin.ModelAdmin):
         SocialStatusAdmin,
         AgentDateOfBirthAdmin,
         AgentDateOfDeathAdmin,
-        ReferenceInlineAdmin,
     ]
 
 
