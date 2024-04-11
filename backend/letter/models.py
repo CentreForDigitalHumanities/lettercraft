@@ -1,8 +1,14 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from core.models import DescriptionField, EntityDescription, Named
-from person.models import AgentDescription
+from core.models import (
+    DescriptionField,
+    EntityDescription,
+    Named,
+    HistoricalEntity,
+    Field,
+)
+from person.models import AgentDescription, HistoricalPerson
 
 
 class GiftDescription(EntityDescription, models.Model):
@@ -13,16 +19,22 @@ class GiftDescription(EntityDescription, models.Model):
     categories = models.ManyToManyField(
         to="GiftCategory",
         through="GiftDescriptionCategory",
+        blank=True,
+        help_text="categories assigned to the gift",
     )
     senders = models.ManyToManyField(
         to=AgentDescription,
         through="GiftDescriptionSender",
         related_name="gifts_sent",
+        blank=True,
+        help_text="agents described as the sender of the gift",
     )
     addressees = models.ManyToManyField(
         to=AgentDescription,
         through="GiftDescriptionAddressee",
         related_name="gifts_addressed",
+        blank=True,
+        help_text="agents described as the addressee of the gift",
     )
 
 
@@ -96,16 +108,22 @@ class LetterDescription(EntityDescription, models.Model):
     categories = models.ManyToManyField(
         to="Category",
         through="LetterDescriptionCategory",
+        blank=True,
+        help_text="categories assigned to the letter",
     )
     senders = models.ManyToManyField(
         to=AgentDescription,
         through="LetterDescriptionSender",
         related_name="letters_sent",
+        blank=True,
+        help_text="agents described as the sender of the letter",
     )
     addressees = models.ManyToManyField(
         to=AgentDescription,
         through="LetterDescriptionAddressee",
         related_name="letters_addressed",
+        blank=True,
+        help_text="agents described as the addressee of the letter",
     )
 
 
