@@ -61,6 +61,9 @@ class GiftDescriptionCategory(DescriptionField, models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self) -> str:
+        return f"category {self.category} on {self.gift}"
+
 
 class GiftDescriptionSender(DescriptionField, models.Model):
     """
@@ -80,6 +83,9 @@ class GiftDescriptionSender(DescriptionField, models.Model):
         if self.gift.source != self.agent.source:
             raise ValidationError("Can only link descriptions in the same source text")
 
+    def __str__(self):
+        return f"{self.agent.name} is sender of {self.gift.name} ({self.gift.source})"
+
 
 class GiftDescriptionAddressee(DescriptionField, models.Model):
     """
@@ -98,6 +104,11 @@ class GiftDescriptionAddressee(DescriptionField, models.Model):
     def clean(self):
         if self.gift.source != self.agent.source:
             raise ValidationError("Can only link descriptions in the same source text")
+
+    def __str__(self):
+        return (
+            f"{self.agent.name} is addressee of {self.gift.name} ({self.gift.source})"
+        )
 
 
 class LetterDescription(EntityDescription, models.Model):
@@ -153,6 +164,9 @@ class LetterDescriptionCategory(DescriptionField, models.Model):
         on_delete=models.CASCADE,
     )
 
+    def __str__(self) -> str:
+        return f"category {self.category} on {self.letter}"
+
 
 class LetterDescriptionSender(DescriptionField, models.Model):
     """
@@ -172,6 +186,11 @@ class LetterDescriptionSender(DescriptionField, models.Model):
         if self.letter.source != self.agent.source:
             raise ValidationError("Can only link descriptions in the same source text")
 
+    def __str__(self):
+        return (
+            f"{self.agent.name} is sender of {self.letter.name} ({self.letter.source})"
+        )
+
 
 class LetterDescriptionAddressee(DescriptionField, models.Model):
     """
@@ -190,6 +209,9 @@ class LetterDescriptionAddressee(DescriptionField, models.Model):
     def clean(self):
         if self.letter.source != self.agent.source:
             raise ValidationError("Can only link descriptions in the same source text")
+
+    def __str__(self):
+        return f"{self.agent.name} is addressee of {self.letter.name} ({self.letter.source})"
 
 
 class PreservedLetter(HistoricalEntity, models.Model):
