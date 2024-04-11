@@ -101,8 +101,8 @@ class LetterAction(models.Model):
         categories = self.categories.all()
         category_names = [category.get_value_display() for category in categories]
         category_desc = ", ".join(category_names)
-        letters = ", ".join(letter.__str__() for letter in self.letters.all())
-        return f"{category_desc} of {letters}"
+        # letters = ", ".join(letter.__str__() for letter in self.letters.all())
+        return f"{category_desc}"
 
     def __str__(self):
         return f"{self.description} ({self.display_date})"

@@ -1,6 +1,6 @@
 import pytest
 from case_study.models import CaseStudy
-from letter.models import Letter
+from letter.models import LetterDescription
 from event.models import (
     EpistolaryEvent,
     LetterAction,
@@ -18,10 +18,12 @@ def source(db):
 
 
 @pytest.fixture()
-def letter(db):
-    letter = Letter.objects.create()
-    letter.name = "letter for testing"
-    letter.save()
+def letter_description(db, source, agent_description):
+    letter = LetterDescription.objects.create(
+        name="Bert's letter",
+        source=source,
+    )
+    letter.senders.add(agent_description)
     return letter
 
 
@@ -62,9 +64,9 @@ def agent_group_description(db, source, historical_person, historical_person_2):
 
 
 @pytest.fixture()
-def letter_action_writing(db, letter):
+def letter_action_writing(db, letter_description):
     letter_action = LetterAction.objects.create()
-    letter_action.letters.add(letter)
+    # letter_action.letters.add(letter_description)
     # letter_action.actors.add(agent)
 
     LetterActionCategory.objects.create(
@@ -80,9 +82,9 @@ def letter_action_writing(db, letter):
 
 
 @pytest.fixture()
-def letter_action_reading(db, letter):
+def letter_action_reading(db, letter_description):
     letter_action = LetterAction.objects.create()
-    letter_action.letters.add(letter)
+    # letter_action.letters.add(letter_description)
     # letter_action.actors.add(agent_2)
 
     LetterActionCategory.objects.create(
@@ -104,7 +106,7 @@ def case_study(db):
 
 
 @pytest.fixture()
-def epistolary_event(db, letter, case_study):
+def epistolary_event(db, letter_description, case_study):
     epistolary_event = EpistolaryEvent.objects.create(
         name="Test Epistolary event", note="Test note"
     )

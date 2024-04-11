@@ -257,9 +257,9 @@ class Command(BaseCommand):
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
         action = LetterAction.objects.create()
-        action.letters.set(get_random_model_objects(Letter, min_amount=1, max_amount=5))
+        # action.letters.set(get_random_model_objects(Letter, min_amount=1, max_amount=5))
 
-        action.gifts.set(get_random_model_objects(Gift, min_amount=0, max_amount=5))
+        # action.gifts.set(get_random_model_objects(Gift, min_amount=0, max_amount=5))
 
         action.epistolary_events.set(
             get_random_model_objects(EpistolaryEvent, min_amount=0, max_amount=5)
