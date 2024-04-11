@@ -31,14 +31,7 @@ class GiftDescriptionAddresseeAdmin(admin.StackedInline):
 
 
 @admin.register(models.GiftDescription)
-class GiftDescriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "source"]
-    list_filter = ["source"]
-    search_fields = ["name", "description"]
-    fieldsets = [
-        core_admin.named_fieldset,
-        core_admin.description_source_fieldset,
-    ]
+class GiftDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     inlines = [
         GiftDescriptionCategoryAdmin,
         GiftDescriptionSenderAdmin,
@@ -74,14 +67,7 @@ class LetterDescriptionAddresseeAdmin(admin.StackedInline):
 
 
 @admin.register(models.LetterDescription)
-class LetterDescriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "source"]
-    list_filter = ["source"]
-    search_fields = ["name", "description"]
-    fieldsets = [
-        core_admin.named_fieldset,
-        core_admin.description_source_fieldset,
-    ]
+class LetterDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     inlines = [
         LetterDescriptionCategoryAdmin,
         LetterDescriptionSenderAdmin,

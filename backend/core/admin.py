@@ -29,3 +29,13 @@ description_field_fields = [
     "source_location",
     "source_terminology",
 ] + field_fields
+
+
+class EntityDescriptionAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "source"]
+    list_filter = ["source"]
+    search_fields = ["name", "description"]
+    fieldsets = [
+        named_fieldset,
+        description_source_fieldset,
+    ]

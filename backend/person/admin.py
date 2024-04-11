@@ -54,14 +54,7 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
 
 
 @admin.register(models.AgentDescription)
-class AgentDescriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "source"]
-    list_filter = ["source"]
-    search_fields = ["name", "description"]
-    fieldsets = [
-        core_admin.named_fieldset,
-        core_admin.description_source_fieldset,
-    ]
+class AgentDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     inlines = [
         AgentDescriptionNameAdmin,
         AgentDescriptionGenderAdmin,
