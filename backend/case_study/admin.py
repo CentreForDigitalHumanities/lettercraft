@@ -4,6 +4,11 @@ from . import models
 
 @admin.register(models.CaseStudy)
 class CaseStudyAdmin(admin.ModelAdmin):
-    fields = ["name"]
-    inlines = []
-    extra = 0
+    list_display = ["name", "description"]
+    fields = ["name", "description", "episodes"]
+    filter_horizontal = ["episodes"]
+
+
+@admin.register(models.Episode)
+class EpisodeAdmin(admin.ModelAdmin):
+    filter_horizontal = ["events"]
