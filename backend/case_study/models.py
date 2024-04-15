@@ -1,7 +1,8 @@
 from django.db import models
 from core.models import Named
 from event.models import EventDescription
-
+from person.models import HistoricalPerson
+from space.models import Structure
 
 class CaseStudy(Named, models.Model):
     """
@@ -16,6 +17,18 @@ class CaseStudy(Named, models.Model):
         to="Episode",
         blank=True,
         help_text="Episodes involved in this case study",
+    )
+
+    key_persons = models.ManyToManyField(
+        to=HistoricalPerson,
+        blank=True,
+        help_text="Key historical figures involved in this case study",
+    )
+
+    key_sites = models.ManyToManyField(
+        to=Structure,
+        blank=True,
+        help_text="Key historical sites involved in this case study",
     )
 
     def __str__(self):
