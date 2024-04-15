@@ -2,7 +2,7 @@ from django.db import transaction
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Reference, Source
+from source.models import Source
 
 from case_study.models import CaseStudy
 from event.models import (
@@ -12,26 +12,27 @@ from event.models import (
     LetterAction,
     LetterActionCategory,
     LetterEventDate,
-    Role,
+    # Role,
     WorldEvent,
     WorldEventSelfTrigger,
     WorldEventTrigger,
 )
-from person.models import (
-    Agent,
-    AgentDateOfBirth,
-    AgentDateOfDeath,
-    Gender,
-    StatusMarker,
-)
+
+# from person.models import (
+#     Agent,
+#     AgentDateOfBirth,
+#     AgentDateOfDeath,
+#     Gender,
+#     StatusMarker,
+# )
 from letter.models import (
     Category,
     Gift,
     Letter,
-    LetterAddressees,
+    # LetterAddressees,
     LetterCategory,
     LetterMaterial,
-    LetterSenders,
+    # LetterSenders,
 )
 import random
 
@@ -117,8 +118,8 @@ class Command(BaseCommand):
             self._create_epistolary_events(
                 fake, options, total=40, model=EpistolaryEvent
             )
-            self._create_status_markers(fake, options, total=50, model=StatusMarker)
-            self._create_agents(fake, options, total=100, model=Agent)
+            # self._create_status_markers(fake, options, total=50, model=StatusMarker)
+            # self._create_agents(fake, options, total=100, model=Agent)
             self._create_letter_categories(fake, options, total=10, model=Category)
             self._create_letters(fake, options, total=200, model=Letter)
             self._create_gifts(fake, options, total=50, model=Gift)
@@ -137,7 +138,6 @@ class Command(BaseCommand):
                 fake, options, total=50, model=EpistolaryEventSelfTrigger
             )
             self._create_sources(fake, options, total=50, model=Source)
-            self._create_references(fake, options, total=250, model=Reference)
 
             print("-" * 80)
             print("Development dataset created successfully.")
@@ -159,55 +159,57 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_status_markers(self, fake, options, total, model):
-        StatusMarker.objects.create(name=fake.job(), description=fake.text())
+        # StatusMarker.objects.create(name=fake.job(), description=fake.text())
+        pass
 
     @track_progress
     def _create_agents(self, fake: Faker, options, total, model):
-        is_group = random.choice([True, False])
+        pass
+        # is_group = random.choice([True, False])
 
-        if is_group is True:
-            gender_options = [
-                gender for gender in Gender.values if gender != Gender.MIXED
-            ]
-            agent_names = random.sample(group_names, k=random.randint(0, 3))
-        else:
-            gender_options = Gender.values
-            agent_names = [fake.name() for _ in range(random.randint(0, 3))]
+        # if is_group is True:
+        #     gender_options = [
+        #         gender for gender in Gender.values if gender != Gender.MIXED
+        #     ]
+        #     agent_names = random.sample(group_names, k=random.randint(0, 3))
+        # else:
+        #     gender_options = Gender.values
+        #     agent_names = [fake.name() for _ in range(random.randint(0, 3))]
 
-        agent = Agent.objects.create(
-            is_group=is_group, gender=random.choice(gender_options)
-        )
+        # agent = Agent.objects.create(
+        #     is_group=is_group, gender=random.choice(gender_options)
+        # )
 
-        for name in agent_names:
-            agent.names.create(
-                value=name,
-                **self.fake_field_value(fake),
-            )
+        # for name in agent_names:
+        #     agent.names.create(
+        #         value=name,
+        #         **self.fake_field_value(fake),
+        #     )
 
-        if is_group is False:
-            if random.choice([True, False]):
-                AgentDateOfBirth.objects.create(
-                    agent=agent,
-                    **self.fake_date_value(fake),
-                    **self.fake_field_value(fake),
-                )
+        # if is_group is False:
+        #     if random.choice([True, False]):
+        #         AgentDateOfBirth.objects.create(
+        #             agent=agent,
+        #             **self.fake_date_value(fake),
+        #             **self.fake_field_value(fake),
+        #         )
 
-            if random.choice([True, False]):
-                AgentDateOfDeath.objects.create(
-                    agent=agent,
-                    **self.fake_date_value(fake),
-                    **self.fake_field_value(fake),
-                )
+        #     if random.choice([True, False]):
+        #         AgentDateOfDeath.objects.create(
+        #             agent=agent,
+        #             **self.fake_date_value(fake),
+        #             **self.fake_field_value(fake),
+        #         )
 
-        for _ in range(random.randint(0, 2)):
-            agent.social_statuses.create(
-                status_marker=get_random_model_object(StatusMarker),
-                **self.fake_date_value(fake),
-                **self.fake_field_value(fake),
-            )
+        # for _ in range(random.randint(0, 2)):
+        #     agent.social_statuses.create(
+        #         status_marker=get_random_model_object(StatusMarker),
+        #         **self.fake_date_value(fake),
+        #         **self.fake_field_value(fake),
+        #     )
 
-        agent.clean()
-        agent.save()
+        # agent.clean()
+        # agent.save()
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
@@ -218,8 +220,8 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letters(self, fake: Faker, *args, **kwargs):
-        senders = get_random_model_objects(Agent, min_amount=2, max_amount=5)
-        addressees = get_random_model_objects(Agent, min_amount=2, max_amount=5)
+        # senders = get_random_model_objects(Agent, min_amount=2, max_amount=5)
+        # addressees = get_random_model_objects(Agent, min_amount=2, max_amount=5)
 
         subject = ", ".join(fake.words(nb=3, unique=True))
         letter = Letter.objects.create(
@@ -240,17 +242,17 @@ class Command(BaseCommand):
                 **self.fake_field_value(fake),
             )
 
-        sender_object = LetterSenders.objects.create(
-            letter=letter,
-            **self.fake_field_value(fake),
-        )
-        sender_object.senders.set(senders)
+        # sender_object = LetterSenders.objects.create(
+        #     letter=letter,
+        #     **self.fake_field_value(fake),
+        # )
+        # sender_object.senders.set(senders)
 
-        addressees_object = LetterAddressees.objects.create(
-            letter=letter,
-            **self.fake_field_value(fake),
-        )
-        addressees_object.addressees.set(addressees)
+        # addressees_object = LetterAddressees.objects.create(
+        #     letter=letter,
+        #     **self.fake_field_value(fake),
+        # )
+        # addressees_object.addressees.set(addressees)
 
     @track_progress
     def _create_letter_actions(self, fake: Faker, *args, **kwargs):
@@ -280,26 +282,26 @@ class Command(BaseCommand):
                 **self.fake_field_value(fake),
             )
 
-        for _ in range(random.randint(1, 5)):
-            Role.objects.create(
-                agent=get_random_model_object(Agent),
-                letter_action=action,
-                present=random.choice([True, False]),
-                role=random.choice(Role.RoleOptions.choices)[0],
-                description=fake.text(),
-                **self.fake_field_value(fake),
-            )
+        # for _ in range(random.randint(1, 5)):
+        #     Role.objects.create(
+        #         agent=get_random_model_object(Agent),
+        #         letter_action=action,
+        #         present=random.choice([True, False]),
+        #         role=random.choice(Role.RoleOptions.choices)[0],
+        #         description=fake.text(),
+        #         **self.fake_field_value(fake),
+        #     )
 
     @track_progress
     def _create_gifts(self, fake, options, total, model):
         unique_name = get_unique_name(gift_names, Gift)
 
-        gifter = get_random_model_object(Agent, allow_null=True)
+        # gifter = get_random_model_object(Agent, allow_null=True)
 
         Gift.objects.create(
             name=unique_name,
             material=random.choice(Gift.Material.choices)[0],
-            gifted_by=gifter,
+            # gifted_by=gifter,
             description=fake.text(),
         )
 
@@ -352,31 +354,3 @@ class Command(BaseCommand):
     def _create_sources(self, fake, options, total, model):
         unique_name = get_unique_name(source_names, Source)
         Source.objects.create(name=unique_name, bibliographical_info=fake.text())
-
-    @track_progress
-    def _create_references(self, fake, options, total, model):
-        random_content_type = (
-            ContentType.objects.exclude(
-                app_label__in=["admin", "auth", "contenttypes", "sessions", "source"]
-            )
-            .order_by("?")
-            .first()
-        )
-
-        random_objects = random_content_type.model_class().objects.all()
-
-        if not random_objects.exists():
-            return
-
-        random_object_id = random_objects.order_by("?").first().id
-
-        random_source = Source.objects.order_by("?").first()
-
-        Reference.objects.create(
-            content_type=random_content_type,
-            object_id=random_object_id,
-            source=random_source,
-            location=f"chapter {random.randint(1, 10)}, page {random.randint(1, 100)}",
-            terminology=fake.words(nb=3, unique=True),
-            mention=random.choice(["direct", "implied"]),
-        )

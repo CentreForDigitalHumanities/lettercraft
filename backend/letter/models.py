@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib import admin
 from core.models import Field
-from person.models import Agent
+# from person.models import Agent
 
 
 class Gift(models.Model):
@@ -35,20 +35,20 @@ class Gift(models.Model):
         help_text="The material the gift consists of",
     )
 
-    gifted_by = models.ForeignKey(
-        to=Agent,
-        on_delete=models.CASCADE,
-        related_name="gifts_given",
-        help_text="The agent who gave the gift. Leave empty if unknown.",
-        null=True,
-        blank=True,
-    )
+    # gifted_by = models.ForeignKey(
+    #     to=Agent,
+    #     on_delete=models.CASCADE,
+    #     related_name="gifts_given",
+    #     help_text="The agent who gave the gift. Leave empty if unknown.",
+    #     null=True,
+    #     blank=True,
+    # )
 
-    def __str__(self):
-        gifter_name = (
-            self.gifted_by.names.first() if self.gifted_by is not None else "unknown"
-        )
-        return f"{self.name} ({self.material}), gifted by {gifter_name}"
+    # def __str__(self):
+    #     gifter_name = (
+    #         self.gifted_by.names.first() if self.gifted_by is not None else "unknown"
+    #     )
+    #     return f"{self.name} ({self.material}), gifted by {gifter_name}"
 
 
 class Letter(models.Model):
@@ -131,39 +131,39 @@ class LetterMaterial(Field, models.Model):
             return f"material #{self.id}"
 
 
-class LetterSenders(Field, models.Model):
-    senders = models.ManyToManyField(
-        to=Agent,
-        blank=True,
-        help_text="Agents whom the letter names as the sender",
-    )
-    letter = models.OneToOneField(
-        to=Letter,
-        on_delete=models.CASCADE,
-        null=False,
-    )
+# class LetterSenders(Field, models.Model):
+#     senders = models.ManyToManyField(
+#         to=Agent,
+#         blank=True,
+#         help_text="Agents whom the letter names as the sender",
+#     )
+#     letter = models.OneToOneField(
+#         to=Letter,
+#         on_delete=models.CASCADE,
+#         null=False,
+#     )
 
-    def __str__(self):
-        if self.letter:
-            return f"senders of {self.letter}"
-        else:
-            return f"senders #{self.id}"
+#     def __str__(self):
+#         if self.letter:
+#             return f"senders of {self.letter}"
+#         else:
+#             return f"senders #{self.id}"
 
 
-class LetterAddressees(Field, models.Model):
-    addressees = models.ManyToManyField(
-        to=Agent,
-        blank=True,
-        help_text="Agents whom the letter names as the addressee",
-    )
-    letter = models.OneToOneField(
-        to=Letter,
-        on_delete=models.CASCADE,
-        null=False,
-    )
+# class LetterAddressees(Field, models.Model):
+#     addressees = models.ManyToManyField(
+#         to=Agent,
+#         blank=True,
+#         help_text="Agents whom the letter names as the addressee",
+#     )
+#     letter = models.OneToOneField(
+#         to=Letter,
+#         on_delete=models.CASCADE,
+#         null=False,
+#     )
 
-    def __str__(self):
-        if self.letter:
-            return f"addressees of {self.letter}"
-        else:
-            return f"addressees #{self.id}"
+#     def __str__(self):
+#         if self.letter:
+#             return f"addressees of {self.letter}"
+#         else:
+#             return f"addressees #{self.id}"

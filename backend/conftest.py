@@ -8,7 +8,13 @@ from event.models import (
     WorldEvent,
     LetterEventDate,
 )
-from person.models import Agent
+from person.models import HistoricalPerson, AgentDescription
+from source.models import Source
+
+
+@pytest.fixture()
+def source(db):
+    return Source.objects.create(name="Sesame Street")
 
 
 @pytest.fixture()
@@ -20,35 +26,46 @@ def letter(db):
 
 
 @pytest.fixture()
-def agent(db):
-    agent = Agent.objects.create()
-    agent.name = "Bert"
+def historical_person(db):
+    person = HistoricalPerson.objects.create(name="Bert")
+    return person
+
+
+@pytest.fixture()
+def historical_person_2(db):
+    person = HistoricalPerson.objects.create(name="Ernie")
+    return person
+
+
+@pytest.fixture()
+def agent_description(db, historical_person, source):
+    agent = AgentDescription.objects.create(
+        name="Bert",
+        source=source,
+    )
+    agent.describes.add(historical_person)
     agent.save()
     return agent
 
 
 @pytest.fixture()
-def agent_2(db):
-    agent = Agent.objects.create()
-    agent.name = "Ernie"
+def agent_group_description(db, source, historical_person, historical_person_2):
+    agent = AgentDescription.objects.create(
+        name="The Muppets",
+        source=source,
+        is_group=True,
+    )
+    agent.describes.add(historical_person)
+    agent.describes.add(historical_person_2)
     agent.save()
     return agent
 
 
 @pytest.fixture()
-def agent_group(db):
-    agent_group = Agent.objects.create()
-    agent_group.name = "The Muppets"
-    agent_group.is_group = True
-    agent_group.save()
-    return agent_group
-
-
-@pytest.fixture()
-def letter_action_writing(db, letter, agent):
+def letter_action_writing(db, letter):
     letter_action = LetterAction.objects.create()
     letter_action.letters.add(letter)
-    letter_action.actors.add(agent)
+    # letter_action.actors.add(agent)
 
     LetterActionCategory.objects.create(
         letter_action=letter_action,
@@ -63,10 +80,10 @@ def letter_action_writing(db, letter, agent):
 
 
 @pytest.fixture()
-def letter_action_reading(db, letter, agent_2):
+def letter_action_reading(db, letter):
     letter_action = LetterAction.objects.create()
     letter_action.letters.add(letter)
-    letter_action.actors.add(agent_2)
+    # letter_action.actors.add(agent_2)
 
     LetterActionCategory.objects.create(
         letter_action=letter_action,
