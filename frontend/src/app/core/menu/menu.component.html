@@ -13,13 +13,14 @@
         </button>
 
         <div id="navbarLinks" class="navbar-collapse" [ngbCollapse]="!burgerActive">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link">
                         Home
                     </a>
                 </li>
             </ul>
+            <lc-user-menu></lc-user-menu>
         </div>
     </div>
 </nav>
