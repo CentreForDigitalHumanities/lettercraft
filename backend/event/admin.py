@@ -3,6 +3,12 @@ from . import models
 from core import admin as core_admin
 
 
+@admin.register(models.EventCategory)
+class EventCategoryAdmin(admin.ModelAdmin):
+    list_display = ["name", "description"]
+    search_fields = ["name", "description"]
+
+
 class EventDescriptionAgentAdmin(admin.StackedInline):
     model = models.EventDescriptionAgent
     fields = ["agent"] + core_admin.description_field_fields
@@ -33,6 +39,18 @@ class EventDescriptionSpaceAdmin(admin.StackedInline):
 
 @admin.register(models.EventDescription)
 class EventDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
+    filter_horizontal = ["categories"]
+    list_filter = ["source", "categories"]
+    fieldsets = [
+        core_admin.named_fieldset,
+        core_admin.description_source_fieldset,
+        (
+            "Contents",
+            {
+                "fields": ["summary", "categories"],
+            },
+        ),
+    ]
     inlines = [
         EventDescriptionAgentAdmin,
         EventDescriptionGiftAdmin,

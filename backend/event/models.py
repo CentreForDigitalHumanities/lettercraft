@@ -1,10 +1,15 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from core.models import EntityDescription, DescriptionField
+from core.models import EntityDescription, DescriptionField, Named
 from person.models import AgentDescription
 from letter.models import GiftDescription, LetterDescription
 from space.models import SpaceDescription
+
+
+class EventCategory(Named):
+    class Meta:
+        verbose_name_plural = "event categories"
 
 
 class EventDescription(EntityDescription, models.Model):
@@ -12,6 +17,15 @@ class EventDescription(EntityDescription, models.Model):
     An epistolary event described in as source text
     """
 
+    summary = models.TextField(
+        blank=True,
+        help_text="full description of the events in the passage",
+    )
+    categories = models.ManyToManyField(
+        to=EventCategory,
+        related_name="event_descriptions",
+        help_text="labels assigned to this event",
+    )
     agents = models.ManyToManyField(
         to=AgentDescription,
         through="EventDescriptionAgent",
