@@ -27,6 +27,7 @@ export class AuthService {
         this.sessionService.expired.pipe(
             takeUntilDestroyed()
         ).subscribe(() => this.logout());
+        this.setInitialAuth();
     }
 
     private setAuth(user: User): void {
@@ -39,6 +40,14 @@ export class AuthService {
 
     private checkUser(): Observable<UserResponse> {
         return this.apiService.getUser();
+    }
+
+    private setInitialAuth(): void {
+        this.apiService.getUser()
+            .pipe(takeUntilDestroyed())
+            .subscribe(result =>
+                this.setAuth(parseUserData(result)),
+            );
     }
 
     public currentUser(): User | null | undefined {

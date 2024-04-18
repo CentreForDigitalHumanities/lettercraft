@@ -34,7 +34,7 @@ export class ApiService {
     }
 
     getUser(): Observable<UserResponse> {
-        return this.http.get<UserResponse>(this.apiRoute('users/user'));
+        return this.http.get<UserResponse>(this.apiRoute('users/user/'));
     }
 
     public register(details: {
