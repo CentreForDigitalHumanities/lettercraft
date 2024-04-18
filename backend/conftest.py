@@ -5,6 +5,25 @@ from letter.models import LetterDescription
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import EventDescription
+from user.models import User
+
+
+@pytest.fixture()
+def user_data():
+    return {
+        "username": "JohnDoe",
+        "email": "j.doe@nowhere.org",
+        "password": "secret",
+    }
+
+
+@pytest.fixture()
+def user(db, user_data):
+    return User.objects.create(
+        username=user_data["username"],
+        email=user_data["email"],
+        password=user_data["password"],
+    )
 
 
 @pytest.fixture()
