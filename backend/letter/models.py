@@ -1,85 +1,141 @@
 from django.db import models
-from django.contrib import admin
-from core.models import Field
-# from person.models import Agent
+from django.core.exceptions import ValidationError
+
+from core.models import (
+    DescriptionField,
+    EntityDescription,
+    Named,
+    HistoricalEntity,
+    Field,
+)
+from person.models import AgentDescription, HistoricalPerson
 
 
-class Gift(models.Model):
+class GiftDescription(EntityDescription, models.Model):
     """
-    A gift presented alongside a letter.
+    A gift described in an narrative source text
     """
 
-    class Material(models.TextChoices):
-        PRECIOUS_METAL = "precious metal", "precious metal"
-        WRITE = "textile", "textile"
-        WOOD = "wood", "wood"
-        GLASS = "glass", "glass"
-        CERAMIC = "ceramic", "ceramic"
-        ANIMAL_PRODUCT = "animal product", "animal product"
-        LIVESTOCK = "livestock", "livestock"
-        PAPER = "paper", "paper"
-        OTHER = "other", "other"
-        UNKNOWN = "unknown", "unknown"
-
-    name = models.CharField(
-        max_length=256, help_text="A short name for the gift (for identification)"
-    )
-
-    description = models.TextField(
+    categories = models.ManyToManyField(
+        to="GiftCategory",
+        through="GiftDescriptionCategory",
         blank=True,
-        help_text="A longer description of the gift",
+        help_text="categories assigned to the gift",
+    )
+    senders = models.ManyToManyField(
+        to=AgentDescription,
+        through="GiftDescriptionSender",
+        related_name="gifts_sent",
+        blank=True,
+        help_text="agents described as the sender of the gift",
+    )
+    addressees = models.ManyToManyField(
+        to=AgentDescription,
+        through="GiftDescriptionAddressee",
+        related_name="gifts_addressed",
+        blank=True,
+        help_text="agents described as the addressee of the gift",
     )
 
-    material = models.CharField(
-        choices=Material.choices,
-        help_text="The material the gift consists of",
+
+class GiftCategory(Named, models.Model):
+    """
+    A type of gift (e.g. "silver cup", "hairshirt")
+    """
+
+    class Meta:
+        verbose_name_plural = "gift categories"
+
+
+class GiftDescriptionCategory(DescriptionField, models.Model):
+    """
+    Categorisation of a gift in an a narrative source.
+    """
+
+    gift = models.ForeignKey(
+        to=GiftDescription,
+        on_delete=models.CASCADE,
+    )
+    category = models.ForeignKey(
+        to=GiftCategory,
+        on_delete=models.CASCADE,
     )
 
-    # gifted_by = models.ForeignKey(
-    #     to=Agent,
-    #     on_delete=models.CASCADE,
-    #     related_name="gifts_given",
-    #     help_text="The agent who gave the gift. Leave empty if unknown.",
-    #     null=True,
-    #     blank=True,
-    # )
-
-    # def __str__(self):
-    #     gifter_name = (
-    #         self.gifted_by.names.first() if self.gifted_by is not None else "unknown"
-    #     )
-    #     return f"{self.name} ({self.material}), gifted by {gifter_name}"
+    def __str__(self) -> str:
+        return f"category {self.category} on {self.gift}"
 
 
-class Letter(models.Model):
-    name = models.CharField(
-        max_length=200,
-        blank=False,
-        unique=True,
-        help_text="a unique name to identify this letter in the database",
+class GiftDescriptionSender(DescriptionField, models.Model):
+    """
+    Description of a person as the sender of a gift
+    """
+
+    gift = models.ForeignKey(
+        to=GiftDescription,
+        on_delete=models.CASCADE,
     )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+    )
+
+    def clean(self):
+        if self.gift.source != self.agent.source:
+            raise ValidationError("Can only link descriptions in the same source text")
 
     def __str__(self):
-        return self.name
+        return f"{self.agent.name} is sender of {self.gift.name} ({self.gift.source})"
 
-    @admin.display(
-        description="Date range of actions involving this letter",
+
+class GiftDescriptionAddressee(DescriptionField, models.Model):
+    """
+    Description of a person as the addressee of a gift
+    """
+
+    gift = models.ForeignKey(
+        to=GiftDescription,
+        on_delete=models.CASCADE,
     )
-    def date_active(self):
-        return self._aggregate_dates(self.events.all())
-
-    @admin.display(
-        description="Date range in which this letter was written",
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
     )
-    def date_written(self):
-        return self._aggregate_dates(self.events.filter(categories__value="write"))
 
-    def _aggregate_dates(self, actions):
-        """Calculate a date range based on the dates of related actions"""
-        dates = [action.date for action in actions]
-        lower = min(date.year_lower for date in dates)
-        upper = max(data.year_upper for data in dates)
-        return lower, upper
+    def clean(self):
+        if self.gift.source != self.agent.source:
+            raise ValidationError("Can only link descriptions in the same source text")
+
+    def __str__(self):
+        return (
+            f"{self.agent.name} is addressee of {self.gift.name} ({self.gift.source})"
+        )
+
+
+class LetterDescription(EntityDescription, models.Model):
+    """
+    A letter described in a narrative source text
+    """
+
+    categories = models.ManyToManyField(
+        to="Category",
+        through="LetterDescriptionCategory",
+        blank=True,
+        help_text="categories assigned to the letter",
+    )
+    senders = models.ManyToManyField(
+        to=AgentDescription,
+        through="LetterDescriptionSender",
+        related_name="letters_sent",
+        blank=True,
+        help_text="agents described as the sender of the letter",
+    )
+    addressees = models.ManyToManyField(
+        to=AgentDescription,
+        through="LetterDescriptionAddressee",
+        related_name="letters_addressed",
+        blank=True,
+        help_text="agents described as the addressee of the letter",
+    )
 
 
 class Category(models.Model):
@@ -94,76 +150,96 @@ class Category(models.Model):
         return self.label
 
 
-class LetterCategory(Field, models.Model):
-    category = models.ForeignKey(to=Category, null=True, on_delete=models.SET_NULL)
-    letter = models.OneToOneField(
-        to=Letter,
+class LetterDescriptionCategory(DescriptionField, models.Model):
+    """
+    Categorisation of a letter in an a narrative source.
+    """
+
+    letter = models.ForeignKey(
+        to=LetterDescription,
         on_delete=models.CASCADE,
-        null=False,
     )
+    category = models.ForeignKey(
+        to=Category,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return f"category {self.category} on {self.letter}"
+
+
+class LetterDescriptionSender(DescriptionField, models.Model):
+    """
+    Description of a person as the sender of a letter
+    """
+
+    letter = models.ForeignKey(
+        to=LetterDescription,
+        on_delete=models.CASCADE,
+    )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+    )
+
+    def clean(self):
+        if self.letter.source != self.agent.source:
+            raise ValidationError("Can only link descriptions in the same source text")
 
     def __str__(self):
-        return f"category of {self.letter}"
+        return (
+            f"{self.agent.name} is sender of {self.letter.name} ({self.letter.source})"
+        )
 
 
-class LetterMaterial(Field, models.Model):
-    class Surface(models.TextChoices):
-        PARCHMENT = "parchment", "parchment"
-        PAPYRUS = "papyrus", "papyrus"
-        OTHER = "other", "other"
-        UNKNOWN = "unknown", "unknown"
+class LetterDescriptionAddressee(DescriptionField, models.Model):
+    """
+    Description of a person as the addressee of a letter
+    """
 
-    surface = models.CharField(
-        choices=Surface.choices,
-        null=False,
-        blank=False,
-    )
-    letter = models.OneToOneField(
-        to=Letter,
+    letter = models.ForeignKey(
+        to=LetterDescription,
         on_delete=models.CASCADE,
-        null=False,
     )
+    agent = models.ForeignKey(
+        to=AgentDescription,
+        on_delete=models.CASCADE,
+    )
+
+    def clean(self):
+        if self.letter.source != self.agent.source:
+            raise ValidationError("Can only link descriptions in the same source text")
 
     def __str__(self):
-        if self.letter:
-            return f"material of {self.letter}"
-        else:
-            return f"material #{self.id}"
+        return f"{self.agent.name} is addressee of {self.letter.name} ({self.letter.source})"
 
 
-# class LetterSenders(Field, models.Model):
-#     senders = models.ManyToManyField(
-#         to=Agent,
-#         blank=True,
-#         help_text="Agents whom the letter names as the sender",
-#     )
-#     letter = models.OneToOneField(
-#         to=Letter,
-#         on_delete=models.CASCADE,
-#         null=False,
-#     )
+class PreservedLetter(HistoricalEntity, models.Model):
+    """
+    A letter that has been preserved
+    """
 
-#     def __str__(self):
-#         if self.letter:
-#             return f"senders of {self.letter}"
-#         else:
-#             return f"senders #{self.id}"
+    persons_involved = models.ManyToManyField(
+        to=HistoricalPerson,
+        through="PreservedLetterRole",
+        blank=True,
+        help_text="historical figures related to the letter",
+    )
 
 
-# class LetterAddressees(Field, models.Model):
-#     addressees = models.ManyToManyField(
-#         to=Agent,
-#         blank=True,
-#         help_text="Agents whom the letter names as the addressee",
-#     )
-#     letter = models.OneToOneField(
-#         to=Letter,
-#         on_delete=models.CASCADE,
-#         null=False,
-#     )
+class PreservedLetterRole(Field, models.Model):
+    """
+    Relationship between a preserved letter and a historical figure
+    """
 
-#     def __str__(self):
-#         if self.letter:
-#             return f"addressees of {self.letter}"
-#         else:
-#             return f"addressees #{self.id}"
+    letter = models.ForeignKey(
+        to=PreservedLetter,
+        on_delete=models.CASCADE,
+    )
+    person = models.ForeignKey(
+        to=HistoricalPerson,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return f"role of {self.person} in {self.letter}"

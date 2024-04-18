@@ -32,26 +32,26 @@ class EventDateAdmin(admin.StackedInline):
 #     verbose_name_plural = "agents/roles involved"
 
 
-class LetterActionLettersAdmin(admin.StackedInline):
-    model = models.LetterAction.letters.through
-    extra = 0
-    verbose_name = "letter"
-    verbose_name_plural = "letters"
+# class LetterActionLettersAdmin(admin.StackedInline):
+#     model = models.LetterAction.letters.through
+#     extra = 0
+#     verbose_name = "letter"
+#     verbose_name_plural = "letters"
 
-class LetterActionGiftsAdmin(admin.StackedInline):
-    model = models.LetterAction.gifts.through
-    extra = 0
-    verbose_name = "gift"
-    verbose_name_plural = "gifts"
+# class LetterActionGiftsAdmin(admin.StackedInline):
+#     model = models.LetterAction.gifts.through
+#     extra = 0
+#     verbose_name = "gift"
+#     verbose_name_plural = "gifts"
 
 @admin.register(models.LetterAction)
 class LetterActionAdmin(admin.ModelAdmin):
-    filter_horizontal = ["epistolary_events", "gifts", "space_descriptions"]
+    filter_horizontal = ["epistolary_events", "space_descriptions"]
     list_display=["description", "display_date"]
     inlines = [
-        LetterActionLettersAdmin,
+        # LetterActionLettersAdmin,
         LetterActionCategoryAdmin,
-        LetterActionGiftsAdmin,
+        # LetterActionGiftsAdmin,
         EventDateAdmin,
         # RoleAdmin,
     ]
