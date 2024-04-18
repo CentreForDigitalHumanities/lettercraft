@@ -1,4 +1,6 @@
+from allauth.account.models import EmailAddress
 import pytest
+
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
 
@@ -19,11 +21,15 @@ def user_data():
 
 @pytest.fixture()
 def user(db, user_data):
-    return User.objects.create(
+    user = User.objects.create(
         username=user_data["username"],
         email=user_data["email"],
         password=user_data["password"],
     )
+    EmailAddress.objects.create(
+        user=user, email=user.email, verified=True, primary=True
+    )
+    return user
 
 
 @pytest.fixture
