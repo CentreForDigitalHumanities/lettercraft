@@ -26,6 +26,16 @@ def user(db, user_data):
     )
 
 
+@pytest.fixture
+def user_client(client, user, user_data):
+    client.login(
+        username=user_data["username"],
+        password=user_data["password"],
+    )
+    yield client
+    client.logout()
+
+
 @pytest.fixture()
 def source(db):
     return Source.objects.create(name="Sesame Street")

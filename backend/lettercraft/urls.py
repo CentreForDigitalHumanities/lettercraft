@@ -33,14 +33,18 @@ else:
     spa_url = re_path(r'', index)
 
 urlpatterns = [
-    path('admin', RedirectView.as_view(url='/admin/', permanent=True)),
-    path('api', RedirectView.as_view(url='/api/', permanent=True)),
-    path('api-auth', RedirectView.as_view(url='/api-auth/', permanent=True)),
-    path('admin/', admin.site.urls),
-    path('api/', include(api_router.urls)),
-    path('api-auth/', include(
-        'rest_framework.urls',
-        namespace='rest_framework',
-    )),
+    path("admin", RedirectView.as_view(url="/admin/", permanent=True)),
+    path("api", RedirectView.as_view(url="/api/", permanent=True)),
+    path("api-auth", RedirectView.as_view(url="/api-auth/", permanent=True)),
+    path("admin/", admin.site.urls),
+    path("api/", include(api_router.urls)),
+    path(
+        "api-auth/",
+        include(
+            "rest_framework.urls",
+            namespace="rest_framework",
+        ),
+    ),
+    path("users/", include("user.urls")),
     spa_url,  # catch-all; unknown paths to be handled by a SPA
 ]
