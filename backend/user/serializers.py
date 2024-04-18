@@ -8,15 +8,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
 
+    fields = {}
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     profile = UserProfileSerializer()
 
     class Meta(UserDetailsSerializer.Meta):
+        is_staff = serializers.BooleanField(read_only=True)
         fields = (
             "id",
             "username",
             "email",
+            "first_name",
+            "last_name",
             "is_staff",
             "profile",
         )
