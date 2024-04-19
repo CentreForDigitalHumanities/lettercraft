@@ -4,15 +4,22 @@
             <span class="visually-hidden">Loading user data...</span>
         </div>
     </li>
-    <li class="nav-item">
-        <a [routerLink]="['/login']" routerLinkActive="active" class="nav-link">
-            Sign in
-        </a>
-    </li>
-    <li class="nav-item">
-        <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
-            Register
-        </a>
-    </li>
+    <ng-container *ngIf="user$ | async as user">
+        <li class="navbar-text" *ngIf="user; else notLoggedIn">
+            {{user.username}}
+        </li>
+        <ng-template #notLoggedIn>
+            <li class="nav-item">
+                <a [routerLink]="['/login']" routerLinkActive="active" class="nav-link">
+                    Sign in
+                </a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
+                    Register
+                </a>
+            </li>
+        </ng-template>
+    </ng-container>
 </ul>
 

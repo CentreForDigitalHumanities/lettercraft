@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, filter, map, tap } from 'rxjs';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import * as _ from 'underscore';
@@ -11,12 +11,16 @@ import * as _ from 'underscore';
 })
 export class UserMenuComponent {
     isLoading$: Observable<boolean>;
+    user$: Observable<User | null>;
 
     constructor(private authService: AuthService) {
         this.isLoading$ = this.authService.currentUser$.pipe(
             map(_.isUndefined)
-        )
-
+        );
+        this.user$ = this.authService.currentUser$.pipe(
+            filter(_.negate(_.isUndefined)),
+            tap(data => console.log(data)),
+        );
     }
 
 }
