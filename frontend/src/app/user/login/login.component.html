@@ -1,1 +1,15 @@
-<p>login works!</p>
+<form>
+    <div class="mb-3">
+        <label class="form-label" for="usernameInput">Username</label>
+        <input class="form-control" id="usernameInput" [formControl]="usernameInput">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="passwordInput">Password</label>
+        <input type="password" class="form-control" id="passwordInput" [formControl]="passwordInput">
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary" (click)="submit()">
+            Sign in
+        </button>
+    </div>
+</form>

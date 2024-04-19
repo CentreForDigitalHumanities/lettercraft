@@ -64,14 +64,13 @@ export class AuthService {
     /**
      * Logs in, retrieves user response, transforms to User object
      */
-    public login(username: string, password: string): void {
-        this.http.post<{ key: string }>(
+    public login(username: string, password: string): Observable<User | null> {
+        return this.http.post<{ key: string }>(
             this.authRoute('login/'),
             { username, password }
         ).pipe(
             mergeMap(() => this.checkUser()),
-        ).subscribe(user =>
-            this.setAuth(user)
+            tap(data => this.setAuth(data)),
         );
     }
 
