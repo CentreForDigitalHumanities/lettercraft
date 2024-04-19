@@ -66,7 +66,7 @@ export class AuthService {
      */
     public login(username: string, password: string): void {
         this.http.post<{ key: string }>(
-            this.authRoute('login'),
+            this.authRoute('login/'),
             { username, password }
         ).pipe(
             mergeMap(() => this.checkUser()),
