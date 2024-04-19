@@ -78,9 +78,10 @@ export class AuthService {
     public logout(redirectToLogin: boolean = false): void {
         this.purgeAuth();
         this.http.post(
-            this.authRoute('logout'),
+            this.authRoute('logout/'),
             {}
-        ).subscribe(() => {
+        ).subscribe((data) => {
+            console.log(data);
             if (redirectToLogin) {
                 this.showLogin();
             }

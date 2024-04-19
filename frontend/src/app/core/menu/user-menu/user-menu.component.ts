@@ -29,4 +29,8 @@ export class UserMenuComponent {
         );
     }
 
+    logout() {
+        this.authService.logout(false);
+    }
+
 }
