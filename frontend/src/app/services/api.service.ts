@@ -17,24 +17,28 @@ export class ApiService {
         return `${this.apiUrl}/${route}`;
     }
 
+    private authRoute(route: string): string {
+        return `/users/${route}`
+    }
+
     // authentication
 
     login(username: string, password: string): Observable<{ key: string }> {
         return this.http.post<{ key: string }>(
-            this.apiRoute('users/login'),
+            this.authRoute('login'),
             { username, password }
         );
     }
 
     logout(): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
-            this.apiRoute('users/logout'),
+            this.authRoute('logout'),
             {}
         );
     }
 
     getUser(): Observable<UserResponse> {
-        return this.http.get<UserResponse>(this.apiRoute('users/user/'));
+        return this.http.get<UserResponse>(this.authRoute('user/'));
     }
 
     public register(details: {
@@ -43,26 +47,26 @@ export class ApiService {
         password1: string;
         password2: string;
     }): Observable<any> {
-        return this.http.post<any>(this.apiRoute('users/registration'), details);
+        return this.http.post<any>(this.authRoute('registration'), details);
     }
 
     public verifyEmail(key: string) {
         return this.http.post<any>(
-            this.apiRoute('users/registration/verify-email'),
+            this.authRoute('registration/verify-email'),
             { key }
         );
     }
 
     public keyInfo(key: string): Observable<{ username: string, email: string }> {
         return this.http.post<{ username: string; email: string }>(
-            this.apiRoute('users/registration/key-info'),
+            this.authRoute('registration/key-info'),
             { key }
         );
     }
 
     public requestResetPassword(email: string): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
-            this.apiRoute('users/password/reset'),
+            this.authRoute('password/reset'),
             { email }
         );
     }
@@ -74,7 +78,7 @@ export class ApiService {
         newPassword2: string
     ): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
-            this.apiRoute('users/password/reset/confirm'),
+            this.authRoute('password/reset/confirm'),
             {
                 uid,
                 token,
@@ -89,7 +93,7 @@ export class ApiService {
         details: Partial<UserResponse>
     ): Observable<UserResponse> {
         return this.http.patch<UserResponse>(
-            this.apiRoute('user'),
+            this.authRoute('user'),
             details
         );
     }
