@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map, mergeMap, tap } from 'rxjs';
 import { User, UserResponse } from '../models/user';
 import { encodeUserData, parseUserData } from '../utils/user';
 import * as _ from 'underscore';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
@@ -19,10 +19,14 @@ export class AuthService {
         map(user => _.isUndefined(user) ? undefined : !_.isNull(user))
     )
 
+    private authRoute(route: string): string {
+        return `/users/${route}`
+    }
+
     constructor(
         private sessionService: SessionService,
-        private apiService: ApiService,
         private router: Router,
+        private http: HttpClient,
     ) {
         this.sessionService.expired.pipe(
             takeUntilDestroyed()
@@ -38,15 +42,17 @@ export class AuthService {
         this.currentUserSubject$.next(null);
     }
 
-    private checkUser(): Observable<UserResponse> {
-        return this.apiService.getUser();
+    private checkUser(): Observable<User> {
+        return this.http.get<UserResponse>(this.authRoute('user/')).pipe(
+            map(parseUserData)
+        );
     }
 
     private setInitialAuth(): void {
-        this.apiService.getUser()
+        this.checkUser()
             .pipe(takeUntilDestroyed())
-            .subscribe(result =>
-                this.setAuth(parseUserData(result)),
+            .subscribe(user =>
+                this.setAuth(user),
             );
     }
 
@@ -57,42 +63,48 @@ export class AuthService {
     /**
      * Logs in, retrieves user response, transforms to User object
      */
-    public login(username: string, password: string): Observable<UserResponse> {
-        const loginRequest$ = this.apiService.login(username, password);
-        return loginRequest$.pipe(
+    public login(username: string, password: string): void {
+        this.http.post<{ key: string }>(
+            this.authRoute('login'),
+            { username, password }
+        ).pipe(
             mergeMap(() => this.checkUser()),
-            tap((res) => this.setAuth(parseUserData(res)))
+        ).subscribe(user =>
+            this.setAuth(user)
         );
     }
 
-    public logout(redirectToLogin: boolean = false): Observable<any> {
+    public logout(redirectToLogin: boolean = false): void {
         this.purgeAuth();
-        return this.apiService.logout().pipe(
-            tap(() => {
-                if (redirectToLogin) {
-                    this.showLogin();
-                }
-            })
-        );
+        this.http.post(
+            this.authRoute('logout'),
+            {}
+        ).subscribe(() => {
+            if (redirectToLogin) {
+                this.showLogin();
+            }
+        });
     }
 
     public register(
         username: string, email: string, password1: string, password2: string
     ): Observable<any> {
-        return this.apiService.register({
-            username,
-            email,
-            password1,
-            password2,
-        });
+        const data = { username, email, password1, password2 };
+        return this.http.post(this.authRoute('registration'), data);
     }
 
-    public verifyEmail(key: string) {
-        return this.apiService.verifyEmail(key);
+    public verifyEmail(key: string): Observable<any> {
+        return this.http.post(
+            this.authRoute('registration/verify-email'),
+            { key }
+        );
     }
 
-    public keyInfo(key: string) {
-        return this.apiService.keyInfo(key);
+    public keyInfo(key: string): Observable<{ username: string, email: string }> {
+        return this.http.post<{ username: string; email: string }>(
+            this.authRoute('registration/key-info'),
+            { key }
+        );
     }
 
     public showLogin(returnUrl?: string) {
@@ -102,8 +114,11 @@ export class AuthService {
         );
     }
 
-    public requestResetPassword(email: string): Observable<any> {
-        return this.apiService.requestResetPassword(email);
+    public requestResetPassword(email: string): Observable<{ detail: string }> {
+        return this.http.post<{ detail: string }>(
+            this.authRoute('password/reset'),
+            { email }
+        );
     }
 
     public resetPassword(
@@ -111,19 +126,25 @@ export class AuthService {
         token: string,
         newPassword1: string,
         newPassword2: string
-    ): Observable<any> {
-        return this.apiService.resetPassword(
-            uid,
-            token,
-            newPassword1,
-            newPassword2
+    ): Observable<{ detail: string }> {
+        return this.http.post<{ detail: string }>(
+            this.authRoute('password/reset/confirm'),
+            {
+                uid,
+                token,
+                new_password1: newPassword1,
+                new_password2: newPassword2,
+            }
         );
     }
 
     public updateSettings(update: Partial<User>): Observable<any> {
         const data = encodeUserData(update);
-        return this.apiService.updateUserSettings(data).pipe(
-            tap((res) => this.setAuth(parseUserData(res)))
+        return this.http.patch<UserResponse>(
+            this.authRoute('user'),
+            data
+        ).pipe(
+            tap(res => this.setAuth(parseUserData(res))),
         );
     }
 

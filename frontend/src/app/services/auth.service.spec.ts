@@ -12,7 +12,7 @@ describe('AuthService', () => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule, RouterTestingModule],
             providers: [
-                SessionService,
+                SessionService, SessionService,
             ],
         });
         service = TestBed.inject(AuthService);
