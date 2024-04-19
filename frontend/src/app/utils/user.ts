@@ -6,11 +6,17 @@ import * as _ from 'underscore';
 * @param result User response data
 * @returns User object
 */
-export const parseUserData = (result: UserResponse): User => new User(
-    result.id,
-    result.username,
-    result.is_staff,
-);
+export const parseUserData = (result: UserResponse | null): User | null => {
+    if (result) {
+        return new User(
+            result.id,
+            result.username,
+            result.is_staff,
+        );
+    } else {
+        return null;
+    }
+}
 
 /**
  * Transfroms User data to backend UserResponse object

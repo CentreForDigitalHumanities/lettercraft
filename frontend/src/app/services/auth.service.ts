@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, map, mergeMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
 import { User, UserResponse } from '../models/user';
 import { encodeUserData, parseUserData } from '../utils/user';
 import * as _ from 'underscore';
@@ -34,7 +34,7 @@ export class AuthService {
         this.setInitialAuth();
     }
 
-    private setAuth(user: User): void {
+    private setAuth(user: User | null): void {
         this.currentUserSubject$.next(user);
     }
 
@@ -42,9 +42,10 @@ export class AuthService {
         this.currentUserSubject$.next(null);
     }
 
-    private checkUser(): Observable<User> {
+    private checkUser(): Observable<User | null> {
         return this.http.get<UserResponse>(this.authRoute('user/')).pipe(
-            map(parseUserData)
+            catchError(error => of(null)),
+            map(parseUserData),
         );
     }
 
