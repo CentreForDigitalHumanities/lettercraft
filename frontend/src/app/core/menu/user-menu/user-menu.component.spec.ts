@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserMenuComponent } from './user-menu.component';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '@services/auth.service';
 
 describe('UserMenuComponent', () => {
     let component: UserMenuComponent;

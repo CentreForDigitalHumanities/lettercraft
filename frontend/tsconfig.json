@@ -27,11 +27,14 @@
         "@env": [
             "src/environments/environment"
         ],
+        "@services/*": [
+            "src/app/services/*"
+        ],
         "@shared/*": [
             "src/app/shared/*"
         ],
     },
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

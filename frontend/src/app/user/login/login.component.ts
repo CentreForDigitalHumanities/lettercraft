@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '@services/auth.service';
+
+
 
 @Component({
   selector: 'lc-login',
