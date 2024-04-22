@@ -12,4 +12,7 @@
             Sign in
         </button>
     </div>
+    <div class="alert alert-danger" *ngIf="requestFailed" role="alert">
+        Failed to sign in.
+    </div>
 </form>

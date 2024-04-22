@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +15,8 @@ export class LoginComponent {
     usernameInput = new FormControl();
     passwordInput = new FormControl();
 
+    requestFailed = false;
+
     private returnUrl: string;
 
     constructor(
@@ -27,8 +30,17 @@ export class LoginComponent {
     submit() {
         this.authService.login(
             this.usernameInput.value, this.passwordInput.value
-        ).subscribe(result => {
-            this.router.navigate([this.returnUrl]);
+        ).subscribe({
+            next: () => this.loginSucces(),
+            error: (e: HttpErrorResponse) => this.loginFailed(e)
         });
+    }
+
+    loginSucces() {
+        this.router.navigate([this.returnUrl]);
+    }
+
+    loginFailed(error: HttpErrorResponse) {
+        this.requestFailed = true;
     }
 }
