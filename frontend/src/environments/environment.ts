@@ -4,12 +4,13 @@
 import { buildTime, version, sourceUrl } from './version';
 
 export const environment = {
-  production: false,
-  // URL path prefix for assets
-  assets: 'assets',
-  buildTime,
-  version,
-  sourceUrl
+    production: false,
+    // URL path prefix for assets
+    assets: 'assets',
+    buildTime,
+    version,
+    sourceUrl,
+    apiUrl: '/api/',
 };
 
 /*
