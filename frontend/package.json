@@ -4,7 +4,7 @@
     "start": "yarn serve",
     "build": "ng build --deploy-url='/static/'",
     "watch": "ng build --watch",
-    "test": "ng test --watch=true",
+    "test": "ng test --watch=false",
     "prebuild": "node ./build/build-pre.js",
     "build:en": "ng build  --deploy-url='/static/' --configuration=production-en",
     "i18n": "ng extract-i18n --output-path locale",
@@ -13,7 +13,7 @@
     "serve:en": "ng serve --proxy-config ../proxy.conf.json --configuration=en",
     "stop": "lsof -t -i tcp:4200 | xargs kill -9 || echo \"not running\"",
     "pretest": "yarn prebuild",
-    "test-once": "ng test --watch=false"
+    "watch-test": "ng test --watch=true"
   },
   "private": true,
   "dependencies": {
