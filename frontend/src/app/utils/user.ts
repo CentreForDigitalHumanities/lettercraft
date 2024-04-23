@@ -11,6 +11,9 @@ export const parseUserData = (result: UserResponse | null): User | null => {
         return new User(
             result.id,
             result.username,
+            result.email,
+            result.first_name,
+            result.last_name,
             result.is_staff,
         );
     } else {
@@ -27,17 +30,13 @@ export const parseUserData = (result: UserResponse | null): User | null => {
  * @returns UserResponse object
  */
 export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
-    const changeKeys = {
-        isStaff: 'is_staff',
+    const encoded: Partial<UserResponse> = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        is_staff: data.isStaff,
     };
-
-    const encoded: Record<string, any> = {};
-
-    _.keys(data).forEach(key => {
-        const value = _.get(data, key);
-        const path = _.get(changeKeys, key, key);
-        encoded[path] = value;
-    });
-
-    return encoded;
+    return _.omit(encoded, _.isUndefined);
 };

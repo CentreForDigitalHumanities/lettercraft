@@ -3,9 +3,9 @@ import { By } from '@angular/platform-browser';
 
 import { UserMenuComponent } from './user-menu.component';
 import { AuthService } from '@services/auth.service';
-import { AuthServiceMock } from '@mock/auth.service.mock';
+import { AuthServiceMock, testUser } from '@mock/auth.service.mock';
 import { SharedTestingModule } from '@shared/shared-testing.module';
-import { User } from '../../../models/user';
+
 
 describe('UserMenuComponent', () => {
     let component: UserMenuComponent;
@@ -50,7 +50,7 @@ describe('UserMenuComponent', () => {
     });
 
     it('should show a user menu when logged in', () => {
-        authService._setUser(new User(0, 'test', false));
+        authService._setUser(testUser({}));
         fixture.detectChanges();
 
         expect(spinner()).toBeFalsy();

@@ -1,6 +1,17 @@
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { User } from "../app/models/user";
 
+export const testUser = (data: Partial<User>): User =>
+    new User(
+        data.id || 0,
+        data.username || 'test',
+        data.email || 'test@testing.org',
+        data.firstName || 'Tester',
+        data.lastName || 'Testerton',
+        data.isStaff || false
+    );
+
+
 export class AuthServiceMock {
     currentUser$ = new BehaviorSubject<User | null | undefined>(undefined);
 
@@ -9,6 +20,6 @@ export class AuthServiceMock {
     }
 
     login(username: string, password: string): Observable<User | null> {
-        return of(new User(0, username, false));
+        return of(testUser({ username }));
     }
 }
