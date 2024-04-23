@@ -23,6 +23,14 @@
       "ES2022",
       "dom"
     ],
+    "paths": {
+        "@env": [
+            "src/environments/environment"
+        ],
+        "@shared/*": [
+            "src/app/shared/*"
+        ],
+    },
     "allowSyntheticDefaultImports": true,
   },
   "angularCompilerOptions": {
