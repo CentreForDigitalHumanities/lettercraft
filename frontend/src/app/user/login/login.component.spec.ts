@@ -2,8 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { AuthService } from '@services/auth.service';
-import { HttpTestingController } from '@angular/common/http/testing';
 import { SharedModule } from '@shared/shared.module';
+import { AuthServiceMock } from '../../../mock/auth.service.mock';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('LoginComponent', () => {
     let component: LoginComponent;
@@ -12,8 +13,10 @@ describe('LoginComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [LoginComponent],
-            providers: [AuthService, HttpTestingController],
-            imports: [SharedModule]
+            providers: [
+                { provide: AuthService, useClass: AuthServiceMock }
+            ],
+            imports: [SharedModule, RouterTestingModule]
         });
         fixture = TestBed.createComponent(LoginComponent);
         component = fixture.componentInstance;
