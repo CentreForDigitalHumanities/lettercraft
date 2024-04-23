@@ -15,7 +15,7 @@ def user_data():
     return {
         "username": "JohnDoe",
         "email": "j.doe@nowhere.org",
-        "password": "secret",
+        "password": "secretpassword",
         "first_name": "John",
         "last_name": "Doe",
     }
@@ -27,8 +27,8 @@ def user(db, user_data):
         username=user_data["username"],
         email=user_data["email"],
         password=user_data["password"],
-        first_name="John",
-        last_name="Doe",
+        first_name=user_data["first_name"],
+        last_name=user_data["last_name"],
     )
     EmailAddress.objects.create(
         user=user, email=user.email, verified=True, primary=True
