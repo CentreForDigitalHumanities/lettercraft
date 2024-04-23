@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sites",
     "livereload",
     "django.contrib.staticfiles",
     "rest_framework",
@@ -132,13 +133,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Authentication
 
 AUTH_USER_MODEL = "user.User"
+ACCOUNT_EMAIL_REQUIRED = True
 
-# TODO: set these to true when email verification is done
+# TODO: set this to true when email verification is done
 # ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_EMAIL_REQUIRED = True
 
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
+
+SITE_ID = 1
 SITE_NAME = "Lettercraft"
 HOST = "localhost:8000"
 
