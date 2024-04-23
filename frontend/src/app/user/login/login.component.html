@@ -1,5 +1,5 @@
 <form>
-    <div class="mb-3">
+    <div class="mb-3" id="usernameField">
         <label class="form-label" for="usernameInput">Username</label>
         <input class="form-control" id="usernameInput" [formControl]="usernameInput"
             [class.is-invalid]="usernameErrorMessage != ''">
@@ -7,7 +7,7 @@
             {{usernameErrorMessage}}
         </div>
     </div>
-    <div class="mb-3">
+    <div class="mb-3" id="passwordField">
         <label class="form-label" for="passwordInput">Password</label>
         <input type="password" class="form-control" id="passwordInput" [formControl]="passwordInput"
             [class.is-invalid]="passwordErrorMessage != ''">

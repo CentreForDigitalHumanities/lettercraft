@@ -5,6 +5,7 @@ import { UserMenuComponent } from './user-menu.component';
 import { AuthService } from '@services/auth.service';
 import { AuthServiceMock } from '@mock/auth.service.mock';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { User } from '../../../models/user';
 
 describe('UserMenuComponent', () => {
     let component: UserMenuComponent;
@@ -40,7 +41,7 @@ describe('UserMenuComponent', () => {
     });
 
     it('should show sign-in when not logged in', () => {
-        authService.setUser(null);
+        authService._setUser(null);
         fixture.detectChanges();
 
         expect(spinner()).toBeFalsy();
@@ -49,7 +50,7 @@ describe('UserMenuComponent', () => {
     });
 
     it('should show a user menu when logged in', () => {
-        authService.setUser({ username: 'test', id: 0, isStaff: true });
+        authService._setUser(new User(0, 'test', false));
         fixture.detectChanges();
 
         expect(spinner()).toBeFalsy();
