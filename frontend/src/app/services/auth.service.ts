@@ -16,7 +16,7 @@ export class AuthService {
 
     currentUser$: Observable<User | null | undefined> = this.currentUserSubject$.pipe();
     isAuthenticated$: Observable<boolean | undefined> = this.currentUserSubject$.pipe(
-        map(user => _.isUndefined(user) ? undefined : !_.isNull(user))
+        map(_.isObject)
     )
 
     private authRoute(route: string): string {
@@ -96,19 +96,20 @@ export class AuthService {
 
     public verifyEmail(key: string): Observable<any> {
         return this.http.post(
-            this.authRoute('registration/verify-email'),
+            this.authRoute('registration/verify-email/'),
             { key }
         );
     }
 
     public keyInfo(key: string): Observable<{ username: string, email: string }> {
         return this.http.post<{ username: string; email: string }>(
-            this.authRoute('registration/key-info'),
+            this.authRoute('registration/key-info/'),
             { key }
         );
     }
 
     public showLogin(returnUrl?: string) {
+        this.currentUser$
         this.router.navigate(
             ['/login'],
             returnUrl ? { queryParams: { returnUrl } } : undefined
