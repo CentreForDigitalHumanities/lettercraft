@@ -11,7 +11,6 @@ def test_user_serializer(user_client, user_data):
         "first_name": user_data["first_name"],
         "last_name": user_data["last_name"],
         "is_staff": False,
-        "profile": {},
     }
 
 
