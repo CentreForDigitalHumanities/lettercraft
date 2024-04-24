@@ -1,7 +1,13 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from source.models import Source
+from django.contrib.postgres.fields import ArrayField
 
 class Field(models.Model):
+    """
+    A piece of information about an entity.
+    """
+
     certainty = models.IntegerField(
         choices=[
             (0, "uncertain"),
@@ -20,6 +26,7 @@ class Field(models.Model):
 
     class Meta:
         abstract = True
+
 
 class LettercraftDate(models.Model):
     MIN_YEAR = 400
@@ -66,3 +73,101 @@ class LettercraftDate(models.Model):
         if self.year_exact:
             self.year_lower = self.year_exact
             self.year_upper = self.year_exact
+
+
+class Named(models.Model):
+    """
+    An object with a name and description
+    """
+
+    name = models.CharField(
+        max_length=200,
+        blank=False,
+        help_text="A name to help identify this object",
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Longer description to help identify this object",
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class HistoricalEntity(Named, models.Model):
+
+    identifiable = models.BooleanField(
+        default=True,
+        null=False,
+        help_text="Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class EntityDescription(Named, models.Model):
+    """
+    A description of an entity (person, object, location, event) in a narrative source.
+
+    Descriptions may refer to HistoricalEntity targets.
+    """
+
+    source = models.ForeignKey(
+        to=Source,
+        on_delete=models.PROTECT,
+        help_text="Source text containing this description",
+    )
+    source_mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this entity presented in the text?",
+    )
+    source_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location(s) where the entity is mentioned or described in the source text",
+    )
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.name} ({self.source})"
+
+
+class DescriptionField(Field, models.Model):
+    """
+    A piece of information contained in an EntityDescription.
+
+    An extension of Field that can contain extra information about how and where the
+    information is presented in the source.
+    """
+
+    source_mention = models.CharField(
+        max_length=32,
+        blank=True,
+        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        help_text="How is this information presented in the text?",
+    )
+    source_location = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text="Specific location of the information in the source text",
+    )
+    source_terminology = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant terminology used in the source text",
+    )
+
+    class Meta:
+        abstract = True
