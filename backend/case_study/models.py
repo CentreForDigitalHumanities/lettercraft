@@ -1,6 +1,6 @@
 from django.db import models
 from core.models import Named
-from event.models import EventDescription
+from event.models import Episode
 from person.models import HistoricalPerson
 from space.models import Structure
 
@@ -14,7 +14,7 @@ class CaseStudy(Named, models.Model):
         verbose_name_plural = "case studies"
 
     episodes = models.ManyToManyField(
-        to="Episode",
+        to=Episode,
         blank=True,
         help_text="Episodes involved in this case study",
     )
@@ -33,15 +33,3 @@ class CaseStudy(Named, models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Episode(Named, models.Model):
-    """
-    A higher abstraction of events into connected "episodes"
-    """
-
-    events = models.ManyToManyField(
-        to=EventDescription,
-        blank=True,
-        help_text="Events that make up this episode",
-    )

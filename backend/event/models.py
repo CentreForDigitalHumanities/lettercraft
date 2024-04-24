@@ -138,3 +138,15 @@ class EventDescriptionSpace(DescriptionField, models.Model):
 
     def __str__(self):
         return f"{self.space.name} / {self.event}"
+
+
+class Episode(Named, models.Model):
+    """
+    A higher abstraction of events into connected "episodes"
+    """
+
+    events = models.ManyToManyField(
+        to=EventDescription,
+        blank=True,
+        help_text="Events that make up this episode",
+    )

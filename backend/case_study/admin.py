@@ -7,8 +7,3 @@ class CaseStudyAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     fields = ["name", "description", "episodes", "key_persons", "key_sites"]
     filter_horizontal = ["episodes", "key_persons", "key_sites"]
-
-
-@admin.register(models.Episode)
-class EpisodeAdmin(admin.ModelAdmin):
-    filter_horizontal = ["events"]

@@ -4,8 +4,8 @@ from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
 from source.models import Source
 
-from case_study.models import CaseStudy, Episode
-from event.models import EventDescription
+from case_study.models import CaseStudy
+from event.models import EventDescription, Episode
 from person.models import (
     HistoricalPerson,
     AgentDescription,

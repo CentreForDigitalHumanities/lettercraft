@@ -57,3 +57,8 @@ class EventDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin)
         EventDescriptionLetterAdmin,
         EventDescriptionSpaceAdmin,
     ]
+
+
+@admin.register(models.Episode)
+class EpisodeAdmin(admin.ModelAdmin):
+    filter_horizontal = ["events"]
