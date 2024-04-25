@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, DestroyRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth.service';
-import { Observable, Subject, catchError, delay, filter, of, switchMap, take, tap, timer } from 'rxjs';
-import * as _ from 'underscore';
+import { Observable, Subject, catchError, filter, of, switchMap, take } from 'rxjs';
+import _ from 'underscore';
 
 @Component({
     selector: 'lc-verify-email',
@@ -16,11 +16,12 @@ export class VerifyEmailComponent {
     userDetails$: Observable<{ username: string, email: string } | undefined>;
     error$ = new Subject<HttpErrorResponse>();
     success$ = new Subject<boolean>();
+    directToLogin: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
-        private router: Router,
+        private destroyRef: DestroyRef,
     ) {
         this.key = this.activatedRoute.snapshot.params['key'];
         this.userDetails$ = this.authService.keyInfo(this.key).pipe(
@@ -31,27 +32,20 @@ export class VerifyEmailComponent {
             })
         );
         this.success$.pipe(
-            delay(3000),
             switchMap(() => this.authService.isAuthenticated$.pipe(
                 filter(_.negate(_.isUndefined)),
                 take(1))
             ),
             takeUntilDestroyed(),
-        ).subscribe(isLoggedIn => this.redirect(isLoggedIn));
+        ).subscribe(isLoggedIn => this.directToLogin = !isLoggedIn);
     }
 
     confirm() {
-        this.authService.verifyEmail(this.key).subscribe({
+        this.authService.verifyEmail(this.key).pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
             next: () => this.success$.next(true),
             error: (e) => this.error$.next(e),
         })
-    }
-
-    private redirect(isLoggedIn: boolean): void {
-        if (isLoggedIn) {
-            this.router.navigate(['/']);
-        } else {
-            this.authService.showLogin();
-        }
     }
 }
