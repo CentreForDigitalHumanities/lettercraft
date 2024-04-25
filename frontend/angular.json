@@ -62,26 +62,6 @@
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true
-                        },
-                        "production-en": {
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
-                                },
-                                {
-                                    "type": "anyComponentStyle",
-                                    "maximumWarning": "2kb",
-                                    "maximumError": "4kb"
-                                }
-                            ],
-                            "outputHashing": "all",
-                            "outputPath": "dist/en",
-                            "i18nFile": "locale/messages.en.xlf",
-                            "i18nFormat": "xlf",
-                            "i18nLocale": "en",
-                            "i18nMissingTranslation": "error"
                         }
                     },
                     "defaultConfiguration": "production"
@@ -94,18 +74,9 @@
                         },
                         "development": {
                             "browserTarget": "lettercraft:build:development"
-                        },
-                        "en": {
-                            "browserTarget": "lettercraft:build:production-en"
                         }
                     },
                     "defaultConfiguration": "development"
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "browserTarget": "lettercraft:build"
-                    }
                 },
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
