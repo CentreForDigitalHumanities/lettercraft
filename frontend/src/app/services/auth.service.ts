@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
 import { User, UserResponse } from '../models/user';
 import { encodeUserData, parseUserData } from '../utils/user';
-import * as _ from 'underscore';
+import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

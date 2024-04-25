@@ -1,5 +1,5 @@
 import { User, UserResponse } from "../models/user";
-import * as _ from 'underscore';
+import _ from 'underscore';
 
 /* Transforms backend user response to User object
 *
