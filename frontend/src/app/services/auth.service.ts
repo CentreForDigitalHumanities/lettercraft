@@ -91,7 +91,7 @@ export class AuthService {
         username: string, email: string, password1: string, password2: string
     ): Observable<any> {
         const data = { username, email, password1, password2 };
-        return this.http.post(this.authRoute('registration'), data);
+        return this.http.post(this.authRoute('registration/'), data);
     }
 
     public verifyEmail(key: string): Observable<any> {
@@ -118,7 +118,7 @@ export class AuthService {
 
     public requestResetPassword(email: string): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset'),
+            this.authRoute('password/reset/'),
             { email }
         );
     }
@@ -130,7 +130,7 @@ export class AuthService {
         newPassword2: string
     ): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset/confirm'),
+            this.authRoute('password/reset/confirm/'),
             {
                 uid,
                 token,
@@ -143,7 +143,7 @@ export class AuthService {
     public updateSettings(update: Partial<User>): Observable<any> {
         const data = encodeUserData(update);
         return this.http.patch<UserResponse>(
-            this.authRoute('user'),
+            this.authRoute('user/'),
             data
         ).pipe(
             tap(res => this.setAuth(parseUserData(res))),
