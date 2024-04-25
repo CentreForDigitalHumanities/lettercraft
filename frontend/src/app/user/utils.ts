@@ -1,4 +1,4 @@
-import { User, UserResponse } from "../models/user";
+import { User, UserResponse } from "./models/user";
 import _ from 'underscore';
 
 /* Transforms backend user response to User object

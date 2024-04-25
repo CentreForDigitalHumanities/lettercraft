@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { User } from "../app/models/user";
+import { User } from "../app/user/models/user";
 
 export const testUser = (data: Partial<User>): User =>
     new User(

@@ -3,8 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
-import { User, UserResponse } from '../models/user';
-import { encodeUserData, parseUserData } from '../utils/user';
+import { User, UserResponse } from '../user/models/user';
+import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 
