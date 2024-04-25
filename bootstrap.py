@@ -2,14 +2,10 @@
 
 import os
 import os.path as op
-from distutils import dir_util
-import glob
-import json
 import platform
 import sys
 import subprocess
 import shlex
-import shutil
 
 SLUG = 'lettercraft'
 WINDOWS = (platform.system() == 'Windows')
@@ -166,123 +162,6 @@ def make_create_db_command(psql_cmd):
         'Create the database',
         psql_cmd + ' -f ' + op.join('backend', 'create_db.sql'),
     )
-
-def merge_json(target, source):
-    for key, value in source.items():
-        if value is None:
-            del target[key]
-        elif key in target and isinstance(target[key], dict) and \
-                isinstance(source[key], dict):
-            merge_json(target[key], source[key])
-        else:
-            target[key] = value
-    return target
-
-
-def modify_angular_json():
-    with open('frontend/angular.json', 'r') as file:
-        data = json.load(file)
-    try:
-        project = 'lettercraft'.replace('_', '-')
-        data['projects'][project]['architect']['test']['options']['karmaConfig'] = 'karma.conf.js'
-        for lang in 'en:english'.split(','):
-            [code, lang_name] = lang.split(':')
-            production = merge_json({}, data['projects'][project]['architect']['build']['configurations']['production'])
-            production['outputPath'] = f'dist/{code}'
-            production['i18nFile'] = f'locale/messages.{code}.xlf'
-            production['i18nFormat'] = 'xlf'
-            production['i18nLocale'] = code
-            production['i18nMissingTranslation'] = 'error'
-            data['projects'][project]['architect']['build']['configurations'][f'production-{code}'] = production
-
-            serve = merge_json({}, data['projects'][project]['architect']['serve']['configurations']['production'])
-            serve['browserTarget'] += f'-{code}'
-            data['projects'][project]['architect']['serve']['configurations'][code] = serve
-
-        data['projects'][project]['architect']['build']['options']['outputPath'] = \
-            data['projects'][project]['architect']['build']['configurations']['production']['outputPath'] = 'dist'
-    except Exception as error:
-        print("Oh no! :( Maybe the format changed?")
-        print(json.dumps(data, indent=4))
-        raise error
-    with open('frontend/angular.json', 'w') as file:
-        json.dump(data, file, indent=4)
-
-
-def activate_frontend():
-    framework = 'angular'
-    os.rename('package.angular.json', 'package.json')
-
-    if framework == 'backbone':
-        os.rename('frontend.backbone', 'frontend')
-        shutil.move(op.join('frontend', 'proxy.json'), 'proxy.json')
-        override_package_json()
-    elif framework == 'angular':
-        project_name = 'lettercraft'.replace('_', '-')
-        Command(
-            'Install dependencies',
-            ['yarn', 'install', '--ignore-scripts']
-        )()
-        Command(
-            'Creating project',
-            ['yarn', 'ng', 'new', project_name, '--prefix=lc',
-                '--skip-git=true',
-                '--skip-install=true',
-                '--package-manager=yarn',
-                '--style=scss',
-                '--routing=true']
-        )()
-        dir_util.copy_tree('frontend.angular', project_name)
-        os.rename(project_name, 'frontend')
-        shutil.move(op.join('frontend', 'proxy.conf.json'), 'proxy.conf.json')
-        override_package_json()
-        Command(
-            'Install frontend dependencies using Yarn',
-            ['yarn'],
-            cwd="frontend"
-        )()
-        # Remove editorconfig
-        os.remove(os.path.join('frontend', '.editorconfig'))
-        modify_angular_json()
-        Command(
-            'ng add @angular/localize',
-            ['yarn', 'ng', 'add', '@angular/localize', '--skip-confirmation'],
-            cwd="frontend"
-        )()
-        Command(
-            'Creating localizations',
-            ['yarn', 'i18n'],
-            cwd="frontend"
-        )()
-        for lang in 'en:english'.split(','):
-            [code, lang_name] = lang.split(':')
-            shutil.copyfile('frontend/locale/messages.xlf', f'frontend/locale/messages.{code}.xlf')
-        if '4200' != '4200':
-            Command(
-                'Set frontend port',
-                ['yarn', 'ng', 'config', "projects.lettercraft.architect.serve.options.port", '4200'],
-                cwd="frontend"
-            )()
-    else:
-        print('Unknown framework angular specified!')
-    # remove other frameworks
-    for path in glob.glob("frontend.*"):
-        shutil.rmtree(path)
-    for path in glob.glob("package.*.json"):
-        os.remove(path)
-
-
-def override_package_json():
-    if os.path.isfile('frontend/package.overwrite.json'):
-        print('Overriding package.json')
-        with open('frontend/package.overwrite.json', 'r') as file:
-            overwrite = json.load(file)
-        with open('frontend/package.json', 'r') as file:
-            data = json.load(file)
-        with open('frontend/package.json', 'w') as file:
-            merge_json(data, overwrite)
-            json.dump(data, file, indent=4)
-        os.remove('frontend/package.overwrite.json')
 
 
 install_pip_tools = Command(
