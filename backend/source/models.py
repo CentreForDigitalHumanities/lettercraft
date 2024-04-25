@@ -34,10 +34,6 @@ class Source(models.Model):
         max_length=255, blank=True, help_text="The name of the author of the edition"
     )
 
-    bibliographical_info = models.TextField(
-        blank=True, help_text="bibliographical information to identify this source"
-    )
-
     def __str__(self):
         return self.name
 

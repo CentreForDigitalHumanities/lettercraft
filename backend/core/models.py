@@ -166,11 +166,6 @@ class DescriptionField(Field, models.Model):
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
         help_text="How is this information presented in the text?",
     )
-    source_location = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text="Specific location of the information in the source text",
-    )
     source_terminology = ArrayField(
         models.CharField(
             max_length=200,
