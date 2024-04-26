@@ -7,18 +7,17 @@ import _ from 'underscore';
 * @returns User object
 */
 export const parseUserData = (result: UserResponse | null): User | null => {
-    if (result) {
-        return new User(
-            result.id,
-            result.username,
-            result.email,
-            result.first_name,
-            result.last_name,
-            result.is_staff,
-        );
-    } else {
+    if (!result) {
         return null;
     }
+    return new User(
+        result.id,
+        result.username,
+        result.email,
+        result.first_name,
+        result.last_name,
+        result.is_staff,
+    );
 }
 
 /**
