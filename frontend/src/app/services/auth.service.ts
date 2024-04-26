@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
-import { User, UserResponse } from '../user/models/user';
+import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { RegistrationForm, ResetPasswordForm, User, UserResponse } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
@@ -12,16 +12,14 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class AuthService {
-    private currentUserSubject$ = new BehaviorSubject<User | null | undefined>(undefined);
+    private currentUserSubject$ = new BehaviorSubject<User | null>(null);
 
-    currentUser$: Observable<User | null | undefined> = this.currentUserSubject$.pipe();
-    isAuthenticated$: Observable<boolean | undefined> = this.currentUserSubject$.pipe(
+    public currentUser = computed(() => this.currentUserSubject$.value);
+
+    currentUser$ = this.currentUserSubject$.pipe();
+    isAuthenticated$ = this.currentUserSubject$.pipe(
         map(_.isObject)
     )
-
-    private authRoute(route: string): string {
-        return `/users/${route}`
-    }
 
     constructor(
         private sessionService: SessionService,
@@ -34,6 +32,10 @@ export class AuthService {
         this.setInitialAuth();
     }
 
+    private authRoute(route: string): string {
+        return `/users/${route}`;
+    }
+
     private setAuth(user: User | null): void {
         this.currentUserSubject$.next(user);
     }
@@ -42,56 +44,52 @@ export class AuthService {
         this.currentUserSubject$.next(null);
     }
 
-    private checkUser(): Observable<User | null> {
+    private checkUser$(): Observable<User | null> {
         return this.http.get<UserResponse>(this.authRoute('user/')).pipe(
+            // TODO: proper error handling.
             catchError(error => of(null)),
             map(parseUserData),
         );
     }
 
+    // TODO: this belongs in the app component.
     private setInitialAuth(): void {
-        this.checkUser()
+        this.checkUser$()
             .pipe(takeUntilDestroyed())
             .subscribe(user =>
                 this.setAuth(user),
             );
     }
 
-    public currentUser(): User | null | undefined {
-        return this.currentUserSubject$.value;
-    }
-
     /**
      * Logs in, retrieves user response, transforms to User object
      */
-    public login(username: string, password: string): Observable<User | null> {
+    public login$(username: string, password: string): Observable<User | null> {
         return this.http.post<{ key: string }>(
             this.authRoute('login/'),
             { username, password }
         ).pipe(
-            mergeMap(() => this.checkUser()),
+            switchMap(() => this.checkUser$()),
+            // Side effect: set the user in the service.
             tap(data => this.setAuth(data)),
         );
     }
 
-    public logout(redirectToLogin: boolean = false): void {
+    public logout(redirectToLogin = false): void {
         this.purgeAuth();
         this.http.post(
             this.authRoute('logout/'),
             {}
+            // Subscribe in component
         ).subscribe((data) => {
-            console.log(data);
             if (redirectToLogin) {
                 this.showLogin();
             }
         });
     }
 
-    public register(
-        username: string, email: string, password1: string, password2: string
-    ): Observable<any> {
-        const data = { username, email, password1, password2 };
-        return this.http.post(this.authRoute('registration/'), data);
+    public register$(registrationForm: RegistrationForm): Observable<any> {
+        return this.http.post(this.authRoute('registration/'), registrationForm);
     }
 
     public verifyEmail(key: string): Observable<any> {
@@ -123,20 +121,11 @@ export class AuthService {
         );
     }
 
-    public resetPassword(
-        uid: string,
-        token: string,
-        newPassword1: string,
-        newPassword2: string
+    public resetPassword(resetPasswordForm: ResetPasswordForm
     ): Observable<{ detail: string }> {
         return this.http.post<{ detail: string }>(
             this.authRoute('password/reset/confirm/'),
-            {
-                uid,
-                token,
-                new_password1: newPassword1,
-                new_password2: newPassword2,
-            }
+            resetPasswordForm
         );
     }
 
