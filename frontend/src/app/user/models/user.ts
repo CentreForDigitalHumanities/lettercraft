@@ -17,3 +17,17 @@ export class User {
         public isStaff: boolean,
     ) { }
 }
+
+export interface UserRegistration {
+    username: string;
+    email: string;
+    password1: string;
+    password2: string;
+}
+
+export interface ResetPasswordForm {
+    uid: string;
+    token: string;
+    new_password1: string;
+    new_password2: string;
+}

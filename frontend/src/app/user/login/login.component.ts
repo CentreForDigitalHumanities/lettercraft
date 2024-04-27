@@ -6,7 +6,6 @@ import { AuthService } from '@services/auth.service';
 import { passwordValidators, usernameValidators } from '../validation';
 
 
-
 @Component({
   selector: 'lc-login',
   templateUrl: './login.component.html',
@@ -39,7 +38,7 @@ export class LoginComponent {
     submit() {
         const valid = this.checkValidation();
         if (valid) {
-            this.authService.login(
+            this.authService.login$(
                 this.usernameInput.value as string, this.passwordInput.value as string
             ).subscribe({
                 next: () => this.loginSucces(),

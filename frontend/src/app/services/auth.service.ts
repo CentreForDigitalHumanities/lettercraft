@@ -2,8 +2,8 @@ import { Injectable, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, map, of, switchMap, tap } from 'rxjs';
-import { RegistrationForm, ResetPasswordForm, User, UserResponse } from '../user/models/user';
+import { BehaviorSubject, Observable, Subject, catchError, map, of, switchMap, tap } from 'rxjs';
+import { UserRegistration, ResetPasswordForm, User, UserResponse } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
@@ -20,6 +20,15 @@ export class AuthService {
     isAuthenticated$ = this.currentUserSubject$.pipe(
         map(_.isObject)
     )
+
+    public newRegistration$ = new Subject<UserRegistration>();
+
+    public registration$ = this.newRegistration$.pipe(
+        switchMap(registrationForm => this.http.post(
+            this.authRoute('registration/'), registrationForm)
+        ),
+        catchError(error => of(null)),
+    );
 
     constructor(
         private sessionService: SessionService,
@@ -86,10 +95,6 @@ export class AuthService {
                 this.showLogin();
             }
         });
-    }
-
-    public register$(registrationForm: RegistrationForm): Observable<any> {
-        return this.http.post(this.authRoute('registration/'), registrationForm);
     }
 
     public verifyEmail(key: string): Observable<any> {
