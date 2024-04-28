@@ -52,6 +52,7 @@ export class RegisterComponent {
 
     public submit(): void {
         this.form.updateValueAndValidity();
+        this.form.markAllAsTouched();
         if (!this.form.valid) {
             return;
         }
