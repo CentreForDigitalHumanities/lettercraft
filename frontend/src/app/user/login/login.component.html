@@ -1,26 +1,40 @@
-<form>
-    <div class="mb-3" id="usernameField">
-        <label class="form-label" for="usernameInput">Username</label>
-        <input class="form-control" id="usernameInput" [formControl]="usernameInput"
-            [class.is-invalid]="usernameErrorMessage != ''">
-        <div class="invalid-feedback">
-            {{usernameErrorMessage}}
-        </div>
-    </div>
-    <div class="mb-3" id="passwordField">
-        <label class="form-label" for="passwordInput">Password</label>
-        <input type="password" class="form-control" id="passwordInput" [formControl]="passwordInput"
-            [class.is-invalid]="passwordErrorMessage != ''">
-        <div class="invalid-feedback">
-            {{passwordErrorMessage}}
-        </div>
+<h2>Sign in</h2>
+
+<p>Sign in using the form below.</p>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="mb-3">
+        <label for="username" class="form-label">
+            Username
+        </label>
+        <input
+            type="text"
+            id="username"
+            class="form-control"
+            [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
+            [formControl]="form.controls.username">
+        <p *ngIf="form.controls.username.hasError('required')" class="invalid-feedback">Username is required.</p>
+        <p *ngIf="form.controls.username.hasError('invalid')" class="invalid-feedback">Invalid username.</p>
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary" (click)="submit()">
+        <label for="password" class="form-label">
+            Password
+        </label>
+        <input
+            type="password"
+            id="password"
+            class="form-control"
+            [formControl]="form.controls.password"
+            [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid">
+        <p *ngIf="form.controls.password.hasError('required')" class="invalid-feedback">Password is required.</p>
+        <p *ngIf="form.controls.password.hasError('invalid')" class="invalid-feedback">Invalid password.</p>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary mt-3">
             Sign in
         </button>
     </div>
-    <div class="alert alert-danger" *ngIf="requestFailed" role="alert">
+    <div class="alert alert-danger" *ngIf="loginReturnError$ | async" role="alert">
         Failed to sign in.
     </div>
 </form>

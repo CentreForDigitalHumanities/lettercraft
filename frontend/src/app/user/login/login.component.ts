@@ -1,81 +1,62 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Component, DestroyRef, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
 import { passwordValidators, usernameValidators } from '../validation';
+import { UserLogin } from '../models/user';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, ignoreElements, of } from 'rxjs';
 
+type LoginForm = {
+    [key in keyof UserLogin]: FormControl<string>;
+}
 
 @Component({
   selector: 'lc-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-    usernameInput = new FormControl('', [
-        Validators.required,
-        ...usernameValidators
-    ]);
-    usernameErrorMessage = '';
-    passwordInput = new FormControl('', [
-        Validators.required,
-        ...passwordValidators,
-    ]);
-    passwordErrorMessage = '';
+export class LoginComponent implements OnInit {
+    form = new FormGroup<LoginForm>({
+        username: new FormControl<string>('', {
+            nonNullable: true,
+            validators: [Validators.required]
+        }),
+        password: new FormControl<string>('', {
+            nonNullable: true,
+            validators: [Validators.required]
+        }),
+    });
 
-    requestFailed = false;
+    returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
 
-    private returnUrl: string;
+    loginReturn$ = this.authService.login$;
+    loginReturnError$ = this.authService.login$.pipe(
+        ignoreElements(),
+        catchError(error => of(error))
+    );
 
     constructor(
         private authService: AuthService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-    ) {
-        this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
+        private destroyRef: DestroyRef,
+    ) { }
+
+    ngOnInit(): void {
+        this.loginReturn$.pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() => {
+            this.router.navigate([this.returnUrl]);
+        })
     }
 
-    submit() {
-        const valid = this.checkValidation();
-        if (valid) {
-            this.authService.login$(
-                this.usernameInput.value as string, this.passwordInput.value as string
-            ).subscribe({
-                next: () => this.loginSucces(),
-                error: (e: HttpErrorResponse) => this.loginFailed(e)
-            });
+    submit(): void {
+        this.form.updateValueAndValidity();
+        this.form.markAllAsTouched();
+        if (!this.form.valid) {
+            return;
         }
-    }
-
-    private checkValidation() {
-        if (this.usernameInput.invalid) {
-            if (this.usernameInput.errors?.['required']) {
-                this.usernameErrorMessage = 'username is required';
-            } else {
-                this.usernameErrorMessage = 'invalid username';
-            }
-        } else {
-            this.usernameErrorMessage = '';
-        }
-
-        if (this.passwordInput.invalid) {
-            if (this.passwordInput.errors?.['required']) {
-                this.passwordErrorMessage = 'password is required';
-            } else {
-                this.passwordErrorMessage = 'invalid password';
-            }
-        } else {
-            this.passwordErrorMessage = '';
-        }
-
-        return this.usernameInput.valid && this.passwordInput.valid;
-    }
-
-    private loginSucces() {
-        this.router.navigate([this.returnUrl]);
-    }
-
-    private loginFailed(error: HttpErrorResponse) {
-        this.requestFailed = true;
+        this.authService.newLogin$.next(this.form.getRawValue());
     }
 }

@@ -2,6 +2,8 @@
 
 <p>Enter your details in the form below to create a new user account.</p>
 
+<p>Already have an account? <a routerLink="/login">Sign in</a></p>
+
 <form class="needs-validation" [formGroup]="form" (ngSubmit)="submit()">
     <div>
         <label for="username" class="form-label">
@@ -14,9 +16,9 @@
             [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
             [formControl]="form.controls.username"
         >
-        <p *ngIf="form.controls.username.hasError('required')" class="invalid-feedback">Please provide a username</p>
-        <p *ngIf="form.controls.username.hasError('minlength')" class="invalid-feedback">Username must be at least 3 characters long</p>
-        <p *ngIf="form.controls.username.hasError('maxlength')" class="invalid-feedback">Username must be at most 150 characters long</p>
+        <p *ngFor="let error of userErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
     <div>
         <label for="email" class="form-label">Email</label>
@@ -26,7 +28,9 @@
             class="form-control"
             [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
             [formControl]="form.controls.email">
-        <p class="invalid-feedback">Please provide a valid email</p>
+        <p *ngFor="let error of emailErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
     <div>
         <label for="password1" class="form-label">Password</label>
@@ -36,8 +40,9 @@
             class="form-control"
             [class.is-invalid]="form.controls.password1.touched && form.controls.password1.invalid"
             [formControl]="form.controls.password1">
-        <p *ngIf="form.controls.password1.hasError('required')" class="invalid-feedback">Please provide a password</p>
-        <p *ngIf="form.controls.password1.hasError('minlength')" class="invalid-feedback">Password must be at least 8 characters long</p>
+        <p *ngFor="let error of password1Errors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
     <div>
         <label for="password2" class="form-label">Confirm Password</label>
@@ -47,9 +52,16 @@
             id="password2"
             [class.is-invalid]="form.controls.password2.touched && form.controls.password2.invalid"
             [formControl]="form.controls.password2">
-        <p *ngIf="form.controls.password2.hasError('required')" class="invalid-feedback">Please provide a password</p>
-        <p *ngIf="form.controls.password2.hasError('minlength')" class="invalid-feedback">Password must be at least 8 characters long</p>
+        <p *ngFor="let error of password2Errors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
-    <p class="invalid-feedback" [class.visible]="form.hasError('passwords')">Passwords do not match.</p>
-    <button type="submit" class="btn btn-primary mt-3">Register</button>
+    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback visible">{{ error}}</p>
+    <button type="submit" class="btn btn-primary my-3">Register</button>
 </form>
+
+<div *ngIf="registrationSuccessful$ | async" class="alert alert-success" role="alert">
+    <h2 class="h6 alert-heading">Registration successful</h2>
+    <p>Your account details have been registered successfully.</p>
+    <p>Please check your email inbox for a verification email and click the link.</p>
+</div>

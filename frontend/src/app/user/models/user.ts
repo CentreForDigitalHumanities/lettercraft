@@ -25,6 +25,11 @@ export interface UserRegistration {
     password2: string;
 }
 
+export interface UserLogin {
+    username: string;
+    password: string;
+}
+
 export interface ResetPasswordForm {
     uid: string;
     token: string;
