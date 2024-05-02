@@ -8,6 +8,10 @@ import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 
+interface VerificationResult {
+    detail: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -40,6 +44,16 @@ export class AuthService {
             this.authRoute('login/'), loginForm
         )),
     );
+
+    public verifyEmail$ = new Subject<string>();
+    public verifyEmailResult$ = this.verifyEmail$.pipe(
+        switchMap(key => this.http.post<VerificationResult>(
+            this.authRoute('registration/verify-email/'),
+            { key }
+        )),
+        share()
+    );
+
 
     public user$ = merge([
         this.login$,
@@ -113,14 +127,9 @@ export class AuthService {
         });
     }
 
-    public verifyEmail(key: string): Observable<any> {
-        return this.http.post(
-            this.authRoute('registration/verify-email/'),
-            { key }
-        );
-    }
 
-    public keyInfo(key: string): Observable<{ username: string, email: string }> {
+
+    public keyInfo$(key: string): Observable<{ username: string, email: string }> {
         return this.http.post<{ username: string; email: string }>(
             this.authRoute('registration/key-info/'),
             { key }

@@ -18,7 +18,7 @@
 <div *ngIf="success$ | async" class="alert alert-success" role="alert">
     <h2 class="h6 alert-heading">E-mail confirmed</h2>
     Your email address has been verified!
-    <a *ngIf="directToLogin; else homeLink" [routerLink]="['/login']" class="alert-link">
+    <a *ngIf="directToLogin$ | async; else homeLink" [routerLink]="['/login']" class="alert-link">
         Sign in
     </a>
     <ng-template #homeLink>
