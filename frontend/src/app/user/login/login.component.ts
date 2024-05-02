@@ -2,10 +2,10 @@ import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
-import { passwordValidators, usernameValidators } from '../validation';
 import { UserLogin } from '../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, ignoreElements, of } from 'rxjs';
+import { updateFormValidity } from '../utils';
 
 type LoginForm = {
     [key in keyof UserLogin]: FormControl<string>;
@@ -51,9 +51,9 @@ export class LoginComponent implements OnInit {
         })
     }
 
-    submit(): void {
-        this.form.updateValueAndValidity();
+    public submit(): void {
         this.form.markAllAsTouched();
+        updateFormValidity(this.form);
         if (!this.form.valid) {
             return;
         }

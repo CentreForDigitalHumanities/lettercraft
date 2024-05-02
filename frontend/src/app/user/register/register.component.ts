@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { UserRegistration } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { usernameValidators, passwordValidators, identicalPasswordsValidator } from '../validation';
@@ -39,7 +39,7 @@ const errorMessageMap: Record<keyof UserRegistration | 'form', Record<string, st
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
     form = new FormGroup<RegisterForm>({
         username: new FormControl<string>('', {
             nonNullable: true,
