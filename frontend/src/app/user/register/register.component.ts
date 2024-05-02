@@ -94,7 +94,7 @@ export class RegisterComponent implements OnInit {
     );
 
     registrationSuccessful$ = this.authService.registration$.pipe(
-        filter(result => result === null),
+        filter(result => !(result?.error)),
         map(() => true),
     );
 
@@ -109,8 +109,8 @@ export class RegisterComponent implements OnInit {
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe(result => {
-                if (result?.errorObject) {
-                    setErrors(result.errorObject, this.form);
+                if (result?.error) {
+                    setErrors(result.error, this.form);
                 }
             });
     }

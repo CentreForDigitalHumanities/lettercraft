@@ -30,7 +30,7 @@ export interface UserLogin {
     password: string;
 }
 
-export interface ResetPasswordForm {
+export interface PasswordReset {
     uid: string;
     token: string;
     new_password1: string;

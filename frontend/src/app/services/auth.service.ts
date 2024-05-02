@@ -3,13 +3,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, catchError, map, of, switchMap, tap, merge, share } from 'rxjs';
-import { UserRegistration, ResetPasswordForm, User, UserResponse, UserLogin, PasswordForgotten } from '../user/models/user';
+import { UserRegistration, User, UserResponse, UserLogin, PasswordForgotten, PasswordReset } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 
-interface VerificationResult {
+interface AuthAPIResult {
     detail: string;
+}
+
+interface AuthAPIError {
+    error: Record<string, string>;
 }
 
 @Injectable({
@@ -29,10 +33,9 @@ export class AuthService {
 
     public newRegistration$ = new Subject<UserRegistration>();
     public registration$ = this.newRegistration$.pipe(
-        switchMap(registrationForm => this.http.post<null>(
+        switchMap(registrationForm => this.http.post<void>(
             this.authRoute('registration/'), registrationForm).pipe(
-                // Catch the error and return it so we can show the error and the stream does not complete.
-                catchError(error => of({ errorObject: error.error })),
+                catchError(error => of<AuthAPIError>({ error: error.error })),
             ),
         ),
         share()
@@ -40,21 +43,34 @@ export class AuthService {
 
     public newLogin$ = new Subject<UserLogin>();
     public login$ = this.newLogin$.pipe(
-        switchMap(loginForm => this.http.post<any>(
+        switchMap(loginForm => this.http.post<AuthAPIResult>(
             this.authRoute('login/'), loginForm
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error })),
         )),
     );
 
     public passwordForgotten$ = new Subject<PasswordForgotten>()
     public passwordForgottenResult$ = this.passwordForgotten$.pipe(
-        switchMap(form => this.http.post<any>(
-            this.authRoute(''), form
-        ))
+        switchMap(form => this.http.post<AuthAPIResult>(
+            this.authRoute('password/reset/'), form
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error}))
+        )),
+    );
+
+    public passwordReset$ = new Subject<PasswordReset>();
+    public passwordResetResult$ = this.passwordReset$.pipe(
+        switchMap(form => this.http.post<AuthAPIResult>(
+            this.authRoute('password/reset/confirm/'), form
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error}))
+        )),
     );
 
     public verifyEmail$ = new Subject<string>();
     public verifyEmailResult$ = this.verifyEmail$.pipe(
-        switchMap(key => this.http.post<VerificationResult>(
+        switchMap(key => this.http.post<AuthAPIResult>(
             this.authRoute('registration/verify-email/'),
             { key }
         )),
@@ -151,20 +167,6 @@ export class AuthService {
         );
     }
 
-    public requestResetPassword(email: string): Observable<{ detail: string }> {
-        return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset/'),
-            { email }
-        );
-    }
-
-    public resetPassword(resetPasswordForm: ResetPasswordForm
-    ): Observable<{ detail: string }> {
-        return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset/confirm/'),
-            resetPasswordForm
-        );
-    }
 
     public updateSettings(update: Partial<User>): Observable<any> {
         const data = encodeUserData(update);

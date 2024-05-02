@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
 import { UserLogin } from '../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, ignoreElements, of } from 'rxjs';
+import { filter } from 'rxjs';
 import { updateFormValidity } from '../utils';
 
 type LoginForm = {
@@ -17,7 +17,7 @@ type LoginForm = {
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-    form = new FormGroup<LoginForm>({
+    public form = new FormGroup<LoginForm>({
         username: new FormControl<string>('', {
             nonNullable: true,
             validators: [Validators.required]
@@ -28,12 +28,12 @@ export class LoginComponent implements OnInit {
         }),
     });
 
-    returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
+    private returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
 
-    loginReturn$ = this.authService.login$;
-    loginReturnError$ = this.authService.login$.pipe(
-        ignoreElements(),
-        catchError(error => of(error))
+    private loginReturn$ = this.authService.login$;
+
+    public loginReturnError$ = this.authService.login$.pipe(
+        filter(response => 'error' in response),
     );
 
     constructor(
