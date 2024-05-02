@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { controlErrorMessages$, updateFormValidity } from '../utils';
-import { of } from 'rxjs';
+import { filter } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { PasswordForgotten } from '../models/user';
 
@@ -29,9 +29,11 @@ export class PasswordForgottenComponent {
         })
     });
 
-    emailErrors$ = controlErrorMessages$('email', this.form, errorMessageMap.email);
+    public emailErrors$ = controlErrorMessages$('email', this.form, errorMessageMap.email);
 
-    passwordForgottenSuccessful$ = of(null)
+    public passwordForgottenSuccessful$ = this.authService.passwordForgottenResult$.pipe(
+        filter(result => !('error' in result)),
+    );
 
     constructor(private authService: AuthService) { }
 
@@ -41,6 +43,7 @@ export class PasswordForgottenComponent {
         if (!this.form.valid) {
             return;
         }
+        this.authService.passwordForgotten$.next(this.form.getRawValue())
     }
 
 }
