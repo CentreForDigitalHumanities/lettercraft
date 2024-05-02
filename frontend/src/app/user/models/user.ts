@@ -36,3 +36,7 @@ export interface ResetPasswordForm {
     new_password1: string;
     new_password2: string;
 }
+
+export interface PasswordForgotten {
+    email: string;
+}

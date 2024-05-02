@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subject, catchError, map, of, switchMap, tap, merge, share } from 'rxjs';
-import { UserRegistration, ResetPasswordForm, User, UserResponse, UserLogin } from '../user/models/user';
+import { UserRegistration, ResetPasswordForm, User, UserResponse, UserLogin, PasswordForgotten } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
@@ -43,6 +43,13 @@ export class AuthService {
         switchMap(loginForm => this.http.post<any>(
             this.authRoute('login/'), loginForm
         )),
+    );
+
+    public passwordForgotten$ = new Subject<PasswordForgotten>()
+    public passwordForgottenResult$ = this.passwordForgotten$.pipe(
+        switchMap(form => this.http.post<any>(
+            this.authRoute(''), form
+        ))
     );
 
     public verifyEmail$ = new Subject<string>();

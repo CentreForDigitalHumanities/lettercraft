@@ -3,12 +3,14 @@ import { LoginComponent } from './login/login.component';
 import { SharedModule } from '../shared/shared.module';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { RegisterComponent } from './register/register.component';
+import { PasswordForgottenComponent } from './password-forgotten/password-forgotten.component';
 
 @NgModule({
     declarations: [
         LoginComponent,
         VerifyEmailComponent,
-        RegisterComponent
+        RegisterComponent,
+        PasswordForgottenComponent
     ],
     imports: [
         SharedModule
