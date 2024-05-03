@@ -121,10 +121,8 @@ export class AuthService {
         map(_.isObject)
     );
 
-
     constructor(
         private sessionService: SessionService,
-        private router: Router,
         private http: HttpClient,
     ) {
         this.sessionService.expired.pipe(
@@ -142,14 +140,4 @@ export class AuthService {
     private authRoute(route: string): string {
         return `/users/${route}`;
     }
-
-    public showLogin(returnUrl?: string) {
-        this.router.navigate(
-            ['/login'],
-            returnUrl ? { queryParams: { returnUrl } } : undefined
-        );
-    }
-
-
-
 }

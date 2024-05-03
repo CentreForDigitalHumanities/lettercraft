@@ -21,6 +21,10 @@ export class UserSettingsComponent implements OnInit {
                 Validators.required,
             ]
         }),
+        // dj-rest-auth does not let you change your email address, so we don't need to validate it.
+        email: new FormControl<string>('', {
+            nonNullable: true
+        }),
         username: new FormControl<string>('', {
             nonNullable: true,
             validators: [
@@ -47,6 +51,11 @@ export class UserSettingsComponent implements OnInit {
     public formErrors$ = formErrorMessages$(this.form);
 
     public settingsUpdatedSuccessful$ = this.authService.updateSettingsResult$.pipe(
+        filter(result => !('error' in result)),
+        map(() => true),
+    );
+
+    public passwordResetRequestSuccessful$ = this.authService.passwordForgottenResult$.pipe(
         filter(result => !('error' in result)),
         map(() => true),
     );
@@ -82,8 +91,8 @@ export class UserSettingsComponent implements OnInit {
         });
     }
 
-    public requestNewPassword(): void {
-        // TODO: Implement!
+    public requestPasswordReset(): void {
+        this.authService.passwordForgotten$.next({ email: this.form.getRawValue().email });
     }
 
     public deleteAccount(): void {
@@ -98,7 +107,9 @@ export class UserSettingsComponent implements OnInit {
         }
         const patchInput = this.form.getRawValue();
 
-        // If we send the username along, dj-auth-rest will assume it has changed, returning a 'username already taken' error if we did not change it.
+        // If we send the username along, dj-auth-rest will assume it has changed,
+        // returning a 'username already taken' error if it hasn't.
+        // Therefore we remove the username from the input if it has not changed.
         if (patchInput.username === this.currentUsername) {
             delete patchInput.username;
         }
