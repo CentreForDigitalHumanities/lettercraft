@@ -1,0 +1,70 @@
+<h2>User settings</h2>
+
+<p>Use the form below to change your name or password.</p>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div *ngIf="form.controls.username as control">
+        <label for="username" class="form-label">
+            Username
+        </label>
+        <input
+            type="text"
+            id="username"
+            class="form-control"
+            [class.is-invalid]="control.touched && control.invalid"
+            [formControl]="control"
+        >
+        <p *ngFor="let error of usernameErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
+    </div>
+    <div>
+        <label for="first-name" class="form-label">First name</label>
+        <input
+            type="text"
+            id="first-name"
+            class="form-control"
+            [class.is-invalid]="form.controls.firstName.touched && form.controls.firstName.invalid"
+            [formControl]="form.controls.firstName">
+        <p *ngFor="let error of firstNameErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
+    </div>
+    <div>
+        <label for="last-name" class="form-label">
+            Last name
+        </label>
+        <input
+            type="text"
+            id="first-name"
+            class="form-control"
+            [class.is-invalid]="form.controls.lastName.touched && form.controls.lastName.invalid"
+            [formControl]="form.controls.lastName">
+        <p *ngFor="let error of lastNameErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
+    </div>
+    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback always-block">
+        {{ error }}
+    </p>
+    <button type="submit" class="btn btn-primary my-3">Save changes</button>
+</form>
+
+<div *ngIf="settingsUpdatedSuccessful$ | async" class="alert alert-success" role="alert">
+    <h2 class="h6 alert-heading">User settings updated</h2>
+    <p>Your user settings have been updated.</p>
+</div>
+
+<div>
+    <p>Click here to request a new password</p>
+    <button class="btn btn-primary" (click)="requestNewPassword()">
+        Request new password
+    </button>
+</div>
+
+<div>
+    <p>Click here to delete your account.</p>
+    <button class="btn btn-danger" (click)="deleteAccount()">
+        Delete account
+    </button>
+</div>

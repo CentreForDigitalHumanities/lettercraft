@@ -45,3 +45,8 @@ export interface KeyInfo {
     username: string;
     email: string;
 }
+
+// Dj-rest-auth does not let you update your email address.
+export type UserSettings = Pick<User, 'id' | 'firstName' | 'lastName'> & {
+    username?: string
+}

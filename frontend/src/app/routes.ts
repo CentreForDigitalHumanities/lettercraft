@@ -6,6 +6,7 @@ import { VerifyEmailComponent } from './user/verify-email/verify-email.component
 import { RegisterComponent } from './user/register/register.component';
 import { PasswordForgottenComponent } from './user/password-forgotten/password-forgotten.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
+import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 
 const routes: Routes = [
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
     {
         path: 'reset-password/:uid/:token',
         component: ResetPasswordComponent
+    },
+    {
+        path: 'user-settings',
+        component: UserSettingsComponent
     },
     {
         path: '',

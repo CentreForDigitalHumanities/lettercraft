@@ -86,7 +86,13 @@ export const ERROR_MAP: Record<string, Record<string, string>> = {
     },
     form: {
         'passwords': 'Passwords must be identical.',
-    }
+    },
+    firstName: {
+        'required': 'First name is required.',
+    },
+    lastName: {
+        'required': 'Last name is required.',
+    },
 };
 
 
@@ -110,7 +116,7 @@ export function controlErrorMessages$<F extends FormGroup, K extends string & ke
     // Get a subset of error messages based on the lookup key, if provided, or the control name.
     const messagesForControl = lookup ? ERROR_MAP[lookup] : ERROR_MAP[controlName] ?? ERROR_MAP['form'];
     return control.statusChanges.pipe(
-        map(() => mapErrorsToMessages(form, messagesForControl))
+        map(() => mapErrorsToMessages(control, messagesForControl))
     );
 }
 

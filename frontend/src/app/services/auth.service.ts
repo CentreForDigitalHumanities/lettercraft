@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
-import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith } from 'rxjs';
-import { UserRegistration, User, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo } from '../user/models/user';
+import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom } from 'rxjs';
+import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
@@ -33,19 +33,19 @@ export class AuthService {
     public registration$ = new Subject<UserRegistration>();
     public registrationResult$ = this.registration$.pipe(
         switchMap(registrationForm => this.http.post<void>(
-            this.authRoute('registration/'), registrationForm).pipe(
-                catchError(error => of<AuthAPIError>({ error: error.error })),
-            ),
-        ),
+            this.authRoute('registration/'), registrationForm
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error })),
+        )),
         share()
     );
 
-    public passwordForgotten$ = new Subject<PasswordForgotten>()
+    public passwordForgotten$ = new Subject<PasswordForgotten>();
     public passwordForgottenResult$ = this.passwordForgotten$.pipe(
         switchMap(form => this.http.post<AuthAPIResult>(
             this.authRoute('password/reset/'), form
         ).pipe(
-            catchError(error => of<AuthAPIError>({ error: error.error}))
+            catchError(error => of<AuthAPIError>({ error: error.error }))
         )),
     );
 
@@ -54,7 +54,7 @@ export class AuthService {
         switchMap(form => this.http.post<AuthAPIResult>(
             this.authRoute('password/reset/confirm/'), form
         ).pipe(
-            catchError(error => of<AuthAPIError>({ error: error.error}))
+            catchError(error => of<AuthAPIError>({ error: error.error }))
         )),
         share()
     );
@@ -67,6 +67,19 @@ export class AuthService {
         )),
         share()
     );
+
+    public updateSettings$ = new Subject<UserSettings>();
+    public updateSettingsResult$ = this.updateSettings$.pipe(
+        switchMap(update => this.http.patch<UserResponse>(
+            this.authRoute('user/'),
+            encodeUserData(update)
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error })),
+        )),
+        share()
+    );
+
+
 
     public initialAuth$ = new Subject<void>();
 
@@ -83,15 +96,22 @@ export class AuthService {
         share()
     );
 
+    private updateSettingsUser$ = this.updateSettingsResult$
+    .pipe(
+        withLatestFrom(this.backendUser$),
+        map(([userData, currentUser]) => 'error' in userData ? currentUser : parseUserData(userData)),
+    );
+
     public logout$ = new Subject<void>();
     public logoutResult$ = this.logout$.pipe(
         switchMap(() => this.http.post<AuthAPIResult>(this.authRoute('logout/'), {})),
         share()
     );
 
-    public currentUser$: Observable<User | undefined | null> = merge(
+    public currentUser$ = merge(
         this.logoutResult$.pipe(map(() => null)),
-        this.backendUser$
+        this.backendUser$,
+        this.updateSettingsUser$
     ).pipe(
         startWith(undefined),
         share()
@@ -130,14 +150,6 @@ export class AuthService {
         );
     }
 
-    public updateSettings(update: Partial<User>): Observable<any> {
-        const data = encodeUserData(update);
-        return this.http.patch<UserResponse>(
-            this.authRoute('user/'),
-            data
-        ).pipe(
-            // tap(res => this.setAuth(parseUserData(res))),
-        );
-    }
+
 
 }

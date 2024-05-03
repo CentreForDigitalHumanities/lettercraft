@@ -5,6 +5,7 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { RegisterComponent } from './register/register.component';
 import { PasswordForgottenComponent } from './password-forgotten/password-forgotten.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 @NgModule({
     declarations: [
@@ -13,6 +14,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
         RegisterComponent,
         PasswordForgottenComponent,
         ResetPasswordComponent,
+        UserSettingsComponent,
     ],
     imports: [
         SharedModule
