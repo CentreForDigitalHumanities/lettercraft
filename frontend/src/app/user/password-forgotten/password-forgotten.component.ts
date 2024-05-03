@@ -9,12 +9,6 @@ type PasswordForgottenForm = {
     [key in keyof PasswordForgotten]: FormControl<string>;
 }
 
-const errorMessageMap: Record<keyof PasswordForgotten, Record<string, string>> = {
-    email: {
-        'required': 'Email is required.',
-        'email': 'Email is invalid.',
-    }
-}
 
 @Component({
   selector: 'lc-password-forgotten',
@@ -29,7 +23,7 @@ export class PasswordForgottenComponent {
         })
     });
 
-    public emailErrors$ = controlErrorMessages$('email', this.form, errorMessageMap.email);
+    public emailErrors$ = controlErrorMessages$(this.form, 'email');
 
     public passwordForgottenSuccessful$ = this.authService.passwordForgottenResult$.pipe(
         filter(result => !('error' in result)),

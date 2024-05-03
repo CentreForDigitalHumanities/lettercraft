@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { AbstractControl, FormGroup } from "@angular/forms";
 import { User, UserResponse } from "./models/user";
 import _ from 'underscore';
 import { Observable, map } from "rxjs";
@@ -63,31 +63,86 @@ export function setErrors(errorObject: Record<string, string>, form: FormGroup):
     }
 }
 
+export const ERROR_MAP: Record<string, Record<string, string>> = {
+    username: {
+        'required': 'Username is required.',
+        'minlength': 'Username must be at least 3 characters long.',
+        'maxlength': 'Username must be at most 150 characters long.',
+    },
+    email: {
+        'required': 'Email is required.',
+        'email': 'Email is invalid.',
+    },
+    password: {
+        'required': 'Password is required.',
+        'minlength': 'Password must be at least 8 characters long.',
+    },
+    token: {
+        'invalid': 'The URL is invalid. Please request a new one.'
+    },
+    uid: {
+        'invalid': 'The URL is invalid. Please request a new one.'
+    },
+    form: {
+        'passwords': 'Passwords must be identical.',
+    }
+};
+
 
 /**
  * Watches a FormControl and turns its errors into an array of string messages.
  *
- * @param controlName - The name of the form control.
+ * Uses the optional parameter `lookup` to determine which error messages from `ERROR_MAP` to use. If no `lookup` is
+ * provided, `controlName` is used. If no error messages are found using either `lookup` or `controlName`, `ERROR_MAP['form']` is used.
+ *
  * @param form - The FormGroup instance.
- * @param errorMessageMap - A mapping object that contains error messages for each control.
+ * @param controlName - The name of the form control.
+ * @param lookup - The key to use in the error map. Defaults to the control name.
  * @returns An Observable that emits an array of error messages every time the control's status changes.
  */
-export function controlErrorMessages$<T extends FormGroup, K extends string & keyof T['controls']>(controlName: K, form: T, errorMessageMap: Record<string, string>): Observable<string[]> {
+export function controlErrorMessages$<F extends FormGroup, K extends string & keyof F['controls']>(
+    form: F,
+    controlName: K,
+    lookup?: string,
+): Observable<string[]> {
     const control = form.controls[controlName];
+    // Get a subset of error messages based on the lookup key, if provided, or the control name.
+    const messagesForControl = lookup ? ERROR_MAP[lookup] : ERROR_MAP[controlName] ?? ERROR_MAP['form'];
     return control.statusChanges.pipe(
-        map(() => {
-            const errors = control.errors ?? {};
-            const messages: string[] = Object.keys(errors)
-                .map(errorKey => {
-                    if (errorKey in errorMessageMap) {
-                        return errorMessageMap[errorKey];
-                    } else {
-                        return errors[errorKey];
-                    }
-                });
-            return messages;
-        }),
+        map(() => mapErrorsToMessages(form, messagesForControl))
     );
+}
+
+/**
+ * Watches a FormGroup and turns its errors into an array of string messages.
+ *
+ * Uses the optional parameter `lookup` to determine which error messages from `ERROR_MAP` to use. If no `lookup` is
+ * provided, or if no error messages are found, `ERROR_MAP['form']` is used.
+ *
+ * @param form The form group to check for errors.
+ * @param lookup Optional parameter to specify a specific error lookup key.
+ * @returns An observable that emits an array of error messages.
+ */
+export function formErrorMessages$<F extends FormGroup>(form: F, lookup?: string): Observable<string[]> {
+    const messagesForForm = lookup ? ERROR_MAP[lookup] : ERROR_MAP['form'];
+    return form.statusChanges.pipe(
+        map(() => mapErrorsToMessages(form, messagesForForm))
+    );
+}
+
+/**
+ * Maps control errors to error messages using the provided error map.
+ *
+ * If no message is specified for an error key, the error value itself is used as the message.
+ *
+ * @param control - The control containing the errors.
+ * @param errorMap - The map of error keys to error messages.
+ * @returns An array of error messages.
+ */
+function mapErrorsToMessages(control: AbstractControl, errorMap: Record<string, string>): string[] {
+    const errors = control.errors ?? {};
+    return Object.keys(errors)
+        .map(errorKey => errorKey in errorMap ? errorMap[errorKey] : errors[errorKey]);
 }
 
 /**

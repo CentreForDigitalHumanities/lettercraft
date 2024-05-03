@@ -3,32 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { ResetPassword } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { identicalPasswordsValidator, passwordValidators } from '../validation';
-import { controlErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { filter, map } from 'rxjs';
+import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
+import { filter, map, merge } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type ResetPasswordForm = {
     [key in keyof ResetPassword]: FormControl<string>;
 }
-
-const errorMessageMap: Pick<Record<keyof ResetPassword | 'form', Record<string, string>>, 'new_password1' | 'new_password2' | 'form' | 'token'> = {
-    new_password1: {
-        'required': 'Password is required.',
-        'minlength': 'Password must be at least 8 characters long.',
-    },
-    new_password2: {
-        'required': 'Password is required.',
-        'minlength': 'Password must be at least 8 characters long.',
-    },
-    form: {
-        'passwords': 'Passwords must be identical.',
-        'invalid': 'The token is invalid. Please request a new password reset link.'
-    },
-    token: {
-        'invalid': 'The URL is invalid. Please request a new one.'
-    }
-};
 
 @Component({
   selector: 'lc-reset-password',
@@ -61,28 +43,12 @@ export class ResetPasswordComponent implements OnInit {
         validators: identicalPasswordsValidator<keyof ResetPassword>('new_password1', 'new_password2')
     });
 
-    public password1Errors$ = controlErrorMessages$('new_password1', this.form, errorMessageMap.new_password1);
-    public password2Errors$ = controlErrorMessages$('new_password2', this.form, errorMessageMap.new_password2);
-    public formErrors$ = this.form.statusChanges.pipe(
-        map(() => {
-            // We also include errors from the hidden 'uid' and 'token' controls in the form errors.
-            const formErrors =
-                {
-                    ...this.form.errors,
-                    ...this.form.controls.token.errors,
-                    ...this.form.controls.uid.errors
-                 } ?? {};
-            const formErrorMessages = errorMessageMap.form;
-            const messages: string[] = [];
-            for (const errorKey in formErrors) {
-                if (errorKey in formErrorMessages) {
-                    messages.push(formErrorMessages[errorKey]);
-                } else {
-                    messages.push(formErrors[errorKey]);
-                }
-            }
-            return messages;
-        })
+    public password1Errors$ = controlErrorMessages$(this.form, 'new_password1', 'password');
+    public password2Errors$ = controlErrorMessages$(this.form, 'new_password2', 'password');
+    public formErrors$ = merge(
+        formErrorMessages$(this.form),
+        controlErrorMessages$(this.form, 'token'),
+        controlErrorMessages$(this.form, 'uid')
     );
 
     public resetPasswordSuccesful$ = this.authService.resetPasswordResult$.pipe(
