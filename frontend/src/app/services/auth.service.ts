@@ -79,8 +79,6 @@ export class AuthService {
         share()
     );
 
-
-
     public initialAuth$ = new Subject<void>();
 
     public backendUser$ = merge(

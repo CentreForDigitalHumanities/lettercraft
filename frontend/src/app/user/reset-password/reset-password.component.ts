@@ -4,9 +4,10 @@ import { ResetPassword } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { identicalPasswordsValidator, passwordValidators } from '../validation';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { filter, map, merge } from 'rxjs';
+import { combineLatest, filter, map, merge, tap } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import _ from 'underscore';
 
 type ResetPasswordForm = {
     [key in keyof ResetPassword]: FormControl<string>;
@@ -45,10 +46,12 @@ export class ResetPasswordComponent implements OnInit {
 
     public password1Errors$ = controlErrorMessages$(this.form, 'new_password1', 'password');
     public password2Errors$ = controlErrorMessages$(this.form, 'new_password2', 'password');
-    public formErrors$ = merge(
+    public formErrors$ = combineLatest([
         formErrorMessages$(this.form),
         controlErrorMessages$(this.form, 'token'),
-        controlErrorMessages$(this.form, 'uid')
+        controlErrorMessages$(this.form, 'uid'),
+    ]).pipe(
+        map(errorLists => _.flatten(errorLists, 1))
     );
 
     public resetPasswordSuccesful$ = this.authService.resetPasswordResult$.pipe(
