@@ -31,8 +31,8 @@ export class AuthService {
 
     public initialAuth$ = new Subject<void>();
 
-    public newRegistration$ = new Subject<UserRegistration>();
-    public registration$ = this.newRegistration$.pipe(
+    public registration$ = new Subject<UserRegistration>();
+    public registrationResult$ = this.registration$.pipe(
         switchMap(registrationForm => this.http.post<void>(
             this.authRoute('registration/'), registrationForm).pipe(
                 catchError(error => of<AuthAPIError>({ error: error.error })),
@@ -41,8 +41,8 @@ export class AuthService {
         share()
     );
 
-    public newLogin$ = new Subject<UserLogin>();
-    public login$ = this.newLogin$.pipe(
+    public login$ = new Subject<UserLogin>();
+    public loginResult$ = this.login$.pipe(
         switchMap(loginForm => this.http.post<AuthAPIResult>(
             this.authRoute('login/'), loginForm
         ).pipe(
@@ -59,13 +59,14 @@ export class AuthService {
         )),
     );
 
-    public passwordReset$ = new Subject<ResetPassword>();
-    public passwordResetResult$ = this.passwordReset$.pipe(
+    public resetPassword$ = new Subject<ResetPassword>();
+    public resetPasswordResult$ = this.resetPassword$.pipe(
         switchMap(form => this.http.post<AuthAPIResult>(
             this.authRoute('password/reset/confirm/'), form
         ).pipe(
             catchError(error => of<AuthAPIError>({ error: error.error}))
         )),
+        share()
     );
 
     public verifyEmail$ = new Subject<string>();
@@ -79,7 +80,7 @@ export class AuthService {
 
 
     public user$ = merge([
-        this.login$,
+        this.loginResult$,
         this.initialAuth$
     ]).pipe(
         switchMap(() => this.http.get<UserResponse>(

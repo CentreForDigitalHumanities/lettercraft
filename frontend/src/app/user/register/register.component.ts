@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
             ]
         }),
     }, {
-        validators: identicalPasswordsValidator
+        validators: identicalPasswordsValidator<keyof RegisterForm>('password1', 'password2')
     });
 
     userErrors$ = controlErrorMessages$('username', this.form, errorMessageMap.username);
@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
         })
     );
 
-    registrationSuccessful$ = this.authService.registration$.pipe(
+    registrationSuccessful$ = this.authService.registrationResult$.pipe(
         filter(result => !(result?.error)),
         map(() => true),
     );
@@ -104,7 +104,7 @@ export class RegisterComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.authService.registration$
+        this.authService.registrationResult$
             .pipe(
                 takeUntilDestroyed(this.destroyRef)
             )
@@ -121,6 +121,6 @@ export class RegisterComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.newRegistration$.next(this.form.getRawValue());
+        this.authService.registration$.next(this.form.getRawValue());
     }
 }

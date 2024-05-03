@@ -30,9 +30,9 @@ export class LoginComponent implements OnInit {
 
     private returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
 
-    private loginReturn$ = this.authService.login$;
+    private loginReturn$ = this.authService.loginResult$;
 
-    public loginReturnError$ = this.authService.login$.pipe(
+    public loginReturnError$ = this.authService.loginResult$.pipe(
         filter(response => 'error' in response),
     );
 
@@ -57,6 +57,6 @@ export class LoginComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.newLogin$.next(this.form.getRawValue());
+        this.authService.login$.next(this.form.getRawValue());
     }
 }
