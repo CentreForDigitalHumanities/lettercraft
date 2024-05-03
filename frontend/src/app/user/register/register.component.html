@@ -16,7 +16,7 @@
             [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
             [formControl]="form.controls.username"
         >
-        <p *ngFor="let error of userErrors$ | async" class="invalid-feedback">
+        <p *ngFor="let error of usernameErrors$ | async" class="invalid-feedback">
             {{ error }}
         </p>
     </div>

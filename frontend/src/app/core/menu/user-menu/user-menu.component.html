@@ -12,7 +12,7 @@
                 {{user.username}}
             </button>
             <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
-                <a ngbDropdownItem [routerLink]="['/settings']">Settings</a>
+                <a ngbDropdownItem [routerLink]="['/user-settings']">Settings</a>
                 <a *ngIf="user.isStaff" ngbDropdownItem href="/admin/">Administration</a>
                 <button ngbDropdownItem (click)="logout()">Sign out</button>
             </div>

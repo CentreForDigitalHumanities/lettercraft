@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
         validators: identicalPasswordsValidator<keyof RegisterForm>('password1', 'password2')
     });
 
-    public userErrors$ = controlErrorMessages$(this.form, 'username');
+    public usernameErrors$ = controlErrorMessages$(this.form, 'username');
     public emailErrors$ = controlErrorMessages$(this.form, 'email');
     public password1Errors$ = controlErrorMessages$(this.form, 'password1', 'password');
     public password2Errors$ = controlErrorMessages$(this.form, 'password2', 'password');
