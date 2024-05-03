@@ -21,20 +21,23 @@ export const passwordValidators = [
 ];
 
 
-
 /**
- * Validates that two password fields have identical values.
+ * Form-level validator that checks whether two password fields have identical values.
  *
- * @param form - The form control containing at least two controls named `password1` and `password2`.
+ * @param password1ControlName - The name of the first password control field on the form.
+ * @param password2ControlName - The name of the second password control field on the form.
  * @returns A `ValidationErrors` object if the passwords do not match, otherwise `null`.
  */
-export const identicalPasswordsValidator: ValidatorFn = (form: AbstractControl): ValidationErrors | null => {
-    const password1 = form.get('password1');
-    const password2 = form.get('password2');
+export function identicalPasswordsValidator<T>(password1ControlName: string & T, password2ControlName: string & T): ValidatorFn {
 
-    if (!password1?.value || !password2?.value) {
-        return null;
-    }
+    return (form: AbstractControl): ValidationErrors | null => {
+        const password1 = form.get(password1ControlName);
+        const password2 = form.get(password2ControlName);
 
-    return password1.value === password2.value ? null : { 'passwords': 'Passwords do not match' };
-};
+        if (!password1?.value || !password2?.value) {
+            return null;
+        }
+
+        return password1.value === password2.value ? null : { 'passwords': 'Passwords do not match' };
+    };
+}
