@@ -3,7 +3,8 @@ import { User, UserResponse } from "./models/user";
 import _ from 'underscore';
 import { Observable, map } from "rxjs";
 
-/* Transforms backend user response to User object
+/**
+* Transforms backend user response to User object
 *
 * @param result User response data
 * @returns User object

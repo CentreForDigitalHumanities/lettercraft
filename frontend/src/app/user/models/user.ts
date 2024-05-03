@@ -40,3 +40,8 @@ export interface ResetPassword {
 export interface PasswordForgotten {
     email: string;
 }
+
+export interface KeyInfo {
+    username: string;
+    email: string;
+}
