@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { Observable, map } from 'rxjs';
-import { User } from 'src/app/user/models/user';
+import { map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 
@@ -11,26 +10,24 @@ import _ from 'underscore';
   styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent {
-    isLoading$: Observable<boolean>;
-    user$: Observable<User | null | undefined>;
-    showSignIn$: Observable<boolean>;
+    public isLoading$ = this.authService.currentUser$.pipe(
+        map(_.isUndefined)
+    );
 
-    icons = {
+    public user$ = this.authService.currentUser$;
+
+    public showSignIn$ = this.authService.currentUser$.pipe(
+        map(_.isNull)
+    );
+
+    public icons = {
         user: faUser,
     };
 
-    constructor(private authService: AuthService) {
-        this.isLoading$ = this.authService.currentUser$.pipe(
-            map(_.isUndefined)
-        );
-        this.user$ = this.authService.currentUser$;
-        this.showSignIn$ = this.authService.currentUser$.pipe(
-            map(_.isNull)
-        );
-    }
+    constructor(public authService: AuthService) { }
 
-    logout() {
-        this.authService.logout(false);
+    logout(): void {
+        this.authService.logout$.next();
     }
 
 }

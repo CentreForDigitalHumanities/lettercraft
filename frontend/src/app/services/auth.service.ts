@@ -1,8 +1,8 @@
-import { Injectable, computed } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { Router } from '@angular/router';
-import { Observable, Subject, catchError, map, of, switchMap, tap, merge, share } from 'rxjs';
+import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith } from 'rxjs';
 import { UserRegistration, User, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
@@ -71,8 +71,8 @@ export class AuthService {
     public initialAuth$ = new Subject<void>();
 
     public backendUser$ = merge(
-        this.loginResult$.pipe(tap(() => console.log('Login!'))),
-        this.initialAuth$.pipe(tap(() => console.log('Init auth!')))
+        this.loginResult$,
+        this.initialAuth$
     ).pipe(
         switchMap(() => this.http.get<UserResponse>(
             this.authRoute('user/')
@@ -80,14 +80,21 @@ export class AuthService {
             catchError(error => of(null)),
             map(parseUserData),
         )),
+        share()
     );
 
-    // Used to reset the user manually.
-    private purgeAuth$ = new Subject<void>();
+    public logout$ = new Subject<void>();
+    public logoutResult$ = this.logout$.pipe(
+        switchMap(() => this.http.post<AuthAPIResult>(this.authRoute('logout/'), {})),
+        share()
+    );
 
-    public currentUser$: Observable<User | null> = merge(
-        this.purgeAuth$.pipe(map(() => null)),
+    public currentUser$: Observable<User | undefined | null> = merge(
+        this.logoutResult$.pipe(map(() => null)),
         this.backendUser$
+    ).pipe(
+        startWith(undefined),
+        share()
     );
 
     public isAuthenticated$ = this.currentUser$.pipe(
@@ -102,9 +109,7 @@ export class AuthService {
     ) {
         this.sessionService.expired.pipe(
             takeUntilDestroyed()
-        ).subscribe(() => this.logout());
-
-        this.backendUser$.subscribe(user => console.log('New user received!', user));
+        ).subscribe(() => this.logout$.next());
     }
 
     public keyInfo$(key: string): Observable<KeyInfo> {
@@ -116,19 +121,6 @@ export class AuthService {
 
     private authRoute(route: string): string {
         return `/users/${route}`;
-    }
-
-    public logout(redirectToLogin = false): void {
-        this.purgeAuth$.next();
-        this.http.post(
-            this.authRoute('logout/'),
-            {}
-            // Subscribe in component
-        ).subscribe((data) => {
-            if (redirectToLogin) {
-                this.showLogin();
-            }
-        });
     }
 
     public showLogin(returnUrl?: string) {
