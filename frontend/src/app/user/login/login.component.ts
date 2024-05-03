@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
 import { UserLogin } from '../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter } from 'rxjs';
+import { Observable, filter, map, merge, startWith } from 'rxjs';
 import { updateFormValidity } from '../utils';
 
 type LoginForm = {
@@ -16,7 +16,7 @@ type LoginForm = {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
     public form = new FormGroup<LoginForm>({
         username: new FormControl<string>('', {
             nonNullable: true,
@@ -28,28 +28,16 @@ export class LoginComponent implements OnInit {
         }),
     });
 
-    private returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
-
-    private loginReturn$ = this.authService.loginResult$;
-
     public loginReturnError$ = this.authService.loginResult$.pipe(
         filter(response => 'error' in response),
     );
 
-    constructor(
-        private authService: AuthService,
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private destroyRef: DestroyRef,
-    ) { }
+    public loading$: Observable<boolean> = merge(
+        this.authService.login$.pipe(map(() => true)),
+        this.authService.loginResult$.pipe(map(() => false)),
+    ).pipe(startWith(false));
 
-    ngOnInit(): void {
-        this.loginReturn$.pipe(
-            takeUntilDestroyed(this.destroyRef)
-        ).subscribe(() => {
-            this.router.navigate([this.returnUrl]);
-        })
-    }
+    constructor(private authService: AuthService) { }
 
     public submit(): void {
         this.form.markAllAsTouched();
