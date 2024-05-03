@@ -4,7 +4,7 @@
 
 <p>Already have an account? <a routerLink="/login">Sign in</a></p>
 
-<form class="needs-validation" [formGroup]="form" (ngSubmit)="submit()">
+<form [formGroup]="form" (ngSubmit)="submit()">
     <div>
         <label for="username" class="form-label">
             Username
@@ -39,7 +39,8 @@
             id="password1"
             class="form-control"
             [class.is-invalid]="form.controls.password1.touched && form.controls.password1.invalid"
-            [formControl]="form.controls.password1">
+            [formControl]="form.controls.password1"
+        >
         <p *ngFor="let error of password1Errors$ | async" class="invalid-feedback">
             {{ error }}
         </p>
@@ -56,7 +57,9 @@
             {{ error }}
         </p>
     </div>
-    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback visible">{{ error}}</p>
+    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback always-block">
+        {{ error}}
+    </p>
     <button type="submit" class="btn btn-primary my-3">Register</button>
 </form>
 
