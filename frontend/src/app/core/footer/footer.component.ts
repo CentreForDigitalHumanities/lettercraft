@@ -8,7 +8,4 @@ import { environment } from '@env';
 })
 export class FooterComponent {
     environment = environment;
-
-    constructor() { }
-
 }
