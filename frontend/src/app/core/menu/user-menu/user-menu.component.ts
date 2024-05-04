@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { map, merge, startWith } from 'rxjs';
+import { map, merge, startWith, tap } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 
@@ -27,11 +27,11 @@ export class UserMenuComponent {
     public loading$ = merge(
         this.authService.logout$.pipe(map(() => true)),
         this.authService.logoutResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    ).pipe(startWith(false), tap(console.log));
 
     constructor(public authService: AuthService) { }
 
-    logout(): void {
+    public logout(): void {
         this.authService.logout$.next();
     }
 

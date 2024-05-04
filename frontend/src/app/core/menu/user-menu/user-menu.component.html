@@ -16,9 +16,6 @@
                 <a *ngIf="user.isStaff" ngbDropdownItem href="/admin/">Administration</a>
                 <button ngbDropdownItem (click)="logout()">
                     Sign out
-                    <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm" role="status">
-                        <span class="visually-hidden">Signing out...</span>
-                    </div>
                 </button>
             </div>
         </li>
@@ -33,6 +30,13 @@
             <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
                 Register
             </a>
+        </li>
+    </ng-container>
+    <ng-container *ngIf="loading$ | async">
+        <li class="d-flex align-items-center">
+            <div class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="visually-hidden">Signing out...</span>
+            </div>
         </li>
     </ng-container>
 </ul>

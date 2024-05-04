@@ -7,6 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
 import { ToastService } from '@services/toast.service';
+import { Router } from '@angular/router';
 
 type RegisterForm = {
     [key in keyof UserRegistration]: FormControl<UserRegistration[key]>;
@@ -66,6 +67,7 @@ export class RegisterComponent implements OnInit {
         private authService: AuthService,
         private toastService: ToastService,
         private destroyRef: DestroyRef,
+        private router: Router,
     ) { }
 
     ngOnInit(): void {
@@ -82,6 +84,7 @@ export class RegisterComponent implements OnInit {
                         body: 'You have been successfully registered. Please check your email for a confirmation link.',
                         type: 'success',
                     });
+                    this.router.navigate(['/']);
                 }
             });
     }
