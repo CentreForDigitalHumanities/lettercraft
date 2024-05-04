@@ -38,7 +38,7 @@
         </button>
 
     </div>
-    <div class="alert alert-danger" *ngIf="loginReturnError$ | async" role="alert">
+    <div class="alert alert-danger" *ngIf="loginError$ | async" role="alert">
         Failed to sign in.
     </div>
 </form>

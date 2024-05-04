@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { usernameValidators, passwordValidators, identicalPasswordsValidator } from '../validation';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map } from 'rxjs';
+import { filter, map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
 
 type RegisterForm = {
@@ -56,10 +56,15 @@ export class RegisterComponent implements OnInit {
     public password2Errors$ = controlErrorMessages$(this.form, 'password2', 'password');
     public formErrors$ = formErrorMessages$(this.form);
 
-    public registrationSuccessful$ = this.authService.registrationResult$.pipe(
+    public success$ = this.authService.registrationResult$.pipe(
         filter(result => !(result?.error)),
         map(() => true),
     );
+
+    public loading$ = merge(
+        this.authService.registration$.pipe(map(() => true)),
+        this.authService.registrationResult$.pipe(map(() => false))
+    ).pipe(startWith(false));
 
     constructor(
         private authService: AuthService,

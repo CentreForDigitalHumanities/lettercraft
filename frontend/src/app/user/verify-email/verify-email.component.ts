@@ -1,9 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth.service';
-import { Observable, Subject, catchError, filter, ignoreElements, map, merge, of, share, switchMap, take } from 'rxjs';
+import { catchError, filter, ignoreElements, map, merge, of, share, startWith, switchMap, take } from 'rxjs';
 import _ from 'underscore';
 
 
@@ -29,6 +28,11 @@ export class VerifyEmailComponent {
         map(() => true),
         catchError(() => of(false)),
     );
+
+    public loading$ = merge(
+        this.authService.verifyEmail$.pipe(map(() => true)),
+        this.authService.verifyEmailResult$.pipe(map(() => false))
+    ).pipe(startWith(false));
 
     public directToLogin$ = this.success$.pipe(
         switchMap(() => this.authService.isAuthenticated$.pipe(

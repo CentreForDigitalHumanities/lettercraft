@@ -4,7 +4,7 @@ import { ResetPassword } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { identicalPasswordsValidator, passwordValidators } from '../validation';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { combineLatest, filter, map, merge, tap } from 'rxjs';
+import { combineLatest, filter, map, merge, startWith, tap } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import _ from 'underscore';
@@ -54,10 +54,15 @@ export class ResetPasswordComponent implements OnInit {
         map(errorLists => _.flatten(errorLists, 1))
     );
 
-    public resetPasswordSuccesful$ = this.authService.resetPasswordResult$.pipe(
+    public success$ = this.authService.resetPasswordResult$.pipe(
         filter(result => !('error' in result)),
         map(() => true)
     );
+
+    public loading$ = merge(
+        this.authService.resetPassword$.pipe(map(() => true)),
+        this.authService.resetPasswordResult$.pipe(map(() => false))
+    ).pipe(startWith(false));
 
     constructor(
         private activatedRoute: ActivatedRoute,

@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
 import { User, UserSettings } from '../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map } from 'rxjs';
+import { filter, map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
 
 type UserSettingsForm = { [key in keyof UserSettings]: FormControl<UserSettings[key]> };
@@ -50,15 +50,25 @@ export class UserSettingsComponent implements OnInit {
     public lastNameErrors$ = controlErrorMessages$(this.form, 'lastName');
     public formErrors$ = formErrorMessages$(this.form);
 
-    public settingsUpdatedSuccessful$ = this.authService.updateSettingsResult$.pipe(
+    public updateSettingsSuccess$ = this.authService.updateSettingsResult$.pipe(
         filter(result => !('error' in result)),
         map(() => true),
     );
 
-    public passwordResetRequestSuccessful$ = this.authService.passwordForgottenResult$.pipe(
+    public updateSettingsLoading$ = merge(
+        this.authService.updateSettings$.pipe(map(() => true)),
+        this.authService.updateSettingsResult$.pipe(map(() => false))
+    ).pipe(startWith(false))
+
+    public requestResetSuccess$ = this.authService.passwordForgottenResult$.pipe(
         filter(result => !('error' in result)),
         map(() => true),
     );
+
+    public requestResetLoading = merge(
+        this.authService.passwordForgotten$.pipe(map(() => true)),
+        this.authService.passwordForgottenResult$.pipe(map(() => false))
+    ).pipe(startWith(false))
 
     // See submit() for explanation.
     private currentUsername: string | null = null;

@@ -28,11 +28,11 @@ export class LoginComponent {
         }),
     });
 
-    public loginReturnError$ = this.authService.loginResult$.pipe(
+    public loginError$ = this.authService.loginResult$.pipe(
         filter(response => 'error' in response),
     );
 
-    public loading$: Observable<boolean> = merge(
+    public loading$ = merge(
         this.authService.login$.pipe(map(() => true)),
         this.authService.loginResult$.pipe(map(() => false)),
     ).pipe(startWith(false));

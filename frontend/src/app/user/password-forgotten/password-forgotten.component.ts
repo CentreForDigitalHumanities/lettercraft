@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { controlErrorMessages$, updateFormValidity } from '../utils';
-import { filter } from 'rxjs';
+import { filter, map, merge, startWith } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { PasswordForgotten } from '../models/user';
 
 type PasswordForgottenForm = {
     [key in keyof PasswordForgotten]: FormControl<string>;
 }
-
 
 @Component({
   selector: 'lc-password-forgotten',
@@ -25,9 +24,14 @@ export class PasswordForgottenComponent {
 
     public emailErrors$ = controlErrorMessages$(this.form, 'email');
 
-    public passwordForgottenSuccessful$ = this.authService.passwordForgottenResult$.pipe(
+    public success$ = this.authService.passwordForgottenResult$.pipe(
         filter(result => !('error' in result)),
     );
+
+    public loading$ = merge(
+        this.authService.passwordForgotten$.pipe(map(() => true)),
+        this.authService.passwordForgottenResult$.pipe(map(() => false))
+    ).pipe(startWith(false));
 
     constructor(private authService: AuthService) { }
 
