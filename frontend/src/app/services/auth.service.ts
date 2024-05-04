@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
+import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay, tap } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
@@ -39,6 +39,17 @@ export class AuthService {
         share()
     );
 
+    public keyInfo$ = new Subject<string>();
+    public keyInfoResult$ = this.keyInfo$.pipe(
+        switchMap(key => this.http.post<KeyInfo>(
+            this.authRoute('registration/key-info/'),
+            { key }
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error })),
+        )),
+        share()
+    );
+
     public passwordForgotten$ = new Subject<PasswordForgotten>();
     public passwordForgottenResult$ = this.passwordForgotten$.pipe(
         switchMap(form => this.http.post<AuthAPIResult>(
@@ -46,6 +57,7 @@ export class AuthService {
         ).pipe(
             catchError(error => of<AuthAPIError>({ error: error.error }))
         )),
+        share()
     );
 
     public resetPassword$ = new Subject<ResetPassword>();
@@ -139,14 +151,7 @@ export class AuthService {
         ).subscribe(() => this.logout$.next());
     }
 
-    public keyInfo$(key: string): Observable<KeyInfo | AuthAPIError> {
-        return this.http.post<KeyInfo>(
-            this.authRoute('registration/key-info/'),
-            { key }
-        ).pipe(
-            catchError(error => of<AuthAPIError>({ error: error.error }))
-        );
-    }
+
 
     private authRoute(route: string): string {
         return `/users/${route}`;

@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@services/auth.service';
@@ -11,16 +11,14 @@ import { map, merge, share, startWith } from 'rxjs';
     templateUrl: './verify-email.component.html',
     styleUrls: ['./verify-email.component.scss']
 })
-export class VerifyEmailComponent implements OnInit {
+export class VerifyEmailComponent implements OnInit, AfterViewInit {
     private key = this.activatedRoute.snapshot.params['key'];
 
-    private keyInfo$ = this.authService.keyInfo$(this.key);
-
-    private keyInfoError$ = this.keyInfo$.pipe(
+    private keyInfoError$ = this.authService.keyInfoResult$.pipe(
         map(results => 'error' in results ? results : null),
     );
 
-    public userDetails$ = this.keyInfo$.pipe(
+    public userDetails$ = this.authService.keyInfoResult$.pipe(
         map(results => 'error' in results ? null : results),
         share()
     );
@@ -68,6 +66,10 @@ export class VerifyEmailComponent implements OnInit {
                 });
             }
         });
+    }
+
+    ngAfterViewInit(): void {
+        this.authService.keyInfo$.next(this.key);
     }
 
     public confirm(): void {
