@@ -27,7 +27,7 @@ export class UserMenuComponent {
     public loading$ = merge(
         this.authService.logout$.pipe(map(() => true)),
         this.authService.logoutResult$.pipe(map(() => false)),
-    ).pipe(startWith(false), tap(console.log));
+    ).pipe(startWith(false));
 
     constructor(public authService: AuthService) { }
 

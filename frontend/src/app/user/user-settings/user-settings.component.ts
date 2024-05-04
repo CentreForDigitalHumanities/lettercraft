@@ -34,21 +34,13 @@ export class UserSettingsComponent implements OnInit {
         }),
         firstName: new FormControl<string>('', {
             nonNullable: true,
-            validators: [
-                Validators.required,
-            ]
         }),
         lastName: new FormControl<string>('', {
             nonNullable: true,
-            validators: [
-                Validators.required,
-            ]
         }),
     });
 
     public usernameErrors$ = controlErrorMessages$(this.form, 'username');
-    public firstNameErrors$ = controlErrorMessages$(this.form, 'firstName');
-    public lastNameErrors$ = controlErrorMessages$(this.form, 'lastName');
     public formErrors$ = formErrorMessages$(this.form);
 
     public updateSettingsLoading$ = merge(

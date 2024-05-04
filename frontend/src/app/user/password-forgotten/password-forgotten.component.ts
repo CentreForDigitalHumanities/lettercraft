@@ -38,7 +38,7 @@ export class PasswordForgottenComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.authService.passwordForgotten$
+        this.authService.passwordForgottenResult$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(result => {
                 if ('error' in result) {
