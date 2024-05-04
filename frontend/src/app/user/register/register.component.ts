@@ -8,7 +8,7 @@ import { filter, map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
 
 type RegisterForm = {
-    [key in keyof UserRegistration]: FormControl<string>;
+    [key in keyof UserRegistration]: FormControl<UserRegistration[key]>;
 }
 
 @Component({

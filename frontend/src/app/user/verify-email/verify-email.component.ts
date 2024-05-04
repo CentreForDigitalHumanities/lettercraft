@@ -6,7 +6,6 @@ import { catchError, filter, ignoreElements, map, merge, of, share, startWith, s
 import _ from 'underscore';
 
 
-
 @Component({
     selector: 'lc-verify-email',
     templateUrl: './verify-email.component.html',

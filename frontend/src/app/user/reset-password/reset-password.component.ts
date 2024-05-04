@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import _ from 'underscore';
 
 type ResetPasswordForm = {
-    [key in keyof ResetPassword]: FormControl<string>;
+    [key in keyof ResetPassword]: FormControl<ResetPassword[key]>;
 }
 
 @Component({

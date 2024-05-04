@@ -1,5 +1,5 @@
 from django.urls import include, path, re_path
-from .views import redirect_confirm, KeyInfoView
+from .views import DeleteUser, redirect_confirm, KeyInfoView
 from dj_rest_auth.registration.views import VerifyEmailView
 
 from .views import KeyInfoView, redirect_confirm, redirect_reset
@@ -22,6 +22,12 @@ urlpatterns = [
         "password-reset/<uidb64>/<token>/",
         redirect_reset,
         name="password_reset_confirm",
+    ),
+    # delete user
+    path(
+        "delete/",
+        DeleteUser.as_view(),
+        name="delete user"
     ),
     # generic routes
     path("", include("dj_rest_auth.urls")),
