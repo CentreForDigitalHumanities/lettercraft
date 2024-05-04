@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 export class MenuComponent {
     burgerActive = false;
 
-    constructor() { }
-
     toggleBurger() {
         this.burgerActive = !this.burgerActive;
     }
