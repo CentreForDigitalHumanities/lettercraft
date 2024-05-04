@@ -63,6 +63,8 @@ export class AuthService {
         switchMap(key => this.http.post<AuthAPIResult>(
             this.authRoute('registration/verify-email/'),
             { key }
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error }))
         )),
         share()
     );
@@ -104,10 +106,10 @@ export class AuthService {
     );
 
     private updateSettingsUser$ = this.updateSettingsResult$
-    .pipe(
-        withLatestFrom(this.backendUser$),
-        map(([userData, currentUser]) => 'error' in userData ? currentUser : parseUserData(userData)),
-    );
+        .pipe(
+            withLatestFrom(this.backendUser$),
+            map(([userData, currentUser]) => 'error' in userData ? currentUser : parseUserData(userData)),
+        );
 
     public logout$ = new Subject<void>();
     public logoutResult$ = this.logout$.pipe(
@@ -137,10 +139,12 @@ export class AuthService {
         ).subscribe(() => this.logout$.next());
     }
 
-    public keyInfo$(key: string): Observable<KeyInfo> {
+    public keyInfo$(key: string): Observable<KeyInfo | AuthAPIError> {
         return this.http.post<KeyInfo>(
             this.authRoute('registration/key-info/'),
             { key }
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error }))
         );
     }
 

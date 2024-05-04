@@ -13,8 +13,9 @@
             class="form-control"
             [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
             [formControl]="form.controls.username">
-        <p *ngIf="form.controls.username.hasError('required')" class="invalid-feedback">Username is required.</p>
-        <p *ngIf="form.controls.username.hasError('invalid')" class="invalid-feedback">Invalid username.</p>
+        <p *ngFor="let error of usernameErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
     <div class="mb-3">
         <label for="password" class="form-label">
@@ -26,9 +27,13 @@
             class="form-control"
             [formControl]="form.controls.password"
             [class.is-invalid]="form.controls.password.touched && form.controls.password.invalid">
-        <p *ngIf="form.controls.password.hasError('required')" class="invalid-feedback">Password is required.</p>
-        <p *ngIf="form.controls.password.hasError('invalid')" class="invalid-feedback">Invalid password.</p>
+        <p *ngFor="let error of passwordErrors$ | async" class="invalid-feedback">
+            {{ error }}
+        </p>
     </div>
+    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback always-block">
+        {{ error }}
+    </p>
     <div class="mb-3">
         <button type="submit" class="btn btn-primary mt-3">
             Sign in
@@ -36,10 +41,6 @@
                 <span class="visually-hidden">Logging in...</span>
             </div>
         </button>
-
-    </div>
-    <div class="alert alert-danger" *ngIf="loginError$ | async" role="alert">
-        Failed to sign in.
     </div>
 </form>
 

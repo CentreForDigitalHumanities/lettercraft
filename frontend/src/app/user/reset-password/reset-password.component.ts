@@ -4,10 +4,11 @@ import { ResetPassword } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { identicalPasswordsValidator, passwordValidators } from '../validation';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { combineLatest, filter, map, merge, startWith } from 'rxjs';
+import { combineLatest, map, merge, startWith } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import _ from 'underscore';
+import { ToastService } from '@services/toast.service';
 
 type ResetPasswordForm = {
     [key in keyof ResetPassword]: FormControl<ResetPassword[key]>;
@@ -24,8 +25,11 @@ export class ResetPasswordComponent implements OnInit {
 
     public form = new FormGroup<ResetPasswordForm>({
         uid: new FormControl<string>(this.uid, {
-            nonNullable: true }),
-        token: new FormControl<string>(this.token, { nonNullable: true }),
+            nonNullable: true
+        }),
+        token: new FormControl<string>(this.token, {
+            nonNullable: true
+        }),
         new_password1: new FormControl<string>('', {
             nonNullable: true,
             validators: [
@@ -54,11 +58,6 @@ export class ResetPasswordComponent implements OnInit {
         map(errorLists => _.flatten(errorLists, 1))
     );
 
-    public success$ = this.authService.resetPasswordResult$.pipe(
-        filter(result => !('error' in result)),
-        map(() => true)
-    );
-
     public loading$ = merge(
         this.authService.resetPassword$.pipe(map(() => true)),
         this.authService.resetPasswordResult$.pipe(map(() => false))
@@ -67,6 +66,7 @@ export class ResetPasswordComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private authService: AuthService,
+        private toastService: ToastService,
         private destroyRef: DestroyRef
     ) { }
 
@@ -76,6 +76,12 @@ export class ResetPasswordComponent implements OnInit {
             .subscribe(result => {
                 if ('error' in result) {
                     setErrors(result.error, this.form);
+                } else {
+                    this.toastService.show({
+                        header: 'Password reset',
+                        body: 'Your password has been successfully reset.',
+                        type: 'success'
+                    })
                 }
             });
     }

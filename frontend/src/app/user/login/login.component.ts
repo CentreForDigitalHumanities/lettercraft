@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
 import { UserLogin } from '../models/user';
-import { filter, map, merge, startWith } from 'rxjs';
-import { updateFormValidity } from '../utils';
+import { map, merge, startWith } from 'rxjs';
+import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
+import { ToastService } from '@services/toast.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type LoginForm = {
     [key in keyof UserLogin]: FormControl<string>;
@@ -14,7 +16,7 @@ type LoginForm = {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
     public form = new FormGroup<LoginForm>({
         username: new FormControl<string>('', {
             nonNullable: true,
@@ -26,16 +28,36 @@ export class LoginComponent {
         }),
     });
 
-    public loginError$ = this.authService.loginResult$.pipe(
-        filter(response => 'error' in response),
-    );
+    public usernameErrors$ = controlErrorMessages$(this.form, 'username');
+    public passwordErrors$ = controlErrorMessages$(this.form, 'password');
+    public formErrors$ = formErrorMessages$(this.form);
 
     public loading$ = merge(
         this.authService.login$.pipe(map(() => true)),
         this.authService.loginResult$.pipe(map(() => false)),
     ).pipe(startWith(false));
 
-    constructor(private authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private toastService: ToastService,
+        private destroyRef: DestroyRef,
+    ) { }
+
+    ngOnInit(): void {
+        this.authService.loginResult$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(result => {
+                if ('error' in result) {
+                    setErrors(result.error, this.form);
+                } else {
+                    this.toastService.show({
+                        header: 'Sign in successful',
+                        body: 'You have been successfully signed in.',
+                        type: 'success'
+                    })
+                }
+            })
+    }
 
     public submit(): void {
         this.form.markAllAsTouched();

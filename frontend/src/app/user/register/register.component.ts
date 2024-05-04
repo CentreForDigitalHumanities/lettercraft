@@ -4,8 +4,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { usernameValidators, passwordValidators, identicalPasswordsValidator } from '../validation';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { filter, map, merge, startWith } from 'rxjs';
+import { map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
+import { ToastService } from '@services/toast.service';
 
 type RegisterForm = {
     [key in keyof UserRegistration]: FormControl<UserRegistration[key]>;
@@ -56,11 +57,6 @@ export class RegisterComponent implements OnInit {
     public password2Errors$ = controlErrorMessages$(this.form, 'password2', 'password');
     public formErrors$ = formErrorMessages$(this.form);
 
-    public success$ = this.authService.registrationResult$.pipe(
-        filter(result => !(result?.error)),
-        map(() => true),
-    );
-
     public loading$ = merge(
         this.authService.registration$.pipe(map(() => true)),
         this.authService.registrationResult$.pipe(map(() => false))
@@ -68,6 +64,7 @@ export class RegisterComponent implements OnInit {
 
     constructor(
         private authService: AuthService,
+        private toastService: ToastService,
         private destroyRef: DestroyRef,
     ) { }
 
@@ -79,6 +76,12 @@ export class RegisterComponent implements OnInit {
             .subscribe(result => {
                 if (result?.error) {
                     setErrors(result.error, this.form);
+                } else {
+                    this.toastService.show({
+                        header: 'Registration successful',
+                        body: 'You have been successfully registered. Please check your email for a confirmation link.',
+                        type: 'success',
+                    });
                 }
             });
     }
