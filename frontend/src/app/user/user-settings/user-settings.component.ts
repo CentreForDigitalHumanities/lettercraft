@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
-import { User, UserSettings } from '../models/user';
+import { UserSettings } from '../models/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map, merge, startWith } from 'rxjs';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
@@ -65,10 +65,20 @@ export class UserSettingsComponent implements OnInit {
         map(() => true),
     );
 
-    public requestResetLoading = merge(
+    public requestResetLoading$ = merge(
         this.authService.passwordForgotten$.pipe(map(() => true)),
         this.authService.passwordForgottenResult$.pipe(map(() => false))
-    ).pipe(startWith(false))
+    ).pipe(startWith(false));
+
+    public deleteUserSuccess$ = this.authService.deleteUserResult$.pipe(
+        filter(result => !('error' in result)),
+        map(() => true)
+    );
+
+    public deleteUserLoading$ = merge(
+        this.authService.deleteUser$.pipe(map(() => true)),
+        this.authService.deleteUserResult$.pipe(map(() => false))
+    ).pipe(startWith(false));
 
     // See submit() for explanation.
     private currentUsername: string | null = null;
@@ -106,7 +116,7 @@ export class UserSettingsComponent implements OnInit {
     }
 
     public deleteAccount(): void {
-        // TODO: Implement!
+        this.authService.deleteUser$.next();
     }
 
     public submit(): void {

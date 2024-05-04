@@ -60,6 +60,11 @@
     <p>Your user settings have been updated.</p>
 </div>
 
+<div *ngIf="deleteUserSuccess$ | async" class="alert alert-success" role="alert">
+    <h2 class="h6 alert-heading">User deleted</h2>
+    <p>User account deleted.</p>
+</div>
+
 <div *ngIf="requestResetSuccess$ | async" class="alert alert-success" role="alert">
     <h2 class="h6 alert-heading">Password reset request received</h2>
     <p>Your request to reset your password has been received successfully.</p>
@@ -70,7 +75,7 @@
     <p>Click here to request a new password</p>
     <button class="btn btn-primary" (click)="requestPasswordReset()">
         Request new password
-        <div *ngIf="requestResetLoading | async" class="spinner-border spinner-border-sm" role="status">
+        <div *ngIf="requestResetLoading$ | async" class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Requesting password reset link...</span>
         </div>
     </button>

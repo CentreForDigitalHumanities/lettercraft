@@ -4,7 +4,7 @@ import { ResetPassword } from '../models/user';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { identicalPasswordsValidator, passwordValidators } from '../validation';
 import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { combineLatest, filter, map, merge, startWith, tap } from 'rxjs';
+import { combineLatest, filter, map, merge, startWith } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import _ from 'underscore';

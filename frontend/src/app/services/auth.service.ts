@@ -79,6 +79,16 @@ export class AuthService {
         share()
     );
 
+    public deleteUser$ = new Subject<void>();
+    public deleteUserResult$ = this.deleteUser$.pipe(
+        switchMap(() => this.http.delete<AuthAPIResult>(
+            this.authRoute('delete/')
+        ).pipe(
+            catchError(error => of<AuthAPIError>({ error: error.error }))
+        )),
+        share()
+    );
+
     public initialAuth$ = new Subject<void>();
 
     public backendUser$ = merge(
