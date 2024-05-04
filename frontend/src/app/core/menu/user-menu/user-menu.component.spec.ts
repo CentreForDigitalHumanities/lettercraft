@@ -24,7 +24,7 @@ describe('UserMenuComponent', () => {
             declarations: [UserMenuComponent],
             imports: [SharedTestingModule],
         });
-        authService = TestBed.inject(AuthService) as any as AuthServiceMock;
+        authService = TestBed.inject(AuthService) as unknown as AuthServiceMock;
         fixture = TestBed.createComponent(UserMenuComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();

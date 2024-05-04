@@ -19,6 +19,7 @@ export class AuthServiceMock {
         this.currentUser$.next(value);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     login(username: string, password: string): Observable<User | null> {
         return of(testUser({ username }));
     }

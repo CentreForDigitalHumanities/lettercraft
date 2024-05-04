@@ -1,10 +1,8 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services/auth.service';
 import { UserLogin } from '../models/user';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable, filter, map, merge, startWith } from 'rxjs';
+import { filter, map, merge, startWith } from 'rxjs';
 import { updateFormValidity } from '../utils';
 
 type LoginForm = {

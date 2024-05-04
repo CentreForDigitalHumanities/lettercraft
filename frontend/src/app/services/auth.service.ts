@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { Router } from '@angular/router';
 import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
@@ -98,7 +97,7 @@ export class AuthService {
         switchMap(() => this.http.get<UserResponse>(
             this.authRoute('user/')
         ).pipe(
-            catchError(error => of(null)),
+            catchError(() => of(null)),
             map(parseUserData),
         )),
         share()
