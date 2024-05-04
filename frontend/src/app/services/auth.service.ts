@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom } from 'rxjs';
+import { Observable, Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
@@ -121,7 +121,7 @@ export class AuthService {
         this.updateSettingsUser$
     ).pipe(
         startWith(undefined),
-        share()
+        shareReplay(1)
     );
 
     public isAuthenticated$ = this.currentUser$.pipe(
