@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 
-type ToastType = 'success' | 'info' | 'warning' | 'danger';
+export type ToastType = 'success' | 'info' | 'warning' | 'danger';
 
-interface Toast {
+export interface Toast {
     header: string;
     body: string;
     className: string;
     delay: number;
 }
 
-interface ToastInput {
+export interface ToastInput {
     header: string;
     body: string;
     type?: ToastType;
     delay?: number;
 }
 
-const TOAST_STYLES: Record<ToastType, string> = {
+export const TOAST_STYLES: Record<ToastType, string> = {
     success: 'bg-success text-light',
     info: 'bg-info text-dark',
     warning: 'bg-warning text-dark',
