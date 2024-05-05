@@ -11,6 +11,7 @@ import {
     updateFormValidity,
 } from "../utils";
 import { ToastService } from "@services/toast.service";
+import { usernameValidators } from "../validation";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -33,7 +34,10 @@ export class UserSettingsComponent implements OnInit {
         }),
         username: new FormControl<string>("", {
             nonNullable: true,
-            validators: [Validators.required],
+            validators: [
+                Validators.required,
+                ...usernameValidators
+            ],
         }),
         firstName: new FormControl<string>("", {
             nonNullable: true,

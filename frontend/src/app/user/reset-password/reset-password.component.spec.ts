@@ -6,7 +6,7 @@ import { ToastService } from "@services/toast.service";
 import { HttpTestingController } from "@angular/common/http/testing";
 import { toSignal } from "@angular/core/rxjs-interop";
 
-fdescribe("ResetPasswordComponent", () => {
+describe("ResetPasswordComponent", () => {
     let component: ResetPasswordComponent;
     let fixture: ComponentFixture<ResetPasswordComponent>;
     let toastService: ToastService;
