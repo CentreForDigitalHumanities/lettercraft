@@ -100,7 +100,7 @@ export const ERROR_MAP: Record<string, Record<string, string>> = {
 };
 
 /**
- * Watches a FormControl and turns its errors into an array of string messages.
+ * Watches a FormControl and returns an Observable that yields an array of error messages.
  *
  * Uses the optional parameter `lookup` to determine which error messages from `ERROR_MAP` to use. If no `lookup` is
  * provided, `controlName` is used. If no error messages are found using either `lookup` or `controlName`, `ERROR_MAP['form']` is used.
