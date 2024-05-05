@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { VerifyEmailComponent } from './verify-email.component';
-import { SharedTestingModule } from '@shared/shared-testing.module';
+import { VerifyEmailComponent } from "./verify-email.component";
+import { SharedTestingModule } from "@shared/shared-testing.module";
 
-describe('VerifyEmailComponent', () => {
+describe("VerifyEmailComponent", () => {
     let component: VerifyEmailComponent;
     let fixture: ComponentFixture<VerifyEmailComponent>;
 
@@ -17,7 +17,7 @@ describe('VerifyEmailComponent', () => {
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it("should create", () => {
         expect(component).toBeTruthy();
     });
 });

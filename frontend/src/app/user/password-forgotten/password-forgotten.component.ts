@@ -1,60 +1,60 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { controlErrorMessages$, updateFormValidity } from '../utils';
-import { map, merge, startWith } from 'rxjs';
-import { AuthService } from '@services/auth.service';
-import { PasswordForgotten } from '../models/user';
-import { ToastService } from '@services/toast.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { controlErrorMessages$, updateFormValidity } from "../utils";
+import { map, merge, startWith } from "rxjs";
+import { AuthService } from "@services/auth.service";
+import { PasswordForgotten } from "../models/user";
+import { ToastService } from "@services/toast.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 type PasswordForgottenForm = {
     [key in keyof PasswordForgotten]: FormControl<string>;
-}
+};
 
 @Component({
-  selector: 'lc-password-forgotten',
-  templateUrl: './password-forgotten.component.html',
-  styleUrls: ['./password-forgotten.component.scss']
+    selector: "lc-password-forgotten",
+    templateUrl: "./password-forgotten.component.html",
+    styleUrls: ["./password-forgotten.component.scss"],
 })
 export class PasswordForgottenComponent implements OnInit {
     form = new FormGroup<PasswordForgottenForm>({
-        email: new FormControl<string>('', {
+        email: new FormControl<string>("", {
             nonNullable: true,
-            validators: [Validators.required, Validators.email]
-        })
+            validators: [Validators.required, Validators.email],
+        }),
     });
 
-    public emailErrors$ = controlErrorMessages$(this.form, 'email');
+    public emailErrors$ = controlErrorMessages$(this.form, "email");
 
     public loading$ = merge(
         this.authService.passwordForgotten$.pipe(map(() => true)),
-        this.authService.passwordForgottenResult$.pipe(map(() => false))
+        this.authService.passwordForgottenResult$.pipe(map(() => false)),
     ).pipe(startWith(false));
 
     constructor(
         private authService: AuthService,
         private toastService: ToastService,
-        private destroyRef: DestroyRef
-    ) { }
+        private destroyRef: DestroyRef,
+    ) {}
 
     ngOnInit(): void {
         this.authService.passwordForgottenResult$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(result => {
-                if ('error' in result) {
+            .subscribe((result) => {
+                if ("error" in result) {
                     this.toastService.show({
-                        header: 'Reset request failed',
-                        body: 'Request to send password reset email failed. Please try again.',
-                        type: 'danger'
-                    })
+                        header: "Reset request failed",
+                        body: "Request to send password reset email failed. Please try again.",
+                        type: "danger",
+                    });
                 } else {
                     this.toastService.show({
-                        header: 'Password reset request successful',
-                        body: 'If your email address is known to us, an email has been sent containing a link to a page where you may reset your password.',
-                        type: 'success',
+                        header: "Password reset request successful",
+                        body: "If your email address is known to us, an email has been sent containing a link to a page where you may reset your password.",
+                        type: "success",
                         // This is a long message, so we show it for 10 seconds.
-                        delay: 10000
-                    })
+                        delay: 10000,
+                    });
                 }
             });
     }
@@ -65,6 +65,6 @@ export class PasswordForgottenComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.passwordForgotten$.next(this.form.getRawValue())
+        this.authService.passwordForgotten$.next(this.form.getRawValue());
     }
 }

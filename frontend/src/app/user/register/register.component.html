@@ -6,17 +6,20 @@
 
 <form [formGroup]="form" (ngSubmit)="submit()">
     <div class="mb-2">
-        <label for="username" class="form-label">
-            Username
-        </label>
+        <label for="username" class="form-label"> Username </label>
         <input
             type="text"
             id="username"
             class="form-control"
-            [class.is-invalid]="form.controls.username.touched && form.controls.username.invalid"
+            [class.is-invalid]="
+                form.controls.username.touched && form.controls.username.invalid
+            "
             [formControl]="form.controls.username"
+        />
+        <p
+            *ngFor="let error of usernameErrors$ | async"
+            class="invalid-feedback"
         >
-        <p *ngFor="let error of usernameErrors$ | async" class="invalid-feedback">
             {{ error }}
         </p>
     </div>
@@ -26,8 +29,11 @@
             type="email"
             id="email"
             class="form-control"
-            [class.is-invalid]="form.controls.email.touched && form.controls.email.invalid"
-            [formControl]="form.controls.email">
+            [class.is-invalid]="
+                form.controls.email.touched && form.controls.email.invalid
+            "
+            [formControl]="form.controls.email"
+        />
         <p *ngFor="let error of emailErrors$ | async" class="invalid-feedback">
             {{ error }}
         </p>
@@ -38,10 +44,16 @@
             type="password"
             id="password1"
             class="form-control"
-            [class.is-invalid]="form.controls.password1.touched && form.controls.password1.invalid"
+            [class.is-invalid]="
+                form.controls.password1.touched &&
+                form.controls.password1.invalid
+            "
             [formControl]="form.controls.password1"
+        />
+        <p
+            *ngFor="let error of password1Errors$ | async"
+            class="invalid-feedback"
         >
-        <p *ngFor="let error of password1Errors$ | async" class="invalid-feedback">
             {{ error }}
         </p>
     </div>
@@ -51,20 +63,33 @@
             type="password"
             class="form-control"
             id="password2"
-            [class.is-invalid]="form.controls.password2.touched && form.controls.password2.invalid"
-            [formControl]="form.controls.password2">
-        <p *ngFor="let error of password2Errors$ | async" class="invalid-feedback">
+            [class.is-invalid]="
+                form.controls.password2.touched &&
+                form.controls.password2.invalid
+            "
+            [formControl]="form.controls.password2"
+        />
+        <p
+            *ngFor="let error of password2Errors$ | async"
+            class="invalid-feedback"
+        >
             {{ error }}
         </p>
     </div>
-    <p *ngFor="let error of formErrors$ | async" class="invalid-feedback always-block">
+    <p
+        *ngFor="let error of formErrors$ | async"
+        class="invalid-feedback always-block"
+    >
         {{ error }}
     </p>
     <button type="submit" class="btn btn-primary my-3">
         Register
-        <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm" role="status">
+        <div
+            *ngIf="loading$ | async"
+            class="spinner-border spinner-border-sm"
+            role="status"
+        >
             <span class="visually-hidden">Registering...</span>
         </div>
     </button>
 </form>
-

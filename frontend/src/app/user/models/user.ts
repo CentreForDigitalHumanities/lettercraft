@@ -47,6 +47,9 @@ export interface KeyInfo {
 }
 
 // Dj-rest-auth does not let you update your email address, but we need it to request the password reset form.
-export type UserSettings = Pick<User, 'id' | 'email' | 'firstName' | 'lastName'> & {
-    username?: string
-}
+export type UserSettings = Pick<
+    User,
+    "id" | "email" | "firstName" | "lastName"
+> & {
+    username?: string;
+};

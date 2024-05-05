@@ -1,15 +1,15 @@
 import { AbstractControl, FormGroup } from "@angular/forms";
 import { User, UserResponse } from "./models/user";
-import _ from 'underscore';
+import _ from "underscore";
 import { Observable, map } from "rxjs";
 import { AuthAPIError } from "@services/auth.service";
 
 /**
-* Transforms backend user response to User object
-*
-* @param result User response data
-* @returns User object
-*/
+ * Transforms backend user response to User object
+ *
+ * @param result User response data
+ * @returns User object
+ */
 export const parseUserData = (result: UserResponse | null): User | null => {
     if (!result) {
         return null;
@@ -22,7 +22,7 @@ export const parseUserData = (result: UserResponse | null): User | null => {
         result.last_name,
         result.is_staff,
     );
-}
+};
 
 /**
  * Transfroms User data to backend UserResponse object
@@ -44,7 +44,6 @@ export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
     return _.omit(encoded, _.isUndefined);
 };
 
-
 /**
  * Interprets backend validation errors and adds errors to their associated controls.
  *
@@ -53,50 +52,52 @@ export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
  * @param errorObject - The error object containing the control names as keys and the corresponding error messages as values.
  * @param form - The form to which the errors should be added.
  */
-export function setErrors(errorObject: AuthAPIError['error'], form: FormGroup): void {
+export function setErrors(
+    errorObject: AuthAPIError["error"],
+    form: FormGroup,
+): void {
     for (const errorKey in errorObject) {
         const control = form.get(errorKey);
         const error = errorObject[errorKey];
-        const errorMessage = Array.isArray(error) ? error.join('; ') : error;
+        const errorMessage = Array.isArray(error) ? error.join("; ") : error;
         if (control) {
-            control.setErrors({'invalid': errorMessage});
+            control.setErrors({ invalid: errorMessage });
         } else {
-            form.setErrors({'invalid': errorMessage});
+            form.setErrors({ invalid: errorMessage });
         }
     }
 }
 
 export const ERROR_MAP: Record<string, Record<string, string>> = {
     username: {
-        'required': 'Username is required.',
-        'minlength': 'Username must be at least 3 characters long.',
-        'maxlength': 'Username must be at most 150 characters long.',
+        required: "Username is required.",
+        minlength: "Username must be at least 3 characters long.",
+        maxlength: "Username must be at most 150 characters long.",
     },
     email: {
-        'required': 'Email is required.',
-        'email': 'Email is invalid.',
+        required: "Email is required.",
+        email: "Email is invalid.",
     },
     password: {
-        'required': 'Password is required.',
-        'minlength': 'Password must be at least 8 characters long.',
+        required: "Password is required.",
+        minlength: "Password must be at least 8 characters long.",
     },
     token: {
-        'invalid': 'The URL is invalid. Please request a new one.'
+        invalid: "The URL is invalid. Please request a new one.",
     },
     uid: {
-        'invalid': 'The URL is invalid. Please request a new one.'
+        invalid: "The URL is invalid. Please request a new one.",
     },
     form: {
-        'passwords': 'Passwords must be identical.',
+        passwords: "Passwords must be identical.",
     },
     firstName: {
-        'required': 'First name is required.',
+        required: "First name is required.",
     },
     lastName: {
-        'required': 'Last name is required.',
+        required: "Last name is required.",
     },
 };
-
 
 /**
  * Watches a FormControl and turns its errors into an array of string messages.
@@ -109,16 +110,17 @@ export const ERROR_MAP: Record<string, Record<string, string>> = {
  * @param lookup - The key to use in the error map. Defaults to the control name.
  * @returns An Observable that emits an array of error messages every time the control's status changes.
  */
-export function controlErrorMessages$<F extends FormGroup, K extends string & keyof F['controls']>(
-    form: F,
-    controlName: K,
-    lookup?: string,
-): Observable<string[]> {
+export function controlErrorMessages$<
+    F extends FormGroup,
+    K extends string & keyof F["controls"],
+>(form: F, controlName: K, lookup?: string): Observable<string[]> {
     const control = form.controls[controlName];
     // Get a subset of error messages based on the lookup key, if provided, or the control name.
-    const messagesForControl = lookup ? ERROR_MAP[lookup] : ERROR_MAP[controlName] ?? ERROR_MAP['form'];
+    const messagesForControl = lookup
+        ? ERROR_MAP[lookup]
+        : ERROR_MAP[controlName] ?? ERROR_MAP["form"];
     return control.statusChanges.pipe(
-        map(() => mapErrorsToMessages(control, messagesForControl))
+        map(() => mapErrorsToMessages(control, messagesForControl)),
     );
 }
 
@@ -132,10 +134,13 @@ export function controlErrorMessages$<F extends FormGroup, K extends string & ke
  * @param lookup Optional parameter to specify a specific error lookup key.
  * @returns An observable that emits an array of error messages.
  */
-export function formErrorMessages$<F extends FormGroup>(form: F, lookup?: string): Observable<string[]> {
-    const messagesForForm = lookup ? ERROR_MAP[lookup] : ERROR_MAP['form'];
+export function formErrorMessages$<F extends FormGroup>(
+    form: F,
+    lookup?: string,
+): Observable<string[]> {
+    const messagesForForm = lookup ? ERROR_MAP[lookup] : ERROR_MAP["form"];
     return form.statusChanges.pipe(
-        map(() => mapErrorsToMessages(form, messagesForForm))
+        map(() => mapErrorsToMessages(form, messagesForForm)),
     );
 }
 
@@ -148,10 +153,14 @@ export function formErrorMessages$<F extends FormGroup>(form: F, lookup?: string
  * @param errorMap - The map of error keys to error messages.
  * @returns An array of error messages.
  */
-function mapErrorsToMessages(control: AbstractControl, errorMap: Record<string, string>): string[] {
+function mapErrorsToMessages(
+    control: AbstractControl,
+    errorMap: Record<string, string>,
+): string[] {
     const errors = control.errors ?? {};
-    return Object.keys(errors)
-        .map(errorKey => errorKey in errorMap ? errorMap[errorKey] : errors[errorKey]);
+    return Object.keys(errors).map((errorKey) =>
+        errorKey in errorMap ? errorMap[errorKey] : errors[errorKey],
+    );
 }
 
 /**
@@ -160,7 +169,7 @@ function mapErrorsToMessages(control: AbstractControl, errorMap: Record<string, 
  * @param form - The form group to update.
  */
 export function updateFormValidity(form: FormGroup): void {
-    Object.values(form.controls).forEach(control => {
+    Object.values(form.controls).forEach((control) => {
         control.updateValueAndValidity();
     });
     form.updateValueAndValidity();

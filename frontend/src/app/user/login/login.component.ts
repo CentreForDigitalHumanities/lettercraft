@@ -1,36 +1,41 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@services/auth.service';
-import { UserLogin } from '../models/user';
-import { map, merge, startWith } from 'rxjs';
-import { controlErrorMessages$, formErrorMessages$, setErrors, updateFormValidity } from '../utils';
-import { ToastService } from '@services/toast.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Component, DestroyRef, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AuthService } from "@services/auth.service";
+import { UserLogin } from "../models/user";
+import { map, merge, startWith } from "rxjs";
+import {
+    controlErrorMessages$,
+    formErrorMessages$,
+    setErrors,
+    updateFormValidity,
+} from "../utils";
+import { ToastService } from "@services/toast.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Router } from "@angular/router";
 
 type LoginForm = {
     [key in keyof UserLogin]: FormControl<string>;
-}
+};
 
 @Component({
-  selector: 'lc-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: "lc-login",
+    templateUrl: "./login.component.html",
+    styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
     public form = new FormGroup<LoginForm>({
-        username: new FormControl<string>('', {
+        username: new FormControl<string>("", {
             nonNullable: true,
-            validators: [Validators.required]
+            validators: [Validators.required],
         }),
-        password: new FormControl<string>('', {
+        password: new FormControl<string>("", {
             nonNullable: true,
-            validators: [Validators.required]
+            validators: [Validators.required],
         }),
     });
 
-    public usernameErrors$ = controlErrorMessages$(this.form, 'username');
-    public passwordErrors$ = controlErrorMessages$(this.form, 'password');
+    public usernameErrors$ = controlErrorMessages$(this.form, "username");
+    public passwordErrors$ = controlErrorMessages$(this.form, "password");
     public formErrors$ = formErrorMessages$(this.form);
 
     public loading$ = merge(
@@ -43,23 +48,23 @@ export class LoginComponent implements OnInit {
         private toastService: ToastService,
         private destroyRef: DestroyRef,
         private router: Router,
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.authService.loginResult$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(result => {
-                if ('error' in result) {
+            .subscribe((result) => {
+                if ("error" in result) {
                     setErrors(result.error, this.form);
                 } else {
                     this.toastService.show({
-                        header: 'Sign in successful',
-                        body: 'You have been successfully signed in.',
-                        type: 'success'
+                        header: "Sign in successful",
+                        body: "You have been successfully signed in.",
+                        type: "success",
                     });
-                    this.router.navigate(['/']);
+                    this.router.navigate(["/"]);
                 }
-            })
+            });
     }
 
     public submit(): void {
