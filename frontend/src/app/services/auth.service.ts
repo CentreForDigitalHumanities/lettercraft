@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay, throttleTime, debounceTime } from 'rxjs';
+import { Subject, catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay, throttleTime } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 
-interface AuthAPIResult {
+export interface AuthAPIResult {
     detail: string;
 }
 
-interface AuthAPIError {
-    error: Record<string, string>;
+export interface AuthAPIError {
+    error: Record<string, string | string[]>;
 }
 
 @Injectable({

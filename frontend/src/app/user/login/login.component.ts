@@ -19,11 +19,11 @@ type LoginForm = {
 })
 export class LoginComponent implements OnInit {
     public form = new FormGroup<LoginForm>({
-        username: new FormControl<string>('baltus', {
+        username: new FormControl<string>('', {
             nonNullable: true,
             validators: [Validators.required]
         }),
-        password: new FormControl<string>('knerbonius', {
+        password: new FormControl<string>('', {
             nonNullable: true,
             validators: [Validators.required]
         }),

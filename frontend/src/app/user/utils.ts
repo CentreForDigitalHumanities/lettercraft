@@ -2,6 +2,7 @@ import { AbstractControl, FormGroup } from "@angular/forms";
 import { User, UserResponse } from "./models/user";
 import _ from 'underscore';
 import { Observable, map } from "rxjs";
+import { AuthAPIError } from "@services/auth.service";
 
 /**
 * Transforms backend user response to User object
@@ -52,14 +53,15 @@ export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
  * @param errorObject - The error object containing the control names as keys and the corresponding error messages as values.
  * @param form - The form to which the errors should be added.
  */
-export function setErrors(errorObject: Record<string, string>, form: FormGroup): void {
+export function setErrors(errorObject: AuthAPIError['error'], form: FormGroup): void {
     for (const errorKey in errorObject) {
         const control = form.get(errorKey);
         const error = errorObject[errorKey];
+        const errorMessage = Array.isArray(error) ? error.join('; ') : error;
         if (control) {
-            control.setErrors({'invalid': error});
+            control.setErrors({'invalid': errorMessage});
         } else {
-            form.setErrors({'invalid': error});
+            form.setErrors({'invalid': errorMessage});
         }
     }
 }
