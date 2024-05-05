@@ -44,6 +44,6 @@ export function identicalPasswordsValidator<T>(
 
         return password1.value === password2.value
             ? null
-            : { passwords: "Passwords do not match" };
+            : { passwords: true };
     };
 }

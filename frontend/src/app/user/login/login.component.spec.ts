@@ -45,7 +45,7 @@ describe("LoginComponent", () => {
         });
     });
 
-    it("should check invalid usernames", () => {
+    it("should check invalid login details", () => {
         component.form.controls.username.setValue("te$t");
         component.form.controls.password.setValue("secretpassword");
         component.submit();
@@ -80,6 +80,7 @@ describe("LoginComponent", () => {
 
         component.submit();
         expect(loading()).toBeTrue();
+        expect(component.form.valid).toBeTrue();
 
         const req = httpTestingController.expectOne("/users/login/");
         req.flush({ key: "abcdefghijklmnopqrstuvwxyz" });
