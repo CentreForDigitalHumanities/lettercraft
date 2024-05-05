@@ -52,6 +52,7 @@ export class PasswordForgottenComponent implements OnInit {
                         header: 'Password reset request successful',
                         body: 'If your email address is known to us, an email has been sent containing a link to a page where you may reset your password.',
                         type: 'success',
+                        // This is a long message, so we show it for 10 seconds.
                         delay: 10000
                     })
                 }

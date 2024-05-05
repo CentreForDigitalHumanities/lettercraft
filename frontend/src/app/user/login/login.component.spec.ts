@@ -8,7 +8,7 @@ import { HttpTestingController } from '@angular/common/http/testing';
 import { ToastService } from '@services/toast.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-fdescribe('LoginComponent', () => {
+describe('LoginComponent', () => {
     let component: LoginComponent;
     let fixture: ComponentFixture<LoginComponent>;
     let toastService: ToastService;
@@ -20,7 +20,6 @@ fdescribe('LoginComponent', () => {
             declarations: [LoginComponent],
             providers: [
                 ToastService,
-                // { provide: AuthService, useClass: AuthServiceMock }
                 AuthService
             ],
             imports: [SharedTestingModule]

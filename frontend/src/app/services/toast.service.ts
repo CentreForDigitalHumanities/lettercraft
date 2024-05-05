@@ -10,7 +10,7 @@ interface Toast {
 }
 
 interface ToastInput {
-    header?: string;
+    header: string;
     body: string;
     type?: ToastType;
     delay?: number;
@@ -23,13 +23,6 @@ const TOAST_STYLES: Record<ToastType, string> = {
     danger: 'bg-danger text-light',
 };
 
-const TOAST_DEFAULT_HEADERS: Record<ToastType, string> = {
-    success: 'Success',
-    info: 'Info',
-    warning: 'Warning',
-    danger: 'Error',
-};
-
 @Injectable({
   providedIn: 'root'
 })
@@ -40,7 +33,7 @@ export class ToastService {
         const type = toastInput.type || 'info';
         const toast: Toast = {
             className: TOAST_STYLES[type],
-            header: toastInput.header || TOAST_DEFAULT_HEADERS[type],
+            header: toastInput.header,
             body: toastInput.body,
             delay: toastInput.delay || 5000,
         }
