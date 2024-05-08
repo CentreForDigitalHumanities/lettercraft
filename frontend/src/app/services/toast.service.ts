@@ -17,10 +17,10 @@ export interface ToastInput {
 }
 
 export const TOAST_STYLES: Record<ToastType, string> = {
-    success: 'bg-success text-light',
-    info: 'bg-info text-dark',
-    warning: 'bg-warning text-dark',
-    danger: 'bg-danger text-light',
+    success: 'text-bg-success',
+    info: 'text-bg-info',
+    warning: 'text-bg-warning',
+    danger: 'text-bg-danger',
 };
 
 @Injectable({
