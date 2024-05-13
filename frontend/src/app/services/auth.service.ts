@@ -80,7 +80,6 @@ export class AuthService {
             this.authRoute('logout/'),
             {}
         ).subscribe((data) => {
-            console.log(data);
             if (redirectToLogin) {
                 this.showLogin();
             }
@@ -109,7 +108,6 @@ export class AuthService {
     }
 
     public showLogin(returnUrl?: string) {
-        this.currentUser$
         this.router.navigate(
             ['/login'],
             returnUrl ? { queryParams: { returnUrl } } : undefined
