@@ -23,7 +23,7 @@ urlpatterns = [
         redirect_reset,
         name="password_reset_confirm",
     ),
-    # generic routes
+    # generic routes (login, logout, pw reset etc.)
     path("", include("dj_rest_auth.urls")),
     path("registration/", include("dj_rest_auth.registration.urls")),
 ]
