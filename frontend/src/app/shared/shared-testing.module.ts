@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -20,7 +20,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         NgbModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        FormsModule,
         ReactiveFormsModule,
     ], exports: [
         CommonModule,
@@ -30,7 +29,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         NgbModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        FormsModule,
         ReactiveFormsModule,
     ]
 })
