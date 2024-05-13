@@ -7,3 +7,5 @@ psycopg2 --no-binary psycopg2
 pytest
 pytest-django
 pytest-xdist
+dj_rest_auth
+django-allauth

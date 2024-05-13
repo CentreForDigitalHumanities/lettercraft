@@ -1,22 +1,16 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AppComponent } from './app.component';
-import { FooterComponent } from './core/footer/footer.component';
-import { MenuComponent } from './core/menu/menu.component';
 import { SharedTestingModule } from './shared/shared-testing.module';
+import { CoreModule } from './core/core.module';
 
 describe('AppComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [
                 AppComponent,
-                MenuComponent,
-                FooterComponent
             ],
-            imports: [SharedTestingModule]
+            imports: [SharedTestingModule, CoreModule]
         }).compileComponents();
     }));
 

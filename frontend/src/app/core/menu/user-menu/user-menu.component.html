@@ -1,0 +1,34 @@
+<ul class="navbar-nav">
+    <li class="navbar-text" *ngIf="isLoading$ | async">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading user data...</span>
+        </div>
+    </li>
+    <ng-container *ngIf="user$ | async as user">
+        <li class="nav-item" ngbDropdown>
+            <button class="nav-link" ngbDropdownToggle id="userDropdown">
+                <fa-icon [icon]="icons.user"></fa-icon>
+                &nbsp;
+                {{user.username}}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
+                <a ngbDropdownItem [routerLink]="['/settings']" hidden>Settings</a>  <!-- hide settings link until this is implemented -->
+                <a *ngIf="user.isStaff" ngbDropdownItem href="/admin/">Administration</a>
+                <button ngbDropdownItem (click)="logout()">Sign out</button>
+            </div>
+        </li>
+    </ng-container>
+    <ng-container *ngIf="showSignIn$ | async">
+        <li class="nav-item">
+            <a [routerLink]="['/login']" routerLinkActive="active" class="nav-link">
+                Sign in
+            </a>
+        </li>
+        <li class="nav-item" hidden> <!-- hide registration link until this is implemented -->
+            <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
+                Register
+            </a>
+        </li>
+    </ng-container>
+</ul>
+

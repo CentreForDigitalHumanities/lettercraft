@@ -1,0 +1,26 @@
+<form>
+    <div class="mb-3" id="usernameField">
+        <label class="form-label" for="usernameInput">Username</label>
+        <input class="form-control" id="usernameInput" [formControl]="usernameInput"
+            [class.is-invalid]="usernameErrorMessage != ''">
+        <div class="invalid-feedback">
+            {{usernameErrorMessage}}
+        </div>
+    </div>
+    <div class="mb-3" id="passwordField">
+        <label class="form-label" for="passwordInput">Password</label>
+        <input type="password" class="form-control" id="passwordInput" [formControl]="passwordInput"
+            [class.is-invalid]="passwordErrorMessage != ''">
+        <div class="invalid-feedback">
+            {{passwordErrorMessage}}
+        </div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary" (click)="submit()">
+            Sign in
+        </button>
+    </div>
+    <div class="alert alert-danger" *ngIf="requestFailed" role="alert">
+        Failed to sign in.
+    </div>
+</form>
