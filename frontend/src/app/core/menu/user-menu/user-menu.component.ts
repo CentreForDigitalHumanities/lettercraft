@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Observable, map } from 'rxjs';
-import { User } from 'src/app/user/user';
+import { User } from '../../../user/models/user';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 
