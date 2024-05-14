@@ -10,7 +10,7 @@ import _ from 'underscore';
   styleUrls: ['./user-menu.component.scss']
 })
 export class UserMenuComponent {
-    public isLoading$ = this.authService.currentUser$.pipe(
+    public authLoading$ = this.authService.currentUser$.pipe(
         map(_.isUndefined)
     );
 
@@ -24,7 +24,7 @@ export class UserMenuComponent {
         user: faUser,
     };
 
-    public loading$ = merge(
+    public logoutLoading$ = merge(
         this.authService.logout$.pipe(map(() => true)),
         this.authService.logoutResult$.pipe(map(() => false)),
     ).pipe(startWith(false));
