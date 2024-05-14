@@ -117,12 +117,8 @@ export class AuthService {
         share()
     );
 
-    public initialAuth$ = new Subject<void>();
-
-    public backendUser$ = merge(
-        this.loginResult$,
-        this.initialAuth$
-    ).pipe(
+    public backendUser$ = this.loginResult$.pipe(
+        startWith(undefined),
         switchMap(() => this.http.get<UserResponse>(
             this.authRoute('user/')
         ).pipe(
