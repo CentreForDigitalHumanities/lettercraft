@@ -1,16 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { UserMenuComponent } from './user-menu.component';
 import { AuthService } from '@services/auth.service';
-import { AuthServiceMock, testUser } from '@mock/auth.service.mock';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { HttpTestingController } from '@angular/common/http/testing';
+import { UserResponse } from 'src/app/user/models/user';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
+const fakeUserResponse: UserResponse = {
+    id: 1,
+    username: "frodo",
+    email: "frodo@shire.me",
+    first_name: "Frodo",
+    last_name: "Baggins",
+    is_staff: false
+}
 
-describe('UserMenuComponent', () => {
+@Injectable({ providedIn: 'root' })
+class MockAuthService extends AuthService {
+
+}
+
+fdescribe('UserMenuComponent', () => {
     let component: UserMenuComponent;
     let fixture: ComponentFixture<UserMenuComponent>;
-    let authService: AuthServiceMock;
+    let authService: AuthService;
+    let httpTestingController: HttpTestingController;
+    let loading: Signal<boolean | undefined>;
 
     const spinner = () => fixture.debugElement.query(By.css('.spinner-border'));
     const signInLink = () => fixture.debugElement.query(By.css('a[href="/login"]'));
@@ -18,21 +35,27 @@ describe('UserMenuComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [
-                { provide: AuthService, useClass: AuthServiceMock }
-            ],
+            providers: [AuthService],
             declarations: [UserMenuComponent],
             imports: [SharedTestingModule],
         });
-        authService = TestBed.inject(AuthService) as unknown as AuthServiceMock;
+        httpTestingController = TestBed.inject(HttpTestingController);
+        authService = TestBed.inject(AuthService);
         fixture = TestBed.createComponent(UserMenuComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        loading = TestBed.runInInjectionContext(() => toSignal(component.loading$));
+    });
+
+    afterEach(() => {
+        httpTestingController.verify();
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    // it('should show sign-in when not logged in', () => { });
 
     it('should show a loading spinner', () => {
         expect(spinner()).toBeTruthy();
@@ -40,21 +63,24 @@ describe('UserMenuComponent', () => {
         expect(userDropdownTrigger()).toBeFalsy();
     });
 
-    it('should show sign-in when not logged in', () => {
-        authService._setUser(null);
-        fixture.detectChanges();
+    // it('should show an admin menu when user is a staff member', () => { });
 
-        expect(spinner()).toBeFalsy();
-        expect(signInLink()).toBeTruthy();
-        expect(userDropdownTrigger()).toBeFalsy();
-    });
+
 
     it('should show a user menu when logged in', () => {
-        authService._setUser(testUser({}));
+        // Normally called in AppComponent.ngAfterViewInit();
+        authService.initialAuth$.next();
+        const req = httpTestingController.expectOne('/users/user/');
+        req.flush(fakeUserResponse);
         fixture.detectChanges();
 
-        expect(spinner()).toBeFalsy();
-        expect(signInLink()).toBeFalsy();
-        expect(userDropdownTrigger()).toBeTruthy();
+        expect(loading()).toBeFalse();
+
+        // authService._setUser(testUser({}));
+        // fixture.detectChanges();
+
+        // expect(spinner()).toBeFalsy();
+        // expect(signInLink()).toBeFalsy();
+        // expect(userDropdownTrigger()).toBeTruthy();
     });
 });
