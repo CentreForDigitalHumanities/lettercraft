@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -24,7 +24,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         }),
         NgbModule,
         RouterModule,
-        FormsModule,
         ReactiveFormsModule,
     ], exports: [
         CommonModule,
@@ -35,7 +34,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         HttpClientXsrfModule,
         NgbModule,
         RouterModule,
-        FormsModule,
         ReactiveFormsModule,
     ]
 })

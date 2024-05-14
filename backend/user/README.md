@@ -18,7 +18,7 @@ Other user-related data, such as personal preferences, content created by the us
 
 For things like personal preferences, which have a one-to-one relationship with users, it can be useful to add a `UserProfile` model.
 
-Recommendated steps for adding a UserProfile:
+Recommended steps for adding a UserProfile:
 
 - Add a `UserProfile` model in Django, with a `OneToOneField` to `User`.
 - In the migration that adds user profiles, add a data migration to add a profile for all existing users ([example of a UserProfile migration](https://github.com/UUDigitalHumanitieslab/I-analyzer/blob/c234b818cfa493c5f948b7acb7d8c8eba91626ad/backend/users/migrations/0004_userprofile.py))

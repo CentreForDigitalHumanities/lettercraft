@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { map, merge, startWith, tap } from 'rxjs';
+import { map, merge, startWith } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 
