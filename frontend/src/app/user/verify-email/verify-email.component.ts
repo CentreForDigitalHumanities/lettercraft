@@ -13,19 +13,12 @@ import { map, merge, share, startWith } from "rxjs";
 export class VerifyEmailComponent implements OnInit, AfterViewInit {
     private key = this.activatedRoute.snapshot.params["key"];
 
-    private keyInfoError$ = this.authService.keyInfoResult$.pipe(
-        map((results) => ("error" in results ? results : null)),
-    );
-
-    public userDetails$ = this.authService.keyInfoResult$.pipe(
+    public userDetails$ = this.authService.keyInfo.result$.pipe(
         map((results) => ("error" in results ? null : results)),
         share(),
     );
 
-    public loading$ = merge(
-        this.authService.verifyEmail$.pipe(map(() => true)),
-        this.authService.verifyEmailResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public loading$ = this.authService.verifyEmail.loading$;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -35,7 +28,7 @@ export class VerifyEmailComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.keyInfoError$
+        this.authService.keyInfo.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((result) => {
                 if (!result) {
@@ -48,30 +41,30 @@ export class VerifyEmailComponent implements OnInit, AfterViewInit {
                 });
             });
 
-        this.authService.verifyEmailResult$
+        this.authService.verifyEmail.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    this.toastService.show({
-                        header: "Email verification failed",
-                        body: "Failed to verify email address.",
-                        type: "danger",
-                    });
-                } else {
-                    this.toastService.show({
-                        header: "Email verified",
-                        body: "Email address has been verified.",
-                        type: "success",
-                    });
-                }
-            });
+            .subscribe(() => this.toastService.show({
+                header: "Email verification failed",
+                body: "Failed to verify email address.",
+                type: "danger",
+            }));
+
+        this.authService.verifyEmail.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.toastService.show({
+                header: "Email verified",
+                body: "Email address has been verified.",
+                type: "success",
+            }));
     }
 
+    // We are subscribing to results of this call in the template, so we should
+    // only start listening after the view has been initialized.
     ngAfterViewInit(): void {
-        this.authService.keyInfo$.next(this.key);
+        this.authService.keyInfo.subject.next(this.key);
     }
 
     public confirm(): void {
-        this.authService.verifyEmail$.next(this.key);
+        this.authService.verifyEmail.subject.next(this.key);
     }
 }

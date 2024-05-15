@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { map, merge, startWith } from 'rxjs';
+import { map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
+import { ToastService } from '@services/toast.service';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lc-user-menu',
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss']
 })
-export class UserMenuComponent {
+export class UserMenuComponent implements OnInit {
     public authLoading$ = this.authService.currentUser$.pipe(
         map(_.isUndefined)
     );
@@ -24,15 +27,40 @@ export class UserMenuComponent {
         user: faUser,
     };
 
-    public logoutLoading$ = merge(
-        this.authService.logout$.pipe(map(() => true)),
-        this.authService.logoutResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public logoutLoading$ = this.authService.logout.loading$;
 
-    constructor(public authService: AuthService) { }
+    constructor(
+        private authService: AuthService,
+        private toastService: ToastService,
+        private router: Router,
+        private destroyRef: DestroyRef
+    ) { }
+
+    ngOnInit(): void {
+        this.authService.logout.error$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.toastService.show({
+                    header: 'Sign out failed',
+                    body: 'There was an error signing you out. Please try again.',
+                    type: 'danger'
+                });
+            });
+
+        this.authService.logout.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.toastService.show({
+                    header: 'Sign out successful',
+                    body: 'You have been successfully signed out.',
+                    type: 'success'
+                });
+                this.router.navigate(['/']);
+            });
+    }
 
     public logout(): void {
-        this.authService.logout$.next();
+        this.authService.logout.subject.next();
     }
 
 }

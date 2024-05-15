@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { controlErrorMessages$, updateFormValidity } from "../utils";
-import { map, merge, startWith } from "rxjs";
 import { AuthService } from "@services/auth.service";
 import { PasswordForgotten } from "../models/user";
 import { ToastService } from "@services/toast.service";
@@ -26,10 +25,7 @@ export class PasswordForgottenComponent implements OnInit {
 
     public emailErrors$ = controlErrorMessages$(this.form, "email");
 
-    public loading$ = merge(
-        this.authService.passwordForgotten$.pipe(map(() => true)),
-        this.authService.passwordForgottenResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public loading$ = this.authService.passwordForgotten.loading$;
 
     constructor(
         private authService: AuthService,
@@ -38,25 +34,25 @@ export class PasswordForgottenComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authService.passwordForgottenResult$
+        this.authService.passwordForgotten.success$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    this.toastService.show({
-                        header: "Reset request failed",
-                        body: "Request to send password reset email failed. Please try again.",
-                        type: "danger",
-                    });
-                } else {
-                    this.toastService.show({
-                        header: "Password reset request successful",
-                        body: "If your email address is known to us, an email has been sent containing a link to a page where you may reset your password.",
-                        type: "success",
-                        // This is a long message, so we show it for 10 seconds.
-                        delay: 10000,
-                    });
-                }
+            .subscribe(() => {
+                this.toastService.show({
+                    header: "Password reset request successful",
+                    body: "If your email address is known to us, an email has been sent containing a link to a page where you may reset your password.",
+                    type: "success",
+                    // This is a long message, so we show it for 10 seconds.
+                    delay: 10000,
+                });
             });
+
+        this.authService.passwordForgotten.error$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.toastService.show({
+                header: "Reset request failed",
+                body: "Request to send password reset email failed. Please try again.",
+                type: "danger",
+            }));
     }
 
     public submit(): void {
@@ -65,6 +61,6 @@ export class PasswordForgottenComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.passwordForgotten$.next(this.form.getRawValue());
+        this.authService.passwordForgotten.subject.next(this.form.getRawValue());
     }
 }

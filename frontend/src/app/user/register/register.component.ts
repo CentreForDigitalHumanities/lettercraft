@@ -8,7 +8,6 @@ import {
 } from "../validation";
 import { AuthService } from "@services/auth.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { map, merge, startWith } from "rxjs";
 import {
     controlErrorMessages$,
     formErrorMessages$,
@@ -69,10 +68,7 @@ export class RegisterComponent implements OnInit {
     );
     public formErrors$ = formErrorMessages$(this.form);
 
-    public loading$ = merge(
-        this.authService.registration$.pipe(map(() => true)),
-        this.authService.registrationResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public loading$ = this.authService.registration.loading$;
 
     constructor(
         private authService: AuthService,
@@ -82,19 +78,19 @@ export class RegisterComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authService.registrationResult$
+        this.authService.registration.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if (result?.error) {
-                    setErrors(result.error, this.form);
-                } else {
-                    this.toastService.show({
-                        header: "Registration successful",
-                        body: "You have been successfully registered. Please check your email for a confirmation link.",
-                        type: "success",
-                    });
-                    this.router.navigate(["/"]);
-                }
+            .subscribe((result) => setErrors(result.error, this.form));
+
+        this.authService.registration.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => {
+                this.toastService.show({
+                    header: "Registration successful",
+                    body: "You have been successfully registered. Please check your email for a confirmation link.",
+                    type: "success",
+                });
+                this.router.navigate(["/"]);
             });
     }
 
@@ -104,6 +100,6 @@ export class RegisterComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.registration$.next(this.form.getRawValue());
+        this.authService.registration.subject.next(this.form.getRawValue());
     }
 }

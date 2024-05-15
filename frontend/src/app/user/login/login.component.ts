@@ -2,7 +2,6 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
 import { UserLogin } from "../models/user";
-import { map, merge, startWith } from "rxjs";
 import {
     controlErrorMessages$,
     formErrorMessages$,
@@ -38,10 +37,7 @@ export class LoginComponent implements OnInit {
     public passwordErrors$ = controlErrorMessages$(this.form, "password");
     public formErrors$ = formErrorMessages$(this.form);
 
-    public loading$ = merge(
-        this.authService.login$.pipe(map(() => true)),
-        this.authService.loginResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public loading$ = this.authService.login.loading$;
 
     constructor(
         private authService: AuthService,
@@ -51,20 +47,20 @@ export class LoginComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authService.loginResult$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    setErrors(result.error, this.form);
-                } else {
-                    this.toastService.show({
-                        header: "Sign in successful",
-                        body: "You have been successfully signed in.",
-                        type: "success",
-                    });
-                    this.router.navigate(["/"]);
-                }
+        this.authService.login.success$.pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() => {
+            this.toastService.show({
+                header: "Sign in successful",
+                body: "You have been successfully signed in.",
+                type: "success",
             });
+            this.router.navigate(["/"]);
+        });
+
+        this.authService.login.error$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result) => setErrors(result.error, this.form));
     }
 
     public submit(): void {
@@ -73,6 +69,6 @@ export class LoginComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.login$.next(this.form.getRawValue());
+        this.authService.login.subject.next(this.form.getRawValue());
     }
 }

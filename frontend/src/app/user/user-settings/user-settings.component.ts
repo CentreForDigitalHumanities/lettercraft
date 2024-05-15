@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
 import { UserSettings } from "../models/user";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { filter, map, merge, startWith } from "rxjs";
+import { filter } from "rxjs";
 import {
     controlErrorMessages$,
+    encodeUserData,
     formErrorMessages$,
     setErrors,
     updateFormValidity,
@@ -50,20 +51,9 @@ export class UserSettingsComponent implements OnInit {
     public usernameErrors$ = controlErrorMessages$(this.form, "username");
     public formErrors$ = formErrorMessages$(this.form);
 
-    public updateSettingsLoading$ = merge(
-        this.authService.updateSettings$.pipe(map(() => true)),
-        this.authService.updateSettingsResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
-
-    public requestResetLoading$ = merge(
-        this.authService.passwordForgotten$.pipe(map(() => true)),
-        this.authService.passwordForgottenResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
-
-    public deleteUserLoading$ = merge(
-        this.authService.deleteUser$.pipe(map(() => true)),
-        this.authService.deleteUserResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public updateSettingsLoading$ = this.authService.updateSettings.loading$;
+    public requestResetLoading$ = this.authService.passwordForgotten.loading$;
+    public deleteUserLoading$ = this.authService.deleteUser.loading$;
 
     // See submit() for explanation.
     private currentUsername: string | null = null;
@@ -88,59 +78,54 @@ export class UserSettingsComponent implements OnInit {
                 this.currentUsername = user.username;
             });
 
-        this.authService.passwordForgottenResult$
+        this.authService.passwordForgotten.success$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if (!("error" in result)) {
-                    this.toastService.show({
-                        header: "Password reset email sent",
-                        body: "An email has been sent to you with instructions on how to reset your password.",
-                        type: "success",
-                    });
-                }
+            .subscribe(() => {
+                this.toastService.show({
+                    header: "Password reset email sent",
+                    body: "An email has been sent to you with instructions on how to reset your password.",
+                    type: "success",
+                });
             });
 
-        this.authService.deleteUserResult$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    this.toastService.show({
-                        header: "Error deleting account",
-                        body: "An error occurred while deleting your account. Please try again later.",
-                        type: "danger",
-                    });
-                } else {
-                    this.toastService.show({
-                        header: "Account deleted",
-                        body: "Your account has been successfully deleted.",
-                        type: "success",
-                    });
-                }
-            });
 
-        this.authService.updateSettingsResult$
+        this.authService.deleteUser.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    setErrors(result.error, this.form);
-                } else {
-                    this.toastService.show({
-                        header: "Settings updated",
-                        body: "Your settings have been successfully updated.",
-                        type: "success",
-                    });
-                }
-            });
+            .subscribe(() => this.toastService.show({
+                header: "Error deleting account",
+                body: "An error occurred while deleting your account. Please try again later.",
+                type: "danger",
+            }));
+
+        this.authService.deleteUser.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.toastService.show({
+                header: "Account deleted",
+                body: "Your account has been successfully deleted.",
+                type: "success",
+            }));
+
+        this.authService.updateSettings.error$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(result => setErrors(result.error, this.form));
+
+        this.authService.updateSettings.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.toastService.show({
+                header: "Settings updated",
+                body: "Your settings have been successfully updated.",
+                type: "success",
+            }));
     }
 
     public requestPasswordReset(): void {
-        this.authService.passwordForgotten$.next({
+        this.authService.passwordForgotten.subject.next({
             email: this.form.getRawValue().email,
         });
     }
 
     public deleteAccount(): void {
-        this.authService.deleteUser$.next();
+        this.authService.deleteUser.subject.next();
     }
 
     public submit(): void {
@@ -158,6 +143,6 @@ export class UserSettingsComponent implements OnInit {
             delete patchInput.username;
         }
 
-        this.authService.updateSettings$.next(patchInput);
+        this.authService.updateSettings.subject.next(encodeUserData(patchInput));
     }
 }

@@ -69,10 +69,7 @@ export class ResetPasswordComponent implements OnInit {
         controlErrorMessages$(this.form, "uid"),
     ]).pipe(map((errorLists) => _.flatten(errorLists, 1)));
 
-    public loading$ = merge(
-        this.authService.resetPassword$.pipe(map(() => true)),
-        this.authService.resetPasswordResult$.pipe(map(() => false)),
-    ).pipe(startWith(false));
+    public loading$ = this.authService.resetPassword.loading$;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -82,19 +79,17 @@ export class ResetPasswordComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.authService.resetPasswordResult$
+        this.authService.resetPassword.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                if ("error" in result) {
-                    setErrors(result.error, this.form);
-                } else {
-                    this.toastService.show({
-                        header: "Password reset",
-                        body: "Your password has been successfully reset.",
-                        type: "success",
-                    });
-                }
-            });
+            .subscribe(result => setErrors(result.error, this.form));
+
+        this.authService.resetPassword.success$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.toastService.show({
+                header: "Password reset",
+                body: "Your password has been successfully reset.",
+                type: "success",
+            }));
     }
 
     public submit(): void {
@@ -103,6 +98,6 @@ export class ResetPasswordComponent implements OnInit {
         if (!this.form.valid) {
             return;
         }
-        this.authService.resetPassword$.next(this.form.getRawValue());
+        this.authService.resetPassword.subject.next(this.form.getRawValue());
     }
 }

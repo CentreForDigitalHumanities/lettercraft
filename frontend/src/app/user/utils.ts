@@ -2,7 +2,7 @@ import { AbstractControl, FormGroup } from "@angular/forms";
 import { User, UserResponse } from "./models/user";
 import _ from "underscore";
 import { Observable, map } from "rxjs";
-import { AuthAPIError } from "@services/auth.service";
+import { RequestError } from "./Request";
 
 /**
  * Transforms backend user response to User object
@@ -53,7 +53,7 @@ export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
  * @param form - The form to which the errors should be added.
  */
 export function setErrors(
-    errorObject: AuthAPIError["error"],
+    errorObject: RequestError["error"],
     form: FormGroup,
 ): void {
     for (const errorKey in errorObject) {
