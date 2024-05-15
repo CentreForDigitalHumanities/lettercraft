@@ -109,8 +109,6 @@ export class AuthService {
      * @returns void
      */
     public newUserSettings(userSettings: UserSettings): void {
-        console.log('Current user name:', this.currentUserName())
-        console.log('Identical:', userSettings.username === this.currentUserName())
         if (userSettings.username === this.currentUserName()) {
             delete userSettings.username;
         }

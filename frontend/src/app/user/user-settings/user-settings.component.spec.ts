@@ -44,6 +44,9 @@ describe("UserSettingsComponent", () => {
         fixture = TestBed.createComponent(UserSettingsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+
+        // Initial request to get the user data in AuthService
+        httpTestingController.expectOne("/users/user/").flush(fakeUser);
     });
 
     it("should create", () => {
@@ -58,7 +61,6 @@ describe("UserSettingsComponent", () => {
             firstName: 'Frodo',
             lastName: 'Baggins'
         });
-        expect(component['currentUsername']).toBe('frodo');
     });
 
     it("should check missing input", () => {
