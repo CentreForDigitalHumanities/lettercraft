@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Observable, Subject, catchError, filter, map, merge, of, share, startWith, switchMap, throttleTime } from "rxjs";
+import { Observable, OperatorFunction, Subject, catchError, filter, map, merge, of, share, startWith, switchMap, throttleTime } from "rxjs";
 
 
 export type HttpVerb = 'get' | 'post' | 'patch' | 'delete';
@@ -38,21 +38,23 @@ export class Request<Input, Result extends object | never> {
     ) {
         this.subject = new Subject<Input>();
 
+        // Catches errors and returns them as a RequestError object.
+        const catchToError: OperatorFunction<Result, Result | RequestError> = catchError(error => of<RequestError>({ error: error.error }));
+
         this.result$ = this.subject.pipe(
             throttleTime(500),
             switchMap(input => {
                 switch (this.verb) {
                     case "get":
-                        return this.http.get<Result>(this.route);
+                        return this.http.get<Result>(this.route).pipe(catchToError);
                     case "post":
-                        return this.http.post<Result>(this.route, input);
+                        return this.http.post<Result>(this.route, input).pipe(catchToError);
                     case "patch":
-                        return this.http.patch<Result>(this.route, input);
+                        return this.http.patch<Result>(this.route, input).pipe(catchToError);
                     case "delete":
-                        return this.http.delete<Result>(this.route);
+                        return this.http.delete<Result>(this.route).pipe(catchToError);
                 }
             }),
-            catchError(error => of<RequestError>({ error: error.error })),
             share()
         );
 

@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter } from "rxjs";
 import {
     controlErrorMessages$,
-    encodeUserData,
     formErrorMessages$,
     setErrors,
     updateFormValidity,
@@ -55,9 +54,6 @@ export class UserSettingsComponent implements OnInit {
     public requestResetLoading$ = this.authService.passwordForgotten.loading$;
     public deleteUserLoading$ = this.authService.deleteUser.loading$;
 
-    // See submit() for explanation.
-    private currentUsername: string | null = null;
-
     constructor(
         private authService: AuthService,
         private toastService: ToastService,
@@ -75,7 +71,6 @@ export class UserSettingsComponent implements OnInit {
                     return;
                 }
                 this.form.patchValue(user);
-                this.currentUsername = user.username;
             });
 
         this.authService.passwordForgotten.success$
@@ -134,15 +129,7 @@ export class UserSettingsComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
-        const patchInput = this.form.getRawValue();
-
-        // If we send the username along, dj-auth-rest will assume it has changed,
-        // returning a 'username already taken' error if it hasn't.
-        // Therefore we remove the username from the input if it has not changed.
-        if (patchInput.username === this.currentUsername) {
-            delete patchInput.username;
-        }
-
-        this.authService.updateSettings.subject.next(encodeUserData(patchInput));
+        const userSettings = this.form.getRawValue();
+        this.authService.newUserSettings(userSettings);
     }
 }

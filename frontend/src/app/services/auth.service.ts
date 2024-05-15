@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
-import { parseUserData } from '../user/utils';
+import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 import { HttpVerb, Request } from '../user/Request';
@@ -17,7 +17,8 @@ export interface AuthAPIResult {
 })
 export class AuthService {
     public login = this.createRequest<UserLogin, AuthAPIResult>(
-        this.authRoute('login/'), 'get'
+        this.authRoute('login/'),
+        'post'
     );
     public registration = this.createRequest<UserRegistration, never>(
         this.authRoute('registration/'),
@@ -89,6 +90,32 @@ export class AuthService {
         this.sessionService.expired.pipe(
             takeUntilDestroyed()
         ).subscribe(() => this.logout.subject.next());
+    }
+
+    // Keeping track of the latest version of the username
+    private currentUserName = toSignal<string | null>(
+        this.currentUser$.pipe(
+            map(user => user?.username ?? null)
+        )
+    );
+
+    /**
+     * Encodes the user settings and sends them to the server to be updated.
+     *
+     * Due to a quirk in dj-auth-rest, the username must only be sent along if it has changed.
+     * If the username is not changed, it will be removed from the input.
+     *
+     * @param userSettings - The user settings to be submitted.
+     * @returns void
+     */
+    public newUserSettings(userSettings: UserSettings): void {
+        console.log('Current user name:', this.currentUserName())
+        console.log('Identical:', userSettings.username === this.currentUserName())
+        if (userSettings.username === this.currentUserName()) {
+            delete userSettings.username;
+        }
+        const encoded = encodeUserData(userSettings);
+        this.updateSettings.subject.next(encoded);
     }
 
     private authRoute(route: string): string {
