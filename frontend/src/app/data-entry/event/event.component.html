@@ -76,6 +76,21 @@
             <div ngbAccordionBody>
                 <ng-template>
                     <div class="mb-5">
+                        <h3>Designators</h3>
+                        <label class="form-label">
+                            Expressions (in Latin) that refer to this entity
+                        </label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" value="Transmisit">
+                            <button class="btn btn-outline-secondary" disabled>
+                                <fa-icon [icon]="icons.remove"></fa-icon>
+                            </button>
+                        </div>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" placeholder="Add a new designator">
+                        </div>
+                    </div>
+                    <div class="mb-5">
                         <h3>Action</h3>
                         <div class="mb-4">
                             <label class="form-label">Summary</label>
