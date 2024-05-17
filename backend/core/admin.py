@@ -12,7 +12,7 @@ description_source_fieldset = (
     "Source information",
     {
         "description": "Information about the source from which this description is taken.",
-        "fields": ["source", "source_mention", "book", "chapter", "page"],
+        "fields": ["source", "source_mention", "designators", "book", "chapter", "page"],
     },
 )
 
@@ -22,7 +22,6 @@ field_fields = ["certainty", "note"]
 
 description_field_fields = [
     "source_mention",
-    "source_terminology",
 ] + field_fields
 
 
