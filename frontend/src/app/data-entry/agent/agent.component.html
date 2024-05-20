@@ -138,36 +138,6 @@
                         </div>
                     </div>
 
-                    <div class="mb-5">
-                        <h3>Social status</h3>
-
-                        <div class="mb-4">
-                            <label class="form-label">
-                                What is the social status of
-                                <span *ngIf="agent === 1">this person</span><span *ngIf="agent === 3">the members of this group</span>?
-                                How does the text describe them?
-                            </label>
-                            <input class="form-control">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-
                     <div class="mb-5" *ngIf="agent === 3">
                         <h3>Place</h3>
 
