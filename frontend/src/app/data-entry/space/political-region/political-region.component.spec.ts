@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoliticalRegionComponent } from './political-region.component';
+import { SharedTestingModule } from 'src/app/shared/shared-testing.module';
 
 describe('PoliticalRegionComponent', () => {
   let component: PoliticalRegionComponent;
@@ -8,7 +9,8 @@ describe('PoliticalRegionComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PoliticalRegionComponent]
+        declarations: [PoliticalRegionComponent],
+        imports: [SharedTestingModule],
     });
     fixture = TestBed.createComponent(PoliticalRegionComponent);
     component = fixture.componentInstance;

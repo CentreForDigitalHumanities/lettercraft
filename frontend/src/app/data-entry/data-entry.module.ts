@@ -24,6 +24,14 @@ import { EventComponent } from './event/event.component';
         ObjectComponent,
         EventComponent,
     ],
+    exports: [
+        SourcesComponent,
+        SourceComponent,
+        AgentComponent,
+        SpaceComponent,
+        ObjectComponent,
+        EventComponent,
+    ],
     imports: [
         SharedModule,
     ]

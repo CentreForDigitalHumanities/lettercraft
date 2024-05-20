@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -14,6 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
     imports: [
         CommonModule,
         BrowserModule,
+        FormsModule,
         FontAwesomeModule,
         HttpClientTestingModule,
         NgbModule,
@@ -22,6 +24,7 @@ import { RouterTestingModule } from '@angular/router/testing';
     ], exports: [
         CommonModule,
         BrowserModule,
+        FormsModule,
         FontAwesomeModule,
         HttpClientTestingModule,
         NgbModule,
