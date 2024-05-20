@@ -5,9 +5,9 @@ import { SourcesComponent } from './data-entry/sources/sources.component';
 import { SourceComponent } from './data-entry/source/source.component';
 import { AgentComponent } from './data-entry/agent/agent.component';
 import { SpaceComponent } from './data-entry/space/space.component';
-import { StructureComponent } from './data-entry/space/structure/structure.component';
 import { ObjectComponent } from './data-entry/object/object.component';
 import { EventComponent } from './data-entry/event/event.component';
+import { SourceAltComponent } from './data-entry/source-alt/source-alt.component';
 
 const routes: Routes = [
     {
@@ -18,24 +18,38 @@ const routes: Routes = [
         path: 'data-entry',
         children: [
             {
-                path: 'source/:sourceID/agent/:agentID',
-                component: AgentComponent,
+                path: 'source/1',
+                children: [
+                    {
+                        path: 'agent/:agentID',
+                        component: AgentComponent,
+                    },
+                    {
+                        path: 'space/:spaceID',
+                        component: SpaceComponent,
+                    },
+                    {
+                        path: 'object/:objectID',
+                        component: ObjectComponent,
+                    },
+                    {
+                        path: 'event/:eventID',
+                        component: EventComponent,
+                    },
+                    {
+                        path: '',
+                        component: SourceComponent,
+                    }
+                ]
             },
             {
-                path: 'source/:sourceID/space/:spaceID',
-                component: SpaceComponent,
-            },
-            {
-                path: 'source/:sourceID/object/:objectID',
-                component: ObjectComponent,
-            },
-            {
-                path: 'source/:sourceID/event/:eventID',
-                component: EventComponent,
-            },
-            {
-                path: 'source/:sourceID',
-                component: SourceComponent,
+                path: 'source/2',
+                children: [
+                    {
+                        path: '',
+                        component: SourceAltComponent,
+                    }
+                ]
             },
             {
                 path: '',

@@ -9,6 +9,7 @@ import { StructureTreeComponent } from './space/structure/structure-tree/structu
 import { PoliticalRegionComponent } from './space/political-region/political-region.component';
 import { ObjectComponent } from './object/object.component';
 import { EventComponent } from './event/event.component';
+import { SourceAltComponent } from './source-alt/source-alt.component';
 
 
 
@@ -23,10 +24,12 @@ import { EventComponent } from './event/event.component';
         PoliticalRegionComponent,
         ObjectComponent,
         EventComponent,
+        SourceAltComponent,
     ],
     exports: [
         SourcesComponent,
         SourceComponent,
+        SourceAltComponent,
         AgentComponent,
         SpaceComponent,
         ObjectComponent,
