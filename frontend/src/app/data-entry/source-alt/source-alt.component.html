@@ -39,6 +39,21 @@
         </h5>
         <p>{{episode.summary || '...'}}</p>
 
+        <dl>
+            <dt>Agents</dt>
+            <dd><ul>
+                <li *ngFor="let agent of episode.agents">
+                    <a [routerLink]="['agent/', agent.id]">{{agent.name}}</a>
+                </li>
+            </ul></dd>
+
+            <dt>Locations</dt>
+            <dd>...</dd>
+
+            <dt>Objects</dt>
+            <dd>...</dd>
+        </dl>
+
     </div>
 </div>
 <div class="btn-group mb-4">
