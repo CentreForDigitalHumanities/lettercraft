@@ -120,11 +120,22 @@ class EntityDescription(Named, models.Model):
         on_delete=models.PROTECT,
         help_text="Source text containing this description",
     )
+
     source_mention = models.CharField(
         max_length=32,
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
         help_text="How is this entity presented in the text?",
+    )
+
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe this entity in the source text",
     )
 
     book = models.CharField(
@@ -165,15 +176,6 @@ class DescriptionField(Field, models.Model):
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
         help_text="How is this information presented in the text?",
-    )
-    source_terminology = ArrayField(
-        models.CharField(
-            max_length=200,
-        ),
-        default=list,
-        blank=True,
-        size=5,
-        help_text="Relevant terminology used in the source text",
     )
 
     class Meta:
