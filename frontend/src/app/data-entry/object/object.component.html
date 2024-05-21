@@ -86,105 +86,14 @@
                             <input type="text" class="form-control" placeholder="Add a new designator">
                         </div>
                     </div>
+
                     <div class="mb-5">
-                        <h3>Sender</h3>
+                        <h3>Category</h3>
                         <div class="mb-4">
-                            <label class="form-label">Who is described as the (original) sender?</label>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked>
-                                <label class="form-check-label">St. Radegund</label>
+                            <label for="" class="form-label">Select all categories that apply</label>
+                            <div class="d-flex flex-wrap" style="gap: .5em;">
+                                <span *ngFor="let category of categories" role="button" class="badge" [class]="category.selected ? 'text-bg-primary' : 'text-bg-secondary'" (click)="selectCategory(category)">{{category.label}}</span>
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input">
-                                <label class="form-check-label">Unknown messenger</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input">
-                                <label class="form-check-label">The nuns of Poitiers</label>
-                            </div>
-                            <div class="form-text">
-                                You can choose between the agents that have been added for this source.
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <h3>Addressee</h3>
-                        <div class="mb-4">
-                            <label class="form-label">Who is describe as the addressee?</label>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input">
-                                <label class="form-check-label">St. Radegund</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input">
-                                <label class="form-check-label">Unknown messenger</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" checked>
-                                <label class="form-check-label">The nuns of Poitiers</label>
-                            </div>
-                            <div class="form-text">
-                                You can choose between the agents that have been added for this source.
-                            </div>
-
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-                    <div class="mb-5">
-                        <h3>Material properties</h3>
-                        <div class="mb-4">
-                            <label class="form-label">Material</label>
-                            <input class="form-control" value="parchment">
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
                         </div>
                     </div>
                 </ng-template>

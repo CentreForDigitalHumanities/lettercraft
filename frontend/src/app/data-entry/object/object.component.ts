@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { faAdd, faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+interface Category {
+    label: string;
+    selected: boolean;
+}
+
 @Component({
     selector: 'lc-object',
     templateUrl: './object.component.html',
@@ -12,6 +17,33 @@ export class ObjectComponent {
         cancel: faCancel,
         remove: faTimes,
         add: faAdd,
+    }
+
+    categories: Category[] = [
+        {
+            label: 'Written by woman',
+            selected: true
+        },
+        {
+            label: 'Secret letter',
+            selected: true
+        },
+        {
+            label: 'Poem',
+            selected: false
+        },
+        {
+            label: 'Written by saint',
+            selected: true
+        },
+        {
+            label: 'Unknown author',
+            selected: false
+        }
+    ];
+
+    public selectCategory(category: Category): void {
+        category.selected = !category.selected;
     }
 
 }
