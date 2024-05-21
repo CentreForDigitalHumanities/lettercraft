@@ -125,31 +125,6 @@ class AgentDescriptionGender(DescriptionField, models.Model):
             raise ValidationError("Mixed gender can only be used for groups")
 
 
-class AgentDescriptionName(DescriptionField, models.Model):
-    """
-    A name used for an agent in a source text description
-    """
-
-    agent = models.ForeignKey(
-        to=AgentDescription,
-        on_delete=models.CASCADE,
-        related_name="names",
-    )
-    name = models.CharField(
-        max_length=256,
-    )
-
-    class Meta:
-        verbose_name = "name used in description"
-        verbose_name_plural = "names used in description"
-        constraints = [
-            models.UniqueConstraint("name", "agent", name="unique_names_for_agent")
-        ]
-
-    def __str__(self):
-        return self.name
-
-
 class AgentDescriptionLocation(DescriptionField, models.Model):
     """
     A characterisation of a location as a fundamental property of an agent.

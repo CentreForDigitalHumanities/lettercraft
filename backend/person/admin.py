@@ -29,10 +29,6 @@ class HistoricalPersonAdmin(admin.ModelAdmin):
     ]
 
 
-class AgentDescriptionNameAdmin(admin.StackedInline):
-    model = models.AgentDescriptionName
-    fields = ["name"] + core_admin.description_field_fields
-    extra = 0
 
 
 class AgentDescriptionGenderAdmin(admin.StackedInline):
@@ -49,7 +45,6 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
 @admin.register(models.AgentDescription)
 class AgentDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     inlines = [
-        AgentDescriptionNameAdmin,
         AgentDescriptionGenderAdmin,
         AgentDescriptionLocationAdmin,
     ]
