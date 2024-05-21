@@ -49,12 +49,11 @@ def source(db):
 
 
 @pytest.fixture()
-def letter_description(db, source, agent_description):
+def letter_description(db, source):
     letter = LetterDescription.objects.create(
         name="Bert's letter",
         source=source,
     )
-    letter.senders.add(agent_description)
     return letter
 
 
