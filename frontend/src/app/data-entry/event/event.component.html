@@ -99,34 +99,13 @@
                                 Describe the events in this passage.
                             </p>
                         </div>
+                    </div>
+                    <div class="mb-5">
+                        <h3>Category</h3>
                         <div class="mb-4">
-                            <label class="form-label">Action labels</label>
-
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item hstack">
-                                    <span>
-                                        delivering
-                                    </span>
-                                    <div class="ms-auto btn-group">
-                                        <button class="btn btn-primary" disabled>
-                                            <fa-icon [icon]="icons.edit"></fa-icon>
-                                        </button>
-                                        <button class="btn btn-danger" disabled>
-                                            <fa-icon [icon]="icons.remove"></fa-icon>
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-
-                            <div ngbDropdown>
-                                <button type="button" class="btn btn-primary" ngbDropdownToggle>
-                                    Add a label
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <button ngbDropdownItem *ngFor="let label of labels">
-                                        {{label}}
-                                    </button>
-                                </div>
+                            <label for="" class="form-label">Select all categories that apply</label>
+                            <div class="d-flex flex-wrap" style="gap: .5em;">
+                                <span *ngFor="let category of categories" role="button" class="badge" [class]="category.selected ? 'text-bg-primary' : 'text-bg-secondary'" (click)="selectCategory(category)">{{category.label}}</span>
                             </div>
                         </div>
                     </div>

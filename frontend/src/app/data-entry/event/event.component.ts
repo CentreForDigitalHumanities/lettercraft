@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Category } from 'src/app/shared/types';
 
 @Component({
   selector: 'lc-event',
@@ -19,4 +20,43 @@ export class EventComponent {
         'secret communication',
         'penance',
     ];
+
+    categories: Category[] = [
+        {
+            label: 'Delivery',
+            selected: true
+        },
+        {
+            label: 'Secret communication',
+            selected: false
+        },
+        {
+            label: 'Public reading',
+            selected: true
+        },
+        {
+            label: 'Writing',
+            selected: false
+        },
+        {
+            label: 'Penance',
+            selected: false
+        },
+        {
+            label: 'Excommunication',
+            selected: false
+        },
+        {
+            label: 'Deliberate destruction',
+            selected: false
+        },
+        {
+            label: 'Healing',
+            selected: false
+        }
+    ];
+
+    public selectCategory(category: Category): void {
+        category.selected = !category.selected;
+    }
 }

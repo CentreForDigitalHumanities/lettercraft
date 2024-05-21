@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { faAdd, faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-
-interface Category {
-    label: string;
-    selected: boolean;
-}
+import { Category } from 'src/app/shared/types';
 
 @Component({
     selector: 'lc-object',
