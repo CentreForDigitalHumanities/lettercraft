@@ -11,24 +11,6 @@ from core.models import (
 from space.models import SpaceDescription
 
 
-class StatusMarker(models.Model):
-    """
-    A marker of someone's social status. This can be a job title or a social group someone belongs to.
-    """
-
-    name = models.CharField(
-        max_length=256,
-        help_text="The name of the marker or job (e.g. 'bishop of Toulouse', 'peasantry of France')",
-    )
-    description = models.TextField(
-        blank=True,
-        help_text="A description of what the marker means (e.g. 'The bishop of Toulouse is the ecclesiastical ruler of the diocese of Toulouse')",
-    )
-
-    def __str__(self):
-        return self.name
-
-
 class HistoricalPerson(HistoricalEntity, models.Model):
     """
     A historical figure, which may be referenced in narrative sources or preserved letters
@@ -141,27 +123,6 @@ class AgentDescriptionGender(DescriptionField, models.Model):
     def clean(self):
         if self.gender == Gender.MIXED and not self.agent.is_group:
             raise ValidationError("Mixed gender can only be used for groups")
-
-
-class AgentDescriptionSocialStatus(DescriptionField, models.Model):
-    """
-    A characterisation of an agent's social status in a source text.
-    """
-
-    agent = models.ForeignKey(
-        to=AgentDescription,
-        on_delete=models.CASCADE,
-        related_name="social_statuses",
-    )
-    status_marker = models.ForeignKey(
-        to=StatusMarker, on_delete=models.CASCADE, related_name="social_statuses"
-    )
-
-    class Meta:
-        verbose_name = "social status description"
-
-    def __str__(self):
-        return str(self.status_marker)
 
 
 class AgentDescriptionLocation(DescriptionField, models.Model):
