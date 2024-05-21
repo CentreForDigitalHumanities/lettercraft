@@ -32,7 +32,7 @@
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </a>
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -45,11 +45,11 @@
                             </h5>
                             <p>Messenger who delivers the letter to the nuns</p>
                             <div class="btn-group">
-                                <a class="btn btn-primary" [routerLink]="['agent', 1]">
+                                <button class="btn btn-primary" disabled>
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </a>
-                                <button class="btn btn-danger">
+                                </button>
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -66,7 +66,7 @@
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </a>
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary" disabled>
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new agent
                         </button>
@@ -100,11 +100,11 @@
                             </h5>
                             <p>Abbey in Poitiers</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary" [routerLink]="['space', 1]">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
-                                <button class="btn btn-danger">
+                                </a>
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -117,11 +117,11 @@
                             </h5>
                             <p>A cave somewhere in France, where Radegund had a vision</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" disabled>
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </button>
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary" disabled>
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new place
                         </button>
@@ -154,11 +154,12 @@
                             </h5>
                             <p>A letter written by Radegund describing her vision</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary"
+                                    [routerLink]="['object/', 1]">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
-                                <button class="btn btn-danger">
+                                </a>
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -171,11 +172,11 @@
                             </h5>
                             <p>A penitent gift</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" disabled>
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </button>
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -188,11 +189,11 @@
                             </h5>
                             <p>A letter delivered in a vision</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" disabled>
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
                                 </button>
-                                <button class="btn btn-danger">
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -200,7 +201,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary" disabled>
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new object
                         </button>
@@ -230,11 +231,12 @@
                             </h5>
                             <p>An unknown messenger delivers a letter to the nuns of Poitiers.</p>
                             <div class="btn-group">
-                                <button class="btn btn-primary">
+                                <a class="btn btn-primary"
+                                    [routerLink]="['event', '1']">
                                     <fa-icon [icon]="icons.edit"></fa-icon>
                                     Edit
-                                </button>
-                                <button class="btn btn-danger">
+                                </a>
+                                <button class="btn btn-danger" disabled>
                                     <fa-icon [icon]="icons.delete"></fa-icon>
                                     Delete
                                 </button>
@@ -242,7 +244,7 @@
                         </div>
                     </div>
                     <div class="btn-group mb-4">
-                        <button class="btn btn-success">
+                        <button class="btn btn-primary" disabled>
                             <fa-icon [icon]="icons.create"></fa-icon>
                             Add a new action
                         </button>

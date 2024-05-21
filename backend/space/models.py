@@ -2,26 +2,16 @@ from django.db import models
 from django.contrib import admin
 import itertools
 
-from core.models import Field
+from core.models import DescriptionField, HistoricalEntity, EntityDescription
 from space import validators
 
-class SpaceDescription(models.Model):
+
+class SpaceDescription(EntityDescription, models.Model):
     """
     The representation of a space within a source text.
 
     This model compounds all different aspects of space (geographical, political, etc.).
     """
-
-    name = models.CharField(
-        max_length=200,
-        blank=False,
-        help_text="A name to identify this space when entering data",
-    )
-
-    description = models.TextField(
-        blank=True,
-        help_text="Longer description of this place that can be used to identify it",
-    )
 
     political_regions = models.ManyToManyField(
         to="PoliticalRegion",
@@ -47,42 +37,8 @@ class SpaceDescription(models.Model):
         help_text="Man-made structures referenced in this description",
     )
 
-    def __str__(self):
-        return self.name
 
-
-class NamedSpace(models.Model):
-    """
-    Abstract class for "Named" regions, i.e. ones that can be
-    identified as named entities.
-    """
-
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        blank=False,
-    )
-
-    description = models.TextField(
-        blank=True,
-    )
-
-    identifiable = models.BooleanField(
-        default=True,
-        null=False,
-        help_text="Whether this place is an identifiable location that can be cross-referenced between descriptions, or a generic description",
-    )
-
-    # may be expanded with geo data?
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        abstract = True
-
-
-class PoliticalRegion(NamedSpace, models.Model):
+class PoliticalRegion(HistoricalEntity, models.Model):
     """
     A political region, e.g. a kingdom or duchy
     """
@@ -90,7 +46,7 @@ class PoliticalRegion(NamedSpace, models.Model):
     pass
 
 
-class EcclesiasticalRegion(NamedSpace, models.Model):
+class EcclesiasticalRegion(HistoricalEntity, models.Model):
     """
     An ecclesiastical region, e.g. a diocese
     """
@@ -98,7 +54,7 @@ class EcclesiasticalRegion(NamedSpace, models.Model):
     pass
 
 
-class GeographicalRegion(NamedSpace, models.Model):
+class GeographicalRegion(HistoricalEntity, models.Model):
     """
     A geographical region or location, e.g. "the Pyrenees".
     """
@@ -106,7 +62,7 @@ class GeographicalRegion(NamedSpace, models.Model):
     pass
 
 
-class Structure(NamedSpace, models.Model):
+class Structure(HistoricalEntity, models.Model):
     """
     A structure is a man-made site.
 
@@ -163,31 +119,31 @@ class Structure(NamedSpace, models.Model):
             )
 
 
-class PoliticalRegionField(Field, models.Model):
+class PoliticalRegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
 
 
-class EcclesiasticalRegionField(Field, models.Model):
+class EcclesiasticalRegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     ecclesiastical_region = models.ForeignKey(
         to=EcclesiasticalRegion, on_delete=models.CASCADE
     )
 
 
-class GeographicalRegionField(Field, models.Model):
+class GeographicalRegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     geographical_region = models.ForeignKey(
         to=GeographicalRegion, on_delete=models.CASCADE
     )
 
 
-class StructureField(Field, models.Model):
+class StructureField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
 
 
-class LandscapeFeature(Field, models.Model):
+class LandscapeFeature(DescriptionField, models.Model):
     """
     A landscape feature describes natural or geological aspects of a
     space, e.g. "a forest", "a hill", "a cave".

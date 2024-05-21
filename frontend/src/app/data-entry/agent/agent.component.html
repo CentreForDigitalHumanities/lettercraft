@@ -79,28 +79,18 @@
             <div ngbAccordionBody>
                 <ng-template>
                     <div class="mb-5" *ngIf="agent === 1">
-                        <h3>Name</h3>
-
+                        <h3>Designators</h3>
                         <label class="form-label">
-                            Name(s)
+                            Expressions (in Latin) that refer to this entity
                         </label>
-
                         <div class="input-group mb-4">
-                            <input type="text" class="form-control" value="St. Radegund">
-                            <button class="btn btn-outline-secondary">
+                            <input type="text" class="form-control" value="Radegundis Sancta">
+                            <button class="btn btn-outline-secondary" disabled>
                                 <fa-icon [icon]="icons.remove"></fa-icon>
                             </button>
                         </div>
-
                         <div class="input-group mb-4">
-                            <input type="text" class="form-control" placeholder="Add a new name">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
+                            <input type="text" class="form-control" placeholder="Add a new designator">
                         </div>
                     </div>
 
@@ -118,36 +108,6 @@
                                 <option *ngIf="agent === 3">Mixed</option>
                                 <option>Unknown</option>
                             </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                How is this information presented in the text?
-                            </label>
-
-                            <select class="form-select">
-                                <option>Implied</option>
-                                <option selected>Mentioned</option>
-                                <option>Described</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Additional notes
-                            </label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="mb-5">
-                        <h3>Social status</h3>
-
-                        <div class="mb-4">
-                            <label class="form-label">
-                                What is the social status of
-                                <span *ngIf="agent === 1">this person</span><span *ngIf="agent === 3">the members of this group</span>?
-                                How does the text describe them?
-                            </label>
-                            <input class="form-control">
                         </div>
                         <div class="mb-4">
                             <label class="form-label">
@@ -224,19 +184,15 @@
                         <label class="form-label">
                             Can we cross-reference this agent with other sources?
                         </label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" checked="true">
-                            <label class="form-check-label">
+                        <select class="form-select">
+                            <option value="yes" selected>
                                 Yes, this person is a historical or religious figure;
                                 they may appear in other sources
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio">
-                            <label class="form-check-label">
+                            </option>
+                            <option>
                                 No, this person is an unknown individual
-                            </label>
-                        </div>
+                            </option>
+                        </select>
                     </div>
                 </ng-template>
             </div>
