@@ -8,60 +8,61 @@
 
 <h1 class="mb-4">Walafrid Strabo, Vita Galli</h1>
 
+
+<h2 class="mb-4">Episodes</h2>
+
 <p>
     Identify <i>episodes</i> in the narrative that relate to epistolary communication.
     For each episode, fill in what happens and what agents, objects, and locations are involved.
 </p>
 
-<h2 class="mb-4">Episodes</h2>
-
-<div class="list-group mb-4 ">
-    <div class="list-group-item pt-3"
-        *ngFor="let episode of episodes"
-        [routerLink]="['source/', 1]">
-
-        <div class="btn-group float-end">
-            <a class="btn btn-primary"
-                [routerLink]="['event', '1']">
-                <fa-icon [icon]="icons.edit"></fa-icon>
-                Edit
-            </a>
-            <button class="btn btn-danger" disabled>
-                <fa-icon [icon]="icons.delete"></fa-icon>
-                Delete
-            </button>
+<div class="mb-4">
+    <div class="card mb-4"
+        *ngFor="let episode of episodes">
+        <div class="card-header">
+            <div class="hstack">
+                <span>
+                    <fa-icon [icon]="icons.action"></fa-icon>
+                    &nbsp;
+                    {{episode.title}}
+                </span>
+                <div class="ms-auto btn-group">
+                    <a class="btn btn-primary"
+                        [routerLink]="['event', '1']">
+                        <fa-icon [icon]="icons.edit"></fa-icon>
+                </a>
+                    <button class="btn btn-danger" disabled>
+                        <fa-icon [icon]="icons.delete"></fa-icon>
+                    </button>
+                </div>
+            </div>
         </div>
+        <div class="card-body">
+            <p>{{episode.summary || '...'}}</p>
 
-        <h5 class="mb-1">
-            <fa-icon [icon]="icons.action"></fa-icon>
-            &nbsp;
-            {{episode.title}}
-        </h5>
-        <p>{{episode.summary || '...'}}</p>
+            <dl>
+                <dt>Agents</dt>
+                <dd><ul>
+                    <li *ngFor="let agent of episode.agents">
+                        <a [routerLink]="['agent/', agent.id]">{{agent.name}}</a>
+                    </li>
+                </ul></dd>
 
-        <dl>
-            <dt>Agents</dt>
-            <dd><ul>
-                <li *ngFor="let agent of episode.agents">
-                    <a [routerLink]="['agent/', agent.id]">{{agent.name}}</a>
-                </li>
-            </ul></dd>
+                <dt>Locations</dt>
+                <dd><ul>
+                    <li *ngFor="let location of episode.locations">
+                        <a [routerLink]="['space/', location.id]">{{location.name}}</a>
+                    </li>
+                </ul></dd>
 
-            <dt>Locations</dt>
-            <dd><ul>
-                <li *ngFor="let location of episode.locations">
-                    <a [routerLink]="['space/', location.id]">{{location.name}}</a>
-                </li>
-            </ul></dd>
-
-            <dt>Objects</dt>
-            <dd><ul>
-                <li *ngFor="let object of episode.objects">
-                    <a [routerLink]="['object/', object]">{{object.name}}</a>
-                </li>
-            </ul></dd>
-        </dl>
-
+                <dt>Objects</dt>
+                <dd><ul>
+                    <li *ngFor="let object of episode.objects">
+                        <a [routerLink]="['object/', object]">{{object.name}}</a>
+                    </li>
+                </ul></dd>
+            </dl>
+        </div>
     </div>
 </div>
 <div class="btn-group mb-4">
