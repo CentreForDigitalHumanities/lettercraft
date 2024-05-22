@@ -48,10 +48,18 @@
             </ul></dd>
 
             <dt>Locations</dt>
-            <dd>...</dd>
+            <dd><ul>
+                <li *ngFor="let location of episode.locations">
+                    <a [routerLink]="['space/', location.id]">{{location.name}}</a>
+                </li>
+            </ul></dd>
 
             <dt>Objects</dt>
-            <dd>...</dd>
+            <dd><ul>
+                <li *ngFor="let object of episode.objects">
+                    <a [routerLink]="['object/', object]">{{object.name}}</a>
+                </li>
+            </ul></dd>
         </dl>
 
     </div>
