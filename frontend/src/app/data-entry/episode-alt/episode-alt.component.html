@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem [collapsed]="false">
+    <div ngbAccordionItem>
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Source text</button>
         </h2>
@@ -98,7 +98,7 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem>
+    <div ngbAccordionItem >
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Contents</button>
         </h2>
@@ -154,13 +154,63 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem>
+    <div ngbAccordionItem [collapsed]="false">
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Agents</button>
         </h2>
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
                 <ng-template>
+                    <p class="mb-4">Which agents are involved?</p>
+                        <div class="mb-4">
+                            <div class="card mb-3"
+                                *ngFor="let agent of episode.agents">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            {{agent.name}}
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-primary" disabled>
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </button>
+                                            <button class="btn btn-danger" disabled>
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this information presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                            <option>Described</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ngbDropdown>
+                                <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                    Add an agent
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <button ngbDropdownItem>
+                                        Radegund
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                 </ng-template>
             </div>
         </div>
