@@ -11,6 +11,7 @@ import { ObjectComponent } from './object/object.component';
 import { EventComponent } from './event/event.component';
 import { SourceAltComponent } from './source-alt/source-alt.component';
 import { EpisodeAltComponent } from './episode-alt/episode-alt.component';
+import { AgentAltComponent } from './agent-alt/agent-alt.component';
 
 
 
@@ -27,6 +28,7 @@ import { EpisodeAltComponent } from './episode-alt/episode-alt.component';
         EventComponent,
         SourceAltComponent,
         EpisodeAltComponent,
+        AgentAltComponent,
     ],
     exports: [
         SourcesComponent,
