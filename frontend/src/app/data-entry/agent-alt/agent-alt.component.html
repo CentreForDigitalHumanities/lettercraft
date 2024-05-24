@@ -17,3 +17,253 @@
 <p class="lead">
     {{agent.description}}
 </p>
+
+
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" class="form-control"
+                            [value]="agent.name">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the agent in the overview of the source.
+                                For example: "Radegund", "messenger from Poitiers", "the citizens of Arles".
+                            </small>
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Description
+                        </label>
+                        <input type="text" class="form-control"
+                            [value]="agent.description">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this agent.
+                            </small>
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">
+                            Is this agent a person or a group?
+                        </label>
+                        <select class="form-select">
+                            <option [selected]="agent.isGroup === false">Person</option>
+                            <option [selected]="agent.isGroup === true">Group</option>
+                        </select>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Designators</h3>
+                        <label class="form-label">
+                            Expressions (in Latin) that refer to this entity
+                        </label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" value="example name">
+                            <button class="btn btn-outline-secondary" disabled>
+                                <fa-icon [icon]="icons.remove"></fa-icon>
+                            </button>
+                        </div>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" placeholder="Add a new designator">
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Gender</h3>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How does the text present the gender of
+                                <span *ngIf="!agent.isGroup">this person</span><span *ngIf="agent.isGroup">the members of this group</span>?
+                            </label>
+                            <select class="form-select">
+                                <option selected>Female</option>
+                                <option>Male</option>
+                                <option>Other</option>
+                                <option *ngIf="agent.isGroup">Mixed</option>
+                                <option>Unknown</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mb-5" *ngIf="agent.isGroup">
+                        <h3>Place</h3>
+
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Is this group defined by their connection to a place?
+                            </label>
+
+                            <select class="form-select">
+                                <option selected>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Select one of the places that are represented in the source.
+                            </label>
+
+                            <select class="form-select">
+                                <option selected>The Abbey of the Holy Cross</option>
+                                <option>A cave</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                How is this information presented in the text?
+                            </label>
+
+                            <select class="form-select">
+                                <option>Implied</option>
+                                <option selected>Mentioned</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">
+                                Additional notes
+                            </label>
+                            <textarea class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Episodes</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p class="mb-4">In which episodes is this agent involved?</p>
+                        <div class="mb-4">
+                            <div class="card mb-3"
+                                *ngFor="let episode of episodes; let first = first">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            {{episode.title}}
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-secondary">
+                                                <fa-icon [icon]="first ? icons.collapse : icons.expand"></fa-icon>
+                                            </button>
+                                            <a class="btn btn-primary"
+                                                [routerLink]="['../..', 'episode', episode.order]">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </a>
+                                            <button class="btn btn-danger" disabled>
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body" *ngIf="first">
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            How is this agent presented in the text?
+                                        </label>
+                                        <select class="form-select">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hstack gap-2">
+                                <div ngbDropdown>
+                                    <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                        Add an episode
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <button ngbDropdownItem
+                                            *ngFor="let episode of otherEpisodes">
+                                            {{episode.title}}
+                                        </button>
+                                        <button ngbDropdownItem>
+                                            <fa-icon [icon]="icons.add"></fa-icon>
+                                            Add a new episode
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem *ngIf="!agent.isGroup">
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Historical context</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-4">
+                        <label class="form-label">
+                            Can we cross-reference this agent with other sources?
+                        </label>
+                        <select class="form-select">
+                            <option value="yes" selected>
+                                Yes, this person is a historical or religious figure;
+                                they may appear in other sources
+                            </option>
+                            <option>
+                                No, this person is an unknown individual
+                            </option>
+                        </select>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
