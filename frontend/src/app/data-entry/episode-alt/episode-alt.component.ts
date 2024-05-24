@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { episodes } from '../source-alt/source-data';
-import { faPencil, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faPencil, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lc-episode-alt',
@@ -12,6 +12,8 @@ export class EpisodeAltComponent {
     icons = {
         remove: faTimes,
         edit: faPencil,
+        expand: faCaretDown,
+        collapse: faCaretUp,
     };
 
     labels = [

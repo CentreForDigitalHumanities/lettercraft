@@ -164,31 +164,34 @@
                     <p class="mb-4">Which agents are involved?</p>
                         <div class="mb-4">
                             <div class="card mb-3"
-                                *ngFor="let agent of episode.agents">
+                                *ngFor="let agent of episode.agents; let first = first">
                                 <div class="card-header">
                                     <div class="hstack">
                                         <span>
                                             {{agent.name}}
                                         </span>
                                         <div class="ms-auto btn-group">
-                                            <button class="btn btn-primary" disabled>
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            <button class="btn btn-secondary">
+                                                <fa-icon [icon]="first ? icons.collapse : icons.expand"></fa-icon>
                                             </button>
+                                            <a class="btn btn-primary"
+                                                [routerLink]="['../..', 'agent', agent.id]">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </a>
                                             <button class="btn btn-danger" disabled>
                                                 <fa-icon [icon]="icons.remove"></fa-icon>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" *ngIf="first">
                                     <div class="mb-3">
                                         <label class="form-label">
-                                            How is this information presented in the text?
+                                            How is this agent presented in the text?
                                         </label>
                                         <select class="form-select">
                                             <option>Implied</option>
                                             <option selected>Mentioned</option>
-                                            <option>Described</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
