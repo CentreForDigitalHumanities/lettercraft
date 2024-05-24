@@ -8,6 +8,7 @@ import { SpaceComponent } from './data-entry/space/space.component';
 import { ObjectComponent } from './data-entry/object/object.component';
 import { EventComponent } from './data-entry/event/event.component';
 import { SourceAltComponent } from './data-entry/source-alt/source-alt.component';
+import { EpisodeAltComponent } from './data-entry/episode-alt/episode-alt.component';
 
 const routes: Routes = [
     {
@@ -48,6 +49,10 @@ const routes: Routes = [
                     {
                         path: '',
                         component: SourceAltComponent,
+                    },
+                    {
+                        path: 'episode/:episodeID',
+                        component: EpisodeAltComponent,
                     }
                 ]
             },

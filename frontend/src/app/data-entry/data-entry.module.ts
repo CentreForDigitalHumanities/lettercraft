@@ -10,6 +10,7 @@ import { PoliticalRegionComponent } from './space/political-region/political-reg
 import { ObjectComponent } from './object/object.component';
 import { EventComponent } from './event/event.component';
 import { SourceAltComponent } from './source-alt/source-alt.component';
+import { EpisodeAltComponent } from './episode-alt/episode-alt.component';
 
 
 
@@ -25,6 +26,7 @@ import { SourceAltComponent } from './source-alt/source-alt.component';
         ObjectComponent,
         EventComponent,
         SourceAltComponent,
+        EpisodeAltComponent,
     ],
     exports: [
         SourcesComponent,
