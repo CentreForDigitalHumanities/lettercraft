@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { episodes } from '../source-alt/source-data';
-import { faCaretDown, faCaretUp, faPencil, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { agents, episodes } from '../source-alt/source-data';
+import { faCaretDown, faCaretUp, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'lc-episode-alt',
@@ -14,6 +15,7 @@ export class EpisodeAltComponent {
         edit: faPencil,
         expand: faCaretDown,
         collapse: faCaretUp,
+        add: faPlus,
     };
 
     labels = [
@@ -25,8 +27,11 @@ export class EpisodeAltComponent {
 
     episode: any;
 
+    otherAgents: any[];
+
     constructor(private activatedRoute: ActivatedRoute) {
         const id = activatedRoute.snapshot.params['episodeID'];
         this.episode = episodes.find(e => e.order == id);
+        this.otherAgents = _.difference(agents, this.episode.agents);
     }
 }

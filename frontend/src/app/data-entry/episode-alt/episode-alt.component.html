@@ -203,15 +203,23 @@
                                 </div>
                             </div>
 
-                            <div ngbDropdown>
-                                <button type="button" class="btn btn-primary" ngbDropdownToggle>
-                                    Add an agent
-                                </button>
-                                <div ngbDropdownMenu>
-                                    <button ngbDropdownItem>
-                                        Radegund
+                            <div class="hstack gap-2">
+                                <div ngbDropdown>
+                                    <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                        Add an agent
                                     </button>
+                                    <div ngbDropdownMenu>
+                                        <button ngbDropdownItem
+                                            *ngFor="let agent of otherAgents">
+                                            {{agent.name}}
+                                        </button>
+                                        <button ngbDropdownItem>
+                                            <fa-icon [icon]="icons.add"></fa-icon>
+                                            Add a new agent
+                                        </button>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                 </ng-template>
