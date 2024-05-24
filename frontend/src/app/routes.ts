@@ -47,13 +47,17 @@ const routes: Routes = [
                 path: 'source/2',
                 children: [
                     {
+                        path: 'episode/:episodeID',
+                        component: EpisodeAltComponent,
+                    },
+                    {
+                        path: 'agent/:agentID',
+                        component: AgentComponent,
+                    },
+                    {
                         path: '',
                         component: SourceAltComponent,
                     },
-                    {
-                        path: 'episode/:episodeID',
-                        component: EpisodeAltComponent,
-                    }
                 ]
             },
             {
