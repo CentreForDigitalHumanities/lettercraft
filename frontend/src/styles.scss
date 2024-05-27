@@ -16,3 +16,9 @@
 .offcanvas {
     --bs-offcanvas-width: 600px;
 }
+
+.card {
+    :last-child.card-header {
+        border-bottom: none;
+    }
+}

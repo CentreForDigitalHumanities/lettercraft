@@ -140,12 +140,13 @@
                         </div>
                         <div class="mb-4">
                             <label class="form-label">
-                                Select one of the places that are represented in the source.
+                                Select one of the locations that are represented in the source.
                             </label>
 
                             <select class="form-select">
-                                <option selected>The Abbey of the Holy Cross</option>
-                                <option>A cave</option>
+                                <option *ngFor="let location of locations">
+                                    {{location.name}}
+                                </option>
                             </select>
                         </div>
                         <div class="mb-4">
@@ -202,7 +203,7 @@
                                 <div class="card-body" *ngIf="first">
                                     <div class="mb-3">
                                         <label class="form-label">
-                                            How is this agent presented in the text?
+                                            How is this agent's involvement presented?
                                         </label>
                                         <select class="form-select">
                                             <option>Implied</option>

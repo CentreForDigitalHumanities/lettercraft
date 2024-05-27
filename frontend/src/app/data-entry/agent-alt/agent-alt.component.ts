@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { agents, episodes } from '../source-alt/source-data';
+import { agents, episodes, locations } from '../source-alt/source-data';
 import { faCaretDown, faCaretUp, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'underscore';
 
@@ -13,6 +13,7 @@ export class AgentAltComponent {
     agent: any;
     episodes: any[];
     otherEpisodes: any[];
+    locations: any[];
 
     icons = {
         remove: faTimes,
@@ -29,5 +30,6 @@ export class AgentAltComponent {
             _.any(episode.agents, agent => _.isEqual(agent, this.agent))
         );
         this.otherEpisodes = _.difference(episodes, this.episodes);
+        this.locations = locations;
     }
 }

@@ -34,16 +34,6 @@
                             For example: "journey to Rome", "Clovis' response", "Radegund asks Germanus for help".
                         </p>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Description
-                        </label>
-                        <input type="text" class="form-control" value="">
-
-                        <p class="form-text">
-                            Add a short description to help identify this event
-                        </p>
-                    </div>
                 </ng-template>
             </div>
         </div>
@@ -73,25 +63,29 @@
                     <div class="mb-5">
                         <h3 class="mb-3">Location</h3>
 
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Book
-                            </label>
-                            <input type="text" class="form-control">
-                        </div>
+                        <p>Describe the location of this passage in the source text.</p>
 
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Chapter
-                            </label>
-                            <input type="text" class="form-control">
-                        </div>
+                        <div class="row mb-4">
+                            <div class="col">
+                                <label class="form-label">
+                                    Book
+                                </label>
+                                <input type="text" class="form-control">
+                            </div>
 
-                        <div class="mb-4">
-                            <label class="form-label">
-                                Page
-                            </label>
-                            <input type="text" class="form-control">
+                            <div class="col">
+                                <label class="form-label">
+                                    Chapter
+                                </label>
+                                <input type="text" class="form-control">
+                            </div>
+
+                            <div class="col">
+                                <label class="form-label">
+                                    Page
+                                </label>
+                                <input type="text" class="form-control">
+                            </div>
                         </div>
                     </div>
                 </ng-template>
@@ -120,7 +114,9 @@
                     <div class="mb-5">
                         <h3>Labels</h3>
                         <div class="mb-4">
-                            <label class="form-label">Action labels</label>
+                            <label class="form-label">
+                                Assign any labels that apply to these events.
+                            </label>
 
                             <ul class="list-group mb-3">
                                 <li class="list-group-item hstack">
@@ -154,7 +150,7 @@
             </div>
         </div>
     </div>
-    <div ngbAccordionItem [collapsed]="false">
+    <div ngbAccordionItem>
         <h2 ngbAccordionHeader>
             <button ngbAccordionButton>Agents</button>
         </h2>
