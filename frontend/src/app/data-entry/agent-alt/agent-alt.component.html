@@ -2,7 +2,11 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
         <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
-        <li class="breadcrumb-item"><a [routerLink]="['/data-entry/source', 2]">Walafrid Strabo, Vita Galli</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/data-entry/source', 2]" class="icon-link">
+                Walafrid Strabo, Vita Galli
+            </a>
+        </li>
         <li class="breadcrumb-item active">
             {{agent.name}}
         </li>
@@ -10,6 +14,7 @@
 </nav>
 
 <h1 class="mb-4">
+    <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
     {{agent.name}}
     <small class="text-body-secondary">(<i>Walafrid Strabo, Vita Galli</i>)</small>
 </h1>
