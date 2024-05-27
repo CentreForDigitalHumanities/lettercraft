@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { agents, episodes } from '../source-alt/source-data';
-import { faCaretDown, faCaretUp, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faPencil, faPeopleGroup, faPlus, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'underscore';
 
 @Component({
@@ -16,6 +16,8 @@ export class EpisodeAltComponent {
         expand: faCaretDown,
         collapse: faCaretUp,
         add: faPlus,
+        person: faUser,
+        group: faPeopleGroup,
     };
 
     labels = [

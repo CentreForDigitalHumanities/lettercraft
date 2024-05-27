@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { agents, episodes, locations } from '../source-alt/source-data';
-import { faCaretDown, faCaretUp, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark, faCaretDown, faCaretUp, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'underscore';
 
 @Component({
@@ -21,6 +21,7 @@ export class AgentAltComponent {
         expand: faCaretDown,
         edit: faPencil,
         add: faPlus,
+        episode: faBookmark,
     };
 
     constructor(private activatedRoute: ActivatedRoute) {

@@ -44,21 +44,29 @@
                 <dt>Agents</dt>
                 <dd><ul>
                     <li *ngFor="let agent of episode.agents">
-                        <a [routerLink]="['agent/', agent.id]">{{agent.name}}</a>
+                        <a [routerLink]="['agent/', agent.id]" class="icon-link">
+                            <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
+                            {{agent.name}}
+                        </a>
                     </li>
                 </ul></dd>
 
                 <dt>Locations</dt>
                 <dd><ul>
                     <li *ngFor="let location of episode.locations">
-                        <a [routerLink]="['space/', location.id]">{{location.name}}</a>
+                        <a [routerLink]="['space/', location.id]"  class="icon-link">
+                            <fa-icon [icon]="icons.location"></fa-icon>
+                            {{location.name}}</a>
                     </li>
                 </ul></dd>
 
                 <dt>Objects</dt>
                 <dd><ul>
                     <li *ngFor="let object of episode.objects">
-                        <a [routerLink]="['object/', object]">{{object.name}}</a>
+                        <a [routerLink]="['object/', object]" class="icon-link">
+                            <fa-icon [icon]="icons.letter"></fa-icon>
+                            {{object.name}}
+                        </a>
                     </li>
                 </ul></dd>
             </dl>

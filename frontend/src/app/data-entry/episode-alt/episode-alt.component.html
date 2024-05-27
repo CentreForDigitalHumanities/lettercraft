@@ -164,6 +164,8 @@
                                 <div class="card-header">
                                     <div class="hstack">
                                         <span>
+                                            <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
+                                            &nbsp;
                                             {{agent.name}}
                                         </span>
                                         <div class="ms-auto btn-group">
