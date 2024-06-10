@@ -10,6 +10,8 @@ import { EventComponent } from './data-entry/event/event.component';
 import { SourceAltComponent } from './data-entry/source-alt/source-alt.component';
 import { EpisodeAltComponent } from './data-entry/episode-alt/episode-alt.component';
 import { AgentAltComponent } from './data-entry/agent-alt/agent-alt.component';
+import { LoginComponent } from './user/login/login.component';
+import { VerifyEmailComponent } from './user/verify-email/verify-email.component';
 
 const routes: Routes = [
     {
@@ -66,6 +68,12 @@ const routes: Routes = [
                 component: SourcesComponent,
             },
         ]
+        path: 'login',
+        component: LoginComponent,
+    },
+    {
+        path: 'confirm-email/:key',
+        component: VerifyEmailComponent,
     },
     {
         path: '',

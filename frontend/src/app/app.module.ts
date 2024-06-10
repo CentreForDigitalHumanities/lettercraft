@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { DataEntryModule } from './data-entry/data-entry.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
     declarations: [
@@ -18,6 +19,7 @@ import { DataEntryModule } from './data-entry/data-entry.module';
         SharedModule,
         CoreModule,
         DataEntryModule,
+        UserModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

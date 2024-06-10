@@ -29,23 +29,12 @@ class HistoricalPersonAdmin(admin.ModelAdmin):
     ]
 
 
-class AgentDescriptionNameAdmin(admin.StackedInline):
-    model = models.AgentDescriptionName
-    fields = ["name"] + core_admin.description_field_fields
-    extra = 0
 
 
 class AgentDescriptionGenderAdmin(admin.StackedInline):
     model = models.AgentDescriptionGender
     fields = ["gender"] + core_admin.description_field_fields
     extra = 0
-
-
-class AgentDescriptionSocialStatusAdmin(admin.StackedInline):
-    model = models.AgentDescriptionSocialStatus
-    fields = ["status_marker"] + core_admin.description_field_fields
-    extra = 0
-
 
 class AgentDescriptionLocationAdmin(admin.StackedInline):
     model = models.AgentDescriptionLocation
@@ -56,13 +45,6 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
 @admin.register(models.AgentDescription)
 class AgentDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     inlines = [
-        AgentDescriptionNameAdmin,
         AgentDescriptionGenderAdmin,
-        AgentDescriptionSocialStatusAdmin,
         AgentDescriptionLocationAdmin,
     ]
-
-
-@admin.register(models.StatusMarker)
-class StatusMarkerAdmin(admin.ModelAdmin):
-    pass

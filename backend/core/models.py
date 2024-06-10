@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from source.models import Source
 from django.contrib.postgres.fields import ArrayField
 
 class Field(models.Model):
@@ -117,20 +116,44 @@ class EntityDescription(Named, models.Model):
     """
 
     source = models.ForeignKey(
-        to=Source,
+        to='source.Source',
         on_delete=models.PROTECT,
         help_text="Source text containing this description",
     )
+
     source_mention = models.CharField(
         max_length=32,
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
         help_text="How is this entity presented in the text?",
     )
-    source_location = models.CharField(
-        max_length=200,
+
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
         blank=True,
-        help_text="Specific location(s) where the entity is mentioned or described in the source text",
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe this entity in the source text",
+    )
+
+    book = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="The book in the source"
+    )
+
+    chapter = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="The chapter or chapters in the source"
+    )
+
+    page = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="The page number or page range in the source"
     )
 
     class Meta:
@@ -153,20 +176,6 @@ class DescriptionField(Field, models.Model):
         blank=True,
         choices=[("direct", "directly mentioned"), ("implied", "implied")],
         help_text="How is this information presented in the text?",
-    )
-    source_location = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text="Specific location of the information in the source text",
-    )
-    source_terminology = ArrayField(
-        models.CharField(
-            max_length=200,
-        ),
-        default=list,
-        blank=True,
-        size=5,
-        help_text="Relevant terminology used in the source text",
     )
 
     class Meta:

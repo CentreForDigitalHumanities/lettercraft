@@ -7,6 +7,7 @@ import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
         }),
         NgbModule,
         RouterModule,
+        ReactiveFormsModule,
     ], exports: [
         CommonModule,
         BrowserModule,
@@ -35,6 +37,7 @@ import { FormsModule } from '@angular/forms';
         HttpClientXsrfModule,
         NgbModule,
         RouterModule,
+        ReactiveFormsModule,
     ]
 })
 export class SharedModule { }

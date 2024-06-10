@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '@env';
 
 @Component({
     selector: 'lc-footer',
@@ -8,7 +8,4 @@ import { environment } from '../../../environments/environment';
 })
 export class FooterComponent {
     environment = environment;
-
-    constructor() { }
-
 }
