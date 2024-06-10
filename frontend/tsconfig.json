@@ -22,7 +22,22 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "paths": {
+        "@env": [
+            "src/environments/environment"
+        ],
+        "@services/*": [
+            "src/app/services/*"
+        ],
+        "@shared/*": [
+            "src/app/shared/*"
+        ],
+        "@mock/*": [
+            "src/mock/*"
+        ]
+    },
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

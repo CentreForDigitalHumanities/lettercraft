@@ -6,6 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -23,6 +24,7 @@ import { RouterModule } from '@angular/router';
         }),
         NgbModule,
         RouterModule,
+        ReactiveFormsModule,
     ], exports: [
         CommonModule,
         BrowserModule,
@@ -32,6 +34,7 @@ import { RouterModule } from '@angular/router';
         HttpClientXsrfModule,
         NgbModule,
         RouterModule,
+        ReactiveFormsModule,
     ]
 })
 export class SharedModule { }
