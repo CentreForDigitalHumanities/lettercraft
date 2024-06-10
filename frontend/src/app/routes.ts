@@ -67,7 +67,9 @@ const routes: Routes = [
                 path: '',
                 component: SourcesComponent,
             },
-        ]
+        ],
+    },
+    {
         path: 'login',
         component: LoginComponent,
     },
