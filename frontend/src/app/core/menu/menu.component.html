@@ -19,6 +19,11 @@
                         Home
                     </a>
                 </li>
+                <li *ngIf="isLoggedIn$ | async" class="nav-item">
+                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
+                        Data entry
+                    </a>
+                </li>
             </ul>
             <lc-user-menu></lc-user-menu>
         </div>
