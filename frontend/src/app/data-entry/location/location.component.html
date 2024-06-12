@@ -85,6 +85,52 @@
                             <input type="text" class="form-control" placeholder="Add a new designator">
                         </div>
                     </div>
+
+                    <div class="mb-5">
+                        <h3>Regions</h3>
+
+                        <p>
+                            A surrounding region for the location.
+                            These can be political domains (e.g. kingdoms, duchies),
+                            ecclesial domains (e.g. dioceses), or geographical regions
+                            (mountain ranges, islands, etc.).
+                        </p>
+
+                        <p>
+                            Focus on what the text provides as evidence. For instance,
+                            if the text describes something happens "in Poitiers", you can
+                            add Poitiers as a settlement below; you do not need to add the
+                            surrounding geography, kingdom, or diocese if the text does
+                            not mention these.
+                        </p>
+
+                        <button class="btn btn-primary">
+                            <fa-icon [icon]="icons.add"></fa-icon>
+                            Add a region
+                        </button>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Settlements</h3>
+
+                        <p>Towns or villages.</p>
+
+                        <button class="btn btn-primary">
+                            <fa-icon [icon]="icons.add"></fa-icon>
+                            Add a settlement
+                        </button>
+                    </div>
+
+                    <div class="mb-5">
+                        <h3>Structures</h3>
+
+                        <p>Buildings, fortifications, rooms, etc.</p>
+
+                        <button class="btn btn-primary">
+                            <fa-icon [icon]="icons.add"></fa-icon>
+                            Add a site
+                        </button>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -96,7 +142,7 @@
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
                 <ng-template>
-                    <p class="mb-4">In which episodes is this agent involved?</p>
+                    <p class="mb-4">In which episodes is this location involved?</p>
                         <div class="mb-4">
                             <div class="card mb-3"
                                 *ngFor="let episode of episodes; let first = first">
@@ -125,7 +171,7 @@
                                     <div class="mb-3">
                                         <label class="form-label"
                                             for="episode-{{episode.id}}-presented-input">
-                                            How is this location presented?
+                                            How is this location presented in the episode?
                                         </label>
                                         <select class="form-select"
                                             id="episode-{{episode.id}}-presented-input">
