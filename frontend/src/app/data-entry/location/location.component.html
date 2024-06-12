@@ -1,1 +1,24 @@
-<p>location works!</p>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
+        <li class="breadcrumb-item">
+            <a [routerLink]="['/data-entry/source', 2]" class="icon-link">
+                Walafrid Strabo, Vita Galli
+            </a>
+        </li>
+        <li class="breadcrumb-item active">
+            {{location.name}}
+        </li>
+    </ol>
+</nav>
+
+<h1 class="mb-4">
+    <fa-icon [icon]="icons.location"></fa-icon>
+    {{location.name}}
+    <small class="text-body-secondary">(<i>Walafrid Strabo, Vita Galli</i>)</small>
+</h1>
+
+<p class="lead">
+    {{location.description}}
+</p>
