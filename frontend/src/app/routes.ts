@@ -12,6 +12,7 @@ import { EpisodeAltComponent } from './data-entry/episode-alt/episode-alt.compon
 import { AgentAltComponent } from './data-entry/agent-alt/agent-alt.component';
 import { LoginComponent } from './user/login/login.component';
 import { VerifyEmailComponent } from './user/verify-email/verify-email.component';
+import { LocationComponent } from './data-entry/location/location.component';
 
 const routes: Routes = [
     {
@@ -56,6 +57,10 @@ const routes: Routes = [
                     {
                         path: 'agent/:agentID',
                         component: AgentAltComponent,
+                    },
+                    {
+                        path: 'location/:locationID',
+                        component: LocationComponent,
                     },
                     {
                         path: '',

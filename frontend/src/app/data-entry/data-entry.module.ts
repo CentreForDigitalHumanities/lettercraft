@@ -12,6 +12,7 @@ import { EventComponent } from './event/event.component';
 import { SourceAltComponent } from './source-alt/source-alt.component';
 import { EpisodeAltComponent } from './episode-alt/episode-alt.component';
 import { AgentAltComponent } from './agent-alt/agent-alt.component';
+import { LocationComponent } from './location/location.component';
 
 
 
@@ -29,6 +30,7 @@ import { AgentAltComponent } from './agent-alt/agent-alt.component';
         SourceAltComponent,
         EpisodeAltComponent,
         AgentAltComponent,
+        LocationComponent,
     ],
     exports: [
         SourcesComponent,
@@ -38,6 +40,8 @@ import { AgentAltComponent } from './agent-alt/agent-alt.component';
         SpaceComponent,
         ObjectComponent,
         EventComponent,
+        AgentAltComponent,
+        LocationComponent,
     ],
     imports: [
         SharedModule,

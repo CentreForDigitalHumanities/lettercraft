@@ -57,7 +57,7 @@
                 <dt>Locations</dt>
                 <dd><ul>
                     <li *ngFor="let location of episode.locations">
-                        <a [routerLink]="['space/', location.id]"  class="icon-link">
+                        <a [routerLink]="['location/', location.id]"  class="icon-link">
                             <fa-icon [icon]="icons.location"></fa-icon>
                             {{location.name}}</a>
                     </li>
