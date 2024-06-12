@@ -22,3 +22,150 @@
 <p class="lead">
     {{location.description}}
 </p>
+
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label" for="name-input">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" id="name-input"
+                            [value]="location.name">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the location in the overview of the source.
+                                For example: "Poitiers", "The scriptorium", "unknown crossroads".
+                            </small>
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="description-input">
+                            Description
+                        </label>
+                        <input type="text" class="form-control" id="description-input"
+                            [value]="location.description">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this location.
+                            </small>
+                        </p>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Designators</h3>
+                        <p class="form-label">
+                            Expressions (in Latin) that refer to this entity
+                        </p>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" value="example name">
+                            <button class="btn btn-outline-secondary" disabled>
+                                <fa-icon [icon]="icons.remove"></fa-icon>
+                            </button>
+                        </div>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" placeholder="Add a new designator">
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Episodes</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <p class="mb-4">In which episodes is this agent involved?</p>
+                        <div class="mb-4">
+                            <div class="card mb-3"
+                                *ngFor="let episode of episodes; let first = first">
+                                <div class="card-header">
+                                    <div class="hstack">
+                                        <span>
+                                            <fa-icon [icon]="icons.episode"></fa-icon>
+                                            &nbsp;
+                                            {{episode.title}}
+                                        </span>
+                                        <div class="ms-auto btn-group">
+                                            <button class="btn btn-secondary">
+                                                <fa-icon [icon]="first ? icons.collapse : icons.expand"></fa-icon>
+                                            </button>
+                                            <a class="btn btn-primary"
+                                                [routerLink]="['../..', 'episode', episode.order]">
+                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                            </a>
+                                            <button class="btn btn-danger" disabled>
+                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body" *ngIf="first">
+                                    <div class="mb-3">
+                                        <label class="form-label"
+                                            for="episode-{{episode.id}}-presented-input">
+                                            How is this location presented?
+                                        </label>
+                                        <select class="form-select"
+                                            id="episode-{{episode.id}}-presented-input">
+                                            <option>Implied</option>
+                                            <option selected>Mentioned</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label"
+                                            for="episode-{{episode.id}}-notes-input">
+                                            Additional notes
+                                        </label>
+                                        <textarea class="form-control" rows="2"
+                                            id="episode-{{episode.id}}-notes-input">
+                                        </textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hstack gap-2">
+                                <div ngbDropdown>
+                                    <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                        Add an episode
+                                    </button>
+                                    <div ngbDropdownMenu>
+                                        <button ngbDropdownItem
+                                            *ngFor="let episode of otherEpisodes">
+                                            {{episode.title}}
+                                        </button>
+                                        <button ngbDropdownItem>
+                                            <fa-icon [icon]="icons.add"></fa-icon>
+                                            Add a new episode
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
