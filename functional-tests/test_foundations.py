@@ -10,7 +10,7 @@ def test_lettercraft_admin(browser, admin_address):
 
 def test_lettercraft_api(browser, api_address):
     browser.get(api_address)
-    assert 'Api Root' in browser.title
+    assert 'Lettercraft & Epistolary Performance in Medieval Europe' in browser.title
 
 
 def test_lettercraft_api_auth(browser, api_auth_address):
