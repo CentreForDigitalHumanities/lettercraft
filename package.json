@@ -23,6 +23,7 @@
         "test": "yarn test-back && yarn test-front && yarn test-func",
         "start-front": "yarn front yarn serve",
         "start-back": "cd backend && python manage.py runserver --settings glue --pythonpath ..",
+        "codegen": "yarn front yarn codegen",
         "livereload-back": "cd backend && python manage.py livereload --settings glue --pythonpath ..",
         "watch-test-front": "yarn front yarn watch-test",
         "watch-test-back": "yarn test-back --looponfail",
