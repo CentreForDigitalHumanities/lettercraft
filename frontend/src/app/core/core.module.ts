@@ -3,6 +3,7 @@ import { SharedModule } from '../shared/shared.module';
 import { FooterComponent } from './footer/footer.component';
 import { MenuComponent } from './menu/menu.component';
 import { UserMenuComponent } from './menu/user-menu/user-menu.component';
+import { ToastContainerComponent } from './toast-container/toast-container.component';
 
 
 
@@ -11,6 +12,7 @@ import { UserMenuComponent } from './menu/user-menu/user-menu.component';
         FooterComponent,
         MenuComponent,
         UserMenuComponent,
+        ToastContainerComponent,
     ],
     imports: [
         SharedModule
@@ -18,6 +20,7 @@ import { UserMenuComponent } from './menu/user-menu/user-menu.component';
     exports: [
         FooterComponent,
         MenuComponent,
+        ToastContainerComponent
     ]
 })
 export class CoreModule { }

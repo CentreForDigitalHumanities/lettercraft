@@ -1,151 +1,126 @@
 import { Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, map, mergeMap, of, tap } from 'rxjs';
-import { User, UserResponse } from '../user/models/user';
+import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
+import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
+import { HttpVerb, Request } from '../user/Request';
+
+export interface AuthAPIResult {
+    detail: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private currentUserSubject$ = new BehaviorSubject<User | null | undefined>(undefined);
-
-    currentUser$: Observable<User | null | undefined> = this.currentUserSubject$.pipe();
-    isAuthenticated$: Observable<boolean | undefined> = this.currentUserSubject$.pipe(
-        map(_.isObject)
+    public login = this.createRequest<UserLogin, AuthAPIResult>(
+        this.authRoute('login/'),
+        'post'
+    );
+    public registration = this.createRequest<UserRegistration, never>(
+        this.authRoute('registration/'),
+        'post'
+    );
+    public passwordForgotten = this.createRequest<PasswordForgotten, AuthAPIResult>(
+        this.authRoute('password/reset/'),
+        'post'
+    );
+    public resetPassword = this.createRequest<ResetPassword, AuthAPIResult>(
+        this.authRoute('password/reset/confirm/'),
+        'post'
+    );
+    public verifyEmail = this.createRequest<string, AuthAPIResult>(
+        this.authRoute('registration/verify-email/'),
+        'post'
+    );
+    public updateSettings = this.createRequest<Partial<UserSettings>, UserResponse>(
+        this.authRoute('user/'),
+        'patch'
+    );
+    public keyInfo = this.createRequest<string, KeyInfo>(
+        this.authRoute('registration/key-info/'),
+        'post'
     )
+    public deleteUser = this.createRequest<void, AuthAPIResult>(
+        this.authRoute('delete/'),
+        'delete'
+    );
+    public logout = this.createRequest<void, AuthAPIResult>(
+        this.authRoute('logout/'),
+        'post'
+    );
 
-    private authRoute(route: string): string {
-        return `/users/${route}`
-    }
+    public backendUser$ = this.login.result$.pipe(
+        startWith(undefined),
+        switchMap(() => this.http.get<UserResponse>(
+            this.authRoute('user/')
+        ).pipe(
+            catchError(() => of(null)),
+            map(parseUserData),
+        )),
+        share()
+    );
+
+    private updateSettingsUser$ = this.updateSettings.result$
+        .pipe(
+            withLatestFrom(this.backendUser$),
+            map(([userData, currentUser]) => 'error' in userData ? currentUser : parseUserData(userData)),
+        );
+
+    public currentUser$ = merge(
+        this.logout.result$.pipe(map(() => null)),
+        this.backendUser$,
+        this.updateSettingsUser$
+    ).pipe(
+        startWith(undefined),
+        shareReplay(1)
+    );
+
+    public isAuthenticated$ = this.currentUser$.pipe(
+        map(_.isObject)
+    );
 
     constructor(
         private sessionService: SessionService,
-        private router: Router,
         private http: HttpClient,
     ) {
         this.sessionService.expired.pipe(
             takeUntilDestroyed()
-        ).subscribe(() => this.logout());
-        this.setInitialAuth();
+        ).subscribe(() => this.logout.subject.next());
     }
 
-    private setAuth(user: User | null): void {
-        this.currentUserSubject$.next(user);
-    }
-
-    private purgeAuth(): void {
-        this.currentUserSubject$.next(null);
-    }
-
-    private checkUser(): Observable<User | null> {
-        return this.http.get<UserResponse>(this.authRoute('user/')).pipe(
-            catchError(error => of(null)),
-            map(parseUserData),
-        );
-    }
-
-    private setInitialAuth(): void {
-        this.checkUser()
-            .pipe(takeUntilDestroyed())
-            .subscribe(user =>
-                this.setAuth(user),
-            );
-    }
-
-    public currentUser(): User | null | undefined {
-        return this.currentUserSubject$.value;
-    }
+    // Keeping track of the latest version of the username
+    private currentUserName = toSignal<string | null>(
+        this.currentUser$.pipe(
+            map(user => user?.username ?? null)
+        )
+    );
 
     /**
-     * Logs in, retrieves user response, transforms to User object
+     * Encodes the user settings and sends them to the server to be updated.
+     *
+     * Due to a quirk in dj-auth-rest, the username must only be sent along if it has changed.
+     * If the username is not changed, it will be removed from the input.
+     *
+     * @param userSettings - The user settings to be submitted.
+     * @returns void
      */
-    public login(username: string, password: string): Observable<User | null> {
-        return this.http.post<{ key: string }>(
-            this.authRoute('login/'),
-            { username, password }
-        ).pipe(
-            mergeMap(() => this.checkUser()),
-            tap(data => this.setAuth(data)),
-        );
+    public newUserSettings(userSettings: UserSettings): void {
+        if (userSettings.username === this.currentUserName()) {
+            delete userSettings.username;
+        }
+        const encoded = encodeUserData(userSettings);
+        this.updateSettings.subject.next(encoded);
     }
 
-    public logout(redirectToLogin: boolean = false): void {
-        this.purgeAuth();
-        this.http.post(
-            this.authRoute('logout/'),
-            {}
-        ).subscribe((data) => {
-            if (redirectToLogin) {
-                this.showLogin();
-            }
-        });
+    private authRoute(route: string): string {
+        return `/users/${route}`;
     }
 
-    public register(
-        username: string, email: string, password1: string, password2: string
-    ): Observable<any> {
-        const data = { username, email, password1, password2 };
-        return this.http.post(this.authRoute('registration/'), data);
+    private createRequest<Input, Result extends object | never = AuthAPIResult>(route: string, verb: HttpVerb): Request<Input, Result> {
+        return new Request<Input, Result>(this.http, route, verb);
     }
-
-    public verifyEmail(key: string): Observable<any> {
-        return this.http.post(
-            this.authRoute('registration/verify-email/'),
-            { key }
-        );
-    }
-
-    public keyInfo(key: string): Observable<{ username: string, email: string }> {
-        return this.http.post<{ username: string; email: string }>(
-            this.authRoute('registration/key-info/'),
-            { key }
-        );
-    }
-
-    public showLogin(returnUrl?: string) {
-        this.router.navigate(
-            ['/login'],
-            returnUrl ? { queryParams: { returnUrl } } : undefined
-        );
-    }
-
-    public requestResetPassword(email: string): Observable<{ detail: string }> {
-        return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset/'),
-            { email }
-        );
-    }
-
-    public resetPassword(
-        uid: string,
-        token: string,
-        newPassword1: string,
-        newPassword2: string
-    ): Observable<{ detail: string }> {
-        return this.http.post<{ detail: string }>(
-            this.authRoute('password/reset/confirm/'),
-            {
-                uid,
-                token,
-                new_password1: newPassword1,
-                new_password2: newPassword2,
-            }
-        );
-    }
-
-    public updateSettings(update: Partial<User>): Observable<any> {
-        const data = encodeUserData(update);
-        return this.http.patch<UserResponse>(
-            this.authRoute('user/'),
-            data
-        ).pipe(
-            tap(res => this.setAuth(parseUserData(res))),
-        );
-    }
-
 }
