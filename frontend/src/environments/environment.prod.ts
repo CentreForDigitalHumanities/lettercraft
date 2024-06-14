@@ -1,8 +1,10 @@
+import { graphql } from 'graphql';
 import { version } from './version';
 
 export const environment = {
   production: true,
     assets: '/static/assets',
     version,
-    apiUrl: '/api/'
+    apiUrl: '/api/',
+    graphqlUrl: '/api/graphql',
 };
