@@ -94,6 +94,10 @@ REST_FRAMEWORK = {
     ]
 }
 
+# GraphQL
+GRAPHENE = {"SCHEMA": "api.graphql.schema.schema"}
+ENABLE_GRAPHIQL = DEBUG
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
