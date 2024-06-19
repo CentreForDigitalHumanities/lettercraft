@@ -1,1 +1,16 @@
-<p>object-alt works!</p>
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/']">Lettercraft</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry']">Data entry</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/data-entry/source', 2]">Walafrid Strabo, Vita Galli</a></li>
+        <li class="breadcrumb-item active">
+            {{object.name}}
+        </li>
+    </ol>
+</nav>
+<h1 class="mb-4">
+    {{object.name}}
+    <small class="text-body-secondary">(<i>Walafrid Strabo, Vita Galli</i>)</small>
+</h1>
+
+<p class="lead">{{object.description}}</p>
