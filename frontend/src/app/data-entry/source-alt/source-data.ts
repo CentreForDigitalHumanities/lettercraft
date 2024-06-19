@@ -168,18 +168,22 @@ export const objects = [
         id: 1,
         name: 'A letter (epistola)',
         description: 'Letter ordering Columbanus\' to leave Burgundy. NB: not mentioned in earlier versions of the text',
+        type: 'letter',
     }, {
         id: 2,
         name: 'Letter (epistola)',
-        description: 'Letter from Cunzo to summon Gallus.'
+        description: 'Letter from Cunzo to summon Gallus.',
+        type: 'letter',
     }, {
         id: 3,
         name: 'Royal gifts (donis regiis)',
         description: 'Gifts from King Sigibert',
+        type: 'gift',
     }, {
         id: 4,
         name: 'imaginary epistolary summons by Columbanus',
-        description: 'A lie by Gallus to obscure his whereabouts'
+        description: 'A lie by Gallus to obscure his whereabouts',
+        type: 'letter',
     }
 ]
 
