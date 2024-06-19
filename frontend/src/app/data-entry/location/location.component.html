@@ -147,7 +147,7 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" (click)="open(newRegion)">
                             <fa-icon [icon]="icons.add"></fa-icon>
                             Add a region
                         </button>
@@ -258,3 +258,13 @@
         </div>
     </div>
 </div>
+
+<ng-template #newRegion let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title">Add region</h4>
+        <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <lc-political-region></lc-political-region>
+    </div>
+</ng-template>

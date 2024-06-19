@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faBookmark, faCaretDown, faCaretUp, faLocationDot, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { episodes, locations } from '../source-alt/source-data';
 import _ from 'underscore';
+import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'lc-location',
@@ -24,12 +25,19 @@ export class LocationComponent {
         location: faLocationDot,
     };
 
-    constructor(private activatedRoute: ActivatedRoute) {
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private offcanvasService: NgbOffcanvas
+    ) {
         const id = activatedRoute.snapshot.params['locationID'];
         this.location = locations.find(a => a.id === parseInt(id));
         this.episodes = episodes.filter(episode =>
             _.any(episode.locations, location => _.isEqual(location, this.location))
         );
         this.otherEpisodes = _.difference(episodes, this.episodes);
+    }
+
+    open(content: TemplateRef<any>) {
+        this.offcanvasService.open(content, { position: 'end' });
     }
 }
