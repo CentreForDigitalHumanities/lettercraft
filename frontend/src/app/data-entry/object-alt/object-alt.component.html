@@ -89,4 +89,50 @@
             </div>
         </div>
     </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Categorisation</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Labels</h3>
+
+                        <p class="form-label">
+                            Assign any labels that apply to this object.
+                        </p>
+
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item hstack">
+                                <span>
+                                    {{(object.type === 'letter' ? letterLabels : giftLabels)[0]}}
+                                </span>
+                                <div class="ms-auto btn-group">
+                                    <button class="btn btn-primary" disabled>
+                                        <fa-icon [icon]="icons.edit"></fa-icon>
+                                    </button>
+                                    <button class="btn btn-danger" disabled>
+                                        <fa-icon [icon]="icons.remove"></fa-icon>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div ngbDropdown>
+                            <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                Add a label
+                            </button>
+                            <div ngbDropdownMenu>
+                                <button ngbDropdownItem *ngFor="let label of
+                                    (object.type === 'letter' ? letterLabels : giftLabels).slice(1)">
+                                    {{label}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
 </div>

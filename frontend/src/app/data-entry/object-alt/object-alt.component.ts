@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { objects } from '../source-alt/source-data';
-import { faEnvelope, faGift, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faGift, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'lc-object-alt',
@@ -15,7 +15,12 @@ export class ObjectAltComponent {
         gift: faGift,
         letter: faEnvelope,
         remove: faTimes,
+        edit: faPencil,
+        add: faPlus,
     }
+
+    giftLabels = ['golden cup', 'silver cup', 'hairshirt', 'livestock', 'book'];
+    letterLabels = ['papal bull', 'royal decree', 'imaginary', 'love letter'];
 
     constructor(private activatedRoute: ActivatedRoute) {
         const id = activatedRoute.snapshot.params['objectID'];
