@@ -13,6 +13,7 @@ import { SourceAltComponent } from './source-alt/source-alt.component';
 import { EpisodeAltComponent } from './episode-alt/episode-alt.component';
 import { AgentAltComponent } from './agent-alt/agent-alt.component';
 import { LocationComponent } from './location/location.component';
+import { ObjectAltComponent } from './object-alt/object-alt.component';
 
 
 
@@ -31,6 +32,7 @@ import { LocationComponent } from './location/location.component';
         EpisodeAltComponent,
         AgentAltComponent,
         LocationComponent,
+        ObjectAltComponent,
     ],
     exports: [
         SourcesComponent,
@@ -39,6 +41,7 @@ import { LocationComponent } from './location/location.component';
         AgentComponent,
         SpaceComponent,
         ObjectComponent,
+        ObjectAltComponent,
         EventComponent,
         AgentAltComponent,
         LocationComponent,
