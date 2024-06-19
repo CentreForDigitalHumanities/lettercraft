@@ -104,6 +104,49 @@
                             not mention these.
                         </p>
 
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <div class="hstack">
+                                    <span>
+                                        Burgundy
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-secondary">
+                                            <fa-icon [icon]="icons.collapse"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <fa-icon [icon]="icons.edit"></fa-icon>
+                                        </button>
+                                        <button class="btn btn-danger" disabled>
+                                            <fa-icon [icon]="icons.remove"></fa-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label"
+                                        for="region-presented-input">
+                                        How is this information presented in the episode?
+                                    </label>
+                                    <select class="form-select"
+                                        id="region-presented-input">
+                                        <option>Implied</option>
+                                        <option selected>Mentioned</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"
+                                        for="region-notes-input">
+                                        Additional notes
+                                    </label>
+                                    <textarea class="form-control" rows="2"
+                                        id="region-notes-input">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+
                         <button class="btn btn-primary">
                             <fa-icon [icon]="icons.add"></fa-icon>
                             Add a region
