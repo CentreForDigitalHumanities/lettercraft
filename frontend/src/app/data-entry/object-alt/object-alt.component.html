@@ -15,3 +15,78 @@
 </h1>
 
 <p class="lead">{{object.description}}</p>
+
+
+<div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Identification</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" class="form-control" [value]="object.name">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                This is a name to identify the object in the overview of the source.
+                                For example: "letter from Radegund to Germanus", "Radegund's first letter", "a ring".
+                            </small>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Description
+                        </label>
+                        <input type="text" class="form-control" [value]="object.description">
+
+                        <p>
+                            <small class="text-body-secondary">
+                                Add a description to help identify this object
+                            </small>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Is this object a letter or a gift?
+                        </label>
+                        <select class="form-select">
+                            <option [selected]="object.type === 'letter'">Letter</option>
+                            <option [selected]="object.type === 'gift'">Gift</option>
+                        </select>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div ngbAccordionItem>
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>Description in source text</button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordionBody>
+                <ng-template>
+                    <div class="mb-5">
+                        <h3>Designators</h3>
+                        <label class="form-label">
+                            Expressions (in Latin) that refer to this entity
+                        </label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" value="Littera ab Radegundi prodita">
+                            <button class="btn btn-outline-secondary" disabled>
+                                <fa-icon [icon]="icons.remove"></fa-icon>
+                            </button>
+                        </div>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" placeholder="Add a new designator">
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
