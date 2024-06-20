@@ -18,7 +18,6 @@ class SettlementAdmin(admin.ModelAdmin):
 
 @admin.register(models.Structure)
 class StructureAdmin(admin.ModelAdmin):
-    readonly_fields = ["ancestors_display", "descendants_display"]
     list_display = ["name", "description", "identifiable"]
     list_filter = ["identifiable"]
 

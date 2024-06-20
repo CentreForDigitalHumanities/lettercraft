@@ -67,7 +67,6 @@ class Structure(HistoricalEntity, models.Model):
     """
 
     class LevelOptions(models.IntegerChoices):
-        SETTLEMENT = 0, "settlement, population centre"
         ROAD = 1, "road, square, crossroad"
         FORTIFICATION = 2, "fortification"
         BUILDING = 3, "building, vessel"
@@ -84,44 +83,6 @@ class Structure(HistoricalEntity, models.Model):
     )
 
     level = models.IntegerField(choices=LevelOptions.choices)
-    parent = models.ForeignKey(
-        to="self",
-        related_name="children",
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        verbose_name="parent structure",
-        help_text="The structure containing this structure, e.g. the building containing a room.",
-    )
-
-    @property
-    def ancestors(self):
-        if self.parent:
-            return [self.parent] + self.parent.ancestors
-        else:
-            return []
-
-    @admin.display(description="Contained in structures")
-    def ancestors_display(self):
-        return ", ".join(str(a) for a in self.ancestors)
-
-    @property
-    def descendants(self):
-        iterate_descendants = (
-            [child] + child.descendants for child in self.children.all()
-        )
-        return list(itertools.chain.from_iterable(iterate_descendants))
-
-    @admin.display(description="Contains structures")
-    def descendants_display(self):
-        return ", ".join(str(a) for a in self.descendants)
-
-    def clean(self):
-        if self.parent:
-            validators.validate_level_deeper_than_parent(
-                self.level, self.parent, self.LevelOptions
-            )
-
 
 class RegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
