@@ -14,6 +14,7 @@ class RegionAdmin(admin.ModelAdmin):
 class SettlementAdmin(admin.ModelAdmin):
     list_display = ["name", "identifiable"]
     list_filter = ["identifiable"]
+    filter_horizontal = ["regions"]
 
 
 @admin.register(models.Structure)

@@ -51,7 +51,12 @@ class Settlement(HistoricalEntity, models.Model):
     A town or village.
     """
 
-    pass
+    regions = models.ManyToManyField(
+        to=Region,
+        related_name="settlements",
+        blank=True,
+        help_text="Surrounding regions of this settlement",
+    )
 
 
 class Structure(HistoricalEntity, models.Model):
