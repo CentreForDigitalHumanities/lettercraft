@@ -1,9 +1,6 @@
 from django.db import models
-from django.contrib import admin
-import itertools
 
 from core.models import DescriptionField, HistoricalEntity, EntityDescription
-from space import validators
 
 
 class SpaceDescription(EntityDescription, models.Model):
@@ -97,15 +94,3 @@ class SettlementField(DescriptionField, models.Model):
 class StructureField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
-
-
-class LandscapeFeature(DescriptionField, models.Model):
-    """
-    A landscape feature describes natural or geological aspects of a
-    space, e.g. "a forest", "a hill", "a cave".
-    """
-
-    space = models.ForeignKey(
-        to=SpaceDescription, on_delete=models.CASCADE, related_name="landscape_features"
-    )
-    landscape = models.CharField(max_length=512, blank=False)

@@ -43,12 +43,6 @@ class StructureFieldInlineAdmin(admin.StackedInline):
     extra = 0
 
 
-class LandscapeFeatureInlineAdmin(admin.StackedInline):
-    model = models.LandscapeFeature
-    fields = ["landscape"] + core_admin.description_field_fields
-    extra = 0
-
-
 @admin.register(models.SpaceDescription)
 class SpaceDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "source"]
@@ -62,5 +56,4 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         RegionFieldInlineAdmin,
         SettlementFieldInlineAdmin,
         StructureFieldInlineAdmin,
-        LandscapeFeatureInlineAdmin,
     ]
