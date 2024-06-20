@@ -19,6 +19,12 @@ class SpaceDescription(EntityDescription, models.Model):
         help_text="Regions referenced in this description",
     )
 
+    settlements = models.ManyToManyField(
+        to="Settlement",
+        through="SettlementField",
+        help_text="Settlements referenced in this description",
+    )
+
     structures = models.ManyToManyField(
         to="Structure",
         through="StructureField",
@@ -43,6 +49,14 @@ class Region(HistoricalEntity, models.Model):
     )
 
 
+class Settlement(HistoricalEntity, models.Model):
+    """
+    A town or village.
+    """
+
+    pass
+
+
 class Structure(HistoricalEntity, models.Model):
     """
     A structure is a man-made site.
@@ -59,6 +73,15 @@ class Structure(HistoricalEntity, models.Model):
         BUILDING = 3, "building, vessel"
         ROOM = 4, "room"
         SPOT = 5, "spot, object"
+
+    settlement = models.ForeignKey(
+        to=Settlement,
+        related_name="structures",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        help_text="The settlement containing this structure",
+    )
 
     level = models.IntegerField(choices=LevelOptions.choices)
     parent = models.ForeignKey(
@@ -103,6 +126,11 @@ class Structure(HistoricalEntity, models.Model):
 class RegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     region = models.ForeignKey(to=Region, on_delete=models.CASCADE)
+
+
+class SettlementField(DescriptionField, models.Model):
+    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
+    settlement = models.ForeignKey(to=Settlement, on_delete=models.CASCADE)
 
 
 class StructureField(DescriptionField, models.Model):

@@ -10,6 +10,12 @@ class RegionAdmin(admin.ModelAdmin):
     list_filter = ["identifiable"]
 
 
+@admin.register(models.Settlement)
+class SettlementAdmin(admin.ModelAdmin):
+    list_display = ["name", "identifiable"]
+    list_filter = ["identifiable"]
+
+
 @admin.register(models.Structure)
 class StructureAdmin(admin.ModelAdmin):
     readonly_fields = ["ancestors_display", "descendants_display"]
@@ -21,6 +27,13 @@ class RegionFieldInlineAdmin(admin.StackedInline):
     verbose_name = "Region reference"
     model = models.RegionField
     fields = ["space", "region"] + core_admin.description_field_fields
+    extra = 0
+
+
+class SettlementFieldInlineAdmin(admin.StackedInline):
+    verbose_name = "Settlement reference"
+    model = models.SettlementField
+    fields = ["space", "settlement"] + core_admin.description_field_fields
     extra = 0
 
 
@@ -48,6 +61,7 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
     ]
     inlines = [
         RegionFieldInlineAdmin,
+        SettlementFieldInlineAdmin,
         StructureFieldInlineAdmin,
         LandscapeFeatureInlineAdmin,
     ]
