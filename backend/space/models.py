@@ -13,22 +13,10 @@ class SpaceDescription(EntityDescription, models.Model):
     This model compounds all different aspects of space (geographical, political, etc.).
     """
 
-    political_regions = models.ManyToManyField(
-        to="PoliticalRegion",
-        through="PoliticalRegionField",
-        help_text="Political regions referenced in this description",
-    )
-
-    ecclesiastical_regions = models.ManyToManyField(
-        to="EcclesiasticalRegion",
-        through="EcclesiasticalRegionField",
-        help_text="Ecclesiastical regions referenced in this description",
-    )
-
-    geographical_regions = models.ManyToManyField(
-        to="GeographicalRegion",
-        through="GeographicalRegionField",
-        help_text="Geographical regions referenced in this description",
+    regions = models.ManyToManyField(
+        to="Region",
+        through="RegionField",
+        help_text="Regions referenced in this description",
     )
 
     structures = models.ManyToManyField(
@@ -38,28 +26,21 @@ class SpaceDescription(EntityDescription, models.Model):
     )
 
 
-class PoliticalRegion(HistoricalEntity, models.Model):
+class Region(HistoricalEntity, models.Model):
     """
-    A political region, e.g. a kingdom or duchy
-    """
-
-    pass
-
-
-class EcclesiasticalRegion(HistoricalEntity, models.Model):
-    """
-    An ecclesiastical region, e.g. a diocese
+    A region. Regions can be political (e.g. kingdoms), ecclesiastical (e.g. dioceses), or
+    geographical (e.g. a mountain range).
     """
 
-    pass
-
-
-class GeographicalRegion(HistoricalEntity, models.Model):
-    """
-    A geographical region or location, e.g. "the Pyrenees".
-    """
-
-    pass
+    type = models.CharField(
+        max_length=32,
+        choices=[
+            ("political", "political"),
+            ("ecclesiastical", "ecclesiastical"),
+            ("geographical", "geographical"),
+        ],
+        help_text="Kind of region",
+    )
 
 
 class Structure(HistoricalEntity, models.Model):
@@ -119,23 +100,9 @@ class Structure(HistoricalEntity, models.Model):
             )
 
 
-class PoliticalRegionField(DescriptionField, models.Model):
+class RegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
-
-
-class EcclesiasticalRegionField(DescriptionField, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    ecclesiastical_region = models.ForeignKey(
-        to=EcclesiasticalRegion, on_delete=models.CASCADE
-    )
-
-
-class GeographicalRegionField(DescriptionField, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    geographical_region = models.ForeignKey(
-        to=GeographicalRegion, on_delete=models.CASCADE
-    )
+    region = models.ForeignKey(to=Region, on_delete=models.CASCADE)
 
 
 class StructureField(DescriptionField, models.Model):

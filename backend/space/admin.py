@@ -4,20 +4,8 @@ from . import models
 from core import admin as core_admin
 
 
-@admin.register(models.PoliticalRegion)
-class PoliticalRegion(admin.ModelAdmin):
-    list_display = ["name", "identifiable"]
-    list_filter = ["identifiable"]
-
-
-@admin.register(models.EcclesiasticalRegion)
-class EccleciasticalRegion(admin.ModelAdmin):
-    list_display = ["name", "identifiable"]
-    list_filter = ["identifiable"]
-
-
-@admin.register(models.GeographicalRegion)
-class GeographicalRegionAdmin(admin.ModelAdmin):
+@admin.register(models.Region)
+class RegionAdmin(admin.ModelAdmin):
     list_display = ["name", "identifiable"]
     list_filter = ["identifiable"]
 
@@ -29,24 +17,10 @@ class StructureAdmin(admin.ModelAdmin):
     list_filter = ["identifiable"]
 
 
-class PoliticalRegionFieldInlineAdmin(admin.StackedInline):
-    verbose_name = "Political region reference"
-    model = models.PoliticalRegionField
-    fields = ["space", "political_region"] + core_admin.description_field_fields
-    extra = 0
-
-
-class EcclesiasticalRegionFieldInlineAdmin(admin.StackedInline):
-    verbose_name = "Ecclesiastical region reference"
-    model = models.EcclesiasticalRegionField
-    fields = ["space", "ecclesiastical_region"] + core_admin.description_field_fields
-    extra = 0
-
-
-class GeographicalRegionFieldInlineAdmin(admin.StackedInline):
-    verbose_name = "Geographical region reference"
-    model = models.GeographicalRegionField
-    fields = ["space", "geographical_region"] + core_admin.description_field_fields
+class RegionFieldInlineAdmin(admin.StackedInline):
+    verbose_name = "Region reference"
+    model = models.RegionField
+    fields = ["space", "region"] + core_admin.description_field_fields
     extra = 0
 
 
@@ -73,9 +47,7 @@ class SpaceDescriptionAdmin(admin.ModelAdmin):
         core_admin.description_source_fieldset,
     ]
     inlines = [
-        PoliticalRegionFieldInlineAdmin,
-        EcclesiasticalRegionFieldInlineAdmin,
-        GeographicalRegionFieldInlineAdmin,
+        RegionFieldInlineAdmin,
         StructureFieldInlineAdmin,
         LandscapeFeatureInlineAdmin,
     ]
