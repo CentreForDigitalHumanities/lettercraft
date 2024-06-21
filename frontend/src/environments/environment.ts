@@ -9,7 +9,7 @@ export const environment = {
     assets: 'assets',
     version,
     apiUrl: '/api/',
-    graphqlUrl: '/api/graphql',
+    graphqlUrl: '/graphql',
 };
 
 /*
