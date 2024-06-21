@@ -1,8 +1,9 @@
-from graphene import List, ObjectType, ResolveInfo, String
+from graphene import List, ObjectType, ResolveInfo, String, Field
 
-from core.models import EntityDescription, Field
+from core.models import EntityDescription
 from core.types.GQLSourceMention import GQLSourceMention
 from core.types.NamedType import NamedType
+from source.models import Source
 from source.types.SourceType import SourceType
 
 
@@ -22,8 +23,8 @@ class EntityDescriptionType(NamedType, ObjectType):
     @staticmethod
     def fields() -> list[str]:
         return [
-            "certainty",
-            "note",
+            "source",
+            "source_mention",
             "designators",
             "book",
             "chapter",
@@ -31,7 +32,7 @@ class EntityDescriptionType(NamedType, ObjectType):
         ] + NamedType.fields()
 
     @staticmethod
-    def resolve_source(parent: EntityDescription, info: ResolveInfo) -> SourceType:
+    def resolve_source(parent: EntityDescription, info: ResolveInfo) -> Source:
         return parent.source
 
     @staticmethod
