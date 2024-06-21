@@ -18,7 +18,7 @@
         "django": "yarn back python manage.py",
         "startapp": "yarn back django-admin startapp --settings lettercraft.settings --pythonpath .",
         "test-front": "yarn front yarn test",
-        "test-back": "yarn back pytest",
+        "test-back": "yarn back python -m pytest && yarn back python manage.py test",
         "test-func": "yarn func pytest",
         "test": "yarn test-back && yarn test-front && yarn test-func",
         "start-front": "yarn front yarn serve",
