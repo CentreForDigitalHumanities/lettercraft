@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "space",
     "user",
     "graphene_django",
+    "graphql_app",
 ]
 
 MIDDLEWARE = [
