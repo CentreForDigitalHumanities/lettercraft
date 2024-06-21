@@ -96,7 +96,12 @@ REST_FRAMEWORK = {
 }
 
 # GraphQL
-GRAPHENE = {"SCHEMA": "api.graphql.schema.schema"}
+GRAPHENE = {
+    "SCHEMA": "graphql_app.schema.schema",
+    "MIDDLEWARE": [
+        "graphql_app.middleware.GraphQLAuthMiddleware",
+    ],
+}
 ENABLE_GRAPHIQL = DEBUG
 
 # Database
