@@ -61,7 +61,7 @@ class LettercraftDate(models.Model):
     )
 
     @property
-    def display_date(self):
+    def display_date(self) -> str:
         if self.year_exact:
             return str(self.year_exact)
         return f"c. {self.year_lower}–{self.year_upper}"
