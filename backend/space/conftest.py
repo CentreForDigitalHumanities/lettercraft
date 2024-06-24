@@ -20,9 +20,10 @@ def settlement(db, region):
 
 
 @pytest.fixture
-def building_structure(db, settlement):
+def structure(db, settlement):
     structure = models.Structure.objects.create(
         name="Bert and Ernie's house", level=models.Structure.LevelOptions.BUILDING
     )
-    structure.settlement.add(settlement)
+    structure.settlement = settlement
+    structure.save()
     return structure
