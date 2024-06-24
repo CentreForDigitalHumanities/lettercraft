@@ -1,9 +1,6 @@
 from django.db import models
-from django.contrib import admin
-import itertools
 
 from core.models import DescriptionField, HistoricalEntity, EntityDescription
-from space import validators
 
 
 class SpaceDescription(EntityDescription, models.Model):
@@ -13,22 +10,16 @@ class SpaceDescription(EntityDescription, models.Model):
     This model compounds all different aspects of space (geographical, political, etc.).
     """
 
-    political_regions = models.ManyToManyField(
-        to="PoliticalRegion",
-        through="PoliticalRegionField",
-        help_text="Political regions referenced in this description",
+    regions = models.ManyToManyField(
+        to="Region",
+        through="RegionField",
+        help_text="Regions referenced in this description",
     )
 
-    ecclesiastical_regions = models.ManyToManyField(
-        to="EcclesiasticalRegion",
-        through="EcclesiasticalRegionField",
-        help_text="Ecclesiastical regions referenced in this description",
-    )
-
-    geographical_regions = models.ManyToManyField(
-        to="GeographicalRegion",
-        through="GeographicalRegionField",
-        help_text="Geographical regions referenced in this description",
+    settlements = models.ManyToManyField(
+        to="Settlement",
+        through="SettlementField",
+        help_text="Settlements referenced in this description",
     )
 
     structures = models.ManyToManyField(
@@ -38,28 +29,34 @@ class SpaceDescription(EntityDescription, models.Model):
     )
 
 
-class PoliticalRegion(HistoricalEntity, models.Model):
+class Region(HistoricalEntity, models.Model):
     """
-    A political region, e.g. a kingdom or duchy
-    """
-
-    pass
-
-
-class EcclesiasticalRegion(HistoricalEntity, models.Model):
-    """
-    An ecclesiastical region, e.g. a diocese
+    A region. Regions can be political (e.g. kingdoms), ecclesiastical (e.g. dioceses), or
+    geographical (e.g. a mountain range).
     """
 
-    pass
+    type = models.CharField(
+        max_length=32,
+        choices=[
+            ("political", "political"),
+            ("ecclesiastical", "ecclesiastical"),
+            ("geographical", "geographical"),
+        ],
+        help_text="Kind of region",
+    )
 
 
-class GeographicalRegion(HistoricalEntity, models.Model):
+class Settlement(HistoricalEntity, models.Model):
     """
-    A geographical region or location, e.g. "the Pyrenees".
+    A town or village.
     """
 
-    pass
+    regions = models.ManyToManyField(
+        to=Region,
+        related_name="settlements",
+        blank=True,
+        help_text="Surrounding regions of this settlement",
+    )
 
 
 class Structure(HistoricalEntity, models.Model):
@@ -72,84 +69,33 @@ class Structure(HistoricalEntity, models.Model):
     """
 
     class LevelOptions(models.IntegerChoices):
-        SETTLEMENT = 0, "settlement, population centre"
         ROAD = 1, "road, square, crossroad"
         FORTIFICATION = 2, "fortification"
         BUILDING = 3, "building, vessel"
         ROOM = 4, "room"
         SPOT = 5, "spot, object"
 
-    level = models.IntegerField(choices=LevelOptions.choices)
-    parent = models.ForeignKey(
-        to="self",
-        related_name="children",
+    settlement = models.ForeignKey(
+        to=Settlement,
+        related_name="structures",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-        verbose_name="parent structure",
-        help_text="The structure containing this structure, e.g. the building containing a room.",
+        help_text="The settlement containing this structure",
     )
 
-    @property
-    def ancestors(self):
-        if self.parent:
-            return [self.parent] + self.parent.ancestors
-        else:
-            return []
+    level = models.IntegerField(choices=LevelOptions.choices)
 
-    @admin.display(description="Contained in structures")
-    def ancestors_display(self):
-        return ", ".join(str(a) for a in self.ancestors)
-
-    @property
-    def descendants(self):
-        iterate_descendants = (
-            [child] + child.descendants for child in self.children.all()
-        )
-        return list(itertools.chain.from_iterable(iterate_descendants))
-
-    @admin.display(description="Contains structures")
-    def descendants_display(self):
-        return ", ".join(str(a) for a in self.descendants)
-
-    def clean(self):
-        if self.parent:
-            validators.validate_level_deeper_than_parent(
-                self.level, self.parent, self.LevelOptions
-            )
-
-
-class PoliticalRegionField(DescriptionField, models.Model):
+class RegionField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    political_region = models.ForeignKey(to=PoliticalRegion, on_delete=models.CASCADE)
+    region = models.ForeignKey(to=Region, on_delete=models.CASCADE)
 
 
-class EcclesiasticalRegionField(DescriptionField, models.Model):
+class SettlementField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    ecclesiastical_region = models.ForeignKey(
-        to=EcclesiasticalRegion, on_delete=models.CASCADE
-    )
-
-
-class GeographicalRegionField(DescriptionField, models.Model):
-    space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
-    geographical_region = models.ForeignKey(
-        to=GeographicalRegion, on_delete=models.CASCADE
-    )
+    settlement = models.ForeignKey(to=Settlement, on_delete=models.CASCADE)
 
 
 class StructureField(DescriptionField, models.Model):
     space = models.ForeignKey(to=SpaceDescription, on_delete=models.CASCADE)
     structure = models.ForeignKey(to=Structure, on_delete=models.CASCADE)
-
-
-class LandscapeFeature(DescriptionField, models.Model):
-    """
-    A landscape feature describes natural or geological aspects of a
-    space, e.g. "a forest", "a hill", "a cave".
-    """
-
-    space = models.ForeignKey(
-        to=SpaceDescription, on_delete=models.CASCADE, related_name="landscape_features"
-    )
-    landscape = models.CharField(max_length=512, blank=False)
