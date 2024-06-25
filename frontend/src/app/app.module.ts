@@ -7,6 +7,8 @@ import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
+import { GraphQLModule } from './graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -18,6 +20,8 @@ import { UserModule } from './user/user.module';
         SharedModule,
         CoreModule,
         UserModule,
+        GraphQLModule,
+        HttpClientModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
