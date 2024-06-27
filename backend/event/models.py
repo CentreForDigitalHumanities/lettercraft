@@ -68,7 +68,7 @@ class EpisodeAgent(DescriptionField, models.Model):
 
     def clean(self):
         if self.episode.source != self.agent.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+            raise ValidationError("Can only link episodes and agents in the same source text")
 
     def __str__(self):
         return f"{self.agent.name} / {self.episode}"
@@ -90,7 +90,7 @@ class EpisodeGift(DescriptionField, models.Model):
 
     def clean(self):
         if self.episode.source != self.gift.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+            raise ValidationError("Can only link episodes and gifts in the same source text")
 
     def __str__(self):
         return f"{self.gift.name} / {self.episode}"
@@ -112,7 +112,7 @@ class EpisodeLetter(DescriptionField, models.Model):
 
     def clean(self):
         if self.episode.source != self.letter.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+            raise ValidationError("Can only link episodes and letters in the same source text")
 
     def __str__(self):
         return f"{self.letter.name} / {self.episode}"
@@ -134,7 +134,7 @@ class EpisodeSpace(DescriptionField, models.Model):
 
     def clean(self):
         if self.episode.source != self.space.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+            raise ValidationError("Can only link episodes and spaces in the same source text")
 
     def __str__(self):
         return f"{self.space.name} / {self.episode}"
