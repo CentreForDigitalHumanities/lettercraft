@@ -57,7 +57,7 @@ class PersonReference(Field, models.Model):
     person = models.ForeignKey(
         to=HistoricalPerson,
         on_delete=models.CASCADE,
-        related_name="person_references",
+        related_name="description_references",
     )
     description = models.ForeignKey(
         to="AgentDescription",
