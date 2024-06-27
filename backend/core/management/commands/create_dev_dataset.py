@@ -5,7 +5,7 @@ from faker import Faker
 from source.models import Source
 
 from case_study.models import CaseStudy
-from event.models import EventDescription, Episode
+from event.models import EventDescription, Series
 from person.models import (
     HistoricalPerson,
     AgentDescription,
@@ -122,9 +122,9 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_episodes(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, Episode)
+        unique_name = get_unique_name(epistolary_event_names, Series)
         events = get_random_model_objects(EventDescription, min_amount=1, max_amount=5)
-        Episode.objects.create(
+        Series.objects.create(
             name=unique_name,
             description=fake.text(),
             events=events,
@@ -133,7 +133,7 @@ class Command(BaseCommand):
     @track_progress
     def _create_case_studies(self, fake: Faker, options, total, model):
         unique_name = get_unique_name(case_study_names, CaseStudy)
-        episodes = get_random_model_objects(Episode, min_amount=1, max_amount=5)
+        episodes = get_random_model_objects(Series, min_amount=1, max_amount=5)
         CaseStudy.objects.create(
             name=unique_name,
             episodes=episodes,

@@ -140,12 +140,12 @@ class EventDescriptionSpace(DescriptionField, models.Model):
         return f"{self.space.name} / {self.event}"
 
 
-class Episode(Named, models.Model):
+class Series(Named, models.Model):
     """
-    A higher abstraction of events into connected "episodes"
+    A set of connected "episodes".
     """
 
-    events = models.ManyToManyField(
+    episodes = models.ManyToManyField(
         to=EventDescription,
         blank=True,
         help_text="Events that make up this episode",
