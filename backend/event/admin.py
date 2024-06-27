@@ -37,8 +37,8 @@ class EventDescriptionSpaceAdmin(admin.StackedInline):
     verbose_name = "involved space"
 
 
-@admin.register(models.EventDescription)
-class EventDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
+@admin.register(models.Episode)
+class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     filter_horizontal = ["categories"]
     list_filter = ["source", "categories"]
     fieldsets = [

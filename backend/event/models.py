@@ -12,9 +12,9 @@ class EventCategory(Named):
         verbose_name_plural = "event categories"
 
 
-class EventDescription(EntityDescription, models.Model):
+class Episode(EntityDescription, models.Model):
     """
-    An epistolary event described in as source text
+    An episode described in a source text
     """
 
     summary = models.TextField(
@@ -58,7 +58,7 @@ class EventDescriptionAgent(DescriptionField, models.Model):
     """
 
     event = models.ForeignKey(
-        to=EventDescription,
+        to=Episode,
         on_delete=models.CASCADE,
     )
     agent = models.ForeignKey(
@@ -80,7 +80,7 @@ class EventDescriptionGift(DescriptionField, models.Model):
     """
 
     event = models.ForeignKey(
-        to=EventDescription,
+        to=Episode,
         on_delete=models.CASCADE,
     )
     gift = models.ForeignKey(
@@ -102,7 +102,7 @@ class EventDescriptionLetter(DescriptionField, models.Model):
     """
 
     event = models.ForeignKey(
-        to=EventDescription,
+        to=Episode,
         on_delete=models.CASCADE,
     )
     letter = models.ForeignKey(
@@ -124,7 +124,7 @@ class EventDescriptionSpace(DescriptionField, models.Model):
     """
 
     event = models.ForeignKey(
-        to=EventDescription,
+        to=Episode,
         on_delete=models.CASCADE,
     )
     space = models.ForeignKey(
@@ -146,7 +146,7 @@ class Series(Named, models.Model):
     """
 
     episodes = models.ManyToManyField(
-        to=EventDescription,
+        to=Episode,
         blank=True,
         help_text="Events that make up this episode",
     )
