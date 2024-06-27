@@ -3,35 +3,35 @@ from . import models
 from core import admin as core_admin
 
 
-@admin.register(models.EventCategory)
-class EventCategoryAdmin(admin.ModelAdmin):
+@admin.register(models.EpisodeCategory)
+class EpisodeCategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     search_fields = ["name", "description"]
 
 
-class EventDescriptionAgentAdmin(admin.StackedInline):
-    model = models.EventDescriptionAgent
+class EpisodeAgentAdmin(admin.StackedInline):
+    model = models.EpisodeAgent
     fields = ["agent"] + core_admin.description_field_fields
     extra = 0
     verbose_name = "involved agent"
 
 
-class EventDescriptionGiftAdmin(admin.StackedInline):
-    model = models.EventDescriptionGift
+class EpisodeGiftAdmin(admin.StackedInline):
+    model = models.EpisodeGift
     fields = ["gift"] + core_admin.description_field_fields
     extra = 0
     verbose_name = "involved gift"
 
 
-class EventDescriptionLetterAdmin(admin.StackedInline):
-    model = models.EventDescriptionLetter
+class EpisodeLetterAdmin(admin.StackedInline):
+    model = models.EpisodeLetter
     fields = ["letter"] + core_admin.description_field_fields
     extra = 0
     verbose_name = "involved letter"
 
 
-class EventDescriptionSpaceAdmin(admin.StackedInline):
-    model = models.EventDescriptionSpace
+class EpisodeSpaceAdmin(admin.StackedInline):
+    model = models.EpisodeSpace
     fields = ["space"] + core_admin.description_field_fields
     extra = 0
     verbose_name = "involved space"
@@ -52,10 +52,10 @@ class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
         ),
     ]
     inlines = [
-        EventDescriptionAgentAdmin,
-        EventDescriptionGiftAdmin,
-        EventDescriptionLetterAdmin,
-        EventDescriptionSpaceAdmin,
+        EpisodeAgentAdmin,
+        EpisodeGiftAdmin,
+        EpisodeLetterAdmin,
+        EpisodeSpaceAdmin,
     ]
 
 
