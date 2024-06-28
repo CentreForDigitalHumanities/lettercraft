@@ -25,7 +25,7 @@
             <a
                 [routerLink]="['/login']"
                 routerLinkActive="active"
-                [queryParams]="{ next: currentPath | async }"
+                [queryParams]="(onLoginPage$ | async) ? null : { next: currentPath$ | async }"
                 class="nav-link"
             >
                 Sign in
