@@ -116,7 +116,7 @@ class SourceMention(models.TextChoices):
 
 class EntityDescription(Named, models.Model):
     """
-    A description of an entity (person, object, location, event) in a narrative source.
+    A description of an entity (person, object, location, episode) in a narrative source.
 
     Descriptions may refer to HistoricalEntity targets.
     """
