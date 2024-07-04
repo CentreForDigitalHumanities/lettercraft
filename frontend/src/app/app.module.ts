@@ -9,11 +9,15 @@ import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SecretComponent } from './secret/secret.component';
+import { OtherComponent } from './other/other.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        SecretComponent,
+        OtherComponent
     ],
     imports: [
         AppRoutingModule,

@@ -7,6 +7,9 @@ import { RegisterComponent } from './user/register/register.component';
 import { PasswordForgottenComponent } from './user/password-forgotten/password-forgotten.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
+import { SecretComponent } from './secret/secret.component';
+import { LoggedOnGuard } from '@shared/logged-on.guard';
+import { OtherComponent } from './other/other.component';
 
 const routes: Routes = [
     {
@@ -36,6 +39,15 @@ const routes: Routes = [
     {
         path: 'user-settings',
         component: UserSettingsComponent
+    },
+    {
+        path: 'secret',
+        component: SecretComponent,
+        canActivate: [LoggedOnGuard]
+    },
+    {
+        path: 'other',
+        component: OtherComponent
     },
     {
         path: '',
