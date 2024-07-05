@@ -1,12 +1,11 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CurrentPathService } from '@shared/current-path.service';
 
 @Component({
   selector: 'lc-user-menu',
@@ -28,14 +27,15 @@ export class UserMenuComponent implements OnInit {
 
     public logoutLoading$ = this.authService.logout.loading$;
 
-    public currentPath$ = this.currentPath.path$;
-    public onLoginPage$ = this.currentPath.onLoginPage$;
+    public currentPath$ = this.router.routerState.root.url.pipe(
+        map((url) => url.pop() ?? null),
+        filter(url => url?.toString() !== "")
+    );
 
     constructor(
         private authService: AuthService,
         private toastService: ToastService,
         private router: Router,
-        private currentPath: CurrentPathService,
         private destroyRef: DestroyRef
     ) {}
 
