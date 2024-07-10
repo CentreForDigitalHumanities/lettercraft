@@ -56,14 +56,14 @@ class LetterDescription(EntityDescription, models.Model):
     """
 
     categories = models.ManyToManyField(
-        to="Category",
+        to="LetterCategory",
         through="LetterDescriptionCategory",
         blank=True,
         help_text="categories assigned to the letter",
     )
 
 
-class Category(models.Model):
+class LetterCategory(models.Model):
     label = models.CharField(max_length=200, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
 
@@ -85,7 +85,7 @@ class LetterDescriptionCategory(DescriptionField, models.Model):
         on_delete=models.CASCADE,
     )
     category = models.ForeignKey(
-        to=Category,
+        to=LetterCategory,
         on_delete=models.CASCADE,
     )
 

@@ -23,8 +23,8 @@ class GiftDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     ]
 
 
-@admin.register(models.Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(models.LetterCategory)
+class LetterCategoryAdmin(admin.ModelAdmin):
     fields = ["label", "description"]
 
 
