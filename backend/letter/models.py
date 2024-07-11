@@ -34,16 +34,18 @@ class GiftCategory(Named, models.Model):
 
 class GiftDescriptionCategory(DescriptionField, models.Model):
     """
-    Categorisation of a gift in an a narrative source.
+    Categorisation of a gift in a narrative source.
     """
 
     gift = models.ForeignKey(
         to=GiftDescription,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
     category = models.ForeignKey(
         to=GiftCategory,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
 
     def __str__(self) -> str:
@@ -77,16 +79,18 @@ class LetterCategory(models.Model):
 
 class LetterDescriptionCategory(DescriptionField, models.Model):
     """
-    Categorisation of a letter in an a narrative source.
+    Categorisation of a letter in a narrative source.
     """
 
     letter = models.ForeignKey(
         to=LetterDescription,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
     category = models.ForeignKey(
         to=LetterCategory,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
 
     def __str__(self) -> str:
