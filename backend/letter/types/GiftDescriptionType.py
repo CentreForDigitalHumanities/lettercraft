@@ -4,7 +4,7 @@ from django.db.models import QuerySet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import GiftCategory, GiftDescription, GiftDescriptionCategory
-from letter.types import GiftDescriptionCategoryType
+from letter.types.GiftDescriptionCategoryType import GiftDescriptionCategoryType
 from letter.types.GiftCategoryType import GiftCategoryType
 
 
