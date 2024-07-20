@@ -10,7 +10,8 @@ import {
 } from "../utils";
 import { ToastService } from "@services/toast.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { map, withLatestFrom } from "rxjs";
 
 type LoginForm = {
     [key in keyof UserLogin]: FormControl<string>;
@@ -39,24 +40,32 @@ export class LoginComponent implements OnInit {
 
     public loading$ = this.authService.login.loading$;
 
+    private nextParam$ = this.route.queryParamMap.pipe(
+        map((params) => params.get("next"))
+    );
+
     constructor(
         private authService: AuthService,
         private toastService: ToastService,
-        private destroyRef: DestroyRef,
         private router: Router,
+        private route: ActivatedRoute,
+        private destroyRef: DestroyRef
     ) {}
 
     ngOnInit(): void {
-        this.authService.login.success$.pipe(
-            takeUntilDestroyed(this.destroyRef)
-        ).subscribe(() => {
-            this.toastService.show({
-                header: "Sign in successful",
-                body: "You have been successfully signed in.",
-                type: "success",
+        this.authService.login.success$
+            .pipe(
+                withLatestFrom(this.nextParam$),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe(([, next]) => {
+                this.toastService.show({
+                    header: "Sign in successful",
+                    body: "You have been successfully signed in.",
+                    type: "success",
+                });
+                this.router.navigate([next || "/"]);
             });
-            this.router.navigate(["/"]);
-        });
 
         this.authService.login.error$
             .pipe(takeUntilDestroyed(this.destroyRef))

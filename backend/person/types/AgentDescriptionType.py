@@ -38,6 +38,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
 
     @staticmethod
     def resolve_person_references(
-        agent_description: AgentDescription, info: ResolveInfo
+        parent: AgentDescription, info: ResolveInfo
     ) -> QuerySet[PersonReference]:
-        return agent_description.person_references.all()  # type: ignore
+        return parent.person_references.all()  # type: ignore
