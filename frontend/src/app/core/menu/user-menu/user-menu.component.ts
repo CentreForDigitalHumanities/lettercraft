@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 import { ToastService } from '@services/toast.service';
@@ -19,9 +19,7 @@ export class UserMenuComponent implements OnInit {
 
     public user$ = this.authService.currentUser$;
 
-    public showSignIn$ = this.authService.currentUser$.pipe(
-        map(_.isNull)
-    );
+    public showSignIn$ = this.authService.currentUser$.pipe(map(_.isNull));
 
     public icons = {
         user: faUser,
@@ -29,12 +27,17 @@ export class UserMenuComponent implements OnInit {
 
     public logoutLoading$ = this.authService.logout.loading$;
 
+    public currentPath$ = this.router.routerState.root.url.pipe(
+        map((url) => url.pop() ?? null),
+        filter(url => url?.toString() !== "")
+    );
+
     constructor(
         private authService: AuthService,
         private toastService: ToastService,
         private router: Router,
         private destroyRef: DestroyRef
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.authService.logout.error$
@@ -62,5 +65,4 @@ export class UserMenuComponent implements OnInit {
     public logout(): void {
         this.authService.logout.subject.next();
     }
-
 }
