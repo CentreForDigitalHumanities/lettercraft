@@ -12,7 +12,7 @@ from person.models import (
     HistoricalPerson,
 )
 from letter.models import (
-    Category,
+    LetterCategory,
     GiftDescription,
     LetterDescription,
     LetterDescriptionCategory,
@@ -104,7 +104,9 @@ class Command(BaseCommand):
             self._create_agent_descriptions(
                 fake, options, total=100, model=AgentDescription
             )
-            self._create_letter_categories(fake, options, total=10, model=Category)
+            self._create_letter_categories(
+                fake, options, total=10, model=LetterCategory
+            )
             self._create_letter_descriptions(
                 fake, options, total=200, model=LetterDescription
             )
@@ -180,9 +182,11 @@ class Command(BaseCommand):
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
         unique_label = get_unique_name(
-            list_of_names=letter_category_names, model=Category, name_field="label"
+            list_of_names=letter_category_names,
+            model=LetterCategory,
+            name_field="label",
         )
-        Category.objects.create(label=unique_label, description=fake.text())
+        LetterCategory.objects.create(label=unique_label, description=fake.text())
 
     @track_progress
     def _create_letter_descriptions(self, fake: Faker, *args, **kwargs):
@@ -197,7 +201,7 @@ class Command(BaseCommand):
         if random.choice([True, False]):
             LetterDescriptionCategory.objects.create(
                 letter=letter,
-                category=get_random_model_object(Category),
+                category=get_random_model_object(LetterCategory),
                 **self.fake_field_value(fake),
             )
 

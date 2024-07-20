@@ -34,16 +34,18 @@ class GiftCategory(Named, models.Model):
 
 class GiftDescriptionCategory(DescriptionField, models.Model):
     """
-    Categorisation of a gift in an a narrative source.
+    Categorisation of a gift in a narrative source.
     """
 
     gift = models.ForeignKey(
         to=GiftDescription,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
     category = models.ForeignKey(
         to=GiftCategory,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
 
     def __str__(self) -> str:
@@ -56,14 +58,14 @@ class LetterDescription(EntityDescription, models.Model):
     """
 
     categories = models.ManyToManyField(
-        to="Category",
+        to="LetterCategory",
         through="LetterDescriptionCategory",
         blank=True,
         help_text="categories assigned to the letter",
     )
 
 
-class Category(models.Model):
+class LetterCategory(models.Model):
     label = models.CharField(max_length=200, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
 
@@ -77,16 +79,18 @@ class Category(models.Model):
 
 class LetterDescriptionCategory(DescriptionField, models.Model):
     """
-    Categorisation of a letter in an a narrative source.
+    Categorisation of a letter in a narrative source.
     """
 
     letter = models.ForeignKey(
         to=LetterDescription,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
     category = models.ForeignKey(
-        to=Category,
+        to=LetterCategory,
         on_delete=models.CASCADE,
+        related_name="categorisations",
     )
 
     def __str__(self) -> str:
