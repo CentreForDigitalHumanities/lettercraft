@@ -7,14 +7,14 @@ from letter.models import GiftDescription, LetterDescription
 from space.models import SpaceDescription
 
 
-class EventCategory(Named):
+class EpisodeCategory(Named):
     class Meta:
-        verbose_name_plural = "event categories"
+        verbose_name_plural = "episode categories"
 
 
-class EventDescription(EntityDescription, models.Model):
+class Episode(EntityDescription, models.Model):
     """
-    An epistolary event described in as source text
+    An episode described in a source text
     """
 
     summary = models.TextField(
@@ -22,43 +22,43 @@ class EventDescription(EntityDescription, models.Model):
         help_text="full description of the events in the passage",
     )
     categories = models.ManyToManyField(
-        to=EventCategory,
-        related_name="event_descriptions",
-        help_text="labels assigned to this event",
+        to=EpisodeCategory,
+        related_name="episodes",
+        help_text="labels assigned to this episode",
     )
     agents = models.ManyToManyField(
         to=AgentDescription,
-        through="EventDescriptionAgent",
+        through="EpisodeAgent",
         blank=True,
-        help_text="agents involved in this event",
+        help_text="agents involved in this episode",
     )
     gifts = models.ManyToManyField(
         to=GiftDescription,
-        through="EventDescriptionGift",
+        through="EpisodeGift",
         blank=True,
-        help_text="gifts involved in this event",
+        help_text="gifts involved in this episode",
     )
     letters = models.ManyToManyField(
         to=LetterDescription,
-        through="EventDescriptionLetter",
+        through="EpisodeLetter",
         blank=True,
-        help_text="letters involved in this event",
+        help_text="letters involved in this episode",
     )
     spaces = models.ManyToManyField(
         to=SpaceDescription,
-        through="EventDescriptionSpace",
+        through="EpisodeSpace",
         blank=True,
-        help_text="locations involved in this event",
+        help_text="locations involved in this episode",
     )
 
 
-class EventDescriptionAgent(DescriptionField, models.Model):
+class EpisodeAgent(DescriptionField, models.Model):
     """
-    Relationship between an agent and an event described in a source text
+    Relationship between an episode and an agent described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
+    episode = models.ForeignKey(
+        to=Episode,
         on_delete=models.CASCADE,
     )
     agent = models.ForeignKey(
@@ -67,20 +67,20 @@ class EventDescriptionAgent(DescriptionField, models.Model):
     )
 
     def clean(self):
-        if self.event.source != self.agent.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+        if self.episode.source != self.agent.source:
+            raise ValidationError("Can only link episodes and agents in the same source text")
 
     def __str__(self):
-        return f"{self.agent.name} / {self.event}"
+        return f"{self.agent.name} / {self.episode}"
 
 
-class EventDescriptionGift(DescriptionField, models.Model):
+class EpisodeGift(DescriptionField, models.Model):
     """
-    Relationship between an agent and an gift described in a source text
+    Relationship between an episode and a gift described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
+    episode = models.ForeignKey(
+        to=Episode,
         on_delete=models.CASCADE,
     )
     gift = models.ForeignKey(
@@ -89,20 +89,20 @@ class EventDescriptionGift(DescriptionField, models.Model):
     )
 
     def clean(self):
-        if self.event.source != self.gift.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+        if self.episode.source != self.gift.source:
+            raise ValidationError("Can only link episodes and gifts in the same source text")
 
     def __str__(self):
-        return f"{self.gift.name} / {self.event}"
+        return f"{self.gift.name} / {self.episode}"
 
 
-class EventDescriptionLetter(DescriptionField, models.Model):
+class EpisodeLetter(DescriptionField, models.Model):
     """
-    Relationship between an agent and a letter described in a source text
+    Relationship between an episode and a letter described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
+    episode = models.ForeignKey(
+        to=Episode,
         on_delete=models.CASCADE,
     )
     letter = models.ForeignKey(
@@ -111,20 +111,20 @@ class EventDescriptionLetter(DescriptionField, models.Model):
     )
 
     def clean(self):
-        if self.event.source != self.letter.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+        if self.episode.source != self.letter.source:
+            raise ValidationError("Can only link episodes and letters in the same source text")
 
     def __str__(self):
-        return f"{self.letter.name} / {self.event}"
+        return f"{self.letter.name} / {self.episode}"
 
 
-class EventDescriptionSpace(DescriptionField, models.Model):
+class EpisodeSpace(DescriptionField, models.Model):
     """
-    Relationship between an agent and a space described in a source text
+    Relationship between an episode and a space described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
+    episode = models.ForeignKey(
+        to=Episode,
         on_delete=models.CASCADE,
     )
     space = models.ForeignKey(
@@ -133,20 +133,23 @@ class EventDescriptionSpace(DescriptionField, models.Model):
     )
 
     def clean(self):
-        if self.event.source != self.space.source:
-            raise ValidationError("Can only link descriptions in the same source text")
+        if self.episode.source != self.space.source:
+            raise ValidationError("Can only link episodes and spaces in the same source text")
 
     def __str__(self):
-        return f"{self.space.name} / {self.event}"
+        return f"{self.space.name} / {self.episode}"
 
 
-class Episode(Named, models.Model):
+class Series(Named, models.Model):
     """
-    A higher abstraction of events into connected "episodes"
+    A set of connected "episodes".
     """
 
-    events = models.ManyToManyField(
-        to=EventDescription,
+    episodes = models.ManyToManyField(
+        to=Episode,
         blank=True,
-        help_text="Events that make up this episode",
+        help_text="Episodes that make up this series",
     )
+
+    class Meta:
+        verbose_name_plural = "series"

@@ -5,7 +5,7 @@ from faker import Faker
 from source.models import Source
 
 from case_study.models import CaseStudy
-from event.models import EventDescription, Episode
+from event.models import Episode, Series
 from person.models import (
     HistoricalPerson,
     AgentDescription,
@@ -111,10 +111,8 @@ class Command(BaseCommand):
             self._create_gift_descriptions(
                 fake, options, total=50, model=GiftDescription
             )
-            self._create_event_descriptions(
-                fake, options, total=50, model=EventDescription
-            )
-            self._create_episodes(fake, options, total=20, model=EventDescription)
+            self._create_event_descriptions(fake, options, total=50, model=Episode)
+            self._create_episodes(fake, options, total=20, model=Episode)
             self._create_case_studies(fake, options, total=10, model=CaseStudy)
 
             print("-" * 80)
@@ -122,9 +120,9 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_episodes(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, Episode)
-        events = get_random_model_objects(EventDescription, min_amount=1, max_amount=5)
-        Episode.objects.create(
+        unique_name = get_unique_name(epistolary_event_names, Series)
+        events = get_random_model_objects(Episode, min_amount=1, max_amount=5)
+        Series.objects.create(
             name=unique_name,
             description=fake.text(),
             events=events,
@@ -133,7 +131,7 @@ class Command(BaseCommand):
     @track_progress
     def _create_case_studies(self, fake: Faker, options, total, model):
         unique_name = get_unique_name(case_study_names, CaseStudy)
-        episodes = get_random_model_objects(Episode, min_amount=1, max_amount=5)
+        episodes = get_random_model_objects(Series, min_amount=1, max_amount=5)
         CaseStudy.objects.create(
             name=unique_name,
             episodes=episodes,
@@ -141,10 +139,10 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_event_descriptions(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, EventDescription)
+        unique_name = get_unique_name(epistolary_event_names, Episode)
         source = get_random_model_object(Source)
 
-        event = EventDescription.objects.create(
+        event = Episode.objects.create(
             source=source, name=unique_name, description=fake.text()
         )
 
