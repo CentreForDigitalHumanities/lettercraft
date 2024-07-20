@@ -22,7 +22,13 @@
     </ng-container>
     <ng-container *ngIf="showSignIn$ | async">
         <li class="nav-item">
-            <a [routerLink]="['/login']" routerLinkActive="active" class="nav-link">
+            <a
+                #linkActive="routerLinkActive"
+                [routerLink]="['/login']"
+                routerLinkActive="active"
+                [queryParams]="linkActive.isActive ? null : { next: currentPath$ | async }"
+                class="nav-link"
+            >
                 Sign in
             </a>
         </li>

@@ -71,6 +71,7 @@ export class AuthService {
         );
 
     public currentUser$ = merge(
+        this.login.subject.pipe(map(() => undefined)),
         this.logout.result$.pipe(map(() => null)),
         this.backendUser$,
         this.updateSettingsUser$
@@ -80,16 +81,16 @@ export class AuthService {
     );
 
     public isAuthenticated$ = this.currentUser$.pipe(
-        map(_.isObject)
+        map(user => user === undefined ? undefined : _.isObject(user))
     );
 
     constructor(
         private sessionService: SessionService,
-        private http: HttpClient,
+        private http: HttpClient
     ) {
-        this.sessionService.expired.pipe(
-            takeUntilDestroyed()
-        ).subscribe(() => this.logout.subject.next());
+        this.sessionService.expired
+            .pipe(takeUntilDestroyed())
+            .subscribe(() => this.logout.subject.next());
     }
 
     // Keeping track of the latest version of the username
