@@ -1,5 +1,5 @@
 <ul class="navbar-nav">
-    <li class="navbar-text" *ngIf="isLoading$ | async">
+    <li class="navbar-text" *ngIf="authLoading$ | async">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading user data...</span>
         </div>
@@ -12,22 +12,37 @@
                 {{user.username}}
             </button>
             <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
-                <a ngbDropdownItem [routerLink]="['/settings']" hidden>Settings</a>  <!-- hide settings link until this is implemented -->
+                <a ngbDropdownItem [routerLink]="['/user-settings']">Settings</a>
                 <a *ngIf="user.isStaff" ngbDropdownItem href="/admin/">Administration</a>
-                <button ngbDropdownItem (click)="logout()">Sign out</button>
+                <button ngbDropdownItem (click)="logout()">
+                    Sign out
+                </button>
             </div>
         </li>
     </ng-container>
     <ng-container *ngIf="showSignIn$ | async">
         <li class="nav-item">
-            <a [routerLink]="['/login']" routerLinkActive="active" class="nav-link">
+            <a
+                #linkActive="routerLinkActive"
+                [routerLink]="['/login']"
+                routerLinkActive="active"
+                [queryParams]="linkActive.isActive ? null : { next: currentPath$ | async }"
+                class="nav-link"
+            >
                 Sign in
             </a>
         </li>
-        <li class="nav-item" hidden> <!-- hide registration link until this is implemented -->
+        <li class="nav-item">
             <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
                 Register
             </a>
+        </li>
+    </ng-container>
+    <ng-container *ngIf="logoutLoading$ | async">
+        <li class="d-flex align-items-center">
+            <div class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="visually-hidden">Signing out...</span>
+            </div>
         </li>
     </ng-container>
 </ul>

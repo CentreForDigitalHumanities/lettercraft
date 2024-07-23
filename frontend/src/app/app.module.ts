@@ -8,6 +8,8 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { DataEntryModule } from './data-entry/data-entry.module';
 import { UserModule } from './user/user.module';
+import { GraphQLModule } from './graphql.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
@@ -20,6 +22,8 @@ import { UserModule } from './user/user.module';
         CoreModule,
         DataEntryModule,
         UserModule,
+        GraphQLModule,
+        HttpClientModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 from allauth.account.models import EmailConfirmationHMAC
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -43,6 +43,10 @@ class KeyInfoView(APIView):
         except Exception as e:
             raise APIException(e)
 
+class DeleteUser(APIView):
+    def delete(self, request: HttpRequest):
+        user = request.user
+        user.delete()
 
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]

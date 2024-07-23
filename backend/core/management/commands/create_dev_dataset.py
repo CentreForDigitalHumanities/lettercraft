@@ -5,14 +5,14 @@ from faker import Faker
 from source.models import Source
 
 from case_study.models import CaseStudy
-from event.models import EventDescription, Episode
+from event.models import Episode, Series
 from person.models import (
     HistoricalPerson,
     AgentDescription,
     HistoricalPerson,
 )
 from letter.models import (
-    Category,
+    LetterCategory,
     GiftDescription,
     LetterDescription,
     LetterDescriptionCategory,
@@ -104,17 +104,17 @@ class Command(BaseCommand):
             self._create_agent_descriptions(
                 fake, options, total=100, model=AgentDescription
             )
-            self._create_letter_categories(fake, options, total=10, model=Category)
+            self._create_letter_categories(
+                fake, options, total=10, model=LetterCategory
+            )
             self._create_letter_descriptions(
                 fake, options, total=200, model=LetterDescription
             )
             self._create_gift_descriptions(
                 fake, options, total=50, model=GiftDescription
             )
-            self._create_event_descriptions(
-                fake, options, total=50, model=EventDescription
-            )
-            self._create_episodes(fake, options, total=20, model=EventDescription)
+            self._create_event_descriptions(fake, options, total=50, model=Episode)
+            self._create_episodes(fake, options, total=20, model=Episode)
             self._create_case_studies(fake, options, total=10, model=CaseStudy)
 
             print("-" * 80)
@@ -122,9 +122,9 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_episodes(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, Episode)
-        events = get_random_model_objects(EventDescription, min_amount=1, max_amount=5)
-        Episode.objects.create(
+        unique_name = get_unique_name(epistolary_event_names, Series)
+        events = get_random_model_objects(Episode, min_amount=1, max_amount=5)
+        Series.objects.create(
             name=unique_name,
             description=fake.text(),
             events=events,
@@ -133,7 +133,7 @@ class Command(BaseCommand):
     @track_progress
     def _create_case_studies(self, fake: Faker, options, total, model):
         unique_name = get_unique_name(case_study_names, CaseStudy)
-        episodes = get_random_model_objects(Episode, min_amount=1, max_amount=5)
+        episodes = get_random_model_objects(Series, min_amount=1, max_amount=5)
         CaseStudy.objects.create(
             name=unique_name,
             episodes=episodes,
@@ -141,10 +141,10 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_event_descriptions(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, EventDescription)
+        unique_name = get_unique_name(epistolary_event_names, Episode)
         source = get_random_model_object(Source)
 
-        event = EventDescription.objects.create(
+        event = Episode.objects.create(
             source=source, name=unique_name, description=fake.text()
         )
 
@@ -182,9 +182,11 @@ class Command(BaseCommand):
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
         unique_label = get_unique_name(
-            list_of_names=letter_category_names, model=Category, name_field="label"
+            list_of_names=letter_category_names,
+            model=LetterCategory,
+            name_field="label",
         )
-        Category.objects.create(label=unique_label, description=fake.text())
+        LetterCategory.objects.create(label=unique_label, description=fake.text())
 
     @track_progress
     def _create_letter_descriptions(self, fake: Faker, *args, **kwargs):
@@ -199,7 +201,7 @@ class Command(BaseCommand):
         if random.choice([True, False]):
             LetterDescriptionCategory.objects.create(
                 letter=letter,
-                category=get_random_model_object(Category),
+                category=get_random_model_object(LetterCategory),
                 **self.fake_field_value(fake),
             )
 

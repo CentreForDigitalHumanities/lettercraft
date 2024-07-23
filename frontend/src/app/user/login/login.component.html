@@ -1,26 +1,66 @@
-<form>
-    <div class="mb-3" id="usernameField">
-        <label class="form-label" for="usernameInput">Username</label>
-        <input class="form-control" id="usernameInput" [formControl]="usernameInput"
-            [class.is-invalid]="usernameErrorMessage != ''">
-        <div class="invalid-feedback">
-            {{usernameErrorMessage}}
-        </div>
-    </div>
-    <div class="mb-3" id="passwordField">
-        <label class="form-label" for="passwordInput">Password</label>
-        <input type="password" class="form-control" id="passwordInput" [formControl]="passwordInput"
-            [class.is-invalid]="passwordErrorMessage != ''">
-        <div class="invalid-feedback">
-            {{passwordErrorMessage}}
-        </div>
+<h1>Sign in</h1>
+
+<p>Sign in using the form below.</p>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="mb-3">
+        <label for="username" class="form-label"> Username </label>
+        <input
+            type="text"
+            id="username"
+            class="form-control"
+            [class.is-invalid]="
+                form.controls.username.touched && form.controls.username.invalid
+            "
+            [formControl]="form.controls.username"
+        />
+        <p
+            *ngFor="let error of usernameErrors$ | async"
+            class="invalid-feedback"
+        >
+            {{ error }}
+        </p>
     </div>
     <div class="mb-3">
-        <button type="submit" class="btn btn-primary" (click)="submit()">
+        <label for="password" class="form-label"> Password </label>
+        <input
+            type="password"
+            id="password"
+            class="form-control"
+            [formControl]="form.controls.password"
+            [class.is-invalid]="
+                form.controls.password.touched && form.controls.password.invalid
+            "
+        />
+        <p
+            *ngFor="let error of passwordErrors$ | async"
+            class="invalid-feedback"
+        >
+            {{ error }}
+        </p>
+    </div>
+    <p
+        *ngFor="let error of formErrors$ | async"
+        class="invalid-feedback always-block"
+    >
+        {{ error }}
+    </p>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary mt-3">
             Sign in
+            <div
+                *ngIf="loading$ | async"
+                class="spinner-border spinner-border-sm"
+                role="status"
+            >
+                <span class="visually-hidden">Logging in...</span>
+            </div>
         </button>
     </div>
-    <div class="alert alert-danger" *ngIf="requestFailed" role="alert">
-        Failed to sign in.
-    </div>
 </form>
+
+<div>
+    <a [routerLink]="['/password-forgotten']">
+        Forgotten your password?
+    </a>
+</div>

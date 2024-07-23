@@ -6,7 +6,7 @@ from letter.models import LetterDescription
 
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
-from event.models import EventDescription
+from event.models import Episode
 from user.models import User
 
 
@@ -105,8 +105,8 @@ def agent_group_description(db, source, historical_person, historical_person_2):
 
 
 @pytest.fixture()
-def event_description(db, source, agent_description, agent_description_2):
-    event = EventDescription.objects.create(
+def episode(db, source, agent_description, agent_description_2):
+    event = Episode.objects.create(
         name="Bert writes a letter",
         source=source,
     )

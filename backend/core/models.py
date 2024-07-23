@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import ArrayField
 
+
 class Field(models.Model):
     """
     A piece of information about an entity.
@@ -60,7 +61,7 @@ class LettercraftDate(models.Model):
     )
 
     @property
-    def display_date(self):
+    def display_date(self) -> str:
         if self.year_exact:
             return str(self.year_exact)
         return f"c. {self.year_lower}–{self.year_upper}"
@@ -108,15 +109,20 @@ class HistoricalEntity(Named, models.Model):
         abstract = True
 
 
+class SourceMention(models.TextChoices):
+    DIRECT = "direct", "directly mentioned"
+    IMPLIED = "implied", "implied"
+
+
 class EntityDescription(Named, models.Model):
     """
-    A description of an entity (person, object, location, event) in a narrative source.
+    A description of an entity (person, object, location, episode) in a narrative source.
 
     Descriptions may refer to HistoricalEntity targets.
     """
 
     source = models.ForeignKey(
-        to='source.Source',
+        to="source.Source",
         on_delete=models.PROTECT,
         help_text="Source text containing this description",
     )
@@ -124,7 +130,7 @@ class EntityDescription(Named, models.Model):
     source_mention = models.CharField(
         max_length=32,
         blank=True,
-        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        choices=SourceMention.choices,
         help_text="How is this entity presented in the text?",
     )
 
@@ -141,19 +147,19 @@ class EntityDescription(Named, models.Model):
     book = models.CharField(
         max_length=255,
         blank=True,
-        help_text="The book in the source"
+        help_text="The book in the source",
     )
 
     chapter = models.CharField(
         max_length=255,
         blank=True,
-        help_text="The chapter or chapters in the source"
+        help_text="The chapter or chapters in the source",
     )
 
     page = models.CharField(
         max_length=255,
         blank=True,
-        help_text="The page number or page range in the source"
+        help_text="The page number or page range in the source",
     )
 
     class Meta:
@@ -174,7 +180,7 @@ class DescriptionField(Field, models.Model):
     source_mention = models.CharField(
         max_length=32,
         blank=True,
-        choices=[("direct", "directly mentioned"), ("implied", "implied")],
+        choices=SourceMention.choices,
         help_text="How is this information presented in the text?",
     )
 
