@@ -24,11 +24,13 @@
         *ngFor="let episode of episodes">
         <div class="card-header">
             <div class="hstack">
-                <span>
+                <div>
                     <fa-icon [icon]="icons.action"></fa-icon>
                     &nbsp;
                     {{episode.title}}
-                </span>
+                    <br>
+                    <small>book 1, chapter 1</small>
+                </div>
                 <div class="ms-auto btn-group">
                     <a class="btn btn-primary"
                         [routerLink]="['episode', episode.order]">
