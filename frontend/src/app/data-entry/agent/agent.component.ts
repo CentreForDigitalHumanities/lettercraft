@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-agent',
@@ -10,11 +10,7 @@ import { faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 export class AgentComponent {
     agent: number;
 
-    icons = {
-        confirm: faCheck,
-        cancel: faCancel,
-        remove: faTimes,
-    }
+    icons = icons;
 
     constructor(route: ActivatedRoute) {
         this.agent = parseInt(route.snapshot.params['agentID']);

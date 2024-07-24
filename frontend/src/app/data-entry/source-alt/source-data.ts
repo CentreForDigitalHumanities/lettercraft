@@ -230,7 +230,7 @@ export const episodes = [
         chapter: 'Cap. 14',
         title: 'A message about the death of a Bishop',
         summary: 'A messenger arrives at the residence of priest Willimar in Arbon, announcing to the priest, Gallus and Hiltibold that bishop Gaudentius of Konstanz has died, prompting all who are present to start weeping and praying',
-        agents: [agents[1], agents[11], agents[10], agents[9], agents[12]],
+        agents: [agents[1], agents[11], agents[12], agents[10], agents[9]],
         locations: [locations[4]],
         objects: [],
     }, {
@@ -263,7 +263,7 @@ export const episodes = [
         chapter: 'Cap. 15',
         title: 'Gallus lays a false epistolary trail',
         summary: 'Willimar fears the duke will send his henchmen to collect Gallus if he ignores the ducal summons. Gallus flees, first, to his cell, and then with two brethren to Raetia Curiensis, telling his other brothers to lie about his whereabouts: he has gone to Italy, summoned by a letter from his master Columbanus. He finds refuge in village of Grabs, hosted by the deacon Johannis, who does not recognize him.',
-        agents: [agents[6], agents[13], agents[1], agents[9], agents[18], agents[17]],
+        agents: [agents[6], agents[13], agents[1], agents[18], agents[9], agents[17]],
         locations: [locations[4], locations[9], locations[10], locations[11]],
         objects: [objects[1], objects[3]]
     }, {

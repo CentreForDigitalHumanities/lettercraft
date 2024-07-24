@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCheck, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-structure',
@@ -7,8 +7,5 @@ import { faCheck, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./structure.component.scss']
 })
 export class StructureComponent {
-    icons = {
-        info: faInfoCircle,
-        confirm: faCheck,
-    };
+    icons = icons;
 }

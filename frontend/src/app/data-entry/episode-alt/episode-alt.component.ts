@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { agents, episodes } from '../source-alt/source-data';
-import { faCaretDown, faCaretUp, faPencil, faPeopleGroup, faPlus, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'underscore';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-episode-alt',
@@ -10,15 +10,7 @@ import * as _ from 'underscore';
   styleUrls: ['./episode-alt.component.scss']
 })
 export class EpisodeAltComponent {
-    icons = {
-        remove: faTimes,
-        edit: faPencil,
-        expand: faCaretDown,
-        collapse: faCaretUp,
-        add: faPlus,
-        person: faUser,
-        group: faPeopleGroup,
-    };
+    icons = icons;
 
     labels = [
         'writing',

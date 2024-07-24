@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCheck, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 import { BehaviorSubject, Observable, OperatorFunction, debounceTime, delay, distinctUntilChanged, fromEvent, map, merge, mergeMap, switchMap, tap, timer } from 'rxjs';
 
 @Component({
@@ -8,10 +8,7 @@ import { BehaviorSubject, Observable, OperatorFunction, debounceTime, delay, dis
     styleUrls: ['./political-region.component.scss']
 })
 export class PoliticalRegionComponent {
-    icons = {
-        info: faInfoCircle,
-        confirm: faCheck,
-    }
+    icons = icons;
 
     politicalRegions = [
         'Burgundy',

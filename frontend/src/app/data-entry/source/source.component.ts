@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faCaretDown, faCaretUp, faCube, faEnvelope, faHand, faLocationDot, faPencil, faPeopleGroup, faPerson, faPlus, faTrash, } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-source',
@@ -8,18 +8,5 @@ import { faCaretDown, faCaretUp, faCube, faEnvelope, faHand, faLocationDot, faPe
 })
 export class SourceComponent {
 
-    icons = {
-        hide: faCaretUp,
-        show: faCaretDown,
-        delete: faTrash,
-        edit: faPencil,
-        create: faPlus,
-        person: faPerson,
-        group: faPeopleGroup,
-        place: faLocationDot,
-        letter: faEnvelope,
-        object: faCube,
-        action: faHand,
-    }
-
+    icons = icons;
 }

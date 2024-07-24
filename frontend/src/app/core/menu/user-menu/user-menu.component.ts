@@ -1,5 +1,4 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { filter, map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
@@ -22,7 +21,7 @@ export class UserMenuComponent implements OnInit {
     public showSignIn$ = this.authService.currentUser$.pipe(map(_.isNull));
 
     public icons = {
-        user: faUser,
+        user: 'bi bi-person-fill',
     };
 
     public logoutLoading$ = this.authService.logout.loading$;

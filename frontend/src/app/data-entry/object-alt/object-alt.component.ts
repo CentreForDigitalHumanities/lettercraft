@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { objects } from '../source-alt/source-data';
-import { faEnvelope, faGift, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-object-alt',
@@ -11,13 +11,7 @@ import { faEnvelope, faGift, faPencil, faPlus, faTimes } from '@fortawesome/free
 export class ObjectAltComponent {
     object: any;
 
-    icons = {
-        gift: faGift,
-        letter: faEnvelope,
-        remove: faTimes,
-        edit: faPencil,
-        add: faPlus,
-    }
+    icons = icons;
 
     giftLabels = ['golden cup', 'silver cup', 'hairshirt', 'livestock', 'book'];
     letterLabels = ['papal bull', 'royal decree', 'imaginary', 'love letter'];

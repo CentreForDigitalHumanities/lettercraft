@@ -7,7 +7,7 @@
 </nav>
 
 <h1 class="mb-4">
-    <fa-icon [icon]="icons.source"></fa-icon>
+    <i [class]="icons.source"></i>
     Walafrid Strabo, Vita Galli
 </h1>
 
@@ -25,7 +25,7 @@
         <div class="card-header">
             <div class="hstack">
                 <div>
-                    <fa-icon [icon]="icons.action"></fa-icon>
+                    <i [class]="icons.episode"></i>
                     &nbsp;
                     {{episode.title}}
                     <br>
@@ -34,10 +34,10 @@
                 <div class="ms-auto btn-group">
                     <a class="btn btn-primary"
                         [routerLink]="['episode', episode.order]">
-                        <fa-icon [icon]="icons.edit"></fa-icon>
+                        <i [class]="icons.edit"></i>
                 </a>
                     <button class="btn btn-danger" disabled>
-                        <fa-icon [icon]="icons.delete"></fa-icon>
+                        <i [class]="icons.delete"></i>
                     </button>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <dd class="ms-4">
                         <span *ngFor="let agent of episode.agents; let last = last">
                             <a [routerLink]="['agent/', agent.id]" class="icon-link">
-                                <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
+                                <i [class]="agentIcon(agent)"></i>
                                 {{agent.name}}
                             </a><span *ngIf="!last">, &nbsp;</span>
                         </span>
@@ -63,7 +63,7 @@
                     <dd class="ms-4">
                         <span *ngFor="let location of episode.locations; let last = last">
                             <a [routerLink]="['location/', location.id]"  class="icon-link">
-                                <fa-icon [icon]="icons.location"></fa-icon>
+                                <i [class]="icons.location"></i>
                                 {{location.name}}
                             </a><span *ngIf="!last">, &nbsp;</span>
                         </span>
@@ -75,7 +75,7 @@
                     <dd class="ms-4">
                         <span *ngFor="let object of episode.objects; let last = last">
                             <a [routerLink]="['object/', object.id]" class="icon-link">
-                                <fa-icon [icon]="icons.letter"></fa-icon>
+                                <i [class]="icons.letter"></i>
                                 {{object.name}}
                             </a><span *ngIf="!last">, &nbsp;</span>
                         </span>
@@ -87,7 +87,7 @@
 </div>
 <div class="btn-group mb-4">
     <button class="btn btn-primary" disabled>
-        <fa-icon [icon]="icons.create"></fa-icon>
+        <i [class]="icons.create"></i>
         Add a new episode
     </button>
 </div>

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { agents, episodes, locations } from '../source-alt/source-data';
-import { faBook, faBookmark, faCaretDown, faCaretUp, faPencil, faPeopleGroup, faPlus, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'underscore';
+import { agentIcon, icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-agent-alt',
@@ -15,16 +15,8 @@ export class AgentAltComponent {
     otherEpisodes: any[];
     locations: any[];
 
-    icons = {
-        remove: faTimes,
-        collapse: faCaretUp,
-        expand: faCaretDown,
-        edit: faPencil,
-        add: faPlus,
-        episode: faBookmark,
-        person: faUser,
-        group: faPeopleGroup,
-    };
+    icons = icons;
+    agentIcon = agentIcon
 
     constructor(private activatedRoute: ActivatedRoute) {
         const id = activatedRoute.snapshot.params['agentID'];

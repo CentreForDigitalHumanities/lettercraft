@@ -14,7 +14,7 @@
 </nav>
 
 <h1 class="mb-4">
-    <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
+    <i [class]="agentIcon(agent)"></i>
     {{agent.name}}
     <small class="text-body-secondary">(<i>Walafrid Strabo, Vita Galli</i>)</small>
 </h1>
@@ -89,7 +89,7 @@
                         <div class="input-group mb-4">
                             <input type="text" class="form-control" value="example name">
                             <button class="btn btn-outline-secondary" disabled>
-                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                <i [class]="icons.remove"></i>
                             </button>
                         </div>
                         <div class="input-group mb-4">
@@ -189,20 +189,20 @@
                                 <div class="card-header">
                                     <div class="hstack">
                                         <span>
-                                            <fa-icon [icon]="icons.episode"></fa-icon>
+                                            <i [class]="icons.episode"></i>
                                             &nbsp;
                                             {{episode.title}}
                                         </span>
                                         <div class="ms-auto btn-group">
                                             <button class="btn btn-secondary">
-                                                <fa-icon [icon]="first ? icons.collapse : icons.expand"></fa-icon>
+                                                <i [class]="first ? icons.collapse : icons.expand"></i>
                                             </button>
                                             <a class="btn btn-primary"
                                                 [routerLink]="['../..', 'episode', episode.order]">
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                                <i [class]="icons.edit"></i>
                                             </a>
                                             <button class="btn btn-danger" disabled>
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                                <i [class]="icons.remove"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@
                                             {{episode.title}}
                                         </button>
                                         <button ngbDropdownItem>
-                                            <fa-icon [icon]="icons.add"></fa-icon>
+                                            <i [class]="icons.add"></i>
                                             Add a new episode
                                         </button>
                                     </div>

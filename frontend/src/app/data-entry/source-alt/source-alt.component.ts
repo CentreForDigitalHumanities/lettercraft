@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { faBook, faBookmark, faEnvelope, faLocationDot, faPencil, faPeopleGroup, faPlus, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { episodes } from './source-data';
+import { agentIcon, icons } from '@shared/icons';
 
 /** alternative workflow implementation */
 @Component({
@@ -10,18 +10,8 @@ import { episodes } from './source-data';
 })
 export class SourceAltComponent {
 
-    icons = {
-        edit: faPencil,
-        delete: faTrash,
-        create: faPlus,
-        action: faBookmark,
-        person: faUser,
-        group: faPeopleGroup,
-        location: faLocationDot,
-        letter: faEnvelope,
-        source: faBook,
-    }
-
+    icons = icons;
     episodes = episodes;
+    agentIcon = agentIcon;
 
 }

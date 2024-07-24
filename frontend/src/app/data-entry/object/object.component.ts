@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faAdd, faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
     selector: 'lc-object',
@@ -7,11 +7,6 @@ import { faAdd, faCancel, faCheck, faTimes } from '@fortawesome/free-solid-svg-i
     styleUrls: ['./object.component.scss']
 })
 export class ObjectComponent {
-    icons = {
-        confirm: faCheck,
-        cancel: faCancel,
-        remove: faTimes,
-        add: faAdd,
-    }
+    icons = icons;
 
 }

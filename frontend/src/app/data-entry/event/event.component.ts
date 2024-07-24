@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-event',
@@ -7,11 +7,7 @@ import { faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./event.component.scss']
 })
 export class EventComponent {
-    icons = {
-        remove: faTimes,
-        edit: faPencil,
-        add: faPlus,
-    };
+    icons = icons;
 
     labels = [
         'writing',

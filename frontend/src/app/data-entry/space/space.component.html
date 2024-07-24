@@ -70,13 +70,13 @@
                         <div class="input-group mb-4">
                             <input type="text" class="form-control" value="Abbatiam">
                             <button class="btn btn-outline-secondary" disabled>
-                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                <i [class]="icons.remove"></i>
                             </button>
                         </div>
                         <div class="input-group mb-4">
                             <input type="text" class="form-control" value="Monasterii">
                             <button class="btn btn-outline-secondary" disabled>
-                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                <i [class]="icons.remove"></i>
                             </button>
                         </div>
                         <div class="input-group mb-4">
@@ -98,10 +98,10 @@
                                         <div class="ms-auto btn-group">
                                             <button class="btn btn-primary"
                                                 (click)="open(editPoliticalRegion)">
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                                <i [class]="icons.edit"></i>
                                             </button>
                                             <button class="btn btn-danger" disabled>
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                                <i [class]="icons.remove"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -128,7 +128,7 @@
 
                             <button class="btn btn-primary" type="button"
                                 (click)="open(newPoliticalRegion)" disabled>
-                                <fa-icon [icon]="icons.add"></fa-icon>
+                                <i [class]="icons.add"></i>
                                 Add a political region
                             </button>
                             <!-- <input type="text" class="form-control" [ngbTypeahead]="searchPoliticalRegion"> -->
@@ -140,7 +140,7 @@
                         <p class="form-text">(Arch)dioceses, parishes</p>
                         <div class="mb-4">
                             <button class="btn btn-primary" type="button" disabled>
-                                <fa-icon [icon]="icons.add"></fa-icon>
+                                <i [class]="icons.add"></i>
                                 Add an ecclesiastical region
                             </button>
                         </div>
@@ -151,7 +151,7 @@
                         <p class="form-text">Mountain ranges, valleys, islands, continents, etc.</p>
                         <div class="mb-4">
                             <button class="btn btn-primary" type="button" disabled>
-                                <fa-icon [icon]="icons.add"></fa-icon>
+                                <i [class]="icons.add"></i>
                                 Add a geographical region
                             </button>
                         </div>
@@ -172,10 +172,10 @@
                                         <div class="ms-auto btn-group">
                                             <button class="btn btn-primary"
                                                 (click)="open(editStructure)">
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                                <i [class]="icons.edit"></i>
                                             </button>
                                             <button class="btn btn-danger" disabled>
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                                <i [class]="icons.remove"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -208,10 +208,10 @@
                                         </span>
                                         <div class="ms-auto btn-group">
                                             <button class="btn btn-primary" disabled>
-                                                <fa-icon [icon]="icons.edit"></fa-icon>
+                                                <i [class]="icons.edit"></i>
                                             </button>
                                             <button class="btn btn-danger" disabled>
-                                                <fa-icon [icon]="icons.remove"></fa-icon>
+                                                <i [class]="icons.remove"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@
                             </div>
 
                             <button class="btn btn-primary" disabled>
-                                <fa-icon [icon]="icons.add"></fa-icon>
+                                <i [class]="icons.add"></i>
                                 Add a structure
                             </button>
                         </div>
@@ -247,7 +247,7 @@
                         <p class="form-text">Natural features, such as a forest, a swamp, a hill</p>
                         <div class="mb-4">
                             <button class="btn btn-primary" type="button" disabled>
-                                <fa-icon [icon]="icons.add"></fa-icon>
+                                <i [class]="icons.add"></i>
                                 Add a feature
                             </button>
                         </div>
@@ -276,7 +276,7 @@
     <div class="offcanvas-body">
         <div class="mb-4 card">
             <div class="card-body">
-                <fa-icon [icon]="icons.info"></fa-icon>
+                <i [class]="icons.info"></i>
                 This region is described in <b>3</b> sources.
                 Changes in this form will affect all of them.
             </div>
@@ -291,7 +291,7 @@
                 <textarea class="form-control" rows="3">Kingdom in Southwest France</textarea>
             </div>
             <button class="btn btn-success">
-                <fa-icon [icon]="icons.confirm"></fa-icon>
+                <i [class]="icons.confirm"></i>
                 Save
             </button>
         </form>

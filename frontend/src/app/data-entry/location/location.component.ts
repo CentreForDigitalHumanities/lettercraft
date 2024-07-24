@@ -1,9 +1,9 @@
 import { Component, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faBookmark, faCaretDown, faCaretUp, faLocationDot, faPencil, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { episodes, locations } from '../source-alt/source-data';
 import _ from 'underscore';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
+import { icons } from '@shared/icons';
 
 @Component({
   selector: 'lc-location',
@@ -15,15 +15,7 @@ export class LocationComponent {
     otherEpisodes: any[];
     location: any;
 
-    icons = {
-        remove: faTimes,
-        collapse: faCaretUp,
-        expand: faCaretDown,
-        edit: faPencil,
-        add: faPlus,
-        episode: faBookmark,
-        location: faLocationDot,
-    };
+    icons = icons;
 
     constructor(
         private activatedRoute: ActivatedRoute,

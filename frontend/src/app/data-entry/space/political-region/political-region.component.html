@@ -16,7 +16,7 @@
             <div *ngIf="!(isLoading$ | async); else loadingSpinner">
                 <div class="mb-4 card">
                     <div class="card-body">
-                        <fa-icon [icon]="icons.info"></fa-icon>
+                        <i [class]="icons.info"></i>
                         <ng-container *ngIf="exists(name); else notifyNew">
                             You're linking this description to the existing region
                             <i>{{name}}</i>.
@@ -35,7 +35,7 @@
                     <textarea class="form-control" rows="3">{{description(name)}}</textarea>
                 </div>
                 <button class="btn btn-success" disabled>
-                    <fa-icon [icon]="icons.confirm"></fa-icon>
+                    <i [class]="icons.confirm"></i>
                     Save
                 </button>
             </div>
