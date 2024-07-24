@@ -164,7 +164,7 @@
                                 <div class="card-header">
                                     <div class="hstack">
                                         <span>
-                                            <i [class]="agent.isGroup ? icons.group : icons.person"></i>
+                                            <i [class]="agentIcon(agent)"></i>
                                             &nbsp;
                                             {{agent.name}}
                                         </span>
@@ -213,7 +213,7 @@
                                         </button>
                                         <button ngbDropdownItem>
                                             <i [class]="icons.add"></i>
-                                            Add a new agent
+                                            Create a new agent
                                         </button>
                                     </div>
                                 </div>
@@ -231,6 +231,68 @@
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
                 <ng-template>
+                    <p class="mb-4">Which locations are involved in this episode?</p>
+                    <div class="mb-4">
+                        <div class="card mb-3"
+                            *ngFor="let location of episode.locations; let first = first">
+                            <div class="card-header">
+                                <div class="hstack">
+                                    <span>
+                                        <i [class]="icons.location"></i>
+                                        &nbsp;
+                                        {{location.name}}
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-secondary">
+                                            <i [class]="first ? icons.collapse : icons.expand"></i>
+                                        </button>
+                                        <a class="btn btn-primary"
+                                            [routerLink]="['../..', 'location', location.id]">
+                                            <i [class]="icons.edit"></i>
+                                        </a>
+                                        <button class="btn btn-danger" disabled>
+                                            <i [class]="icons.remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" *ngIf="first">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        How is this location presented in the text?
+                                    </label>
+                                    <select class="form-select">
+                                        <option>Implied</option>
+                                        <option selected>Mentioned</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Additional notes
+                                    </label>
+                                    <textarea class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hstack gap-2">
+                            <div ngbDropdown>
+                                <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                    Add a location
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <button ngbDropdownItem
+                                        *ngFor="let location of otherLocations">
+                                        {{location.name}}
+                                    </button>
+                                    <button ngbDropdownItem>
+                                        <i [class]="icons.add"></i>
+                                        Create a new location
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-template>
             </div>
         </div>
@@ -242,6 +304,68 @@
         <div ngbAccordionCollapse>
             <div ngbAccordionBody>
                 <ng-template>
+                    <p class="mb-4">Which letters and gifts are involved in this episode?</p>
+                    <div class="mb-4">
+                        <div class="card mb-3"
+                            *ngFor="let obj of episode.objects; let first = first">
+                            <div class="card-header">
+                                <div class="hstack">
+                                    <span>
+                                        <i [class]="icons.letter"></i>
+                                        &nbsp;
+                                        {{obj.name}}
+                                    </span>
+                                    <div class="ms-auto btn-group">
+                                        <button class="btn btn-secondary">
+                                            <i [class]="first ? icons.collapse : icons.expand"></i>
+                                        </button>
+                                        <a class="btn btn-primary"
+                                            [routerLink]="['../..', 'object', obj.id]">
+                                            <i [class]="icons.edit"></i>
+                                        </a>
+                                        <button class="btn btn-danger" disabled>
+                                            <i [class]="icons.remove"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" *ngIf="first">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        How is this object presented in the text?
+                                    </label>
+                                    <select class="form-select">
+                                        <option>Implied</option>
+                                        <option selected>Mentioned</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Additional notes
+                                    </label>
+                                    <textarea class="form-control" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hstack gap-2">
+                            <div ngbDropdown>
+                                <button type="button" class="btn btn-primary" ngbDropdownToggle>
+                                    Add an object
+                                </button>
+                                <div ngbDropdownMenu>
+                                    <button ngbDropdownItem
+                                        *ngFor="let obj of otherObjects">
+                                        {{obj.name}}
+                                    </button>
+                                    <button ngbDropdownItem>
+                                        <i [class]="icons.add"></i>
+                                        Create a new object
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-template>
             </div>
         </div>
