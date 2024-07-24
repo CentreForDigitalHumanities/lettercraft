@@ -261,11 +261,11 @@
                             Can we cross-reference this agent with other sources?
                         </label>
                         <select class="form-select">
-                            <option value="yes" selected>
+                            <option value="yes" [selected]="agent.isHistoricalFigure">
                                 Yes, this person is a historical or religious figure;
                                 they may appear in other sources
                             </option>
-                            <option>
+                            <option value="no" [selected]="!agent.isHistoricalFigure">
                                 No, this person is an unknown individual
                             </option>
                         </select>
