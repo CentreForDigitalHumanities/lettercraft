@@ -1,11 +1,11 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { filter, map } from 'rxjs';
 import { AuthService } from '@services/auth.service';
 import _ from 'underscore';
 import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { authIcons } from '@shared/icons';
 
 @Component({
   selector: 'lc-user-menu',
@@ -21,16 +21,14 @@ export class UserMenuComponent implements OnInit {
 
     public showSignIn$ = this.authService.currentUser$.pipe(map(_.isNull));
 
-    public icons = {
-        user: faUser,
-    };
-
     public logoutLoading$ = this.authService.logout.loading$;
 
     public currentPath$ = this.router.routerState.root.url.pipe(
         map((url) => url.pop() ?? null),
         filter(url => url?.toString() !== "")
     );
+
+    authIcons = authIcons;
 
     constructor(
         private authService: AuthService,
