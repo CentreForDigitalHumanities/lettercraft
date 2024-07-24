@@ -46,34 +46,41 @@
             <p>{{episode.summary || '...'}}</p>
 
             <dl>
-                <dt>Agents</dt>
-                <dd><ul>
-                    <li *ngFor="let agent of episode.agents">
-                        <a [routerLink]="['agent/', agent.id]" class="icon-link">
-                            <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
-                            {{agent.name}}
-                        </a>
-                    </li>
-                </ul></dd>
+                <ng-container *ngIf="episode.agents.length">
+                    <dt>Agents</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let agent of episode.agents; let last = last">
+                            <a [routerLink]="['agent/', agent.id]" class="icon-link">
+                                <fa-icon [icon]="agent.isGroup ? icons.group : icons.person"></fa-icon>
+                                {{agent.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
 
-                <dt>Locations</dt>
-                <dd><ul>
-                    <li *ngFor="let location of episode.locations">
-                        <a [routerLink]="['location/', location.id]"  class="icon-link">
-                            <fa-icon [icon]="icons.location"></fa-icon>
-                            {{location.name}}</a>
-                    </li>
-                </ul></dd>
+                <ng-container *ngIf="episode.locations.length">
+                    <dt>Locations</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let location of episode.locations; let last = last">
+                            <a [routerLink]="['location/', location.id]"  class="icon-link">
+                                <fa-icon [icon]="icons.location"></fa-icon>
+                                {{location.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
 
-                <dt>Objects</dt>
-                <dd><ul>
-                    <li *ngFor="let object of episode.objects">
-                        <a [routerLink]="['object/', object.id]" class="icon-link">
-                            <fa-icon [icon]="icons.letter"></fa-icon>
-                            {{object.name}}
-                        </a>
-                    </li>
-                </ul></dd>
+                <ng-container *ngIf="episode.objects.length">
+                    <dt>Objects</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let object of episode.objects; let last = last">
+                            <a [routerLink]="['object/', object.id]" class="icon-link">
+                                <fa-icon [icon]="icons.letter"></fa-icon>
+                                {{object.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
             </dl>
         </div>
     </div>
