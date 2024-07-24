@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,7 +16,6 @@ import { ReactiveFormsModule } from '@angular/forms';
         CommonModule,
         BrowserModule,
         FormsModule,
-        FontAwesomeModule,
         HttpClientTestingModule,
         NgbModule,
         NoopAnimationsModule,
@@ -27,7 +25,6 @@ import { ReactiveFormsModule } from '@angular/forms';
         CommonModule,
         BrowserModule,
         FormsModule,
-        FontAwesomeModule,
         HttpClientTestingModule,
         NgbModule,
         NoopAnimationsModule,
