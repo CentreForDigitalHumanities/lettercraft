@@ -22,7 +22,7 @@ You need to install the following software:
 This project integrates two isolated subprojects, each inside its own subdirectory with its own code, package dependencies and tests:
 
 - **backend**: the server side web application based on [Django](https://www.djangoproject.com)
-- **frontend**: the client side web application based on [Angular](https://angular.io)
+- **frontend**: the client side web application based on [Angular](https://angular.dev)
 
 Each subproject is configurable from the outside. Integration is achieved using "magic configuration" which is contained inside the root directory together with this document. In this way, the subprojects can stay truly isolated from each other.
 
@@ -50,7 +50,7 @@ Some useful URLs:
 
 - https://localhost:8000/ to view the homepage for the frontend
 - https://localhost:8000/admin/ to view the backend admin
-- https://localhost:8000/api/graphql to expore the GraphQL API
+- https://localhost:8000/api/graphql to explore the GraphQL API
 
 ### Working with GraphQL
 
@@ -113,7 +113,7 @@ You can run all unit tests with:
 yarn test
 ```
 
-Backend tests are run with [pytest](), frontend tests with [jasmine](). For more detailed control over testing, like running a single test, consult the documentation of those libraries.
+Backend tests are run with [pytest](https://docs.pytest.org), frontend tests with [jasmine](https://jasmine.github.io/). For more detailed control over testing, like running a single test, consult the documentation of those libraries.
 
 #### Running Django commands
 
@@ -131,7 +131,7 @@ yarn django [SUBCOMMAND] [OPTIONS]
 
 Python dependencies are managed using pip and recorded in [requirements.in](/backend/requirements.in) / [requirements.txt](/backend/requirements.txt). To update dependencies:
 
-- Edit `requirements.in` to describe the new dependencies
+- Edit `requirements.in` to describe the new dependencies.
 - Run `pip-compile` to update the full manifest in `requirements.txt`.
 - Run `pip install -r requirements.txt` to update your Python environment.
 
