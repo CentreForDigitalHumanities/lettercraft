@@ -7,11 +7,14 @@ import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from './icon/icon.component';
 
 
 
 @NgModule({
-    declarations: [],
+    declarations: [
+        IconComponent
+    ],
     imports: [
         CommonModule,
         BrowserModule,
@@ -26,6 +29,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         RouterModule,
         ReactiveFormsModule,
     ], exports: [
+        IconComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
