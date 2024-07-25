@@ -1,0 +1,21 @@
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<h1>Data entry</h1>
+
+<p>Select a source to begin</p>
+
+<div class="list-group">
+    <a
+        *ngFor="let source of sources$ | async"
+        class="list-group-item list-group-item-action"
+        [routerLink]="['source', source.id]"
+    >
+        <h5 class="mb-1">{{ source.name }}</h5>
+        <p class="mb-1">
+            {{ source.medievalAuthor }},
+            <em>{{ source.medievalTitle }}</em>.
+            (Ed. {{ source.editionAuthor }},
+            <em>{{ source.editionTitle }}</em>)
+        </p>
+    </a>
+</div>

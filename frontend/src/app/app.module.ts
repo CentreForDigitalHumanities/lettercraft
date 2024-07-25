@@ -9,11 +9,15 @@ import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { SourcesComponent } from './data-entry/sources/sources.component';
+import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        SourcesComponent,
+        BreadcrumbComponent,
     ],
     imports: [
         AppRoutingModule,
