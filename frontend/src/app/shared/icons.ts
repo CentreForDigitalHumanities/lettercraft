@@ -1,8 +1,23 @@
+/**
+ * Declares icons to use.
+ *
+ * Icons are defined with their name in the bootstrap-icons library.
+ * See https://icons.getbootstrap.com/
+ *
+ * Add to this module as needed.
+ */
+
 export const actionIcons = {
     add: 'plus-lg',
     remove: 'x-lg',
+    create: 'plus-lg',
+    delete: 'trash',
+    help: 'question-circle',
     confirm: 'check-lg',
     cancel: 'x-lg',
+    expand: 'caret-down',
+    collapse: 'caret-up',
+    edit: 'pencil',
 };
 
 export const authIcons = {
