@@ -5,5 +5,5 @@ export const environment = {
     assets: '/static/assets',
     version,
     apiUrl: '/api/',
-    graphqlUrl: '/graphql',
+    graphqlUrl: '/api/graphql',
 };
