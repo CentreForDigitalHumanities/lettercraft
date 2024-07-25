@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { DataEntrySourceListGQL } from "generated/graphql";
+import { DataEntrySourceListGQL, SourceType } from "generated/graphql";
 import { map } from "rxjs";
 
 @Component({
@@ -23,6 +23,10 @@ export class SourcesComponent {
                 )
             )
         );
+
+    public identify(_index: number, item: Pick<SourceType, "id">): string {
+        return item.id;
+    }
 
     constructor(private sourceListQuery: DataEntrySourceListGQL) {}
 }
