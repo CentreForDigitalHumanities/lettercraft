@@ -82,4 +82,5 @@ jobs:
         find static
         yarn start-back-p &
         chromedriver --version
+        yarn front yarn graphql-codegen
         yarn test
