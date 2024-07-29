@@ -11,7 +11,7 @@ import { Component, Input } from '@angular/core';
  *
  * ```html
  * <button class="btn">
- *     <lc-icon icon="pencil"></lc-icon>
+ *     <lc-icon icon="pencil" />
  *     Edit
  * </button>
  * ```
@@ -20,7 +20,7 @@ import { Component, Input } from '@angular/core';
  *
  * ```html
  * <button class="btn">
- *     <lc-icon icon="pencil" title="edit"></lc-icon>
+ *     <lc-icon icon="pencil" title="edit" />
  * </button>
  * ```
  */
@@ -29,5 +29,5 @@ import { Component, Input } from '@angular/core';
     templateUrl: './icon.component.html',
 })
 export class IconComponent {
-    @Input() icon: string | undefined;
+    @Input({ required: true }) icon!: string;
 }
