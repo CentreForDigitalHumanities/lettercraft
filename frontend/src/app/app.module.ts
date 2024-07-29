@@ -9,15 +9,12 @@ import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SourcesComponent } from './data-entry/sources/sources.component';
-import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
+import { DataEntryModule } from './data-entry/data-entry.module';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        SourcesComponent,
-        BreadcrumbComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -26,6 +23,7 @@ import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
         UserModule,
         GraphQLModule,
         HttpClientModule,
+        DataEntryModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -7,12 +7,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from './icon/icon.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 
 
 @NgModule({
     declarations: [
-        IconComponent
+        IconComponent,
+        BreadcrumbComponent
     ],
     imports: [
         CommonModule,
@@ -26,8 +28,10 @@ import { IconComponent } from './icon/icon.component';
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-    ], exports: [
+    ],
+    exports: [
         IconComponent,
+        BreadcrumbComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -36,6 +40,6 @@ import { IconComponent } from './icon/icon.component';
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-    ]
+    ],
 })
-export class SharedModule { }
+export class SharedModule {}
