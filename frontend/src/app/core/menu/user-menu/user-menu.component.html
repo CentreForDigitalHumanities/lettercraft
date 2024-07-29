@@ -7,7 +7,7 @@
     <ng-container *ngIf="user$ | async as user">
         <li class="nav-item" ngbDropdown>
             <button class="nav-link" ngbDropdownToggle id="userDropdown">
-                <fa-icon [icon]="icons.user"></fa-icon>
+                <lc-icon [icon]="authIcons.user" />
                 &nbsp;
                 {{user.username}}
             </button>
