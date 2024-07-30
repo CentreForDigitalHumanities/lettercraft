@@ -4,12 +4,11 @@
 
 <p>Select a source to begin</p>
 
-<div class="list-group">
-    <a *ngFor="let source of sources$ | async; trackBy: identify"
-       class="list-group-item list-group-item-action"
-       [routerLink]="['source', source.id]">
+<ul class="list-group">
+    <li *ngFor="let source of sources$ | async; trackBy: identify"
+       class="list-group-item list-group-item-action">
         <div class="d-flex align-items-center">
-            <h5 class="mb-1">{{ source.name }}</h5>
+            <a [routerLink]="['source', source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
             <small class="text-body-secondary ms-2">
                 ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other {{{ source.numOfEpisodes}} episodes}})
             </small>
@@ -22,5 +21,5 @@
                 (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container><em>{{ source.editionTitle }}</em>.)
             </ng-container>
         </p>
-    </a>
-</div>
+    </li>
+</ul>
