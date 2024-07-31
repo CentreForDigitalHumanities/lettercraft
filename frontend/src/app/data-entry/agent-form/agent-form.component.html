@@ -15,9 +15,10 @@
         </p>
 
         <h2>Identification</h2>
-        <lc-agent-identification-form [id]="id$ | async"></lc-agent-identification-form>
+        <lc-agent-identification-form *ngIf="id$ | async as id" [id]="id"></lc-agent-identification-form>
 
         <h2>Description in source text</h2>
+        <lc-agent-description-form *ngIf="id$ | async as id" [id]="id"></lc-agent-description-form>
 
         <h2>Episodes</h2>
 
