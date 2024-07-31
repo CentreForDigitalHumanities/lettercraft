@@ -8,13 +8,15 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from './icon/icon.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ActionButtonGroupComponent } from './action-button-group/action-button-group.component';
 
 
 
 @NgModule({
     declarations: [
         IconComponent,
-        BreadcrumbComponent
+        BreadcrumbComponent,
+        ActionButtonGroupComponent
     ],
     imports: [
         CommonModule,
@@ -32,6 +34,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     exports: [
         IconComponent,
         BreadcrumbComponent,
+        ActionButtonGroupComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
