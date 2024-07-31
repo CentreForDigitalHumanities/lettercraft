@@ -2,74 +2,121 @@
 
 <h1 class="mb-4">
     <lc-icon [icon]="dataIcons.source" />
-    {{ sourceTitle() }}
+    <span *ngIf="source$ | async as source" class="ms-2">
+        {{ source.medievalAuthor }}, <i>{{ source.medievalTitle }}</i>
+    </span>
 </h1>
-
 
 <h2 class="mb-4">Episodes</h2>
 
 <p>
-    Identify <i>episodes</i> in the narrative that relate to epistolary communication.
-    For each episode, fill in what happens and what agents, objects, and locations are involved.
+    Identify <i>episodes</i> in the narrative that relate to epistolary
+    communication. For each episode, fill in what happens and what agents,
+    objects, and locations are involved.
 </p>
 
 <div class="mb-4" *ngIf="source$ | async as source">
-    <div class="card mb-4"
-        *ngFor="let episode of source.episodes">
+    <div class="card mb-4" *ngFor="let episode of source.episodes">
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <div>
                     <lc-icon [icon]="dataIcons.episode" />
                     &nbsp;
-                    {{episode.name}}
-                    <br>
-                    <small>book 1, chapter 1</small>
+                    {{ episode.name }}
+                    <br />
+                    <small>
+                        <span>book {{ episode.book }}</span>,
+                        <span>chapter {{ episode.chapter }}</span>
+                    </small>
                 </div>
                 <lc-action-button-group
                     [editLink]="['episode', episode.id]"
-                    (delete)="deleteEpisode(episode.id)" />
+                    (delete)="deleteEpisode(episode.id)"
+                />
             </div>
         </div>
         <div class="card-body">
-            <p>{{episode.summary || '...'}}</p>
+            <p>{{ episode.summary || "..." }}</p>
 
-            <!-- <dl>
-                <ng-container *ngIf="episode.agents.length">
-                    <dt>Agents</dt>
-                    <dd class="ms-4">
-                        <span *ngFor="let agent of episode.agents; let last = last">
-                            <a [routerLink]="['agent/', agent.id]" class="icon-link">
-                                <i [class]="agentIcon(agent)"></i>
-                                {{agent.name}}
-                            </a><span *ngIf="!last">, &nbsp;</span>
-                        </span>
-                    </dd>
-                </ng-container>
+            <dl>
+                <dt>Agents</dt>
+                <dd
+                    *ngIf="episode.agents.length > 0; else noAgents"
+                    class="ms-4"
+                >
+                    <span
+                        *ngFor="let agent of episode.agents"
+                        class="entity-item"
+                    >
+                        <a
+                            [routerLink]="['agent/', agent.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="agentIcon(agent)" />
+                            {{ agent.name }}
+                        </a>
+                    </span>
+                </dd>
+                <ng-template #noAgents>
+                    <dd class="ms-4">No agents have been added yet.</dd>
+                </ng-template>
 
-                <ng-container *ngIf="episode.locations.length">
-                    <dt>Locations</dt>
-                    <dd class="ms-4">
-                        <span *ngFor="let location of episode.locations; let last = last">
-                            <a [routerLink]="['location/', location.id]"  class="icon-link">
-                                <i [class]="icons.location"></i>
-                                {{location.name}}
-                            </a><span *ngIf="!last">, &nbsp;</span>
-                        </span>
-                    </dd>
-                </ng-container>
+                <dt>Locations</dt>
+                <dd
+                    *ngIf="episode.spaces.length > 0; else noSpaces"
+                    class="ms-4"
+                >
+                    <span
+                        *ngFor="let space of episode.spaces"
+                        class="entity-item"
+                    >
+                        <a
+                            [routerLink]="['location/', space.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="dataIcons.location" />
+                            {{ space.name }}
+                        </a>
+                    </span>
+                </dd>
+                <ng-template #noSpaces>
+                    <dd class="ms-4">No locations have been added yet.</dd>
+                </ng-template>
 
-                <ng-container *ngIf="episode.objects.length">
-                    <dt>Objects</dt>
-                    <dd class="ms-4">
-                        <span *ngFor="let object of episode.objects; let last = last">
-                            <a [routerLink]="['object/', object.id]" class="icon-link">
-                                <i [class]="icons.letter"></i>
-                                {{object.name}}
-                            </a><span *ngIf="!last">, &nbsp;</span>
-                        </span>
-                    </dd>
-                </ng-container>
-            </dl> -->
+                <dt>Objects</dt>
+                <dd
+                    *ngIf="
+                        episode.gifts.length > 0 || episode.letters.length > 0;
+                        else noObjects
+                    "
+                    class="ms-4"
+                >
+                    <span
+                        *ngFor="let gift of episode.gifts"
+                        class="entity-item"
+                    >
+                        <a [routerLink]="['gift/', gift.id]" class="icon-link">
+                            <lc-icon [icon]="dataIcons.gift" />
+                            {{ gift.name }}
+                        </a>
+                    </span>
+                    <span
+                        *ngFor="let letter of episode.letters"
+                        class="entity-item"
+                    >
+                        <a
+                            [routerLink]="['letter/', letter.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="dataIcons.letter" />
+                            {{ letter.name }}
+                        </a>
+                    </span>
+                </dd>
+                <ng-template #noObjects>
+                    <dd class="ms-4">No objects have been added yet.</dd>
+                </ng-template>
+            </dl>
         </div>
     </div>
 </div>

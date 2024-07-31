@@ -10,11 +10,32 @@ query DataEntrySourceDetail($id: ID!) {
         episodes {
             id
             name
+            description
             summary
+            book
+            chapter
+            page
             agents {
                 id
+                name
+                isGroup
+                describes {
+                    id
+                    identifiable
+                }
             }
-            
+            gifts {
+                id
+                name
+            }
+            letters {
+                id
+                name
+            }
+            spaces {
+                id
+                name
+            }
         }
     }
 }
