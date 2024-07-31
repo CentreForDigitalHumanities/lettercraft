@@ -1,0 +1,10 @@
+<div class="btn-group">
+    <a class="btn btn-primary" [routerLink]="editLink">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit
+    </a>
+    <button class="btn btn-danger" (click)="onDelete($event)">
+        <lc-icon [icon]="actionIcons.delete" />
+        Delete
+    </button>
+</div>
