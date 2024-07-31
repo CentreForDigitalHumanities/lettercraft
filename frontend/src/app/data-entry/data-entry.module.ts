@@ -6,6 +6,6 @@ import { SourceComponent } from './source/source.component';
 @NgModule({
     declarations: [SourcesComponent, SourceComponent],
     imports: [SharedModule],
-    exports: [SourcesComponent, SourceComponent],
+    exports: [SourcesComponent],
 })
 export class DataEntryModule {}
