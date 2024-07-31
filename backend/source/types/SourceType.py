@@ -1,4 +1,4 @@
-from graphene import Field, Int, List, ResolveInfo
+from graphene import Field, Int, List, NonNull, ResolveInfo
 from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 from event.models import Episode
@@ -9,7 +9,7 @@ from source.types.SourceWrittenDateType import SourceWrittenDateType
 
 
 class SourceType(DjangoObjectType):
-    episodes = List(EpisodeType, required=True)
+    episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
     written_date = Field(SourceWrittenDateType)
     contents_date = Field(SourceContentsDateType)

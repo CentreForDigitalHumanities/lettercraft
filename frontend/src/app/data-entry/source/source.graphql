@@ -9,6 +9,12 @@ query DataEntrySourceDetail($id: ID!) {
         numOfEpisodes
         episodes {
             id
+            name
+            summary
+            agents {
+                id
+            }
+            
         }
     }
 }

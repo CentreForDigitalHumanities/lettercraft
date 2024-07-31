@@ -1,241 +1,81 @@
 <lc-breadcrumb [breadcrumbs]="breadcrumbs()" />
 
-<h1>{{ sourceTitle() }}</h1>
+<h1 class="mb-4">
+    <lc-icon [icon]="dataIcons.source" />
+    {{ sourceTitle() }}
+</h1>
 
-<p>Fill in what agents, places, and objects are described in <i>{{ sourceTitle() }}</i>. Then describe the episodes in the work, and how the agents, places, and objects are involved in these actions.</p>
 
-<div ngbAccordion [closeOthers]="true">
-    <div ngbAccordionItem>
-        <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>Agents</button>
-        </h2>
-        <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-                <ng-template>
-                    <p>What people and groups act as agents in the text?</p>
-                    <ul class="list-group mb-4">
-                        <li class="list-group-item"
-                            [routerLink]="['source/', 1]">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="dataIcons.person" />
-                                St. Radegund
-                            </h5>
-                            <p>Founder of the Abbey in Poitiers</p>
-                            <lc-action-button-group [editLink]="['agent', 1]" (deleteAction)="onDelete()" />
-                        </li>
-                        <li class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="dataIcons.personUnknown" />
-                                Unknown messenger
-                            </h5>
-                            <p>Messenger who delivers the letter to the nuns</p>
-                            <div class="btn-group">
-                                <button class="btn btn-primary" disabled>
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </li>
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="dataIcons.group"></lc-icon>
-                                The nuns of Poitiers
-                            </h5>
-                            <p>Nuns in the abbey of Poitiers</p>
-                            <div class="btn-group">
-                                <a class="btn btn-primary" [routerLink]="['agent', 3]">
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </a>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </ul>
-                    <div class="btn-group mb-4">
-                        <button class="btn btn-primary">
-                            <lc-icon [icon]="actionIcons.create" />
-                            Add a new agent
-                        </button>
-                    </div>
-                </ng-template>
+<h2 class="mb-4">Episodes</h2>
+
+<p>
+    Identify <i>episodes</i> in the narrative that relate to epistolary communication.
+    For each episode, fill in what happens and what agents, objects, and locations are involved.
+</p>
+
+<div class="mb-4" *ngIf="source$ | async as source">
+    <div class="card mb-4"
+        *ngFor="let episode of source.episodes">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <lc-icon [icon]="dataIcons.episode" />
+                    &nbsp;
+                    {{episode.name}}
+                    <br>
+                    <small>book 1, chapter 1</small>
+                </div>
+                <lc-action-button-group
+                    [editLink]="['episode', episode.id]"
+                    (delete)="deleteEpisode(episode.id)" />
             </div>
+        </div>
+        <div class="card-body">
+            <p>{{episode.summary || '...'}}</p>
+
+            <!-- <dl>
+                <ng-container *ngIf="episode.agents.length">
+                    <dt>Agents</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let agent of episode.agents; let last = last">
+                            <a [routerLink]="['agent/', agent.id]" class="icon-link">
+                                <i [class]="agentIcon(agent)"></i>
+                                {{agent.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
+
+                <ng-container *ngIf="episode.locations.length">
+                    <dt>Locations</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let location of episode.locations; let last = last">
+                            <a [routerLink]="['location/', location.id]"  class="icon-link">
+                                <i [class]="icons.location"></i>
+                                {{location.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
+
+                <ng-container *ngIf="episode.objects.length">
+                    <dt>Objects</dt>
+                    <dd class="ms-4">
+                        <span *ngFor="let object of episode.objects; let last = last">
+                            <a [routerLink]="['object/', object.id]" class="icon-link">
+                                <i [class]="icons.letter"></i>
+                                {{object.name}}
+                            </a><span *ngIf="!last">, &nbsp;</span>
+                        </span>
+                    </dd>
+                </ng-container>
+            </dl> -->
         </div>
     </div>
-    <!-- <div ngbAccordionItem>
-        <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>Places</button>
-        </h2>
-        <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-                <ng-template>
-                    <p>What locations are described in the text? Where do actions take place?</p>
-                    <div class="list-group mb-4">
-                        <div class="list-group-item"
-                            [routerLink]="['source/', 1]">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.place"></lc-icon>
-                                The Abbey of the Holy Cross
-                            </h5>
-                            <p>Abbey in Poitiers</p>
-                            <div class="btn-group">
-                                <a class="btn btn-primary" [routerLink]="['space', 1]">
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </a>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.place"></lc-icon>
-                                A cave
-                            </h5>
-                            <p>A cave somewhere in France, where Radegund had a vision</p>
-                            <div class="btn-group">
-                                <button class="btn btn-primary" disabled>
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="btn-group mb-4">
-                        <button class="btn btn-primary" disabled>
-                            <lc-icon [icon]="actionIcons.create"></lc-icon>
-                            Add a new place
-                        </button>
-                    </div>
-                </ng-template>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div ngbAccordionItem>
-        <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>Objects</button>
-        </h2>
-        <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-                <ng-template>
-                    <p>What objects are sent and received?</p>
-                    <div class="list-group mb-4">
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.letter"></lc-icon>
-                                Letter from Radegund
-                            </h5>
-                            <p>A letter written by Radegund describing her vision</p>
-                            <div class="btn-group">
-                                <a class="btn btn-primary"
-                                    [routerLink]="['object/', 1]">
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </a>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.object"></lc-icon>
-                                Hairshirt
-                            </h5>
-                            <p>A penitent gift</p>
-                            <div class="btn-group">
-                                <button class="btn btn-primary" disabled>
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.letter"></lc-icon>
-                                Letter from Heaven
-                            </h5>
-                            <p>A letter delivered in a vision</p>
-                            <div class="btn-group">
-                                <button class="btn btn-primary" disabled>
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </button>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="btn-group mb-4">
-                        <button class="btn btn-primary" disabled>
-                            <lc-icon [icon]="actionIcons.create"></lc-icon>
-                            Add a new object
-                        </button>
-                    </div>
-                </ng-template>
-            </div>
-        </div>
-    </div> -->
-    <!-- <div ngbAccordionItem>
-        <h2 ngbAccordionHeader>
-            <button ngbAccordionButton>Actions</button>
-        </h2>
-        <div ngbAccordionCollapse>
-            <div ngbAccordionBody>
-                <ng-template>
-                    <p>
-                        Describe the events of the text in singular "actions".
-                        A single letter-exchange often involves several actions; e.g.
-                        the writing, transporting, delivering, and reading of the letter.
-                    </p>
-                    <div class="list-group mb-4">
-                        <div class="list-group-item"
-                            [routerLink]="['source/', 1]">
-                            <h5 class="mb-1">
-                                <lc-icon [icon]="icons.action"></lc-icon>
-                                Delivering of the letter from Radegund
-                            </h5>
-                            <p>An unknown messenger delivers a letter to the nuns of Poitiers.</p>
-                            <div class="btn-group">
-                                <a class="btn btn-primary"
-                                    [routerLink]="['event', '1']">
-                                    <lc-icon [icon]="actionIcons.edit"></lc-icon>
-                                    Edit
-                                </a>
-                                <button class="btn btn-danger" disabled>
-                                    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="btn-group mb-4">
-                        <button class="btn btn-primary" disabled>
-                            <lc-icon [icon]="actionIcons.create"></lc-icon>
-                            Add a new action
-                        </button>
-                    </div>
-                </ng-template>
-            </div>
-        </div>
-    </div> -->
+</div>
+<div class="btn-group mb-4">
+    <button class="btn btn-primary" disabled>
+        <lc-icon [icon]="actionIcons.create" />
+        Add a new episode
+    </button>
 </div>

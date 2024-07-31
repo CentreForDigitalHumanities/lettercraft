@@ -43,8 +43,8 @@ export class SourceComponent {
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
-    onDelete(): void {
-        console.log("Hey there!");
+    deleteEpisode(episodeId: string): void {
+        console.log("Deleting episode with id", episodeId);
     }
 
     constructor(
