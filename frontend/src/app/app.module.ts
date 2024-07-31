@@ -9,11 +9,12 @@ import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
+import { DataEntryModule } from './data-entry/data-entry.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
         UserModule,
         GraphQLModule,
         HttpClientModule,
+        DataEntryModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
