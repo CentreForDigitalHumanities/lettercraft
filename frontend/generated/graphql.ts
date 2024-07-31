@@ -742,7 +742,7 @@ export type DataEntryAgentQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -783,6 +783,7 @@ export const DataEntryAgentDocument = gql`
     id
     name
     description
+    isGroup
     source {
       id
       name
