@@ -4,8 +4,10 @@
         class="input-group mb-3">
         <input class="form-control" [value]="designator"
             [attr.aria-label]="designatorInputLabel(i)"
+            [disabled]="disabled"
             (blur)="blur$.next()">
         <button class="btn btn-secondary" type="button"
+            [disabled]="disabled"
             (blur)="blur$.next()"
             (click)="removeDesignator(i)">
             <lc-icon [icon]="actionIcons.remove"
@@ -21,6 +23,7 @@
             [formControl]="addForm.controls.designator"
             (blur)="blur$.next()">
         <button class="btn btn-primary" type="submit"
+            [disabled]="disabled"
             (blur)="blur$.next()">
             <lc-icon [icon]="actionIcons.add" aria-label="add" />
         </button>

@@ -49,6 +49,11 @@ export class DesignatorsControlComponent implements ControlValueAccessor {
 
     setDisabledState(isDisabled: boolean): void {
         this.disabled = isDisabled;
+        if (isDisabled) {
+            this.addForm.disable();
+        } else {
+            this.addForm.enable();
+        }
     }
 
     onAddFormSubmit() {
