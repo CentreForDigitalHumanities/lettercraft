@@ -33,8 +33,8 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_episodes(parent: Source, info: ResolveInfo) -> QuerySet[Episode]:
-        return Episode.objects.filter(source_id=parent.pk)
+        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk)
 
     @staticmethod
     def resolve_num_of_episodes(parent: Source, info: ResolveInfo) -> int:
-        return Episode.objects.filter(source_id=parent.pk).count()
+        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk).count()
