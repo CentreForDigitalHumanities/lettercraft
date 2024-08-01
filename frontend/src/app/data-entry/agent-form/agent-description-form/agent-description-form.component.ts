@@ -6,7 +6,7 @@ import {
     PersonAgentDescriptionGenderGenderChoices as GenderChoices,
     PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices
 } from 'generated/graphql';
-import { map, Subject, switchMap } from 'rxjs';
+import { Observable, map, Subject, switchMap } from 'rxjs';
 
 
 @Component({
@@ -39,13 +39,20 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         }),
     })
 
+    isGroup$: Observable<boolean>;
+
     private id$ = new Subject<string>();
+    private data$: Observable<DataEntryAgentDescriptionQuery>;
 
     constructor(private agentQuery: DataEntryAgentDescriptionGQL) {
-        this.id$.pipe(
+        this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
-        ).subscribe(this.updateFormData.bind(this));
+        );
+        this.isGroup$ = this.data$.pipe(
+            map(result => result.agentDescription?.isGroup || false),
+        );
+        this.data$.subscribe(this.updateFormData.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
