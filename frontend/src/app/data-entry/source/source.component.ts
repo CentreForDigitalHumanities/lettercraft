@@ -24,7 +24,7 @@ export class SourceComponent {
         },
         {
             label: this.sourceTitle(),
-            link: "/data-entry/source/1",
+            link: "/data-entry/source/" + this.route.snapshot.params["id"],
         },
     ]);
 
