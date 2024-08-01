@@ -29,8 +29,6 @@ class HistoricalPersonAdmin(admin.ModelAdmin):
     ]
 
 
-
-
 class AgentDescriptionGenderAdmin(admin.StackedInline):
     model = models.AgentDescriptionGender
     fields = ["gender"] + core_admin.description_field_fields
@@ -44,6 +42,11 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
 
 @admin.register(models.AgentDescription)
 class AgentDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
+    fieldsets = [
+        core_admin.named_fieldset,
+        ("Person/group", {"fields": ["is_group"]}),
+        core_admin.description_source_fieldset,
+    ]
     inlines = [
         AgentDescriptionGenderAdmin,
         AgentDescriptionLocationAdmin,
