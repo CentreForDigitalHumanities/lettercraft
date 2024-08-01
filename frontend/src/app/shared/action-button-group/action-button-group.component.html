@@ -1,10 +1,10 @@
 <div class="btn-group">
     <a class="btn btn-primary" [routerLink]="editLink">
-        <lc-icon [icon]="actionIcons.edit" />
+        <lc-icon [icon]="actionIcons.edit" [title]="showButtonText ? undefined : 'Edit'" />
         <span *ngIf="showButtonText" class="ms-2">Edit</span>
     </a>
     <button class="btn btn-danger" (click)="onDelete($event)">
-        <lc-icon [icon]="actionIcons.delete" />
+        <lc-icon [icon]="actionIcons.delete" [title]="showButtonText ? undefined : 'Delete'"/>
         <span *ngIf="showButtonText" class="ms-2">Delete</span>
     </button>
 </div>
