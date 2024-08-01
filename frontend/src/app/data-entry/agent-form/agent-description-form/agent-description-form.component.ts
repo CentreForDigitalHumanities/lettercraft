@@ -6,7 +6,7 @@ import {
     PersonAgentDescriptionGenderGenderChoices as GenderChoices,
     PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices
 } from 'generated/graphql';
-import { Observable, map, Subject, switchMap } from 'rxjs';
+import { Observable, map, Subject, switchMap, shareReplay } from 'rxjs';
 
 
 @Component({
@@ -48,6 +48,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
+            shareReplay(1),
         );
         this.isGroup$ = this.data$.pipe(
             map(result => result.agentDescription?.isGroup || false),
