@@ -1,10 +1,4 @@
 import { Component } from "@angular/core";
-import {
-    FormBuilder,
-    FormControl,
-    FormGroup,
-    Validators,
-} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntryEpisodeDetailGQL } from "generated/graphql";
@@ -50,51 +44,8 @@ export class EpisodeFormComponent {
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
-    public labels = [{
-        id: 1,
-        name: "One"
-    }, {
-        id: 2,
-        name: "Two"
-    }];
-
-    public form = this.fb.group({
-        identification: this.fb.group({
-            name: this.fb.control("", {
-                nonNullable: true,
-                validators: [Validators.required],
-            }),
-        }),
-        sourceText: this.fb.group({
-            designators: this.fb.array([]),
-            book: this.fb.control(""),
-            chapter: this.fb.control(""),
-            page: this.fb.control(""),
-        }),
-        contents: this.fb.group({
-            summary: this.fb.control("")
-        })
-    });
-
     constructor(
-        private fb: FormBuilder,
         private route: ActivatedRoute,
         private episodeQuery: DataEntryEpisodeDetailGQL
     ) {}
-
-    public addDesignator(): void {
-        console.log("Adding designator!");
-        const newControl = this.fb.control("");
-        this.form.controls.sourceText.controls.designators.push(newControl);
-    }
-
-    public removeDesignator(index: number): void {
-        this.form.controls.sourceText.controls.designators.removeAt(index);
-    }
-
-    public submit(): void {
-        console.log("Submitting form!", this.form.getRawValue());
-
-        this.form.updateValueAndValidity();
-    }
 }
