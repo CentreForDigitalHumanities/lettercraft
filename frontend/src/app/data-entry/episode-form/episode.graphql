@@ -1,0 +1,11 @@
+query DataEntryEpisodeDetail($id: ID!) {
+    episode(id: $id) {
+        id
+        name
+        source {
+            id
+            medievalTitle
+            medievalAuthor
+        }
+    }
+}

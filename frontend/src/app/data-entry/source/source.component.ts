@@ -24,12 +24,12 @@ export class SourceComponent {
         },
         {
             label: this.sourceTitle(),
-            link: "/data-entry/source/1",
+            link: "/data-entry/source",
         },
     ]);
 
     public source$ = this.route.params.pipe(
-        map((params) => params["id"]),
+        map((params) => params["sourceId"]),
         switchMap((id) => this.sourceDetailQuery.watch({ id }).valueChanges),
         map((result) => result.data.source),
         share()

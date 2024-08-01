@@ -5,7 +5,7 @@ from event.types.EpisodeType import EpisodeType
 
 
 class EventQueries(ObjectType):
-    episode = Field(EpisodeType, id=ID(required=True))
+    episode = Field(NonNull(EpisodeType), id=ID(required=True))
     episodes = List(NonNull(EpisodeType), required=True, source_id=ID())
 
     @staticmethod
