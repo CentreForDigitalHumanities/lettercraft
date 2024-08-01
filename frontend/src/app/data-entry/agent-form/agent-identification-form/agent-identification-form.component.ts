@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
+import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery } from 'generated/graphql';
 import { map, Subject, switchMap } from 'rxjs';
 
 @Component({
@@ -19,7 +19,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
 
     private id$ = new Subject<string>();
 
-    constructor(private agentQuery: DataEntryAgentGQL) {
+    constructor(private agentQuery: DataEntryAgentIdentificationGQL) {
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
@@ -36,7 +36,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         this.id$.complete();
     }
 
-    updateFormData(data: DataEntryAgentQuery) {
+    updateFormData(data: DataEntryAgentIdentificationQuery) {
         this.form.setValue({
             name: data.agentDescription?.name || '',
             description: data.agentDescription?.description || '',
