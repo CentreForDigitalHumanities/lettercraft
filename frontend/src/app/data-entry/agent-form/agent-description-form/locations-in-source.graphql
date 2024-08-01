@@ -1,0 +1,6 @@
+query LocationsInSourceList($sourceID: ID!) {
+  spaceDescriptions(sourceId: $sourceID) {
+    id
+    name
+  }
+}
