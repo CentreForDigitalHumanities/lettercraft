@@ -1,1 +1,70 @@
-<p>agent-description-form works!</p>
+<form>
+    <h3>Designators</h3>
+
+    <p>What expressions are used in the text to refer to this agent?</p>
+
+    <div class="mb-4">
+        <p class="form-label">Designators</p>
+    </div>
+
+    <h3>Gender</h3>
+
+    <p>Does the text establish the gender of this agent?</p>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender">Gender</label>
+        <select class="form-select" id="input-gender" >
+            <option *ngFor="let option of genderOptions" [value]="option.value">
+                {{option.label}}
+            </option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender-mention">
+            How is this information presented in the text?
+        </label>
+        <select class="form-select" id="input-gender-mention">
+            <option>Implied</option>
+            <option selected>Mentioned</option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender-notes">
+            Additional notes
+        </label>
+        <textarea class="form-control" id="input-gender-notes"></textarea>
+    </div>
+
+    <h3>Location</h3>
+
+    <p>
+        Is the group characterised by their location? (For example, "the citizens of
+        Arles", "the nuns at the abbey in Poitiers".)
+    </p>
+
+
+    <div class="mb-4">
+        <label class="form-label" for="input-location">Location</label>
+        <select class="form-select" id="input-location" >
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-location-mention">
+            How is this information presented in the text?
+        </label>
+        <select class="form-select" id="input-location-mention">
+            <option>Implied</option>
+            <option selected>Mentioned</option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-location-notes">
+            Additional notes
+        </label>
+        <textarea class="form-control" id="input-location-notes"></textarea>
+    </div>
+</form>
