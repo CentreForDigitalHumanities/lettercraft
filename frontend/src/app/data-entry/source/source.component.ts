@@ -3,7 +3,7 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntrySourceDetailGQL, DataEntrySourceDetailQuery } from "generated/graphql";
-import { map, share, switchMap } from "rxjs";
+import { map, shareReplay, switchMap } from "rxjs";
 
 type QueriedAgent = NonNullable<DataEntrySourceDetailQuery["source"]["episodes"]>[0]["agents"][0];
 
@@ -32,7 +32,7 @@ export class SourceComponent {
         map((params) => params["id"]),
         switchMap((id) => this.sourceDetailQuery.watch({ id }).valueChanges),
         map((result) => result.data.source),
-        share()
+        shareReplay(1)
     );
 
     public sourceTitle = toSignal(
