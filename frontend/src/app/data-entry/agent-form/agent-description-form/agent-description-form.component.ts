@@ -1,7 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import {
-    PersonAgentDescriptionGenderGenderChoices as GenderChoices
+    DataEntryAgentDescriptionGQL,
+    DataEntryAgentDescriptionQuery,
+    PersonAgentDescriptionGenderGenderChoices as GenderChoices,
+    PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices
 } from 'generated/graphql';
+import { map, Subject, switchMap } from 'rxjs';
 
 
 @Component({
@@ -9,7 +14,7 @@ import {
     templateUrl: './agent-description-form.component.html',
     styleUrls: ['./agent-description-form.component.scss']
 })
-export class AgentDescriptionFormComponent {
+export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
     @Input() id?: string;
 
     genderOptions: { value: GenderChoices, label: string }[] = [
@@ -19,5 +24,49 @@ export class AgentDescriptionFormComponent {
         { value: GenderChoices.Mixed, label: 'Mixed (for groups)' },
         { value: GenderChoices.Unknown, label: 'Unknown' }
     ];
+
+    genderSourceMentionOptions: { value: GenderSourceMentionChoices, label: string }[] = [
+        { value: GenderSourceMentionChoices.Direct, label: 'Mentioned' },
+        { value: GenderSourceMentionChoices.Implied, label: 'Implied' },
+    ];
+
+    form = new FormGroup({
+        designators: new FormControl<string[]>([]),
+        gender: new FormGroup({
+            gender: new FormControl<string>(GenderChoices.Unknown),
+            sourceMention: new FormControl<string>(GenderSourceMentionChoices.Direct),
+            note: new FormControl<string>(''),
+        }),
+    })
+
+    private id$ = new Subject<string>();
+
+    constructor(private agentQuery: DataEntryAgentDescriptionGQL) {
+        this.id$.pipe(
+            switchMap(id => this.agentQuery.watch({ id }).valueChanges),
+            map(result => result.data),
+        ).subscribe(this.updateFormData.bind(this));
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['id'] && this.id) {
+            this.id$.next(this.id);
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.id$.complete();
+    }
+
+    updateFormData(data: DataEntryAgentDescriptionQuery) {
+        this.form.setValue({
+            designators: data.agentDescription?.designators || [],
+            gender: {
+                gender: data.agentDescription?.gender?.gender || GenderChoices.Unknown,
+                sourceMention: data.agentDescription?.gender?.sourceMention || GenderSourceMentionChoices.Direct,
+                note: data.agentDescription?.gender?.note || '',
+            }
+        });
+    }
 
 }

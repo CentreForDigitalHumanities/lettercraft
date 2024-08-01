@@ -737,6 +737,27 @@ export type UpdateOrCreateSourceMutation = {
   source?: Maybe<SourceType>;
 };
 
+export type DataEntryAgentDescriptionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: PersonAgentDescriptionGenderGenderChoices, sourceMention?: PersonAgentDescriptionGenderSourceMentionChoices | null, note: string } | null, source: { __typename?: 'SourceType', id: string } } | null };
+
+export type LocationsInSourceListQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type LocationsInSourceListQuery = { __typename?: 'Query', spaceDescriptions: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> };
+
+export type DataEntryAgentIdentificationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryAgentIdentificationQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean } | null };
+
 export type DataEntryAgentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -777,6 +798,75 @@ export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export const DataEntryAgentDescriptionDocument = gql`
+    query DataEntryAgentDescription($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    isGroup
+    designators
+    gender {
+      id
+      gender
+      sourceMention
+      note
+    }
+    source {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryAgentDescriptionGQL extends Apollo.Query<DataEntryAgentDescriptionQuery, DataEntryAgentDescriptionQueryVariables> {
+    override document = DataEntryAgentDescriptionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LocationsInSourceListDocument = gql`
+    query LocationsInSourceList($id: ID!) {
+  spaceDescriptions(sourceId: $id) {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LocationsInSourceListGQL extends Apollo.Query<LocationsInSourceListQuery, LocationsInSourceListQueryVariables> {
+    override document = LocationsInSourceListDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryAgentIdentificationDocument = gql`
+    query DataEntryAgentIdentification($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    isGroup
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryAgentIdentificationGQL extends Apollo.Query<DataEntryAgentIdentificationQuery, DataEntryAgentIdentificationQueryVariables> {
+    override document = DataEntryAgentIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryAgentDocument = gql`
     query DataEntryAgent($id: ID!) {
   agentDescription(id: $id) {

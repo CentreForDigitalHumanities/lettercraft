@@ -1,0 +1,15 @@
+query DataEntryAgentDescription($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    designators
+    gender {
+      id
+      gender
+      sourceMention
+      note
+    }
+    source {
+        id
+    }
+  }
+}
