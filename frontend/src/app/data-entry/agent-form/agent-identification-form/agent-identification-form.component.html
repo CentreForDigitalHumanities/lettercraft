@@ -1,31 +1,29 @@
 <form [formGroup]="form" aria-label="identification">
-    <div class="mb-3">
+    <div class="mb-4">
         <label class="form-label" for="input-name">
             Name
         </label>
-        <input id="input-name" type="text" class="form-control"
-            [formControl]="form.controls.name">
-
         <p>
             <small class="text-body-secondary">
                 This is a name to identify the agent in the overview of the source.
                 For example: "Radegund", "messenger from Poitiers", "the citizens of Arles".
             </small>
         </p>
+        <input id="input-name" type="text" class="form-control"
+            [formControl]="form.controls.name">
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <label class="form-label" for="input-description">
             Description
         </label>
-        <input id="input-description" type="text" class="form-control"
-            [formControl]="form.controls.description">
-
         <p>
             <small class="text-body-secondary">
                 Add a description to help identify this agent.
             </small>
         </p>
+        <input id="input-description" type="text" class="form-control"
+            [formControl]="form.controls.description">
     </div>
 
     <div class="mb-4">
