@@ -70,11 +70,7 @@ export class DesignatorsControlComponent implements ControlValueAccessor {
         this.designators$.next(spliced);
     }
 
-    designatorInputLabel(i: number): string {
-        return `designator ${i}`;
-    }
-
-    designatorRemoveLabel(i: number): string {
-        return `remove designator ${i}`;
+    designatorRemoveLabel(designator: string): string {
+        return `remove designator "${designator}"`;
     }
 }
