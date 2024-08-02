@@ -15,7 +15,7 @@ import _ from 'underscore';
 @Component({
     selector: 'lc-agent-description-form',
     templateUrl: './agent-description-form.component.html',
-    styleUrls: ['./agent-description-form.component.scss']
+    styleUrls: ['./agent-description-form.component.scss'],
 })
 export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
     @Input() id?: string;
@@ -34,7 +34,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
     ];
 
     form = new FormGroup({
-        designators: new FormControl<string[]>([]),
+        designators: new FormControl<string[]>([], { nonNullable: true }),
         gender: new FormGroup({
             gender: new FormControl<string>(GenderChoices.Unknown),
             sourceMention: new FormControl<string>(GenderSourceMentionChoices.Direct),
