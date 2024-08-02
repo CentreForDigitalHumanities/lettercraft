@@ -4,9 +4,12 @@ import {
     DataEntryAgentDescriptionGQL,
     DataEntryAgentDescriptionQuery,
     PersonAgentDescriptionGenderGenderChoices as GenderChoices,
-    PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices
+    PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices,
+    LocationsInSourceListGQL,
+    LocationsInSourceListQuery
 } from 'generated/graphql';
-import { Observable, map, Subject, switchMap, shareReplay } from 'rxjs';
+import { Observable, map, Subject, switchMap, shareReplay, filter } from 'rxjs';
+import _ from 'underscore';
 
 
 @Component({
@@ -40,11 +43,15 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
     })
 
     isGroup$: Observable<boolean>;
+    locations$: Observable<LocationsInSourceListQuery>;
 
     private id$ = new Subject<string>();
     private data$: Observable<DataEntryAgentDescriptionQuery>;
 
-    constructor(private agentQuery: DataEntryAgentDescriptionGQL) {
+    constructor(
+        private agentQuery: DataEntryAgentDescriptionGQL,
+        private locationsQuery: LocationsInSourceListGQL,
+    ) {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
@@ -52,6 +59,13 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         );
         this.isGroup$ = this.data$.pipe(
             map(result => result.agentDescription?.isGroup || false),
+        );
+        this.locations$ = this.data$.pipe(
+            map(data => data.agentDescription?.source.id),
+            filter(_.negate(_.isUndefined)),
+            switchMap(id => this.locationsQuery.watch({ id }).valueChanges),
+            map(result => result.data),
+            shareReplay(1),
         );
         this.data$.subscribe(this.updateFormData.bind(this));
     }

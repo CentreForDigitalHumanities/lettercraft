@@ -54,6 +54,12 @@
         <div class="mb-4">
             <label class="form-label" for="input-location">Location</label>
             <select class="form-select" id="input-location" >
+                <ng-container *ngIf="locations$ | async as locationData">
+                    <option *ngFor="let location of locationData.spaceDescriptions"
+                        [value]="location.id">
+                        {{location.name}}
+                    </option>
+                </ng-container>
             </select>
         </div>
 
