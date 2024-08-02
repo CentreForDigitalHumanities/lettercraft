@@ -9,6 +9,14 @@ query DataEntryAgentDescription($id: ID!) {
       sourceMention
       note
     }
+    location {
+        id
+        sourceMention
+        note
+        location {
+            id
+        }
+    }
     source {
         id
     }

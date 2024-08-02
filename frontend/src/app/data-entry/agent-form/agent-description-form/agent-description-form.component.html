@@ -51,7 +51,9 @@
 
         <div class="mb-4">
             <label class="form-label" for="input-location">Location</label>
-            <select class="form-select" id="input-location" >
+            <select class="form-select" id="input-location"
+                [formControl]="form.controls.location.controls.location">
+                <option [ngValue]="null">This group is not tied to a location</option>
                 <ng-container *ngIf="locations$ | async as locationData">
                     <option *ngFor="let location of locationData.spaceDescriptions"
                         [value]="location.id">
@@ -65,7 +67,8 @@
             <label class="form-label" for="input-location-mention">
                 How is this information presented in the text?
             </label>
-            <select class="form-select" id="input-location-mention">
+            <select class="form-select" id="input-location-mention"
+                [formControl]="form.controls.location.controls.sourceMention">
                 <option>Implied</option>
                 <option selected>Mentioned</option>
             </select>
@@ -75,7 +78,9 @@
             <label class="form-label" for="input-location-notes">
                 Additional notes
             </label>
-            <textarea class="form-control" id="input-location-notes"></textarea>
+            <textarea class="form-control" id="input-location-notes"
+                [formControl]="form.controls.location.controls.note">
+            </textarea>
         </div>
     </ng-container>
 </form>

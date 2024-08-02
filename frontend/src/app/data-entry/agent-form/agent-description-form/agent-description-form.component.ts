@@ -6,7 +6,8 @@ import {
     PersonAgentDescriptionGenderGenderChoices as GenderChoices,
     PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices,
     LocationsInSourceListGQL,
-    LocationsInSourceListQuery
+    LocationsInSourceListQuery,
+    PersonAgentDescriptionSourceMentionChoices as LocationSourceMentionChoices,
 } from 'generated/graphql';
 import { Observable, map, Subject, switchMap, shareReplay, filter } from 'rxjs';
 import _ from 'underscore';
@@ -40,6 +41,11 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
             sourceMention: new FormControl<string>(GenderSourceMentionChoices.Direct),
             note: new FormControl<string>(''),
         }),
+        location: new FormGroup({
+            location: new FormControl<string | null>(null),
+            sourceMention: new FormControl<string>(LocationSourceMentionChoices.Direct),
+            note: new FormControl<string>(''),
+        })
     })
 
     isGroup$: Observable<boolean>;
@@ -87,6 +93,11 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
                 gender: data.agentDescription?.gender?.gender || GenderChoices.Unknown,
                 sourceMention: data.agentDescription?.gender?.sourceMention || GenderSourceMentionChoices.Direct,
                 note: data.agentDescription?.gender?.note || '',
+            },
+            location: {
+                location: data.agentDescription?.location?.location.id || null,
+                sourceMention: data.agentDescription?.location?.sourceMention || LocationSourceMentionChoices.Direct,
+                note: data.agentDescription?.location?.note || '',
             }
         });
     }
