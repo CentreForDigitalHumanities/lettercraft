@@ -43,44 +43,56 @@
     <ng-container *ngIf="isGroup$ | async">
         <h3>Location</h3>
 
-        <p>
-            Is the group characterised by their location? (For example, "the citizens of
-            Arles", "the nuns at the abbey in Poitiers".)
-        </p>
-
-
         <div class="mb-4">
-            <label class="form-label" for="input-location">Location</label>
-            <select class="form-select" id="input-location"
-                [formControl]="form.controls.location.controls.location">
-                <option [ngValue]="null">This group is not tied to a location</option>
-                <ng-container *ngIf="locations$ | async as locationData">
-                    <option *ngFor="let location of locationData.spaceDescriptions"
-                        [value]="location.id">
-                        {{location.name}}
+            <label class="form-label" for="input-has-location">
+                Is the group characterised by their location? (For example, "the citizens of
+                Arles", "the nuns at the abbey in Poitiers".)
+            </label>
+            <select class="form-select" id="input-has-location"
+                [formControl]="form.controls.location.controls.hasLocation">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+
+        <div [ngbCollapse]="!form.controls.location.controls.hasLocation.value">
+            <div class="mb-4">
+                <label class="form-label" for="input-location">
+                    By which location is the group defined?
+                </label>
+                <select class="form-select" id="input-location"
+                    [formControl]="form.controls.location.controls.location">
+                    <ng-container *ngIf="locations$ | async as locationData">
+                        <option *ngFor="let location of locationData.spaceDescriptions"
+                            [value]="location.id">
+                            {{location.name}}
+                        </option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="input-location-mention">
+                    How is this information presented in the text?
+                </label>
+                <select class="form-select" id="input-location-mention"
+                    [formControl]="form.controls.location.controls.sourceMention">
+                    <option *ngFor="let option of locationSourceMentionOptions"
+                        [value]="option.value">
+                        {{option.label}}
                     </option>
-                </ng-container>
-            </select>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="input-location-notes">
+                    Additional notes
+                </label>
+                <textarea class="form-control" id="input-location-notes"
+                    [formControl]="form.controls.location.controls.note">
+                </textarea>
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label class="form-label" for="input-location-mention">
-                How is this information presented in the text?
-            </label>
-            <select class="form-select" id="input-location-mention"
-                [formControl]="form.controls.location.controls.sourceMention">
-                <option>Implied</option>
-                <option selected>Mentioned</option>
-            </select>
-        </div>
-
-        <div class="mb-4">
-            <label class="form-label" for="input-location-notes">
-                Additional notes
-            </label>
-            <textarea class="form-control" id="input-location-notes"
-                [formControl]="form.controls.location.controls.note">
-            </textarea>
-        </div>
     </ng-container>
 </form>

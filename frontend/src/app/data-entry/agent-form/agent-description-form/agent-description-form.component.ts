@@ -34,6 +34,11 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         { value: GenderSourceMentionChoices.Implied, label: 'Implied' },
     ];
 
+    locationSourceMentionOptions: { value: LocationSourceMentionChoices, label: string }[] = [
+        { value: LocationSourceMentionChoices.Direct, label: 'Mentioned' },
+        { value: LocationSourceMentionChoices.Implied, label: 'Implied' },
+    ];
+
     form = new FormGroup({
         designators: new FormControl<string[]>([], { nonNullable: true }),
         gender: new FormGroup({
@@ -42,6 +47,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
             note: new FormControl<string>(''),
         }),
         location: new FormGroup({
+            hasLocation: new FormControl<boolean>(false, { nonNullable: true }),
             location: new FormControl<string | null>(null),
             sourceMention: new FormControl<string>(LocationSourceMentionChoices.Direct),
             note: new FormControl<string>(''),
@@ -95,6 +101,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
                 note: data.agentDescription?.gender?.note || '',
             },
             location: {
+                hasLocation: data.agentDescription?.location !== null,
                 location: data.agentDescription?.location?.location.id || null,
                 sourceMention: data.agentDescription?.location?.sourceMention || LocationSourceMentionChoices.Direct,
                 note: data.agentDescription?.location?.note || '',
