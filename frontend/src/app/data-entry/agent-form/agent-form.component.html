@@ -1,7 +1,7 @@
-<ng-container *ngIf="data$ | async as data">
+<ng-container *ngIf="data$ | async as data; else loading">
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
 
-    <ng-container *ngIf="data.agentDescription as agentDescription">
+    <ng-container *ngIf="data.agentDescription as agentDescription; else noAgent">
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.person" />
             {{agentDescription.name}}
@@ -27,5 +27,19 @@
         <h2>Historical context</h2>
 
         <p><i>Coming soon!</i></p>
+    </ng-container>
+
+
+    <ng-template #noAgent>
+        <div class="alert alert-danger" role="alert">
+            Cannot find agent with ID {{id$ | async}}.
+        </div>
+    </ng-template>
 
 </ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>
