@@ -58,7 +58,11 @@ Lettercraft uses a GraphQL API for research data. (User authentication / managem
 
 If you have worked on other applications from our lab, working with GraphQL may be new to you. See [Working with GraphQL](https://github.com/CentreForDigitalHumanities/dh-graphql/blob/main/Working%20with%20GraphQL.md) for a detailed guide on working with GraphQL in a Django/Angular project.
 
-One notable change from the development workflow in other applications is code generation: frontend types are automatically generated based on the backend definitions. If you are working on the API, make sure to run `yarn codegen` to keep generated types up to date.
+One notable change from the development workflow in other applications is code generation: frontend types are automatically generated based on the backend definitions.
+
+While you have a backend development server running, run `yarn codegen` in a separate terminal. This process will watch the frontend and backend for changes to keep generated types up to date.
+
+(Alternatively, you can `yarn codegen-once`. This will start a backend server, run code generation once, and exit. Note that this only works if the backend isn't already running.)
 
 ### Recommended order of development
 

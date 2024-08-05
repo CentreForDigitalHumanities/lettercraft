@@ -79,7 +79,7 @@ jobs:
         yarn
         yarn django migrate
         yarn front yarn pretest
-        yarn front yarn graphql-codegen
+        yarn codegen-once
         yarn static-p
         find static
         yarn start-back-p &
