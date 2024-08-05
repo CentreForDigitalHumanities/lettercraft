@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DesignatorsControlComponent } from './designators-control.component';
+import { SharedTestingModule } from '@shared/shared-testing.module';
 
 describe('DesignatorsControlComponent', () => {
     let component: DesignatorsControlComponent;
@@ -8,7 +9,8 @@ describe('DesignatorsControlComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [DesignatorsControlComponent]
+            declarations: [DesignatorsControlComponent],
+            imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(DesignatorsControlComponent);
         component = fixture.componentInstance;
