@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { dataIcons } from '@shared/icons';
 import { DataEntrySpaceDescriptionGQL, DataEntrySpaceDescriptionQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
@@ -27,4 +28,26 @@ export class LocationFormComponent {
         );
     }
 
+    getBreadcrumbs(data: DataEntrySpaceDescriptionQuery): Breadcrumb[] {
+        if (data.spaceDescription) {
+            return [
+                { link: '/', label: 'Lettercraft' },
+                { link: '/data-entry', label: 'Data entry' },
+                {
+                    link: `/data-entry/sources/${data.spaceDescription.source.id}`,
+                    label: data.spaceDescription.source.name
+                },
+                {
+                    link: `/data-entry/locations/${data.spaceDescription.id}`,
+                    label: data.spaceDescription.name
+                },
+            ];
+        } else {
+            return [
+                { link: '/', label: 'Lettercraft' },
+                { link: '/data-entry', label: 'Data entry' },
+                { link: '', label: 'Location not found' }
+            ]
+        }
+    }
 }
