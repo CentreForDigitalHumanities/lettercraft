@@ -9,6 +9,9 @@ import { ResetPasswordComponent } from './user/reset-password/reset-password.com
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 import { LoggedOnGuard } from '@shared/logged-on.guard';
 import { SourcesComponent } from './data-entry/sources/sources.component';
+import { LocationFormComponent } from './data-entry/location-form/location-form.component';
+import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
+import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
 
 const routes: Routes = [
     {
@@ -43,6 +46,18 @@ const routes: Routes = [
         path: 'data-entry',
         canActivate: [LoggedOnGuard],
         children: [
+            {
+                path: 'gifts/:id',
+                component: GiftFormComponent,
+            },
+            {
+                path: 'letters/:id',
+                component: LetterFormComponent,
+            },
+            {
+                path: 'locations/:id',
+                component: LocationFormComponent,
+            },
             {
                 path: '',
                 component: SourcesComponent
