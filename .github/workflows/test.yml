@@ -66,9 +66,6 @@ jobs:
       run: |
         cat bootstrap_ci.txt | python bootstrap.py
         yarn
-        yarn django migrate
-        yarn front yarn pretest
-        yarn codegen-once
     - name: Run all tests
       run: |
         yarn test
