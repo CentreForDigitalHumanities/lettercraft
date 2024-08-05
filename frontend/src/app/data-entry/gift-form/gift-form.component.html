@@ -1,4 +1,6 @@
 <ng-container *ngIf="data$ | async as data">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
+
     <ng-container *ngIf="data.giftDescription as giftDescription">
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.gift"></lc-icon>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { dataIcons } from '@shared/icons';
 import { DataEntryGiftGQL, DataEntryGiftQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
@@ -23,5 +24,28 @@ export class GiftFormComponent {
             switchMap(id => this.giftQuery.watch({ id }).valueChanges),
             map(result => result.data),
         );
+    }
+
+    getBreadcrumbs(data: DataEntryGiftQuery): Breadcrumb[] {
+        if (data.giftDescription) {
+            return [
+                { link: '/', label: 'Lettercraft' },
+                { link: '/data-entry', label: 'Data entry' },
+                {
+                    link: `/data-entry/sources/${data.giftDescription.source.id}`,
+                    label: data.giftDescription.source.name
+                },
+                {
+                    link: `/data-entry/gifts/${data.giftDescription.id}`,
+                    label: data.giftDescription.name
+                },
+            ];
+        } else {
+            return [
+                { link: '/', label: 'Lettercraft' },
+                { link: '/data-entry', label: 'Data entry' },
+                { link: '', label: 'Gift not found' }
+            ]
+        }
     }
 }
