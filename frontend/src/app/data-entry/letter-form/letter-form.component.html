@@ -1,1 +1,19 @@
-<p>letter-form works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.letterDescription as letterDescription">
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.letter" />
+            {{letterDescription.name}}
+            <span class="text-secondary">
+                ({{letterDescription.source.name}})
+            </span>
+        </h1>
+
+        <p class="lead mb-4" *ngIf="letterDescription.description">
+            {{letterDescription.description}}
+        </p>
+
+        <p class="alert alert-warning">
+            This form is not implemented yet!
+        </p>
+    </ng-container>
+</ng-container>
