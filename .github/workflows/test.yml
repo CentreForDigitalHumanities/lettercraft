@@ -15,7 +15,7 @@ on:
       - 'release/**'
 
 jobs:
-  build:
+  test-back:
 
     runs-on: ubuntu-22.04
 
@@ -65,7 +65,23 @@ jobs:
         PGPASSWORD: lettercraft_pwd
       run: |
         cat bootstrap_ci.txt | python bootstrap.py
-        yarn
     - name: Run all tests
       run: |
-        yarn test
+        cd backend
+        pytest
+  test-front:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          yarn fyarn
+      - name: Run tests
+        run: |
+          yarn test-front
