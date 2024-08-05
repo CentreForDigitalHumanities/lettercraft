@@ -1,4 +1,6 @@
 <ng-container *ngIf="data$ | async as data">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
+
     <ng-container *ngIf="data.letterDescription as letterDescription">
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.letter" />
