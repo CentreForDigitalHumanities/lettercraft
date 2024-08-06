@@ -62,7 +62,7 @@ One notable change from the development workflow in other applications is code g
 
 While you have a backend development server running, run `yarn codegen` in a separate terminal. This process will watch the frontend and backend for changes to keep generated types up to date.
 
-(Alternatively, you can `yarn codegen-once`. This will start a backend server, run code generation once, and exit. Note that this only works if the backend isn't already running.)
+(Alternatively, you can `yarn codegen-once`. This will start a backend server, run code generation once, and exit. Note that this only works if the backend isn't already running, and does not work on Windows.)
 
 ### Recommended order of development
 
