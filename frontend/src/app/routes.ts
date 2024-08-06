@@ -12,6 +12,7 @@ import { SourcesComponent } from './data-entry/sources/sources.component';
 import { LocationFormComponent } from './data-entry/location-form/location-form.component';
 import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
 import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
+import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,10 @@ const routes: Routes = [
         path: 'data-entry',
         canActivate: [LoggedOnGuard],
         children: [
+            {
+                path: 'agents/:id',
+                component: AgentFormComponent,
+            },
             {
                 path: 'gifts/:id',
                 component: GiftFormComponent,
