@@ -9,6 +9,7 @@ import { ResetPasswordComponent } from './user/reset-password/reset-password.com
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
 import { LoggedOnGuard } from '@shared/logged-on.guard';
 import { SourcesComponent } from './data-entry/sources/sources.component';
+import { SourceComponent } from './data-entry/source/source.component';
 
 const routes: Routes = [
     {
@@ -44,8 +45,17 @@ const routes: Routes = [
         canActivate: [LoggedOnGuard],
         children: [
             {
-                path: '',
+                path: 'source',
                 component: SourcesComponent
+            },
+            {
+                path: 'source/:id',
+                component: SourceComponent
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'source'
             }
         ]
     },

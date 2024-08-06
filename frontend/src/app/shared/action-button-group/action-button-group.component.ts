@@ -9,6 +9,7 @@ import { actionIcons } from "@shared/icons";
 })
 export class ActionButtonGroupComponent {
     @Input({ required: true }) public editLink!: RouterLink["routerLink"];
+    @Input() showButtonText = true;
     @Output() deleteAction = new EventEmitter<void>();
 
     public actionIcons = actionIcons;
