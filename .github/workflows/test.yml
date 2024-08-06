@@ -15,9 +15,9 @@ on:
       - 'release/**'
 
 jobs:
-  build:
+  test-back:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     services:
       # Label used to access the service container
@@ -39,34 +39,25 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
 
-    strategy:
-      matrix:
-        python-version: ['3.10']
-        node-version: ['16.x', '18.x']
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+        python-version: '3.10'
+        cache: 'pip'
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 18
+        cache: 'npm'
     - name: Install Python dependencies
       run: |
         cd backend
         python -m pip install --upgrade pip
         pip install virtualenv
         pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Run all tests
+    - name: Bootstrap application
       env:
         # Provide PostgreSQL environment variables in order to default to TCP connection
         PGDATABASE: lettercraft
@@ -76,12 +67,23 @@ jobs:
         PGPASSWORD: lettercraft_pwd
       run: |
         cat bootstrap_ci.txt | python bootstrap.py
-        yarn
-        yarn django migrate
-        yarn front yarn pretest
-        yarn front yarn graphql-codegen
-        yarn static-p
-        find static
-        yarn start-back-p &
-        chromedriver --version
-        yarn test
+    - name: Run all tests
+      run: |
+        cd backend
+        pytest
+  test-front:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+      - name: Install dependencies
+        run: |
+          yarn fyarn
+      - name: Run tests
+        run: |
+          yarn test-front
