@@ -1,0 +1,21 @@
+<ng-container *ngIf="data$ | async as data">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
+
+    <ng-container *ngIf="data.giftDescription as giftDescription">
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.gift"></lc-icon>
+            {{giftDescription.name}}
+            <span class="text-secondary">
+                ({{giftDescription.source.name}})
+            </span>
+        </h1>
+
+        <p class="lead mb-4" *ngIf="giftDescription.description">
+            {{giftDescription.description}}
+        </p>
+
+        <div class="alert alert-warning">
+            This form is not implemented yet!
+        </div>
+    </ng-container>
+</ng-container>
