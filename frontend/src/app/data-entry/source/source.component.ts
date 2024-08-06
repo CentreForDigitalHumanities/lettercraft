@@ -2,10 +2,8 @@ import { Component, computed } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
-import { DataEntrySourceDetailGQL, DataEntrySourceDetailQuery } from "generated/graphql";
+import { DataEntrySourceDetailGQL } from "generated/graphql";
 import { map, shareReplay, switchMap } from "rxjs";
-
-type QueriedAgent = NonNullable<DataEntrySourceDetailQuery["source"]["episodes"]>[0]["agents"][0];
 
 @Component({
     selector: "lc-source",
@@ -48,20 +46,5 @@ export class SourceComponent {
     constructor(
         private route: ActivatedRoute,
         private sourceDetailQuery: DataEntrySourceDetailGQL
-    ) { }
-
-
-    public deleteEpisode(episodeId: string): void {
-        console.log("Deleting episode with id", episodeId);
-    }
-
-    public agentIcon(agent: QueriedAgent): string {
-        if (agent.isGroup) {
-            return dataIcons.group;
-        }
-        if (agent.describes?.some(person => person?.identifiable)) {
-            return dataIcons.person;
-        }
-        return dataIcons.personUnknown;
-    }
+    ) {}
 }
