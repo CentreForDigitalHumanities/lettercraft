@@ -1,0 +1,14 @@
+<select class="form-select" *ngIf="visibleItems$ !== null && (visibleItems$ | async) as items">
+    <option *ngIf="items.length > 0; else noItems" selected>
+        Select an option from the list below.
+    </option>
+    <ng-template #noItems>
+        <option selected disabled>No items available.</option>
+    </ng-template>
+    <option
+        *ngFor="let item of visibleItems$ | async; let i = index; trackBy: trackById"
+        (click)="selectItem(item)"
+    >
+        <span>{{ item.label }}</span>
+    </option>
+</select>
