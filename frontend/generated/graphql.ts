@@ -31,6 +31,20 @@ export type AgentDescriptionGenderType = {
   sourceMention?: Maybe<PersonAgentDescriptionGenderSourceMentionChoices>;
 };
 
+export type AgentDescriptionLocationType = {
+  __typename?: 'AgentDescriptionLocationType';
+  agent: AgentDescriptionType;
+  /** How certain are you of this value? */
+  certainty: PersonAgentDescriptionLocationCertaintyChoices;
+  id: Scalars['ID']['output'];
+  /** location by which the agent is identified */
+  location: SpaceDescriptionType;
+  /** Additional notes */
+  note: Scalars['String']['output'];
+  /** How is this information presented in the text? */
+  sourceMention?: Maybe<PersonAgentDescriptionLocationSourceMentionChoices>;
+};
+
 export type AgentDescriptionType = {
   __typename?: 'AgentDescriptionType';
   /** The book in the source */
@@ -46,6 +60,7 @@ export type AgentDescriptionType = {
   id: Scalars['ID']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
   isGroup: Scalars['Boolean']['output'];
+  location?: Maybe<AgentDescriptionLocationType>;
   /** A name to help identify this object */
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
@@ -285,6 +300,24 @@ export enum PersonAgentDescriptionGenderGenderChoices {
 
 /** An enumeration. */
 export enum PersonAgentDescriptionGenderSourceMentionChoices {
+  /** directly mentioned */
+  Direct = 'DIRECT',
+  /** implied */
+  Implied = 'IMPLIED'
+}
+
+/** An enumeration. */
+export enum PersonAgentDescriptionLocationCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
+}
+
+/** An enumeration. */
+export enum PersonAgentDescriptionLocationSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */

@@ -17,6 +17,23 @@ type AgentDescriptionGenderType {
   sourceMention: PersonAgentDescriptionGenderSourceMentionChoices
 }
 
+type AgentDescriptionLocationType {
+  agent: AgentDescriptionType!
+
+  """How certain are you of this value?"""
+  certainty: PersonAgentDescriptionLocationCertaintyChoices!
+  id: ID!
+
+  """location by which the agent is identified"""
+  location: SpaceDescriptionType!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: PersonAgentDescriptionLocationSourceMentionChoices
+}
+
 type AgentDescriptionType {
   """The book in the source"""
   book: String!
@@ -37,6 +54,7 @@ type AgentDescriptionType {
 
   """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
   isGroup: Boolean!
+  location: AgentDescriptionLocationType
 
   """A name to help identify this object"""
   name: String!
@@ -325,6 +343,27 @@ enum PersonAgentDescriptionGenderGenderChoices {
 
 """An enumeration."""
 enum PersonAgentDescriptionGenderSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionLocationCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionLocationSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
