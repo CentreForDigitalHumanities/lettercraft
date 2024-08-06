@@ -445,6 +445,7 @@ type Query {
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
   letterDescription(id: ID!): LetterDescriptionType
   letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  source(id: ID!): SourceType!
   sources: [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
@@ -539,6 +540,7 @@ type SourceType {
 
   """The title of the edition used for this source"""
   editionTitle: String!
+  episodes: [EpisodeType!]!
   id: ID!
 
   """The name of the original author of the work, if known"""

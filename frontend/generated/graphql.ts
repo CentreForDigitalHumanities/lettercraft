@@ -386,6 +386,7 @@ export type Query = {
   giftDescriptions: Array<GiftDescriptionType>;
   letterDescription?: Maybe<LetterDescriptionType>;
   letterDescriptions: Array<LetterDescriptionType>;
+  source: SourceType;
   sources: Array<SourceType>;
   spaceDescription?: Maybe<SpaceDescriptionType>;
   spaceDescriptions: Array<SpaceDescriptionType>;
@@ -432,6 +433,11 @@ export type QueryLetterDescriptionArgs = {
 export type QueryLetterDescriptionsArgs = {
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QuerySourceArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -517,6 +523,7 @@ export type SourceType = {
   editionAuthor: Scalars['String']['output'];
   /** The title of the edition used for this source */
   editionTitle: Scalars['String']['output'];
+  episodes: Array<EpisodeType>;
   id: Scalars['ID']['output'];
   /** The name of the original author of the work, if known */
   medievalAuthor: Scalars['String']['output'];
@@ -697,11 +704,72 @@ export type UpdateOrCreateSourceMutation = {
   source?: Maybe<SourceType>;
 };
 
+export type DataEntrySourceDetailQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes?: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean } | null> | null }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
+
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export const DataEntrySourceDetailDocument = gql`
+    query DataEntrySourceDetail($id: ID!) {
+  source(id: $id) {
+    id
+    name
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    numOfEpisodes
+    episodes {
+      id
+      name
+      description
+      summary
+      book
+      chapter
+      page
+      agents {
+        id
+        name
+        isGroup
+        describes {
+          id
+          identifiable
+        }
+      }
+      gifts {
+        id
+        name
+      }
+      letters {
+        id
+        name
+      }
+      spaces {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntrySourceDetailGQL extends Apollo.Query<DataEntrySourceDetailQuery, DataEntrySourceDetailQueryVariables> {
+    override document = DataEntrySourceDetailDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntrySourceListDocument = gql`
     query DataEntrySourceList {
   sources {
