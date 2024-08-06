@@ -1,0 +1,13 @@
+<p>Selected:</p>
+<ul class="list-group">
+    <li *ngFor="let selected of selectedLabels()" class="list-group-item">
+        <p>{{ selected.name }}</p>
+    </li>
+</ul>
+
+<p>Pick one</p>
+<select class="custom-select" [formControl]="control">
+    <option *ngFor="let label of options" [value]="label.id">
+        {{ label.name }}
+    </option>
+</select>
