@@ -9,7 +9,7 @@ import { SharedModule } from '@shared/shared.module';
         AgentFormComponent
     ],
     imports: [
-        SharedModule
+        SharedModule,
     ],
     exports: [
         AgentFormComponent,
