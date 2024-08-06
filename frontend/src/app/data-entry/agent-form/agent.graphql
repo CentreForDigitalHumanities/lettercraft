@@ -1,0 +1,11 @@
+query DataEntryAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
