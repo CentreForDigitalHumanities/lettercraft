@@ -1,13 +1,18 @@
-<p>Selected:</p>
+<p>Labels:</p>
 <ul class="list-group">
     <li *ngFor="let selected of selectedLabels()" class="list-group-item">
         <p>{{ selected.name }}</p>
+        <button class="btn btn-danger" (click)="removeLabel(selected.id)">Remove</button>
     </li>
 </ul>
 
-<p>Pick one</p>
-<select class="custom-select" [formControl]="control">
-    <option *ngFor="let label of options" [value]="label.id">
-        {{ label.name }}
-    </option>
-</select>
+<form>
+    <label for="label-select" class="form-label">Pick a label</label>
+
+    <select id="label-select" class="form-select" [formControl]="formControl">
+        <option selected>Select a label here</option>
+        <option *ngFor="let label of options" [value]="label.id">
+            {{ label.name }}
+        </option>
+    </select>
+</form>
