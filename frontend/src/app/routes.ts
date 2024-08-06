@@ -13,6 +13,8 @@ import { LocationFormComponent } from './data-entry/location-form/location-form.
 import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
 import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
 import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
+import { SourceComponent } from './data-entry/source/source.component';
+
 
 const routes: Routes = [
     {
@@ -64,8 +66,17 @@ const routes: Routes = [
                 component: LocationFormComponent,
             },
             {
-                path: '',
+                path: 'sources',
                 component: SourcesComponent
+            },
+            {
+                path: 'sources/:id',
+                component: SourceComponent
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'sources'
             }
         ]
     },

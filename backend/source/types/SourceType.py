@@ -1,13 +1,15 @@
-from graphene import Field, Int, ResolveInfo
+from graphene import Field, Int, List, NonNull, ResolveInfo
 from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 from event.models import Episode
 from source.models import Source
+from event.types.EpisodeType import EpisodeType
 from source.types.SourceContentsDateType import SourceContentsDateType
 from source.types.SourceWrittenDateType import SourceWrittenDateType
 
 
 class SourceType(DjangoObjectType):
+    episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
     written_date = Field(SourceWrittenDateType)
     contents_date = Field(SourceContentsDateType)
@@ -30,5 +32,9 @@ class SourceType(DjangoObjectType):
         return queryset.all()
 
     @staticmethod
+    def resolve_episodes(parent: Source, info: ResolveInfo) -> QuerySet[Episode]:
+        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk)
+
+    @staticmethod
     def resolve_num_of_episodes(parent: Source, info: ResolveInfo) -> int:
-        return Episode.objects.filter(source_id=parent.pk).count()
+        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk).count()
