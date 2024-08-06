@@ -51,6 +51,7 @@ export type AgentDescriptionType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
+  contributors?: Maybe<Array<Maybe<UserType>>>;
   describes?: Maybe<Array<Maybe<HistoricalPersonType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
@@ -80,6 +81,7 @@ export type EpisodeType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
+  contributors?: Maybe<Array<Maybe<UserType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -141,6 +143,7 @@ export type GiftDescriptionType = {
   categorisations: Array<GiftDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
+  contributors?: Maybe<Array<Maybe<UserType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -197,6 +200,7 @@ export type LetterDescriptionType = {
   categorisations: Array<LetterDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
+  contributors?: Maybe<Array<Maybe<UserType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -423,6 +427,8 @@ export type Query = {
   sources: Array<SourceType>;
   spaceDescription?: Maybe<SpaceDescriptionType>;
   spaceDescriptions: Array<SpaceDescriptionType>;
+  userDescription?: Maybe<UserType>;
+  userDescriptions: Array<UserType>;
 };
 
 
@@ -481,6 +487,11 @@ export type QuerySpaceDescriptionArgs = {
 
 export type QuerySpaceDescriptionsArgs = {
   sourceId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryUserDescriptionArgs = {
+  id: Scalars['ID']['input'];
 };
 
 export type RegionFieldType = {
@@ -588,6 +599,7 @@ export type SpaceDescriptionType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
+  contributors?: Maybe<Array<Maybe<UserType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -735,6 +747,13 @@ export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   source?: Maybe<SourceType>;
+};
+
+export type UserType = {
+  __typename?: 'UserType';
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
 };
 
 export type DataEntrySourceDetailQueryVariables = Exact<{
