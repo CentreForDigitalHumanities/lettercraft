@@ -16,6 +16,8 @@ description_source_fieldset = (
     },
 )
 
+contributions_fieldset = ("Contributors", {"fields": ["contributors"]})
+
 date_fields = ["year_lower", "year_upper", "year_exact"]
 
 field_fields = ["certainty", "note"]
@@ -27,9 +29,11 @@ description_field_fields = [
 
 class EntityDescriptionAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "source"]
-    list_filter = ["source"]
+    list_filter = ["source", "contributors"]
     search_fields = ["name", "description"]
+    filter_horizontal = ["contributors"]
     fieldsets = [
         named_fieldset,
+        contributions_fieldset,
         description_source_fieldset,
     ]
