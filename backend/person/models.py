@@ -134,10 +134,10 @@ class AgentDescriptionLocation(DescriptionField, models.Model):
     May be used for groups ("the nuns of Poitiers").
     """
 
-    agent = models.ForeignKey(
+    agent = models.OneToOneField(
         to=AgentDescription,
         on_delete=models.CASCADE,
-        related_name="locations",
+        related_name="location",
     )
     location = models.ForeignKey(
         to=SpaceDescription,

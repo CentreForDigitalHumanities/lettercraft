@@ -1,0 +1,797 @@
+type AgentDescriptionGenderType {
+  agent: AgentDescriptionType!
+
+  """How certain are you of this value?"""
+  certainty: PersonAgentDescriptionGenderCertaintyChoices!
+
+  """
+  The gender of this agent. The option Mixed is only applicable for groups.
+  """
+  gender: PersonAgentDescriptionGenderGenderChoices!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: PersonAgentDescriptionGenderSourceMentionChoices
+}
+
+type AgentDescriptionLocationType {
+  agent: AgentDescriptionType!
+
+  """How certain are you of this value?"""
+  certainty: PersonAgentDescriptionLocationCertaintyChoices!
+  id: ID!
+
+  """location by which the agent is identified"""
+  location: SpaceDescriptionType!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: PersonAgentDescriptionLocationSourceMentionChoices
+}
+
+type AgentDescriptionType {
+  """The book in the source"""
+  book: String!
+
+  """The chapter or chapters in the source"""
+  chapter: String!
+  describes: [HistoricalPersonType]
+
+  """Longer description to help identify this object"""
+  description: String!
+
+  """
+  Relevant (Latin) terminology used to describe this entity in the source text
+  """
+  designators: [String!]!
+  gender: AgentDescriptionGenderType
+  id: ID!
+
+  """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
+  isGroup: Boolean!
+  location: AgentDescriptionLocationType
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The page number or page range in the source"""
+  page: String!
+  personReferences: [PersonReferenceType]
+
+  """Source text containing this description"""
+  source: SourceType!
+
+  """How is this entity presented in the text?"""
+  sourceMention: PersonAgentDescriptionSourceMentionChoices
+}
+
+type EpisodeType {
+  """agents involved in this episode"""
+  agents: [AgentDescriptionType!]!
+
+  """The book in the source"""
+  book: String!
+
+  """The chapter or chapters in the source"""
+  chapter: String!
+
+  """Longer description to help identify this object"""
+  description: String!
+
+  """
+  Relevant (Latin) terminology used to describe this entity in the source text
+  """
+  designators: [String!]!
+
+  """gifts involved in this episode"""
+  gifts: [GiftDescriptionType!]!
+  id: ID!
+
+  """letters involved in this episode"""
+  letters: [LetterDescriptionType!]!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The page number or page range in the source"""
+  page: String!
+
+  """Source text containing this description"""
+  source: SourceType!
+
+  """How is this entity presented in the text?"""
+  sourceMention: EventEpisodeSourceMentionChoices
+
+  """locations involved in this episode"""
+  spaces: [SpaceDescriptionType!]!
+
+  """full description of the events in the passage"""
+  summary: String!
+}
+
+"""An enumeration."""
+enum EventEpisodeSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+type GiftCategoryType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+}
+
+type GiftDescriptionCategoryType {
+  category: GiftCategoryType!
+
+  """How certain are you of this value?"""
+  certainty: LetterGiftDescriptionCategoryCertaintyChoices!
+  gift: GiftDescriptionType!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: LetterGiftDescriptionCategorySourceMentionChoices
+}
+
+type GiftDescriptionType {
+  """The book in the source"""
+  book: String!
+  categories: [GiftCategoryType!]!
+  categorisations: [GiftDescriptionCategoryType!]!
+
+  """The chapter or chapters in the source"""
+  chapter: String!
+
+  """Longer description to help identify this object"""
+  description: String!
+
+  """
+  Relevant (Latin) terminology used to describe this entity in the source text
+  """
+  designators: [String!]!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The page number or page range in the source"""
+  page: String!
+
+  """Source text containing this description"""
+  source: SourceType!
+
+  """How is this entity presented in the text?"""
+  sourceMention: LetterGiftDescriptionSourceMentionChoices
+}
+
+type HistoricalPersonType {
+  dateOfBirth: PersonDateOfBirthType
+  dateOfDeath: PersonDateOfDeathType
+
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """
+  Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
+  """
+  identifiable: Boolean!
+
+  """A name to help identify this object"""
+  name: String!
+}
+
+type LetterCategoryType {
+  description: String!
+  id: ID!
+  label: String!
+}
+
+type LetterDescriptionCategoryType {
+  category: LetterCategoryType!
+
+  """How certain are you of this value?"""
+  certainty: LetterLetterDescriptionCategoryCertaintyChoices!
+  id: ID!
+  letter: LetterDescriptionType!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: LetterLetterDescriptionCategorySourceMentionChoices
+}
+
+type LetterDescriptionType {
+  """The book in the source"""
+  book: String!
+  categories: [LetterCategoryType!]!
+  categorisations: [LetterDescriptionCategoryType!]!
+
+  """The chapter or chapters in the source"""
+  chapter: String!
+
+  """Longer description to help identify this object"""
+  description: String!
+
+  """
+  Relevant (Latin) terminology used to describe this entity in the source text
+  """
+  designators: [String!]!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The page number or page range in the source"""
+  page: String!
+
+  """Source text containing this description"""
+  source: SourceType!
+
+  """How is this entity presented in the text?"""
+  sourceMention: LetterLetterDescriptionSourceMentionChoices
+}
+
+"""An enumeration."""
+enum LetterGiftDescriptionCategoryCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum LetterGiftDescriptionCategorySourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum LetterGiftDescriptionSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum LetterLetterDescriptionCategoryCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum LetterLetterDescriptionCategorySourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum LetterLetterDescriptionSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+type Mutation {
+  updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionGenderCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionGenderGenderChoices {
+  """Female"""
+  FEMALE
+
+  """Male"""
+  MALE
+
+  """Mixed"""
+  MIXED
+
+  """Other"""
+  OTHER
+
+  """Unknown"""
+  UNKNOWN
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionGenderSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionLocationCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionLocationSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum PersonAgentDescriptionSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+type PersonDateOfBirthType {
+  """How certain are you of this value?"""
+  certainty: PersonPersonDateOfBirthCertaintyChoices!
+  displayDate: String!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """date on which this person was born"""
+  person: HistoricalPersonType!
+
+  """
+  The exact year of the value (if known). This will override the values in the lower and upper bounds fields.
+  """
+  yearExact: Int
+
+  """The earliest possible year for this value"""
+  yearLower: Int!
+
+  """The latest possible year for this value"""
+  yearUpper: Int!
+}
+
+type PersonDateOfDeathType {
+  """How certain are you of this value?"""
+  certainty: PersonPersonDateOfDeathCertaintyChoices!
+  displayDate: String!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """date on which this person died"""
+  person: HistoricalPersonType!
+
+  """
+  The exact year of the value (if known). This will override the values in the lower and upper bounds fields.
+  """
+  yearExact: Int
+
+  """The earliest possible year for this value"""
+  yearLower: Int!
+
+  """The latest possible year for this value"""
+  yearUpper: Int!
+}
+
+"""An enumeration."""
+enum PersonPersonDateOfBirthCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum PersonPersonDateOfDeathCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum PersonPersonReferenceCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+type PersonReferenceType {
+  """How certain are you of this value?"""
+  certainty: PersonPersonReferenceCertaintyChoices!
+  description: AgentDescriptionType!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+  person: HistoricalPersonType!
+}
+
+type Query {
+  agentDescription(id: ID!): AgentDescriptionType
+  agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
+  episode(id: ID!): EpisodeType
+  episodes(sourceId: ID): [EpisodeType!]!
+  giftDescription(id: ID!): GiftDescriptionType
+  giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
+  letterDescription(id: ID!): LetterDescriptionType
+  letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  source(id: ID!): SourceType!
+  sources: [SourceType!]!
+  spaceDescription(id: ID!): SpaceDescriptionType
+  spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+}
+
+type RegionFieldType {
+  """How certain are you of this value?"""
+  certainty: SpaceRegionFieldCertaintyChoices!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+  region: RegionType!
+
+  """How is this information presented in the text?"""
+  sourceMention: SpaceRegionFieldSourceMentionChoices
+  space: SpaceDescriptionType!
+}
+
+type RegionType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """
+  Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
+  """
+  identifiable: Boolean!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """Kind of region"""
+  type: SpaceRegionTypeChoices!
+}
+
+type SettlementFieldType {
+  """How certain are you of this value?"""
+  certainty: SpaceSettlementFieldCertaintyChoices!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+  settlement: SettlementType!
+
+  """How is this information presented in the text?"""
+  sourceMention: SpaceSettlementFieldSourceMentionChoices
+  space: SpaceDescriptionType!
+}
+
+type SettlementType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """
+  Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
+  """
+  identifiable: Boolean!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """Surrounding regions of this settlement"""
+  regions: [RegionType!]!
+}
+
+type SourceContentsDateType {
+  displayDate: String!
+  id: ID!
+
+  """The source whose events took place at this date"""
+  source: SourceType!
+
+  """
+  The exact year of the value (if known). This will override the values in the lower and upper bounds fields.
+  """
+  yearExact: Int
+
+  """The earliest possible year for this value"""
+  yearLower: Int!
+
+  """The latest possible year for this value"""
+  yearUpper: Int!
+}
+
+type SourceType {
+  contentsDate: SourceContentsDateType
+
+  """The name of the author of the edition"""
+  editionAuthor: String!
+
+  """The title of the edition used for this source"""
+  editionTitle: String!
+  episodes: [EpisodeType!]!
+  id: ID!
+
+  """The name of the original author of the work, if known"""
+  medievalAuthor: String!
+
+  """The original title of the work, if known"""
+  medievalTitle: String!
+
+  """a unique name to identify this source in the database"""
+  name: String!
+  numOfEpisodes: Int!
+  writtenDate: SourceWrittenDateType
+}
+
+type SourceWrittenDateType {
+  displayDate: String!
+  id: ID!
+
+  """The source that was written at this date"""
+  source: SourceType!
+
+  """
+  The exact year of the value (if known). This will override the values in the lower and upper bounds fields.
+  """
+  yearExact: Int
+
+  """The earliest possible year for this value"""
+  yearLower: Int!
+
+  """The latest possible year for this value"""
+  yearUpper: Int!
+}
+
+type SpaceDescriptionType {
+  """The book in the source"""
+  book: String!
+
+  """The chapter or chapters in the source"""
+  chapter: String!
+
+  """Longer description to help identify this object"""
+  description: String!
+
+  """
+  Relevant (Latin) terminology used to describe this entity in the source text
+  """
+  designators: [String!]!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The page number or page range in the source"""
+  page: String!
+  regionFields: [RegionFieldType!]!
+  regions: [RegionType!]!
+  settlementFields: [SettlementFieldType!]!
+  settlements: [SettlementType!]!
+
+  """Source text containing this description"""
+  source: SourceType!
+
+  """How is this entity presented in the text?"""
+  sourceMention: SpaceSpaceDescriptionSourceMentionChoices
+  structureFields: [StructureFieldType!]!
+  structures: [StructureType!]!
+}
+
+"""An enumeration."""
+enum SpaceRegionFieldCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum SpaceRegionFieldSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum SpaceRegionTypeChoices {
+  """ecclesiastical"""
+  ECCLESIASTICAL
+
+  """geographical"""
+  GEOGRAPHICAL
+
+  """political"""
+  POLITICAL
+}
+
+"""An enumeration."""
+enum SpaceSettlementFieldCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum SpaceSettlementFieldSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum SpaceSpaceDescriptionSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum SpaceStructureFieldCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum SpaceStructureFieldSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
+}
+
+"""An enumeration."""
+enum SpaceStructureLevelChoices {
+  """road, square, crossroad"""
+  A_1
+
+  """fortification"""
+  A_2
+
+  """building, vessel"""
+  A_3
+
+  """room"""
+  A_4
+
+  """spot, object"""
+  A_5
+}
+
+type StructureFieldType {
+  """How certain are you of this value?"""
+  certainty: SpaceStructureFieldCertaintyChoices!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: SpaceStructureFieldSourceMentionChoices
+  space: SpaceDescriptionType!
+  structure: StructureType!
+}
+
+type StructureType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """
+  Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
+  """
+  identifiable: Boolean!
+  level: SpaceStructureLevelChoices!
+
+  """A name to help identify this object"""
+  name: String!
+
+  """The settlement containing this structure"""
+  settlement: SettlementType
+}
+
+input UpdateCreateSourceInput {
+  editionAuthor: String
+  editionTitle: String
+  id: ID
+  medievalAuthor: String
+  medievalTitle: String
+  name: String!
+}
+
+type UpdateOrCreateSourceMutation {
+  errors: [String]
+  source: SourceType
+}
