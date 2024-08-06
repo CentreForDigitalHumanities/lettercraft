@@ -1,7 +1,7 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnDestroy } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { actionIcons } from '@shared/icons';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'underscore';
 
 @Component({
@@ -16,7 +16,7 @@ import _ from 'underscore';
         }
     ],
 })
-export class DesignatorsControlComponent implements ControlValueAccessor {
+export class DesignatorsControlComponent implements ControlValueAccessor, OnDestroy {
     @Input({ required: true }) formControl!: FormControl<string[]>;
 
     designators$ = new BehaviorSubject<string[]>([]);
@@ -35,16 +35,26 @@ export class DesignatorsControlComponent implements ControlValueAccessor {
 
     actionIcons = actionIcons;
 
+    private onChangeSubscription?: Subscription;
+    private onTouchedSubscription?: Subscription;
+
     writeValue(obj: string[]): void {
         this.designators$.next(obj);
     }
 
-    registerOnChange(fn: (_: any) => void): void {
-        this.designators$.subscribe(fn);
+    registerOnChange(fn: (_: unknown) => void): void {
+        this.onChangeSubscription?.unsubscribe();
+        this.onChangeSubscription = this.designators$.subscribe(fn);
     }
 
-    registerOnTouched(fn: (_: any) => void): void {
-        this.blur$.subscribe(fn);
+    registerOnTouched(fn: (_: unknown) => void): void {
+        this.onTouchedSubscription?.unsubscribe();
+        this.onTouchedSubscription = this.blur$.subscribe(fn);
+    }
+
+    ngOnDestroy(): void {
+        this.designators$.complete();
+        this.blur$.complete();
     }
 
     setDisabledState(isDisabled: boolean): void {
