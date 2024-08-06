@@ -1,0 +1,33 @@
+<div class="mb-3">
+    <p>Designators</p>
+    <p *ngIf="designators$.value.length === 0">
+        <i>No designators added.</i>
+    </p>
+    <ul class="list-group">
+        <li *ngFor="let designator of designators$.value; let i = index"
+            class="list-group-item hstack gap-3">
+            <span>{{designator}}</span>
+            <button class="btn ms-auto" type="button"
+                [disabled]="disabled"
+                (blur)="blur$.next()"
+                (click)="removeDesignator(i)">
+                <lc-icon [icon]="actionIcons.remove"
+                    [attr.aria-label]="designatorRemoveLabel(designator)" />
+            </button>
+        </li>
+    </ul>
+</div>
+
+<form class="mb-3" [formGroup]="addForm" (ngSubmit)="onAddFormSubmit()">
+    <label class="form-label" for="input-new-designator">Add a designator</label>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="input-new-designator"
+            [formControl]="addForm.controls.designator"
+            (blur)="blur$.next()">
+        <button class="btn btn-primary" type="submit"
+            [disabled]="disabled"
+            (blur)="blur$.next()">
+            <lc-icon [icon]="actionIcons.add" aria-label="add designator" />
+        </button>
+    </div>
+</form>
