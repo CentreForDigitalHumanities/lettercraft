@@ -25,6 +25,7 @@ class Episode(EntityDescription, models.Model):
         to=EpisodeCategory,
         related_name="episodes",
         help_text="labels assigned to this episode",
+        blank=True,
     )
     agents = models.ManyToManyField(
         to=AgentDescription,
