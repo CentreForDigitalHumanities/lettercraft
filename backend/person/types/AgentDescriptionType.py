@@ -8,6 +8,8 @@ from person.types.AgentDescriptionGenderType import AgentDescriptionGenderType
 from person.types.AgentDescriptionLocationType import AgentDescriptionLocationType
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
+from event.types.EpisodeAgentType import EpisodeAgentType
+from event.models import EpisodeAgent
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -15,6 +17,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     person_references = List(PersonReferenceType)
     gender = Field(AgentDescriptionGenderType)
     location = Field(AgentDescriptionLocationType)
+    episodes = List(EpisodeAgentType)
 
     class Meta:
         model = AgentDescription
@@ -25,6 +28,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
             "person_references",
             "gender",
             "location",
+            "episodes",
         ] + EntityDescriptionType.fields()
 
     @classmethod
@@ -44,3 +48,9 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: AgentDescription, info: ResolveInfo
     ) -> QuerySet[PersonReference]:
         return PersonReference.objects.filter(description=parent)
+
+    @staticmethod
+    def resolve_episodes(
+        parent: AgentDescription, info: ResolveInfo
+    ) -> QuerySet[EpisodeAgent]:
+        return EpisodeAgent.objects.filter(agent=parent)

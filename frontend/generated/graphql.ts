@@ -57,6 +57,7 @@ export type AgentDescriptionType = {
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
+  episodes?: Maybe<Array<Maybe<EpisodeAgentType>>>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
@@ -115,6 +116,19 @@ export type DeletePersonReferenceMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type EpisodeAgentType = {
+  __typename?: 'EpisodeAgentType';
+  agent: AgentDescriptionType;
+  /** How certain are you of this value? */
+  certainty: EventEpisodeAgentCertaintyChoices;
+  episode: EpisodeType;
+  id: Scalars['ID']['output'];
+  /** Additional notes */
+  note: Scalars['String']['output'];
+  /** How is this information presented in the text? */
+  sourceMention?: Maybe<EventEpisodeAgentSourceMentionChoices>;
+};
+
 export type EpisodeCategoryType = {
   __typename?: 'EpisodeCategoryType';
   /** Longer description to help identify this object */
@@ -156,6 +170,24 @@ export type EpisodeType = {
   /** full description of the events in the passage */
   summary: Scalars['String']['output'];
 };
+
+/** An enumeration. */
+export enum EventEpisodeAgentCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
+}
+
+/** An enumeration. */
+export enum EventEpisodeAgentSourceMentionChoices {
+  /** directly mentioned */
+  Direct = 'DIRECT',
+  /** implied */
+  Implied = 'IMPLIED'
+}
 
 /** An enumeration. */
 export enum EventEpisodeSourceMentionChoices {

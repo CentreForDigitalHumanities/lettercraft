@@ -50,6 +50,7 @@ type AgentDescriptionType {
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeAgentType]
   gender: AgentDescriptionGenderType
   id: ID!
 
@@ -109,6 +110,21 @@ type DeletePersonReferenceMutation {
   ok: Boolean!
 }
 
+type EpisodeAgentType {
+  agent: AgentDescriptionType!
+
+  """How certain are you of this value?"""
+  certainty: EventEpisodeAgentCertaintyChoices!
+  episode: EpisodeType!
+  id: ID!
+
+  """Additional notes"""
+  note: String!
+
+  """How is this information presented in the text?"""
+  sourceMention: EventEpisodeAgentSourceMentionChoices
+}
+
 type EpisodeCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -162,6 +178,27 @@ type EpisodeType {
 
   """full description of the events in the passage"""
   summary: String!
+}
+
+"""An enumeration."""
+enum EventEpisodeAgentCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum EventEpisodeAgentSourceMentionChoices {
+  """directly mentioned"""
+  DIRECT
+
+  """implied"""
+  IMPLIED
 }
 
 """An enumeration."""

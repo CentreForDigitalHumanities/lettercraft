@@ -3,12 +3,12 @@ from graphene_django import DjangoObjectType
 from core.types.DescriptionFieldType import DescriptionFieldType
 from django.db.models import QuerySet
 
-from event.models import EpisodeGift
+from event.models import EpisodeAgent
 
 
 class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
     class Meta:
-        model = EpisodeGift
+        model = EpisodeAgent
         fields = [
             "id",
             "episode",
@@ -18,7 +18,7 @@ class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
     @classmethod
     def get_queryset(
         cls,
-        queryset: QuerySet[EpisodeGift],
+        queryset: QuerySet[EpisodeAgent],
         info: ResolveInfo,
-    ) -> QuerySet[EpisodeGift]:
+    ) -> QuerySet[EpisodeAgent]:
         return queryset.all()
