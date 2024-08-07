@@ -4,6 +4,7 @@ import { AgentFormComponent } from './agent-form.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { AgentDescriptionFormComponent } from './agent-description-form/agent-description-form.component';
 import { AgentIdentificationFormComponent } from './agent-identification-form/agent-identification-form.component';
+import { DataEntrySharedModule } from '../shared/data-entry-shared.module';
 
 describe('AgentFormComponent', () => {
     let component: AgentFormComponent;
@@ -11,11 +12,14 @@ describe('AgentFormComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [AgentFormComponent],
-            imports: [
-                SharedTestingModule,
+            declarations: [
+                AgentFormComponent,
                 AgentIdentificationFormComponent,
                 AgentDescriptionFormComponent,
+            ],
+            imports: [
+                SharedTestingModule,
+                DataEntrySharedModule,
             ],
         });
         fixture = TestBed.createComponent(AgentFormComponent);
