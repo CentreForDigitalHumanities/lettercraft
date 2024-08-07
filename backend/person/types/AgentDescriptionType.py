@@ -1,4 +1,4 @@
-from graphene import Field, List, ResolveInfo
+from graphene import Field, List, ResolveInfo, NonNull
 from graphene_django import DjangoObjectType
 
 from django.db.models import QuerySet
@@ -8,13 +8,16 @@ from person.types.AgentDescriptionGenderType import AgentDescriptionGenderType
 from person.types.AgentDescriptionLocationType import AgentDescriptionLocationType
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
+from event.types.EpisodeAgentType import EpisodeAgentType
+from event.models import EpisodeAgent
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
-    describes = List(HistoricalPersonType)
-    person_references = List(PersonReferenceType)
+    describes = List(NonNull(HistoricalPersonType), required=True)
+    person_references = List(NonNull(PersonReferenceType), required=True)
     gender = Field(AgentDescriptionGenderType)
     location = Field(AgentDescriptionLocationType)
+    episodes = List(NonNull(EpisodeAgentType), required=True)
 
     class Meta:
         model = AgentDescription
@@ -25,6 +28,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
             "person_references",
             "gender",
             "location",
+            "episodes",
         ] + EntityDescriptionType.fields()
 
     @classmethod
@@ -44,3 +48,9 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: AgentDescription, info: ResolveInfo
     ) -> QuerySet[PersonReference]:
         return PersonReference.objects.filter(description=parent)
+
+    @staticmethod
+    def resolve_episodes(
+        parent: AgentDescription, info: ResolveInfo
+    ) -> QuerySet[EpisodeAgent]:
+        return EpisodeAgent.objects.filter(agent=parent)

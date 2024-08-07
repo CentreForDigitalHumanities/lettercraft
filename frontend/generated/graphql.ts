@@ -52,11 +52,12 @@ export type AgentDescriptionType = {
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
-  describes?: Maybe<Array<Maybe<HistoricalPersonType>>>;
+  describes: Array<HistoricalPersonType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
+  episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
@@ -66,7 +67,7 @@ export type AgentDescriptionType = {
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
   page: Scalars['String']['output'];
-  personReferences?: Maybe<Array<Maybe<PersonReferenceType>>>;
+  personReferences: Array<PersonReferenceType>;
   /** Source text containing this description */
   source: SourceType;
   /** How is this entity presented in the text? */
@@ -166,6 +167,19 @@ export type DeletePersonReferenceMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type EpisodeAgentType = {
+  __typename?: 'EpisodeAgentType';
+  agent: AgentDescriptionType;
+  /** How certain are you of this value? */
+  certainty: EventEpisodeAgentCertaintyChoices;
+  episode: EpisodeType;
+  id: Scalars['ID']['output'];
+  /** Additional notes */
+  note: Scalars['String']['output'];
+  /** How is this information presented in the text? */
+  sourceMention?: Maybe<EventEpisodeAgentSourceMentionChoices>;
+};
+
 export type EpisodeCategoryType = {
   __typename?: 'EpisodeCategoryType';
   /** Longer description to help identify this object */
@@ -207,6 +221,24 @@ export type EpisodeType = {
   /** full description of the events in the passage */
   summary: Scalars['String']['output'];
 };
+
+/** An enumeration. */
+export enum EventEpisodeAgentCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
+}
+
+/** An enumeration. */
+export enum EventEpisodeAgentSourceMentionChoices {
+  /** directly mentioned */
+  Direct = 'DIRECT',
+  /** implied */
+  Implied = 'IMPLIED'
+}
 
 /** An enumeration. */
 export enum EventEpisodeSourceMentionChoices {
@@ -1277,7 +1309,7 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes?: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean } | null> | null }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean }> }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
