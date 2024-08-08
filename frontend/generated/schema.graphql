@@ -331,6 +331,7 @@ type LettercraftErrorType {
 }
 
 type Mutation {
+  updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
@@ -813,6 +814,18 @@ type StructureType {
 
   """The settlement containing this structure"""
   settlement: SettlementType
+}
+
+input UpdateAgentInput {
+  description: String
+  id: ID!
+  isGroup: Boolean
+  name: String
+}
+
+type UpdateAgentMutation {
+  agent: AgentDescriptionType
+  error: String
 }
 
 input UpdateCreateSourceInput {

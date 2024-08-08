@@ -288,8 +288,14 @@ export type LettercraftErrorType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+};
+
+
+export type MutationUpdateAgentArgs = {
+  agentData: UpdateAgentInput;
 };
 
 
@@ -759,6 +765,19 @@ export type StructureType = {
   name: Scalars['String']['output'];
   /** The settlement containing this structure */
   settlement?: Maybe<SettlementType>;
+};
+
+export type UpdateAgentInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  isGroup?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateAgentMutation = {
+  __typename?: 'UpdateAgentMutation';
+  agent?: Maybe<AgentDescriptionType>;
+  error?: Maybe<Scalars['String']['output']>;
 };
 
 export type UpdateCreateSourceInput = {

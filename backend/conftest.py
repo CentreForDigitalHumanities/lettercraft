@@ -1,5 +1,6 @@
 from allauth.account.models import EmailAddress
 import pytest
+from graphene.test import Client
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
@@ -8,6 +9,7 @@ from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
 from user.models import User
+from graphql_app.schema import schema
 
 
 @pytest.fixture()
@@ -119,3 +121,9 @@ def episode(db, source, agent_description, agent_description_2):
 def case_study(db):
     case_study = CaseStudy.objects.create(name="Test Case Study")
     return case_study
+
+
+@pytest.fixture()
+def graphql_client():
+    client = Client(schema)
+    return client

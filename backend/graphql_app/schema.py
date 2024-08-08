@@ -8,6 +8,7 @@ from space.queries import SpaceQueries
 from user.queries import UserQueries
 from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
+from person.mutations.UpdateAgentMutation import UpdateAgentMutation
 
 
 class Query(
@@ -25,6 +26,7 @@ class Query(
 class Mutation(ObjectType):
     update_or_create_source = UpdateOrCreateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
+    update_agent = UpdateAgentMutation.Field()
 
 
 schema = Schema(query=Query, mutation=Mutation)

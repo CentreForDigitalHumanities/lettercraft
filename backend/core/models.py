@@ -5,17 +5,19 @@ from django.contrib.postgres.fields import ArrayField
 from user.models import User
 
 
+class Certainty(models.IntegerChoices):
+    UNCERTAIN = (0, "uncertain")
+    SOMEWHAT_CERTAIN = (1, "somewhat certain")
+    CERTAIN = (2, "certain")
+
+
 class Field(models.Model):
     """
     A piece of information about an entity.
     """
 
     certainty = models.IntegerField(
-        choices=[
-            (0, "uncertain"),
-            (1, "somewhat certain"),
-            (2, "certain"),
-        ],
+        choices=Certainty.choices,
         default=2,
         help_text="How certain are you of this value?",
     )
