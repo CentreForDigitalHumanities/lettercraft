@@ -1,10 +1,5 @@
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
-import {
-    ControlValueAccessor,
-    FormControl,
-    NG_VALUE_ACCESSOR,
-} from "@angular/forms";
-import { map, Observable, startWith, tap } from "rxjs";
+import { Component, computed, forwardRef, Input, signal } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 export interface MultiselectItem {
     id: string;
@@ -23,8 +18,7 @@ export interface MultiselectItem {
         },
     ],
 })
-export class MultiselectComponent implements ControlValueAccessor, OnInit {
-    @Input({ required: true }) formControl!: FormControl<string[]>;
+export class MultiselectComponent implements ControlValueAccessor {
     // All available options to choose from.
     @Input() options: MultiselectItem[] = [];
     // Determines whether to show selected items in the list of selectable options.
@@ -33,45 +27,33 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
     @Input() placeholderEmpty = "Select an option from the list below...";
     @Input() noAvailableOptions = "No options available";
 
-    public visibleItems$: Observable<MultiselectItem[]> | null = null;
+    public selectedItems = signal<string[]>([]);
+    public disabled = false;
+    public visibleItems = computed(() => {
+        return this.options.filter((item) => {
+            if (this.showSelected) {
+                return true;
+            }
+            return !this.selectedItems().includes(item.id);
+        });
+    });
 
     private onChange: ((value: string[]) => void) | null = null;
     private onTouched: (() => void) | null = null;
 
-    ngOnInit(): void {
-        // this.control only becomes available in OnInit.
-        this.visibleItems$ = this.formControl.valueChanges.pipe(
-            startWith(this.formControl.value),
-            map((selectedIds) => {
-                return this.options.filter((item) => {
-                    if (this.showSelected) {
-                        return true;
-                    }
-                    return !selectedIds.includes(item.id);
-                });
-            })
-        );
-    }
-
     public selectItem(item: MultiselectItem): void {
-        const selectedIds: string[] = [...this.formControl.value];
+        const selectedIds: string[] = this.selectedItems();
         const index = selectedIds.indexOf(item.id);
         if (index !== -1) {
             selectedIds.splice(index, 1);
         } else {
             selectedIds.push(item.id);
         }
-        this.onChange && this.onChange(selectedIds);
-        this.onTouched && this.onTouched();
-    }
-
-    public selectedString(): string {
-        return this.formControl.value
-            .map((id) => {
-                const item = this.options.find((item) => item.id === id);
-                return item ? item.label : "";
-            })
-            .join(", ");
+        // Propagate change to form control in view.
+        this.selectedItems.set(selectedIds);
+        // Propagate change to parent component.
+        this.onChange?.(selectedIds);
+        this.onTouched?.();
     }
 
     public trackById(_index: number, item: MultiselectItem): string {
@@ -79,9 +61,7 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
     }
 
     public writeValue(value: string[]): void {
-        if (this.formControl.value !== value) {
-            this.formControl.setValue(value, { emitEvent: false });
-        }
+        this.selectedItems.set(value);
     }
 
     public registerOnChange(fn: (value: string[]) => void): void {
@@ -93,10 +73,6 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
     }
 
     public setDisabledState?(isDisabled: boolean): void {
-        if (isDisabled && this.formControl.enabled) {
-            this.formControl.disable();
-        } else if (!isDisabled && this.formControl.disabled) {
-            this.formControl.enable();
-        }
+        this.disabled = isDisabled;
     }
 }

@@ -1,9 +1,5 @@
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
-import {
-    ControlValueAccessor,
-    FormControl,
-    NG_VALUE_ACCESSOR,
-} from "@angular/forms";
+import { Component, Input, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { MultiselectItem } from "../shared/multiselect/multiselect.component";
 import { map, Observable, startWith } from "rxjs";
 import { actionIcons } from "@shared/icons";
@@ -27,12 +23,12 @@ export class LabelSelectComponent implements OnInit {
                 return this.options.filter((item) => {
                     return selectedIds.includes(item.id);
                 });
-            }),
+            })
         );
     }
 
     public removeLabel(labelId: string): void {
-        const selectedIds = this.control.value.filter(id => id !== labelId);
+        const selectedIds = this.control.value.filter((id) => id !== labelId);
         this.control.setValue(selectedIds);
     }
 }

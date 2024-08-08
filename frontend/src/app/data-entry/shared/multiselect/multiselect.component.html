@@ -1,9 +1,10 @@
 <select
-    *ngIf="visibleItems$ !== null && (visibleItems$ | async) as items"
+    *ngIf="visibleItems() as items"
     class="form-select"
     [title]="placeholderEmpty"
     aria-multiselectable="true"
     tabindex="0"
+    [disabled]="disabled"
 >
     <ng-container *ngIf="items.length > 0; else noItems">
         <option class="visually-hidden" [attr.aria-disabled]="true">
@@ -16,7 +17,7 @@
     <option
         *ngFor="let item of items; let i = index; trackBy: trackById"
         (click)="selectItem(item)"
-        [attr.aria-selected]="formControl.value.includes(item.id)"
+        [attr.aria-selected]="selectedItems().includes(item.id)"
         tabindex="1"
     >
         <span>{{ item.label }}</span>
