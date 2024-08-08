@@ -12,28 +12,17 @@ import { actionIcons } from "@shared/icons";
     selector: "lc-label-select",
     templateUrl: "./label-select.component.html",
     styleUrls: ["./label-select.component.scss"],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => LabelSelectComponent),
-            multi: true,
-        },
-    ],
 })
-export class LabelSelectComponent implements ControlValueAccessor, OnInit {
-    @Input({ required: true }) formControl!: FormControl<string[]>;
+export class LabelSelectComponent implements OnInit {
+    @Input({ required: true }) control!: FormControl<string[]>;
     @Input() options: MultiselectItem[] = [];
 
     public selectedLabels$: Observable<MultiselectItem[]> | null = null;
-
     public actionIcons = actionIcons;
 
-    private onChange: ((value: string[]) => void) | null = null;
-    private onTouched: (() => void) | null = null;
-
     ngOnInit(): void {
-        this.selectedLabels$ = this.formControl.valueChanges.pipe(
-            startWith(this.formControl.value),
+        this.selectedLabels$ = this.control.valueChanges.pipe(
+            startWith(this.control.value),
             map((selectedIds) => {
                 return this.options.filter((item) => {
                     return selectedIds.includes(item.id);
@@ -43,29 +32,7 @@ export class LabelSelectComponent implements ControlValueAccessor, OnInit {
     }
 
     public removeLabel(labelId: string): void {
-        const selectedIds = this.formControl.value.filter(id => id !== labelId);
-        this.formControl.setValue(selectedIds);
-        this.onChange && this.onChange(selectedIds);
-        this.onTouched && this.onTouched();
-    }
-
-    public writeValue(value: string[]): void {
-        this.formControl.setValue(value, { emitEvent: false });
-    }
-
-    public registerOnChange(fn: (value: string[]) => void): void {
-        this.onChange = fn;
-    }
-
-    public registerOnTouched(fn: () => void): void {
-        this.onTouched = fn;
-    }
-
-    public setDisabledState?(isDisabled: boolean): void {
-        if (isDisabled) {
-            this.formControl.disable();
-        } else {
-            this.formControl.enable();
-        }
+        const selectedIds = this.control.value.filter(id => id !== labelId);
+        this.control.setValue(selectedIds);
     }
 }

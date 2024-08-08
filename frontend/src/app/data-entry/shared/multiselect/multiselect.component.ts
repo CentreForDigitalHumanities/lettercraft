@@ -4,7 +4,7 @@ import {
     FormControl,
     NG_VALUE_ACCESSOR,
 } from "@angular/forms";
-import { map, Observable, startWith } from "rxjs";
+import { map, Observable, startWith, tap } from "rxjs";
 
 export interface MultiselectItem {
     id: string;
@@ -61,7 +61,6 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
         } else {
             selectedIds.push(item.id);
         }
-        this.formControl.setValue(selectedIds);
         this.onChange && this.onChange(selectedIds);
         this.onTouched && this.onTouched();
     }
@@ -80,7 +79,9 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
     }
 
     public writeValue(value: string[]): void {
-        this.formControl.setValue(value, { emitEvent: false });
+        if (this.formControl.value !== value) {
+            this.formControl.setValue(value, { emitEvent: false });
+        }
     }
 
     public registerOnChange(fn: (value: string[]) => void): void {
@@ -92,9 +93,9 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
     }
 
     public setDisabledState?(isDisabled: boolean): void {
-        if (isDisabled) {
+        if (isDisabled && this.formControl.enabled) {
             this.formControl.disable();
-        } else {
+        } else if (!isDisabled && this.formControl.disabled) {
             this.formControl.enable();
         }
     }
