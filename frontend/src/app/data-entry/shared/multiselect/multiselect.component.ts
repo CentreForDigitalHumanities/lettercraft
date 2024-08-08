@@ -24,9 +24,14 @@ export interface MultiselectItem {
     ],
 })
 export class MultiselectComponent implements ControlValueAccessor, OnInit {
-    @Input({ required: true }) control!: FormControl<string[]>;
+    @Input({ required: true }) formControl!: FormControl<string[]>;
+    // All available options to choose from.
     @Input() options: MultiselectItem[] = [];
+    // Determines whether to show selected items in the list of selectable options.
     @Input() showSelected = false;
+    // A placeholder to be shown when nothing has been selected.
+    @Input() placeholderEmpty = "Select an option from the list below...";
+    @Input() noAvailableOptions = "No options available";
 
     public visibleItems$: Observable<MultiselectItem[]> | null = null;
 
@@ -35,53 +40,62 @@ export class MultiselectComponent implements ControlValueAccessor, OnInit {
 
     ngOnInit(): void {
         // this.control only becomes available in OnInit.
-        this.visibleItems$ = this.control.valueChanges.pipe(
-            map(selectedIds => {
-                return this.options.filter(item => {
+        this.visibleItems$ = this.formControl.valueChanges.pipe(
+            startWith(this.formControl.value),
+            map((selectedIds) => {
+                return this.options.filter((item) => {
                     if (this.showSelected) {
                         return true;
                     }
                     return !selectedIds.includes(item.id);
                 });
-            }),
-            startWith(this.options)
+            })
         );
     }
 
-    public trackById(_index: number, item: MultiselectItem): string {
-        return item.id;
-    }
-
     public selectItem(item: MultiselectItem): void {
-        const selectedIds: string[] = [...this.control.value];
+        const selectedIds: string[] = [...this.formControl.value];
         const index = selectedIds.indexOf(item.id);
         if (index !== -1) {
             selectedIds.splice(index, 1);
         } else {
             selectedIds.push(item.id);
         }
-        this.control.setValue(selectedIds);
+        this.formControl.setValue(selectedIds);
         this.onChange && this.onChange(selectedIds);
         this.onTouched && this.onTouched();
     }
 
-    writeValue(value: string[]): void {
-        this.control.setValue(value, { emitEvent: false });
+    public selectedString(): string {
+        return this.formControl.value
+            .map((id) => {
+                const item = this.options.find((item) => item.id === id);
+                return item ? item.label : "";
+            })
+            .join(", ");
     }
 
-    registerOnChange(fn: (value: string[]) => void): void {
+    public trackById(_index: number, item: MultiselectItem): string {
+        return item.id;
+    }
+
+    public writeValue(value: string[]): void {
+        this.formControl.setValue(value, { emitEvent: false });
+    }
+
+    public registerOnChange(fn: (value: string[]) => void): void {
         this.onChange = fn;
     }
 
-    registerOnTouched(fn: () => void): void {
+    public registerOnTouched(fn: () => void): void {
         this.onTouched = fn;
     }
 
-    setDisabledState?(isDisabled: boolean): void {
+    public setDisabledState?(isDisabled: boolean): void {
         if (isDisabled) {
-            this.control.disable();
+            this.formControl.disable();
         } else {
-            this.control.enable();
+            this.formControl.enable();
         }
     }
 }

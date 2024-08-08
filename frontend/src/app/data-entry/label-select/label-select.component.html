@@ -1,18 +1,19 @@
-<p>Labels:</p>
-<ul class="list-group">
-    <li *ngFor="let selected of selectedLabels()" class="list-group-item">
-        <p>{{ selected.name }}</p>
-        <button class="btn btn-danger" (click)="removeLabel(selected.id)">Remove</button>
-    </li>
+<p>Selected labels (click to remove):</p>
+<ul *ngIf="selectedLabels$ && (selectedLabels$ | async) as labels" class="ps-0">
+    <ng-container *ngIf="labels.length > 0; else noLabels">
+        <li *ngFor="let label of labels" class="badge rounded-pill">
+            <button class="btn text-bg-primary" type="button" (click)="removeLabel(label.id)">
+                <span>{{ label.label }}</span>
+                <lc-icon [icon]="actionIcons.cancel" class="ms-2" />
+            </button>
+        </li>
+    </ng-container>
+    <ng-template #noLabels>
+        <p>No labels selected</p>
+    </ng-template>
 </ul>
 
 <form>
     <label for="label-select" class="form-label">Pick a label</label>
-
-    <select id="label-select" class="form-select" [formControl]="formControl">
-        <option selected>Select a label here</option>
-        <option *ngFor="let label of options" [value]="label.id">
-            {{ label.name }}
-        </option>
-    </select>
+    <lc-multiselect id="label-select" [options]="options" [formControl]="formControl" placeholderEmpty="Select a label from the list below." />
 </form>

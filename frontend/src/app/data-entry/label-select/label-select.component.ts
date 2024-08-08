@@ -1,17 +1,12 @@
-import { Component, computed, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import {
     ControlValueAccessor,
     FormControl,
     NG_VALUE_ACCESSOR,
 } from "@angular/forms";
+import { MultiselectItem } from "../shared/multiselect/multiselect.component";
+import { map, Observable, startWith } from "rxjs";
 import { actionIcons } from "@shared/icons";
-
-interface LabelOption {
-    id: string;
-    name: string;
-}
-
-
 
 @Component({
     selector: "lc-label-select",
@@ -25,65 +20,52 @@ interface LabelOption {
         },
     ],
 })
-export class LabelSelectComponent implements ControlValueAccessor {
-    public formControl = new FormControl<string[]>([], { nonNullable: true });
-    public disabled = false;
+export class LabelSelectComponent implements ControlValueAccessor, OnInit {
+    @Input({ required: true }) formControl!: FormControl<string[]>;
+    @Input() options: MultiselectItem[] = [];
 
-    public options: LabelOption[] = [];
+    public selectedLabels$: Observable<MultiselectItem[]> | null = null;
+
     public actionIcons = actionIcons;
 
-    public selectedLabels = computed<LabelOption[]>(() => {
-        const selected: LabelOption[] = [];
-        this.formControl.value.forEach(id => {
-            const option = this.options.find(option => option.id === id);
-            if (option) {
-                selected.push(option);
-            }
-        });
-        return selected;
-    });
+    private onChange: ((value: string[]) => void) | null = null;
+    private onTouched: (() => void) | null = null;
 
-    public removeLabel(labelId: string): void {
-        this.formControl.setValue(
-            this.formControl.value.filter(id => id !== labelId)
+    ngOnInit(): void {
+        this.selectedLabels$ = this.formControl.valueChanges.pipe(
+            startWith(this.formControl.value),
+            map((selectedIds) => {
+                return this.options.filter((item) => {
+                    return selectedIds.includes(item.id);
+                });
+            }),
         );
     }
 
-    constructor() {
-        this.formControl.valueChanges.subscribe(value => {
-            console.log('Selected:', value);
-            this.onChange(value);
-            this.onTouch(value);
-        });
+    public removeLabel(labelId: string): void {
+        const selectedIds = this.formControl.value.filter(id => id !== labelId);
+        this.formControl.setValue(selectedIds);
+        this.onChange && this.onChange(selectedIds);
+        this.onTouched && this.onTouched();
     }
 
-
-    onChange: (_: unknown) => void = () => { return; };
-    onTouch: (_: unknown) => void = () => { return; };
-
-    writeValue(labelIds: string[]): void {
-        // Implement the logic to set the value of the control
-        // based on the provided object
-        this.formControl.setValue(labelIds);
+    public writeValue(value: string[]): void {
+        this.formControl.setValue(value, { emitEvent: false });
     }
 
-    registerOnChange(fn: () => void): void {
-        // Implement the logic to register the provided function
-        // as the callback to be called when the value of the control changes
-        console.log('ON change!');
+    public registerOnChange(fn: (value: string[]) => void): void {
         this.onChange = fn;
     }
 
-    registerOnTouched(fn: () => void): void {
-        // Implement the logic to register the provided function
-        // as the callback to be called when the control is touched
-        this.onTouch = fn;
+    public registerOnTouched(fn: () => void): void {
+        this.onTouched = fn;
     }
 
-    setDisabledState?(isDisabled: boolean): void {
-        // Implement the logic to set the disabled state of the control
-        // based on the provided boolean value
-        console.log('setting disabled state!');
-        this.disabled = isDisabled;
+    public setDisabledState?(isDisabled: boolean): void {
+        if (isDisabled) {
+            this.formControl.disable();
+        } else {
+            this.formControl.enable();
+        }
     }
 }
