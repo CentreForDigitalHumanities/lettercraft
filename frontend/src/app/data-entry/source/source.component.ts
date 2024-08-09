@@ -27,7 +27,7 @@ export class SourceComponent {
     ]);
 
     public source$ = this.route.params.pipe(
-        map((params) => params["sourceId"]),
+        map((params) => params["id"]),
         switchMap((id) => this.sourceDetailQuery.watch({ id }).valueChanges),
         map((result) => result.data.source),
         shareReplay(1)

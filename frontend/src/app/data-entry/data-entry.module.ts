@@ -7,6 +7,7 @@ import { LocationFormModule } from "./location-form/location-form.module";
 import { AgentFormModule } from "./agent-form/agent-form.module";
 import { SourceComponent } from './source/source.component';
 import { EpisodePreviewComponent } from './source/episode-preview/episode-preview.component';
+import { EpisodeFormModule } from "./episode-form/episode-form.module";
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { EpisodePreviewComponent } from './source/episode-preview/episode-previe
         GiftFormModule,
         LetterFormModule,
         LocationFormModule,
+        EpisodeFormModule
     ],
     exports: [
         SourcesComponent,
