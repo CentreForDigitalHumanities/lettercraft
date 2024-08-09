@@ -307,7 +307,16 @@ enum LetterLetterDescriptionSourceMentionChoices {
   IMPLIED
 }
 
+"""
+A simple wrapper around Graphene-Django's ErrorType with a constructor.
+"""
+type LettercraftErrorType {
+  field: String!
+  messages: [String!]!
+}
+
 type Mutation {
+  updateOrCreateEpisode(input: UpdateCreateEpisodeMutationInput!): UpdateCreateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
@@ -780,6 +789,16 @@ type StructureType {
 
   """The settlement containing this structure"""
   settlement: SettlementType
+}
+
+type UpdateCreateEpisodeMutation {
+  errors: [LettercraftErrorType!]
+  ok: Boolean!
+}
+
+input UpdateCreateEpisodeMutationInput {
+  id: ID
+  name: String!
 }
 
 input UpdateCreateSourceInput {

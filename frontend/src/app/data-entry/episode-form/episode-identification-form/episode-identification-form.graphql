@@ -1,0 +1,18 @@
+query DataEntryEpisodeIdentification($id: ID!) {
+    episode(id: $id) {
+        id
+        name
+    }
+}
+
+mutation DataEntryUpdateCreateEpisodeIdentification(
+    $input: UpdateCreateEpisodeMutationInput!
+) {
+    updateOrCreateEpisode(input: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

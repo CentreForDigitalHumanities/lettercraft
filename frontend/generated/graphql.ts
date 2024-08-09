@@ -264,9 +264,22 @@ export enum LetterLetterDescriptionSourceMentionChoices {
   Implied = 'IMPLIED'
 }
 
+/** A simple wrapper around Graphene-Django's ErrorType with a constructor. */
+export type LettercraftErrorType = {
+  __typename?: 'LettercraftErrorType';
+  field: Scalars['String']['output'];
+  messages: Array<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  updateOrCreateEpisode?: Maybe<UpdateCreateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+};
+
+
+export type MutationUpdateOrCreateEpisodeArgs = {
+  input: UpdateCreateEpisodeMutationInput;
 };
 
 
@@ -722,6 +735,17 @@ export type StructureType = {
   settlement?: Maybe<SettlementType>;
 };
 
+export type UpdateCreateEpisodeMutation = {
+  __typename?: 'UpdateCreateEpisodeMutation';
+  errors?: Maybe<Array<LettercraftErrorType>>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type UpdateCreateEpisodeMutationInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+};
+
 export type UpdateCreateSourceInput = {
   editionAuthor?: InputMaybe<Scalars['String']['input']>;
   editionTitle?: InputMaybe<Scalars['String']['input']>;
@@ -743,6 +767,27 @@ export type DataEntryAgentQueryVariables = Exact<{
 
 
 export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string } | null };
+
+export type DataEntryUpdateCreateEpisodeIdentificationMutationVariables = Exact<{
+  input: UpdateCreateEpisodeMutationInput;
+}>;
+
+
+export type DataEntryUpdateCreateEpisodeIdentificationMutation = { __typename?: 'Mutation', updateOrCreateEpisode?: { __typename?: 'UpdateCreateEpisodeMutation', ok: boolean, errors?: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> | null } | null };
+
+export type DataEntryEpisodeFormQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -796,6 +841,71 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeIdentificationDocument = gql`
+    query DataEntryEpisodeIdentification($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeIdentificationGQL extends Apollo.Query<DataEntryEpisodeIdentificationQuery, DataEntryEpisodeIdentificationQueryVariables> {
+    override document = DataEntryEpisodeIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryUpdateCreateEpisodeIdentificationDocument = gql`
+    mutation DataEntryUpdateCreateEpisodeIdentification($input: UpdateCreateEpisodeMutationInput!) {
+  updateOrCreateEpisode(input: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryUpdateCreateEpisodeIdentificationGQL extends Apollo.Mutation<DataEntryUpdateCreateEpisodeIdentificationMutation, DataEntryUpdateCreateEpisodeIdentificationMutationVariables> {
+    override document = DataEntryUpdateCreateEpisodeIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeFormDocument = gql`
+    query DataEntryEpisodeForm($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeFormGQL extends Apollo.Query<DataEntryEpisodeFormQuery, DataEntryEpisodeFormQueryVariables> {
+    override document = DataEntryEpisodeFormDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
