@@ -478,7 +478,7 @@ type PersonReferenceType {
 type Query {
   agentDescription(id: ID!): AgentDescriptionType
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
-  episode(id: ID!): EpisodeType
+  episode(id: ID!): EpisodeType!
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!

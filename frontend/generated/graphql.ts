@@ -413,7 +413,7 @@ export type Query = {
   __typename?: 'Query';
   agentDescription?: Maybe<AgentDescriptionType>;
   agentDescriptions: Array<AgentDescriptionType>;
-  episode?: Maybe<EpisodeType>;
+  episode: EpisodeType;
   episodes: Array<EpisodeType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
@@ -744,6 +744,13 @@ export type DataEntryAgentQueryVariables = Exact<{
 
 export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
+export type DataEntryEpisodeDetailQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeDetailQuery = { __typename?: 'Query', episode: { __typename?: 'EpisodeType', id: string, name: string, source: { __typename?: 'SourceType', id: string, medievalTitle: string, medievalAuthor: string } } };
+
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -796,6 +803,30 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeDetailDocument = gql`
+    query DataEntryEpisodeDetail($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    source {
+      id
+      medievalTitle
+      medievalAuthor
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeDetailGQL extends Apollo.Query<DataEntryEpisodeDetailQuery, DataEntryEpisodeDetailQueryVariables> {
+    override document = DataEntryEpisodeDetailDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
