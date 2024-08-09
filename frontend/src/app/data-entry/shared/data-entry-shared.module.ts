@@ -2,10 +2,19 @@ import { NgModule } from "@angular/core";
 import { SharedModule } from "@shared/shared.module";
 import { DesignatorsControlComponent } from "./designators-control/designators-control.component";
 import { MultiselectComponent } from "./multiselect/multiselect.component";
+import { LabelSelectComponent } from "./label-select/label-select.component";
 
 @NgModule({
-    declarations: [DesignatorsControlComponent, MultiselectComponent],
+    declarations: [
+        DesignatorsControlComponent,
+        MultiselectComponent,
+        LabelSelectComponent,
+    ],
     imports: [SharedModule],
-    exports: [DesignatorsControlComponent, MultiselectComponent],
+    exports: [
+        DesignatorsControlComponent,
+        MultiselectComponent,
+        LabelSelectComponent,
+    ],
 })
 export class DataEntrySharedModule {}

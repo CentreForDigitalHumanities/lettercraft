@@ -1,0 +1,19 @@
+<p>Selected labels (click to remove):</p>
+<ul class="ps-0">
+    <ng-container *ngIf="selectedLabels().length > 0; else noLabels">
+        <li *ngFor="let label of selectedLabels()" class="badge rounded-pill">
+            <button class="btn text-bg-primary" type="button" (click)="removeLabel(label.id)">
+                <span>{{ label.label }}</span>
+                <lc-icon [icon]="actionIcons.cancel" class="ms-2" />
+            </button>
+        </li>
+    </ng-container>
+    <ng-template #noLabels>
+        <p>No labels selected</p>
+    </ng-template>
+</ul>
+
+<form>
+    <label for="label-select" class="form-label">Pick a label</label>
+    <lc-multiselect id="label-select" [options]="options" [formControl]="control" placeholderEmpty="Select a label from the list below." />
+</form>
