@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, signal, computed } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 
 export interface MultiselectOption {
-    id: string;
+    value: string;
     label: string;
 }
 
@@ -34,7 +34,7 @@ export class MultiselectComponent implements ControlValueAccessor {
             if (this.showSelected) {
                 return true;
             }
-            return !this.selectedOptions().includes(option.id);
+            return !this.selectedOptions().includes(option.value);
         });
     });
 
@@ -43,11 +43,11 @@ export class MultiselectComponent implements ControlValueAccessor {
 
     public selectOption(option: MultiselectOption): void {
         const selectedIds: string[] = this.selectedOptions();
-        const index = selectedIds.indexOf(option.id);
+        const index = selectedIds.indexOf(option.value);
         if (index !== -1) {
             selectedIds.splice(index, 1);
         } else {
-            selectedIds.push(option.id);
+            selectedIds.push(option.value);
         }
         // Propagate change to form control in view.
         this.selectedOptions.set(selectedIds);
@@ -57,7 +57,7 @@ export class MultiselectComponent implements ControlValueAccessor {
     }
 
     public trackById(_index: number, option: MultiselectOption): string {
-        return option.id;
+        return option.value;
     }
 
     public writeValue(value: string[]): void {

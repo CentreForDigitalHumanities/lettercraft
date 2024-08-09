@@ -34,7 +34,7 @@ export class LabelSelectComponent implements ControlValueAccessor {
     public formValue = toSignal<string[]>(this.control.valueChanges);
     public selectedLabels = computed(() => {
         const selectedIds = this.formValue();
-        return this.options.filter((item) => selectedIds?.includes(item.id));
+        return this.options.filter((item) => selectedIds?.includes(item.value));
     });
 
     public removeLabel(labelId: string): void {

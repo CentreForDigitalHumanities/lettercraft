@@ -2,7 +2,7 @@
 <ul class="ps-0">
     <ng-container *ngIf="selectedLabels().length > 0; else noLabels">
         <li *ngFor="let label of selectedLabels()" class="badge rounded-pill">
-            <button class="btn text-bg-primary" type="button" (click)="removeLabel(label.id)">
+            <button class="btn text-bg-primary" type="button" (click)="removeLabel(label.value)">
                 <span>{{ label.label }}</span>
                 <lc-icon [icon]="actionIcons.cancel" class="ms-2" />
             </button>

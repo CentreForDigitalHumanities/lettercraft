@@ -19,7 +19,7 @@
     <option
         *ngFor="let option of options; let i = index; trackBy: trackById"
         (click)="selectOption(option)"
-        [attr.aria-selected]="selectedOptions().includes(option.id)"
+        [attr.aria-selected]="selectedOptions().includes(option.value)"
         tabindex="1"
     >
         <span>{{ option.label }}</span>
