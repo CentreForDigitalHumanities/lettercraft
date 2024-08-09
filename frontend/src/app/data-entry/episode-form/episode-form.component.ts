@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
-import { DataEntryEpisodeDetailGQL } from "generated/graphql";
+import { DataEntryEpisodeFormGQL } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 
 @Component({
@@ -53,6 +53,6 @@ export class EpisodeFormComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private episodeQuery: DataEntryEpisodeDetailGQL
+        private episodeQuery: DataEntryEpisodeFormGQL
     ) {}
 }

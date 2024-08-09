@@ -1,4 +1,4 @@
-query DataEntryEpisodeDetail($id: ID!) {
+query DataEntryEpisodeForm($id: ID!) {
     episode(id: $id) {
         id
         name

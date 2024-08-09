@@ -20,7 +20,6 @@ import { EpisodeFormModule } from "./episode-form/episode-form.module";
         EpisodeFormModule,
     ],
     exports: [
-        SourcesComponent,
         AgentFormModule,
         GiftFormModule,
         LetterFormModule,
