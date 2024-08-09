@@ -2,14 +2,18 @@ from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, S
 from django.core.exceptions import ObjectDoesNotExist
 from event.models import Episode
 from graphql_app.LettercraftMutation import LettercraftMutation
-from graphene_django.types import ErrorType
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
 class UpdateCreateEpisodeMutationInput(InputObjectType):
     id = ID()
-    name = String(required=True)
+    # TODO: figure out how to handle required fields ('name').
+    name = String()
+    book = String()
+    chapter = String()
+    page = String()
+    designators = List(NonNull(String))
 
 
 class UpdateCreateEpisodeMutation(LettercraftMutation):
@@ -29,7 +33,7 @@ class UpdateCreateEpisodeMutation(LettercraftMutation):
             retrieved_object = cls.get_or_create_object(info, input)
         except ObjectDoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
-            return cls(ok=False, errors=[error]) # type: ignore
+            return cls(ok=False, errors=[error])  # type: ignore
 
         episode = retrieved_object.object
 
@@ -39,8 +43,8 @@ class UpdateCreateEpisodeMutation(LettercraftMutation):
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
             )
-            return cls(ok=False, errors=[error]) # type: ignore
+            return cls(ok=False, errors=[error])  # type: ignore
 
         episode.save()
 
-        return cls(ok=True, errors=[]) # type: ignore
+        return cls(ok=True, errors=[])  # type: ignore
