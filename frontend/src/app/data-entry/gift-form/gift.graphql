@@ -1,0 +1,11 @@
+query DataEntryGift($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}

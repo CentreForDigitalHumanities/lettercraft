@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActionButtonGroupComponent } from './action-button-group.component';
+import { AgentFormComponent } from './agent-form.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 
-describe('ActionButtonGroupComponent', () => {
-    let component: ActionButtonGroupComponent;
-    let fixture: ComponentFixture<ActionButtonGroupComponent>;
+describe('AgentFormComponent', () => {
+    let component: AgentFormComponent;
+    let fixture: ComponentFixture<AgentFormComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [SharedTestingModule]
+            declarations: [AgentFormComponent],
+            imports: [SharedTestingModule],
         });
-        fixture = TestBed.createComponent(ActionButtonGroupComponent);
+        fixture = TestBed.createComponent(AgentFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
