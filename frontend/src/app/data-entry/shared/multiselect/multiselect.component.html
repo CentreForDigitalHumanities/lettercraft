@@ -1,0 +1,27 @@
+<select
+    *ngIf="visibleOptions() as options"
+    class="form-select"
+    [title]="placeholderEmpty"
+    aria-multiselectable="true"
+    tabindex="0"
+    [disabled]="disabled"
+>
+    <ng-container *ngIf="options.length > 0; else noOptions">
+        <option class="visually-hidden" [attr.aria-disabled]="true">
+            {{ placeholderEmpty }}
+        </option>
+    </ng-container>
+    <ng-template #noOptions>
+        <option class="visually-hidden" [attr.aria-disabled]="true">
+            {{ noAvailableOptions }}
+        </option>
+    </ng-template>
+    <option
+        *ngFor="let option of options; let i = index; trackBy: trackById"
+        (click)="selectOption(option)"
+        [attr.aria-selected]="selectedOptions().includes(option.id)"
+        tabindex="1"
+    >
+        <span>{{ option.label }}</span>
+    </option>
+</select>
