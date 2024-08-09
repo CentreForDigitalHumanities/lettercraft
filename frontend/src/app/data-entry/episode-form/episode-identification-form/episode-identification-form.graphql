@@ -4,15 +4,3 @@ query DataEntryEpisodeIdentification($id: ID!) {
         name
     }
 }
-
-mutation DataEntryUpdateCreateEpisodeIdentification(
-    $input: UpdateCreateEpisodeMutationInput!
-) {
-    updateOrCreateEpisode(input: $input) {
-        ok
-        errors {
-            field
-            messages
-        }
-    }
-}

@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryEpisodeIdentificationGQL,
-    DataEntryUpdateCreateEpisodeIdentificationGQL,
+    DataEntryUpdateCreateEpisodeGQL,
 } from "generated/graphql";
 import {
     debounceTime,
@@ -43,7 +43,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
-        private episodeMutation: DataEntryUpdateCreateEpisodeIdentificationGQL
+        private episodeMutation: DataEntryUpdateCreateEpisodeGQL
     ) {}
 
     public ngOnInit(): void {

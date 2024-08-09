@@ -9,3 +9,15 @@ query DataEntryEpisodeForm($id: ID!) {
         }
     }
 }
+
+mutation DataEntryUpdateCreateEpisode(
+    $input: UpdateCreateEpisodeMutationInput!
+) {
+    updateOrCreateEpisode(input: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
