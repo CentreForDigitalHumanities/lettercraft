@@ -1,12 +1,15 @@
-from graphene import ResolveInfo
+from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
 from django.db.models import QuerySet
 
-from event.models import Episode
+from event.models import Episode, EpisodeCategory
+from event.types.EpisodeCategoryType import EpisodeCategoryType
 
 
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
+    categories = List(NonNull(EpisodeCategoryType), required=True)
+
     class Meta:
         model = Episode
         fields = [
@@ -26,3 +29,9 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         info: ResolveInfo,
     ) -> QuerySet[Episode]:
         return queryset.all()
+
+    @staticmethod
+    def resolve_categories(
+        parent: Episode, info: ResolveInfo
+    ) -> QuerySet[EpisodeCategory]:
+        return parent.categories.all()
