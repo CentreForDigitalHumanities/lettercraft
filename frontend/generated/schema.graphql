@@ -70,12 +70,22 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+type EpisodeCategoryType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+}
+
 type EpisodeType {
   """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
   """The book in the source"""
   book: String!
+  categories: [EpisodeCategoryType!]!
 
   """The chapter or chapters in the source"""
   chapter: String!
@@ -792,13 +802,19 @@ type StructureType {
 }
 
 type UpdateCreateEpisodeMutation {
-  errors: [LettercraftErrorType!]
+  errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
 
 input UpdateCreateEpisodeMutationInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  designators: [String!]
   id: ID
-  name: String!
+  name: String
+  page: String
+  summary: String
 }
 
 input UpdateCreateSourceInput {
