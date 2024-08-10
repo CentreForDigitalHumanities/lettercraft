@@ -35,7 +35,7 @@ class LettercraftMutation(Mutation):
 
         Exceptions:
             - ImproperlyConfigured is raised in two cases:
-                1. when the mutation class implementing DiappMutation does not have the required class field 'django_model' defined;
+                1. when the mutation class implementing LettercraftMutation does not have the required class field 'django_model' defined;
                 2. when the corresponding Graphene type cannot be found. This exception should not be caught.
             - ObjectDoesNotExist is raised when an ID is provided but the corresponding object is not found or inaccessible to the user making the request.
         """

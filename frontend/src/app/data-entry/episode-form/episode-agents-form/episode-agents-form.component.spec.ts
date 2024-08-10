@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { EpisodeAgentsFormComponent } from "./episode-agents-form.component";
+import { SharedTestingModule } from "@shared/shared-testing.module";
 
 describe("EpisodeAgentsFormComponent", () => {
     let component: EpisodeAgentsFormComponent;
@@ -9,6 +10,7 @@ describe("EpisodeAgentsFormComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [EpisodeAgentsFormComponent],
+            imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(EpisodeAgentsFormComponent);
         component = fixture.componentInstance;
