@@ -40,6 +40,7 @@ type AgentDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
   describes: [HistoricalPersonType]
 
   """Longer description to help identify this object"""
@@ -79,6 +80,7 @@ type EpisodeType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -155,6 +157,7 @@ type GiftDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -179,6 +182,7 @@ type GiftDescriptionType {
 }
 
 type HistoricalPersonType {
+  contributors: [UserType!]!
   dateOfBirth: PersonDateOfBirthType
   dateOfDeath: PersonDateOfDeathType
 
@@ -224,6 +228,7 @@ type LetterDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -488,6 +493,8 @@ type Query {
   sources: [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  userDescription(id: ID!): UserType
+  userDescriptions: [UserType!]!
 }
 
 type RegionFieldType {
@@ -505,6 +512,8 @@ type RegionFieldType {
 }
 
 type RegionType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -536,6 +545,8 @@ type SettlementFieldType {
 }
 
 type SettlementType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -619,6 +630,7 @@ type SpaceDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -765,6 +777,8 @@ type StructureFieldType {
 }
 
 type StructureType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -794,4 +808,10 @@ input UpdateCreateSourceInput {
 type UpdateOrCreateSourceMutation {
   errors: [String]
   source: SourceType
+}
+
+type UserType {
+  firstName: String!
+  id: ID!
+  lastName: String!
 }
