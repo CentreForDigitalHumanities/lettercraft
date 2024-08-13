@@ -1,9 +1,7 @@
 from graphene import Field, List, ResolveInfo
-from graphene_django import DjangoObjectType
-
 from django.db.models import QuerySet
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 from user.types.UserType import UserType
 from user.models import User
 

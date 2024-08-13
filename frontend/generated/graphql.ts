@@ -51,7 +51,7 @@ export type AgentDescriptionType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
-  contributors?: Maybe<Array<Maybe<UserType>>>;
+  contributors: Array<UserType>;
   describes?: Maybe<Array<Maybe<HistoricalPersonType>>>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
@@ -81,7 +81,7 @@ export type EpisodeType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
-  contributors?: Maybe<Array<Maybe<UserType>>>;
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -143,7 +143,7 @@ export type GiftDescriptionType = {
   categorisations: Array<GiftDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
-  contributors?: Maybe<Array<Maybe<UserType>>>;
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -200,7 +200,7 @@ export type LetterDescriptionType = {
   categorisations: Array<LetterDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
-  contributors?: Maybe<Array<Maybe<UserType>>>;
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
@@ -599,7 +599,7 @@ export type SpaceDescriptionType = {
   book: Scalars['String']['output'];
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
-  contributors?: Maybe<Array<Maybe<UserType>>>;
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */

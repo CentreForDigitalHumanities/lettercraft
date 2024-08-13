@@ -40,7 +40,7 @@ type AgentDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
-  contributors: [UserType]
+  contributors: [UserType!]!
   describes: [HistoricalPersonType]
 
   """Longer description to help identify this object"""
@@ -80,7 +80,7 @@ type EpisodeType {
 
   """The chapter or chapters in the source"""
   chapter: String!
-  contributors: [UserType]
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -157,7 +157,7 @@ type GiftDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
-  contributors: [UserType]
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -227,7 +227,7 @@ type LetterDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
-  contributors: [UserType]
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -625,7 +625,7 @@ type SpaceDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
-  contributors: [UserType]
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!

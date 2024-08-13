@@ -1,7 +1,7 @@
 from core.models import EntityDescription
 from core.types.AbstractDjangoObjectType import AbstractDjangoObjectType
 from core.types.NamedType import NamedType
-from graphene import List, ResolveInfo
+from graphene import List, ResolveInfo, NonNull
 from django.db.models import QuerySet
 
 from user.models import User
@@ -13,7 +13,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     Should not be queried directly, but should be extended by other types.
     """
 
-    contributors = List(UserType)
+    contributors = List(NonNull(UserType), required=True)
 
     class Meta:
         model = EntityDescription
