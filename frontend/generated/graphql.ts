@@ -161,6 +161,7 @@ export type GiftDescriptionType = {
 
 export type HistoricalPersonType = {
   __typename?: 'HistoricalPersonType';
+  contributors: Array<UserType>;
   dateOfBirth?: Maybe<PersonDateOfBirthType>;
   dateOfDeath?: Maybe<PersonDateOfDeathType>;
   /** Longer description to help identify this object */
@@ -509,6 +510,7 @@ export type RegionFieldType = {
 
 export type RegionType = {
   __typename?: 'RegionType';
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -535,6 +537,7 @@ export type SettlementFieldType = {
 
 export type SettlementType = {
   __typename?: 'SettlementType';
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -722,6 +725,7 @@ export type StructureFieldType = {
 
 export type StructureType = {
   __typename?: 'StructureType';
+  contributors: Array<UserType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -756,6 +760,34 @@ export type UserType = {
   lastName: Scalars['String']['output'];
 };
 
+export type DataEntryAgentQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryGiftQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryGiftQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryLetterQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLetterQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntrySpaceDescriptionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
 export type DataEntrySourceDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -768,6 +800,102 @@ export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export const DataEntryAgentDocument = gql`
+    query DataEntryAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
+    override document = DataEntryAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryGiftDocument = gql`
+    query DataEntryGift($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryGiftGQL extends Apollo.Query<DataEntryGiftQuery, DataEntryGiftQueryVariables> {
+    override document = DataEntryGiftDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLetterDocument = gql`
+    query DataEntryLetter($id: ID!) {
+  letterDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLetterGQL extends Apollo.Query<DataEntryLetterQuery, DataEntryLetterQueryVariables> {
+    override document = DataEntryLetterDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntrySpaceDescriptionDocument = gql`
+    query DataEntrySpaceDescription($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntrySpaceDescriptionGQL extends Apollo.Query<DataEntrySpaceDescriptionQuery, DataEntrySpaceDescriptionQueryVariables> {
+    override document = DataEntrySpaceDescriptionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntrySourceDetailDocument = gql`
     query DataEntrySourceDetail($id: ID!) {
   source(id: $id) {

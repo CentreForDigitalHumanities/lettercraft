@@ -1,0 +1,11 @@
+query DataEntrySpaceDescription($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
