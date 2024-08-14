@@ -5,7 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryEpisodeSourceTextMentionGQL,
-    DataEntryUpdateCreateEpisodeGQL,
+    DataEntryUpdateEpisodeGQL,
 } from "generated/graphql";
 import {
     debounceTime,
@@ -43,7 +43,7 @@ export class EpisodeSourceTextFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,
-        private episodeMutation: DataEntryUpdateCreateEpisodeGQL
+        private episodeMutation: DataEntryUpdateEpisodeGQL
     ) {}
 
     ngOnInit(): void {
@@ -72,7 +72,7 @@ export class EpisodeSourceTextFormComponent implements OnInit {
                 )
             )
             .subscribe((result) => {
-                const errors = result.data?.updateOrCreateEpisode?.errors;
+                const errors = result.data?.updateEpisode?.errors;
                 if (errors && errors.length > 0) {
                     this.toastService.show({
                         body: errors.map((error) => error.messages).join("\n"),

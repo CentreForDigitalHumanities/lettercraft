@@ -326,7 +326,7 @@ type LettercraftErrorType {
 }
 
 type Mutation {
-  updateOrCreateEpisode(input: UpdateCreateEpisodeMutationInput!): UpdateCreateEpisodeMutation
+  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
@@ -801,12 +801,21 @@ type StructureType {
   settlement: SettlementType
 }
 
-type UpdateCreateEpisodeMutation {
+input UpdateCreateSourceInput {
+  editionAuthor: String
+  editionTitle: String
+  id: ID
+  medievalAuthor: String
+  medievalTitle: String
+  name: String!
+}
+
+type UpdateEpisodeMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
 
-input UpdateCreateEpisodeMutationInput {
+input UpdateEpisodeMutationInput {
   book: String
   categories: [ID!]
   chapter: String
@@ -815,15 +824,6 @@ input UpdateCreateEpisodeMutationInput {
   name: String
   page: String
   summary: String
-}
-
-input UpdateCreateSourceInput {
-  editionAuthor: String
-  editionTitle: String
-  id: ID
-  medievalAuthor: String
-  medievalTitle: String
-  name: String!
 }
 
 type UpdateOrCreateSourceMutation {

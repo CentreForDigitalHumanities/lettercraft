@@ -283,13 +283,13 @@ export type LettercraftErrorType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  updateOrCreateEpisode?: Maybe<UpdateCreateEpisodeMutation>;
+  updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
 };
 
 
-export type MutationUpdateOrCreateEpisodeArgs = {
-  input: UpdateCreateEpisodeMutationInput;
+export type MutationUpdateEpisodeArgs = {
+  input: UpdateEpisodeMutationInput;
 };
 
 
@@ -745,13 +745,22 @@ export type StructureType = {
   settlement?: Maybe<SettlementType>;
 };
 
-export type UpdateCreateEpisodeMutation = {
-  __typename?: 'UpdateCreateEpisodeMutation';
+export type UpdateCreateSourceInput = {
+  editionAuthor?: InputMaybe<Scalars['String']['input']>;
+  editionTitle?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
+  medievalTitle?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+};
+
+export type UpdateEpisodeMutation = {
+  __typename?: 'UpdateEpisodeMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateCreateEpisodeMutationInput = {
+export type UpdateEpisodeMutationInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
@@ -760,15 +769,6 @@ export type UpdateCreateEpisodeMutationInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
   summary?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateCreateSourceInput = {
-  editionAuthor?: InputMaybe<Scalars['String']['input']>;
-  editionTitle?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
-  medievalTitle?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
 };
 
 export type UpdateOrCreateSourceMutation = {
@@ -812,12 +812,12 @@ export type DataEntryEpisodeFormQueryVariables = Exact<{
 
 export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
-export type DataEntryUpdateCreateEpisodeMutationVariables = Exact<{
-  input: UpdateCreateEpisodeMutationInput;
+export type DataEntryUpdateEpisodeMutationVariables = Exact<{
+  input: UpdateEpisodeMutationInput;
 }>;
 
 
-export type DataEntryUpdateCreateEpisodeMutation = { __typename?: 'Mutation', updateOrCreateEpisode?: { __typename?: 'UpdateCreateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryUpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode?: { __typename?: 'UpdateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -963,9 +963,9 @@ export const DataEntryEpisodeFormDocument = gql`
       super(apollo);
     }
   }
-export const DataEntryUpdateCreateEpisodeDocument = gql`
-    mutation DataEntryUpdateCreateEpisode($input: UpdateCreateEpisodeMutationInput!) {
-  updateOrCreateEpisode(input: $input) {
+export const DataEntryUpdateEpisodeDocument = gql`
+    mutation DataEntryUpdateEpisode($input: UpdateEpisodeMutationInput!) {
+  updateEpisode(input: $input) {
     ok
     errors {
       field
@@ -978,8 +978,8 @@ export const DataEntryUpdateCreateEpisodeDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DataEntryUpdateCreateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateCreateEpisodeMutation, DataEntryUpdateCreateEpisodeMutationVariables> {
-    override document = DataEntryUpdateCreateEpisodeDocument;
+  export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
+    override document = DataEntryUpdateEpisodeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

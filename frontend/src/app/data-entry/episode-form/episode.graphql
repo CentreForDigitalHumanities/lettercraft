@@ -10,10 +10,10 @@ query DataEntryEpisodeForm($id: ID!) {
     }
 }
 
-mutation DataEntryUpdateCreateEpisode(
-    $input: UpdateCreateEpisodeMutationInput!
+mutation DataEntryUpdateEpisode(
+    $input: UpdateEpisodeMutationInput!
 ) {
-    updateOrCreateEpisode(input: $input) {
+    updateEpisode(input: $input) {
         ok
         errors {
             field

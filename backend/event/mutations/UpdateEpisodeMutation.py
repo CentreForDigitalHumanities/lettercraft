@@ -6,12 +6,7 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-# TODO: figure out how to handle required fields. Options:
-# - Make optional, rely on frontend validation and raise errors in backend.
-# - Always query in frontend, send along with every mutation.
-
-
-class UpdateCreateEpisodeMutationInput(InputObjectType):
+class UpdateEpisodeMutationInput(InputObjectType):
     id = ID()
     name = String()
     book = String()
@@ -22,19 +17,17 @@ class UpdateCreateEpisodeMutationInput(InputObjectType):
     categories = List(NonNull(ID))
 
 
-class UpdateCreateEpisodeMutation(LettercraftMutation):
+class UpdateEpisodeMutation(LettercraftMutation):
     ok = Boolean(required=True)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     django_model = Episode
 
     class Arguments:
-        input = UpdateCreateEpisodeMutationInput(required=True)
+        input = UpdateEpisodeMutationInput(required=True)
 
     @classmethod
-    def mutate(
-        cls, root: None, info: ResolveInfo, input: UpdateCreateEpisodeMutationInput
-    ):
+    def mutate(cls, root: None, info: ResolveInfo, input: UpdateEpisodeMutationInput):
         try:
             retrieved_object = cls.get_or_create_object(info, input)
         except ObjectDoesNotExist as e:
