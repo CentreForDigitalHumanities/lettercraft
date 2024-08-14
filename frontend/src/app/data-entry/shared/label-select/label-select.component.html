@@ -7,7 +7,7 @@
         >
             <span class="ms-1">{{ label.label }}</span>
             <button
-                class="btn btn-sm btn-primary"
+                class="btn btn-sm btn-primary py-0 px-1 ms-1"
                 type="button"
                 [attr.aria-label]="'remove ' + label.label"
                 (click)="removeLabel(label.value)"
@@ -27,6 +27,7 @@
         id="label-select"
         [options]="options"
         [formControl]="control"
-        placeholderEmpty="Select a label from the list below."
+        [showSelected]="true"
+        placeholderEmpty="Select a label"
     />
 </form>

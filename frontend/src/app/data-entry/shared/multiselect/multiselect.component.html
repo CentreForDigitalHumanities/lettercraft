@@ -1,27 +1,31 @@
-<select
-    *ngIf="visibleOptions() as options"
-    class="form-select"
-    [title]="placeholderEmpty"
-    aria-multiselectable="true"
-    tabindex="0"
-    [disabled]="disabled"
->
-    <ng-container *ngIf="options.length > 0; else noOptions">
-        <option class="visually-hidden" [attr.aria-disabled]="true">
-            {{ placeholderEmpty }}
-        </option>
-    </ng-container>
-    <ng-template #noOptions>
-        <option class="visually-hidden" [attr.aria-disabled]="true">
-            {{ noAvailableOptions }}
-        </option>
-    </ng-template>
-    <option
-        *ngFor="let option of options; let i = index; trackBy: trackById"
-        (click)="selectOption(option)"
-        [attr.aria-selected]="selectedOptions().includes(option.value)"
-        tabindex="1"
+<div *ngIf="visibleOptions() as options" ngbDropdown>
+    <button
+        class="btn btn-primary"
+        id="labels-menu"
+        type="button"
+        ngbDropdownToggle
     >
-        <span>{{ option.label }}</span>
-    </option>
-</select>
+        {{ placeholderEmpty }}
+    </button>
+    <div aria-labelledby="labels-menu" ngbDropdownMenu>
+        <ng-container *ngIf="options.length > 0; else noOptions">
+            <button
+                *ngFor="
+                    let option of options;
+                    let i = index;
+                    trackBy: trackById
+                "
+                (click)="selectOption(option)"
+                [disabled]="selectedOptions().includes(option.value)"
+                ngbDropdownItem
+            >
+                {{ option.label }}
+            </button>
+        </ng-container>
+        <ng-template #noOptions>
+            <button ngbDropdownItem disabled>
+                {{ noAvailableOptions }}
+            </button>
+        </ng-template>
+    </div>
+</div>

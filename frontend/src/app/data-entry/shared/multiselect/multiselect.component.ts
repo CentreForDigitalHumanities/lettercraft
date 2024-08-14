@@ -1,5 +1,6 @@
-import { Component, forwardRef, Input, signal, computed } from "@angular/core";
+import { Component, forwardRef, Input, signal, computed, ViewChild, ElementRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+import { NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 
 export interface MultiselectOption {
     value: string;
@@ -26,6 +27,7 @@ export class MultiselectComponent implements ControlValueAccessor {
     // A placeholder to be shown when nothing has been selected.
     @Input() placeholderEmpty = "Select an option from the list below...";
     @Input() noAvailableOptions = "No options available";
+    @ViewChild(NgbDropdownToggle) toggler: NgbDropdownToggle | null = null;
 
     public selectedOptions = signal<string[]>([]);
     public disabled = false;
@@ -54,6 +56,8 @@ export class MultiselectComponent implements ControlValueAccessor {
         // Propagate change to parent component.
         this.onChange?.(selectedIds);
         this.onTouched?.();
+        // Keeps the focus on the toggler after selecting an option.
+        this.toggler?.nativeElement.focus();
     }
 
     public trackById(_index: number, option: MultiselectOption): string {
