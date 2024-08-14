@@ -765,7 +765,7 @@ export type UpdateEpisodeMutationInput = {
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
   designators?: InputMaybe<Array<Scalars['String']['input']>>;
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
   summary?: InputMaybe<Scalars['String']['input']>;

@@ -7,7 +7,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
 class UpdateEpisodeMutationInput(InputObjectType):
-    id = ID()
+    id = ID(required=True)
     name = String()
     book = String()
     chapter = String()

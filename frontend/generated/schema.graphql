@@ -820,7 +820,7 @@ input UpdateEpisodeMutationInput {
   categories: [ID!]
   chapter: String
   designators: [String!]
-  id: ID
+  id: ID!
   name: String
   page: String
   summary: String
