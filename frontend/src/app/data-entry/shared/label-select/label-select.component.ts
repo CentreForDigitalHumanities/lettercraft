@@ -56,9 +56,9 @@ export class LabelSelectComponent implements ControlValueAccessor {
 
     public setDisabledState?(isDisabled: boolean): void {
         if (isDisabled) {
-            this.control.enable();
-        } else {
             this.control.disable();
+        } else {
+            this.control.enable();
         }
     }
 }
