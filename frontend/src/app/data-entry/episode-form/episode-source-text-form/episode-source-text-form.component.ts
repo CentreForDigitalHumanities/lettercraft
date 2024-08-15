@@ -43,7 +43,7 @@ export class EpisodeSourceTextFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     ngOnInit(): void {
@@ -63,7 +63,7 @@ export class EpisodeSourceTextFormComponent implements OnInit {
                 debounceTime(300),
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
-                    this.episodeMutation.mutate({
+                    this.updateEpisode.mutate({
                         input: {
                             id,
                             ...episode,

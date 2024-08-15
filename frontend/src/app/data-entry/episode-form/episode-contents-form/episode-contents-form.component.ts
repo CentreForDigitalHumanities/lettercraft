@@ -45,7 +45,7 @@ export class EpisodeContentsFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeContentsGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     ngOnInit(): void {
@@ -68,7 +68,7 @@ export class EpisodeContentsFormComponent implements OnInit {
                 debounceTime(300),
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
-                    this.episodeMutation.mutate({
+                    this.updateEpisode.mutate({
                         input: {
                             id,
                             ...episode,

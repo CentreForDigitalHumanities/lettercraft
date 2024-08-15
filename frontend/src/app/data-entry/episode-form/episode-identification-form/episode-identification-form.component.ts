@@ -43,7 +43,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     public ngOnInit(): void {
@@ -63,7 +63,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 debounceTime(300),
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
-                    this.episodeMutation
+                    this.updateEpisode
                         .mutate({
                             input: {
                                 id,
