@@ -1,8 +1,9 @@
-import { Component, inject, Input, OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, Input, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import {  } from "generated/graphql";
-
+import { ToastService } from "@services/toast.service";
+import { DataEntryCreateEpisodeGQL } from "generated/graphql";
 
 @Component({
     selector: "lc-new-episode-modal",
@@ -24,7 +25,11 @@ export class NewEpisodeModalComponent implements OnInit {
         }),
     });
 
-    constructor(private createEpisode: DataEntryCreateEpisodeGQL) { }
+    constructor(
+        private destroyRef: DestroyRef,
+        private toastService: ToastService,
+        private updateEpisode: DataEntryCreateEpisodeGQL
+    ) {}
 
     ngOnInit(): void {
         if (this.sourceId) {
@@ -33,6 +38,27 @@ export class NewEpisodeModalComponent implements OnInit {
     }
 
     public submit(): void {
-        this.activeModal.close("create episode");
+        if (this.form.invalid) {
+            return;
+        }
+        this.updateEpisode
+            .mutate({
+                input: {
+                    ...this.form.getRawValue(),
+                },
+            })
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result) => {
+                const errors = result.data?.createEpisode?.errors;
+                if (errors && errors.length > 0) {
+                    this.toastService.show({
+                        body: errors.map((error) => error.messages).join("\n"),
+                        type: "danger",
+                        header: "Update failed",
+                    });
+                    return;
+                }
+                this.activeModal.close("create episode");
+            });
     }
 }

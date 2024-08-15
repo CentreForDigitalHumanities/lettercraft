@@ -18,8 +18,8 @@
 <div class="mb-4" *ngIf="source$ | async as source">
     <lc-episode-preview *ngFor="let episode of source.episodes" [episode]="episode" />
 </div>
-<div class="btn-group mb-4">
-    <button class="btn btn-primary" (click)="openNewEpisodeModal()">
+<div class="btn-group mb-4" *ngIf="source$ | async as source">
+    <button class="btn btn-primary" (click)="openNewEpisodeModal(source.id)">
         <lc-icon [icon]="actionIcons.create" />
         Add a new episode
     </button>

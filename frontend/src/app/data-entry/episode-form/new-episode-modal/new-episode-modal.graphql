@@ -1,7 +1,9 @@
-mutation DataEntryCreateEpisode(input: CreateEpisodeMutationInput!) {
-    ok
-    errors {
-        field
-        messages
+mutation DataEntryCreateEpisode($input: CreateEpisodeMutationInput!) {
+    createEpisode(input: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
     }
 }

@@ -33,4 +33,4 @@ class CreateEpisodeMutation(LettercraftMutation):
             source=source,
         )
 
-        return cls(ok=True)  # type: ignore
+        return cls(ok=True, errors=[])  # type: ignore

@@ -70,6 +70,16 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+type CreateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input CreateEpisodeMutationInput {
+  name: String!
+  source: ID!
+}
+
 type EpisodeCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -326,6 +336,7 @@ type LettercraftErrorType {
 }
 
 type Mutation {
+  createEpisode(input: CreateEpisodeMutationInput!): CreateEpisodeMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }

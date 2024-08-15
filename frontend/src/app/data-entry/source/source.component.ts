@@ -51,7 +51,8 @@ export class SourceComponent {
         private sourceDetailQuery: DataEntrySourceDetailGQL
     ) {}
 
-    public openNewEpisodeModal(): void {
+    public openNewEpisodeModal(sourceId: string): void {
         const modal = this.modalService.open(NewEpisodeModalComponent);
+        modal.componentInstance.sourceId = sourceId;
     }
 }
