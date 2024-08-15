@@ -1,0 +1,7 @@
+mutation DataEntryCreateEpisode(input: CreateEpisodeMutationInput!) {
+    ok
+    errors {
+        field
+        messages
+    }
+}

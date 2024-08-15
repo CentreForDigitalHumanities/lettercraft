@@ -1,9 +1,11 @@
 import { Component, computed } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntrySourceDetailGQL } from "generated/graphql";
 import { map, shareReplay, switchMap } from "rxjs";
+import { NewEpisodeModalComponent } from "../episode-form/new-episode-modal/new-episode-modal.component";
 
 @Component({
     selector: "lc-source",
@@ -45,6 +47,11 @@ export class SourceComponent {
 
     constructor(
         private route: ActivatedRoute,
+        private modalService: NgbModal,
         private sourceDetailQuery: DataEntrySourceDetailGQL
     ) {}
+
+    public openNewEpisodeModal(): void {
+        const modal = this.modalService.open(NewEpisodeModalComponent);
+    }
 }
