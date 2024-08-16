@@ -1,6 +1,7 @@
 from graphene import ObjectType, Schema
 
 from event.mutations.CreateEpisodeMutation import CreateEpisodeMutation
+from event.mutations.DeleteEpisodeMutation import DeleteEpisodeMutation
 from event.queries import EventQueries
 from letter.queries import LetterQueries
 from person.queries import PersonQueries
@@ -20,6 +21,7 @@ class Mutation(ObjectType):
     update_or_create_source = UpdateOrCreateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
     create_episode = CreateEpisodeMutation.Field()
+    delete_episode = DeleteEpisodeMutation.Field()
 
 
 schema = Schema(query=Query, mutation=Mutation)

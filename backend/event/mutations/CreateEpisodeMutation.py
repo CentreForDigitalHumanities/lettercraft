@@ -1,6 +1,15 @@
-from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, String
+from graphene import (
+    ID,
+    Field,
+    InputObjectType,
+    List,
+    NonNull,
+    ResolveInfo,
+    String,
+)
 
 from event.models import Episode
+from event.types.EpisodeType import EpisodeType
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
@@ -12,7 +21,7 @@ class CreateEpisodeMutationInput(InputObjectType):
 
 
 class CreateEpisodeMutation(LettercraftMutation):
-    ok = Boolean(required=True)
+    episode = Field(EpisodeType)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     django_model = Episode
@@ -26,11 +35,11 @@ class CreateEpisodeMutation(LettercraftMutation):
             source = Source.objects.get(id=getattr(input, "source"))
         except Source.DoesNotExist:
             error = LettercraftErrorType(field="source", messages=["Source not found."])
-            return cls(ok=False, errors=[error])  # type: ignore
+            return cls(errors=[error])  # type: ignore
 
-        Episode.objects.create(
+        episode = Episode.objects.create(
             name=getattr(input, "name"),
             source=source,
         )
 
-        return cls(ok=True, errors=[])  # type: ignore
+        return cls(episode=episode, errors=[])  # type: ignore
