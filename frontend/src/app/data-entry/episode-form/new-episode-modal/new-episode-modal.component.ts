@@ -45,7 +45,8 @@ export class NewEpisodeModalComponent implements OnInit {
         }
         const input = this.form.getRawValue();
         this.updateEpisode
-            .mutate({ input },
+            .mutate(
+                { input },
                 {
                     update: (cache) =>
                         cache.evict({
