@@ -38,7 +38,7 @@ export class EpisodeFormComponent {
                 },
                 {
                     label: episode.source.name,
-                    link: `/sources/${episode.source.id}`,
+                    link: `/data-entry/sources/${episode.source.id}`,
                 },
                 {
                     label: episode.name,
