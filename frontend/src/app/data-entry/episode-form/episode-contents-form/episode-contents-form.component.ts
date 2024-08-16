@@ -68,12 +68,14 @@ export class EpisodeContentsFormComponent implements OnInit {
                 debounceTime(300),
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
-                    this.updateEpisode.mutate({
-                        input: {
-                            id,
-                            ...episode,
-                        },
-                    })
+                    this.updateEpisode
+                        .mutate({
+                            input: {
+                                id,
+                                ...episode,
+                            },
+                        })
+                        .pipe(takeUntilDestroyed(this.destroyRef))
                 )
             )
             .subscribe((result) => {
