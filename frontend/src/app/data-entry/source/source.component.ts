@@ -5,6 +5,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntrySourceDetailGQL,
+    EpisodeType,
 } from "generated/graphql";
 import { map, shareReplay, switchMap } from "rxjs";
 import { NewEpisodeModalComponent } from "../episode-form/new-episode-modal/new-episode-modal.component";
@@ -26,7 +27,7 @@ export class SourceComponent {
         },
         {
             label: this.sourceTitle(),
-            link: "/data-entry/source/" + this.route.snapshot.params["id"],
+            link: "/data-entry/sources/" + this.route.snapshot.params["id"],
         },
     ]);
 
@@ -63,4 +64,9 @@ export class SourceComponent {
             }
         });
     }
+
+    public identify(_index: number, item: Pick<EpisodeType, "id">): string {
+        return item.id;
+    }
+
 }

@@ -16,7 +16,7 @@
 </p>
 
 <div class="mb-4" *ngIf="source$ | async as source">
-    <lc-episode-preview *ngFor="let episode of source.episodes" [episode]="episode" />
+    <lc-episode-preview *ngFor="let episode of source.episodes; trackBy: identify" [episode]="episode" />
 </div>
 <div class="btn-group mb-4" *ngIf="source$ | async as source">
     <button class="btn btn-primary" (click)="openNewEpisodeModal(source.id)">
