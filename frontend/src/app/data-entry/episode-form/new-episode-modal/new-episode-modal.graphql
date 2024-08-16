@@ -1,6 +1,8 @@
 mutation DataEntryCreateEpisode($input: CreateEpisodeMutationInput!) {
     createEpisode(input: $input) {
-        ok
+        episode {
+            id
+        }
         errors {
             field
             messages

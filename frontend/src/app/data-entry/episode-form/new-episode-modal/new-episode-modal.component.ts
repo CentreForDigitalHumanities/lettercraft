@@ -37,16 +37,22 @@ export class NewEpisodeModalComponent implements OnInit {
         }
     }
 
-    public submit(): void {
+    public submit(event: Event): void {
+        event.preventDefault();
+        event.stopPropagation();
         if (this.form.invalid) {
             return;
         }
+        const input = this.form.getRawValue();
         this.updateEpisode
-            .mutate({
-                input: {
-                    ...this.form.getRawValue(),
-                },
-            })
+            .mutate({ input },
+                {
+                    update: (cache) =>
+                        cache.evict({
+                            fieldName: "source",
+                        }),
+                }
+            )
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((result) => {
                 const errors = result.data?.createEpisode?.errors;
@@ -58,7 +64,14 @@ export class NewEpisodeModalComponent implements OnInit {
                     });
                     return;
                 }
-                this.activeModal.close("create episode");
+                this.toastService.show({
+                    body: "Episode created",
+                    type: "success",
+                    header: "Success",
+                });
+                this.activeModal.close({
+                    id: result.data?.createEpisode?.episode?.id ?? null,
+                });
             });
     }
 }

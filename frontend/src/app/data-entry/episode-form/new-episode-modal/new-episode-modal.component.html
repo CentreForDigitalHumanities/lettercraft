@@ -1,14 +1,14 @@
 <div class="modal-header">
-    <h4 class="modal-title">Hi there!</h4>
+    <h4>Create new episode</h4>
     <button
         type="button"
         class="btn-close"
         aria-label="Close"
-        (click)="activeModal.dismiss('cross click')"
+        (click)="activeModal.dismiss(null)"
     ></button>
 </div>
 <div class="modal-body">
-    <form>
+    <form [formGroup]="form" (ngSubmit)="submit($event)">
         <div class="form-group">
             <label class="form-label" for="episode-name">Name</label>
             <p class="form-text">
@@ -24,19 +24,20 @@
                 [class.is-invalid]="
                     form.controls.name.invalid && form.controls.name.touched
                 "
+                ngbAutofocus
             />
             <p class="invalid-feedback">This field is required.</p>
         </div>
     </form>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="submit()">
-        Save
+    <button type="button" class="btn btn-primary" (click)="submit($event)">
+        Create
     </button>
     <button
         type="button"
-        class="btn btn-outline-secondary"
-        (click)="activeModal.close('cancel click')"
+        class="btn btn-secondary"
+        (click)="activeModal.close()"
     >
         Cancel
     </button>
