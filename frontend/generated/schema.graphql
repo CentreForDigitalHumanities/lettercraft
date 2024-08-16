@@ -71,13 +71,18 @@ type AgentDescriptionType {
 }
 
 type CreateEpisodeMutation {
+  episode: EpisodeType
   errors: [LettercraftErrorType!]!
-  ok: Boolean!
 }
 
 input CreateEpisodeMutationInput {
   name: String!
   source: ID!
+}
+
+type DeleteEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type EpisodeCategoryType {
@@ -337,6 +342,7 @@ type LettercraftErrorType {
 
 type Mutation {
   createEpisode(input: CreateEpisodeMutationInput!): CreateEpisodeMutation
+  deleteEpisode(id: ID!): DeleteEpisodeMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
