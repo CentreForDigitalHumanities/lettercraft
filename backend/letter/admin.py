@@ -52,7 +52,8 @@ class PreservedLetterRoleAdmin(admin.StackedInline):
 @admin.register(models.PreservedLetter)
 class PreservedLetterAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
-    fields = ["name", "description"]
+    fields = ["name", "description", "contributors"]
+    filter_horizontal = ["contributors"]
     inlines = [
         PreservedLetterRoleAdmin,
     ]
