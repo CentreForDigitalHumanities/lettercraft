@@ -43,9 +43,10 @@ export const sourceFormTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceFormTitle);
 
 
-type AgentTitleQueryData = {
-    agentDescription?: { name: string, source: { name: string } }
-};
+type EntityDescriptionTitleQueryData<D extends string> =
+    Record<D, { name: string, source: { name: string } }>;
+
+type AgentTitleQueryData = EntityDescriptionTitleQueryData<'agentDescription'>;
 
 const agentTitleQuery = (params: Params) => gql<AgentTitleQueryData, unknown>(`
     query AgentTitleQuery {
@@ -66,9 +67,7 @@ const agentFormTitle = (data: AgentTitleQueryData) => {
 
 export const agentFormTitleResolver = queryTitleResolver(agentTitleQuery, agentFormTitle);
 
-type LetterTitleQueryData = {
-    letterDescription?: { name: string, source: { name: string } };
-};
+type LetterTitleQueryData = EntityDescriptionTitleQueryData<'letterDescription'>;
 
 const letterTitleQuery = (params: Params) => gql<LetterTitleQueryData, unknown>(`
     query LetterTitleQuery {
@@ -92,9 +91,7 @@ export const letterFormTitleResolver = queryTitleResolver(
     letterTitleQuery, letterFormTitle);
 
 
-type GiftTitleQueryData = {
-    giftDescription?: { name: string, source: { name: string } };
-};
+type GiftTitleQueryData = EntityDescriptionTitleQueryData<'giftDescription'>;
 
 const giftTitleQuery = (params: Params) => gql<GiftTitleQueryData, unknown>(`
     query GiftTitleQuery {
@@ -116,9 +113,7 @@ const giftFormTitle = (data: GiftTitleQueryData) => {
 
 export const giftFormTitleResolver = queryTitleResolver(giftTitleQuery, giftFormTitle);
 
-type SpaceTitleQueryData = {
-    spaceDescription?: { name: string, source: { name: string } };
-};
+type SpaceTitleQueryData = EntityDescriptionTitleQueryData<'spaceDescription'>;
 
 const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
     query SpaceTitleQuery {
