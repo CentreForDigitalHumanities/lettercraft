@@ -800,6 +800,31 @@ export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SourceTitleQueryQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string } };
+
+export type AgentTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AgentTitleQueryQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type LetterTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LetterTitleQueryQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type GiftTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GiftTitleQueryQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type SpaceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SpaceTitleQueryQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
 export const DataEntryAgentDocument = gql`
     query DataEntryAgent($id: ID!) {
   agentDescription(id: $id) {
@@ -969,6 +994,117 @@ export const DataEntrySourceListDocument = gql`
   })
   export class DataEntrySourceListGQL extends Apollo.Query<DataEntrySourceListQuery, DataEntrySourceListQueryVariables> {
     override document = DataEntrySourceListDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SourceTitleQueryDocument = gql`
+    query SourceTitleQuery {
+  source(id: "") {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SourceTitleQueryGQL extends Apollo.Query<SourceTitleQueryQuery, SourceTitleQueryQueryVariables> {
+    override document = SourceTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const AgentTitleQueryDocument = gql`
+    query AgentTitleQuery {
+  agentDescription(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class AgentTitleQueryGQL extends Apollo.Query<AgentTitleQueryQuery, AgentTitleQueryQueryVariables> {
+    override document = AgentTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LetterTitleQueryDocument = gql`
+    query LetterTitleQuery {
+  letterDescription(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LetterTitleQueryGQL extends Apollo.Query<LetterTitleQueryQuery, LetterTitleQueryQueryVariables> {
+    override document = LetterTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GiftTitleQueryDocument = gql`
+    query GiftTitleQuery {
+  giftDescription(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GiftTitleQueryGQL extends Apollo.Query<GiftTitleQueryQuery, GiftTitleQueryQueryVariables> {
+    override document = GiftTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const SpaceTitleQueryDocument = gql`
+    query SpaceTitleQuery {
+  spaceDescription(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SpaceTitleQueryGQL extends Apollo.Query<SpaceTitleQueryQuery, SpaceTitleQueryQueryVariables> {
+    override document = SpaceTitleQueryDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

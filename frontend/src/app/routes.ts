@@ -14,9 +14,10 @@ import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
 import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
 import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
 import { SourceComponent } from './data-entry/source/source.component';
-
-const SITE_NAME = 'Lettercraft & Epistolary Performance in Medieval Europe';
-const pageTitle = (name: string) => `${name} - ${SITE_NAME}`
+import {
+    agentFormTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
+    SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
+} from './titles';
 
 const routes: Routes = [
     {
@@ -60,32 +61,32 @@ const routes: Routes = [
         children: [
             {
                 path: 'agents/:id',
-                title: pageTitle('Edit agent'),
+                title: agentFormTitleResolver,
                 component: AgentFormComponent,
             },
             {
                 path: 'gifts/:id',
-                title: pageTitle('Edit gift'),
+                title: giftFormTitleResolver,
                 component: GiftFormComponent,
             },
             {
                 path: 'letters/:id',
-                title: pageTitle('Edit letter'),
+                title: letterFormTitleResolver,
                 component: LetterFormComponent,
             },
             {
                 path: 'locations/:id',
-                title: pageTitle('Edit location'),
+                title: spaceFormTitleResolver,
                 component: LocationFormComponent,
             },
             {
                 path: 'sources',
-                title: pageTitle('Sources'),
+                title: pageTitle('Data entry'),
                 component: SourcesComponent
             },
             {
                 path: 'sources/:id',
-                title: pageTitle('View source'),
+                title: sourceFormTitleResolver,
                 component: SourceComponent
             },
             {
