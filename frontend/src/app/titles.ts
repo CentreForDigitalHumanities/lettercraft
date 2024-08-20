@@ -2,6 +2,7 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Params, ResolveFn } from "@angular/router";
 import { Apollo, gql, TypedDocumentNode } from "apollo-angular";
 import { map } from "rxjs";
+import _ from "underscore";
 
 export const SITE_NAME = 'Lettercraft & Epistolary Performance in Medieval Europe';
 export const pageTitle = (name: string) => `${name} - ${SITE_NAME}`;
@@ -42,9 +43,8 @@ const sourceFormTitle = (data: SourceTitleQueryData) => `Edit ${data.source?.nam
 export const sourceFormTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceFormTitle);
 
-
-type EntityDescriptionTitleQueryData<D extends string> =
-    Record<D, { name: string, source: { name: string } }>;
+type EntityDescriptionTitleQueryData<Key extends string> =
+    Record<Key, { name: string, source: { name: string } }>;
 
 type AgentTitleQueryData = EntityDescriptionTitleQueryData<'agentDescription'>;
 
@@ -53,19 +53,24 @@ const agentTitleQuery = (params: Params) => gql<AgentTitleQueryData, unknown>(`
         agentDescription(id: "${params['id']}") {
             id
             name
-            source {
-                id
-                name
-            }
+            source { id, name }
         }
 }`);
 
-const agentFormTitle = (data: AgentTitleQueryData) => {
-    const agent = data.agentDescription;
-    return `Edit ${agent?.name} (${agent?.source?.name})`
-};
+const entityDescriptionFormTitle = <Key extends string>(
+    data: EntityDescriptionTitleQueryData<Key>
+) => {
+    const key = _.first(_.keys(data)) as Key;
+    const entity = data[key];
+    if (entity) {
+        return `Edit ${entity.name} (${entity.source.name})`;
+    } else {
+        return 'Not found';
+    }
+}
 
-export const agentFormTitleResolver = queryTitleResolver(agentTitleQuery, agentFormTitle);
+export const agentFormTitleResolver = queryTitleResolver(
+    agentTitleQuery, entityDescriptionFormTitle);
 
 type LetterTitleQueryData = EntityDescriptionTitleQueryData<'letterDescription'>;
 
@@ -74,21 +79,14 @@ const letterTitleQuery = (params: Params) => gql<LetterTitleQueryData, unknown>(
         letterDescription(id: "${params['id']}") {
             id
             name
-            source {
-                id
-                name
-            }
+            source { id, name }
         }
     }
 `);
 
-const letterFormTitle = (data: LetterTitleQueryData) => {
-    const gift = data.letterDescription;
-    return `Edit ${gift?.name} (${gift?.source.name})`;
-}
 
 export const letterFormTitleResolver = queryTitleResolver(
-    letterTitleQuery, letterFormTitle);
+    letterTitleQuery, entityDescriptionFormTitle);
 
 
 type GiftTitleQueryData = EntityDescriptionTitleQueryData<'giftDescription'>;
@@ -98,20 +96,14 @@ const giftTitleQuery = (params: Params) => gql<GiftTitleQueryData, unknown>(`
         giftDescription(id: "${params['id']}") {
             id
             name
-            source {
-                id
-                name
-            }
+            source { id, name }
         }
     }
 `);
 
-const giftFormTitle = (data: GiftTitleQueryData) => {
-    const gift = data.giftDescription;
-    return `Edit ${gift?.name} (${gift?.source.name})`;
-}
 
-export const giftFormTitleResolver = queryTitleResolver(giftTitleQuery, giftFormTitle);
+export const giftFormTitleResolver = queryTitleResolver(
+    giftTitleQuery, entityDescriptionFormTitle);
 
 type SpaceTitleQueryData = EntityDescriptionTitleQueryData<'spaceDescription'>;
 
@@ -120,17 +112,10 @@ const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
         spaceDescription(id: "${params['id']}") {
             id
             name
-            source {
-                id
-                name
-            }
+            source { id, name }
         }
     }
 `);
 
-const spaceFormTitle = (data: SpaceTitleQueryData) => {
-    const gift = data.spaceDescription;
-    return `Edit ${gift?.name} (${gift?.source.name})`;
-}
-
-export const spaceFormTitleResolver = queryTitleResolver(spaceTitleQuery, spaceFormTitle);
+export const spaceFormTitleResolver = queryTitleResolver(
+    spaceTitleQuery, entityDescriptionFormTitle);
