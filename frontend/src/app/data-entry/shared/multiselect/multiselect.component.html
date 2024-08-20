@@ -1,0 +1,31 @@
+<div *ngIf="visibleOptions() as options" ngbDropdown>
+    <button
+        class="btn btn-primary"
+        id="labels-menu"
+        type="button"
+        ngbDropdownToggle
+    >
+        {{ placeholderEmpty }}
+    </button>
+    <div aria-labelledby="labels-menu" ngbDropdownMenu>
+        <ng-container *ngIf="options.length > 0; else noOptions">
+            <button
+                *ngFor="
+                    let option of options;
+                    let i = index;
+                    trackBy: trackById
+                "
+                (click)="selectOption(option)"
+                [disabled]="selectedOptions().includes(option.value)"
+                ngbDropdownItem
+            >
+                {{ option.label }}
+            </button>
+        </ng-container>
+        <ng-template #noOptions>
+            <button ngbDropdownItem disabled>
+                {{ noAvailableOptions }}
+            </button>
+        </ng-template>
+    </div>
+</div>
