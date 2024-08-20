@@ -71,12 +71,22 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+type EpisodeCategoryType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+}
+
 type EpisodeType {
   """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
   """The book in the source"""
   book: String!
+  categories: [EpisodeCategoryType!]!
 
   """The chapter or chapters in the source"""
   chapter: String!
@@ -312,7 +322,16 @@ enum LetterLetterDescriptionSourceMentionChoices {
   IMPLIED
 }
 
+"""
+A simple wrapper around Graphene-Django's ErrorType with a constructor.
+"""
+type LettercraftErrorType {
+  field: String!
+  messages: [String!]!
+}
+
 type Mutation {
+  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
@@ -803,6 +822,22 @@ input UpdateCreateSourceInput {
   medievalAuthor: String
   medievalTitle: String
   name: String!
+}
+
+type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateEpisodeMutationInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  designators: [String!]
+  id: ID!
+  name: String
+  page: String
+  summary: String
 }
 
 type UpdateOrCreateSourceMutation {

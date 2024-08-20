@@ -12,7 +12,7 @@
                 </small>
             </div>
             <lc-action-button-group
-                [editLink]="['episode', episode.id]"
+                [editLink]="['/', 'data-entry', 'episodes', episode.id]"
                 (delete)="deleteEpisode(episode.id)"
                 [showButtonText]="false"
             />

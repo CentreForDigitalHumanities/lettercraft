@@ -73,12 +73,22 @@ export type AgentDescriptionType = {
   sourceMention?: Maybe<PersonAgentDescriptionSourceMentionChoices>;
 };
 
+export type EpisodeCategoryType = {
+  __typename?: 'EpisodeCategoryType';
+  /** Longer description to help identify this object */
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  /** A name to help identify this object */
+  name: Scalars['String']['output'];
+};
+
 export type EpisodeType = {
   __typename?: 'EpisodeType';
   /** agents involved in this episode */
   agents: Array<AgentDescriptionType>;
   /** The book in the source */
   book: Scalars['String']['output'];
+  categories: Array<EpisodeCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
@@ -269,9 +279,22 @@ export enum LetterLetterDescriptionSourceMentionChoices {
   Implied = 'IMPLIED'
 }
 
+/** A simple wrapper around Graphene-Django's ErrorType with a constructor. */
+export type LettercraftErrorType = {
+  __typename?: 'LettercraftErrorType';
+  field: Scalars['String']['output'];
+  messages: Array<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+};
+
+
+export type MutationUpdateEpisodeArgs = {
+  input: UpdateEpisodeMutationInput;
 };
 
 
@@ -747,6 +770,23 @@ export type UpdateCreateSourceInput = {
   name: Scalars['String']['input'];
 };
 
+export type UpdateEpisodeMutation = {
+  __typename?: 'UpdateEpisodeMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type UpdateEpisodeMutationInput = {
+  book?: InputMaybe<Scalars['String']['input']>;
+  categories?: InputMaybe<Array<Scalars['ID']['input']>>;
+  chapter?: InputMaybe<Scalars['String']['input']>;
+  designators?: InputMaybe<Array<Scalars['String']['input']>>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+  summary?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -766,6 +806,41 @@ export type DataEntryAgentQueryVariables = Exact<{
 
 
 export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryEpisodeContentsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
+
+export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string } | null };
+
+export type DataEntryEpisodeSourceTextMentionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeSourceTextMentionQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+
+export type DataEntryEpisodeFormQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryUpdateEpisodeMutationVariables = Exact<{
+  input: UpdateEpisodeMutationInput;
+}>;
+
+
+export type DataEntryUpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode?: { __typename?: 'UpdateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -819,6 +894,115 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeContentsDocument = gql`
+    query DataEntryEpisodeContents($id: ID!) {
+  episode(id: $id) {
+    id
+    summary
+    categories {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeContentsGQL extends Apollo.Query<DataEntryEpisodeContentsQuery, DataEntryEpisodeContentsQueryVariables> {
+    override document = DataEntryEpisodeContentsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeIdentificationDocument = gql`
+    query DataEntryEpisodeIdentification($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeIdentificationGQL extends Apollo.Query<DataEntryEpisodeIdentificationQuery, DataEntryEpisodeIdentificationQueryVariables> {
+    override document = DataEntryEpisodeIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeSourceTextMentionDocument = gql`
+    query DataEntryEpisodeSourceTextMention($id: ID!) {
+  episode(id: $id) {
+    id
+    designators
+    book
+    chapter
+    page
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeSourceTextMentionGQL extends Apollo.Query<DataEntryEpisodeSourceTextMentionQuery, DataEntryEpisodeSourceTextMentionQueryVariables> {
+    override document = DataEntryEpisodeSourceTextMentionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeFormDocument = gql`
+    query DataEntryEpisodeForm($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeFormGQL extends Apollo.Query<DataEntryEpisodeFormQuery, DataEntryEpisodeFormQueryVariables> {
+    override document = DataEntryEpisodeFormDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryUpdateEpisodeDocument = gql`
+    mutation DataEntryUpdateEpisode($input: UpdateEpisodeMutationInput!) {
+  updateEpisode(input: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
+    override document = DataEntryUpdateEpisodeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

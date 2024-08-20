@@ -14,6 +14,7 @@ import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
 import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
 import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
 import { SourceComponent } from './data-entry/source/source.component';
+import { EpisodeFormComponent } from './data-entry/episode-form/episode-form.component';
 
 
 const routes: Routes = [
@@ -72,6 +73,10 @@ const routes: Routes = [
             {
                 path: 'sources/:id',
                 component: SourceComponent
+            },
+            {
+                path: 'episodes/:id',
+                component: EpisodeFormComponent,
             },
             {
                 path: '',
