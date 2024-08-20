@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.postgres.fields import ArrayField
 
+from user.models import User
+
 
 class Field(models.Model):
     """
@@ -105,6 +107,12 @@ class HistoricalEntity(Named, models.Model):
         help_text="Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description",
     )
 
+    contributors = models.ManyToManyField(
+        to=User,
+        blank=True,
+        help_text="Users who contributed to this entry",
+    )
+
     class Meta:
         abstract = True
 
@@ -160,6 +168,12 @@ class EntityDescription(Named, models.Model):
         max_length=255,
         blank=True,
         help_text="The page number or page range in the source",
+    )
+
+    contributors = models.ManyToManyField(
+        to=User,
+        blank=True,
+        help_text="Users who contributed to this entry",
     )
 
     class Meta:

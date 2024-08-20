@@ -40,6 +40,7 @@ type AgentDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
   describes: [HistoricalPersonType]
 
   """Longer description to help identify this object"""
@@ -70,15 +71,26 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+type EpisodeCategoryType {
+  """Longer description to help identify this object"""
+  description: String!
+  id: ID!
+
+  """A name to help identify this object"""
+  name: String!
+}
+
 type EpisodeType {
   """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
   """The book in the source"""
   book: String!
+  categories: [EpisodeCategoryType!]!
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -155,6 +167,7 @@ type GiftDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -179,6 +192,7 @@ type GiftDescriptionType {
 }
 
 type HistoricalPersonType {
+  contributors: [UserType!]!
   dateOfBirth: PersonDateOfBirthType
   dateOfDeath: PersonDateOfDeathType
 
@@ -224,6 +238,7 @@ type LetterDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -307,7 +322,16 @@ enum LetterLetterDescriptionSourceMentionChoices {
   IMPLIED
 }
 
+"""
+A simple wrapper around Graphene-Django's ErrorType with a constructor.
+"""
+type LettercraftErrorType {
+  field: String!
+  messages: [String!]!
+}
+
 type Mutation {
+  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
@@ -488,6 +512,8 @@ type Query {
   sources: [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  userDescription(id: ID!): UserType
+  userDescriptions: [UserType!]!
 }
 
 type RegionFieldType {
@@ -505,6 +531,8 @@ type RegionFieldType {
 }
 
 type RegionType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -536,6 +564,8 @@ type SettlementFieldType {
 }
 
 type SettlementType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -619,6 +649,7 @@ type SpaceDescriptionType {
 
   """The chapter or chapters in the source"""
   chapter: String!
+  contributors: [UserType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -765,6 +796,8 @@ type StructureFieldType {
 }
 
 type StructureType {
+  contributors: [UserType!]!
+
   """Longer description to help identify this object"""
   description: String!
   id: ID!
@@ -791,7 +824,29 @@ input UpdateCreateSourceInput {
   name: String!
 }
 
+type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateEpisodeMutationInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  designators: [String!]
+  id: ID!
+  name: String
+  page: String
+  summary: String
+}
+
 type UpdateOrCreateSourceMutation {
   errors: [String]
   source: SourceType
+}
+
+type UserType {
+  firstName: String!
+  id: ID!
+  lastName: String!
 }

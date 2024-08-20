@@ -20,8 +20,11 @@ class PersonDateOfDeathAdmin(admin.StackedInline):
 class HistoricalPersonAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     search_fields = ["name", "description"]
+    filter_horizontal = ["contributors"]
+    list_filter = ["contributors"]
     fieldsets = [
         core_admin.named_fieldset,
+        core_admin.contributions_fieldset,
     ]
     inlines = [
         PersonDateOfBirthAdmin,
