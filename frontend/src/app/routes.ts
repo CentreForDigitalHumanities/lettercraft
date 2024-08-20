@@ -15,34 +15,43 @@ import { LetterFormComponent } from './data-entry/letter-form/letter-form.compon
 import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
 import { SourceComponent } from './data-entry/source/source.component';
 
+const SITE_NAME = 'Lettercraft & Epistolary Performance in Medieval Europe';
+const pageTitle = (name: string) => `${name} - ${SITE_NAME}`
 
 const routes: Routes = [
     {
         path: 'home',
+        title: SITE_NAME,
         component: HomeComponent,
     },
     {
         path: 'login',
+        title: pageTitle('Sign in'),
         component: LoginComponent,
     },
     {
         path: 'register',
+        title: pageTitle('Registration'),
         component: RegisterComponent,
     },
     {
         path: 'confirm-email/:key',
+        title: pageTitle('Confirm email'),
         component: VerifyEmailComponent,
     },
     {
         path: 'password-forgotten',
+        title: pageTitle('Forgot password'),
         component: PasswordForgottenComponent
     },
     {
         path: 'reset-password/:uid/:token',
+        title: pageTitle('Reset password'),
         component: ResetPasswordComponent
     },
     {
         path: 'user-settings',
+        title: pageTitle('Settings'),
         component: UserSettingsComponent
     },
     {
@@ -51,26 +60,32 @@ const routes: Routes = [
         children: [
             {
                 path: 'agents/:id',
+                title: pageTitle('Edit agent'),
                 component: AgentFormComponent,
             },
             {
                 path: 'gifts/:id',
+                title: pageTitle('Edit gift'),
                 component: GiftFormComponent,
             },
             {
                 path: 'letters/:id',
+                title: pageTitle('Edit letter'),
                 component: LetterFormComponent,
             },
             {
                 path: 'locations/:id',
+                title: pageTitle('Edit location'),
                 component: LocationFormComponent,
             },
             {
                 path: 'sources',
+                title: pageTitle('Sources'),
                 component: SourcesComponent
             },
             {
                 path: 'sources/:id',
+                title: pageTitle('View source'),
                 component: SourceComponent
             },
             {
