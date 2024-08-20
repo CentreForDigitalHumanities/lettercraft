@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery } from 'generated/graphql';
 import { map, Subject, switchMap } from 'rxjs';
@@ -23,6 +24,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
+            takeUntilDestroyed(),
         ).subscribe(this.updateFormData.bind(this));
     }
 

@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
     DataEntryAgentDescriptionGQL,
@@ -52,7 +53,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
             sourceMention: new FormControl<string>(LocationSourceMentionChoices.Direct),
             note: new FormControl<string>(''),
         })
-    })
+    });
 
     isGroup$: Observable<boolean>;
     locations$: Observable<LocationsInSourceListQuery>;
@@ -67,6 +68,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
+            takeUntilDestroyed(),
             shareReplay(1),
         );
         this.isGroup$ = this.data$.pipe(
