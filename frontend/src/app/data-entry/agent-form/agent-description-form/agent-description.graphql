@@ -1,0 +1,24 @@
+query DataEntryAgentDescription($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    isGroup
+    designators
+    gender {
+      id
+      gender
+      sourceMention
+      note
+    }
+    location {
+        id
+        sourceMention
+        note
+        location {
+            id
+        }
+    }
+    source {
+        id
+    }
+  }
+}

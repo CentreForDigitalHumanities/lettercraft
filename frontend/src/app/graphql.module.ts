@@ -5,20 +5,21 @@ import { ApolloClientOptions, InMemoryCache } from '@apollo/client/core';
 import { environment } from '@env';
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
-  return {
-    link: httpLink.create({ uri: environment.graphqlUrl }),
-    cache: new InMemoryCache(),
-  };
+    return {
+        link: httpLink.create({ uri: environment.graphqlUrl }),
+        cache: new InMemoryCache(),
+        connectToDevTools: false,
+    };
 }
 
 @NgModule({
-  exports: [ApolloModule],
-  providers: [
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory: createApollo,
-      deps: [HttpLink],
-    },
-  ],
+    exports: [ApolloModule],
+    providers: [
+        {
+            provide: APOLLO_OPTIONS,
+            useFactory: createApollo,
+            deps: [HttpLink],
+        },
+    ],
 })
-export class GraphQLModule {}
+export class GraphQLModule { }
