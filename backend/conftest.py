@@ -83,12 +83,12 @@ def agent_description(db, historical_person, source):
 
 
 @pytest.fixture()
-def agent_description_2(db, historical_person, source):
+def agent_description_2(db, historical_person_2, source):
     agent = AgentDescription.objects.create(
         name="Ernie",
         source=source,
     )
-    agent.describes.add(historical_person)
+    agent.describes.add(historical_person_2)
     agent.save()
     return agent
 

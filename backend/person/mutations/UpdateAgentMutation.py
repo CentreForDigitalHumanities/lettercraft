@@ -15,9 +15,8 @@ from person.models import (
     AgentDescription,
     Gender,
     AgentDescriptionGender,
-    AgentDescriptionLocation,
 )
-from core.models import SourceMention, Certainty
+from core.models import SourceMention
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from django.core.exceptions import ObjectDoesNotExist
@@ -31,14 +30,8 @@ class UpdateAgentGenderInput(InputObjectType):
 
 
 class UpdateAgentLocationInput(InputObjectType):
-    location = Field(ID)
-    source_mention = Field(Enum.from_enum(SourceMention))
-    note = String()
-
-
-class UpdatePersonReferenceInput(InputObjectType):
-    person = Field(ID)
-    certainty = Field(Enum.from_enum(Certainty))
+    location = ID()
+    source_mention = Enum.from_enum(SourceMention)()
     note = String()
 
 
@@ -50,7 +43,6 @@ class UpdateAgentInput(InputObjectType):
     designators = List(String)
     gender = UpdateAgentGenderInput()
     location = UpdateAgentLocationInput()
-    person_references = List(NonNull(UpdatePersonReferenceInput))
 
 
 class UpdateAgentMutation(LettercraftMutation):
@@ -75,7 +67,10 @@ class UpdateAgentMutation(LettercraftMutation):
 
         try:
             cls.mutate_object(
-                agent_data, agent, info, excluded_fields=["gender", "location"]
+                agent_data,
+                agent,
+                info,
+                excluded_fields=["gender", "location"],
             )
             cls.handle_nested_fields(agent, agent_data, info)
 
@@ -96,9 +91,6 @@ class UpdateAgentMutation(LettercraftMutation):
     ):
         cls.mutate_nested_object(
             agent, agent_data, info, "gender", AgentDescriptionGender, "agent"
-        )
-        cls.mutate_nested_object(
-            agent, agent_data, info, "location", AgentDescriptionLocation, "agent"
         )
 
     @classmethod

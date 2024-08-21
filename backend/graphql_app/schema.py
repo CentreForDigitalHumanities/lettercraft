@@ -9,6 +9,9 @@ from user.queries import UserQueries
 from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
 from person.mutations.UpdateAgentMutation import UpdateAgentMutation
+from person.mutations.CreatePersonReferenceMutation import CreatePersonReferenceMutation
+from person.mutations.UpdatePersonReferenceMutation import UpdatePersonReferenceMutation
+from person.mutations.DeletePersonReferenceMutation import DeletePersonReferenceMutation
 
 
 class Query(
@@ -27,6 +30,9 @@ class Mutation(ObjectType):
     update_or_create_source = UpdateOrCreateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
     update_agent = UpdateAgentMutation.Field()
+    create_person_reference = CreatePersonReferenceMutation.Field()
+    update_person_reference = UpdatePersonReferenceMutation.Field()
+    delete_person_reference = DeletePersonReferenceMutation.Field()
 
 
 schema = Schema(query=Query, mutation=Mutation)
