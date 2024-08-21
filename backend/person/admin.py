@@ -1,4 +1,9 @@
+from typing import Any
 from django.contrib import admin
+from django.db.models.fields.related import RelatedField
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
+import re
 
 from . import models
 from core import admin as core_admin
@@ -41,6 +46,14 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
     model = models.AgentDescriptionLocation
     fields = ["location"] + core_admin.description_field_fields
     extra = 0
+
+    def get_field_queryset(
+        self, db, db_field: RelatedField, request: HttpRequest
+    ) -> QuerySet:
+        if db_field.name == "location":
+            core_admin.get_queryset_matching_parent_source(self, db_field, request)
+
+        return super().get_field_queryset(db, db_field, request)
 
 
 @admin.register(models.AgentDescription)

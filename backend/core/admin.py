@@ -1,4 +1,9 @@
 from django.contrib import admin
+from django.db.models.fields.related import RelatedField
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
+import re
+
 
 named_fieldset = (
     "Name and description",
@@ -37,3 +42,13 @@ class EntityDescriptionAdmin(admin.ModelAdmin):
         contributions_fieldset,
         description_source_fieldset,
     ]
+
+
+def get_queryset_matching_parent_source(
+    admin: admin.StackedInline | admin.TabularInline,
+    db_field: RelatedField,
+    request: HttpRequest,
+) -> QuerySet:
+    parent_id = re.search(f"\d+", request.path).group(0)
+    parent = admin.parent_model.objects.get(id=parent_id)
+    return db_field.remote_field.model.objects.filter(source=parent.source)
