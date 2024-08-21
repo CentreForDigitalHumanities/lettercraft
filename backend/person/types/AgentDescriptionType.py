@@ -43,4 +43,4 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     def resolve_person_references(
         parent: AgentDescription, info: ResolveInfo
     ) -> QuerySet[PersonReference]:
-        return PersonReference.objects.filter(person=parent)
+        return PersonReference.objects.filter(description=parent)
