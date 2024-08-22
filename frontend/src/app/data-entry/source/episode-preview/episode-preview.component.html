@@ -1,12 +1,12 @@
 <div class="card mb-4">
     <div class="card-header">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between align-items-center">
             <div>
                 <lc-icon [icon]="dataIcons.episode" />
                 &nbsp;
                 {{ episode.name }}
                 <br />
-                <small class="inline-list">
+                <small *ngIf="episode.book || episode.chapter" class="inline-list">
                     <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
                     <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
                 </small>
