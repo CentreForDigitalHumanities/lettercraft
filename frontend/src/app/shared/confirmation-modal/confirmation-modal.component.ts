@@ -10,8 +10,7 @@ export class ConfirmationModalComponent {
     @Input() public title = "Lettercraft";
     @Input() public message = "Are you sure you want to continue?";
 
-
-    constructor(private activeModal: NgbActiveModal) { }
+    constructor(private activeModal: NgbActiveModal) {}
 
     public confirm(): void {
         this.activeModal.close(true);
@@ -24,5 +23,4 @@ export class ConfirmationModalComponent {
     public dismiss(): void {
         this.activeModal.dismiss();
     }
-
 }

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { BaseModalComponent } from "./base-modal.component";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 describe("BaseModalComponent", () => {
     let component: BaseModalComponent;
@@ -10,7 +9,6 @@ describe("BaseModalComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [BaseModalComponent],
-            providers: [NgbActiveModal],
         });
         fixture = TestBed.createComponent(BaseModalComponent);
         component = fixture.componentInstance;
@@ -19,5 +17,18 @@ describe("BaseModalComponent", () => {
 
     it("should create", () => {
         expect(component).toBeTruthy();
+    });
+
+    it("should have a default title", () => {
+        expect(component.title).toBe("Lettercraft");
+    });
+
+    it("should emit dismiss event when dismissModal is called", () => {
+        let dismissEventEmitted = false;
+        component.dismiss.subscribe(() => {
+            dismissEventEmitted = true;
+        });
+        component.dismissModal();
+        expect(dismissEventEmitted).toBe(true);
     });
 });
