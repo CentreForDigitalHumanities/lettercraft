@@ -1,0 +1,24 @@
+<lc-base-modal>
+    <ng-container modal-header>
+        <h4 ngbAutoFocus>{{ title }}</h4>
+    </ng-container>
+    <ng-container modal-content>
+        <p>{{ message }}</p>
+    </ng-container>
+    <ng-container modal-footer>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="confirm()"
+        >
+            Yes
+        </button>
+        <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="cancel()"
+        >
+            No
+        </button>
+    </ng-container>
+</lc-base-modal>
