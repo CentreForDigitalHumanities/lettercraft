@@ -1,5 +1,5 @@
 import pytest
-from person.models import PersonReference
+from person.models import PersonReference, AgentDescription
 
 def update_agent_body(agent_data: str):
     return f"""
@@ -125,6 +125,38 @@ def test_update_agent_location(graphql_client, agent_description, space_descript
     )
     assert agent_description.location.location == space_description
     assert agent_description.location.note == "!"
+
+
+def test_create_agent_mutations(graphql_client, source):
+    result = graphql_client.execute(
+        f"""
+        mutation CreateAgent {{
+            createAgent(agentData: {{
+                name: "Elmo"
+                source: "{source.id}"
+            }}) {{
+                agent {{ id }}
+            }}
+        }}
+        """
+    )
+    agent_id = result["data"]["createAgent"]["agent"]["id"]
+    agent = AgentDescription.objects.get(id=agent_id)
+    assert agent.name == "Elmo"
+    assert agent.source == source
+
+
+def test_delete_agent_mutations(graphql_client, agent_description):
+    result = graphql_client.execute(
+        f"""
+        mutation DeleteAgent {{
+            deleteAgent(id: "{agent_description.id}") {{ ok }}
+        }}
+        """
+    )
+    assert result["data"]["deleteAgent"]["ok"]
+    with pytest.raises(AgentDescription.DoesNotExist):
+        agent_description.refresh_from_db()
 
 
 @pytest.fixture()

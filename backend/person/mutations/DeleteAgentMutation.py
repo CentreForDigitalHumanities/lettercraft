@@ -7,11 +7,11 @@ from graphene import (
     Mutation,
 )
 
-from person.models import PersonReference
+from person.models import AgentDescription
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class DeletePersonReferenceMutation(Mutation):
+class DeleteAgentMutation(Mutation):
     ok = Boolean(required=True)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
@@ -26,9 +26,9 @@ class DeletePersonReferenceMutation(Mutation):
         id: ID,
     ):
         try:
-            reference = PersonReference.objects.get(id=id)
-        except PersonReference.DoesNotExist:
-            raise LettercraftErrorType("id", ["Reference not found"])
+            reference = AgentDescription.objects.get(id=id)
+        except AgentDescription.DoesNotExist:
+            raise LettercraftErrorType("id", ["Agent not found"])
 
         reference.delete()
 
