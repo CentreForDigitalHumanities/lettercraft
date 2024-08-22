@@ -20,8 +20,9 @@ from person.models import (
 from core.models import SourceMention
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Model
+from django.db import transaction
 
 
 class UpdateAgentGenderInput(InputObjectType):
@@ -65,22 +66,29 @@ class UpdateAgentMutation(LettercraftMutation):
             return cls(ok=False, error=[error])
 
         try:
-            cls.mutate_object(
-                agent_data,
-                agent,
-                info,
-                excluded_fields=["gender", "location"],
-            )
-            cls.handle_nested_fields(agent, agent_data, info)
-
+            with transaction.atomic():
+                cls.mutate_object(
+                    agent_data,
+                    agent,
+                    info,
+                    excluded_fields=["gender", "location"],
+                )
+                cls.handle_nested_fields(agent, agent_data, info)
+                # refresh to load related objects if those were updated through nested
+                # fields
+                agent.refresh_from_db()
+                agent.full_clean()
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error], agent=agent)
-
-        # refresh to load related objects if those were updated
-        agent.refresh_from_db()
+        except ValidationError as e:
+            errors = [
+                LettercraftErrorType(field, messages)
+                for field, messages in e.message_dict
+            ]
+            return cls(ok=False, agent=None, errors=errors)
 
         return cls(ok=True, errors=[], agent=agent)
 
@@ -122,3 +130,4 @@ class UpdateAgentMutation(LettercraftMutation):
                 # in the data
                 related_obj = related_model(**relation)
             cls.mutate_object(nested_data, related_obj, info)
+            related_obj.full_clean()
