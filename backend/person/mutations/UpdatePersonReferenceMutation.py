@@ -37,12 +37,11 @@ class UpdatePersonReferenceMutation(LettercraftMutation):
         cls, root: None, info: ResolveInfo, reference_data: UpdatePersonReferenceInput
     ):
         try:
-            retrieved = cls.get_or_create_object(info, reference_data)
+            reference = cls.get_object(info, reference_data)
         except PersonReference.DoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, error=[error])
 
-        reference = retrieved.object
         cls.mutate_object(reference_data, reference, info)
 
         return cls(ok=True, errors=[])

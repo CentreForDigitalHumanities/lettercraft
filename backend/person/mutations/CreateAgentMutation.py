@@ -34,7 +34,7 @@ class CreateAgentMutation(LettercraftMutation):
 
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, agent_data: CreateAgentInput):
-        agent = AgentDescription()
+        agent = cls.create_object()
         try:
             with transaction.atomic():
                 cls.mutate_object(agent_data, agent, info)

@@ -59,7 +59,7 @@ class UpdateAgentMutation(LettercraftMutation):
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, agent_data: UpdateAgentInput):
         try:
-            agent = AgentDescription.objects.get(id=agent_data.id)
+            agent = cls.get_object(info, agent_data)
         except AgentDescription.DoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, error=[error])
