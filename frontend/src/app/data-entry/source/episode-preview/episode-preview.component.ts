@@ -33,8 +33,6 @@ export class EpisodePreviewComponent {
         this.modalService
             .openConfirmationModal({
                 title: "Delete episode",
-                confirmText: "Delete",
-                cancelText: "Cancel",
                 message: `Are you sure you want to delete this episode? (${this.episode.name})`,
             })
             .then((result) => {

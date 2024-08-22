@@ -10,6 +10,7 @@ import { IconComponent } from "./icon/icon.component";
 import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { ActionButtonGroupComponent } from "./action-button-group/action-button-group.component";
 import { BaseModalComponent } from "./base-modal/base-modal.component";
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { BaseModalComponent } from "./base-modal/base-modal.component";
         BreadcrumbComponent,
         ActionButtonGroupComponent,
         BaseModalComponent,
+        ConfirmationModalComponent,
     ],
     imports: [
         CommonModule,
