@@ -1,20 +1,23 @@
-import { Component, DestroyRef, inject, Input, OnInit } from "@angular/core";
+import { Component, DestroyRef, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastService } from "@services/toast.service";
-import { DataEntryCreateEpisodeGQL } from "generated/graphql";
+import { CreateEpisodeMutationInput, DataEntryCreateEpisodeGQL } from "generated/graphql";
+
+type NewEpisodeForm = {
+    [key in keyof CreateEpisodeMutationInput]: FormControl<CreateEpisodeMutationInput[key]>;
+};
+
 
 @Component({
-    selector: "lc-new-episode-modal",
-    templateUrl: "./new-episode-modal.component.html",
-    styleUrls: ["./new-episode-modal.component.scss"],
+    selector: "lc-new-episode-form",
+    templateUrl: "./new-episode-form.component.html",
+    styleUrls: ["./new-episode-form.component.scss"],
 })
-export class NewEpisodeModalComponent implements OnInit {
+export class NewEpisodeFormComponent implements OnInit {
     @Input({ required: true }) sourceId: string | null = null;
 
-    public activeModal = inject(NgbActiveModal);
-    public form = new FormGroup({
+    public form = new FormGroup<NewEpisodeForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
             validators: [Validators.required],
@@ -37,9 +40,9 @@ export class NewEpisodeModalComponent implements OnInit {
         }
     }
 
-    public submit(event: Event): void {
-        event.preventDefault();
-        event.stopPropagation();
+    public submit(): void {
+        this.form.updateValueAndValidity();
+        this.form.controls.name.markAsTouched();
         if (this.form.invalid) {
             return;
         }
@@ -70,9 +73,9 @@ export class NewEpisodeModalComponent implements OnInit {
                     type: "success",
                     header: "Success",
                 });
-                this.activeModal.close({
-                    id: result.data?.createEpisode?.episode?.id ?? null,
-                });
+                // this.activeModal.close({
+                //     id: result.data?.createEpisode?.episode?.id ?? null,
+                // });
             });
     }
 }
