@@ -34,12 +34,14 @@
 <ng-template #newEpisodeModal>
     <lc-base-modal (dismiss)="closeModal()" *ngIf="source$ | async as source">
         <ng-container modal-header>
-            <h4>Create new episode</h4>
+            <h4 ngbAutofocus>Create new episode</h4>
         </ng-container>
         <ng-container modal-content>
             <lc-new-episode-form
                 #newEpisodeForm
                 [sourceId]="source.id"
+                (mutationStarted)="mutationInProgress = true"
+                (episodeCreated)="closeAndNavigate($event)"
             ></lc-new-episode-form>
         </ng-container>
         <ng-container modal-footer>
@@ -47,8 +49,12 @@
                 type="button"
                 class="btn btn-primary"
                 (click)="newEpisodeForm.submit()"
+
             >
                 Create
+                <div *ngIf="mutationInProgress" class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">Creating new episode...</span>
+                </div>
             </button>
             <button
                 type="button"

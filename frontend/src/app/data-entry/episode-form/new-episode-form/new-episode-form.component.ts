@@ -16,6 +16,8 @@ type NewEpisodeForm = {
 })
 export class NewEpisodeFormComponent implements OnInit {
     @Input({ required: true }) sourceId: string | null = null;
+    @Output() mutationStarted = new EventEmitter<void>();
+    @Output() episodeCreated = new EventEmitter<string | null>();
 
     public form = new FormGroup<NewEpisodeForm>({
         name: new FormControl<string>("", {
@@ -46,6 +48,7 @@ export class NewEpisodeFormComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
+        this.mutationStarted.emit();
         const input = this.form.getRawValue();
         this.updateEpisode
             .mutate(
@@ -73,9 +76,7 @@ export class NewEpisodeFormComponent implements OnInit {
                     type: "success",
                     header: "Success",
                 });
-                // this.activeModal.close({
-                //     id: result.data?.createEpisode?.episode?.id ?? null,
-                // });
+                this.episodeCreated.emit(result.data?.createEpisode?.episode?.id ?? null);
             });
     }
 }

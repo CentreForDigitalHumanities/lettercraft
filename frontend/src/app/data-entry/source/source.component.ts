@@ -1,8 +1,4 @@
-import {
-    Component,
-    computed,
-    TemplateRef,
-} from "@angular/core";
+import { Component, computed, TemplateRef } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
@@ -49,6 +45,7 @@ export class SourceComponent {
     public actionIcons = actionIcons;
 
     public modal: NgbModalRef | null = null;
+    public mutationInProgress = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -59,16 +56,19 @@ export class SourceComponent {
 
     public openNewEpisodeModal(newEpisodeModal: TemplateRef<unknown>): void {
         this.modal = this.modalService.open(newEpisodeModal);
-        this.modal.result.then((result: { id: string | null; } | null) => {
-            if (result && "id" in result) {
-                this.router.navigate(["/data-entry/episodes", result.id]);
-            }
-        });
     }
 
     public closeModal(): void {
         if (this.modal) {
             this.modal.close();
+        }
+    }
+
+    public closeAndNavigate(episodeId: string | null): void {
+        this.mutationInProgress = false;
+        this.closeModal();
+        if (episodeId) {
+            this.router.navigate(["/data-entry/episodes", episodeId]);
         }
     }
 
