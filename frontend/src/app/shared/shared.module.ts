@@ -43,6 +43,7 @@ import { BaseModalComponent } from "./base-modal/base-modal.component";
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
+        BaseModalComponent,
     ],
 })
 export class SharedModule {}

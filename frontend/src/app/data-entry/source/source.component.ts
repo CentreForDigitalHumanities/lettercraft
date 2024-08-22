@@ -1,14 +1,14 @@
-import { Component, computed } from "@angular/core";
+import {
+    Component,
+    computed,
+    TemplateRef,
+} from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { actionIcons, dataIcons } from "@shared/icons";
-import {
-    DataEntrySourceDetailGQL,
-    EpisodeType,
-} from "generated/graphql";
+import { DataEntrySourceDetailGQL, EpisodeType } from "generated/graphql";
 import { map, shareReplay, switchMap } from "rxjs";
-import { NewEpisodeModalComponent } from "../episode-form/new-episode-modal/new-episode-modal.component";
 
 @Component({
     selector: "lc-source",
@@ -48,25 +48,31 @@ export class SourceComponent {
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
+    public modal: NgbModalRef | null = null;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private modalService: NgbModal,
-        private sourceDetailQuery: DataEntrySourceDetailGQL,
+        private sourceDetailQuery: DataEntrySourceDetailGQL
     ) {}
 
-    public openNewEpisodeModal(sourceId: string): void {
-        const modal = this.modalService.open(NewEpisodeModalComponent);
-        modal.componentInstance.sourceId = sourceId;
-        modal.result.then((result: {id : string | null } | null) => {
-            if (result && 'id' in result) {
+    public openNewEpisodeModal(newEpisodeModal: TemplateRef<unknown>): void {
+        this.modal = this.modalService.open(newEpisodeModal);
+        this.modal.result.then((result: { id: string | null; } | null) => {
+            if (result && "id" in result) {
                 this.router.navigate(["/data-entry/episodes", result.id]);
             }
         });
     }
 
+    public closeModal(): void {
+        if (this.modal) {
+            this.modal.close();
+        }
+    }
+
     public identify(_index: number, item: Pick<EpisodeType, "id">): string {
         return item.id;
     }
-
 }

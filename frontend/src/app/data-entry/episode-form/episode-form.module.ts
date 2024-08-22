@@ -9,7 +9,7 @@ import { EpisodeObjectsFormComponent } from "./episode-objects-form/episode-obje
 import { SharedModule } from "@shared/shared.module";
 import { EpisodeFormComponent } from "./episode-form.component";
 import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
-import { NewEpisodeModalComponent } from './new-episode-modal/new-episode-modal.component';
+import { NewEpisodeFormComponent } from "./new-episode-form/new-episode-form.component";
 
 @NgModule({
     declarations: [
@@ -20,8 +20,9 @@ import { NewEpisodeModalComponent } from './new-episode-modal/new-episode-modal.
         EpisodeAgentsFormComponent,
         EpisodeLocationsFormComponent,
         EpisodeObjectsFormComponent,
-        NewEpisodeModalComponent,
+        NewEpisodeFormComponent,
     ],
     imports: [CommonModule, SharedModule, DataEntrySharedModule],
+    exports: [NewEpisodeFormComponent],
 })
 export class EpisodeFormModule {}

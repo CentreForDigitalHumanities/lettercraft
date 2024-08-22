@@ -1,28 +1,15 @@
 <div class="modal-header">
-    <h4>{{ title }}</h4>
+    <ng-content select="[modal-header]" />
     <button
         type="button"
         class="btn-close"
         aria-label="Close"
-        (click)="activeModal.close(cancelValue)"
+        (click)="dismissModal()"
     ></button>
 </div>
 <div class="modal-body">
-    {{ message }}
+    <ng-content select="[modal-content]" />
 </div>
 <div class="modal-footer">
-    <button
-        type="button"
-        class="btn btn-primary"
-        (click)="activeModal.close(confirmValue)"
-    >
-        {{ confirmText }}
-    </button>
-    <button
-        type="button"
-        class="btn btn-secondary"
-        (click)="activeModal.close(cancelValue)"
-    >
-        {{ cancelText }}
-    </button>
+    <ng-content select="[modal-footer]" />
 </div>

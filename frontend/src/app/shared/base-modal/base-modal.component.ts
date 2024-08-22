@@ -1,5 +1,4 @@
-import { Component, inject, Input } from "@angular/core";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 @Component({
     selector: "lc-base-modal",
@@ -8,12 +7,9 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 })
 export class BaseModalComponent {
     @Input() title = "Lettercraft";
-    @Input() message = "";
-    @Input() confirmText = "Ok";
-    @Input() cancelText = "Cancel";
-    @Input() confirmValue = true;
-    @Input() cancelValue = false;
-    @Input() dismissValue = false;
+    @Output() dismiss = new EventEmitter<void>();
 
-    public activeModal = inject(NgbActiveModal);
+    dismissModal(): void {
+        this.dismiss.emit();
+    }
 }
