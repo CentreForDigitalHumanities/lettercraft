@@ -11,19 +11,16 @@ from graphene import (
 )
 
 from person.types.AgentDescriptionType import AgentDescriptionType
-from person.models import (
-    AgentDescription,
-    Gender,
-    AgentDescriptionGender,
-    AgentDescriptionLocation,
-)
+from person.models import AgentDescription, Gender
 from core.models import SourceMention
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Model
 from django.db import transaction
-
+from django.db.models.fields.related_descriptors import (
+    ReverseOneToOneDescriptor,
+    ForwardOneToOneDescriptor,
+)
 
 class UpdateAgentGenderInput(InputObjectType):
     gender = Enum.from_enum(Gender)()
@@ -97,10 +94,10 @@ class UpdateAgentMutation(LettercraftMutation):
         cls, agent: AgentDescription, agent_data: UpdateAgentInput, info: ResolveInfo
     ):
         cls.mutate_nested_object(
-            agent, agent_data, info, "gender", AgentDescriptionGender, "agent"
+            agent, agent_data, info, "gender", AgentDescription.gender
         )
         cls.mutate_nested_object(
-            agent, agent_data, info, "location", AgentDescriptionLocation, "agent"
+            agent, agent_data, info, "location", AgentDescription.location
         )
 
     @classmethod
@@ -110,21 +107,28 @@ class UpdateAgentMutation(LettercraftMutation):
         agent_data: UpdateAgentInput,
         info: ResolveInfo,
         field_name: str,
-        related_model: Model,
-        related_name: str,
+        descriptor: ForwardOneToOneDescriptor | ReverseOneToOneDescriptor,
     ):
+
         if not field_name in agent_data:
             return
 
-        nested_data = getattr(agent_data, field_name)
+        if isinstance(descriptor, ForwardOneToOneDescriptor):
+            related_model = descriptor.field.related_model
+            related_name = descriptor.field.related_query_name()
+        else:
+            related_model = descriptor.related.field.model
+            related_name = descriptor.related.field.name
+
         relation = {related_name: agent}
+        nested_data = getattr(agent_data, field_name)
 
         if nested_data is None:
             related_model.objects.filter(**relation).delete()
         else:
             try:
                 related_obj = related_model.objects.get(**relation)
-            except:
+            except related_model.DoesNotExist:
                 # if the object does not exist, construct it but don't yet create in the
                 # database. The model may have non-nullable fields that are specified
                 # in the data
