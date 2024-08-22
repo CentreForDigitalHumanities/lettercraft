@@ -1,23 +1,15 @@
 <lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
-<ng-container *ngIf="isEditMode$ | async; else newEpisodeTitle">
-    <ng-container *ngIf="episode$ | async as episode; else loading">
-        <h1 class="mb-4">
-            <lc-icon [icon]="dataIcons.episode" />
-            <span>{{ episode.name }}</span>
-            <span class="text-body-secondary"> ({{ episode.source.name }}) </span>
-        </h1>
-        <p class="lead mb-4" *ngIf="episode.description">
-            {{ episode.description}}
-        </p>
-    </ng-container>
-</ng-container>
-<ng-template #newEpisodeTitle>
+<ng-container *ngIf="episode$ | async as episode; else loading">
     <h1 class="mb-4">
         <lc-icon [icon]="dataIcons.episode" />
-        New episode
+        <span>{{ episode.name }}</span>
+        <span class="text-body-secondary"> ({{ episode.source.name }}) </span>
     </h1>
-</ng-template>
+    <p class="lead mb-4" *ngIf="episode.description">
+        {{ episode.description}}
+    </p>
+</ng-container>
 
 <h2 class="subform-header">Identification</h2>
 <lc-episode-identification-form />

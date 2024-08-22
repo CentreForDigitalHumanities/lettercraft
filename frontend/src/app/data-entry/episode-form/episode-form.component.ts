@@ -12,8 +12,6 @@ import { filter, map, share, switchMap } from "rxjs";
 export class EpisodeFormComponent {
     private id$ = this.route.params.pipe(map((params) => params["id"]));
 
-    public isEditMode$ = this.id$.pipe(map((id) => id !== "new"));
-
     public episode$ = this.id$.pipe(
         filter((id) => id !== "new"),
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),

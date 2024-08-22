@@ -1,12 +1,8 @@
-query DataEntryAgent($id: ID!) {
+query DataEntryAgentIdentification($id: ID!) {
   agentDescription(id: $id) {
     id
     name
     description
     isGroup
-    source {
-      id
-      name
-    }
   }
 }
