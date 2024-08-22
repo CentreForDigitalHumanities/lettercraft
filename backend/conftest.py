@@ -9,6 +9,7 @@ from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
 from user.models import User
+from space.models import SpaceDescription
 from graphql_app.schema import schema
 
 
@@ -104,6 +105,12 @@ def agent_group_description(db, source, historical_person, historical_person_2):
     agent.describes.add(historical_person_2)
     agent.save()
     return agent
+
+
+@pytest.fixture()
+def space_description(db, source):
+    space = SpaceDescription.objects.create(name="Sesame street", source=source)
+    return space
 
 
 @pytest.fixture()

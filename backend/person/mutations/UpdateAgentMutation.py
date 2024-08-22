@@ -15,6 +15,7 @@ from person.models import (
     AgentDescription,
     Gender,
     AgentDescriptionGender,
+    AgentDescriptionLocation,
 )
 from core.models import SourceMention
 from graphql_app.LettercraftMutation import LettercraftMutation
@@ -92,6 +93,9 @@ class UpdateAgentMutation(LettercraftMutation):
         cls.mutate_nested_object(
             agent, agent_data, info, "gender", AgentDescriptionGender, "agent"
         )
+        cls.mutate_nested_object(
+            agent, agent_data, info, "location", AgentDescriptionLocation, "agent"
+        )
 
     @classmethod
     def mutate_nested_object(
@@ -101,17 +105,22 @@ class UpdateAgentMutation(LettercraftMutation):
         info: ResolveInfo,
         field_name: str,
         related_model: Model,
-        related_name: str = "agent",
+        related_name: str,
     ):
         if not field_name in agent_data:
             return
 
         nested_data = getattr(agent_data, field_name)
+        relation = {related_name: agent}
 
         if nested_data is None:
-            related_model.objects.filter(**{related_name: agent}).delete()
+            related_model.objects.filter(**relation).delete()
         else:
-            related_obj, _created = related_model.objects.get_or_create(
-                **{related_name: agent}
-            )
+            try:
+                related_obj = related_model.objects.get(**relation)
+            except:
+                # if the object does not exist, construct it but don't yet create in the
+                # database. The model may have non-nullable fields that are specified
+                # in the data
+                related_obj = related_model(**relation)
             cls.mutate_object(nested_data, related_obj, info)

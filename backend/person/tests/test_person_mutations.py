@@ -103,7 +103,7 @@ def test_update_agent_gender(graphql_client, agent_description):
     )
 
     remove_gender_result = graphql_client.execute(
-        update_agent_body(f'id: "{agent_description.pk}", gender: null')
+        update_agent_body(f'id: "{agent_description.id}", gender: null')
     )
     assert_agent_data(
         remove_gender_result,
@@ -114,6 +114,17 @@ def test_update_agent_gender(graphql_client, agent_description):
             "gender": None,
         },
     )
+
+
+def test_update_agent_location(graphql_client, agent_description, space_description):
+    result = graphql_client.execute(
+        update_agent_body(
+            f"""id: "{agent_description.id}"
+            location: {{ location: "{space_description.id}", note: "!" }}"""
+        )
+    )
+    assert agent_description.location.location == space_description
+    assert agent_description.location.note == "!"
 
 
 @pytest.fixture()
