@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast.service';
 import { MutationResult } from 'apollo-angular';
 import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery, UpdateAgentIdentificationGQL, UpdateAgentIdentificationMutation, UpdateAgentInput, UpdateAgentMutation } from 'generated/graphql';
-import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, tap } from 'rxjs';
+import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, Observable, tap, distinctUntilChanged } from 'rxjs';
+import _ from 'underscore';
 
 interface FormData {
     name: string;
@@ -49,10 +50,11 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
 
         this.form.valueChanges.pipe(
             debounceTime(500),
+            distinctUntilChanged(_.isEqual),
             filter(this.isValid.bind(this)),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
-            switchMap(input => this.agentMutation.mutate({ input }, { errorPolicy: 'all' })),
+            switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
     }
@@ -81,6 +83,18 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
 
     private toMutationInput([data, id]: [Partial<FormData>, string]): UpdateAgentInput {
         return { id, ...data };
+    }
+
+    private makeMutation(input: UpdateAgentInput):
+        Observable<MutationResult<UpdateAgentIdentificationMutation>> {
+        return this.agentMutation.mutate({ input }, {
+            errorPolicy: 'all',
+            refetchQueries: [
+                'DataEntryAgent',
+                'DataEntryAgentIdentification',
+                'DataEntryAgentDescription'
+            ],
+        });
     }
 
     private onMutationResult(result: MutationResult<UpdateAgentIdentificationMutation>): void {
