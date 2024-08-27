@@ -1,8 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ToastService } from '@services/toast.service';
+import { MutationResult } from 'apollo-angular';
 import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery, UpdateAgentIdentificationGQL, UpdateAgentIdentificationMutation, UpdateAgentInput, UpdateAgentMutation } from 'generated/graphql';
-import { map, Subject, switchMap, filter, debounceTime, withLatestFrom } from 'rxjs';
+import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, catchError } from 'rxjs';
 
 interface FormData {
     name: string;
@@ -31,6 +33,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
     constructor(
         private agentQuery: DataEntryAgentIdentificationGQL,
         private agentMutation: UpdateAgentIdentificationGQL,
+        private toastService: ToastService,
     ) {
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
@@ -43,7 +46,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
             debounceTime(500),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
-            switchMap(input => this.agentMutation.mutate({ input })),
+            switchMap(input => this.agentMutation.mutate({ input }, { errorPolicy: 'all' })),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
     }
@@ -70,7 +73,24 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         return { id, ...data };
     }
 
-    private onMutationResult(result: any): void {
-        console.log(result);
+    private onMutationResult(result: MutationResult<UpdateAgentIdentificationMutation>): void {
+        if (result.errors) {
+            const messages = result.errors.map(error => error.message);
+            this.toastService.show({
+                type: 'danger',
+                header: 'Failed to save form',
+                body: messages.join('\n\n'),
+            })
+        }
+        if (result.data?.updateAgent?.errors.length) {
+            const errors = result.data.updateAgent.errors;
+            const messages = errors.map(error => `${error.field}: ${error.messages.join('; ')}`);
+            this.toastService.show({
+                type: 'danger',
+                header: 'Failed to save form',
+                body: messages.join('\n\n'),
+            });
+        }
     }
+
 }
