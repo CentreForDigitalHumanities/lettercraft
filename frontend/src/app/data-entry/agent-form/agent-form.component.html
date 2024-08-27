@@ -10,8 +10,13 @@
             </span>
         </h1>
 
-        <p class="lead mb-4" *ngIf="agentDescription.description">
-            {{agentDescription.description}}
+        <p class="lead mb-4">
+            <span *ngIf="agentDescription.description; else noDescription">
+                {{agentDescription.description}}
+            </span>
+            <ng-template #noDescription>
+                <i>(No description)</i>
+            </ng-template>
         </p>
 
         <h2>Identification</h2>
