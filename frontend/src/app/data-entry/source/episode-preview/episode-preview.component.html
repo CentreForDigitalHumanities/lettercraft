@@ -7,7 +7,8 @@
                 {{ episode.name }}
                 <br />
                 <small>
-                    <span>book {{ episode.book }}</span>,
+                    <span>book {{ episode.book }}</span
+                    >,
                     <span>chapter {{ episode.chapter }}</span>
                 </small>
             </div>
@@ -23,10 +24,7 @@
 
         <dl>
             <dt>Agents</dt>
-            <dd
-                *ngIf="episode.agents.length > 0; else noAgents"
-                class="ms-4"
-            >
+            <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
                 <ul class="inline-list">
                     <li
                         *ngFor="let agent of episode.agents"
@@ -47,10 +45,7 @@
             </ng-template>
 
             <dt>Locations</dt>
-            <dd
-                *ngIf="episode.spaces.length > 0; else noSpaces"
-                class="ms-4"
-            >
+            <dd *ngIf="episode.spaces.length > 0; else noSpaces" class="ms-4">
                 <ul class="inline-list">
                     <li
                         *ngFor="let space of episode.spaces"
@@ -106,5 +101,8 @@
                 <dd class="ms-4">No objects have been added yet.</dd>
             </ng-template>
         </dl>
+        <div class="d-flex justify-content-end">
+            <lc-contributors [contributors]="episode.contributors" />
+        </div>
     </div>
 </div>

@@ -847,6 +847,7 @@ type UpdateOrCreateSourceMutation {
 
 type UserType {
   firstName: String!
+  fullName: String!
   id: ID!
   lastName: String!
 }
