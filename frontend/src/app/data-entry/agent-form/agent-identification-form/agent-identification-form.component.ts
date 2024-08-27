@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast.service';
 import { MutationResult } from 'apollo-angular';
 import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery, UpdateAgentIdentificationGQL, UpdateAgentIdentificationMutation, UpdateAgentInput, UpdateAgentMutation } from 'generated/graphql';
-import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, catchError } from 'rxjs';
+import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, tap } from 'rxjs';
 
 interface FormData {
     name: string;
@@ -21,7 +21,13 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
     @Input() id?: string;
 
     form = new FormGroup({
-        name: new FormControl<string>('', { nonNullable: true }),
+        name: new FormControl<string>('', {
+            nonNullable: true,
+            validators: [
+                Validators.required,
+                Validators.minLength(3),
+            ]
+        }),
         description: new FormControl<string>('', { nonNullable: true }),
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
     }, {
@@ -42,8 +48,8 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         ).subscribe(this.updateFormData.bind(this));
 
         this.form.valueChanges.pipe(
-            filter(() => this.form.valid),
             debounceTime(500),
+            filter(this.isValid.bind(this)),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
             switchMap(input => this.agentMutation.mutate({ input }, { errorPolicy: 'all' })),
@@ -67,6 +73,10 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
             description: data.agentDescription?.description || '',
             isGroup: data.agentDescription?.isGroup || false,
         });
+    }
+
+    private isValid(): boolean {
+        return this.form.valid;
     }
 
     private toMutationInput([data, id]: [Partial<FormData>, string]): UpdateAgentInput {
