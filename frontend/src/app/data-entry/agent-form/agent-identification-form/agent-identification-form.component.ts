@@ -3,8 +3,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast.service';
 import { MutationResult } from 'apollo-angular';
-import { DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery, UpdateAgentIdentificationGQL, UpdateAgentIdentificationMutation, UpdateAgentInput, UpdateAgentMutation } from 'generated/graphql';
-import { map, Subject, switchMap, filter, debounceTime, withLatestFrom, Observable, tap, distinctUntilChanged } from 'rxjs';
+import {
+    DataEntryAgentIdentificationGQL, DataEntryAgentIdentificationQuery,
+    DataEntryUpdateAgentGQL, DataEntryUpdateAgentMutation, UpdateAgentInput
+} from 'generated/graphql';
+import {
+    map, Subject, switchMap, filter, debounceTime, withLatestFrom, Observable,
+    distinctUntilChanged
+} from 'rxjs';
 import _ from 'underscore';
 
 interface FormData {
@@ -39,7 +45,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
 
     constructor(
         private agentQuery: DataEntryAgentIdentificationGQL,
-        private agentMutation: UpdateAgentIdentificationGQL,
+        private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
     ) {
         this.id$.pipe(
@@ -86,7 +92,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
     }
 
     private makeMutation(input: UpdateAgentInput):
-        Observable<MutationResult<UpdateAgentIdentificationMutation>> {
+        Observable<MutationResult<DataEntryUpdateAgentMutation>> {
         return this.agentMutation.mutate({ input }, {
             errorPolicy: 'all',
             refetchQueries: [
@@ -97,7 +103,7 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         });
     }
 
-    private onMutationResult(result: MutationResult<UpdateAgentIdentificationMutation>): void {
+    private onMutationResult(result: MutationResult<DataEntryUpdateAgentMutation>): void {
         if (result.errors) {
             const messages = result.errors.map(error => error.message);
             this.toastService.show({
