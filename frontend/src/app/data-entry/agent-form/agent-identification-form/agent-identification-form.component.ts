@@ -37,8 +37,6 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         }),
         description: new FormControl<string>('', { nonNullable: true }),
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
-    }, {
-        updateOn: 'blur'
     });
 
     private id$ = new Subject<string>();
