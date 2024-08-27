@@ -6,3 +6,17 @@ query DataEntryAgentIdentification($id: ID!) {
     isGroup
   }
 }
+
+mutation UpdateAgentIdentification(
+    $input: UpdateAgentInput!
+) {
+    updateAgent(
+        agentData: $input
+    ) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

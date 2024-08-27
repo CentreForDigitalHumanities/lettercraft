@@ -955,6 +955,13 @@ export type DataEntryAgentIdentificationQueryVariables = Exact<{
 
 export type DataEntryAgentIdentificationQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean } | null };
 
+export type UpdateAgentIdentificationMutationVariables = Exact<{
+  input: UpdateAgentInput;
+}>;
+
+
+export type UpdateAgentIdentificationMutation = { __typename?: 'Mutation', updateAgent?: { __typename?: 'UpdateAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryAgentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1102,6 +1109,28 @@ export const DataEntryAgentIdentificationDocument = gql`
   })
   export class DataEntryAgentIdentificationGQL extends Apollo.Query<DataEntryAgentIdentificationQuery, DataEntryAgentIdentificationQueryVariables> {
     override document = DataEntryAgentIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateAgentIdentificationDocument = gql`
+    mutation UpdateAgentIdentification($input: UpdateAgentInput!) {
+  updateAgent(agentData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateAgentIdentificationGQL extends Apollo.Mutation<UpdateAgentIdentificationMutation, UpdateAgentIdentificationMutationVariables> {
+    override document = UpdateAgentIdentificationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
