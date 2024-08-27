@@ -104,17 +104,17 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
     }
 
     private onMutationResult(result: MutationResult<DataEntryUpdateAgentMutation>): void {
-        if (result.errors) {
+        if (result.errors?.length) {
             const messages = result.errors.map(error => error.message);
             this.toastService.show({
                 type: 'danger',
                 header: 'Failed to save form',
                 body: messages.join('\n\n'),
-            })
+            });
         }
         if (result.data?.updateAgent?.errors.length) {
             const errors = result.data.updateAgent.errors;
-            const messages = errors.map(error => `${error.field}: ${error.messages.join('; ')}`);
+            const messages = errors.map(error => `${error.field}: ${error.messages.join('\n')}`);
             this.toastService.show({
                 type: 'danger',
                 header: 'Failed to save form',
