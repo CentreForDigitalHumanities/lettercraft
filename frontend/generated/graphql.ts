@@ -73,6 +73,48 @@ export type AgentDescriptionType = {
   sourceMention?: Maybe<PersonAgentDescriptionSourceMentionChoices>;
 };
 
+/** An enumeration. */
+export enum Certainty {
+  Certain = 'CERTAIN',
+  SomewhatCertain = 'SOMEWHAT_CERTAIN',
+  Uncertain = 'UNCERTAIN'
+}
+
+export type CreateAgentInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
+export type CreateAgentMutation = {
+  __typename?: 'CreateAgentMutation';
+  agent?: Maybe<AgentDescriptionType>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type CreatePersonReferenceInput = {
+  description: Scalars['ID']['input'];
+  person: Scalars['ID']['input'];
+};
+
+export type CreatePersonReferenceMutation = {
+  __typename?: 'CreatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteAgentMutation = {
+  __typename?: 'DeleteAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeletePersonReferenceMutation = {
+  __typename?: 'DeletePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type EpisodeCategoryType = {
   __typename?: 'EpisodeCategoryType';
   /** Longer description to help identify this object */
@@ -121,6 +163,15 @@ export enum EventEpisodeSourceMentionChoices {
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
+}
+
+/** An enumeration. */
+export enum Gender {
+  Female = 'FEMALE',
+  Male = 'MALE',
+  Mixed = 'MIXED',
+  Other = 'OTHER',
+  Unknown = 'UNKNOWN'
 }
 
 export type GiftCategoryType = {
@@ -288,9 +339,34 @@ export type LettercraftErrorType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAgent?: Maybe<CreateAgentMutation>;
+  createPersonReference?: Maybe<CreatePersonReferenceMutation>;
+  deleteAgent?: Maybe<DeleteAgentMutation>;
+  deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+  updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+};
+
+
+export type MutationCreateAgentArgs = {
+  agentData: CreateAgentInput;
+};
+
+
+export type MutationCreatePersonReferenceArgs = {
+  referenceData: CreatePersonReferenceInput;
+};
+
+
+export type MutationDeleteAgentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeletePersonReferenceArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -306,6 +382,11 @@ export type MutationUpdateEpisodeArgs = {
 
 export type MutationUpdateOrCreateSourceArgs = {
   input: UpdateCreateSourceInput;
+};
+
+
+export type MutationUpdatePersonReferenceArgs = {
+  referenceData: UpdatePersonReferenceInput;
 };
 
 /** An enumeration. */
@@ -592,6 +673,12 @@ export type SourceContentsDateType = {
   yearUpper: Scalars['Int']['output'];
 };
 
+/** An enumeration. */
+export enum SourceMention {
+  Direct = 'DIRECT',
+  Implied = 'IMPLIED'
+}
+
 export type SourceType = {
   __typename?: 'SourceType';
   contentsDate?: Maybe<SourceContentsDateType>;
@@ -767,17 +854,33 @@ export type StructureType = {
   settlement?: Maybe<SettlementType>;
 };
 
+export type UpdateAgentGenderInput = {
+  gender?: InputMaybe<Gender>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
+};
+
 export type UpdateAgentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  designators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
   isGroup?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<UpdateAgentLocationInput>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateAgentLocationInput = {
+  location?: InputMaybe<Scalars['ID']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
 };
 
 export type UpdateAgentMutation = {
   __typename?: 'UpdateAgentMutation';
   agent?: Maybe<AgentDescriptionType>;
-  error?: Maybe<Scalars['String']['output']>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UpdateCreateSourceInput = {
@@ -810,6 +913,18 @@ export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   source?: Maybe<SourceType>;
+};
+
+export type UpdatePersonReferenceInput = {
+  certainty?: InputMaybe<Certainty>;
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdatePersonReferenceMutation = {
+  __typename?: 'UpdatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UserType = {

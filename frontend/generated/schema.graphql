@@ -71,6 +71,44 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+"""An enumeration."""
+enum Certainty {
+  CERTAIN
+  SOMEWHAT_CERTAIN
+  UNCERTAIN
+}
+
+input CreateAgentInput {
+  name: String!
+  source: ID!
+}
+
+type CreateAgentMutation {
+  agent: AgentDescriptionType
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input CreatePersonReferenceInput {
+  description: ID!
+  person: ID!
+}
+
+type CreatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteAgentMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeletePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 type EpisodeCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -133,6 +171,15 @@ enum EventEpisodeSourceMentionChoices {
 
   """implied"""
   IMPLIED
+}
+
+"""An enumeration."""
+enum Gender {
+  FEMALE
+  MALE
+  MIXED
+  OTHER
+  UNKNOWN
 }
 
 type GiftCategoryType {
@@ -331,9 +378,14 @@ type LettercraftErrorType {
 }
 
 type Mutation {
+  createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+  createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
+  deleteAgent(id: ID!): DeleteAgentMutation
+  deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+  updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
 
 """An enumeration."""
@@ -602,6 +654,12 @@ type SourceContentsDateType {
   yearUpper: Int!
 }
 
+"""An enumeration."""
+enum SourceMention {
+  DIRECT
+  IMPLIED
+}
+
 type SourceType {
   contentsDate: SourceContentsDateType
 
@@ -816,16 +874,32 @@ type StructureType {
   settlement: SettlementType
 }
 
+input UpdateAgentGenderInput {
+  gender: Gender
+  note: String
+  sourceMention: SourceMention
+}
+
 input UpdateAgentInput {
   description: String
+  designators: [String]
+  gender: UpdateAgentGenderInput
   id: ID!
   isGroup: Boolean
+  location: UpdateAgentLocationInput
   name: String
+}
+
+input UpdateAgentLocationInput {
+  location: ID
+  note: String
+  sourceMention: SourceMention
 }
 
 type UpdateAgentMutation {
   agent: AgentDescriptionType
-  error: String
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 input UpdateCreateSourceInput {
@@ -856,6 +930,17 @@ input UpdateEpisodeMutationInput {
 type UpdateOrCreateSourceMutation {
   errors: [String]
   source: SourceType
+}
+
+input UpdatePersonReferenceInput {
+  certainty: Certainty
+  id: ID!
+  note: String
+}
+
+type UpdatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type UserType {
