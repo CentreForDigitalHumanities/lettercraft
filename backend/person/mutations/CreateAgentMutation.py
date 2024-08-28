@@ -42,7 +42,7 @@ class CreateAgentMutation(LettercraftMutation):
         except ValidationError as e:
             errors = [
                 LettercraftErrorType(field, messages)
-                for field, messages in e.message_dict
+                for field, messages in e.message_dict.items()
             ]
             return cls(ok=False, agent=None, errors=errors)
 
