@@ -87,7 +87,7 @@ class LettercraftMutation(Mutation):
         if id:
             return RetrievedObject(cls.get_object(info, mutation_input), True)
         else:
-            return RetrievedObject(cls.create_object(info, mutation_input), False)
+            return RetrievedObject(cls.create_object(), False)
 
     @staticmethod
     def mutate_object(
