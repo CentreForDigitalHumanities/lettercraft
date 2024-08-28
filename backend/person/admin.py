@@ -19,6 +19,12 @@ class PersonDateOfDeathAdmin(admin.StackedInline):
     extra = 0
 
 
+class PersonReferenceAdmin(admin.StackedInline):
+    model = models.PersonReference
+    fields = ["person", "description"] + core_admin.field_fields
+    extra = 0
+
+
 @admin.register(models.HistoricalPerson)
 class HistoricalPersonAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
@@ -32,6 +38,7 @@ class HistoricalPersonAdmin(admin.ModelAdmin):
     inlines = [
         PersonDateOfBirthAdmin,
         PersonDateOfDeathAdmin,
+        PersonReferenceAdmin,
     ]
 
 
@@ -66,4 +73,5 @@ class AgentDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin)
     inlines = [
         AgentDescriptionGenderAdmin,
         AgentDescriptionLocationAdmin,
+        PersonReferenceAdmin,
     ]

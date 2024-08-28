@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from graphene import InputObjectType, Mutation, ResolveInfo
 from django.db.models import Model
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
-from graphene_django.types import DjangoObjectType
 from graphene_django.registry import get_global_registry
 
 
@@ -21,13 +20,12 @@ class LettercraftMutation(Mutation):
     django_model: Type[Model] | None = None
 
     @classmethod
-    def get_or_create_object(
-        cls, info: ResolveInfo, mutation_input: InputObjectType
-    ) -> RetrievedObject:
+    def get_object(cls, info: ResolveInfo, mutation_input: InputObjectType) -> Model:
         """
-        Retrieves a Django model instance by id. If the instance does not exist, a new instance is created (but not saved to the database). The instance will be empty, i.e. will not have any (obligatory) fields set.
+        Retrieves a Django model instance by id.
 
-        Any mutation making use of this method should have a class field 'django_model' defined referring to the class of the object that is being mutated.
+        Any mutation making use of this method should have a class field 'django_model'
+        defined referring to the class of the object that is being mutated.
 
         Args:
             - mutation_input (InputObjectType): The mutation input.
@@ -35,19 +33,17 @@ class LettercraftMutation(Mutation):
 
         Exceptions:
             - ImproperlyConfigured is raised in two cases:
-                1. when the mutation class implementing LettercraftMutation does not have the required class field 'django_model' defined;
-                2. when the corresponding Graphene type cannot be found. This exception should not be caught.
-            - ObjectDoesNotExist is raised when an ID is provided but the corresponding object is not found or inaccessible to the user making the request.
+                1. when the mutation class implementing LettercraftMutation does not have
+                    the required class field 'django_model' defined;
+                2. when the corresponding Graphene type cannot be found. This exception
+                    should not be caught.
+            - ObjectDoesNotExist is raised when an ID is provided but the corresponding
+                object is not found or inaccessible to the user making the request.
         """
 
-        if cls.django_model is None:
-            raise ImproperlyConfigured(
-                "Mutation class must have a class field 'django_model' defined."
-            )
+        model = cls._model()
 
-        model = cls.django_model
-
-        id = getattr(mutation_input, "id", None)
+        id = getattr(mutation_input, "id")
 
         # The registry is a global object that holds all the models and types.
         # It is used to get the corresponding Graphene type for a Django model.
@@ -57,15 +53,41 @@ class LettercraftMutation(Mutation):
         if graphene_type is None:
             raise ImproperlyConfigured("Graphene type not found for model.")
 
-        if id is None:
-            return RetrievedObject(object=model(), created=True)
-
         try:
             retrieved = graphene_type.get_queryset(model.objects, info).get(pk=id)
         except model.DoesNotExist:
             raise ObjectDoesNotExist("Object not found.")
 
-        return RetrievedObject(object=retrieved, created=False)
+        return retrieved
+
+    @classmethod
+    def create_object(cls) -> Model:
+        """
+        Create a new Django model instance.
+
+        The instance will be empty, i.e. will not have any (obligatory) fields set.
+        """
+
+        model = cls._model()
+        return model()
+
+    @classmethod
+    def get_or_create_object(
+        cls, info: ResolveInfo, mutation_input: InputObjectType
+    ) -> RetrievedObject:
+        """
+        Defers to `get_object()` or `create_object()` based on the input.
+
+        If the input specifies an `id`, this will retrieve the matching object. Otherwise,
+        this will construct a new instance.
+        """
+
+        id = getattr(mutation_input, "id", None)
+
+        if id:
+            return RetrievedObject(cls.get_object(info, mutation_input), True)
+        else:
+            return RetrievedObject(cls.create_object(), False)
 
     @staticmethod
     def mutate_object(
@@ -185,3 +207,19 @@ class LettercraftMutation(Mutation):
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, *args, **kwargs):
         cls.mutate(root, info, *args, **kwargs)
+
+    @classmethod
+    def _model(cls):
+        """
+        Returns the Django model for the mutation class
+
+        Raises:
+            ImproperlyConfigured:
+                The mutation class implementing LettercraftMutation does not have
+                    the required class field 'django_model' defined.
+        """
+        if cls.django_model is None:
+            raise ImproperlyConfigured(
+                "Mutation class must have a class field 'django_model' defined."
+            )
+        return cls.django_model
