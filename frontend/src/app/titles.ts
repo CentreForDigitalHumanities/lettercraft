@@ -1,6 +1,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Params, ResolveFn } from "@angular/router";
 import { Apollo, gql, TypedDocumentNode } from "apollo-angular";
+import { SourceTitleQueryQuery, SourceTitleQueryQueryVariables } from "generated/graphql";
 import { map } from "rxjs";
 import _ from "underscore";
 
@@ -12,15 +13,21 @@ export const pageTitle = (name: string) => `${name} - ${SITE_NAME}`;
  *
  * @param queryFromParams returns a graphQL query based on the route parameters
  * @param titleFromData transforms the result of the query into a string
+ * @param watchChanges whether to keep watching the query for changes
  * @returns a ResolverFn to resolve the title based on the query results
  */
-const queryTitleResolver = <QueryData>(
-    queryFromParams: (params: Params) => TypedDocumentNode<QueryData, unknown>,
+const queryTitleResolver = <QueryData, QueryVariables>(
+    queryFromParams: (params: Params) => TypedDocumentNode<QueryData, QueryVariables>,
     titleFromData: (data: QueryData) => string,
+    watchChanges = false,
 ): ResolveFn<string> => {
     return (route: ActivatedRouteSnapshot) => {
         const query = queryFromParams(route.params);
-        return inject(Apollo).watchQuery({ query }).valueChanges.pipe(
+        const apollo = inject(Apollo);
+        const query$ = watchChanges ?
+            apollo.watchQuery({ query }).valueChanges :
+            apollo.query({ query });
+        return query$.pipe(
             map(result => result.data),
             map(titleFromData),
             map(pageTitle),
@@ -28,9 +35,8 @@ const queryTitleResolver = <QueryData>(
     }
 }
 
-type SourceTitleQueryData = { source?: { name: string } }
 
-const sourceTitleQuery = (params: Params) => gql<SourceTitleQueryData, unknown>(`
+const sourceTitleQuery = (params: Params) => gql<SourceTitleQueryQuery, SourceTitleQueryQueryVariables>(`
     query SourceTitleQuery {
         source(id: "${params['id']}") {
             id
@@ -38,10 +44,11 @@ const sourceTitleQuery = (params: Params) => gql<SourceTitleQueryData, unknown>(
         }
 }`);
 
-const sourceFormTitle = (data: SourceTitleQueryData) => `Edit ${data.source?.name}`;
+const sourceFormTitle = (data: SourceTitleQueryQuery) => `Edit ${data.source?.name}`;
 
 export const sourceFormTitleResolver = queryTitleResolver(
-    sourceTitleQuery, sourceFormTitle);
+    sourceTitleQuery, sourceFormTitle
+);
 
 type EntityDescriptionTitleQueryData<Key extends string> =
     Record<Key, { name: string, source: { name: string } }>;
@@ -55,12 +62,13 @@ const agentTitleQuery = (params: Params) => gql<AgentTitleQueryData, unknown>(`
             name
             source { id, name }
         }
-}`);
+    }`
+);
 
 const entityDescriptionFormTitle = <Key extends string>(
     data: EntityDescriptionTitleQueryData<Key>
 ) => {
-    const key = _.first(_.keys(data)) as Key;
+    const key = _.first(_.without(_.keys(data), '__typename')) as Key;
     const entity = data[key];
     if (entity) {
         return `Edit ${entity.name} (${entity.source.name})`;
@@ -70,7 +78,8 @@ const entityDescriptionFormTitle = <Key extends string>(
 }
 
 export const agentFormTitleResolver = queryTitleResolver(
-    agentTitleQuery, entityDescriptionFormTitle);
+    agentTitleQuery, entityDescriptionFormTitle, true
+);
 
 type LetterTitleQueryData = EntityDescriptionTitleQueryData<'letterDescription'>;
 
@@ -81,12 +90,13 @@ const letterTitleQuery = (params: Params) => gql<LetterTitleQueryData, unknown>(
             name
             source { id, name }
         }
-    }
-`);
+    }`
+);
 
 
 export const letterFormTitleResolver = queryTitleResolver(
-    letterTitleQuery, entityDescriptionFormTitle);
+    letterTitleQuery, entityDescriptionFormTitle, true
+);
 
 
 type GiftTitleQueryData = EntityDescriptionTitleQueryData<'giftDescription'>;
@@ -98,12 +108,13 @@ const giftTitleQuery = (params: Params) => gql<GiftTitleQueryData, unknown>(`
             name
             source { id, name }
         }
-    }
-`);
+    }`
+);
 
 
 export const giftFormTitleResolver = queryTitleResolver(
-    giftTitleQuery, entityDescriptionFormTitle);
+    giftTitleQuery, entityDescriptionFormTitle, true
+);
 
 type SpaceTitleQueryData = EntityDescriptionTitleQueryData<'spaceDescription'>;
 
@@ -114,8 +125,9 @@ const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
             name
             source { id, name }
         }
-    }
-`);
+    }`
+);
 
 export const spaceFormTitleResolver = queryTitleResolver(
-    spaceTitleQuery, entityDescriptionFormTitle);
+    spaceTitleQuery, entityDescriptionFormTitle, true
+);
