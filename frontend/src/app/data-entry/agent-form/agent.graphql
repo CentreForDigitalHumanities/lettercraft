@@ -3,6 +3,7 @@ query DataEntryAgent($id: ID!) {
     id
     name
     description
+    isGroup
     source {
       id
       name

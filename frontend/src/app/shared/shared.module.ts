@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from './icon/icon.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ActionButtonGroupComponent } from './action-button-group/action-button-group.component';
+import { ContributorsComponent } from './contributors/contributors.component';
 
 
 
@@ -16,7 +17,8 @@ import { ActionButtonGroupComponent } from './action-button-group/action-button-
     declarations: [
         IconComponent,
         BreadcrumbComponent,
-        ActionButtonGroupComponent
+        ActionButtonGroupComponent,
+        ContributorsComponent,
     ],
     imports: [
         CommonModule,
@@ -35,6 +37,7 @@ import { ActionButtonGroupComponent } from './action-button-group/action-button-
         IconComponent,
         BreadcrumbComponent,
         ActionButtonGroupComponent,
+        ContributorsComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,

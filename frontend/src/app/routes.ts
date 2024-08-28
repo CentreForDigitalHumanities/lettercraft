@@ -18,6 +18,8 @@ import {
     agentFormTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
     SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
 } from './titles';
+import { EpisodeFormComponent } from './data-entry/episode-form/episode-form.component';
+
 
 const routes: Routes = [
     {
@@ -88,6 +90,10 @@ const routes: Routes = [
                 path: 'sources/:id',
                 title: sourceFormTitleResolver,
                 component: SourceComponent
+            },
+            {
+                path: 'episodes/:id',
+                component: EpisodeFormComponent,
             },
             {
                 path: '',
