@@ -49,6 +49,10 @@ def get_queryset_matching_parent_source(
     db_field: RelatedField,
     request: HttpRequest,
 ) -> QuerySet:
-    parent_id = re.search(f"\d+", request.path).group(0)
-    parent = admin.parent_model.objects.get(id=parent_id)
-    return db_field.remote_field.model.objects.filter(source=parent.source)
+    id_match = re.search(r"\d+", request.path)
+    if id_match:
+        parent_id = id_match.group(0)
+        parent = admin.parent_model.objects.get(id=parent_id)
+        return db_field.remote_field.model.objects.filter(source=parent.source)
+    else:
+        return db_field.remote_field.model.objects.all()
