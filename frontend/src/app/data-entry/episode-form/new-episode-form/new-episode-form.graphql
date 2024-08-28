@@ -1,5 +1,5 @@
-mutation DataEntryCreateEpisode($input: CreateEpisodeMutationInput!) {
-    createEpisode(input: $input) {
+mutation DataEntryCreateEpisode($episodeData: CreateEpisodeInput!) {
+    createEpisode(episodeData: $episodeData) {
         episode {
             id
         }

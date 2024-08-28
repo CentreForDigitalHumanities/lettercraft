@@ -71,14 +71,14 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+input CreateEpisodeInput {
+  name: String!
+  source: ID!
+}
+
 type CreateEpisodeMutation {
   episode: EpisodeType
   errors: [LettercraftErrorType!]!
-}
-
-input CreateEpisodeMutationInput {
-  name: String!
-  source: ID!
 }
 
 type DeleteEpisodeMutation {
@@ -346,10 +346,10 @@ type LettercraftErrorType {
 }
 
 type Mutation {
-  createEpisode(input: CreateEpisodeMutationInput!): CreateEpisodeMutation
+  createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
-  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
-  updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+  updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
+  updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
 """An enumeration."""
@@ -841,12 +841,7 @@ input UpdateCreateSourceInput {
   name: String!
 }
 
-type UpdateEpisodeMutation {
-  errors: [LettercraftErrorType!]!
-  ok: Boolean!
-}
-
-input UpdateEpisodeMutationInput {
+input UpdateEpisodeInput {
   book: String
   categories: [ID!]
   chapter: String
@@ -855,6 +850,11 @@ input UpdateEpisodeMutationInput {
   name: String
   page: String
   summary: String
+}
+
+type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type UpdateOrCreateSourceMutation {

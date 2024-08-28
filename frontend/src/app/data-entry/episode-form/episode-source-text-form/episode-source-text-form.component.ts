@@ -64,7 +64,7 @@ export class EpisodeSourceTextFormComponent implements OnInit {
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
                     this.updateEpisode.mutate({
-                        input: {
+                        episodeData: {
                             id,
                             ...episode,
                         },

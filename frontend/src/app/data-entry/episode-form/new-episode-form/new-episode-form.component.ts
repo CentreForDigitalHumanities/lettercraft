@@ -1,13 +1,22 @@
-import { Component, DestroyRef, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+    Component,
+    DestroyRef,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+} from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastService } from "@services/toast.service";
-import { CreateEpisodeMutationInput, DataEntryCreateEpisodeGQL } from "generated/graphql";
+import {
+    CreateEpisodeInput,
+    DataEntryCreateEpisodeGQL,
+} from "generated/graphql";
 
 type NewEpisodeForm = {
-    [key in keyof CreateEpisodeMutationInput]: FormControl<CreateEpisodeMutationInput[key]>;
+    [key in keyof CreateEpisodeInput]: FormControl<CreateEpisodeInput[key]>;
 };
-
 
 @Component({
     selector: "lc-new-episode-form",
@@ -49,10 +58,10 @@ export class NewEpisodeFormComponent implements OnInit {
             return;
         }
         this.mutationStarted.emit();
-        const input = this.form.getRawValue();
+        const episodeData = this.form.getRawValue();
         this.updateEpisode
             .mutate(
-                { input },
+                { episodeData },
                 {
                     update: (cache) =>
                         cache.evict({
@@ -76,7 +85,9 @@ export class NewEpisodeFormComponent implements OnInit {
                     type: "success",
                     header: "Success",
                 });
-                this.episodeCreated.emit(result.data?.createEpisode?.episode?.id ?? null);
+                this.episodeCreated.emit(
+                    result.data?.createEpisode?.episode?.id ?? null
+                );
             });
     }
 }

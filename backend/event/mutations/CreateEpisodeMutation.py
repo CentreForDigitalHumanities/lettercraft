@@ -15,7 +15,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 
 
-class CreateEpisodeMutationInput(InputObjectType):
+class CreateEpisodeInput(InputObjectType):
     name = String(required=True)
     source = ID(required=True)
 
@@ -27,18 +27,18 @@ class CreateEpisodeMutation(LettercraftMutation):
     django_model = Episode
 
     class Arguments:
-        input = CreateEpisodeMutationInput(required=True)
+        episode_data = CreateEpisodeInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, input: CreateEpisodeMutationInput):
+    def mutate(cls, root: None, info: ResolveInfo, episode_data: CreateEpisodeInput):
         try:
-            source = Source.objects.get(id=getattr(input, "source"))
+            source = Source.objects.get(id=getattr(episode_data, "source"))
         except Source.DoesNotExist:
             error = LettercraftErrorType(field="source", messages=["Source not found."])
             return cls(errors=[error])  # type: ignore
 
         episode = Episode.objects.create(
-            name=getattr(input, "name"),
+            name=getattr(episode_data, "name"),
             source=source,
         )
 

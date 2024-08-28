@@ -73,15 +73,15 @@ export type AgentDescriptionType = {
   sourceMention?: Maybe<PersonAgentDescriptionSourceMentionChoices>;
 };
 
+export type CreateEpisodeInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
 export type CreateEpisodeMutation = {
   __typename?: 'CreateEpisodeMutation';
   episode?: Maybe<EpisodeType>;
   errors: Array<LettercraftErrorType>;
-};
-
-export type CreateEpisodeMutationInput = {
-  name: Scalars['String']['input'];
-  source: Scalars['ID']['input'];
 };
 
 export type DeleteEpisodeMutation = {
@@ -313,7 +313,7 @@ export type Mutation = {
 
 
 export type MutationCreateEpisodeArgs = {
-  input: CreateEpisodeMutationInput;
+  episodeData: CreateEpisodeInput;
 };
 
 
@@ -323,12 +323,12 @@ export type MutationDeleteEpisodeArgs = {
 
 
 export type MutationUpdateEpisodeArgs = {
-  input: UpdateEpisodeMutationInput;
+  episodeData: UpdateEpisodeInput;
 };
 
 
 export type MutationUpdateOrCreateSourceArgs = {
-  input: UpdateCreateSourceInput;
+  sourceData: UpdateCreateSourceInput;
 };
 
 /** An enumeration. */
@@ -799,13 +799,7 @@ export type UpdateCreateSourceInput = {
   name: Scalars['String']['input'];
 };
 
-export type UpdateEpisodeMutation = {
-  __typename?: 'UpdateEpisodeMutation';
-  errors: Array<LettercraftErrorType>;
-  ok: Scalars['Boolean']['output'];
-};
-
-export type UpdateEpisodeMutationInput = {
+export type UpdateEpisodeInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
@@ -814,6 +808,12 @@ export type UpdateEpisodeMutationInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
   summary?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateEpisodeMutation = {
+  __typename?: 'UpdateEpisodeMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UpdateOrCreateSourceMutation = {
@@ -886,14 +886,14 @@ export type DataEntryEpisodeFormQueryVariables = Exact<{
 export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeMutationVariables = Exact<{
-  input: UpdateEpisodeMutationInput;
+  episodeData: UpdateEpisodeInput;
 }>;
 
 
 export type DataEntryUpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode?: { __typename?: 'UpdateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryCreateEpisodeMutationVariables = Exact<{
-  input: CreateEpisodeMutationInput;
+  episodeData: CreateEpisodeInput;
 }>;
 
 
@@ -971,7 +971,7 @@ export const DataEntryAgentDescriptionDocument = gql`
   })
   export class DataEntryAgentDescriptionGQL extends Apollo.Query<DataEntryAgentDescriptionQuery, DataEntryAgentDescriptionQueryVariables> {
     override document = DataEntryAgentDescriptionDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -990,7 +990,7 @@ export const LocationsInSourceListDocument = gql`
   })
   export class LocationsInSourceListGQL extends Apollo.Query<LocationsInSourceListQuery, LocationsInSourceListQueryVariables> {
     override document = LocationsInSourceListDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1011,7 +1011,7 @@ export const DataEntryAgentIdentificationDocument = gql`
   })
   export class DataEntryAgentIdentificationGQL extends Apollo.Query<DataEntryAgentIdentificationQuery, DataEntryAgentIdentificationQueryVariables> {
     override document = DataEntryAgentIdentificationDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1036,7 +1036,7 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1058,7 +1058,7 @@ export const DataEntryEpisodeContentsDocument = gql`
   })
   export class DataEntryEpisodeContentsGQL extends Apollo.Query<DataEntryEpisodeContentsQuery, DataEntryEpisodeContentsQueryVariables> {
     override document = DataEntryEpisodeContentsDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1077,7 +1077,7 @@ export const DataEntryEpisodeIdentificationDocument = gql`
   })
   export class DataEntryEpisodeIdentificationGQL extends Apollo.Query<DataEntryEpisodeIdentificationQuery, DataEntryEpisodeIdentificationQueryVariables> {
     override document = DataEntryEpisodeIdentificationDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1099,7 +1099,7 @@ export const DataEntryEpisodeSourceTextMentionDocument = gql`
   })
   export class DataEntryEpisodeSourceTextMentionGQL extends Apollo.Query<DataEntryEpisodeSourceTextMentionQuery, DataEntryEpisodeSourceTextMentionQueryVariables> {
     override document = DataEntryEpisodeSourceTextMentionDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1123,14 +1123,14 @@ export const DataEntryEpisodeFormDocument = gql`
   })
   export class DataEntryEpisodeFormGQL extends Apollo.Query<DataEntryEpisodeFormQuery, DataEntryEpisodeFormQueryVariables> {
     override document = DataEntryEpisodeFormDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
   }
 export const DataEntryUpdateEpisodeDocument = gql`
-    mutation DataEntryUpdateEpisode($input: UpdateEpisodeMutationInput!) {
-  updateEpisode(input: $input) {
+    mutation DataEntryUpdateEpisode($episodeData: UpdateEpisodeInput!) {
+  updateEpisode(episodeData: $episodeData) {
     ok
     errors {
       field
@@ -1145,14 +1145,14 @@ export const DataEntryUpdateEpisodeDocument = gql`
   })
   export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
     override document = DataEntryUpdateEpisodeDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
   }
 export const DataEntryCreateEpisodeDocument = gql`
-    mutation DataEntryCreateEpisode($input: CreateEpisodeMutationInput!) {
-  createEpisode(input: $input) {
+    mutation DataEntryCreateEpisode($episodeData: CreateEpisodeInput!) {
+  createEpisode(episodeData: $episodeData) {
     episode {
       id
     }
@@ -1169,7 +1169,7 @@ export const DataEntryCreateEpisodeDocument = gql`
   })
   export class DataEntryCreateEpisodeGQL extends Apollo.Mutation<DataEntryCreateEpisodeMutation, DataEntryCreateEpisodeMutationVariables> {
     override document = DataEntryCreateEpisodeDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1193,7 +1193,7 @@ export const DataEntryGiftDocument = gql`
   })
   export class DataEntryGiftGQL extends Apollo.Query<DataEntryGiftQuery, DataEntryGiftQueryVariables> {
     override document = DataEntryGiftDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1217,7 +1217,7 @@ export const DataEntryLetterDocument = gql`
   })
   export class DataEntryLetterGQL extends Apollo.Query<DataEntryLetterQuery, DataEntryLetterQueryVariables> {
     override document = DataEntryLetterDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1241,7 +1241,7 @@ export const DataEntrySpaceDescriptionDocument = gql`
   })
   export class DataEntrySpaceDescriptionGQL extends Apollo.Query<DataEntrySpaceDescriptionQuery, DataEntrySpaceDescriptionQueryVariables> {
     override document = DataEntrySpaceDescriptionDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1263,7 +1263,7 @@ export const DataEntryDeleteEpisodeDocument = gql`
   })
   export class DataEntryDeleteEpisodeGQL extends Apollo.Mutation<DataEntryDeleteEpisodeMutation, DataEntryDeleteEpisodeMutationVariables> {
     override document = DataEntryDeleteEpisodeDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1317,7 +1317,7 @@ export const DataEntrySourceDetailDocument = gql`
   })
   export class DataEntrySourceDetailGQL extends Apollo.Query<DataEntrySourceDetailQuery, DataEntrySourceDetailQueryVariables> {
     override document = DataEntrySourceDetailDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1341,7 +1341,7 @@ export const DataEntrySourceListDocument = gql`
   })
   export class DataEntrySourceListGQL extends Apollo.Query<DataEntrySourceListQuery, DataEntrySourceListQueryVariables> {
     override document = DataEntrySourceListDocument;
-    
+
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }

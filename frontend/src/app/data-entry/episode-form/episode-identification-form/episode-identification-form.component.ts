@@ -65,7 +65,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 switchMap(([episode, id]) =>
                     this.updateEpisode
                         .mutate({
-                            input: {
+                            episodeData: {
                                 id,
                                 name: episode.name,
                             },

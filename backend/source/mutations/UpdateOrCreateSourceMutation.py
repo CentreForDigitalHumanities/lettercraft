@@ -18,11 +18,13 @@ class UpdateOrCreateSourceMutation(Mutation):
     errors = List(String)
 
     class Arguments:
-        input = UpdateCreateSourceInput(required=True)
+        source_data = UpdateCreateSourceInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, input: UpdateCreateSourceInput):
-        source_id = getattr(input, "id", None)
+    def mutate(
+        cls, root: None, info: ResolveInfo, source_data: UpdateCreateSourceInput
+    ):
+        source_id = getattr(source_data, "id", None)
 
         if source_id:
             try:
@@ -32,7 +34,7 @@ class UpdateOrCreateSourceMutation(Mutation):
         else:
             source = Source()
 
-        for field, value in input.items():  # type: ignore
+        for field, value in source_data.items():  # type: ignore
             setattr(source, field, value)
 
         source.save()

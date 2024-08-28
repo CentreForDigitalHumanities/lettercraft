@@ -6,7 +6,7 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class UpdateEpisodeMutationInput(InputObjectType):
+class UpdateEpisodeInput(InputObjectType):
     id = ID(required=True)
     name = String()
     book = String()
@@ -24,12 +24,12 @@ class UpdateEpisodeMutation(LettercraftMutation):
     django_model = Episode
 
     class Arguments:
-        input = UpdateEpisodeMutationInput(required=True)
+        episode_data = UpdateEpisodeInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, input: UpdateEpisodeMutationInput):
+    def mutate(cls, root: None, info: ResolveInfo, episode_data: UpdateEpisodeInput):
         try:
-            retrieved_object = cls.get_or_create_object(info, input)
+            retrieved_object = cls.get_or_create_object(info, episode_data)
         except ObjectDoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, errors=[error])  # type: ignore
@@ -37,7 +37,7 @@ class UpdateEpisodeMutation(LettercraftMutation):
         episode = retrieved_object.object
 
         try:
-            cls.mutate_object(input, episode, info)
+            cls.mutate_object(episode_data, episode, info)
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
