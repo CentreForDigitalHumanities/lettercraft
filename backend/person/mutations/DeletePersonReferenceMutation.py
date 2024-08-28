@@ -28,7 +28,9 @@ class DeletePersonReferenceMutation(Mutation):
         try:
             reference = PersonReference.objects.get(id=id)
         except PersonReference.DoesNotExist:
-            raise LettercraftErrorType("id", ["Reference not found"])
+            return cls(
+                ok=False, errors=LettercraftErrorType("id", ["Reference not found"])
+            )
 
         reference.delete()
 

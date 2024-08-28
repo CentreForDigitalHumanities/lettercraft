@@ -28,7 +28,7 @@ class DeleteAgentMutation(Mutation):
         try:
             reference = AgentDescription.objects.get(id=id)
         except AgentDescription.DoesNotExist:
-            raise LettercraftErrorType("id", ["Agent not found"])
+            return cls(ok=False, errors=LettercraftErrorType("id", ["Agent not found"]))
 
         reference.delete()
 
