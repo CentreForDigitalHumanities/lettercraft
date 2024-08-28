@@ -46,7 +46,7 @@ class EpisodeLetterAdmin(admin.StackedInline):
     verbose_name = "involved letter"
 
     def get_field_queryset(self, db, db_field, request):
-        if db_field.name == "letter":
+        if db_field.name == "letter" and request:
             return core_admin.get_queryset_matching_parent_source(
                 self, db_field, request
             )

@@ -46,9 +46,9 @@ class AgentDescriptionLocationAdmin(admin.StackedInline):
     extra = 0
 
     def get_field_queryset(
-        self, db, db_field: RelatedField, request: HttpRequest
+        self, db, db_field: RelatedField, request: HttpRequest | None
     ) -> QuerySet | None:
-        if db_field.name == "location":
+        if db_field.name == "location" and request:
             return core_admin.get_queryset_matching_parent_source(
                 self, db_field, request
             )
