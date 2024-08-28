@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
+    DataEntryEpisodeCategoriesGQL,
     DataEntryEpisodeContentsGQL,
     DataEntryUpdateEpisodeGQL,
 } from "generated/graphql";
@@ -15,6 +16,7 @@ import {
     switchMap,
     withLatestFrom,
 } from "rxjs";
+import { LabelSelectOption } from "../../shared/label-select/label-select.component";
 
 @Component({
     selector: "lc-episode-contents-form",
@@ -40,11 +42,24 @@ export class EpisodeContentsFormComponent implements OnInit {
         }),
     });
 
+    public episodeCategories$: Observable<LabelSelectOption[]> =
+        this.episodeCategoriesQuery.fetch().pipe(
+            map((result) => {
+                const categories = result.data.episodeCategories;
+                return categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                    description: category.description,
+                }));
+            })
+        );
+
     constructor(
         private destroyRef: DestroyRef,
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeContentsGQL,
+        private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
