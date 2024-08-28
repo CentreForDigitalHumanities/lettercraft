@@ -1,0 +1,8 @@
+<small class="contributors text-muted">
+    <ng-container *ngIf="contributors.length === 0"
+        >No contributors</ng-container
+    >
+    <ng-container *ngIf="contributors.length === 1">Contributor: {{ contributors[0].fullName }}</ng-container>
+    <ng-container *ngIf="contributors.length === 2">Contributors: {{ contributors[0].fullName }}, {{ contributors[1].fullName }}</ng-container>
+    <ng-container *ngIf="contributors.length > 2">Contributors: {{ contributors[0].fullName }} et al.</ng-container>
+</small>

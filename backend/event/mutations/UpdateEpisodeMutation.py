@@ -34,7 +34,7 @@ class UpdateEpisodeMutation(LettercraftMutation):
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, errors=[error])  # type: ignore
 
-        episode = retrieved_object.object
+        episode: Episode = retrieved_object.object  # type: ignore
 
         try:
             cls.mutate_object(episode_data, episode, info)
@@ -43,6 +43,9 @@ class UpdateEpisodeMutation(LettercraftMutation):
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error])  # type: ignore
+
+        user = info.context.user
+        episode.contributors.add(user)
 
         episode.save()
 
