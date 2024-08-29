@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { dataIcons } from '@shared/icons';
+import { actionIcons, dataIcons } from '@shared/icons';
 import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 

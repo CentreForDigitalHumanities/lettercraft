@@ -19,6 +19,10 @@
             </ng-template>
         </p>
 
+        <div class="hstack">
+            <lc-delete-agent class="ms-auto" *ngIf="id$ | async as id" [id]="id" />
+        </div>
+
         <h2>Identification</h2>
         <lc-agent-identification-form *ngIf="id$ | async as id" [id]="id" />
 
