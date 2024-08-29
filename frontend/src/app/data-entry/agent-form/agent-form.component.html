@@ -20,7 +20,8 @@
         </p>
 
         <div class="hstack">
-            <lc-delete-agent class="ms-auto" *ngIf="id$ | async as id" [id]="id" />
+            <lc-delete-agent class="ms-auto" *ngIf="id$ | async as id" [id]="id"
+                [navigateOnDelete]="sourceLink(data)" />
         </div>
 
         <h2>Identification</h2>

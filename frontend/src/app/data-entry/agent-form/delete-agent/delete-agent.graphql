@@ -1,0 +1,9 @@
+mutation DataEntryDeleteAgent($id: ID!) {
+    deleteAgent(id: $id) {
+        ok
+        errors {
+            messages
+            field
+        }
+    }
+}

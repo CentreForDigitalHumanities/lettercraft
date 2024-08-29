@@ -26,6 +26,13 @@ export class AgentFormComponent {
         );
     }
 
+    sourceLink(data: DataEntryAgentQuery): string[] | undefined {
+        if (data.agentDescription?.source) {
+            return ['/data-entry', 'sources', data.agentDescription.source.id]
+        }
+        return undefined;
+    }
+
     getBreadcrumbs(data: DataEntryAgentQuery): Breadcrumb[] {
         if (data.agentDescription) {
             return [
