@@ -32,7 +32,11 @@ export class DeleteAgentComponent {
     }
 
     deleteAgent(id: string) {
-        this.deleteMutation.mutate({ id }).subscribe({
+        this.deleteMutation.mutate({ id }, {
+            refetchQueries: [
+                'source'
+            ],
+        }).subscribe({
             next: (result) => {
                 if (result.data?.deleteAgent?.ok) {
                     this.onSuccess();
