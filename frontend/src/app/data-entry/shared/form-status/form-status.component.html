@@ -1,1 +1,4 @@
-<p role="status">{{status$ | async}}</p>
+<p role="status" *ngIf="status$ | async as status" [className]="classes[status]">
+    <lc-icon [icon]="statusIcons[status]" />
+    {{messages[status]}}
+</p>

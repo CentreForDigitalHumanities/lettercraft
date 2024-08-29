@@ -35,5 +35,12 @@ export const dataIcons = {
     letter: 'envelope',
 };
 
+export const statusIcons = {
+    idle: 'pencil',
+    loading: 'hourglass',
+    saved: 'check-lg',
+    error: 'exclamation-circle',
+}
+
 
 
