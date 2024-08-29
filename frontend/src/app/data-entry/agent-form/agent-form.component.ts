@@ -17,6 +17,8 @@ export class AgentFormComponent {
 
     dataIcons = dataIcons;
 
+    status$ = this.formService.status$;
+
     constructor(
         private agentQuery: DataEntryAgentGQL,
         private formService: AgentFormService,

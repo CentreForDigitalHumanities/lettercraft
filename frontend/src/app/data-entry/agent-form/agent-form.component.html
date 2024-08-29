@@ -19,6 +19,8 @@
             </ng-template>
         </p>
 
+        <lc-form-status [status$]="status$" />
+
         <div class="hstack">
             <lc-delete-agent class="ms-auto" *ngIf="id$ | async as id" [id]="id"
                 [navigateOnDelete]="sourceLink(data)" />

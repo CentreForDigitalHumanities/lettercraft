@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast.service';
@@ -9,10 +9,14 @@ import {
 } from 'generated/graphql';
 import {
     map, switchMap, filter, debounceTime, withLatestFrom, Observable,
-    distinctUntilChanged
+    distinctUntilChanged,
+
+    tap,
+    BehaviorSubject
 } from 'rxjs';
 import _ from 'underscore';
 import { AgentFormService } from '../agent-form.service';
+import { FormStatus } from '../../shared/types';
 
 interface FormData {
     name: string;
@@ -25,7 +29,7 @@ interface FormData {
     templateUrl: './agent-identification-form.component.html',
     styleUrls: ['./agent-identification-form.component.scss']
 })
-export class AgentIdentificationFormComponent {
+export class AgentIdentificationFormComponent implements OnDestroy {
     form = new FormGroup({
         name: new FormControl<string>('', {
             nonNullable: true,
@@ -38,7 +42,10 @@ export class AgentIdentificationFormComponent {
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
     });
 
+    status$ = new BehaviorSubject<FormStatus>('idle');
+
     private id$ = this.formService.id$;
+    private formName = 'identification';
 
     constructor(
         private agentQuery: DataEntryAgentIdentificationGQL,
@@ -46,6 +53,8 @@ export class AgentIdentificationFormComponent {
         private toastService: ToastService,
         private formService: AgentFormService,
     ) {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
@@ -56,11 +65,16 @@ export class AgentIdentificationFormComponent {
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
             filter(this.isValid.bind(this)),
+            tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm(this.formName);
     }
 
     updateFormData(data: DataEntryAgentIdentificationQuery) {
@@ -93,14 +107,15 @@ export class AgentIdentificationFormComponent {
 
     private onMutationResult(result: MutationResult<DataEntryUpdateAgentMutation>): void {
         if (result.errors?.length) {
+            this.status$.next('error');
             const messages = result.errors.map(error => error.message);
             this.toastService.show({
                 type: 'danger',
                 header: 'Failed to save form',
                 body: messages.join('\n\n'),
             });
-        }
-        if (result.data?.updateAgent?.errors.length) {
+        } else if (result.data?.updateAgent?.errors.length) {
+            this.status$.next('error');
             const errors = result.data.updateAgent.errors;
             const messages = errors.map(error => `${error.field}: ${error.messages.join('\n')}`);
             this.toastService.show({
@@ -108,6 +123,8 @@ export class AgentIdentificationFormComponent {
                 header: 'Failed to save form',
                 body: messages.join('\n\n'),
             });
+        } else {
+            this.status$.next('saved');
         }
     }
 

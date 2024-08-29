@@ -17,9 +17,10 @@ import {
     SourceMention,
     UpdateAgentInput,
 } from 'generated/graphql';
-import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom } from 'rxjs';
+import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap } from 'rxjs';
 import _ from 'underscore';
 import { AgentFormService } from '../agent-form.service';
+import { FormStatus } from '../../shared/types';
 
 
 @Component({
@@ -27,7 +28,7 @@ import { AgentFormService } from '../agent-form.service';
     templateUrl: './agent-description-form.component.html',
     styleUrls: ['./agent-description-form.component.scss'],
 })
-export class AgentDescriptionFormComponent {
+export class AgentDescriptionFormComponent implements OnDestroy {
     genderOptions: { value: GenderChoices, label: string }[] = [
         { value: GenderChoices.Female, label: 'Female' },
         { value: GenderChoices.Male, label: 'Male' },
@@ -64,8 +65,11 @@ export class AgentDescriptionFormComponent {
     isGroup$: Observable<boolean>;
     locations$: Observable<LocationsInSourceListQuery>;
 
+    status$ = new BehaviorSubject<FormStatus>('idle');
+
     private id$ = this.formService.id$;
     private data$: Observable<DataEntryAgentDescriptionQuery>;
+    private formName = 'description';
 
     constructor(
         private agentQuery: DataEntryAgentDescriptionGQL,
@@ -74,6 +78,7 @@ export class AgentDescriptionFormComponent {
         private toastService: ToastService,
         private formService: AgentFormService,
     ) {
+        this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
@@ -96,6 +101,7 @@ export class AgentDescriptionFormComponent {
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
             filter(this.isValid.bind(this)),
+            tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
             switchMap(this.makeMutation.bind(this)),
@@ -118,6 +124,10 @@ export class AgentDescriptionFormComponent {
                 note: data.agentDescription?.location?.note || '',
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm(this.formName);
     }
 
     private isValid(): boolean {
@@ -153,14 +163,15 @@ export class AgentDescriptionFormComponent {
 
     private onMutationResult(result: MutationResult<DataEntryUpdateAgentMutation>): void {
         if (result.errors?.length) {
+            this.status$.next('error');
             const messages = result.errors.map(error => error.message);
             this.toastService.show({
                 type: 'danger',
                 header: 'Failed to save form',
                 body: messages.join('\n\n'),
             });
-        }
-        if (result.data?.updateAgent?.errors.length) {
+        } else if (result.data?.updateAgent?.errors.length) {
+            this.status$.next('error');
             const errors = result.data.updateAgent.errors;
             const messages = errors.map(error => `${error.field}: ${error.messages.join('\n')}`);
             this.toastService.show({
@@ -168,6 +179,8 @@ export class AgentDescriptionFormComponent {
                 header: 'Failed to save form',
                 body: messages.join('\n\n'),
             });
+        } else {
+            this.status$.next('saved');
         }
     }
 

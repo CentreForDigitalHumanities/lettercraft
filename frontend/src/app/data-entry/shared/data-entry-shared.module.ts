@@ -17,6 +17,7 @@ import { FormStatusComponent } from './form-status/form-status.component';
         DesignatorsControlComponent,
         MultiselectComponent,
         LabelSelectComponent,
+        FormStatusComponent,
     ],
 })
 export class DataEntrySharedModule {}
