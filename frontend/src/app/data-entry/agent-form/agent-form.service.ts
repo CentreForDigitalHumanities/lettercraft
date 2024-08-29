@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { asyncScheduler, BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, throttleTime } from 'rxjs';
 import { FormStatus } from '../shared/types';
 import _ from 'underscore';
 
@@ -20,7 +20,8 @@ export class AgentFormService {
         );
         this.status$ = this.statuses$.pipe(
             switchMap(statuses => combineLatest(_.values(statuses))),
-            map(this.combinedStatus)
+            map(this.combinedStatus),
+            throttleTime(400, asyncScheduler, { trailing: true }),
         );
     }
 
