@@ -3,13 +3,13 @@ import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { dataIcons } from '@shared/icons';
 import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { AgentFormService } from './agent-form.service';
+import { FormService } from '../shared/form.service';
 
 @Component({
     selector: 'lc-agent-form',
     templateUrl: './agent-form.component.html',
     styleUrls: ['./agent-form.component.scss'],
-    providers: [AgentFormService],
+    providers: [FormService],
 })
 export class AgentFormComponent {
     id$: Observable<string> = this.formService.id$;
@@ -21,7 +21,7 @@ export class AgentFormComponent {
 
     constructor(
         private agentQuery: DataEntryAgentGQL,
-        private formService: AgentFormService,
+        private formService: FormService,
     ) {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),

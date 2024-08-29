@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { asyncScheduler, BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, throttleTime } from 'rxjs';
-import { FormStatus } from '../shared/types';
+import { FormStatus } from './types';
 import _ from 'underscore';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class AgentFormService {
+@Injectable()
+export class FormService {
     id$: Observable<string>;
 
     status$: Observable<FormStatus>;

@@ -15,7 +15,7 @@ import {
     BehaviorSubject
 } from 'rxjs';
 import _ from 'underscore';
-import { AgentFormService } from '../agent-form.service';
+import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
 
 interface FormData {
@@ -51,7 +51,7 @@ export class AgentIdentificationFormComponent implements OnDestroy {
         private agentQuery: DataEntryAgentIdentificationGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
-        private formService: AgentFormService,
+        private formService: FormService,
     ) {
         this.formService.attachForm(this.formName, this.status$);
 

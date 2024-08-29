@@ -5,7 +5,7 @@ import { ToastService } from '@services/toast.service';
 import { actionIcons } from '@shared/icons';
 import { DataEntryDeleteAgentGQL, LettercraftErrorType } from 'generated/graphql';
 import _ from 'underscore';
-import { AgentFormService } from '../agent-form.service';
+import { FormService } from '../../shared/form.service';
 import { BehaviorSubject } from 'rxjs';
 import { FormStatus } from '../../shared/types';
 
@@ -19,7 +19,7 @@ export class DeleteAgentComponent implements OnDestroy {
 
     actionIcons = actionIcons;
 
-    id$ = this.agentFormService.id$;
+    id$ = this.formService.id$;
     status$ = new BehaviorSubject<FormStatus>('idle');
     private formName = 'delete';
 
@@ -28,13 +28,13 @@ export class DeleteAgentComponent implements OnDestroy {
         private deleteMutation: DataEntryDeleteAgentGQL,
         private toastService: ToastService,
         private router: Router,
-        private agentFormService: AgentFormService,
+        private formService: FormService,
     ) {
-        this.agentFormService.attachForm(this.formName, this.status$);
+        this.formService.attachForm(this.formName, this.status$);
     }
 
     ngOnDestroy(): void {
-        this.agentFormService.detachForm(this.formName);
+        this.formService.detachForm(this.formName);
     }
 
     open(content: TemplateRef<any>) {

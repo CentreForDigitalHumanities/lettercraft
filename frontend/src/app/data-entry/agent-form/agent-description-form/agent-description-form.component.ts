@@ -19,7 +19,7 @@ import {
 } from 'generated/graphql';
 import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap } from 'rxjs';
 import _ from 'underscore';
-import { AgentFormService } from '../agent-form.service';
+import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
 
 
@@ -76,7 +76,7 @@ export class AgentDescriptionFormComponent implements OnDestroy {
         private locationsQuery: LocationsInSourceListGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
-        private formService: AgentFormService,
+        private formService: FormService,
     ) {
         this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.id$.pipe(
