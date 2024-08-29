@@ -350,6 +350,9 @@ type Mutation {
   deleteEpisode(id: ID!): DeleteEpisodeMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+  updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
+  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
+  updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
 }
 
 """An enumeration."""
@@ -831,6 +834,18 @@ type StructureType {
 
   """The settlement containing this structure"""
   settlement: SettlementType
+}
+
+input UpdateAgentInput {
+  description: String
+  id: ID!
+  isGroup: Boolean
+  name: String
+}
+
+type UpdateAgentMutation {
+  agent: AgentDescriptionType
+  error: String
 }
 
 input UpdateCreateSourceInput {

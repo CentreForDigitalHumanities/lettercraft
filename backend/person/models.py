@@ -65,6 +65,9 @@ class PersonReference(Field, models.Model):
         related_name="person_references",
     )
 
+    def __str__(self):
+        return f"{self.description} describes {self.person}"
+
 
 class AgentDescription(EntityDescription, models.Model):
     """

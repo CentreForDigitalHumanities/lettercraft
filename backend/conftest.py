@@ -1,5 +1,6 @@
 from allauth.account.models import EmailAddress
 import pytest
+from graphene.test import Client
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
@@ -8,6 +9,8 @@ from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
 from user.models import User
+from space.models import SpaceDescription
+from graphql_app.schema import schema
 
 
 @pytest.fixture()
@@ -81,12 +84,12 @@ def agent_description(db, historical_person, source):
 
 
 @pytest.fixture()
-def agent_description_2(db, historical_person, source):
+def agent_description_2(db, historical_person_2, source):
     agent = AgentDescription.objects.create(
         name="Ernie",
         source=source,
     )
-    agent.describes.add(historical_person)
+    agent.describes.add(historical_person_2)
     agent.save()
     return agent
 
@@ -105,6 +108,12 @@ def agent_group_description(db, source, historical_person, historical_person_2):
 
 
 @pytest.fixture()
+def space_description(db, source):
+    space = SpaceDescription.objects.create(name="Sesame street", source=source)
+    return space
+
+
+@pytest.fixture()
 def episode(db, source, agent_description, agent_description_2):
     event = Episode.objects.create(
         name="Bert writes a letter",
@@ -119,3 +128,9 @@ def episode(db, source, agent_description, agent_description_2):
 def case_study(db):
     case_study = CaseStudy.objects.create(name="Test Case Study")
     return case_study
+
+
+@pytest.fixture()
+def graphql_client():
+    client = Client(schema)
+    return client
