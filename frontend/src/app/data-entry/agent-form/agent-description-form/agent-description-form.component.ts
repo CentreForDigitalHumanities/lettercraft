@@ -17,8 +17,9 @@ import {
     SourceMention,
     UpdateAgentInput,
 } from 'generated/graphql';
-import { Observable, map, Subject, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom } from 'rxjs';
+import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom } from 'rxjs';
 import _ from 'underscore';
+import { AgentFormService } from '../agent-form.service';
 
 
 @Component({
@@ -26,9 +27,7 @@ import _ from 'underscore';
     templateUrl: './agent-description-form.component.html',
     styleUrls: ['./agent-description-form.component.scss'],
 })
-export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
-    @Input() id?: string;
-
+export class AgentDescriptionFormComponent {
     genderOptions: { value: GenderChoices, label: string }[] = [
         { value: GenderChoices.Female, label: 'Female' },
         { value: GenderChoices.Male, label: 'Male' },
@@ -65,7 +64,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
     isGroup$: Observable<boolean>;
     locations$: Observable<LocationsInSourceListQuery>;
 
-    private id$ = new Subject<string>();
+    private id$ = this.formService.id$;
     private data$: Observable<DataEntryAgentDescriptionQuery>;
 
     constructor(
@@ -73,6 +72,7 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
         private locationsQuery: LocationsInSourceListGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
+        private formService: AgentFormService,
     ) {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
@@ -101,16 +101,6 @@ export class AgentDescriptionFormComponent implements OnChanges, OnDestroy {
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['id'] && this.id) {
-            this.id$.next(this.id);
-        }
-    }
-
-    ngOnDestroy(): void {
-        this.id$.complete();
     }
 
     updateFormData(data: DataEntryAgentDescriptionQuery) {

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastService } from '@services/toast.service';
@@ -8,10 +8,11 @@ import {
     DataEntryUpdateAgentGQL, DataEntryUpdateAgentMutation, UpdateAgentInput
 } from 'generated/graphql';
 import {
-    map, Subject, switchMap, filter, debounceTime, withLatestFrom, Observable,
+    map, switchMap, filter, debounceTime, withLatestFrom, Observable,
     distinctUntilChanged
 } from 'rxjs';
 import _ from 'underscore';
+import { AgentFormService } from '../agent-form.service';
 
 interface FormData {
     name: string;
@@ -24,9 +25,7 @@ interface FormData {
     templateUrl: './agent-identification-form.component.html',
     styleUrls: ['./agent-identification-form.component.scss']
 })
-export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
-    @Input() id?: string;
-
+export class AgentIdentificationFormComponent {
     form = new FormGroup({
         name: new FormControl<string>('', {
             nonNullable: true,
@@ -39,12 +38,13 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
     });
 
-    private id$ = new Subject<string>();
+    private id$ = this.formService.id$;
 
     constructor(
         private agentQuery: DataEntryAgentIdentificationGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
+        private formService: AgentFormService,
     ) {
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
@@ -61,16 +61,6 @@ export class AgentIdentificationFormComponent implements OnChanges, OnDestroy {
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['id'] && this.id) {
-            this.id$.next(this.id);
-        }
-    }
-
-    ngOnDestroy(): void {
-        this.id$.complete();
     }
 
     updateFormData(data: DataEntryAgentIdentificationQuery) {
