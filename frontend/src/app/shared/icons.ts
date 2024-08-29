@@ -37,6 +37,7 @@ export const dataIcons = {
 
 export const statusIcons = {
     idle: 'pencil',
+    invalid: 'exclamation-circle',
     loading: 'hourglass',
     saved: 'check-lg',
     error: 'exclamation-circle',

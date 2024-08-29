@@ -15,6 +15,7 @@ export class FormStatusComponent {
 
     messages: Record<FormStatus, string> = {
         'idle': 'Waiting for input',
+        'invalid': 'Form contains errors',
         'loading': 'Loading...',
         'saved': 'Changes saved',
         'error': 'Saving failed',
@@ -22,6 +23,7 @@ export class FormStatusComponent {
 
     classes: Record<FormStatus, string> = {
         'idle': 'text-secondary',
+        'invalid': 'text-danger',
         'loading': 'text-secondary',
         'saved': 'text-success',
         'error': 'text-danger',

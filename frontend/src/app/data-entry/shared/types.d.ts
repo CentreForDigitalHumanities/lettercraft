@@ -1,1 +1,1 @@
-export type FormStatus = 'idle' | 'loading' | 'saved' | 'error';
+export type FormStatus = 'idle' | 'invalid' | 'loading' | 'saved' | 'error';

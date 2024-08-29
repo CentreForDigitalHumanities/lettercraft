@@ -33,10 +33,7 @@ export class AgentIdentificationFormComponent implements OnDestroy {
     form = new FormGroup({
         name: new FormControl<string>('', {
             nonNullable: true,
-            validators: [
-                Validators.required,
-                Validators.minLength(3),
-            ]
+            validators: [Validators.required]
         }),
         description: new FormControl<string>('', { nonNullable: true }),
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
@@ -61,9 +58,17 @@ export class AgentIdentificationFormComponent implements OnDestroy {
             takeUntilDestroyed(),
         ).subscribe(this.updateFormData.bind(this));
 
-        this.form.valueChanges.pipe(
+        const changes$ = this.form.valueChanges.pipe(
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
+        );
+
+        changes$.pipe(
+            filter(_.negate(this.isValid.bind(this))),
+            takeUntilDestroyed(),
+        ).subscribe(() => this.status$.next('invalid'));
+
+        changes$.pipe(
             filter(this.isValid.bind(this)),
             tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),

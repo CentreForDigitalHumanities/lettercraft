@@ -39,12 +39,16 @@ export class FormService {
     }
 
     private combinedStatus(statuses: FormStatus[]) {
-        if (_.any(statuses, status => status === 'error')) {
+        if (statuses.includes('error')) {
             return 'error';
-        } else if (_.any(statuses, status => status === 'loading')) {
+        } else if (statuses.includes('loading')) {
             return 'loading';
-        } else {
+        } else if (statuses.includes('invalid')) {
+            return 'invalid';
+        } else if (statuses.includes('saved')) {
             return 'saved';
+        } else {
+            return 'idle';
         }
     }
 }
