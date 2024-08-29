@@ -73,6 +73,25 @@ export type AgentDescriptionType = {
   sourceMention?: Maybe<PersonAgentDescriptionSourceMentionChoices>;
 };
 
+/** An enumeration. */
+export enum Certainty {
+  Certain = 'CERTAIN',
+  SomewhatCertain = 'SOMEWHAT_CERTAIN',
+  Uncertain = 'UNCERTAIN'
+}
+
+export type CreateAgentInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
+export type CreateAgentMutation = {
+  __typename?: 'CreateAgentMutation';
+  agent?: Maybe<AgentDescriptionType>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type CreateEpisodeInput = {
   name: Scalars['String']['input'];
   source: Scalars['ID']['input'];
@@ -84,8 +103,31 @@ export type CreateEpisodeMutation = {
   errors: Array<LettercraftErrorType>;
 };
 
+export type CreatePersonReferenceInput = {
+  description: Scalars['ID']['input'];
+  person: Scalars['ID']['input'];
+};
+
+export type CreatePersonReferenceMutation = {
+  __typename?: 'CreatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteAgentMutation = {
+  __typename?: 'DeleteAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type DeleteEpisodeMutation = {
   __typename?: 'DeleteEpisodeMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeletePersonReferenceMutation = {
+  __typename?: 'DeletePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -138,6 +180,15 @@ export enum EventEpisodeSourceMentionChoices {
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
+}
+
+/** An enumeration. */
+export enum Gender {
+  Female = 'FEMALE',
+  Male = 'MALE',
+  Mixed = 'MIXED',
+  Other = 'OTHER',
+  Unknown = 'UNKNOWN'
 }
 
 export type GiftCategoryType = {
@@ -305,11 +356,46 @@ export type LettercraftErrorType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAgent?: Maybe<CreateAgentMutation>;
   createEpisode?: Maybe<CreateEpisodeMutation>;
+  createPersonReference?: Maybe<CreatePersonReferenceMutation>;
+  deleteAgent?: Maybe<DeleteAgentMutation>;
   deleteEpisode?: Maybe<DeleteEpisodeMutation>;
+  deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+  updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+};
+
+
+export type MutationCreateAgentArgs = {
+  agentData: CreateAgentInput;
+};
+
+
+export type MutationCreateEpisodeArgs = {
+  episodeData: CreateEpisodeInput;
+};
+
+
+export type MutationCreatePersonReferenceArgs = {
+  referenceData: CreatePersonReferenceInput;
+};
+
+
+export type MutationDeleteAgentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteEpisodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeletePersonReferenceArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -325,6 +411,11 @@ export type MutationUpdateEpisodeArgs = {
 
 export type MutationUpdateOrCreateSourceArgs = {
   sourceData: UpdateCreateSourceInput;
+};
+
+
+export type MutationUpdatePersonReferenceArgs = {
+  referenceData: UpdatePersonReferenceInput;
 };
 
 /** An enumeration. */
@@ -612,6 +703,12 @@ export type SourceContentsDateType = {
   yearUpper: Scalars['Int']['output'];
 };
 
+/** An enumeration. */
+export enum SourceMention {
+  Direct = 'DIRECT',
+  Implied = 'IMPLIED'
+}
+
 export type SourceType = {
   __typename?: 'SourceType';
   contentsDate?: Maybe<SourceContentsDateType>;
@@ -787,17 +884,33 @@ export type StructureType = {
   settlement?: Maybe<SettlementType>;
 };
 
+export type UpdateAgentGenderInput = {
+  gender?: InputMaybe<Gender>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
+};
+
 export type UpdateAgentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  designators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
   isGroup?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<UpdateAgentLocationInput>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateAgentLocationInput = {
+  location?: InputMaybe<Scalars['ID']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
 };
 
 export type UpdateAgentMutation = {
   __typename?: 'UpdateAgentMutation';
   agent?: Maybe<AgentDescriptionType>;
-  error?: Maybe<Scalars['String']['output']>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UpdateCreateSourceInput = {
@@ -830,6 +943,18 @@ export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   source?: Maybe<SourceType>;
+};
+
+export type UpdatePersonReferenceInput = {
+  certainty?: InputMaybe<Certainty>;
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdatePersonReferenceMutation = {
+  __typename?: 'UpdatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UserType = {
@@ -1012,7 +1137,7 @@ export const DataEntryAgentDescriptionDocument = gql`
   })
   export class DataEntryAgentDescriptionGQL extends Apollo.Query<DataEntryAgentDescriptionQuery, DataEntryAgentDescriptionQueryVariables> {
     override document = DataEntryAgentDescriptionDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1031,7 +1156,7 @@ export const LocationsInSourceListDocument = gql`
   })
   export class LocationsInSourceListGQL extends Apollo.Query<LocationsInSourceListQuery, LocationsInSourceListQueryVariables> {
     override document = LocationsInSourceListDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1052,7 +1177,7 @@ export const DataEntryAgentIdentificationDocument = gql`
   })
   export class DataEntryAgentIdentificationGQL extends Apollo.Query<DataEntryAgentIdentificationQuery, DataEntryAgentIdentificationQueryVariables> {
     override document = DataEntryAgentIdentificationDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1077,7 +1202,7 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1099,7 +1224,7 @@ export const DataEntryEpisodeContentsDocument = gql`
   })
   export class DataEntryEpisodeContentsGQL extends Apollo.Query<DataEntryEpisodeContentsQuery, DataEntryEpisodeContentsQueryVariables> {
     override document = DataEntryEpisodeContentsDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1119,7 +1244,7 @@ export const DataEntryEpisodeCategoriesDocument = gql`
   })
   export class DataEntryEpisodeCategoriesGQL extends Apollo.Query<DataEntryEpisodeCategoriesQuery, DataEntryEpisodeCategoriesQueryVariables> {
     override document = DataEntryEpisodeCategoriesDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1138,7 +1263,7 @@ export const DataEntryEpisodeIdentificationDocument = gql`
   })
   export class DataEntryEpisodeIdentificationGQL extends Apollo.Query<DataEntryEpisodeIdentificationQuery, DataEntryEpisodeIdentificationQueryVariables> {
     override document = DataEntryEpisodeIdentificationDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1160,7 +1285,7 @@ export const DataEntryEpisodeSourceTextMentionDocument = gql`
   })
   export class DataEntryEpisodeSourceTextMentionGQL extends Apollo.Query<DataEntryEpisodeSourceTextMentionQuery, DataEntryEpisodeSourceTextMentionQueryVariables> {
     override document = DataEntryEpisodeSourceTextMentionDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1184,7 +1309,7 @@ export const DataEntryEpisodeFormDocument = gql`
   })
   export class DataEntryEpisodeFormGQL extends Apollo.Query<DataEntryEpisodeFormQuery, DataEntryEpisodeFormQueryVariables> {
     override document = DataEntryEpisodeFormDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1206,7 +1331,7 @@ export const DataEntryUpdateEpisodeDocument = gql`
   })
   export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
     override document = DataEntryUpdateEpisodeDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1230,7 +1355,7 @@ export const DataEntryCreateEpisodeDocument = gql`
   })
   export class DataEntryCreateEpisodeGQL extends Apollo.Mutation<DataEntryCreateEpisodeMutation, DataEntryCreateEpisodeMutationVariables> {
     override document = DataEntryCreateEpisodeDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1254,7 +1379,7 @@ export const DataEntryGiftDocument = gql`
   })
   export class DataEntryGiftGQL extends Apollo.Query<DataEntryGiftQuery, DataEntryGiftQueryVariables> {
     override document = DataEntryGiftDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1278,7 +1403,7 @@ export const DataEntryLetterDocument = gql`
   })
   export class DataEntryLetterGQL extends Apollo.Query<DataEntryLetterQuery, DataEntryLetterQueryVariables> {
     override document = DataEntryLetterDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1302,7 +1427,7 @@ export const DataEntrySpaceDescriptionDocument = gql`
   })
   export class DataEntrySpaceDescriptionGQL extends Apollo.Query<DataEntrySpaceDescriptionQuery, DataEntrySpaceDescriptionQueryVariables> {
     override document = DataEntrySpaceDescriptionDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1324,7 +1449,7 @@ export const DataEntryDeleteEpisodeDocument = gql`
   })
   export class DataEntryDeleteEpisodeGQL extends Apollo.Mutation<DataEntryDeleteEpisodeMutation, DataEntryDeleteEpisodeMutationVariables> {
     override document = DataEntryDeleteEpisodeDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1382,7 +1507,7 @@ export const DataEntrySourceDetailDocument = gql`
   })
   export class DataEntrySourceDetailGQL extends Apollo.Query<DataEntrySourceDetailQuery, DataEntrySourceDetailQueryVariables> {
     override document = DataEntrySourceDetailDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1406,7 +1531,7 @@ export const DataEntrySourceListDocument = gql`
   })
   export class DataEntrySourceListGQL extends Apollo.Query<DataEntrySourceListQuery, DataEntrySourceListQueryVariables> {
     override document = DataEntrySourceListDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1425,7 +1550,7 @@ export const SourceTitleQueryDocument = gql`
   })
   export class SourceTitleQueryGQL extends Apollo.Query<SourceTitleQueryQuery, SourceTitleQueryQueryVariables> {
     override document = SourceTitleQueryDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1448,7 +1573,7 @@ export const AgentTitleQueryDocument = gql`
   })
   export class AgentTitleQueryGQL extends Apollo.Query<AgentTitleQueryQuery, AgentTitleQueryQueryVariables> {
     override document = AgentTitleQueryDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1471,7 +1596,7 @@ export const LetterTitleQueryDocument = gql`
   })
   export class LetterTitleQueryGQL extends Apollo.Query<LetterTitleQueryQuery, LetterTitleQueryQueryVariables> {
     override document = LetterTitleQueryDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1494,7 +1619,7 @@ export const GiftTitleQueryDocument = gql`
   })
   export class GiftTitleQueryGQL extends Apollo.Query<GiftTitleQueryQuery, GiftTitleQueryQueryVariables> {
     override document = GiftTitleQueryDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
@@ -1517,7 +1642,7 @@ export const SpaceTitleQueryDocument = gql`
   })
   export class SpaceTitleQueryGQL extends Apollo.Query<SpaceTitleQueryQuery, SpaceTitleQueryQueryVariables> {
     override document = SpaceTitleQueryDocument;
-
+    
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
