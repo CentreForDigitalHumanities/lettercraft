@@ -1,28 +1,41 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, OnDestroy, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
 import { actionIcons } from '@shared/icons';
 import { DataEntryDeleteAgentGQL, LettercraftErrorType } from 'generated/graphql';
 import _ from 'underscore';
+import { AgentFormService } from '../agent-form.service';
+import { BehaviorSubject } from 'rxjs';
+import { FormStatus } from '../../shared/types';
 
 @Component({
     selector: 'lc-delete-agent',
     templateUrl: './delete-agent.component.html',
     styleUrls: ['./delete-agent.component.scss']
 })
-export class DeleteAgentComponent {
-    @Input({ required: true }) id!: string;
+export class DeleteAgentComponent implements OnDestroy {
     @Input() navigateOnDelete?: any[];
 
     actionIcons = actionIcons;
+
+    id$ = this.agentFormService.id$;
+    status$ = new BehaviorSubject<FormStatus>('idle');
+    private formName = 'delete';
 
     constructor(
         private modalService: NgbModal,
         private deleteMutation: DataEntryDeleteAgentGQL,
         private toastService: ToastService,
         private router: Router,
-    ) { }
+        private agentFormService: AgentFormService,
+    ) {
+        this.agentFormService.attachForm(this.formName, this.status$);
+    }
+
+    ngOnDestroy(): void {
+        this.agentFormService.detachForm(this.formName);
+    }
 
     open(content: TemplateRef<any>) {
         this.modalService.open(content, { ariaLabelledBy: 'modal-title' }).result.then(
@@ -32,6 +45,7 @@ export class DeleteAgentComponent {
     }
 
     deleteAgent(id: string) {
+        this.status$.next('loading');
         this.deleteMutation.mutate({ id }, {
             refetchQueries: [
                 'source'
@@ -51,6 +65,7 @@ export class DeleteAgentComponent {
     }
 
     onSuccess() {
+        this.status$.next('saved');
         this.toastService.show({
             type: 'success',
             header: 'Agent deleted',
@@ -62,6 +77,7 @@ export class DeleteAgentComponent {
     }
 
     onFail(errors?: LettercraftErrorType[] | any) {
+        this.status$.next('error');
         console.error(errors);
         const messages = errors?.map?.call(
             (error: any) => error.messages?.join('\n')

@@ -17,7 +17,8 @@
         </p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="modal.close(id)">
+        <button type="button" class="btn btn-danger"
+            *ngIf="id$ | async as id" (click)="modal.close(id)">
             Delete
         </button>
         <button type="button" class="btn btn-secondary" (click)="modal.dismiss('cancel')">

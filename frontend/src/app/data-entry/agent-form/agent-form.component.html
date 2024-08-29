@@ -22,12 +22,11 @@
         <lc-form-status [status$]="status$" />
 
         <div class="hstack">
-            <lc-delete-agent class="ms-auto" *ngIf="id$ | async as id" [id]="id"
-                [navigateOnDelete]="sourceLink(data)" />
+            <lc-delete-agent class="ms-auto" [navigateOnDelete]="sourceLink(data)" />
         </div>
 
         <h2>Identification</h2>
-        <lc-agent-identification-form *ngIf="id$ | async as id" [id]="id" />
+        <lc-agent-identification-form />
 
         <h2>Description in source text</h2>
         <lc-agent-description-form />
