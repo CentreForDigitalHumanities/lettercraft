@@ -14,7 +14,7 @@ export class FormStatusComponent {
     statusIcons = statusIcons;
 
     messages: Record<FormStatus, string> = {
-        'idle': 'Waiting for input',
+        'idle': 'No changes made',
         'invalid': 'Form contains errors',
         'loading': 'Loading...',
         'saved': 'Changes saved',

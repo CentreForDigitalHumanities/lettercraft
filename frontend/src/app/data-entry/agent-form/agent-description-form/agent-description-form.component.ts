@@ -17,7 +17,7 @@ import {
     SourceMention,
     UpdateAgentInput,
 } from 'generated/graphql';
-import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap } from 'rxjs';
+import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap, skip } from 'rxjs';
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
@@ -100,6 +100,7 @@ export class AgentDescriptionFormComponent implements OnDestroy {
         this.form.valueChanges.pipe(
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
+            skip(1),
             filter(this.isValid.bind(this)),
             tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),

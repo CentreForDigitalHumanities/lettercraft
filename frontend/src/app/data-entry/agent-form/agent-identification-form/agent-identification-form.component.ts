@@ -12,7 +12,8 @@ import {
     distinctUntilChanged,
 
     tap,
-    BehaviorSubject
+    BehaviorSubject,
+    skip
 } from 'rxjs';
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
@@ -61,6 +62,7 @@ export class AgentIdentificationFormComponent implements OnDestroy {
         const changes$ = this.form.valueChanges.pipe(
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
+            skip(1),
         );
 
         changes$.pipe(
