@@ -52,12 +52,12 @@ export type AgentDescriptionType = {
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
-  describes?: Maybe<Array<Maybe<HistoricalPersonType>>>;
+  describes: Array<HistoricalPersonType>;
   /** Longer description to help identify this object */
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
-  episodes?: Maybe<Array<Maybe<EpisodeAgentType>>>;
+  episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
@@ -67,7 +67,7 @@ export type AgentDescriptionType = {
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
   page: Scalars['String']['output'];
-  personReferences?: Maybe<Array<Maybe<PersonReferenceType>>>;
+  personReferences: Array<PersonReferenceType>;
   /** Source text containing this description */
   source: SourceType;
   /** How is this entity presented in the text? */
@@ -985,7 +985,7 @@ export type DataEntryAgentEpisodesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes?: Array<{ __typename?: 'EpisodeAgentType', id: string } | null> | null } | null };
+export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string }> } | null };
 
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1076,7 +1076,7 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes?: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean } | null> | null }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean }> }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 

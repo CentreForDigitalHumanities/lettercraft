@@ -1,4 +1,4 @@
-from graphene import Field, List, ResolveInfo
+from graphene import Field, List, ResolveInfo, NonNull
 from graphene_django import DjangoObjectType
 
 from django.db.models import QuerySet
@@ -13,11 +13,11 @@ from event.models import EpisodeAgent
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
-    describes = List(HistoricalPersonType)
-    person_references = List(PersonReferenceType)
+    describes = List(NonNull(HistoricalPersonType), required=True)
+    person_references = List(NonNull(PersonReferenceType), required=True)
     gender = Field(AgentDescriptionGenderType)
     location = Field(AgentDescriptionLocationType)
-    episodes = List(EpisodeAgentType)
+    episodes = List(NonNull(EpisodeAgentType), required=True)
 
     class Meta:
         model = AgentDescription

@@ -41,7 +41,7 @@ type AgentDescriptionType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-  describes: [HistoricalPersonType]
+  describes: [HistoricalPersonType!]!
 
   """Longer description to help identify this object"""
   description: String!
@@ -50,7 +50,7 @@ type AgentDescriptionType {
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
-  episodes: [EpisodeAgentType]
+  episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
 
@@ -63,7 +63,7 @@ type AgentDescriptionType {
 
   """The page number or page range in the source"""
   page: String!
-  personReferences: [PersonReferenceType]
+  personReferences: [PersonReferenceType!]!
 
   """Source text containing this description"""
   source: SourceType!
