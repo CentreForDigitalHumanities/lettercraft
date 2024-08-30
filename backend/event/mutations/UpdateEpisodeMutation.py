@@ -1,20 +1,18 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, String
 from django.core.exceptions import ObjectDoesNotExist
+from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
+from core.types.input.NamedInputType import NamedInputType
 from event.models import Episode
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class UpdateEpisodeMutationInput(InputObjectType):
+class UpdateEpisodeMutationInput(
+    NamedInputType, EntityDescriptionInputType, InputObjectType
+):
     id = ID(required=True)
-    name = String()
-    book = String()
-    chapter = String()
-    page = String()
-    designators = List(NonNull(String))
     summary = String()
-    categories = List(NonNull(ID))
 
 
 class UpdateEpisodeMutation(LettercraftMutation):
