@@ -1,7 +1,25 @@
 <ng-container *ngIf="data$ | async as data">
+    <p>This agent is involved in the following episodes:</p>
     <ul>
         <li *ngFor="let item of data.agentDescription?.episodes">
             {{item.id}}
         </li>
     </ul>
 </ng-container>
+
+<div ngbDropdown class="mb-4">
+    <button type="button" class="btn btn-primary" id="episode-dropdown-trigger"
+        ngbDropdownToggle>
+        Add episode
+    </button>
+    <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
+        <button *ngFor="let episode of (availableEpisodes$ | async)"
+            ngbDropdownItem>
+            {{episode.name}}
+        </button>
+        <button ngbDropdownItem>
+            <lc-icon [icon]="actionIcons.create" />
+            Create new episode
+        </button>
+    </div>
+</div>
