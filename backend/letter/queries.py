@@ -1,7 +1,8 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
 
-from letter.models import GiftDescription, LetterDescription
+from letter.models import GiftDescription, LetterDescription, LetterDescriptionCategory
+from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
 
@@ -11,6 +12,12 @@ class LetterQueries(ObjectType):
 
     letter_descriptions = List(
         NonNull(LetterDescriptionType), required=True, episode_id=ID(), source_id=ID()
+    )
+
+    letter_description_categories = List(
+        NonNull(LetterDescriptionCategoryType),
+        required=True,
+        letter_id=ID(),
     )
 
     gift_description = Field(GiftDescriptionType, id=ID(required=True))
@@ -48,13 +55,27 @@ class LetterQueries(ObjectType):
         ).filter(filters)
 
     @staticmethod
+    def resolve_letter_description_categories(
+        parent: None,
+        info: ResolveInfo,
+        letter_id: str | None = None,
+    ) -> QuerySet[LetterDescriptionCategory]:
+        filters = Q()
+        if letter_id:
+            filters &= Q(letter_id=letter_id)
+
+        return LetterDescriptionCategoryType.get_queryset(
+            LetterDescriptionCategory.objects, info
+        ).filter(filters)
+
+    @staticmethod
     def resolve_gift_description(
         parent: None, info: ResolveInfo, id: str
     ) -> GiftDescription | None:
         try:
-            return GiftDescriptionType.get_queryset(
-                GiftDescription.objects, info
-            ).get(id=id)
+            return GiftDescriptionType.get_queryset(GiftDescription.objects, info).get(
+                id=id
+            )
         except GiftDescription.DoesNotExist:
             return None
 
@@ -71,6 +92,6 @@ class LetterQueries(ObjectType):
         if source_id:
             filters &= Q(source_id=source_id)
 
-        return GiftDescriptionType.get_queryset(
-            GiftDescription.objects, info
-        ).filter(filters)
+        return GiftDescriptionType.get_queryset(GiftDescription.objects, info).filter(
+            filters
+        )
