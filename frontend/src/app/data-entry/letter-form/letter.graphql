@@ -1,4 +1,4 @@
-query DataEntryLetter($id: ID!) {
+query DataEntryLetterForm($id: ID!) {
     letterDescription(id: $id) {
         id
         name
