@@ -3,6 +3,7 @@ import { FormService } from '../../shared/form.service';
 import { DataEntryAgentEpisodesGQL, DataEntryAgentEpisodesQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { actionIcons } from '@shared/icons';
 
 @Component({
   selector: 'lc-agent-episodes-form',
@@ -12,6 +13,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class AgentEpisodesFormComponent {
     data$: Observable<DataEntryAgentEpisodesQuery>;
     availableEpisodes$: Observable<{ name: string, id: string }[]>;
+
+    actionIcons = actionIcons;
 
     constructor(
         private formService: FormService,
