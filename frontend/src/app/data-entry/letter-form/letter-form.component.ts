@@ -36,7 +36,7 @@ export class LetterFormComponent {
                 },
                 {
                     label: letter.source.name,
-                    link: `/source/${letter.source.id}`,
+                    link: `/data-entry/sources/${letter.source.id}`,
                 },
                 {
                     label: letter.name,

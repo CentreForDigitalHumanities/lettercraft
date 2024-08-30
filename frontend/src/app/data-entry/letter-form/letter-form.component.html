@@ -3,7 +3,7 @@
 <ng-container *ngIf="letter$ | async as letter; else loading">
     <h1 class="mb-4">
         <lc-icon [icon]="dataIcons.letter" />
-        <span>{{ letter.name }}</span>
+        <span class="ms-2">{{ letter.name }}</span>
         <span class="text-secondary">
             ({{ letter.source.name }})
         </span>
