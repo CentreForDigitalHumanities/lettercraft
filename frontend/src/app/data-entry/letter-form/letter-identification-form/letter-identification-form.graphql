@@ -1,0 +1,6 @@
+query DataEntryLetterIdentification($id: ID!) {
+    letterDescription(id: $id) {
+        id
+        name
+    }
+}

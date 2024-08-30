@@ -1,0 +1,19 @@
+query DataEntryLetterCategories($id: ID!) {
+    letterDescription(id: $id) {
+        id
+        categories {
+            id
+        }
+    }
+}
+
+query DataEntryAllLetterCategories {
+    letterDescriptionCategories {
+        id
+        category {
+            id
+            label
+            description
+        }
+    }
+}
