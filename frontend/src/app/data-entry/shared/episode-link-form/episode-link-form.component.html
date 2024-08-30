@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header">
+        <div class="hstack gap-2">
+            <span class="card-title">
+                Title
+            </span>
+            <button class="btn btn-secondary ms-auto" aria-label="hide extra options">
+                <lc-icon [icon]="actionIcons.collapse" />
+            </button>
+            <button class="btn btn-primary" aria-label="edit episode">
+                <lc-icon [icon]="actionIcons.edit" />
+            </button>
+            <button class="btn btn-danger" aria-label="remove episode">
+                <lc-icon [icon]="actionIcons.remove" />
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label [htmlFor]="sourceMentionInput" class="form-label">
+                How is this agent's involvement in the episode represented?
+            </label>
+            <select #sourceMentionInput class="form-select">
+                <option>Directly mentioned</option>
+                <option>Implied</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label [htmlFor]="notesInput" class="form-label">Notes</label>
+            <textarea #notesInput class="form-control"></textarea>
+        </div>
+    </div>
+</div>
