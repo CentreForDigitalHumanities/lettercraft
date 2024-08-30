@@ -1,1 +1,7 @@
-<p>agent-episodes-form works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <ul>
+        <li *ngFor="let item of data.agentDescription?.episodes">
+            {{item.id}}
+        </li>
+    </ul>
+</ng-container>
