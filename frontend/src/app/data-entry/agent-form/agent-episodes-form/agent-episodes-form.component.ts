@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AgentEpisodesFormComponent {
     data$: Observable<DataEntryAgentEpisodesQuery>;
+    availableEpisodes$: Observable<{ name: string, id: string }[]>;
 
     constructor(
         private formService: FormService,
@@ -21,5 +22,16 @@ export class AgentEpisodesFormComponent {
             map(result => result.data),
             takeUntilDestroyed(),
         );
+        this.availableEpisodes$ = this.data$.pipe(
+            map(this.availableEpisodes)
+        );
+    }
+
+    private availableEpisodes(
+        data: DataEntryAgentEpisodesQuery
+    ): { name: string, id: string }[] {
+        const allEpisodes = data.agentDescription?.source.episodes || [];
+        const linkedEpisodeIDs = data.agentDescription?.episodes.map(ep => ep.id) || [];
+        return allEpisodes.filter(episode => !linkedEpisodeIDs.includes(episode.id));
     }
 }
