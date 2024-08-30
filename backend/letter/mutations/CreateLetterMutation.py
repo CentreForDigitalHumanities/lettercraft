@@ -30,15 +30,15 @@ class CreateLetterMutation(LettercraftMutation):
         letter_data = CreateLetterInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, Letter_data: CreateLetterInput):
+    def mutate(cls, root: None, info: ResolveInfo, letter_data: CreateLetterInput):
         try:
-            source = Source.objects.get(id=getattr(Letter_data, "source"))
+            source = Source.objects.get(id=getattr(letter_data, "source"))
         except Source.DoesNotExist:
             error = LettercraftErrorType(field="source", messages=["Source not found."])
             return cls(errors=[error])  # type: ignore
 
         letter = LetterDescription.objects.create(
-            name=getattr(Letter_data, "name"),
+            name=getattr(letter_data, "name"),
             source=source,
         )
 

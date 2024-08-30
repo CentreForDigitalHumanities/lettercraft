@@ -23,9 +23,9 @@ class UpdateLetterMutation(LettercraftMutation):
         letter_data = UpdateLetterInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, Letter_data: UpdateLetterInput):
+    def mutate(cls, root: None, info: ResolveInfo, letter_data: UpdateLetterInput):
         try:
-            retrieved_object = cls.get_or_create_object(info, Letter_data)
+            retrieved_object = cls.get_or_create_object(info, letter_data)
         except ObjectDoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, errors=[error])  # type: ignore
@@ -33,7 +33,7 @@ class UpdateLetterMutation(LettercraftMutation):
         letter: LetterDescription = retrieved_object.object  # type: ignore
 
         try:
-            cls.mutate_object(Letter_data, letter, info)
+            cls.mutate_object(letter_data, letter, info)
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
