@@ -36,6 +36,9 @@ export class EpisodeIdentificationFormComponent implements OnInit {
             nonNullable: true,
             validators: [Validators.required],
         }),
+        description: new FormControl<string>("", {
+            nonNullable: true,
+        }),
     });
 
     constructor(
@@ -64,12 +67,24 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
                     this.updateEpisode
-                        .mutate({
-                            episodeData: {
-                                id,
-                                name: episode.name,
+                        .mutate(
+                            {
+                                episodeData: {
+                                    ...episode,
+                                    id,
+                                },
                             },
-                        })
+                            {
+                                update: (cache) => {
+                                    const identified = cache.identify({
+                                        __typename: "EpisodeType",
+                                        id,
+                                    });
+                                    cache.evict({ id: identified });
+                                    cache.gc();
+                                },
+                            }
+                        )
                         .pipe(takeUntilDestroyed(this.destroyRef))
                 )
             )

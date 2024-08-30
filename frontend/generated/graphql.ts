@@ -926,6 +926,7 @@ export type UpdateEpisodeInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1010,7 +1011,7 @@ export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string } | null };
+export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string } | null };
 
 export type DataEntryEpisodeSourceTextMentionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1254,6 +1255,7 @@ export const DataEntryEpisodeIdentificationDocument = gql`
   episode(id: $id) {
     id
     name
+    description
   }
 }
     `;

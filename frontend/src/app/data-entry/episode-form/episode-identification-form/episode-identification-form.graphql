@@ -2,5 +2,6 @@ query DataEntryEpisodeIdentification($id: ID!) {
     episode(id: $id) {
         id
         name
+        description
     }
 }

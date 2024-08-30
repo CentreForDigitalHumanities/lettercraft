@@ -9,6 +9,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 class UpdateEpisodeInput(InputObjectType):
     id = ID(required=True)
     name = String()
+    description = String()
     book = String()
     chapter = String()
     page = String()

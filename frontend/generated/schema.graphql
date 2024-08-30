@@ -933,6 +933,7 @@ input UpdateEpisodeInput {
   book: String
   categories: [ID!]
   chapter: String
+  description: String
   designators: [String!]
   id: ID!
   name: String
