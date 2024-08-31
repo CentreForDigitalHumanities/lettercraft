@@ -1,8 +1,8 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
 
-from letter.models import GiftDescription, LetterDescription, LetterDescriptionCategory
-from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
+from letter.models import GiftDescription, LetterCategory, LetterDescription
+from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
 
@@ -14,10 +14,9 @@ class LetterQueries(ObjectType):
         NonNull(LetterDescriptionType), required=True, episode_id=ID(), source_id=ID()
     )
 
-    letter_description_categories = List(
-        NonNull(LetterDescriptionCategoryType),
+    letter_categories = List(
+        NonNull(LetterCategoryType),
         required=True,
-        letter_id=ID(),
     )
 
     gift_description = Field(GiftDescriptionType, id=ID(required=True))
@@ -55,18 +54,10 @@ class LetterQueries(ObjectType):
         ).filter(filters)
 
     @staticmethod
-    def resolve_letter_description_categories(
-        parent: None,
-        info: ResolveInfo,
-        letter_id: str | None = None,
-    ) -> QuerySet[LetterDescriptionCategory]:
-        filters = Q()
-        if letter_id:
-            filters &= Q(letter_id=letter_id)
-
-        return LetterDescriptionCategoryType.get_queryset(
-            LetterDescriptionCategory.objects, info
-        ).filter(filters)
+    def resolve_letter_categories(
+        parent: None, info: ResolveInfo
+    ) -> QuerySet[LetterCategory]:
+        return LetterCategoryType.get_queryset(LetterCategory.objects, info).all()
 
     @staticmethod
     def resolve_gift_description(
