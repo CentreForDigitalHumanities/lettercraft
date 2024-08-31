@@ -8,12 +8,9 @@ query DataEntryLetterCategories($id: ID!) {
 }
 
 query DataEntryAllLetterCategories {
-    letterDescriptionCategories {
-        id
-        category {
+    letterCategories {
             id
             label
             description
-        }
     }
 }

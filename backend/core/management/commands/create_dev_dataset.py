@@ -19,8 +19,6 @@ from letter.models import (
 )
 import random
 
-from django.contrib.contenttypes.models import ContentType
-
 from .fixtures import (
     case_study_names,
     gift_names,
