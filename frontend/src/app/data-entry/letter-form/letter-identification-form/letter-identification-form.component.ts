@@ -43,7 +43,7 @@ export class LetterIdentificationFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private letterQuery: DataEntryLetterIdentificationGQL,
-        private updateLetter: DataEntryUpdateLetterGQL
+        private letterMutation: DataEntryUpdateLetterGQL
     ) {}
 
     ngOnInit(): void {
@@ -63,13 +63,21 @@ export class LetterIdentificationFormComponent implements OnInit {
                 debounceTime(300),
                 withLatestFrom(this.id$),
                 switchMap(([letter, id]) =>
-                    this.updateLetter
-                        .mutate({
-                            letterData: {
-                                ...letter,
-                                id,
+                    this.letterMutation
+                        .mutate(
+                            {
+                                letterData: {
+                                    ...letter,
+                                    id,
+                                },
                             },
-                        })
+                            {
+                                update: (cache) =>
+                                    cache.evict({
+                                        id: `LetterDescriptionType:${id}`,
+                                    }),
+                            }
+                        )
                         .pipe(takeUntilDestroyed(this.destroyRef))
                 )
             )
