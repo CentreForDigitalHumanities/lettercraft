@@ -20,7 +20,7 @@ import { MultiselectOption } from "../../shared/multiselect/multiselect.componen
     templateUrl: "./letter-categories-form.component.html",
     styleUrls: ["./letter-categories-form.component.scss"],
 })
-export class LetterCategoriesFormComponent implements OnInit {
+export class LetterCategoriesFormComponent {
     public id$ = this.route.params.pipe(
         map((params) => params["id"]),
         share()
@@ -32,7 +32,7 @@ export class LetterCategoriesFormComponent implements OnInit {
     );
 
     public form = new FormGroup({
-        categories: new FormControl<string[]>([], {
+        categorisations: new FormControl<string[]>([], {
             nonNullable: true,
         }),
     });
@@ -54,44 +54,4 @@ export class LetterCategoriesFormComponent implements OnInit {
         private letterCategoriesQuery: DataEntryAllLetterCategoriesGQL,
         private letterMutation: DataEntryUpdateLetterGQL
     ) {}
-
-    ngOnInit(): void {
-        this.letter$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((letter) => {
-                if (!letter) {
-                    return;
-                }
-                const categoryIds = letter.categories.map(
-                    (category) => category.id
-                );
-                this.form.patchValue({ categories: categoryIds });
-            });
-
-        this.form.valueChanges
-            .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([letter, id]) =>
-                    this.letterMutation.mutate({
-                        letterData: {
-                            ...letter,
-                            id: id,
-                        },
-                    })
-                )
-            )
-            .subscribe((result) => {
-                const errors = result.data?.updateLetter?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((error) => error.messages).join("\n"),
-                        type: "danger",
-                        header: "Update failed",
-                    });
-                }
-            });
-    }
 }
