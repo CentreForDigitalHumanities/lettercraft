@@ -71,6 +71,74 @@ type AgentDescriptionType {
   sourceMention: PersonAgentDescriptionSourceMentionChoices
 }
 
+"""An enumeration."""
+enum Certainty {
+  CERTAIN
+  SOMEWHAT_CERTAIN
+  UNCERTAIN
+}
+
+input CreateAgentInput {
+  name: String!
+  source: ID!
+}
+
+type CreateAgentMutation {
+  agent: AgentDescriptionType
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input CreateGiftInput {
+  name: String!
+  source: ID!
+}
+
+type CreateGiftMutation {
+  errors: [LettercraftErrorType!]!
+  gift: GiftDescriptionType
+}
+
+input CreateLetterInput {
+  name: String!
+  source: ID!
+}
+
+type CreateLetterMutation {
+  errors: [LettercraftErrorType!]!
+  letter: LetterDescriptionType
+}
+
+input CreatePersonReferenceInput {
+  description: ID!
+  person: ID!
+}
+
+type CreatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteAgentMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteGiftMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteLetterMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeletePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 type EpisodeCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -135,6 +203,15 @@ enum EventEpisodeSourceMentionChoices {
   IMPLIED
 }
 
+"""An enumeration."""
+enum Gender {
+  FEMALE
+  MALE
+  MIXED
+  OTHER
+  UNKNOWN
+}
+
 type GiftCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -142,6 +219,14 @@ type GiftCategoryType {
 
   """A name to help identify this object"""
   name: String!
+}
+
+input GiftDescriptionCategoryInput {
+  category: ID!
+  certainty: String
+  id: ID
+  note: String
+  sourceMention: SourceMention
 }
 
 type GiftDescriptionCategoryType {
@@ -213,6 +298,14 @@ type LetterCategoryType {
   description: String!
   id: ID!
   label: String!
+}
+
+input LetterDescriptionCategoryInput {
+  category: ID!
+  certainty: String
+  id: ID
+  note: String
+  sourceMention: SourceMention
 }
 
 type LetterDescriptionCategoryType {
@@ -331,9 +424,20 @@ type LettercraftErrorType {
 }
 
 type Mutation {
+  createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+  createGift(giftData: CreateGiftInput!): CreateGiftMutation
+  createLetter(letterData: CreateLetterInput!): CreateLetterMutation
+  createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
+  deleteAgent(id: ID!): DeleteAgentMutation
+  deleteGift(id: ID!): DeleteGiftMutation
+  deleteLetter(id: ID!): DeleteLetterMutation
+  deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
+  updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
+  updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+  updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
 
 """An enumeration."""
@@ -507,6 +611,7 @@ type Query {
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
+  letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
   letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
   source(id: ID!): SourceType!
@@ -600,6 +705,12 @@ type SourceContentsDateType {
 
   """The latest possible year for this value"""
   yearUpper: Int!
+}
+
+"""An enumeration."""
+enum SourceMention {
+  DIRECT
+  IMPLIED
 }
 
 type SourceType {
@@ -816,16 +927,32 @@ type StructureType {
   settlement: SettlementType
 }
 
+input UpdateAgentGenderInput {
+  gender: Gender
+  note: String
+  sourceMention: SourceMention
+}
+
 input UpdateAgentInput {
   description: String
+  designators: [String]
+  gender: UpdateAgentGenderInput
   id: ID!
   isGroup: Boolean
+  location: UpdateAgentLocationInput
   name: String
+}
+
+input UpdateAgentLocationInput {
+  location: ID
+  note: String
+  sourceMention: SourceMention
 }
 
 type UpdateAgentMutation {
   agent: AgentDescriptionType
-  error: String
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 input UpdateCreateSourceInput {
@@ -846,6 +973,7 @@ input UpdateEpisodeMutationInput {
   book: String
   categories: [ID!]
   chapter: String
+  description: String
   designators: [String!]
   id: ID!
   name: String
@@ -853,9 +981,54 @@ input UpdateEpisodeMutationInput {
   summary: String
 }
 
+input UpdateGiftInput {
+  book: String
+  categories: [ID!]
+  categorisations: [GiftDescriptionCategoryInput!]
+  chapter: String
+  description: String
+  designators: [String!]
+  id: ID!
+  name: String
+  page: String
+}
+
+type UpdateGiftMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateLetterInput {
+  book: String
+  categories: [ID!]
+  categorisations: [LetterDescriptionCategoryInput!]
+  chapter: String
+  description: String
+  designators: [String!]
+  id: ID!
+  name: String
+  page: String
+}
+
+type UpdateLetterMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 type UpdateOrCreateSourceMutation {
   errors: [String]
   source: SourceType
+}
+
+input UpdatePersonReferenceInput {
+  certainty: Certainty
+  id: ID!
+  note: String
+}
+
+type UpdatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type UserType {
