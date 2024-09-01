@@ -11,6 +11,7 @@ import {
     debounceTime,
     filter,
     map,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs/operators";
@@ -25,7 +26,8 @@ export class LetterIdentificationFormComponent implements OnInit {
 
     public letter$ = this.id$.pipe(
         switchMap((id) => this.letterQuery.watch({ id }).valueChanges),
-        map((result) => result.data.letterDescription)
+        map((result) => result.data.letterDescription),
+        shareReplay(1)
     );
 
     public form = new FormGroup({
@@ -53,33 +55,41 @@ export class LetterIdentificationFormComponent implements OnInit {
                 if (!letter) {
                     return;
                 }
-                this.form.patchValue(letter);
+                this.form.patchValue(letter, {
+                    emitEvent: false,
+                    onlySelf: true,
+                });
             });
 
-        this.form.valueChanges
+        this.letter$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([letter, id]) =>
-                    this.letterMutation
-                        .mutate(
-                            {
-                                letterData: {
-                                    ...letter,
-                                    id,
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([letter, id]) =>
+                            this.letterMutation.mutate(
+                                {
+                                    letterData: {
+                                        ...letter,
+                                        id,
+                                    },
                                 },
-                            },
-                            {
-                                update: (cache) =>
-                                    cache.evict({
-                                        id: `LetterDescriptionType:${id}`,
-                                    }),
-                            }
+                                {
+                                    update: (cache) => {
+                                        cache.evict({
+                                            id: `LetterDescriptionType:${id}`,
+                                        });
+                                        cache.gc();
+                                    },
+                                }
+                            )
                         )
-                        .pipe(takeUntilDestroyed(this.destroyRef))
-                )
+                    )
+                ),
+                takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((result) => {
                 const errors = result.data?.updateLetter?.errors;

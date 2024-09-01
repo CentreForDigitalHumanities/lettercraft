@@ -1,16 +1,13 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, String
 from django.core.exceptions import ObjectDoesNotExist
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
-from core.types.input.NamedInputType import NamedInputType
 from event.models import Episode
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class UpdateEpisodeMutationInput(
-    NamedInputType, EntityDescriptionInputType, InputObjectType
-):
+class UpdateEpisodeMutationInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
     summary = String()
 

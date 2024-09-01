@@ -1,16 +1,22 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo
 from django.core.exceptions import ObjectDoesNotExist
+from core.types.input.DescriptionFieldInputType import DescriptionFieldInputType
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
-from core.types.input.NamedInputType import NamedInputType
-from letter.models import LetterDescription
+from letter.models import LetterDescription, LetterDescriptionCategory
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
+from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
 
 
-class UpdateLetterInput(NamedInputType, EntityDescriptionInputType, InputObjectType):
+class LetterDescriptionCategoryInput(DescriptionFieldInputType, InputObjectType):
+    id = ID()
+    category = ID(required=True)
+
+
+class UpdateLetterInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
-    categories = List(NonNull(ID))
+    categorisations = List(NonNull(LetterDescriptionCategoryInput))
 
 
 class UpdateLetterMutation(LettercraftMutation):
@@ -33,7 +39,7 @@ class UpdateLetterMutation(LettercraftMutation):
         letter: LetterDescription = retrieved_object.object  # type: ignore
 
         try:
-            cls.mutate_object(letter_data, letter, info)
+            cls.mutate_object(letter_data, letter, info, ["categorisations"])
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]

@@ -1,7 +1,9 @@
 from graphene import ID, InputObjectType, List, NonNull, String
 
+from core.types.input.NamedInputType import NamedInputType
 
-class EntityDescriptionInputType(InputObjectType):
+
+class EntityDescriptionInputType(NamedInputType, InputObjectType):
     book = String()
     chapter = String()
     page = String()
