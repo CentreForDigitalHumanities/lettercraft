@@ -15,6 +15,9 @@ from person.mutations.DeleteAgentMutation import DeleteAgentMutation
 from letter.mutations.CreateLetterMutation import CreateLetterMutation
 from letter.mutations.DeleteLetterMutation import DeleteLetterMutation
 from letter.mutations.UpdateLetterMutation import UpdateLetterMutation
+from letter.mutations.CreateGiftMutation import CreateGiftMutation
+from letter.mutations.DeleteGiftMutation import DeleteGiftMutation
+from letter.mutations.UpdateGiftMutation import UpdateGiftMutation
 from person.mutations.CreatePersonReferenceMutation import CreatePersonReferenceMutation
 from person.mutations.UpdatePersonReferenceMutation import UpdatePersonReferenceMutation
 from person.mutations.DeletePersonReferenceMutation import DeletePersonReferenceMutation
@@ -41,6 +44,9 @@ class Mutation(ObjectType):
     create_letter = CreateLetterMutation.Field()
     update_letter = UpdateLetterMutation.Field()
     delete_letter = DeleteLetterMutation.Field()
+    create_gift = CreateGiftMutation.Field()
+    update_gift = UpdateGiftMutation.Field()
+    delete_gift = DeleteGiftMutation.Field()
     create_person_reference = CreatePersonReferenceMutation.Field()
     update_person_reference = UpdatePersonReferenceMutation.Field()
     delete_person_reference = DeletePersonReferenceMutation.Field()
