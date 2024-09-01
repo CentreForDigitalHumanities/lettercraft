@@ -78,7 +78,10 @@
                         *ngFor="let gift of episode.gifts"
                         class="inline-list-item"
                     >
-                        <a [routerLink]="['gift/', gift.id]" class="icon-link">
+                        <a
+                            [routerLink]="['/', 'data-entry', 'gifts', gift.id]"
+                            class="icon-link"
+                        >
                             <lc-icon [icon]="dataIcons.gift" />
                             {{ gift.name }}
                         </a>
@@ -88,7 +91,12 @@
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/', 'data-entry', 'letters', letter.id]"
+                            [routerLink]="[
+                                '/',
+                                'data-entry',
+                                'letters',
+                                letter.id
+                            ]"
                             class="icon-link"
                         >
                             <lc-icon [icon]="dataIcons.letter" />

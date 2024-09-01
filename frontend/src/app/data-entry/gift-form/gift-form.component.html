@@ -1,21 +1,30 @@
-<ng-container *ngIf="data$ | async as data">
-    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
+<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
-    <ng-container *ngIf="data.giftDescription as giftDescription">
-        <h1 class="mb-4">
-            <lc-icon [icon]="dataIcons.gift"></lc-icon>
-            {{giftDescription.name}}
-            <span class="text-secondary">
-                ({{giftDescription.source.name}})
-            </span>
-        </h1>
+<ng-container *ngIf="gift$ | async as gift; else loading">
+    <h1 class="mb-4">
+        <lc-icon [icon]="dataIcons.gift" />
+        <span class="ms-2">{{ gift.name }}</span>
+        <span class="text-secondary">
+            ({{ gift.source.name }})
+        </span>
+    </h1>
 
-        <p class="lead mb-4" *ngIf="giftDescription.description">
-            {{giftDescription.description}}
-        </p>
-
-        <div class="alert alert-warning">
-            This form is not implemented yet!
-        </div>
-    </ng-container>
+    <p class="lead mb-4" *ngIf="gift.description">
+        {{ gift.description }}
+    </p>
 </ng-container>
+
+<h2 class="subform-header">Identification</h2>
+<lc-gift-identification-form />
+
+<h2 class="subform-header">Source text</h2>
+<lc-gift-source-text-form />
+
+<h2 class="subform-header">Categories</h2>
+<lc-gift-categories-form />
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

@@ -1,11 +1,21 @@
-query DataEntryGift($id: ID!) {
-  giftDescription(id: $id) {
-    id
-    name
-    description
-    source {
-      id
-      name
+query DataEntryGiftForm($id: ID!) {
+    giftDescription(id: $id) {
+        id
+        name
+        description
+        source {
+            id
+            name
+        }
     }
-  }
+}
+
+mutation DataEntryUpdateGift($giftData: UpdateGiftInput!) {
+    updateGift(giftData: $giftData) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
 }

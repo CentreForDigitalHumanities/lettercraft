@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntryLetterFormGQL } from "generated/graphql";
-import { filter, map, Observable, share, switchMap } from "rxjs";
+import { filter, map, share, switchMap } from "rxjs";
 
 @Component({
     selector: "lc-letter-form",
