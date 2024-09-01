@@ -12,6 +12,7 @@ import {
     filter,
     map,
     Observable,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
@@ -28,7 +29,8 @@ export class EpisodeIdentificationFormComponent implements OnInit {
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode)
+        map((result) => result.data.episode),
+        shareReplay(1)
     );
 
     public form = new FormGroup({
@@ -56,36 +58,42 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 if (!episode) {
                     return;
                 }
-                this.form.patchValue(episode);
+                this.form.patchValue(episode, {
+                    emitEvent: false,
+                    onlySelf: true,
+                });
             });
 
-        this.form.valueChanges
+        this.episode$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([episode, id]) =>
-                    this.updateEpisode
-                        .mutate(
-                            {
-                                episodeData: {
-                                    ...episode,
-                                    id,
-                                },
-                            },
-                            {
-                                update: (cache) => {
-                                    const identified = cache.identify({
-                                        __typename: "EpisodeType",
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([episode, id]) =>
+                            this.updateEpisode.mutate(
+                                {
+                                    episodeData: {
+                                        ...episode,
                                         id,
-                                    });
-                                    cache.evict({ id: identified });
-                                    cache.gc();
+                                    },
                                 },
-                            }
-                        )
-                        .pipe(takeUntilDestroyed(this.destroyRef))
+                                {
+                                    update: (cache) => {
+                                        const identified = cache.identify({
+                                            __typename: "EpisodeType",
+                                            id,
+                                        });
+                                        cache.evict({ id: identified });
+                                        cache.gc();
+                                    },
+                                }
+                            )
+                        ),
+                        takeUntilDestroyed(this.destroyRef)
+                    )
                 )
             )
             .subscribe((result) => {

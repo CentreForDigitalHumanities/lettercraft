@@ -13,6 +13,7 @@ import {
     filter,
     map,
     Observable,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
@@ -30,7 +31,8 @@ export class EpisodeContentsFormComponent implements OnInit {
 
     private episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode)
+        map((result) => result.data.episode),
+        shareReplay(1)
     );
 
     public form = new FormGroup({
@@ -70,27 +72,36 @@ export class EpisodeContentsFormComponent implements OnInit {
                 if (!episode) {
                     return;
                 }
-                this.form.patchValue({
-                    summary: episode.summary,
-                    categories: episode.categories.map((c) => c.id),
-                });
+                this.form.patchValue(
+                    {
+                        summary: episode.summary,
+                        categories: episode.categories.map((c) => c.id),
+                    },
+                    {
+                        emitEvent: false,
+                        onlySelf: true
+                    }
+                );
             });
 
-        this.form.valueChanges
+        this.episode$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([episode, id]) =>
-                    this.updateEpisode
-                        .mutate({
-                            episodeData: {
-                                id,
-                                ...episode,
-                            },
-                        })
-                        .pipe(takeUntilDestroyed(this.destroyRef))
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([episode, id]) =>
+                            this.updateEpisode
+                                .mutate({
+                                    episodeData: {
+                                        id,
+                                        ...episode,
+                                    },
+                                })
+                        )
+                    )
                 )
             )
             .subscribe((result) => {
