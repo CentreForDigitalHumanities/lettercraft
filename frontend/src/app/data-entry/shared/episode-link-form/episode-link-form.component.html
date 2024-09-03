@@ -20,19 +20,24 @@
             </button>
         </div>
     </div>
-    <div class="card-body">
+    <form class="card-body" [formGroup]="form">
         <div class="mb-3">
             <label [htmlFor]="sourceMentionInput" class="form-label">
                 How is this agent's involvement in the episode represented?
             </label>
-            <select #sourceMentionInput class="form-select">
-                <option>Directly mentioned</option>
-                <option>Implied</option>
+            <select #sourceMentionInput class="form-select"
+                [formControl]="form.controls.sourceMention">
+                <option *ngFor="let option of sourceMentionOptions"
+                    [ngValue]="option.value">
+                    {{ option.label }}
+                </option>
             </select>
         </div>
         <div class="mb-3">
             <label [htmlFor]="notesInput" class="form-label">Notes</label>
-            <textarea #notesInput class="form-control"></textarea>
+            <textarea #notesInput class="form-control"
+                [formControl]="form.controls.note">
+            </textarea>
         </div>
-    </div>
+    </form>
 </div>

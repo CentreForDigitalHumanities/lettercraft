@@ -1,9 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { EntityType } from '../types';
+import { EntityType, SelectOptions } from '../types';
 import { combineLatest, map, Observable, shareReplay, Subject, switchMap } from 'rxjs';
 import { actionIcons } from '@shared/icons';
-import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery } from 'generated/graphql';
+import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery, EventEpisodeAgentSourceMentionChoices } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup } from '@angular/forms';
+
 
 type LinkTo = 'episode' | 'agent';
 
@@ -27,6 +29,15 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     @Input() linkTo: LinkTo = 'episode';
 
     data$: Observable<EpisodeAgentQueryQuery | undefined>;
+    form = new FormGroup({
+        sourceMention: new FormControl<EventEpisodeAgentSourceMentionChoices>(EventEpisodeAgentSourceMentionChoices.Direct),
+        note: new FormControl<string>('', { nonNullable: true }),
+    });
+
+    sourceMentionOptions: SelectOptions<EventEpisodeAgentSourceMentionChoices> = [
+        { value: EventEpisodeAgentSourceMentionChoices.Direct, label: 'Directly mentioned' },
+        { value: EventEpisodeAgentSourceMentionChoices.Implied, label: 'Implied' }
+    ];
 
     private entityQueries: Record<EntityType, EpisodeAgentQueryGQL>;
     private query$ = new Subject<EpisodeAgentQueryGQL>();
@@ -46,7 +57,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             shareReplay(1),
             takeUntilDestroyed(),
         );
-        this.data$.subscribe();
+        this.data$.subscribe(this.updateFormValues.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -76,5 +87,12 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         } else {
             return data.episodeAgentLink?.agent;
         }
+    }
+
+    private updateFormValues(data?: EpisodeAgentQueryQuery): void {
+        this.form.setValue({
+            sourceMention: data?.episodeAgentLink?.sourceMention || EventEpisodeAgentSourceMentionChoices.Direct,
+            note: data?.episodeAgentLink?.note || '',
+        });
     }
 }
