@@ -2,8 +2,7 @@
     <p>This agent is involved in the following episodes:</p>
     <ul>
         <li *ngFor="let item of data.agentDescription?.episodes">
-            <lc-episode-link-form />
-            {{item.id}}
+            <lc-episode-link-form [id]="item.id" entityType="agent" />
         </li>
     </ul>
 </ng-container>
