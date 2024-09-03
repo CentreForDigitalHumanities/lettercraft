@@ -2,19 +2,19 @@
     <div class="card-header">
         <div class="hstack gap-2">
             <span class="card-title">
-                <span *ngIf="linkTo === 'episode'; else entityName">
-                    {{ data.episodeAgentLink?.episode?.name }}
-                </span>
-                <ng-template #entityName>
-                    {{ data.episodeAgentLink?.agent?.name }}
-                </ng-template>
+                {{ linkedObject(linkTo, data)?.name }}
             </span>
             <button class="btn btn-secondary ms-auto" aria-label="hide extra options">
                 <lc-icon [icon]="actionIcons.collapse" />
             </button>
-            <button class="btn btn-primary" aria-label="edit episode">
+            <a class="btn btn-primary" aria-label="edit episode"
+                [routerLink]="[
+                    '/data-entry',
+                    formUrl(linkTo, entityType),
+                    linkedObject(linkTo, data)?.id
+                ]">
                 <lc-icon [icon]="actionIcons.edit" />
-            </button>
+            </a>
             <button class="btn btn-danger" aria-label="remove episode">
                 <lc-icon [icon]="actionIcons.remove" />
             </button>
