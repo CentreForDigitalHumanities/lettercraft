@@ -8,14 +8,14 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class GiftDescriptionCategoryInput(DescriptionFieldInputType, InputObjectType):
+class GiftCategorisationInput(DescriptionFieldInputType, InputObjectType):
     id = ID()
     category = ID(required=True)
 
 
 class UpdateGiftInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
-    categorisations = List(NonNull(GiftDescriptionCategoryInput))
+    categorisations = List(NonNull(GiftCategorisationInput))
 
 
 class UpdateGiftMutation(LettercraftMutation):
@@ -44,6 +44,8 @@ class UpdateGiftMutation(LettercraftMutation):
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error])  # type: ignore
+
+        # TODO: resolve categorisations
 
         user = info.context.user
         gift.contributors.add(user)
