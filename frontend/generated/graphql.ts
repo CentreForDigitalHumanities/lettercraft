@@ -1310,6 +1310,13 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 
 export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
+export type EpisodeAgentQueryQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: EventEpisodeAgentSourceMentionChoices | null, episode: { __typename?: 'EpisodeType', id: string }, agent: { __typename?: 'AgentDescriptionType', id: string } } | null };
+
 export type DataEntryDeleteEpisodeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1973,6 +1980,32 @@ export const DataEntrySpaceDescriptionDocument = gql`
   })
   export class DataEntrySpaceDescriptionGQL extends Apollo.Query<DataEntrySpaceDescriptionQuery, DataEntrySpaceDescriptionQueryVariables> {
     override document = DataEntrySpaceDescriptionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const EpisodeAgentQueryDocument = gql`
+    query EpisodeAgentQuery($id: ID!) {
+  episodeAgentLink(id: $id) {
+    id
+    note
+    sourceMention
+    episode {
+      id
+    }
+    agent {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EpisodeAgentQueryGQL extends Apollo.Query<EpisodeAgentQueryQuery, EpisodeAgentQueryQueryVariables> {
+    override document = EpisodeAgentQueryDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

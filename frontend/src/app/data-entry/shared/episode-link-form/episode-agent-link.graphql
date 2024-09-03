@@ -1,0 +1,13 @@
+query EpisodeAgentQuery($id: ID!) {
+    episodeAgentLink(id: $id) {
+        id
+        note
+        sourceMention
+        episode {
+            id
+        }
+        agent {
+            id
+        }
+    }
+}
