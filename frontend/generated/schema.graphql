@@ -86,6 +86,16 @@ type CreateAgentMutation {
   ok: Boolean!
 }
 
+input CreateEpisodeAgentInput {
+  agent: ID!
+  episode: ID!
+}
+
+type CreateEpisodeAgentMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 input CreatePersonReferenceInput {
   description: ID!
   person: ID!
@@ -97,6 +107,11 @@ type CreatePersonReferenceMutation {
 }
 
 type DeleteAgentMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteEpisodeAgentMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -379,8 +394,10 @@ type LettercraftErrorType {
 
 type Mutation {
   createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+  createEpisodeAgent(data: CreateEpisodeAgentInput!): CreateEpisodeAgentMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
+  deleteEpisodeAgent(id: ID!): DeleteEpisodeAgentMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation

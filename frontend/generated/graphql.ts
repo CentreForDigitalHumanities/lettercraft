@@ -91,6 +91,17 @@ export type CreateAgentMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type CreateEpisodeAgentInput = {
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
+};
+
+export type CreateEpisodeAgentMutation = {
+  __typename?: 'CreateEpisodeAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type CreatePersonReferenceInput = {
   description: Scalars['ID']['input'];
   person: Scalars['ID']['input'];
@@ -104,6 +115,12 @@ export type CreatePersonReferenceMutation = {
 
 export type DeleteAgentMutation = {
   __typename?: 'DeleteAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteEpisodeAgentMutation = {
+  __typename?: 'DeleteEpisodeAgentMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -343,8 +360,10 @@ export type LettercraftErrorType = {
 export type Mutation = {
   __typename?: 'Mutation';
   createAgent?: Maybe<CreateAgentMutation>;
+  createEpisodeAgent?: Maybe<CreateEpisodeAgentMutation>;
   createPersonReference?: Maybe<CreatePersonReferenceMutation>;
   deleteAgent?: Maybe<DeleteAgentMutation>;
+  deleteEpisodeAgent?: Maybe<DeleteEpisodeAgentMutation>;
   deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
@@ -358,12 +377,22 @@ export type MutationCreateAgentArgs = {
 };
 
 
+export type MutationCreateEpisodeAgentArgs = {
+  data: CreateEpisodeAgentInput;
+};
+
+
 export type MutationCreatePersonReferenceArgs = {
   referenceData: CreatePersonReferenceInput;
 };
 
 
 export type MutationDeleteAgentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteEpisodeAgentArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -921,6 +950,20 @@ export type DataEntryAgentEpisodesQueryVariables = Exact<{
 
 export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string } }> } | null };
 
+export type DataEntryCreateAgentEpisodeMutationMutationVariables = Exact<{
+  data: CreateEpisodeAgentInput;
+}>;
+
+
+export type DataEntryCreateAgentEpisodeMutationMutation = { __typename?: 'Mutation', createEpisodeAgent?: { __typename?: 'CreateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DateEntryDeleteAgentEpisodeMutationMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DateEntryDeleteAgentEpisodeMutationMutation = { __typename?: 'Mutation', deleteEpisodeAgent?: { __typename?: 'DeleteEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1106,6 +1149,50 @@ export const DataEntryAgentEpisodesDocument = gql`
   })
   export class DataEntryAgentEpisodesGQL extends Apollo.Query<DataEntryAgentEpisodesQuery, DataEntryAgentEpisodesQueryVariables> {
     override document = DataEntryAgentEpisodesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateAgentEpisodeMutationDocument = gql`
+    mutation DataEntryCreateAgentEpisodeMutation($data: CreateEpisodeAgentInput!) {
+  createEpisodeAgent(data: $data) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateAgentEpisodeMutationGQL extends Apollo.Mutation<DataEntryCreateAgentEpisodeMutationMutation, DataEntryCreateAgentEpisodeMutationMutationVariables> {
+    override document = DataEntryCreateAgentEpisodeMutationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DateEntryDeleteAgentEpisodeMutationDocument = gql`
+    mutation DateEntryDeleteAgentEpisodeMutation($id: ID!) {
+  deleteEpisodeAgent(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DateEntryDeleteAgentEpisodeMutationGQL extends Apollo.Mutation<DateEntryDeleteAgentEpisodeMutationMutation, DateEntryDeleteAgentEpisodeMutationMutationVariables> {
+    override document = DateEntryDeleteAgentEpisodeMutationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

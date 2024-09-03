@@ -14,7 +14,7 @@
     </button>
     <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
         <button *ngFor="let episode of (availableEpisodes$ | async)"
-            ngbDropdownItem>
+            ngbDropdownItem (click)="addEpisode$.next(episode.id)">
             {{episode.name}}
         </button>
         <button ngbDropdownItem>
