@@ -10,11 +10,9 @@ import {
     DataEntryUpdateAgentMutation,
     Gender,
     PersonAgentDescriptionGenderGenderChoices as GenderChoices,
-    PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices,
+    SourceMention,
     LocationsInSourceListGQL,
     LocationsInSourceListQuery,
-    PersonAgentDescriptionSourceMentionChoices as LocationSourceMentionChoices,
-    SourceMention,
     UpdateAgentInput,
 } from 'generated/graphql';
 import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap, skip } from 'rxjs';
@@ -37,27 +35,27 @@ export class AgentDescriptionFormComponent implements OnDestroy {
         { value: GenderChoices.Unknown, label: 'Unknown' }
     ];
 
-    genderSourceMentionOptions: { value: GenderSourceMentionChoices, label: string }[] = [
-        { value: GenderSourceMentionChoices.Direct, label: 'Mentioned' },
-        { value: GenderSourceMentionChoices.Implied, label: 'Implied' },
+    genderSourceMentionOptions: { value: SourceMention, label: string }[] = [
+        { value: SourceMention.Direct, label: 'Mentioned' },
+        { value: SourceMention.Implied, label: 'Implied' },
     ];
 
-    locationSourceMentionOptions: { value: LocationSourceMentionChoices, label: string }[] = [
-        { value: LocationSourceMentionChoices.Direct, label: 'Mentioned' },
-        { value: LocationSourceMentionChoices.Implied, label: 'Implied' },
+    locationSourceMentionOptions: { value: SourceMention, label: string }[] = [
+        { value: SourceMention.Direct, label: 'Mentioned' },
+        { value: SourceMention.Implied, label: 'Implied' },
     ];
 
     form = new FormGroup({
         designators: new FormControl<string[]>([], { nonNullable: true }),
         gender: new FormGroup({
             gender: new FormControl<string>(GenderChoices.Unknown),
-            sourceMention: new FormControl<string>(GenderSourceMentionChoices.Direct),
+            sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
             note: new FormControl<string>(''),
         }),
         location: new FormGroup({
             hasLocation: new FormControl<boolean>(false, { nonNullable: true }),
             location: new FormControl<string | null>(null),
-            sourceMention: new FormControl<string>(LocationSourceMentionChoices.Direct),
+            sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
             note: new FormControl<string>(''),
         })
     });
@@ -115,13 +113,13 @@ export class AgentDescriptionFormComponent implements OnDestroy {
             designators: data.agentDescription?.designators || [],
             gender: {
                 gender: data.agentDescription?.gender?.gender || GenderChoices.Unknown,
-                sourceMention: data.agentDescription?.gender?.sourceMention || GenderSourceMentionChoices.Direct,
+                sourceMention: data.agentDescription?.gender?.sourceMention || SourceMention.Direct,
                 note: data.agentDescription?.gender?.note || '',
             },
             location: {
                 hasLocation: data.agentDescription?.location !== null,
                 location: data.agentDescription?.location?.location.id || null,
-                sourceMention: data.agentDescription?.location?.sourceMention || LocationSourceMentionChoices.Direct,
+                sourceMention: data.agentDescription?.location?.sourceMention || SourceMention.Direct,
                 note: data.agentDescription?.location?.note || '',
             }
         });

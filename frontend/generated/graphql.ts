@@ -27,8 +27,7 @@ export type AgentDescriptionGenderType = {
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<PersonAgentDescriptionGenderSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
 };
 
 export type AgentDescriptionLocationType = {
@@ -41,8 +40,7 @@ export type AgentDescriptionLocationType = {
   location: SpaceDescriptionType;
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<PersonAgentDescriptionLocationSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
 };
 
 export type AgentDescriptionType = {
@@ -176,8 +174,7 @@ export type EpisodeAgentType = {
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<EventEpisodeAgentSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
 };
 
 export type EpisodeCategoryType = {
@@ -233,14 +230,6 @@ export enum EventEpisodeAgentCertaintyChoices {
 }
 
 /** An enumeration. */
-export enum EventEpisodeAgentSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
 export enum EventEpisodeSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
@@ -283,8 +272,7 @@ export type GiftDescriptionCategoryType = {
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<LetterGiftDescriptionCategorySourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
 };
 
 export type GiftDescriptionType = {
@@ -349,8 +337,7 @@ export type LetterDescriptionCategoryType = {
   letter: LetterDescriptionType;
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<LetterLetterDescriptionCategorySourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
 };
 
 export type LetterDescriptionType = {
@@ -388,14 +375,6 @@ export enum LetterGiftDescriptionCategoryCertaintyChoices {
 }
 
 /** An enumeration. */
-export enum LetterGiftDescriptionCategorySourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
 export enum LetterGiftDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
@@ -411,14 +390,6 @@ export enum LetterLetterDescriptionCategoryCertaintyChoices {
   A_1 = 'A_1',
   /** certain */
   A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum LetterLetterDescriptionCategorySourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
 }
 
 /** An enumeration. */
@@ -561,14 +532,6 @@ export enum PersonAgentDescriptionGenderGenderChoices {
 }
 
 /** An enumeration. */
-export enum PersonAgentDescriptionGenderSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
 export enum PersonAgentDescriptionLocationCertaintyChoices {
   /** uncertain */
   A_0 = 'A_0',
@@ -576,14 +539,6 @@ export enum PersonAgentDescriptionLocationCertaintyChoices {
   A_1 = 'A_1',
   /** certain */
   A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum PersonAgentDescriptionLocationSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
 }
 
 /** An enumeration. */
@@ -768,8 +723,7 @@ export type RegionFieldType = {
   /** Additional notes */
   note: Scalars['String']['output'];
   region: RegionType;
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<SpaceRegionFieldSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
   space: SpaceDescriptionType;
 };
 
@@ -795,8 +749,7 @@ export type SettlementFieldType = {
   /** Additional notes */
   note: Scalars['String']['output'];
   settlement: SettlementType;
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<SpaceSettlementFieldSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
   space: SpaceDescriptionType;
 };
 
@@ -906,14 +859,6 @@ export enum SpaceRegionFieldCertaintyChoices {
 }
 
 /** An enumeration. */
-export enum SpaceRegionFieldSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
 export enum SpaceRegionTypeChoices {
   /** ecclesiastical */
   Ecclesiastical = 'ECCLESIASTICAL',
@@ -934,14 +879,6 @@ export enum SpaceSettlementFieldCertaintyChoices {
 }
 
 /** An enumeration. */
-export enum SpaceSettlementFieldSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
 export enum SpaceSpaceDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
@@ -957,14 +894,6 @@ export enum SpaceStructureFieldCertaintyChoices {
   A_1 = 'A_1',
   /** certain */
   A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum SpaceStructureFieldSourceMentionChoices {
-  /** directly mentioned */
-  Direct = 'DIRECT',
-  /** implied */
-  Implied = 'IMPLIED'
 }
 
 /** An enumeration. */
@@ -988,8 +917,7 @@ export type StructureFieldType = {
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  /** How is this information presented in the text? */
-  sourceMention?: Maybe<SpaceStructureFieldSourceMentionChoices>;
+  sourceMention?: Maybe<SourceMention>;
   space: SpaceDescriptionType;
   structure: StructureType;
 };
@@ -1132,7 +1060,7 @@ export type DataEntryAgentDescriptionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: PersonAgentDescriptionGenderGenderChoices, sourceMention?: PersonAgentDescriptionGenderSourceMentionChoices | null, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention?: PersonAgentDescriptionLocationSourceMentionChoices | null, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
+export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: PersonAgentDescriptionGenderGenderChoices, sourceMention?: SourceMention | null, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention?: SourceMention | null, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
 
 export type LocationsInSourceListQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1315,7 +1243,7 @@ export type EpisodeAgentQueryQueryVariables = Exact<{
 }>;
 
 
-export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: EventEpisodeAgentSourceMentionChoices | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
+export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: SourceMention | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
 
 export type DataEntryDeleteEpisodeMutationVariables = Exact<{
   id: Scalars['ID']['input'];

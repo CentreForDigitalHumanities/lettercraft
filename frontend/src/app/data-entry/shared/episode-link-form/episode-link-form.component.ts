@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/
 import { EntityType, SelectOptions } from '../types';
 import { combineLatest, map, Observable, shareReplay, Subject, switchMap } from 'rxjs';
 import { actionIcons } from '@shared/icons';
-import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery, EventEpisodeAgentSourceMentionChoices } from 'generated/graphql';
+import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery, SourceMention } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 
@@ -31,13 +31,13 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     collapsed = true;
     data$: Observable<EpisodeAgentQueryQuery | undefined>;
     form = new FormGroup({
-        sourceMention: new FormControl<EventEpisodeAgentSourceMentionChoices>(EventEpisodeAgentSourceMentionChoices.Direct),
+        sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
         note: new FormControl<string>('', { nonNullable: true }),
     });
 
-    sourceMentionOptions: SelectOptions<EventEpisodeAgentSourceMentionChoices> = [
-        { value: EventEpisodeAgentSourceMentionChoices.Direct, label: 'Directly mentioned' },
-        { value: EventEpisodeAgentSourceMentionChoices.Implied, label: 'Implied' }
+    sourceMentionOptions: SelectOptions<SourceMention> = [
+        { value: SourceMention.Direct, label: 'Directly mentioned' },
+        { value: SourceMention.Implied, label: 'Implied' }
     ];
 
     private entityQueries: Record<EntityType, EpisodeAgentQueryGQL>;
@@ -92,7 +92,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     private updateFormValues(data?: EpisodeAgentQueryQuery): void {
         this.form.setValue({
-            sourceMention: data?.episodeAgentLink?.sourceMention || EventEpisodeAgentSourceMentionChoices.Direct,
+            sourceMention: data?.episodeAgentLink?.sourceMention || SourceMention.Direct,
             note: data?.episodeAgentLink?.note || '',
         });
     }
