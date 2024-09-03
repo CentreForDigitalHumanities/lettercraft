@@ -5,9 +5,7 @@ import { actionIcons } from '@shared/icons';
 import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-// const EPISODE_LINK_QUERIES: Record<EntityType, typeof EpisodeAgentQueryGQL> = {
-//     agent: EpisodeAgentQueryGQL,
-// };
+type LinkTo = 'episode' | 'agent';
 
 @Component({
     selector: 'lc-episode-link-form',
@@ -26,7 +24,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
      * The header will show the model that is being linked *to*; the model being linked
      * *from* should be clear from the context.
      */
-    @Input() linkTo: 'episode' | 'entity' = 'episode';
+    @Input() linkTo: LinkTo = 'episode';
 
     data$: Observable<EpisodeAgentQueryQuery | undefined>;
 
@@ -63,5 +61,20 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     ngOnDestroy(): void {
         this.query$.complete();
         this.id$.complete();
+    }
+
+    formUrl(linkTo: LinkTo, entityType: EntityType): string {
+        if (linkTo == 'episode') {
+            return 'episodes';
+        }
+        return 'agents';
+    }
+
+    linkedObject(linkTo: LinkTo, data: EpisodeAgentQueryQuery) {
+        if (linkTo === 'episode') {
+            return data.episodeAgentLink?.episode;
+        } else {
+            return data.episodeAgentLink?.agent;
+        }
     }
 }
