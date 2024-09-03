@@ -1146,7 +1146,7 @@ export type DataEntryAgentEpisodesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes?: Array<{ __typename?: 'EpisodeAgentType', id: string } | null> | null } | null };
+export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string } }> } | null };
 
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1430,6 +1430,9 @@ export const DataEntryAgentEpisodesDocument = gql`
     }
     episodes {
       id
+      episode {
+        id
+      }
     }
   }
 }
