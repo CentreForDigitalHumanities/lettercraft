@@ -662,6 +662,7 @@ type Query {
   agentDescription(id: ID!): AgentDescriptionType
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
+  episodeAgentLink(id: ID!): EpisodeAgentType
   episodeCategories: [EpisodeCategoryType!]!
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
