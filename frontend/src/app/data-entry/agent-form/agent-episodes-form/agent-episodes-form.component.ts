@@ -34,7 +34,7 @@ export class AgentEpisodesFormComponent {
         data: DataEntryAgentEpisodesQuery
     ): { name: string, id: string }[] {
         const allEpisodes = data.agentDescription?.source.episodes || [];
-        const linkedEpisodeIDs = data.agentDescription?.episodes.map(ep => ep.id) || [];
+        const linkedEpisodeIDs = data.agentDescription?.episodes.map(ep => ep.episode.id) || [];
         return allEpisodes.filter(episode => !linkedEpisodeIDs.includes(episode.id));
     }
 }
