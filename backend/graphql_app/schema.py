@@ -8,6 +8,8 @@ from space.queries import SpaceQueries
 from user.queries import UserQueries
 from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
+from event.mutations.CreateEpisodeAgentMutation import CreateEpisodeAgentMutation
+from event.mutations.DeleteEpisodeAgentMutation import DeleteEpisodeAgentMutation
 from person.mutations.CreateAgentMutation import CreateAgentMutation
 from person.mutations.UpdateAgentMutation import UpdateAgentMutation
 from person.mutations.DeleteAgentMutation import DeleteAgentMutation
@@ -31,6 +33,8 @@ class Query(
 class Mutation(ObjectType):
     update_or_create_source = UpdateOrCreateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
+    create_episode_agent = CreateEpisodeAgentMutation.Field()
+    delete_episode_agent = DeleteEpisodeAgentMutation.Field()
     create_agent = CreateAgentMutation.Field()
     update_agent = UpdateAgentMutation.Field()
     delete_agent = DeleteAgentMutation.Field()
