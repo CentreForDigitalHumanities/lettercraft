@@ -28,7 +28,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
      */
     @Input() linkTo: LinkTo = 'episode';
 
-    collapsed = true;
+    collapsed = false;
     data$: Observable<EpisodeAgentQueryQuery | undefined>;
     form = new FormGroup({
         sourceMention: new FormControl<EventEpisodeAgentSourceMentionChoices>(EventEpisodeAgentSourceMentionChoices.Direct),
