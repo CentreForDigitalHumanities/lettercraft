@@ -4,8 +4,10 @@
             <span class="card-title">
                 {{ linkedObject(linkTo, data)?.name }}
             </span>
-            <button class="btn btn-secondary ms-auto" aria-label="hide extra options">
-                <lc-icon [icon]="actionIcons.collapse" />
+            <button class="btn btn-secondary ms-auto"
+                [attr.aria-label]="(collapsed ? 'show' : 'hide') + ' additional questions'"
+                (click)="collapsed = !collapsed">
+                <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
             </button>
             <a class="btn btn-primary" aria-label="edit episode"
                 [routerLink]="[
@@ -20,7 +22,7 @@
             </button>
         </div>
     </div>
-    <form class="card-body" [formGroup]="form">
+    <form class="card-body" [formGroup]="form" [ngbCollapse]="collapsed">
         <div class="mb-3">
             <label [htmlFor]="sourceMentionInput" class="form-label">
                 How is this agent's involvement in the episode represented?
