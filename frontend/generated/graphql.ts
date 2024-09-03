@@ -561,6 +561,7 @@ export type Query = {
   agentDescription?: Maybe<AgentDescriptionType>;
   agentDescriptions: Array<AgentDescriptionType>;
   episode?: Maybe<EpisodeType>;
+  episodeAgentLink?: Maybe<EpisodeAgentType>;
   episodes: Array<EpisodeType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
@@ -587,6 +588,11 @@ export type QueryAgentDescriptionsArgs = {
 
 
 export type QueryEpisodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryEpisodeAgentLinkArgs = {
   id: Scalars['ID']['input'];
 };
 
