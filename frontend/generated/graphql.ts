@@ -1082,7 +1082,7 @@ export type EpisodeAgentQueryQueryVariables = Exact<{
 }>;
 
 
-export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: EventEpisodeAgentSourceMentionChoices | null, episode: { __typename?: 'EpisodeType', id: string }, agent: { __typename?: 'AgentDescriptionType', id: string } } | null };
+export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: EventEpisodeAgentSourceMentionChoices | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
 
 export type DataEntrySourceDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1459,9 +1459,11 @@ export const EpisodeAgentQueryDocument = gql`
     sourceMention
     episode {
       id
+      name
     }
     agent {
       id
+      name
     }
   }
 }

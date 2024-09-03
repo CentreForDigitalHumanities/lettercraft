@@ -5,9 +5,11 @@ query EpisodeAgentQuery($id: ID!) {
         sourceMention
         episode {
             id
+            name
         }
         agent {
             id
+            name
         }
     }
 }

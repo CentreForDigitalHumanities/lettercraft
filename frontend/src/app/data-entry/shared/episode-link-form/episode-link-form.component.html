@@ -1,8 +1,13 @@
-<div class="card">
+<div class="card" *ngIf="data$ | async as data">
     <div class="card-header">
         <div class="hstack gap-2">
             <span class="card-title">
-                Title
+                <span *ngIf="linkTo === 'episode'; else entityName">
+                    {{ data.episodeAgentLink?.episode?.name }}
+                </span>
+                <ng-template #entityName>
+                    {{ data.episodeAgentLink?.agent?.name }}
+                </ng-template>
             </span>
             <button class="btn btn-secondary ms-auto" aria-label="hide extra options">
                 <lc-icon [icon]="actionIcons.collapse" />
