@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GiftFormComponent } from './gift-form.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { GiftFormModule } from './gift-form.module';
 
 describe('GiftFormComponent', () => {
     let component: GiftFormComponent;
@@ -10,7 +11,7 @@ describe('GiftFormComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [GiftFormComponent],
-            imports: [SharedTestingModule],
+            imports: [GiftFormModule, SharedTestingModule],
         });
         fixture = TestBed.createComponent(GiftFormComponent);
         component = fixture.componentInstance;

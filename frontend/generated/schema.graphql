@@ -212,6 +212,14 @@ enum Gender {
   UNKNOWN
 }
 
+input GiftCategorisationInput {
+  category: ID!
+  certainty: String
+  id: ID
+  note: String
+  sourceMention: SourceMention
+}
+
 type GiftCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -219,14 +227,6 @@ type GiftCategoryType {
 
   """A name to help identify this object"""
   name: String!
-}
-
-input GiftDescriptionCategoryInput {
-  category: ID!
-  certainty: String
-  id: ID
-  note: String
-  sourceMention: SourceMention
 }
 
 type GiftDescriptionCategoryType {
@@ -294,18 +294,18 @@ type HistoricalPersonType {
   name: String!
 }
 
-type LetterCategoryType {
-  description: String!
-  id: ID!
-  label: String!
-}
-
-input LetterDescriptionCategoryInput {
+input LetterCategorisationInput {
   category: ID!
   certainty: String
   id: ID
   note: String
   sourceMention: SourceMention
+}
+
+type LetterCategoryType {
+  description: String!
+  id: ID!
+  label: String!
 }
 
 type LetterDescriptionCategoryType {
@@ -984,7 +984,7 @@ input UpdateEpisodeMutationInput {
 input UpdateGiftInput {
   book: String
   categories: [ID!]
-  categorisations: [GiftDescriptionCategoryInput!]
+  categorisations: [GiftCategorisationInput!]
   chapter: String
   description: String
   designators: [String!]
@@ -1001,7 +1001,7 @@ type UpdateGiftMutation {
 input UpdateLetterInput {
   book: String
   categories: [ID!]
-  categorisations: [LetterDescriptionCategoryInput!]
+  categorisations: [LetterCategorisationInput!]
   chapter: String
   description: String
   designators: [String!]
