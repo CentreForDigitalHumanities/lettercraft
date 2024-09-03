@@ -16,3 +16,23 @@ query DataEntryAgentEpisodes($id: ID!) {
         }
     }
 }
+
+mutation DataEntryCreateAgentEpisodeMutation($data: CreateEpisodeAgentInput!) {
+    createEpisodeAgent(data: $data) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DateEntryDeleteAgentEpisodeMutation($id: ID!) {
+    deleteEpisodeAgent(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

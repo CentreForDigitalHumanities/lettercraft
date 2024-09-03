@@ -91,6 +91,17 @@ export type CreateAgentMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type CreateEpisodeAgentInput = {
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
+};
+
+export type CreateEpisodeAgentMutation = {
+  __typename?: 'CreateEpisodeAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type CreateEpisodeInput = {
   name: Scalars['String']['input'];
   source: Scalars['ID']['input'];
@@ -137,6 +148,12 @@ export type CreatePersonReferenceMutation = {
 
 export type DeleteAgentMutation = {
   __typename?: 'DeleteAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteEpisodeAgentMutation = {
+  __typename?: 'DeleteEpisodeAgentMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -411,11 +428,13 @@ export type Mutation = {
   __typename?: 'Mutation';
   createAgent?: Maybe<CreateAgentMutation>;
   createEpisode?: Maybe<CreateEpisodeMutation>;
+  createEpisodeAgent?: Maybe<CreateEpisodeAgentMutation>;
   createGift?: Maybe<CreateGiftMutation>;
   createLetter?: Maybe<CreateLetterMutation>;
   createPersonReference?: Maybe<CreatePersonReferenceMutation>;
   deleteAgent?: Maybe<DeleteAgentMutation>;
   deleteEpisode?: Maybe<DeleteEpisodeMutation>;
+  deleteEpisodeAgent?: Maybe<DeleteEpisodeAgentMutation>;
   deleteGift?: Maybe<DeleteGiftMutation>;
   deleteLetter?: Maybe<DeleteLetterMutation>;
   deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
@@ -435,6 +454,11 @@ export type MutationCreateAgentArgs = {
 
 export type MutationCreateEpisodeArgs = {
   episodeData: CreateEpisodeInput;
+};
+
+
+export type MutationCreateEpisodeAgentArgs = {
+  data: CreateEpisodeAgentInput;
 };
 
 
@@ -459,6 +483,11 @@ export type MutationDeleteAgentArgs = {
 
 
 export type MutationDeleteEpisodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteEpisodeAgentArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -1076,6 +1105,20 @@ export type DataEntryAgentEpisodesQueryVariables = Exact<{
 
 export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string } }> } | null };
 
+export type DataEntryCreateAgentEpisodeMutationMutationVariables = Exact<{
+  data: CreateEpisodeAgentInput;
+}>;
+
+
+export type DataEntryCreateAgentEpisodeMutationMutation = { __typename?: 'Mutation', createEpisodeAgent?: { __typename?: 'CreateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DateEntryDeleteAgentEpisodeMutationMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DateEntryDeleteAgentEpisodeMutationMutation = { __typename?: 'Mutation', deleteEpisodeAgent?: { __typename?: 'DeleteEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1156,7 +1199,7 @@ export type DataEntryGiftCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categorisations: Array<{ __typename?: 'GiftDescriptionCategoryType', id: string, sourceMention?: LetterGiftDescriptionCategorySourceMentionChoices | null, note: string, certainty: LetterGiftDescriptionCategoryCertaintyChoices, category: { __typename?: 'GiftCategoryType', id: string, name: string } }> } | null };
+export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categorisations: Array<{ __typename?: 'GiftDescriptionCategoryType', id: string, sourceMention?: SourceMention | null, note: string, certainty: LetterGiftDescriptionCategoryCertaintyChoices, category: { __typename?: 'GiftCategoryType', id: string, name: string } }> } | null };
 
 export type DataEntryAllGiftCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1196,7 +1239,7 @@ export type DataEntryLetterCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categorisations: Array<{ __typename?: 'LetterDescriptionCategoryType', id: string, sourceMention?: LetterLetterDescriptionCategorySourceMentionChoices | null, note: string, certainty: LetterLetterDescriptionCategoryCertaintyChoices, category: { __typename?: 'LetterCategoryType', id: string, label: string } }> } | null };
+export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categorisations: Array<{ __typename?: 'LetterDescriptionCategoryType', id: string, sourceMention?: SourceMention | null, note: string, certainty: LetterLetterDescriptionCategoryCertaintyChoices, category: { __typename?: 'LetterCategoryType', id: string, label: string } }> } | null };
 
 export type DataEntryAllLetterCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1371,6 +1414,50 @@ export const DataEntryAgentEpisodesDocument = gql`
   })
   export class DataEntryAgentEpisodesGQL extends Apollo.Query<DataEntryAgentEpisodesQuery, DataEntryAgentEpisodesQueryVariables> {
     override document = DataEntryAgentEpisodesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateAgentEpisodeMutationDocument = gql`
+    mutation DataEntryCreateAgentEpisodeMutation($data: CreateEpisodeAgentInput!) {
+  createEpisodeAgent(data: $data) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateAgentEpisodeMutationGQL extends Apollo.Mutation<DataEntryCreateAgentEpisodeMutationMutation, DataEntryCreateAgentEpisodeMutationMutationVariables> {
+    override document = DataEntryCreateAgentEpisodeMutationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DateEntryDeleteAgentEpisodeMutationDocument = gql`
+    mutation DateEntryDeleteAgentEpisodeMutation($id: ID!) {
+  deleteEpisodeAgent(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DateEntryDeleteAgentEpisodeMutationGQL extends Apollo.Mutation<DateEntryDeleteAgentEpisodeMutationMutation, DateEntryDeleteAgentEpisodeMutationMutationVariables> {
+    override document = DateEntryDeleteAgentEpisodeMutationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
