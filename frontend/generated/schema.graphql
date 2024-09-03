@@ -12,9 +12,7 @@ type AgentDescriptionGenderType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: PersonAgentDescriptionGenderSourceMentionChoices
+  sourceMention: SourceMention
 }
 
 type AgentDescriptionLocationType {
@@ -29,9 +27,7 @@ type AgentDescriptionLocationType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: PersonAgentDescriptionLocationSourceMentionChoices
+  sourceMention: SourceMention
 }
 
 type AgentDescriptionType {
@@ -120,9 +116,7 @@ type EpisodeAgentType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: EventEpisodeAgentSourceMentionChoices
+  sourceMention: SourceMention
 }
 
 type EpisodeCategoryType {
@@ -193,15 +187,6 @@ enum EventEpisodeAgentCertaintyChoices {
 }
 
 """An enumeration."""
-enum EventEpisodeAgentSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum EventEpisodeSourceMentionChoices {
   """directly mentioned"""
   DIRECT
@@ -238,9 +223,7 @@ type GiftDescriptionCategoryType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: LetterGiftDescriptionCategorySourceMentionChoices
+  sourceMention: SourceMention
 }
 
 type GiftDescriptionType {
@@ -309,9 +292,7 @@ type LetterDescriptionCategoryType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: LetterLetterDescriptionCategorySourceMentionChoices
+  sourceMention: SourceMention
 }
 
 type LetterDescriptionType {
@@ -359,15 +340,6 @@ enum LetterGiftDescriptionCategoryCertaintyChoices {
 }
 
 """An enumeration."""
-enum LetterGiftDescriptionCategorySourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum LetterGiftDescriptionSourceMentionChoices {
   """directly mentioned"""
   DIRECT
@@ -386,15 +358,6 @@ enum LetterLetterDescriptionCategoryCertaintyChoices {
 
   """certain"""
   A_2
-}
-
-"""An enumeration."""
-enum LetterLetterDescriptionCategorySourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
 }
 
 """An enumeration."""
@@ -456,15 +419,6 @@ enum PersonAgentDescriptionGenderGenderChoices {
 }
 
 """An enumeration."""
-enum PersonAgentDescriptionGenderSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum PersonAgentDescriptionLocationCertaintyChoices {
   """uncertain"""
   A_0
@@ -474,15 +428,6 @@ enum PersonAgentDescriptionLocationCertaintyChoices {
 
   """certain"""
   A_2
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionLocationSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
 }
 
 """An enumeration."""
@@ -615,9 +560,7 @@ type RegionFieldType {
   """Additional notes"""
   note: String!
   region: RegionType!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceRegionFieldSourceMentionChoices
+  sourceMention: SourceMention
   space: SpaceDescriptionType!
 }
 
@@ -648,9 +591,7 @@ type SettlementFieldType {
   """Additional notes"""
   note: String!
   settlement: SettlementType!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceSettlementFieldSourceMentionChoices
+  sourceMention: SourceMention
   space: SpaceDescriptionType!
 }
 
@@ -789,15 +730,6 @@ enum SpaceRegionFieldCertaintyChoices {
 }
 
 """An enumeration."""
-enum SpaceRegionFieldSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum SpaceRegionTypeChoices {
   """ecclesiastical"""
   ECCLESIASTICAL
@@ -822,15 +754,6 @@ enum SpaceSettlementFieldCertaintyChoices {
 }
 
 """An enumeration."""
-enum SpaceSettlementFieldSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum SpaceSpaceDescriptionSourceMentionChoices {
   """directly mentioned"""
   DIRECT
@@ -849,15 +772,6 @@ enum SpaceStructureFieldCertaintyChoices {
 
   """certain"""
   A_2
-}
-
-"""An enumeration."""
-enum SpaceStructureFieldSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
 }
 
 """An enumeration."""
@@ -885,9 +799,7 @@ type StructureFieldType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceStructureFieldSourceMentionChoices
+  sourceMention: SourceMention
   space: SpaceDescriptionType!
   structure: StructureType!
 }

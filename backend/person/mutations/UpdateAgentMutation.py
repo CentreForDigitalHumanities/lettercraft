@@ -21,16 +21,17 @@ from django.db.models.fields.related_descriptors import (
     ReverseOneToOneDescriptor,
     ForwardOneToOneDescriptor,
 )
+from core.types.DescriptionFieldType import SourceMentionEnum
 
 class UpdateAgentGenderInput(InputObjectType):
     gender = Enum.from_enum(Gender)()
-    source_mention = Enum.from_enum(SourceMention)()
+    source_mention = SourceMentionEnum()
     note = String()
 
 
 class UpdateAgentLocationInput(InputObjectType):
     location = ID()
-    source_mention = Enum.from_enum(SourceMention)()
+    source_mention = SourceMentionEnum()
     note = String()
 
 
