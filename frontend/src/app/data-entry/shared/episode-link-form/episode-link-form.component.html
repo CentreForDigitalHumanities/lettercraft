@@ -1,7 +1,8 @@
 <div class="card" *ngIf="data$ | async as data">
-    <div class="card-header">
+    <div class="card-header"
+        [class.border-bottom-0]="collapsed">
         <div class="hstack gap-2">
-            <span class="card-title">
+            <span>
                 {{ linkedObject(linkTo, data)?.name }}
             </span>
             <button class="btn btn-secondary ms-auto"

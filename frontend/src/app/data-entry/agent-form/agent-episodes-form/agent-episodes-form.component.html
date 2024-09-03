@@ -1,6 +1,6 @@
 <ng-container *ngIf="data$ | async as data">
     <p>This agent is involved in the following episodes:</p>
-    <ul class="list-unstyled">
+    <ul class="list-unstyled vstack gap-4">
         <li *ngFor="let item of data.agentDescription?.episodes">
             <lc-episode-link-form [id]="item.id" entityType="agent" />
         </li>
