@@ -18,7 +18,8 @@
                 ]">
                 <lc-icon [icon]="actionIcons.edit" />
             </a>
-            <button class="btn btn-danger" aria-label="remove episode">
+            <button class="btn btn-danger" aria-label="remove episode"
+                (click)="delete.emit()">
                 <lc-icon [icon]="actionIcons.remove" />
             </button>
         </div>
