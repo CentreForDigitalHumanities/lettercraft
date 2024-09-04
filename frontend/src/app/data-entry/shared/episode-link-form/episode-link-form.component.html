@@ -7,6 +7,8 @@
             </span>
             <button class="btn btn-secondary ms-auto"
                 [attr.aria-label]="(collapsed ? 'show' : 'hide') + ' additional questions'"
+                [attr.aria-expanded]="!collapsed"
+                [attr.aria-controls]="formElementID"
                 (click)="collapsed = !collapsed">
                 <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
             </button>
@@ -21,7 +23,8 @@
             <ng-content select="[removeControl]"></ng-content>
         </div>
     </div>
-    <form class="card-body" [formGroup]="form" [ngbCollapse]="collapsed">
+    <form class="card-body" [id]="formElementID"
+        [formGroup]="form" [ngbCollapse]="collapsed">
         <div class="mb-3">
             <label [htmlFor]="sourceMentionInput" class="form-label">
                 How is this agent's involvement in the episode represented?
