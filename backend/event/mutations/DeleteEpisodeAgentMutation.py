@@ -16,20 +16,25 @@ class DeleteEpisodeAgentMutation(Mutation):
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     class Arguments:
-        id = ID(required=True)
+        agent = ID(required=True)
+        episode = ID(required=True)
 
     @classmethod
     def mutate(
         cls,
         root: None,
         info: ResolveInfo,
-        id: ID,
+        agent: ID,
+        episode: ID,
     ):
         try:
-            obj = EpisodeAgent.objects.get(id=id)
+            obj = EpisodeAgent.objects.get(agent__id=agent, episode__id=episode)
         except EpisodeAgent.DoesNotExist:
             return cls(
-                ok=False, errors=LettercraftErrorType("id", ["Object not found"])
+                ok=False,
+                errors=LettercraftErrorType(
+                    "agent__id", ["Relation object does not exist"]
+                ),
             )
 
         obj.delete()

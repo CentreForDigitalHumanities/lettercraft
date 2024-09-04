@@ -15,7 +15,8 @@ from event.models import EpisodeAgent
 
 
 class UpdateEpisodeAgentInput(InputObjectType):
-    id = ID(required=True)
+    agent = ID(required=True)
+    episode = ID(required=True)
     source_mention = SourceMentionEnum()
     note = String()
 
@@ -32,11 +33,13 @@ class UpdateEpisodeAgentMutation(LettercraftMutation):
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, data: UpdateEpisodeAgentInput):
         try:
-            reference = cls.get_object(info, data)
+            obj = EpisodeAgent.objects.get(
+                agent__id=data.agent, episode__id=data.episode
+            )
         except EpisodeAgent.DoesNotExist as e:
-            error = LettercraftErrorType(field="id", messages=[str(e)])
+            error = LettercraftErrorType(field="agent", messages=[str(e)])
             return cls(ok=False, error=[error])
 
-        cls.mutate_object(data, reference, info)
+        cls.mutate_object(data, obj, info)
 
         return cls(ok=True, errors=[])

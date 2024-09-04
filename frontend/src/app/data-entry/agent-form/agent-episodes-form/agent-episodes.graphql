@@ -27,8 +27,8 @@ mutation DataEntryCreateAgentEpisodeMutation($data: CreateEpisodeAgentInput!) {
     }
 }
 
-mutation DataEntryDeleteAgentEpisodeMutation($id: ID!) {
-    deleteEpisodeAgent(id: $id) {
+mutation DataEntryDeleteAgentEpisodeMutation($agent: ID!, $episode: ID!) {
+    deleteEpisodeAgent(agent: $agent, episode: $episode) {
         ok
         errors {
             field

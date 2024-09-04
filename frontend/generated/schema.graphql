@@ -397,7 +397,7 @@ type Mutation {
   createEpisodeAgent(data: CreateEpisodeAgentInput!): CreateEpisodeAgentMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
-  deleteEpisodeAgent(id: ID!): DeleteEpisodeAgentMutation
+  deleteEpisodeAgent(agent: ID!, episode: ID!): DeleteEpisodeAgentMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
@@ -556,7 +556,7 @@ type Query {
   agentDescription(id: ID!): AgentDescriptionType
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
-  episodeAgentLink(id: ID!): EpisodeAgentType
+  episodeAgentLink(agent: ID!, episode: ID!): EpisodeAgentType
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
@@ -880,7 +880,8 @@ input UpdateCreateSourceInput {
 }
 
 input UpdateEpisodeAgentInput {
-  id: ID!
+  agent: ID!
+  episode: ID!
   note: String
   sourceMention: SourceMention
 }

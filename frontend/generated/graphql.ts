@@ -394,7 +394,8 @@ export type MutationDeleteAgentArgs = {
 
 
 export type MutationDeleteEpisodeAgentArgs = {
-  id: Scalars['ID']['input'];
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
 };
 
 
@@ -583,7 +584,8 @@ export type QueryEpisodeArgs = {
 
 
 export type QueryEpisodeAgentLinkArgs = {
-  id: Scalars['ID']['input'];
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
 };
 
 
@@ -894,7 +896,8 @@ export type UpdateCreateSourceInput = {
 };
 
 export type UpdateEpisodeAgentInput = {
-  id: Scalars['ID']['input'];
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
   note?: InputMaybe<Scalars['String']['input']>;
   sourceMention?: InputMaybe<SourceMention>;
 };
@@ -976,7 +979,8 @@ export type DataEntryCreateAgentEpisodeMutationMutationVariables = Exact<{
 export type DataEntryCreateAgentEpisodeMutationMutation = { __typename?: 'Mutation', createEpisodeAgent?: { __typename?: 'CreateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryDeleteAgentEpisodeMutationMutationVariables = Exact<{
-  id: Scalars['ID']['input'];
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
 }>;
 
 
@@ -1067,7 +1071,8 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryEpisodeAgentQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
 }>;
 
 
@@ -1202,8 +1207,8 @@ export const DataEntryCreateAgentEpisodeMutationDocument = gql`
     }
   }
 export const DataEntryDeleteAgentEpisodeMutationDocument = gql`
-    mutation DataEntryDeleteAgentEpisodeMutation($id: ID!) {
-  deleteEpisodeAgent(id: $id) {
+    mutation DataEntryDeleteAgentEpisodeMutation($agent: ID!, $episode: ID!) {
+  deleteEpisodeAgent(agent: $agent, episode: $episode) {
     ok
     errors {
       field
@@ -1495,8 +1500,8 @@ export const DataEntrySpaceDescriptionDocument = gql`
     }
   }
 export const DataEntryEpisodeAgentDocument = gql`
-    query DataEntryEpisodeAgent($id: ID!) {
-  episodeAgentLink(id: $id) {
+    query DataEntryEpisodeAgent($agent: ID!, $episode: ID!) {
+  episodeAgentLink(agent: $agent, episode: $episode) {
     id
     note
     sourceMention
