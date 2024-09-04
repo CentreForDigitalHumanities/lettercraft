@@ -22,7 +22,7 @@
             ngbDropdownItem (click)="addEpisode$.next(episode.id)">
             {{episode.name}}
         </button>
-        <button ngbDropdownItem>
+        <button ngbDropdownItem disabled>
             <lc-icon [icon]="actionIcons.create" />
             Create new episode
         </button>
