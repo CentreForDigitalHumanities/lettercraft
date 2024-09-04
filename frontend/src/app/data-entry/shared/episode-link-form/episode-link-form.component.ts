@@ -62,6 +62,11 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         this.data$.subscribe(this.updateFormValues.bind(this));
     }
 
+
+    get formElementID(): string {
+        return `form-${this.linkTo}-link-${this.id}`;
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['entityType']) {
             this.query$.next(this.entityQueries[this.entityType]);
