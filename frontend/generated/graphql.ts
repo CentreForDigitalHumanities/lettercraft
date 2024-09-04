@@ -709,6 +709,7 @@ export enum SourceMention {
 
 export type SourceType = {
   __typename?: 'SourceType';
+  agents: Array<AgentDescriptionType>;
   contentsDate?: Maybe<SourceContentsDateType>;
   /** The name of the author of the edition */
   editionAuthor: Scalars['String']['output'];
@@ -1019,7 +1020,7 @@ export type DataEntryEpisodeAgentsQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeAgentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }> } | null };
+export type DataEntryEpisodeAgentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }> } | null };
 
 export type DataEntryEpisodeContentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1331,6 +1332,10 @@ export const DataEntryEpisodeAgentsDocument = gql`
     id
     source {
       id
+      agents {
+        id
+        name
+      }
     }
     agents {
       id
