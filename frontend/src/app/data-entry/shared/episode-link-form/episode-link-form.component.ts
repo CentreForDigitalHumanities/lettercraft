@@ -15,7 +15,7 @@ import { MutationResult } from 'apollo-angular';
 import { FormService } from '../form.service';
 
 
-type LinkTo = 'episode' | 'agent';
+type LinkTo = 'episode' | 'entity';
 
 @Component({
     selector: 'lc-episode-link-form',
