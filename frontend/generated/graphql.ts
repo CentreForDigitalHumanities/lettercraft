@@ -440,6 +440,7 @@ export type Mutation = {
   deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
+  updateEpisodeAgent?: Maybe<UpdateEpisodeAgentMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
@@ -514,6 +515,11 @@ export type MutationUpdateAgentArgs = {
 
 export type MutationUpdateEpisodeArgs = {
   episodeData: UpdateEpisodeInput;
+};
+
+
+export type MutationUpdateEpisodeAgentArgs = {
+  data: UpdateEpisodeAgentInput;
 };
 
 
@@ -1004,6 +1010,17 @@ export type UpdateCreateSourceInput = {
   name: Scalars['String']['input'];
 };
 
+export type UpdateEpisodeAgentInput = {
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateEpisodeAgentMutation = {
+  __typename?: 'UpdateEpisodeAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type UpdateEpisodeInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -1287,6 +1304,13 @@ export type EpisodeAgentQueryQueryVariables = Exact<{
 
 
 export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: SourceMention | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
+
+export type DataEntryUpdateEpisodeAgentMutationMutationVariables = Exact<{
+  input: UpdateEpisodeAgentInput;
+}>;
+
+
+export type DataEntryUpdateEpisodeAgentMutationMutation = { __typename?: 'Mutation', updateEpisodeAgent?: { __typename?: 'UpdateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryDeleteEpisodeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2026,6 +2050,28 @@ export const EpisodeAgentQueryDocument = gql`
   })
   export class EpisodeAgentQueryGQL extends Apollo.Query<EpisodeAgentQueryQuery, EpisodeAgentQueryQueryVariables> {
     override document = EpisodeAgentQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryUpdateEpisodeAgentMutationDocument = gql`
+    mutation DataEntryUpdateEpisodeAgentMutation($input: UpdateEpisodeAgentInput!) {
+  updateEpisodeAgent(data: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryUpdateEpisodeAgentMutationGQL extends Apollo.Mutation<DataEntryUpdateEpisodeAgentMutationMutation, DataEntryUpdateEpisodeAgentMutationMutationVariables> {
+    override document = DataEntryUpdateEpisodeAgentMutationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
