@@ -19,6 +19,7 @@ import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinct
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
+import { sourceMentionSelectOptions } from '../../shared/utils';
 
 
 @Component({
@@ -35,15 +36,7 @@ export class AgentDescriptionFormComponent implements OnDestroy {
         { value: GenderChoices.Unknown, label: 'Unknown' }
     ];
 
-    genderSourceMentionOptions: { value: SourceMention, label: string }[] = [
-        { value: SourceMention.Direct, label: 'Mentioned' },
-        { value: SourceMention.Implied, label: 'Implied' },
-    ];
-
-    locationSourceMentionOptions: { value: SourceMention, label: string }[] = [
-        { value: SourceMention.Direct, label: 'Mentioned' },
-        { value: SourceMention.Implied, label: 'Implied' },
-    ];
+    sourceMentionOptions = sourceMentionSelectOptions();
 
     form = new FormGroup({
         designators: new FormControl<string[]>([], { nonNullable: true }),

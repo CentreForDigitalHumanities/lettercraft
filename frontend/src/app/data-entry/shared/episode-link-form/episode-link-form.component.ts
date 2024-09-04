@@ -5,6 +5,7 @@ import { actionIcons } from '@shared/icons';
 import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery, SourceMention } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
+import { sourceMentionSelectOptions } from '../utils';
 
 
 type LinkTo = 'episode' | 'agent';
@@ -36,10 +37,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         note: new FormControl<string>('', { nonNullable: true }),
     });
 
-    sourceMentionOptions: SelectOptions<SourceMention> = [
-        { value: SourceMention.Direct, label: 'Directly mentioned' },
-        { value: SourceMention.Implied, label: 'Implied' }
-    ];
+    sourceMentionOptions: SelectOptions<SourceMention> = sourceMentionSelectOptions();
 
     private entityQueries: Record<EntityType, EpisodeAgentQueryGQL>;
     private query$ = new Subject<EpisodeAgentQueryGQL>();
