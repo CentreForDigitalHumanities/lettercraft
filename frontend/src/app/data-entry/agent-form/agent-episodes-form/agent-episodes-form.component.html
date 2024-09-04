@@ -2,7 +2,8 @@
     <p>This agent is involved in the following episodes:</p>
     <ul class="list-unstyled vstack gap-4">
         <li *ngFor="let item of data.agentDescription?.episodes">
-            <lc-episode-link-form [id]="item.id" entityType="agent" />
+            <lc-episode-link-form [id]="item.id" entityType="agent"
+                (delete)="removeEpisode$.next(item.id)" />
         </li>
     </ul>
 </ng-container>

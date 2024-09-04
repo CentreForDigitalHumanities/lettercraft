@@ -957,12 +957,12 @@ export type DataEntryCreateAgentEpisodeMutationMutationVariables = Exact<{
 
 export type DataEntryCreateAgentEpisodeMutationMutation = { __typename?: 'Mutation', createEpisodeAgent?: { __typename?: 'CreateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
-export type DateEntryDeleteAgentEpisodeMutationMutationVariables = Exact<{
+export type DataEntryDeleteAgentEpisodeMutationMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DateEntryDeleteAgentEpisodeMutationMutation = { __typename?: 'Mutation', deleteEpisodeAgent?: { __typename?: 'DeleteEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryDeleteAgentEpisodeMutationMutation = { __typename?: 'Mutation', deleteEpisodeAgent?: { __typename?: 'DeleteEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1176,8 +1176,8 @@ export const DataEntryCreateAgentEpisodeMutationDocument = gql`
       super(apollo);
     }
   }
-export const DateEntryDeleteAgentEpisodeMutationDocument = gql`
-    mutation DateEntryDeleteAgentEpisodeMutation($id: ID!) {
+export const DataEntryDeleteAgentEpisodeMutationDocument = gql`
+    mutation DataEntryDeleteAgentEpisodeMutation($id: ID!) {
   deleteEpisodeAgent(id: $id) {
     ok
     errors {
@@ -1191,8 +1191,8 @@ export const DateEntryDeleteAgentEpisodeMutationDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DateEntryDeleteAgentEpisodeMutationGQL extends Apollo.Mutation<DateEntryDeleteAgentEpisodeMutationMutation, DateEntryDeleteAgentEpisodeMutationMutationVariables> {
-    override document = DateEntryDeleteAgentEpisodeMutationDocument;
+  export class DataEntryDeleteAgentEpisodeMutationGQL extends Apollo.Mutation<DataEntryDeleteAgentEpisodeMutationMutation, DataEntryDeleteAgentEpisodeMutationMutationVariables> {
+    override document = DataEntryDeleteAgentEpisodeMutationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
