@@ -13,3 +13,13 @@ query EpisodeAgentQuery($id: ID!) {
         }
     }
 }
+
+mutation DataEntryUpdateEpisodeAgentMutation($input:UpdateEpisodeAgentInput!) {
+    updateEpisodeAgent(data: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

@@ -401,6 +401,7 @@ type Mutation {
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
+  updateEpisodeAgent(data: UpdateEpisodeAgentInput!): UpdateEpisodeAgentMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
@@ -876,6 +877,16 @@ input UpdateCreateSourceInput {
   medievalAuthor: String
   medievalTitle: String
   name: String!
+}
+
+input UpdateEpisodeAgentInput {
+  id: ID!
+  note: String
+}
+
+type UpdateEpisodeAgentMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type UpdateEpisodeMutation {
