@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { actionIcons } from '@shared/icons';
 import { FormStatus } from '../../shared/types';
 import { MutationResult } from 'apollo-angular';
+import { differencyBy } from '../../shared/utils';
 
 const REFETCH_QUERIES = ['DataEntryAgentEpisodes'];
 
@@ -107,7 +108,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
         data: DataEntryAgentEpisodesQuery
     ): { name: string, id: string }[] {
         const allEpisodes = data.agentDescription?.source.episodes || [];
-        const linkedEpisodeIDs = data.agentDescription?.episodes.map(ep => ep.episode.id) || [];
-        return allEpisodes.filter(episode => !linkedEpisodeIDs.includes(episode.id));
+        const linkedEpisodes = data.agentDescription?.episodes || [];
+        return differencyBy(allEpisodes, linkedEpisodes, 'id');
     }
 }
