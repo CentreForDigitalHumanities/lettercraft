@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
-import { formStatusSubject } from "../../shared/utils";
+import { differencyBy, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
@@ -106,7 +106,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         data: DataEntryEpisodeAgentsQuery
     ): { name: string, id: string }[] {
         const allAgents = data.episode?.source.agents || [];
-        const linkedAgentIDs = data.episode?.agents.map(agent => agent.id) || [];
-        return allAgents.filter(agent => !linkedAgentIDs.includes(agent.id));
+        const linkedAgents = data.episode?.agents || [];
+        return differencyBy(allAgents, linkedAgents, 'id');
     }
 }
