@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { EntityType, SelectOptions } from '../types';
 import { combineLatest, map, Observable, shareReplay, Subject, switchMap } from 'rxjs';
 import { actionIcons } from '@shared/icons';
@@ -27,7 +27,6 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
      * *from* should be clear from the context.
      */
     @Input() linkTo: LinkTo = 'episode';
-    @Output() delete = new EventEmitter<void>();
 
     collapsed = true;
 

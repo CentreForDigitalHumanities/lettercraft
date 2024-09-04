@@ -18,10 +18,7 @@
                 ]">
                 <lc-icon [icon]="actionIcons.edit" />
             </a>
-            <button class="btn btn-danger" aria-label="remove episode"
-                (click)="delete.emit()">
-                <lc-icon [icon]="actionIcons.remove" />
-            </button>
+            <ng-content select="[removeControl]"></ng-content>
         </div>
     </div>
     <form class="card-body" [formGroup]="form" [ngbCollapse]="collapsed">
