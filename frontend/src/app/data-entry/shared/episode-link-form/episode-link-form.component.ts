@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { EntityType, SelectOptions } from '../types';
-import { combineLatest, debounceTime, distinctUntilChanged, map, Observable, shareReplay, skip, Subject, switchMap, withLatestFrom } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, Observable, shareReplay, skip, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { actionIcons } from '@shared/icons';
 import {
     DataEntryUpdateEpisodeAgentGQL, DataEntryUpdateEpisodeAgentMutationVariables,
@@ -9,9 +9,10 @@ import {
 } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
-import { sourceMentionSelectOptions } from '../utils';
+import { formStatusSubject, sourceMentionSelectOptions } from '../utils';
 import _ from 'underscore';
 import { MutationResult } from 'apollo-angular';
+import { FormService } from '../form.service';
 
 
 type LinkTo = 'episode' | 'agent';
@@ -47,13 +48,17 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     private entityQueries: Record<EntityType, DataEntryEpisodeAgentGQL>;
     private query$ = new Subject<DataEntryEpisodeAgentGQL>();
     private id$ = new Subject<string>;
+    private status$ = formStatusSubject();
+    private formName = 'episode-link-' + crypto.randomUUID();
 
     actionIcons = actionIcons;
 
     constructor(
         private agentQuery: DataEntryEpisodeAgentGQL,
         private agentMutation: DataEntryUpdateEpisodeAgentGQL,
+        private formService: FormService,
     ) {
+        this.formService.attachForm(this.formName, this.status$);
         this.entityQueries = {
             agent: agentQuery,
         };
@@ -68,12 +73,12 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             debounceTime(500),
             distinctUntilChanged(_.isEqual),
             skip(1),
-            // tap(() => this.status$.next('loading')),
+            tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),
             map(this.toMutationInput),
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
-        ).subscribe(this.onMutationResult);
+        ).subscribe(this.onMutationResult.bind(this));
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -88,6 +93,8 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     ngOnDestroy(): void {
         this.query$.complete();
         this.id$.complete();
+        this.status$.complete();
+        this.formService.detachForm(this.formName);
     }
 
     formUrl(linkTo: LinkTo, entityType: EntityType): string {
@@ -128,8 +135,12 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     private onMutationResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
         if (result.errors) {
             console.error(result.errors);
+            this.status$.next('error');
         } else if (result.data?.updateEpisode?.errors) {
             console.error(result.data.updateEpisode.errors);
+            this.status$.next('error');
+        } else {
+            this.status$.next('saved');
         }
     }
 }
