@@ -16,19 +16,21 @@
     </ng-container>
 </ng-container>
 
-<div ngbDropdown class="mb-4">
-    <button type="button" class="btn btn-primary" id="episode-dropdown-trigger"
-        ngbDropdownToggle>
-        Add agent
-    </button>
-    <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
-        <button *ngFor="let agent of (availableAgents$ | async)"
-            ngbDropdownItem (click)="addAgent$.next(agent.id)">
-            {{agent.name}}
+<div class="mt-4 mb-4">
+    <div ngbDropdown>
+        <button type="button" class="btn btn-primary" id="add-agent-dropdown-trigger"
+            ngbDropdownToggle>
+            Add agent
         </button>
-        <button ngbDropdownItem disabled>
-            <lc-icon [icon]="actionIcons.create" />
-            Create new agent
-        </button>
+        <div ngbDropdownMenu aria-labelledby="add-agent-dropdown-trigger">
+            <button *ngFor="let agent of (availableAgents$ | async)"
+                ngbDropdownItem (click)="addAgent$.next(agent.id)">
+                {{agent.name}}
+            </button>
+            <button ngbDropdownItem disabled>
+                <lc-icon [icon]="actionIcons.create" />
+                Create new agent
+            </button>
+        </div>
     </div>
 </div>
