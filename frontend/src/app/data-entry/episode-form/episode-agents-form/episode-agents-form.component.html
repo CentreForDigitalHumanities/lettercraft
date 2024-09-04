@@ -1,1 +1,34 @@
-<p><i>Coming soon!</i></p>
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.episode">
+        <p>The following agents are involved in this episode:</p>
+        <ul class="list-unstyled vstack gap-4">
+            <li *ngFor="let agent of data.episode.agents">
+                <lc-episode-link-form entityType="agent" linkTo="entity"
+                        [entityID]="agent.id"
+                        [episodeID]="data.episode.id">
+                    <button removeControl class="btn btn-danger" aria-label="remove episode"
+                        (click)="removeAgent$.next(agent.id)">
+                        <lc-icon [icon]="actionIcons.remove" />
+                    </button>
+                </lc-episode-link-form>
+            </li>
+        </ul>
+    </ng-container>
+</ng-container>
+
+<div ngbDropdown class="mb-4">
+    <button type="button" class="btn btn-primary" id="episode-dropdown-trigger"
+        ngbDropdownToggle>
+        Add agent
+    </button>
+    <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
+        <button *ngFor="let agent of (availableAgents$ | async)"
+            ngbDropdownItem (click)="addAgent$.next(agent.id)">
+            {{agent.name}}
+        </button>
+        <button ngbDropdownItem disabled>
+            <lc-icon [icon]="actionIcons.create" />
+            Create new agent
+        </button>
+    </div>
+</div>
