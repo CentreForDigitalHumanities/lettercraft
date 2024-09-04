@@ -24,7 +24,8 @@ type LinkTo = 'episode' | 'agent';
 })
 export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     /** ID of the connection object (e.g. EpisodeAgent) */
-    @Input({ required: true }) id!: string;
+    @Input({ required: true }) entityID!: string;
+    @Input({ required: true }) episodeID!: string;
 
     /** Type of entity (agent, letter, etc.) */
     @Input({ required: true }) entityType!: EntityType;
@@ -47,14 +48,14 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     private entityQueries: Record<EntityType, DataEntryEpisodeAgentGQL>;
     private query$ = new Subject<DataEntryEpisodeAgentGQL>();
-    private id$ = new Subject<string>;
+    private link$ = new Subject<{ entity: string, episode: string }>();
     private status$ = formStatusSubject();
     private formName = 'episode-link-' + crypto.randomUUID();
 
     actionIcons = actionIcons;
 
     constructor(
-        private agentQuery: DataEntryEpisodeAgentGQL,
+        agentQuery: DataEntryEpisodeAgentGQL,
         private agentMutation: DataEntryUpdateEpisodeAgentGQL,
         private formService: FormService,
     ) {
@@ -62,8 +63,10 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         this.entityQueries = {
             agent: agentQuery,
         };
-        this.data$ = combineLatest([this.query$, this.id$]).pipe(
-            switchMap(([query, id]) => query.watch({ id }).valueChanges),
+        this.data$ = combineLatest([this.query$, this.link$]).pipe(
+            switchMap(([query, link]) => query.watch({
+                agent: link.entity, episode: link.episode
+            }).valueChanges),
             map(result => result.data),
             shareReplay(1),
             takeUntilDestroyed(),
@@ -74,7 +77,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             distinctUntilChanged(_.isEqual),
             skip(1),
             tap(() => this.status$.next('loading')),
-            withLatestFrom(this.id$),
+            withLatestFrom(this.link$),
             map(this.toMutationInput),
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
@@ -85,14 +88,14 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         if (changes['entityType']) {
             this.query$.next(this.entityQueries[this.entityType]);
         }
-        if (changes['id']) {
-            this.id$.next(this.id);
+        if (changes['entityID'] || changes['episodeID']) {
+            this.link$.next({ entity: this.entityID, episode: this.episodeID });
         }
     }
 
     ngOnDestroy(): void {
         this.query$.complete();
-        this.id$.complete();
+        this.link$.complete();
         this.status$.complete();
         this.formService.detachForm(this.formName);
     }
@@ -119,8 +122,10 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         });
     }
 
-    private toMutationInput([values, id]: [typeof this.form.value, string]): DataEntryUpdateEpisodeAgentMutationVariables {
-        return { input: { id, ...values } };
+    private toMutationInput(
+        [values, link]: [typeof this.form.value, { entity: string, episode: string }]
+    ): DataEntryUpdateEpisodeAgentMutationVariables {
+        return { input: { agent: link.entity, episode: link.episode, ...values } };
     }
 
     private makeMutation(mutationInput: DataEntryUpdateEpisodeAgentMutationVariables) {

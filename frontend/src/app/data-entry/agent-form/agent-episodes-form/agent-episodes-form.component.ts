@@ -4,6 +4,7 @@ import {
     CreateEpisodeAgentInput, DataEntryAgentEpisodesGQL, DataEntryAgentEpisodesQuery,
     DataEntryCreateAgentEpisodeMutationGQL,
     DataEntryDeleteAgentEpisodeMutationGQL,
+    DataEntryDeleteAgentEpisodeMutationMutationVariables,
 } from 'generated/graphql';
 import { BehaviorSubject, map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,13 +49,20 @@ export class AgentEpisodesFormComponent implements OnDestroy {
         this.availableEpisodes$ = this.data$.pipe(
             map(this.availableEpisodes)
         );
+
         this.addEpisode$.pipe(
             withLatestFrom(this.formService.id$),
             takeUntilDestroyed(),
         ).subscribe(([episodeID, agentID]) =>
             this.addEpisode(episodeID, agentID)
         );
-        this.removeEpisode$.subscribe(this.removeEpisode.bind(this));
+
+        this.removeEpisode$.pipe(
+            withLatestFrom(this.formService.id$),
+            takeUntilDestroyed(),
+        ).subscribe(([episodeID, agentID]) =>
+            this.removeEpisode(episodeID, agentID)
+        );
     }
 
     ngOnDestroy(): void {
@@ -76,8 +84,11 @@ export class AgentEpisodesFormComponent implements OnDestroy {
         ).subscribe(this.mutationObserver);
     }
 
-    removeEpisode(linkID: string): void {
-        const data = { id: linkID };
+    removeEpisode(episodeID: string, agentID: string): void {
+        const data: DataEntryDeleteAgentEpisodeMutationMutationVariables = {
+            agent: agentID,
+            episode: episodeID,
+        };
         this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver)

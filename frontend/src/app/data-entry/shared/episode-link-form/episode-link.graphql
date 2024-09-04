@@ -1,5 +1,5 @@
-query DataEntryEpisodeAgent($id: ID!) {
-    episodeAgentLink(id: $id) {
+query DataEntryEpisodeAgent($agent: ID!, $episode: ID!) {
+    episodeAgentLink(agent: $agent, episode: $episode) {
         id
         note
         sourceMention

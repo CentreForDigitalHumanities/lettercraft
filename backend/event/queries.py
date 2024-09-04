@@ -9,7 +9,9 @@ class EventQueries(ObjectType):
     episode = Field(EpisodeType, id=ID(required=True))
     episodes = List(NonNull(EpisodeType), required=True, source_id=ID())
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
-    episode_agent_link = Field(EpisodeAgentType, id=ID(required=True))
+    episode_agent_link = Field(
+        EpisodeAgentType, agent=ID(required=True), episode=ID(required=True)
+    )
 
     @staticmethod
     def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Episode | None:
@@ -36,9 +38,14 @@ class EventQueries(ObjectType):
 
     @staticmethod
     def resolve_episode_agent_link(
-        parent: None, info: ResolveInfo, id: str
+        parent: None,
+        info: ResolveInfo,
+        agent: str,
+        episode: str,
     ) -> EpisodeAgent | None:
         try:
-            return EpisodeAgentType.get_queryset(EpisodeAgent.objects, info).get(id=id)
+            return EpisodeAgentType.get_queryset(EpisodeAgent.objects, info).get(
+                agent__id=agent, episode__id=episode
+            )
         except EpisodeAgent.DoesNotExist:
             return None
