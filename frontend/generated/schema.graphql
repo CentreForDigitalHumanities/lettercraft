@@ -953,6 +953,7 @@ input UpdateCreateSourceInput {
 input UpdateEpisodeAgentInput {
   id: ID!
   note: String
+  sourceMention: SourceMention
 }
 
 type UpdateEpisodeAgentMutation {

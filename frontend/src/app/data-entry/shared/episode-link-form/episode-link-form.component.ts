@@ -1,11 +1,17 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { EntityType, SelectOptions } from '../types';
-import { combineLatest, map, Observable, shareReplay, Subject, switchMap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, Observable, shareReplay, skip, Subject, switchMap, withLatestFrom } from 'rxjs';
 import { actionIcons } from '@shared/icons';
-import { EpisodeAgentQueryGQL, EpisodeAgentQueryQuery, SourceMention } from 'generated/graphql';
+import {
+    DataEntryUpdateEpisodeAgentGQL, DataEntryUpdateEpisodeAgentMutationVariables,
+    DataEntryEpisodeAgentGQL, DataEntryEpisodeAgentQuery, SourceMention,
+    DataEntryUpdateEpisodeMutation
+} from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { sourceMentionSelectOptions } from '../utils';
+import _ from 'underscore';
+import { MutationResult } from 'apollo-angular';
 
 
 type LinkTo = 'episode' | 'agent';
@@ -29,7 +35,8 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
      */
     @Input() linkTo: LinkTo = 'episode';
 
-    data$: Observable<EpisodeAgentQueryQuery | undefined>;
+
+    data$: Observable<DataEntryEpisodeAgentQuery | undefined>;
     form = new FormGroup({
         sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
         note: new FormControl<string>('', { nonNullable: true }),
@@ -37,14 +44,15 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     sourceMentionOptions: SelectOptions<SourceMention> = sourceMentionSelectOptions();
 
-    private entityQueries: Record<EntityType, EpisodeAgentQueryGQL>;
-    private query$ = new Subject<EpisodeAgentQueryGQL>();
+    private entityQueries: Record<EntityType, DataEntryEpisodeAgentGQL>;
+    private query$ = new Subject<DataEntryEpisodeAgentGQL>();
     private id$ = new Subject<string>;
 
     actionIcons = actionIcons;
 
     constructor(
-        private agentQuery: EpisodeAgentQueryGQL,
+        private agentQuery: DataEntryEpisodeAgentGQL,
+        private agentMutation: DataEntryUpdateEpisodeAgentGQL,
     ) {
         this.entityQueries = {
             agent: agentQuery,
@@ -56,6 +64,16 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             takeUntilDestroyed(),
         );
         this.data$.subscribe(this.updateFormValues.bind(this));
+        this.form.valueChanges.pipe(
+            debounceTime(500),
+            distinctUntilChanged(_.isEqual),
+            skip(1),
+            // tap(() => this.status$.next('loading')),
+            withLatestFrom(this.id$),
+            map(this.toMutationInput),
+            switchMap(this.makeMutation.bind(this)),
+            takeUntilDestroyed(),
+        ).subscribe(this.onMutationResult);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -79,7 +97,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         return 'agents';
     }
 
-    linkedObject(linkTo: LinkTo, data: EpisodeAgentQueryQuery) {
+    linkedObject(linkTo: LinkTo, data: DataEntryEpisodeAgentQuery) {
         if (linkTo === 'episode') {
             return data.episodeAgentLink?.episode;
         } else {
@@ -87,10 +105,31 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         }
     }
 
-    private updateFormValues(data?: EpisodeAgentQueryQuery): void {
+    private updateFormValues(data?: DataEntryEpisodeAgentQuery): void {
         this.form.setValue({
             sourceMention: data?.episodeAgentLink?.sourceMention || SourceMention.Direct,
             note: data?.episodeAgentLink?.note || '',
         });
+    }
+
+    private toMutationInput([values, id]: [typeof this.form.value, string]): DataEntryUpdateEpisodeAgentMutationVariables {
+        return { input: { id, ...values } };
+    }
+
+    private makeMutation(mutationInput: DataEntryUpdateEpisodeAgentMutationVariables) {
+        return this.agentMutation.mutate(mutationInput, {
+            errorPolicy: 'all',
+            refetchQueries: [
+                'DataEntryEpisodeAgent',
+            ],
+        })
+    }
+
+    private onMutationResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
+        if (result.errors) {
+            console.error(result.errors);
+        } else if (result.data?.updateEpisode?.errors) {
+            console.error(result.data.updateEpisode.errors);
+        }
     }
 }

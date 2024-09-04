@@ -1013,6 +1013,7 @@ export type UpdateCreateSourceInput = {
 export type UpdateEpisodeAgentInput = {
   id: Scalars['ID']['input'];
   note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
 };
 
 export type UpdateEpisodeAgentMutation = {
@@ -1298,19 +1299,19 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 
 export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
-export type EpisodeAgentQueryQueryVariables = Exact<{
+export type DataEntryEpisodeAgentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type EpisodeAgentQueryQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: SourceMention | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
+export type DataEntryEpisodeAgentQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: SourceMention | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
 
-export type DataEntryUpdateEpisodeAgentMutationMutationVariables = Exact<{
+export type DataEntryUpdateEpisodeAgentMutationVariables = Exact<{
   input: UpdateEpisodeAgentInput;
 }>;
 
 
-export type DataEntryUpdateEpisodeAgentMutationMutation = { __typename?: 'Mutation', updateEpisodeAgent?: { __typename?: 'UpdateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryUpdateEpisodeAgentMutation = { __typename?: 'Mutation', updateEpisodeAgent?: { __typename?: 'UpdateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryDeleteEpisodeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2027,8 +2028,8 @@ export const DataEntrySpaceDescriptionDocument = gql`
       super(apollo);
     }
   }
-export const EpisodeAgentQueryDocument = gql`
-    query EpisodeAgentQuery($id: ID!) {
+export const DataEntryEpisodeAgentDocument = gql`
+    query DataEntryEpisodeAgent($id: ID!) {
   episodeAgentLink(id: $id) {
     id
     note
@@ -2048,15 +2049,15 @@ export const EpisodeAgentQueryDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class EpisodeAgentQueryGQL extends Apollo.Query<EpisodeAgentQueryQuery, EpisodeAgentQueryQueryVariables> {
-    override document = EpisodeAgentQueryDocument;
+  export class DataEntryEpisodeAgentGQL extends Apollo.Query<DataEntryEpisodeAgentQuery, DataEntryEpisodeAgentQueryVariables> {
+    override document = DataEntryEpisodeAgentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
     }
   }
-export const DataEntryUpdateEpisodeAgentMutationDocument = gql`
-    mutation DataEntryUpdateEpisodeAgentMutation($input: UpdateEpisodeAgentInput!) {
+export const DataEntryUpdateEpisodeAgentDocument = gql`
+    mutation DataEntryUpdateEpisodeAgent($input: UpdateEpisodeAgentInput!) {
   updateEpisodeAgent(data: $input) {
     ok
     errors {
@@ -2070,8 +2071,8 @@ export const DataEntryUpdateEpisodeAgentMutationDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DataEntryUpdateEpisodeAgentMutationGQL extends Apollo.Mutation<DataEntryUpdateEpisodeAgentMutationMutation, DataEntryUpdateEpisodeAgentMutationMutationVariables> {
-    override document = DataEntryUpdateEpisodeAgentMutationDocument;
+  export class DataEntryUpdateEpisodeAgentGQL extends Apollo.Mutation<DataEntryUpdateEpisodeAgentMutation, DataEntryUpdateEpisodeAgentMutationVariables> {
+    override document = DataEntryUpdateEpisodeAgentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

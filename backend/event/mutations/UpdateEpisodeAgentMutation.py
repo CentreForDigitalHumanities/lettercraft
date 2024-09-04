@@ -16,7 +16,7 @@ from event.models import EpisodeAgent
 
 class UpdateEpisodeAgentInput(InputObjectType):
     id = ID(required=True)
-    source_mention = SourceMentionEnum
+    source_mention = SourceMentionEnum()
     note = String()
 
 
