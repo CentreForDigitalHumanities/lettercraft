@@ -729,6 +729,7 @@ enum SourceMention {
 }
 
 type SourceType {
+  agents: [AgentDescriptionType!]!
   contentsDate: SourceContentsDateType
 
   """The name of the author of the edition"""

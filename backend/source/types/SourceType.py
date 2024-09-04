@@ -6,13 +6,15 @@ from source.models import Source
 from event.types.EpisodeType import EpisodeType
 from source.types.SourceContentsDateType import SourceContentsDateType
 from source.types.SourceWrittenDateType import SourceWrittenDateType
-
+from person.models import AgentDescription
+from person.types.AgentDescriptionType import AgentDescriptionType
 
 class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
     written_date = Field(SourceWrittenDateType)
     contents_date = Field(SourceContentsDateType)
+    agents = List(NonNull(AgentDescriptionType), required=True)
 
     class Meta:
         model = Source
@@ -44,4 +46,10 @@ class SourceType(DjangoObjectType):
             EpisodeType.get_queryset(Episode.objects, info)
             .filter(source_id=parent.pk)
             .count()
+        )
+
+    @staticmethod
+    def resolve_agents(parent: Source, info: ResolveInfo) -> QuerySet[AgentDescription]:
+        return AgentDescriptionType.get_queryset(AgentDescription.objects, info).filter(
+            source__id=parent.pk
         )

@@ -3,6 +3,10 @@ query DataEntryEpisodeAgents($id:ID!) {
         id
         source {
             id
+            agents {
+                id
+                name
+            }
         }
         agents {
             id
