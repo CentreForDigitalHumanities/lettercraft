@@ -1,4 +1,4 @@
-query EpisodeAgentQuery($id: ID!) {
+query DataEntryEpisodeAgent($id: ID!) {
     episodeAgentLink(id: $id) {
         id
         note
@@ -14,7 +14,7 @@ query EpisodeAgentQuery($id: ID!) {
     }
 }
 
-mutation DataEntryUpdateEpisodeAgentMutation($input:UpdateEpisodeAgentInput!) {
+mutation DataEntryUpdateEpisodeAgent($input:UpdateEpisodeAgentInput!) {
     updateEpisodeAgent(data: $input) {
         ok
         errors {
