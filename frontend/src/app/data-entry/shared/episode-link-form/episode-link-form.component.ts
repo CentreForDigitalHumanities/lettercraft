@@ -29,8 +29,6 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
      */
     @Input() linkTo: LinkTo = 'episode';
 
-    collapsed = true;
-
     data$: Observable<EpisodeAgentQueryQuery | undefined>;
     form = new FormGroup({
         sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
@@ -58,11 +56,6 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             takeUntilDestroyed(),
         );
         this.data$.subscribe(this.updateFormValues.bind(this));
-    }
-
-
-    get formElementID(): string {
-        return `form-${this.linkTo}-link-${this.id}`;
     }
 
     ngOnChanges(changes: SimpleChanges): void {

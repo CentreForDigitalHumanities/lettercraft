@@ -1,30 +1,18 @@
-<div class="card" *ngIf="data$ | async as data">
-    <div class="card-header"
-        [class.border-bottom-0]="collapsed">
-        <div class="hstack gap-2">
-            <span>
-                {{ linkedObject(linkTo, data)?.name }}
-            </span>
-            <button class="btn btn-secondary ms-auto"
-                [attr.aria-label]="(collapsed ? 'show' : 'hide') + ' additional questions'"
-                [attr.aria-expanded]="!collapsed"
-                [attr.aria-controls]="formElementID"
-                (click)="collapsed = !collapsed">
-                <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
-            </button>
-            <a class="btn btn-primary" aria-label="edit episode"
-                [routerLink]="[
-                    '/data-entry',
-                    formUrl(linkTo, entityType),
-                    linkedObject(linkTo, data)?.id
-                ]">
-                <lc-icon [icon]="actionIcons.edit" />
-            </a>
-            <ng-content select="[removeControl]"></ng-content>
-        </div>
-    </div>
-    <form class="card-body" [id]="formElementID"
-        [formGroup]="form" [ngbCollapse]="collapsed">
+<lc-collapsible-card *ngIf="data$ | async as data"
+    contentDescription="additional questions">
+    <span cardTitle>
+        {{ linkedObject(linkTo, data)?.name }}
+    </span>
+    <a cardControl class="btn btn-primary" aria-label="edit episode"
+        [routerLink]="[
+            '/data-entry',
+            formUrl(linkTo, entityType),
+            linkedObject(linkTo, data)?.id
+        ]">
+        <lc-icon [icon]="actionIcons.edit" />
+    </a>
+    <ng-content cardControl select="[removeControl]"></ng-content>
+    <form cardBody [formGroup]="form">
         <div class="mb-3">
             <label [htmlFor]="sourceMentionInput" class="form-label">
                 How is this agent's involvement in the episode represented?
@@ -44,4 +32,4 @@
             </textarea>
         </div>
     </form>
-</div>
+</lc-collapsible-card>

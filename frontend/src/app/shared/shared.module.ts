@@ -12,6 +12,7 @@ import { ActionButtonGroupComponent } from './action-button-group/action-button-
 import { BaseModalComponent } from "./base-modal/base-modal.component";
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ContributorsComponent } from './contributors/contributors.component';
+import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
 
 
 
@@ -23,6 +24,7 @@ import { ContributorsComponent } from './contributors/contributors.component';
         BaseModalComponent,
         ConfirmationModalComponent,
         ContributorsComponent,
+        CollapsibleCardComponent,
     ],
     imports: [
         CommonModule,
@@ -40,8 +42,11 @@ import { ContributorsComponent } from './contributors/contributors.component';
     exports: [
         IconComponent,
         BreadcrumbComponent,
+        BaseModalComponent,
+        ConfirmationModalComponent,
         ActionButtonGroupComponent,
         ContributorsComponent,
+        CollapsibleCardComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -50,7 +55,6 @@ import { ContributorsComponent } from './contributors/contributors.component';
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-        BaseModalComponent,
     ],
 })
 export class SharedModule {}
