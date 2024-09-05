@@ -5,6 +5,7 @@ import {
     DataEntryCreateAgentEpisodeMutationGQL,
     DataEntryDeleteAgentEpisodeMutationGQL,
     DataEntryDeleteAgentEpisodeMutationMutationVariables,
+    Entity,
 } from 'generated/graphql';
 import { BehaviorSubject, map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -29,6 +30,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     actionIcons = actionIcons;
     status$ = new BehaviorSubject<FormStatus>('idle');
     formName = 'episodes';
+    entityType = Entity.Agent;
 
     private mutationObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),

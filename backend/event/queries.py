@@ -1,14 +1,26 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
-from event.models import Episode, EpisodeAgent
+from event.models import (
+    Episode,
+    EpisodeEntity,
+    EpisodeAgent,
+)
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeAgentType import EpisodeAgentType
+from event.types.EpisodeEntityType import EpisodeEntityLinkType, Entity, ENTITY_MODELS
+from typing import Type
 
 class EventQueries(ObjectType):
     episode = Field(EpisodeType, id=ID(required=True))
     episodes = List(NonNull(EpisodeType), required=True, source_id=ID())
     episode_agent_link = Field(
         EpisodeAgentType, agent=ID(required=True), episode=ID(required=True)
+    )
+    episode_entity_link = Field(
+        EpisodeEntityLinkType,
+        entity=ID(required=True),
+        episode=ID(required=True),
+        entity_type=Entity(required=True),
     )
 
     @staticmethod
@@ -41,3 +53,23 @@ class EventQueries(ObjectType):
             )
         except EpisodeAgent.DoesNotExist:
             return None
+
+    @staticmethod
+    def resolve_episode_entity_link(
+        parent: None,
+        info: ResolveInfo,
+        entity: str,
+        episode: str,
+        entity_type: Entity,
+    ) -> EpisodeEntityLinkType:
+        Model: Type[EpisodeEntity] = ENTITY_MODELS[entity_type]
+        query = {Model.entity_field: entity, "episode": episode}
+        obj: EpisodeEntity = Model.objects.get(**query)
+        return EpisodeEntityLinkType(
+            id=obj.pk,
+            episode=obj.episode,
+            entity_type=obj.__class__.entity_field,
+            entity=obj.entity,
+            source_mention=obj.source_mention,
+            note=obj.note,
+        )

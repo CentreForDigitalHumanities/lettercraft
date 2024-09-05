@@ -3,7 +3,7 @@
         <p>The following agents are involved in this episode:</p>
         <ul class="list-unstyled vstack gap-4">
             <li *ngFor="let agent of data.episode.agents">
-                <lc-episode-link-form entityType="agent" linkTo="entity"
+                <lc-episode-link-form [entityType]="entityType" linkTo="entity"
                         [entityID]="agent.id"
                         [episodeID]="data.episode.id">
                     <button removeControl class="btn btn-danger" aria-label="remove episode"

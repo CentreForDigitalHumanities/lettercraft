@@ -131,6 +131,20 @@ export type DeletePersonReferenceMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export enum Entity {
+  Agent = 'AGENT',
+  Gift = 'GIFT',
+  Letter = 'LETTER',
+  Space = 'SPACE'
+}
+
+export type EntityType = {
+  __typename?: 'EntityType';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type EpisodeAgentType = {
   __typename?: 'EpisodeAgentType';
   agent: AgentDescriptionType;
@@ -150,6 +164,16 @@ export type EpisodeCategoryType = {
   id: Scalars['ID']['output'];
   /** A name to help identify this object */
   name: Scalars['String']['output'];
+};
+
+export type EpisodeEntityLinkType = {
+  __typename?: 'EpisodeEntityLinkType';
+  entity: EntityType;
+  entityType: Entity;
+  episode: EpisodeType;
+  id: Scalars['ID']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  sourceMention: SourceMention;
 };
 
 export type EpisodeType = {
@@ -553,6 +577,7 @@ export type Query = {
   agentDescriptions: Array<AgentDescriptionType>;
   episode?: Maybe<EpisodeType>;
   episodeAgentLink?: Maybe<EpisodeAgentType>;
+  episodeEntityLink?: Maybe<EpisodeEntityLinkType>;
   episodes: Array<EpisodeType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
@@ -585,6 +610,13 @@ export type QueryEpisodeArgs = {
 
 export type QueryEpisodeAgentLinkArgs = {
   agent: Scalars['ID']['input'];
+  episode: Scalars['ID']['input'];
+};
+
+
+export type QueryEpisodeEntityLinkArgs = {
+  entity: Scalars['ID']['input'];
+  entityType: Entity;
   episode: Scalars['ID']['input'];
 };
 
@@ -1078,13 +1110,14 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 
 export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
-export type DataEntryEpisodeAgentQueryVariables = Exact<{
-  agent: Scalars['ID']['input'];
+export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
+  entity: Scalars['ID']['input'];
   episode: Scalars['ID']['input'];
+  entityType: Entity;
 }>;
 
 
-export type DataEntryEpisodeAgentQuery = { __typename?: 'Query', episodeAgentLink?: { __typename?: 'EpisodeAgentType', id: string, note: string, sourceMention?: SourceMention | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, agent: { __typename?: 'AgentDescriptionType', id: string, name: string } } | null };
+export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeEntityLinkType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'EntityType', id: string, name?: string | null } } | null };
 
 export type DataEntryUpdateEpisodeAgentMutationVariables = Exact<{
   input: UpdateEpisodeAgentInput;
@@ -1535,9 +1568,9 @@ export const DataEntrySpaceDescriptionDocument = gql`
       super(apollo);
     }
   }
-export const DataEntryEpisodeAgentDocument = gql`
-    query DataEntryEpisodeAgent($agent: ID!, $episode: ID!) {
-  episodeAgentLink(agent: $agent, episode: $episode) {
+export const DataEntryEpisodeEntityLinkDocument = gql`
+    query DataEntryEpisodeEntityLink($entity: ID!, $episode: ID!, $entityType: Entity!) {
+  episodeEntityLink(entity: $entity, episode: $episode, entityType: $entityType) {
     id
     note
     sourceMention
@@ -1545,7 +1578,7 @@ export const DataEntryEpisodeAgentDocument = gql`
       id
       name
     }
-    agent {
+    entity {
       id
       name
     }
@@ -1556,8 +1589,8 @@ export const DataEntryEpisodeAgentDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DataEntryEpisodeAgentGQL extends Apollo.Query<DataEntryEpisodeAgentQuery, DataEntryEpisodeAgentQueryVariables> {
-    override document = DataEntryEpisodeAgentDocument;
+  export class DataEntryEpisodeEntityLinkGQL extends Apollo.Query<DataEntryEpisodeEntityLinkQuery, DataEntryEpisodeEntityLinkQueryVariables> {
+    override document = DataEntryEpisodeEntityLinkDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

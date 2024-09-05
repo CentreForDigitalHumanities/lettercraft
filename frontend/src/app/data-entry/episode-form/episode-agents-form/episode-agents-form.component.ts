@@ -7,7 +7,8 @@ import { FormService } from "../../shared/form.service";
 import {
     CreateEpisodeAgentInput, DataEntryCreateAgentEpisodeMutationGQL,
     DataEntryDeleteAgentEpisodeMutationGQL, DataEntryEpisodeAgentsGQL,
-    DataEntryEpisodeAgentsQuery
+    DataEntryEpisodeAgentsQuery,
+    Entity
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
@@ -27,6 +28,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     actionIcons = actionIcons;
     status$ = formStatusSubject();
     formName = 'agents';
+    entityType = Entity.Agent;
 
     private mutationObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),
