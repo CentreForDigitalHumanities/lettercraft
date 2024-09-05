@@ -166,6 +166,19 @@ type DeletePersonReferenceMutation {
   ok: Boolean!
 }
 
+enum Entity {
+  AGENT
+  GIFT
+  LETTER
+  SPACE
+}
+
+type EntityType {
+  description: String
+  id: ID!
+  name: String
+}
+
 type EpisodeAgentType {
   agent: AgentDescriptionType!
 
@@ -186,6 +199,15 @@ type EpisodeCategoryType {
 
   """A name to help identify this object"""
   name: String!
+}
+
+type EpisodeEntityLinkType {
+  entity: EntityType!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
 }
 
 type EpisodeType {
@@ -627,6 +649,7 @@ type Query {
   episode(id: ID!): EpisodeType
   episodeAgentLink(agent: ID!, episode: ID!): EpisodeAgentType
   episodeCategories: [EpisodeCategoryType!]!
+  episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLinkType
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
