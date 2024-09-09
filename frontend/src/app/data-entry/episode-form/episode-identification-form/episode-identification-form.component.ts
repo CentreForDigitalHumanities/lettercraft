@@ -3,9 +3,11 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
+import { MutationResult } from "apollo-angular";
 import {
     DataEntryEpisodeIdentificationGQL,
     DataEntryUpdateEpisodeGQL,
+    DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
     debounceTime,
@@ -38,9 +40,6 @@ export class EpisodeIdentificationFormComponent implements OnInit {
             nonNullable: true,
             validators: [Validators.required],
         }),
-        description: new FormControl<string>("", {
-            nonNullable: true,
-        }),
     });
 
     constructor(
@@ -72,26 +71,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                         filter(() => this.form.valid),
                         debounceTime(300),
                         withLatestFrom(this.id$),
-                        switchMap(([episode, id]) =>
-                            this.updateEpisode.mutate(
-                                {
-                                    episodeData: {
-                                        ...episode,
-                                        id,
-                                    },
-                                },
-                                {
-                                    update: (cache) => {
-                                        const identified = cache.identify({
-                                            __typename: "EpisodeType",
-                                            id,
-                                        });
-                                        cache.evict({ id: identified });
-                                        cache.gc();
-                                    },
-                                }
-                            )
-                        ),
+                        switchMap(this.makeMutation.bind(this)),
                         takeUntilDestroyed(this.destroyRef)
                     )
                 )
@@ -106,5 +86,29 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private makeMutation(
+        [episode, id]: [{ name: string }, string]
+    ): Observable<MutationResult<DataEntryUpdateEpisodeMutation>> {
+        return this.updateEpisode.mutate(
+            {
+                episodeData: {
+                    ...episode,
+                    id,
+                },
+            },
+            {
+                update: (cache) => {
+                    const identified = cache.identify({
+                        __typename: "EpisodeType",
+                        id,
+                    });
+                    cache.evict({ id: identified });
+                    cache.gc();
+                },
+            }
+        )
+
     }
 }
