@@ -6,9 +6,10 @@
                 &nbsp;
                 {{ episode.name }}
                 <br />
-                <small *ngIf="episode.book || episode.chapter" class="inline-list">
+                <small *ngIf="episode.book || episode.chapter || episode.page" class="inline-list">
                     <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
                     <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
+                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
                 </small>
             </div>
             <lc-action-button-group
