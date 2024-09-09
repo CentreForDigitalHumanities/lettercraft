@@ -4,7 +4,9 @@ from event.models import (
     Episode,
     EpisodeEntity,
     EpisodeAgent,
+    EpisodeCategory,
 )
+from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.types.EpisodeEntityType import EpisodeEntityLinkType, Entity, ENTITY_MODELS
@@ -22,6 +24,7 @@ class EventQueries(ObjectType):
         episode=ID(required=True),
         entity_type=Entity(required=True),
     )
+    episode_categories = List(NonNull(EpisodeCategoryType), required=True)
 
     @staticmethod
     def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Episode | None:
@@ -73,3 +76,8 @@ class EventQueries(ObjectType):
             source_mention=obj.source_mention,
             note=obj.note,
         )
+
+    def resolve_episode_categories(
+        parent: None, info: ResolveInfo
+    ) -> QuerySet[EpisodeCategory]:
+        return EpisodeCategoryType.get_queryset(EpisodeCategory.objects, info).all()

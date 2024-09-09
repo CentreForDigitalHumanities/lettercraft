@@ -3,7 +3,7 @@
 <ng-container *ngIf="episode$ | async as episode; else loading">
     <h1 class="mb-4">
         <lc-icon [icon]="dataIcons.episode" />
-        <span>{{ episode.name }}</span>
+        <span class="ms-2">{{ episode.name }}</span>
         <span class="text-body-secondary"> ({{ episode.source.name }}) </span>
     </h1>
     <p class="lead mb-4" *ngIf="episode.description">

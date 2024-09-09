@@ -23,6 +23,7 @@ describe("EpisodePreviewComponent", () => {
             chapter: '',
             page: '',
             agents: [],
+            contributors: [],
             gifts: [],
             letters: [],
             spaces: [],

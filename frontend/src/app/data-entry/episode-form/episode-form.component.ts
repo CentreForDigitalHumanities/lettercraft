@@ -15,7 +15,6 @@ export class EpisodeFormComponent {
     private id$ = this.route.params.pipe(map((params) => params["id"]));
 
     public episode$ = this.id$.pipe(
-        filter((id) => id !== "new"),
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
         map((result) => result.data.episode),
         share()
@@ -38,11 +37,11 @@ export class EpisodeFormComponent {
                 },
                 {
                     label: episode.source.name,
-                    link: `/source/${episode.source.id}`,
+                    link: `/data-entry/sources/${episode.source.id}`,
                 },
                 {
                     label: episode.name,
-                    link: `/data-entry/episode/${episode.id}`,
+                    link: `/data-entry/episodes/${episode.id}`,
                 },
             ];
         })

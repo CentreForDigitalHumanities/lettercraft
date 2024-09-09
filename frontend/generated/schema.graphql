@@ -97,6 +97,16 @@ type CreateEpisodeEntityLinkMutation {
   ok: Boolean!
 }
 
+input CreateEpisodeInput {
+  name: String!
+  source: ID!
+}
+
+type CreateEpisodeMutation {
+  episode: EpisodeType
+  errors: [LettercraftErrorType!]!
+}
+
 input CreatePersonReferenceInput {
   description: ID!
   person: ID!
@@ -113,6 +123,11 @@ type DeleteAgentMutation {
 }
 
 type DeleteEpisodeEntityLinkMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteEpisodeMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -417,15 +432,17 @@ type LettercraftErrorType {
 
 type Mutation {
   createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+  createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
   createEpisodeEntityLink(data: CreateEpisodeEntityLinkInput!): CreateEpisodeEntityLinkMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
+  deleteEpisode(id: ID!): DeleteEpisodeMutation
   deleteEpisodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): DeleteEpisodeEntityLinkMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
-  updateEpisode(input: UpdateEpisodeMutationInput!): UpdateEpisodeMutation
+  updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
-  updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+  updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
 
@@ -580,6 +597,7 @@ type Query {
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
   episodeAgentLink(agent: ID!, episode: ID!): EpisodeAgentType
+  episodeCategories: [EpisodeCategoryType!]!
   episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLinkType
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
@@ -917,20 +935,21 @@ type UpdateEpisodeEntityLinkMutation {
   ok: Boolean!
 }
 
-type UpdateEpisodeMutation {
-  errors: [LettercraftErrorType!]!
-  ok: Boolean!
-}
-
-input UpdateEpisodeMutationInput {
+input UpdateEpisodeInput {
   book: String
   categories: [ID!]
   chapter: String
+  description: String
   designators: [String!]
   id: ID!
   name: String
   page: String
   summary: String
+}
+
+type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 type UpdateOrCreateSourceMutation {
@@ -951,6 +970,7 @@ type UpdatePersonReferenceMutation {
 
 type UserType {
   firstName: String!
+  fullName: String!
   id: ID!
   lastName: String!
 }

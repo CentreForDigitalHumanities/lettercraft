@@ -3,7 +3,7 @@
     <ng-container *ngIf="selectedLabels().length > 0; else noLabels">
         <li
             *ngFor="let label of selectedLabels()"
-            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-flex-inline align-items-center"
+            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
         >
             <span class="ms-1">{{ label.label }}</span>
             <button

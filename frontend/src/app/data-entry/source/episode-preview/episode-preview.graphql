@@ -1,0 +1,9 @@
+mutation DataEntryDeleteEpisode($id: ID!) {
+    deleteEpisode(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

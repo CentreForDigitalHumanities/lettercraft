@@ -12,6 +12,7 @@ import {
     filter,
     map,
     Observable,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
@@ -28,13 +29,17 @@ export class EpisodeIdentificationFormComponent implements OnInit {
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode)
+        map((result) => result.data.episode),
+        shareReplay(1)
     );
 
     public form = new FormGroup({
         name: new FormControl<string>("", {
             nonNullable: true,
             validators: [Validators.required],
+        }),
+        description: new FormControl<string>("", {
+            nonNullable: true,
         }),
     });
 
@@ -43,7 +48,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     public ngOnInit(): void {
@@ -53,24 +58,42 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 if (!episode) {
                     return;
                 }
-                this.form.patchValue(episode);
+                this.form.patchValue(episode, {
+                    emitEvent: false,
+                    onlySelf: true,
+                });
             });
 
-        this.form.valueChanges
+        this.episode$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([episode, id]) =>
-                    this.episodeMutation
-                        .mutate({
-                            input: {
-                                id,
-                                name: episode.name,
-                            },
-                        })
-                        .pipe(takeUntilDestroyed(this.destroyRef))
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([episode, id]) =>
+                            this.updateEpisode.mutate(
+                                {
+                                    episodeData: {
+                                        ...episode,
+                                        id,
+                                    },
+                                },
+                                {
+                                    update: (cache) => {
+                                        const identified = cache.identify({
+                                            __typename: "EpisodeType",
+                                            id,
+                                        });
+                                        cache.evict({ id: identified });
+                                        cache.gc();
+                                    },
+                                }
+                            )
+                        ),
+                        takeUntilDestroyed(this.destroyRef)
+                    )
                 )
             )
             .subscribe((result) => {

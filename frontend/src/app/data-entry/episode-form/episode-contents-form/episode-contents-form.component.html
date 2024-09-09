@@ -9,11 +9,11 @@
         ></textarea>
     </div>
 
-    <div class="form-group">
+    <div *ngIf="episodeCategories$ | async as episodeCategories" class="form-group mt-4">
         <label for="labels" class="form-label">Labels</label>
         <p class="form-text">
             Pick one or more labels that describe this episode.
         </p>
-        <p><i>Coming soon!</i></p>
+        <lc-label-select [formControl]="form.controls.categories" [options]="episodeCategories" />
     </div>
 </form>

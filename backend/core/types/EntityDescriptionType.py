@@ -7,6 +7,7 @@ from django.db.models import QuerySet
 from user.models import User
 from user.types.UserType import UserType
 
+
 class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     """
     Type for models that extend the EntityDescription model.

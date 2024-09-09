@@ -4,7 +4,14 @@ query DataEntryEpisodeContents($id: ID!) {
         summary
         categories {
             id
-            
         }
+    }
+}
+
+query DataEntryEpisodeCategories {
+    episodeCategories {
+        id
+        name
+        description
     }
 }

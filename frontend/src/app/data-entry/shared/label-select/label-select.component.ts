@@ -1,12 +1,23 @@
-import { Component, computed, forwardRef, Input } from "@angular/core";
+import {
+    Component,
+    computed,
+    DestroyRef,
+    forwardRef,
+    Input,
+    OnInit,
+} from "@angular/core";
 import {
     FormControl,
     ControlValueAccessor,
     NG_VALUE_ACCESSOR,
 } from "@angular/forms";
 import { actionIcons } from "@shared/icons";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { MultiselectOption } from "../multiselect/multiselect.component";
+
+export interface LabelSelectOption extends MultiselectOption {
+    description: string;
+}
 
 @Component({
     selector: "lc-label-select",
@@ -20,8 +31,8 @@ import { MultiselectOption } from "../multiselect/multiselect.component";
         },
     ],
 })
-export class LabelSelectComponent implements ControlValueAccessor {
-    @Input() options: MultiselectOption[] = [];
+export class LabelSelectComponent implements ControlValueAccessor, OnInit {
+    @Input({ required: true }) options: LabelSelectOption[] = [];
 
     public control = new FormControl<string[]>([], { nonNullable: true });
     public actionIcons = actionIcons;
@@ -60,5 +71,16 @@ export class LabelSelectComponent implements ControlValueAccessor {
         } else {
             this.control.enable();
         }
+    }
+
+    constructor(private destroyRef: DestroyRef) {}
+
+    ngOnInit(): void {
+        this.control.valueChanges
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((value) => {
+                this.onTouched && this.onTouched();
+                this.onChange && this.onChange(value);
+            });
     }
 }

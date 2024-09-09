@@ -10,6 +10,9 @@ import { IconComponent } from './icon/icon.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ActionButtonGroupComponent } from './action-button-group/action-button-group.component';
 import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
+import { BaseModalComponent } from "./base-modal/base-modal.component";
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { ContributorsComponent } from './contributors/contributors.component';
 
 
 
@@ -18,7 +21,10 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         IconComponent,
         BreadcrumbComponent,
         ActionButtonGroupComponent,
-        CollapsibleCardComponent
+        CollapsibleCardComponent,
+        BaseModalComponent,
+        ConfirmationModalComponent,
+        ContributorsComponent,
     ],
     imports: [
         CommonModule,
@@ -26,8 +32,8 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         BrowserAnimationsModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
-            cookieName: 'csrftoken',
-            headerName: 'X-CSRFToken'
+            cookieName: "csrftoken",
+            headerName: "X-CSRFToken",
         }),
         NgbModule,
         RouterModule,
@@ -38,6 +44,7 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         BreadcrumbComponent,
         ActionButtonGroupComponent,
         CollapsibleCardComponent,
+        ContributorsComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
@@ -46,6 +53,7 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
+        BaseModalComponent,
     ],
 })
 export class SharedModule {}
