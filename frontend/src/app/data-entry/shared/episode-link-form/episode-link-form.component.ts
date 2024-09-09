@@ -104,7 +104,13 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         if (linkTo == 'episode') {
             return 'episodes';
         }
-        return 'agents';
+        const routes = {
+            [Entity.Agent]: 'agents',
+            [Entity.Gift]: 'gifts',
+            [Entity.Letter]: 'letters',
+            [Entity.Space]: 'locations',
+        };
+        return routes[entityType];
     }
 
     linkedObject(linkTo: LinkTo, data: DataEntryEpisodeEntityLinkQuery) {
