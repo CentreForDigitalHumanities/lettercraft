@@ -5,8 +5,10 @@ from event.models import (
     EpisodeSpace,
     EpisodeLetter,
     EpisodeGift,
+    EpisodeEntity,
 )
 from event.types.EpisodeType import EpisodeType
+from typing import Dict, Type
 
 
 class Entity(Enum):
@@ -16,7 +18,7 @@ class Entity(Enum):
     SPACE = "space"
 
 
-ENTITY_MODELS = {
+ENTITY_MODELS: Dict[str, Type[EpisodeEntity]] = {
     Entity.AGENT: EpisodeAgent,
     Entity.SPACE: EpisodeSpace,
     Entity.LETTER: EpisodeLetter,

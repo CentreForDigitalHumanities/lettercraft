@@ -5,7 +5,7 @@ import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
 import {
-    CreateEpisodeAgentInput, DataEntryCreateAgentEpisodeMutationGQL,
+    CreateEpisodeEntityLinkInput, DataEntryCreateEpisodeEntityLinkMutationGQL,
     DataEntryDeleteAgentEpisodeMutationGQL, DataEntryEpisodeAgentsGQL,
     DataEntryEpisodeAgentsQuery,
     Entity
@@ -38,7 +38,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     constructor(
         private formService: FormService,
         private query: DataEntryEpisodeAgentsGQL,
-        private addMutation: DataEntryCreateAgentEpisodeMutationGQL,
+        private addMutation: DataEntryCreateEpisodeEntityLinkMutationGQL,
         private removeMutation: DataEntryDeleteAgentEpisodeMutationGQL,
     ) {
         this.formService.attachForm(this.formName, this.status$);
@@ -74,11 +74,12 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     }
 
     addAgent(agentID: string, episodeID: string): void {
-        const data: CreateEpisodeAgentInput = {
-            agent: agentID,
+        const input: CreateEpisodeEntityLinkInput = {
+            entity: agentID,
             episode: episodeID,
+            entityType: Entity.Agent,
         };
-        this.addMutation.mutate({ data }, {
+        this.addMutation.mutate({ input }, {
             refetchQueries: REFETCH_QUERIES,
         }).pipe(
             tap(() => this.status$.next('loading'))

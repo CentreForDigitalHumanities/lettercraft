@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormService } from '../../shared/form.service';
 import {
-    CreateEpisodeAgentInput, DataEntryAgentEpisodesGQL, DataEntryAgentEpisodesQuery,
-    DataEntryCreateAgentEpisodeMutationGQL,
+    CreateEpisodeEntityLinkInput, DataEntryAgentEpisodesGQL,
+    DataEntryAgentEpisodesQuery,
+    DataEntryCreateEpisodeEntityLinkMutationGQL,
     DataEntryDeleteAgentEpisodeMutationGQL,
     DataEntryDeleteAgentEpisodeMutationMutationVariables,
     Entity,
@@ -40,7 +41,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     constructor(
         private formService: FormService,
         private query: DataEntryAgentEpisodesGQL,
-        private addMutation: DataEntryCreateAgentEpisodeMutationGQL,
+        private addMutation: DataEntryCreateEpisodeEntityLinkMutationGQL,
         private removeMutation: DataEntryDeleteAgentEpisodeMutationGQL,
     ) {
         this.formService.attachForm(this.formName, this.status$);
@@ -76,11 +77,12 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     }
 
     addEpisode(episodeID: string, agentID: string): void {
-        const data: CreateEpisodeAgentInput = {
-            agent: agentID,
+        const input: CreateEpisodeEntityLinkInput = {
+            entity: agentID,
             episode: episodeID,
+            entityType: Entity.Agent,
         };
-        this.addMutation.mutate({ data }, {
+        this.addMutation.mutate({ input }, {
             refetchQueries: REFETCH_QUERIES,
         }).pipe(
             tap(() => this.status$.next('loading'))

@@ -5,7 +5,7 @@ from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.types.EpisodeEntityType import EpisodeEntityLinkType, Entity, ENTITY_MODELS
-from typing import Type
+
 
 class EventQueries(ObjectType):
     episode = Field(EpisodeType, id=ID(required=True))
@@ -66,7 +66,7 @@ class EventQueries(ObjectType):
         episode: str,
         entity_type: Entity,
     ) -> EpisodeEntityLinkType:
-        Model: Type[EpisodeEntity] = ENTITY_MODELS[entity_type]
+        Model = ENTITY_MODELS[entity_type]
         query = {Model.entity_field: entity, "episode": episode}
         obj: EpisodeEntity = Model.objects.get(**query)
         return EpisodeEntityLinkType(

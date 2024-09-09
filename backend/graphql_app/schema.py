@@ -11,7 +11,9 @@ from user.queries import UserQueries
 
 from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
-from event.mutations.CreateEpisodeAgentMutation import CreateEpisodeAgentMutation
+from event.mutations.CreateEpisodeEntityLinkMutation import (
+    CreateEpisodeEntityLinkMutation,
+)
 from event.mutations.DeleteEpisodeAgentMutation import DeleteEpisodeAgentMutation
 from event.mutations.UpdateEpisodeAgentMutation import UpdateEpisodeAgentMutation
 from person.mutations.CreateAgentMutation import CreateAgentMutation
@@ -45,7 +47,7 @@ class Mutation(ObjectType):
     update_episode = UpdateEpisodeMutation.Field()
     create_episode = CreateEpisodeMutation.Field()
     delete_episode = DeleteEpisodeMutation.Field()
-    create_episode_agent = CreateEpisodeAgentMutation.Field()
+    create_episode_entity_link = CreateEpisodeEntityLinkMutation.Field()
     update_episode_agent = UpdateEpisodeAgentMutation.Field()
     delete_episode_agent = DeleteEpisodeAgentMutation.Field()
     create_agent = CreateAgentMutation.Field()
