@@ -1120,7 +1120,7 @@ export type DataEntryEpisodeFormQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeMutationVariables = Exact<{
   episodeData: UpdateEpisodeInput;
@@ -1651,7 +1651,6 @@ export const DataEntryEpisodeFormDocument = gql`
   episode(id: $id) {
     id
     name
-    description
     source {
       id
       name

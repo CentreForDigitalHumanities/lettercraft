@@ -2,7 +2,6 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
 import {
@@ -49,9 +48,6 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         name: new FormControl<string>("", {
             nonNullable: true,
             validators: [Validators.required],
-        }),
-        description: new FormControl<string>("", {
-            nonNullable: true,
         }),
     });
 
@@ -120,7 +116,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         );
     }
 
-    private updateCache(cache: ApolloCache<unknown>, id: string): void {
+    private updateCache(cache: any, id: string): void {
         const identified = cache.identify({
             __typename: "EpisodeType",
             id,

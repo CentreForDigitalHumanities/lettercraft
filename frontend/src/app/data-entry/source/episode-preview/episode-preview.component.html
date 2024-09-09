@@ -20,8 +20,8 @@
     </div>
     <div class="card-body">
         <p>
-            <span *ngIf="episode.summary; else noDescription">{{episode.summary}}</span>
-            <ng-template #noDescription><i>(No description added.)</i></ng-template>
+            <span *ngIf="episode.summary; else noSummary">{{episode.summary}}</span>
+            <ng-template #noSummary><i>(No summary added.)</i></ng-template>
         </p>
 
         <dl>
