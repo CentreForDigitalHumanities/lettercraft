@@ -3,9 +3,9 @@ import { FormService } from '../../shared/form.service';
 import {
     CreateEpisodeEntityLinkInput, DataEntryAgentEpisodesGQL,
     DataEntryAgentEpisodesQuery,
-    DataEntryCreateEpisodeEntityLinkMutationGQL,
-    DataEntryDeleteAgentEpisodeMutationGQL,
-    DataEntryDeleteAgentEpisodeMutationMutationVariables,
+    DataEntryCreateEpisodeEntityLinkGQL,
+    DataEntryDeleteEpisodeEntityLinkGQL,
+    DataEntryDeleteEpisodeEntityLinkMutationVariables,
     Entity,
 } from 'generated/graphql';
 import { BehaviorSubject, map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
@@ -41,8 +41,8 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     constructor(
         private formService: FormService,
         private query: DataEntryAgentEpisodesGQL,
-        private addMutation: DataEntryCreateEpisodeEntityLinkMutationGQL,
-        private removeMutation: DataEntryDeleteAgentEpisodeMutationGQL,
+        private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
+        private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
     ) {
         this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.formService.id$.pipe(
@@ -90,9 +90,10 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     }
 
     removeEpisode(episodeID: string, agentID: string): void {
-        const data: DataEntryDeleteAgentEpisodeMutationMutationVariables = {
-            agent: agentID,
+        const data: DataEntryDeleteEpisodeEntityLinkMutationVariables = {
+            entity: agentID,
             episode: episodeID,
+            entityType: Entity.Agent,
         };
         this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
             tap(() => this.status$.next('loading'))

@@ -5,8 +5,11 @@ import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
 import {
-    CreateEpisodeEntityLinkInput, DataEntryCreateEpisodeEntityLinkMutationGQL,
-    DataEntryDeleteAgentEpisodeMutationGQL, DataEntryEpisodeAgentsGQL,
+    CreateEpisodeEntityLinkInput,
+    DataEntryCreateEpisodeEntityLinkGQL,
+    DataEntryDeleteEpisodeEntityLinkGQL,
+    DataEntryDeleteEpisodeEntityLinkMutationVariables,
+    DataEntryEpisodeAgentsGQL,
     DataEntryEpisodeAgentsQuery,
     Entity
 } from "generated/graphql";
@@ -38,8 +41,8 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     constructor(
         private formService: FormService,
         private query: DataEntryEpisodeAgentsGQL,
-        private addMutation: DataEntryCreateEpisodeEntityLinkMutationGQL,
-        private removeMutation: DataEntryDeleteAgentEpisodeMutationGQL,
+        private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
+        private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
     ) {
         this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.formService.id$.pipe(
@@ -87,9 +90,10 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     }
 
     removeAgent(agentID: string, episodeID: string): void {
-        const data = {
-            agent: agentID,
+        const data: DataEntryDeleteEpisodeEntityLinkMutationVariables = {
+            entity: agentID,
             episode: episodeID,
+            entityType: Entity.Agent,
         };
         this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
             tap(() => this.status$.next('loading'))

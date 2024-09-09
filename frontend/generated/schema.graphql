@@ -142,7 +142,7 @@ type DeleteAgentMutation {
   ok: Boolean!
 }
 
-type DeleteEpisodeAgentMutation {
+type DeleteEpisodeEntityLinkMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -485,7 +485,7 @@ type Mutation {
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
-  deleteEpisodeAgent(agent: ID!, episode: ID!): DeleteEpisodeAgentMutation
+  deleteEpisodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): DeleteEpisodeEntityLinkMutation
   deleteGift(id: ID!): DeleteGiftMutation
   deleteLetter(id: ID!): DeleteLetterMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
