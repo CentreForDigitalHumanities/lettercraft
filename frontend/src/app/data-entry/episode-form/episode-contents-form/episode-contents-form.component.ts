@@ -92,15 +92,7 @@ export class EpisodeContentsFormComponent implements OnInit {
                         filter(() => this.form.valid),
                         debounceTime(300),
                         withLatestFrom(this.id$),
-                        switchMap(([episode, id]) =>
-                            this.updateEpisode
-                                .mutate({
-                                    episodeData: {
-                                        id,
-                                        ...episode,
-                                    },
-                                })
-                        )
+                        switchMap(this.makeMutation.bind(this))
                     )
                 )
             )
@@ -114,5 +106,23 @@ export class EpisodeContentsFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private makeMutation([episode, id]: [typeof this.form.value, string]) {
+        return this.updateEpisode.mutate({
+            episodeData: {
+                id,
+                ...episode,
+            },
+        }, {
+            update: (cache) => {
+                const identified = cache.identify({
+                    __typename: "EpisodeType",
+                    id,
+                });
+                cache.evict({ id: identified });
+                cache.gc();
+            },
+        });
     }
 }
