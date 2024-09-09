@@ -17,8 +17,8 @@ query DataEntryAgentEpisodes($id: ID!) {
     }
 }
 
-mutation DataEntryCreateAgentEpisodeMutation($data: CreateEpisodeAgentInput!) {
-    createEpisodeAgent(data: $data) {
+mutation DataEntryCreateEpisodeEntityLinkMutation($input: CreateEpisodeEntityLinkInput!) {
+    createEpisodeEntityLink(data: $input) {
         ok
         errors {
             field
