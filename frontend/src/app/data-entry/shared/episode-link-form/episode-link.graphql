@@ -14,8 +14,8 @@ query DataEntryEpisodeEntityLink($entity: ID!, $episode: ID!, $entityType: Entit
     }
 }
 
-mutation DataEntryUpdateEpisodeAgent($input:UpdateEpisodeAgentInput!) {
-    updateEpisodeAgent(data: $input) {
+mutation DataEntryUpdateEpisodeEntityLink($input:UpdateEpisodeEntityLinkInput!) {
+    updateEpisodeEntityLink(data: $input) {
         ok
         errors {
             field
