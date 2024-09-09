@@ -19,7 +19,10 @@
         </div>
     </div>
     <div class="card-body">
-        <p>{{ episode.summary || "..." }}</p>
+        <p>
+            <span *ngIf="episode.summary; else noDescription">{{episode.summary}}</span>
+            <ng-template #noDescription><i>(No description added.)</i></ng-template>
+        </p>
 
         <dl>
             <dt>Agents</dt>
@@ -40,7 +43,7 @@
                 </ul>
             </dd>
             <ng-template #noAgents>
-                <dd class="ms-4">No agents have been added yet.</dd>
+                <dd class="ms-4">No agents have been added.</dd>
             </ng-template>
 
             <dt>Locations</dt>
@@ -61,7 +64,7 @@
                 </ul>
             </dd>
             <ng-template #noSpaces>
-                <dd class="ms-4">No locations have been added yet.</dd>
+                <dd class="ms-4">No locations have been added.</dd>
             </ng-template>
 
             <dt>Objects</dt>
@@ -100,7 +103,7 @@
                 </ul>
             </dd>
             <ng-template #noObjects>
-                <dd class="ms-4">No objects have been added yet.</dd>
+                <dd class="ms-4">No objects have been added.</dd>
             </ng-template>
         </dl>
         <div class="d-flex justify-content-end">
