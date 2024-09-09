@@ -14,7 +14,7 @@ import { FormService } from "../shared/form.service";
 export class EpisodeFormComponent {
     Entity = Entity;
 
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -49,11 +49,14 @@ export class EpisodeFormComponent {
         })
     );
 
+    status$ = this.formService.status$;
+
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
     constructor(
         private route: ActivatedRoute,
-        private episodeQuery: DataEntryEpisodeFormGQL
+        private episodeQuery: DataEntryEpisodeFormGQL,
+        private formService: FormService,
     ) {}
 }
