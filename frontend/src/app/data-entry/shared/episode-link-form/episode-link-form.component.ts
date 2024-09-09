@@ -1,14 +1,16 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
-import { EntityType, SelectOptions } from '../types';
+import { SelectOptions } from '../types';
 import { debounceTime, distinctUntilChanged, map, Observable, shareReplay, skip, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { actionIcons } from '@shared/icons';
 import {
-    DataEntryUpdateEpisodeAgentGQL, DataEntryUpdateEpisodeAgentMutationVariables,
     SourceMention,
-    DataEntryUpdateEpisodeMutation,
     DataEntryEpisodeEntityLinkGQL,
     Entity,
-    DataEntryEpisodeEntityLinkQuery
+    DataEntryEpisodeEntityLinkQuery,
+    DataEntryUpdateEpisodeEntityLinkGQL,
+    DataEntryUpdateEpisodeEntityLinkMutation,
+    DataEntryUpdateEpisodeEntityLinkMutationVariables,
+    UpdateEpisodeEntityLinkInput
 } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -49,7 +51,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     sourceMentionOptions: SelectOptions<SourceMention> = sourceMentionSelectOptions();
 
-    private link$ = new Subject<{ entity: string, episode: string, entityType: Entity }>();
+    private link$ = new Subject<UpdateEpisodeEntityLinkInput>();
     private status$ = formStatusSubject();
     private formName = 'episode-link-' + crypto.randomUUID();
 
@@ -57,7 +59,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     constructor(
         query: DataEntryEpisodeEntityLinkGQL,
-        private agentMutation: DataEntryUpdateEpisodeAgentGQL,
+        private updateMutation: DataEntryUpdateEpisodeEntityLinkGQL,
         private formService: FormService,
     ) {
         this.formService.attachForm(this.formName, this.status$);
@@ -121,13 +123,13 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     }
 
     private toMutationInput(
-        [values, link]: [typeof this.form.value, { entity: string, episode: string }]
-    ): DataEntryUpdateEpisodeAgentMutationVariables {
-        return { input: { agent: link.entity, episode: link.episode, ...values } };
+        [values, link]: [typeof this.form.value, UpdateEpisodeEntityLinkInput]
+    ): DataEntryUpdateEpisodeEntityLinkMutationVariables {
+        return { input: { ...link, ...values } };
     }
 
-    private makeMutation(mutationInput: DataEntryUpdateEpisodeAgentMutationVariables) {
-        return this.agentMutation.mutate(mutationInput, {
+    private makeMutation(mutationInput: DataEntryUpdateEpisodeEntityLinkMutationVariables) {
+        return this.updateMutation.mutate(mutationInput, {
             errorPolicy: 'all',
             refetchQueries: [
                 'DataEntryEpisodeEntity',
@@ -135,12 +137,12 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         })
     }
 
-    private onMutationResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
-        if (result.errors) {
+    private onMutationResult(result: MutationResult<DataEntryUpdateEpisodeEntityLinkMutation>) {
+        if (result.errors?.length) {
             console.error(result.errors);
             this.status$.next('error');
-        } else if (result.data?.updateEpisode?.errors) {
-            console.error(result.data.updateEpisode.errors);
+        } else if (result.data?.updateEpisodeEntityLink?.errors?.length) {
+            console.error(result.data.updateEpisodeEntityLink.errors);
             this.status$.next('error');
         } else {
             this.status$.next('saved');

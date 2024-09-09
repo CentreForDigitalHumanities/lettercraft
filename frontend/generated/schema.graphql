@@ -491,7 +491,7 @@ type Mutation {
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
-  updateEpisodeAgent(data: UpdateEpisodeAgentInput!): UpdateEpisodeAgentMutation
+  updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
@@ -975,14 +975,15 @@ input UpdateCreateSourceInput {
   name: String!
 }
 
-input UpdateEpisodeAgentInput {
-  agent: ID!
+input UpdateEpisodeEntityLinkInput {
+  entity: ID!
+  entityType: Entity!
   episode: ID!
   note: String
   sourceMention: SourceMention
 }
 
-type UpdateEpisodeAgentMutation {
+type UpdateEpisodeEntityLinkMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }

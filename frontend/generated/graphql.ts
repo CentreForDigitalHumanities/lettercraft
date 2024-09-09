@@ -465,7 +465,7 @@ export type Mutation = {
   deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
-  updateEpisodeAgent?: Maybe<UpdateEpisodeAgentMutation>;
+  updateEpisodeEntityLink?: Maybe<UpdateEpisodeEntityLinkMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
@@ -545,8 +545,8 @@ export type MutationUpdateEpisodeArgs = {
 };
 
 
-export type MutationUpdateEpisodeAgentArgs = {
-  data: UpdateEpisodeAgentInput;
+export type MutationUpdateEpisodeEntityLinkArgs = {
+  data: UpdateEpisodeEntityLinkInput;
 };
 
 
@@ -1047,15 +1047,16 @@ export type UpdateCreateSourceInput = {
   name: Scalars['String']['input'];
 };
 
-export type UpdateEpisodeAgentInput = {
-  agent: Scalars['ID']['input'];
+export type UpdateEpisodeEntityLinkInput = {
+  entity: Scalars['ID']['input'];
+  entityType: Entity;
   episode: Scalars['ID']['input'];
   note?: InputMaybe<Scalars['String']['input']>;
   sourceMention?: InputMaybe<SourceMention>;
 };
 
-export type UpdateEpisodeAgentMutation = {
-  __typename?: 'UpdateEpisodeAgentMutation';
+export type UpdateEpisodeEntityLinkMutation = {
+  __typename?: 'UpdateEpisodeEntityLinkMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -1355,12 +1356,12 @@ export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
 
 export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeEntityLinkType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'EntityType', id: string, name?: string | null } } | null };
 
-export type DataEntryUpdateEpisodeAgentMutationVariables = Exact<{
-  input: UpdateEpisodeAgentInput;
+export type DataEntryUpdateEpisodeEntityLinkMutationVariables = Exact<{
+  input: UpdateEpisodeEntityLinkInput;
 }>;
 
 
-export type DataEntryUpdateEpisodeAgentMutation = { __typename?: 'Mutation', updateEpisodeAgent?: { __typename?: 'UpdateEpisodeAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryUpdateEpisodeEntityLinkMutation = { __typename?: 'Mutation', updateEpisodeEntityLink?: { __typename?: 'UpdateEpisodeEntityLinkMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryDeleteEpisodeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2137,9 +2138,9 @@ export const DataEntryEpisodeEntityLinkDocument = gql`
       super(apollo);
     }
   }
-export const DataEntryUpdateEpisodeAgentDocument = gql`
-    mutation DataEntryUpdateEpisodeAgent($input: UpdateEpisodeAgentInput!) {
-  updateEpisodeAgent(data: $input) {
+export const DataEntryUpdateEpisodeEntityLinkDocument = gql`
+    mutation DataEntryUpdateEpisodeEntityLink($input: UpdateEpisodeEntityLinkInput!) {
+  updateEpisodeEntityLink(data: $input) {
     ok
     errors {
       field
@@ -2152,8 +2153,8 @@ export const DataEntryUpdateEpisodeAgentDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DataEntryUpdateEpisodeAgentGQL extends Apollo.Mutation<DataEntryUpdateEpisodeAgentMutation, DataEntryUpdateEpisodeAgentMutationVariables> {
-    override document = DataEntryUpdateEpisodeAgentDocument;
+  export class DataEntryUpdateEpisodeEntityLinkGQL extends Apollo.Mutation<DataEntryUpdateEpisodeEntityLinkMutation, DataEntryUpdateEpisodeEntityLinkMutationVariables> {
+    override document = DataEntryUpdateEpisodeEntityLinkDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
