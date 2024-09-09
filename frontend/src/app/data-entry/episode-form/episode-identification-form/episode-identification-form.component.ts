@@ -1,7 +1,6 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
 import {
@@ -16,18 +15,19 @@ import {
     Observable,
     shareReplay,
     switchMap,
+    tap,
     withLatestFrom,
 } from "rxjs";
+import { FormService } from "../../shared/form.service";
+import { formStatusSubject } from "../../shared/utils";
 
 @Component({
     selector: "lc-episode-identification-form",
     templateUrl: "./episode-identification-form.component.html",
     styleUrls: ["./episode-identification-form.component.scss"],
 })
-export class EpisodeIdentificationFormComponent implements OnInit {
-    public id$: Observable<string> = this.route.params.pipe(
-        map((params) => params["id"])
-    );
+export class EpisodeIdentificationFormComponent implements OnDestroy {
+    public id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -42,15 +42,17 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         }),
     });
 
+    private status$ = formStatusSubject();
+
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
-        private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) {}
+        private updateEpisode: DataEntryUpdateEpisodeGQL,
+        private formService: FormService,
+    ) {
+        this.formService.attachForm('identification', this.status$);
 
-    public ngOnInit(): void {
         this.episode$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((episode) => {
@@ -63,33 +65,30 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 });
             });
 
+        this.form.statusChanges.pipe(
+            filter(status => status === 'INVALID'),
+            takeUntilDestroyed(),
+        ).subscribe(() => this.status$.next('invalid'));
+
         this.episode$
             .pipe(
-                switchMap(() =>
-                    this.form.valueChanges.pipe(
-                        map(() => this.form.getRawValue()),
-                        filter(() => this.form.valid),
-                        debounceTime(300),
-                        withLatestFrom(this.id$),
-                        switchMap(this.makeMutation.bind(this)),
-                        takeUntilDestroyed(this.destroyRef)
-                    )
-                )
-            )
-            .subscribe((result) => {
-                const errors = result.data?.updateEpisode?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((error) => error.messages).join("\n"),
-                        type: "danger",
-                        header: "Update failed",
-                    });
-                }
-            });
+                switchMap(() => this.form.valueChanges),
+                debounceTime(500),
+                filter(() => this.form.valid),
+                tap(() => this.status$.next('loading')),
+                withLatestFrom(this.id$),
+                switchMap(this.makeMutation.bind(this)),
+                takeUntilDestroyed(this.destroyRef)
+        ).subscribe(this.handleResult.bind(this));
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm('identification');
+        this.status$.complete();
     }
 
     private makeMutation(
-        [episode, id]: [{ name: string }, string]
+        [episode, id]: [{ name?: string }, string]
     ): Observable<MutationResult<DataEntryUpdateEpisodeMutation>> {
         return this.updateEpisode.mutate(
             {
@@ -108,7 +107,20 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                     cache.gc();
                 },
             }
-        )
+        );
+    }
 
+    private handleResult(result: MutationResult<DataEntryUpdateEpisodeMutation>): void {
+        const errors = result.data?.updateEpisode?.errors;
+        if (errors && errors.length > 0) {
+            this.status$.next('error');
+            this.toastService.show({
+                body: errors.map((error) => error.messages).join("\n"),
+                type: "danger",
+                header: "Update failed",
+            });
+        } else {
+            this.status$.next('saved');
+        }
     }
 }
