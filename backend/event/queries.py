@@ -1,6 +1,7 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
 from event.models import Episode, EpisodeCategory, EpisodeEntity
+from typing import Optional
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
@@ -20,7 +21,7 @@ class EventQueries(ObjectType):
     )
 
     @staticmethod
-    def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Episode | None:
+    def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Optional[Episode]:
         try:
             return EpisodeType.get_queryset(Episode.objects, info).get(id=id)
         except Episode.DoesNotExist:
@@ -30,7 +31,7 @@ class EventQueries(ObjectType):
     def resolve_episodes(
         parent: None,
         info: ResolveInfo,
-        source_id: str | None = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[Episode]:
         filters = Q() if source_id is None else Q(source_id=source_id)
 

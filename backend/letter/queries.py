@@ -1,5 +1,6 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
+from typing import Optional
 
 from letter.models import GiftDescription, LetterCategory, LetterDescription
 from letter.types.LetterCategoryType import LetterCategoryType
@@ -28,7 +29,7 @@ class LetterQueries(ObjectType):
     @staticmethod
     def resolve_letter_description(
         parent: None, info: ResolveInfo, id: str
-    ) -> LetterDescription | None:
+    ) -> Optional[LetterDescription]:
         try:
             return LetterDescriptionType.get_queryset(
                 LetterDescription.objects, info
@@ -40,8 +41,8 @@ class LetterQueries(ObjectType):
     def resolve_letter_descriptions(
         parent: None,
         info: ResolveInfo,
-        episode_id: str | None = None,
-        source_id: str | None = None,
+        episode_id: Optional[str] = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[LetterDescription]:
         filters = Q()
         if episode_id:
@@ -62,7 +63,7 @@ class LetterQueries(ObjectType):
     @staticmethod
     def resolve_gift_description(
         parent: None, info: ResolveInfo, id: str
-    ) -> GiftDescription | None:
+    ) -> Optional[GiftDescription]:
         try:
             return GiftDescriptionType.get_queryset(GiftDescription.objects, info).get(
                 id=id
@@ -74,8 +75,8 @@ class LetterQueries(ObjectType):
     def resolve_gift_descriptions(
         parent: None,
         info: ResolveInfo,
-        episode_id: str | None = None,
-        source_id: str | None = None,
+        episode_id: Optional[str] = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[GiftDescription]:
         filters = Q()
         if episode_id:
