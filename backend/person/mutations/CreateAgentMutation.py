@@ -54,10 +54,11 @@ class CreateAgentMutation(LettercraftMutation):
     def _add_contribution(
         agent: AgentDescription, agent_data: CreateAgentInput, info: ResolveInfo
     ):
-        user = info.context.user
-        agent.contributors.add(user)
+        if info.context:
+            user = info.context.user
+            agent.contributors.add(user)
 
-        if agent_data.episodes:
-            for episode_id in agent_data.episodes:
-                episode = Episode.objects.get(id=episode_id)
-                episode.contributors.add(user)
+            if agent_data.episodes:
+                for episode_id in agent_data.episodes:
+                    episode = Episode.objects.get(id=episode_id)
+                    episode.contributors.add(user)
