@@ -13,10 +13,10 @@ from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
 from event.mutations.CreateEpisodeEntityLinkMutation import (
     CreateEpisodeEntityLinkMutation,
 )
-from backend.event.mutations.DeleteEpisodeEntityLinkMutation import (
+from event.mutations.DeleteEpisodeEntityLinkMutation import (
     DeleteEpisodeEntityLinkMutation,
 )
-from backend.event.mutations.UpdateEpisodeEntityLinkMutation import (
+from event.mutations.UpdateEpisodeEntityLinkMutation import (
     UpdateEpisodeEntityLinkMutation,
 )
 from person.mutations.CreateAgentMutation import CreateAgentMutation
