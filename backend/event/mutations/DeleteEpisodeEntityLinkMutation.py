@@ -9,7 +9,7 @@ from graphene import (
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from event.types.EpisodeEntityType import Entity, ENTITY_MODELS
-
+from event.models import EpisodeEntity
 
 class DeleteEpisodeEntityLinkMutation(Mutation):
     ok = Boolean(required=True)
@@ -45,3 +45,8 @@ class DeleteEpisodeEntityLinkMutation(Mutation):
         obj.delete()
 
         return cls(ok=True, errors=[])
+
+    def add_contribution(obj: EpisodeEntity, info: ResolveInfo):
+        user = info.context.user
+        obj.episode.contributors.add(user)
+        obj.entity.contributors.add(user)

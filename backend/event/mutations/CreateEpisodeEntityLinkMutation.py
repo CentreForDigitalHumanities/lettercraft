@@ -64,6 +64,7 @@ class CreateEpisodeEntityLinkMutation(LettercraftMutation):
                 obj = LinkModel.objects.create(
                     **{"episode": episode, LinkModel.entity_field: entity}
                 )
+                cls.add_contribution(obj, data, info)
                 obj.clean()
         except ValidationError as e:
             errors = [
@@ -73,3 +74,12 @@ class CreateEpisodeEntityLinkMutation(LettercraftMutation):
             return cls(ok=False, errors=errors)
 
         return cls(ok=True, errors=[])
+
+    def add_contribution(
+        episode_entity_link: EpisodeEntity,
+        data: CreateEpisodeEntityLinkInput,
+        info: ResolveInfo,
+    ):
+        user = info.context.user
+        episode_entity_link.episode.contributors.add(user)
+        episode_entity_link.entity.contributors.add(user)

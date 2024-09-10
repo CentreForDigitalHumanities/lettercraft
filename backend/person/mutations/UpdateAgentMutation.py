@@ -72,6 +72,7 @@ class UpdateAgentMutation(LettercraftMutation):
                     excluded_fields=["gender", "location"],
                 )
                 cls.handle_nested_fields(agent, agent_data, info)
+                cls.add_contribution(agent, agent_data, info)
                 # refresh to load related objects if those were updated through nested
                 # fields
                 agent.refresh_from_db()
@@ -136,3 +137,9 @@ class UpdateAgentMutation(LettercraftMutation):
                 related_obj = related_model(**relation)
             cls.mutate_object(nested_data, related_obj, info)
             related_obj.full_clean()
+
+    def add_contribution(
+        agent: AgentDescription, agent_data: UpdateAgentInput, info: ResolveInfo
+    ):
+        user = info.context.user
+        agent.contributors.add(user)
