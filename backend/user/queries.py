@@ -2,6 +2,8 @@ from graphene import Field, List, ResolveInfo
 from django.db.models import QuerySet
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet
+from typing import Optional
+
 from user.types.UserType import UserType
 from user.models import User
 
@@ -13,7 +15,7 @@ class UserQueries(ObjectType):
     @staticmethod
     def resolve_user_description(
         parent: None, info: ResolveInfo, id: str
-    ) -> User | None:
+    ) -> Optional[User]:
         try:
             return UserType.get_queryset(User.objects, info).get(id=id)
         except User.DoesNotExist:

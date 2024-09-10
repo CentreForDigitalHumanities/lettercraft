@@ -3,7 +3,7 @@ from django.db.models.fields.related import RelatedField
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 import re
-
+from typing import Union
 
 named_fieldset = (
     "Name and description",
@@ -45,7 +45,7 @@ class EntityDescriptionAdmin(admin.ModelAdmin):
 
 
 def get_queryset_matching_parent_source(
-    admin: admin.StackedInline | admin.TabularInline,
+    admin: Union[admin.StackedInline, admin.TabularInline],
     db_field: RelatedField,
     request: HttpRequest,
 ) -> QuerySet:

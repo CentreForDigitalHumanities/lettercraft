@@ -9,7 +9,7 @@ from graphene import (
     Enum,
     NonNull,
 )
-
+from typing import Union
 from person.types.AgentDescriptionType import AgentDescriptionType
 from person.models import AgentDescription, Gender
 from core.models import SourceMention
@@ -109,7 +109,7 @@ class UpdateAgentMutation(LettercraftMutation):
         agent_data: UpdateAgentInput,
         info: ResolveInfo,
         field_name: str,
-        descriptor: ForwardOneToOneDescriptor | ReverseOneToOneDescriptor,
+        descriptor: Union[ForwardOneToOneDescriptor, ReverseOneToOneDescriptor],
     ):
 
         if not field_name in agent_data:

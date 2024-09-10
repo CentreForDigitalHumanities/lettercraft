@@ -1,5 +1,7 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
+from typing import Optional
+
 from event.models import (
     Episode,
     EpisodeEntity,
@@ -27,7 +29,7 @@ class EventQueries(ObjectType):
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
 
     @staticmethod
-    def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Episode | None:
+    def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Optional[Episode]:
         try:
             return EpisodeType.get_queryset(Episode.objects, info).get(id=id)
         except Episode.DoesNotExist:
@@ -37,7 +39,7 @@ class EventQueries(ObjectType):
     def resolve_episodes(
         parent: None,
         info: ResolveInfo,
-        source_id: str | None = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[Episode]:
         filters = Q() if source_id is None else Q(source_id=source_id)
 
@@ -49,7 +51,7 @@ class EventQueries(ObjectType):
         info: ResolveInfo,
         agent: str,
         episode: str,
-    ) -> EpisodeAgent | None:
+    ) -> Optional[EpisodeAgent]:
         try:
             return EpisodeAgentType.get_queryset(EpisodeAgent.objects, info).get(
                 agent__id=agent, episode__id=episode

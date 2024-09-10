@@ -1,5 +1,7 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
+from typing import Optional
+
 from person.models import AgentDescription
 from person.types.AgentDescriptionType import AgentDescriptionType
 
@@ -13,7 +15,7 @@ class PersonQueries(ObjectType):
     @staticmethod
     def resolve_agent_description(
         parent: None, info: ResolveInfo, id: str
-    ) -> AgentDescription | None:
+    ) -> Optional[AgentDescription]:
         try:
             return AgentDescriptionType.get_queryset(
                 AgentDescription.objects, info
@@ -25,8 +27,8 @@ class PersonQueries(ObjectType):
     def resolve_agent_descriptions(
         parent: None,
         info: ResolveInfo,
-        episode_id: str | None = None,
-        source_id: str | None = None,
+        episode_id: Optional[str] = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[AgentDescription]:
         filters = Q()
         if episode_id:
