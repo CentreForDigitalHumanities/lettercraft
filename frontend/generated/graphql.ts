@@ -80,6 +80,7 @@ export enum Certainty {
 }
 
 export type CreateAgentInput = {
+  episodes?: InputMaybe<Array<Scalars['ID']['input']>>;
   name: Scalars['String']['input'];
   source: Scalars['ID']['input'];
 };
@@ -1130,6 +1131,13 @@ export type DataEntryUpdateEpisodeMutationVariables = Exact<{
 
 export type DataEntryUpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode?: { __typename?: 'UpdateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
+export type DataEntryCreateAgentMutationVariables = Exact<{
+  input: CreateAgentInput;
+}>;
+
+
+export type DataEntryCreateAgentMutation = { __typename?: 'Mutation', createAgent?: { __typename?: 'CreateAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryCreateEpisodeMutationVariables = Exact<{
   episodeData: CreateEpisodeInput;
 }>;
@@ -1595,6 +1603,28 @@ export const DataEntryUpdateEpisodeDocument = gql`
   })
   export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
     override document = DataEntryUpdateEpisodeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateAgentDocument = gql`
+    mutation DataEntryCreateAgent($input: CreateAgentInput!) {
+  createAgent(agentData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateAgentGQL extends Apollo.Mutation<DataEntryCreateAgentMutation, DataEntryCreateAgentMutationVariables> {
+    override document = DataEntryCreateAgentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

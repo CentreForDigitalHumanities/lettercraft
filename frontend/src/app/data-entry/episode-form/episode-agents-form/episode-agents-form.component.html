@@ -27,10 +27,46 @@
                 ngbDropdownItem (click)="addAgent$.next(agent.id)">
                 {{agent.name}}
             </button>
-            <button ngbDropdownItem disabled>
+            <button ngbDropdownItem (click)="openNewAgentModal(newAgentModal)">
                 <lc-icon [icon]="actionIcons.create" />
                 Create new agent
             </button>
         </div>
     </div>
 </div>
+
+<ng-template #newAgentModal>
+    <lc-base-modal (dismiss)="closeModal()" *ngIf="(data$ | async)?.episode as episode">
+        <ng-container modal-header>
+            <h4 ngbAutofocus>Create new agent</h4>
+        </ng-container>
+        <ng-container modal-content>
+            <lc-new-agent-form #newAgentForm
+                [sourceID]="episode.source.id"
+                [episodeID]="episode.id"
+                (mutationStarted)="createMutationInProgress = true"
+                (agentCreated)="closeModal()" />
+        </ng-container>
+        <ng-container modal-footer>
+            <button
+                type="button"
+                class="btn btn-primary"
+                (click)="closeModal()"
+
+            >
+                Create
+                <div class="spinner-border spinner-border-sm"
+                    *ngIf="createMutationInProgress">
+                    <span class="visually-hidden">Creating new agent...</span>
+                </div>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+            >
+                Cancel
+            </button>
+        </ng-container>
+    </lc-base-modal>
+</ng-template>

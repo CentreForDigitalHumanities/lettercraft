@@ -1,0 +1,9 @@
+mutation DataEntryCreateAgent($input: CreateAgentInput!) {
+    createAgent(agentData: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

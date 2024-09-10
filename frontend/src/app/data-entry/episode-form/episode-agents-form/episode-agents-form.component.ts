@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, TemplateRef } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
 import { differencyBy, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
@@ -14,6 +14,7 @@ import {
     Entity
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 
 const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
 
@@ -32,6 +33,9 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     status$ = formStatusSubject();
     formName = 'agents';
     entityType = Entity.Agent;
+    createMutationInProgress = false;
+
+    private modal?: NgbModalRef;
 
     private mutationObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),
@@ -43,6 +47,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         private query: DataEntryEpisodeAgentsGQL,
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
+        private modalService: NgbModal,
     ) {
         this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.formService.id$.pipe(
@@ -109,6 +114,14 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         this.status$.next('error');
     }
 
+    public openNewAgentModal(newAgentModal: TemplateRef<unknown>): void {
+        this.modal = this.modalService.open(newAgentModal);
+    }
+
+    closeModal() {
+        this.modal?.close();
+    }
+
     private availableAgents(
         data: DataEntryEpisodeAgentsQuery
     ): { name: string, id: string }[] {
@@ -116,4 +129,5 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         const linkedAgents = data.episode?.agents || [];
         return differencyBy(allAgents, linkedAgents, 'id');
     }
+
 }
