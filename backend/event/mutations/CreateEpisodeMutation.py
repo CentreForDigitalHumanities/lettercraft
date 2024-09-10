@@ -41,8 +41,13 @@ class CreateEpisodeMutation(LettercraftMutation):
             name=getattr(episode_data, "name"),
             source=source,
         )
+        cls.add_contribution(episode, episode_data, info)
 
         user = info.context.user
         episode.contributors.add(user)
 
         return cls(episode=episode, errors=[])  # type: ignore
+
+    def add_contribution(obj: Episode, data: CreateEpisodeInput, info: ResolveInfo):
+        user = info.context.user
+        obj.contributors.add(user)
