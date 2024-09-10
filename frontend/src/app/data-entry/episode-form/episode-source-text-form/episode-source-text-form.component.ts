@@ -85,6 +85,8 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
                             id,
                             ...episode,
                         },
+                    }, {
+                        update: (cache) => this.updateCache(id, cache),
                     })
                 ),
                 takeUntilDestroyed(this.destroyRef)
@@ -94,6 +96,15 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.formService.detachForm('source-text');
+    }
+
+    private updateCache(episodeID: string, cache: any) {
+        const identified = cache.identify({
+            __typename: "EpisodeType",
+            episodeID,
+        });
+        cache.evict({ id: identified });
+        cache.gc();
     }
 
     private handleResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
