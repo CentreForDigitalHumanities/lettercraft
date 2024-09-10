@@ -118,7 +118,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             entityType: this.entityType,
         };
         this.addMutation.mutate({ input }, {
-            refetchQueries: REFETCH_QUERIES,
+            update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache),
         }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver);
@@ -130,7 +130,9 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             episode: episodeID,
             entityType: this.entityType,
         };
-        this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
+        this.removeMutation.mutate(data, {
+            update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
+        }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver)
     }
@@ -164,4 +166,17 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         const linkedEntities = data.episode?.[this.entityProperty] || [];
         return differenceBy(allEntities, linkedEntities, 'id');
     }
+
+    private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: any) {
+        cache.evict(cache.identify({
+            __typename: "EpisodeType",
+            id: episodeID,
+        }));
+        cache.evict(cache.identify({
+            __typename: "AgentDescriptionType",
+            id: entityID,
+        }));
+        cache.gc();
+    }
+
 }
