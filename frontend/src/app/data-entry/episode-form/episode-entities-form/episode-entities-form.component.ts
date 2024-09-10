@@ -15,6 +15,7 @@ import {
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
+import { ToastService } from "@services/toast.service";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 
@@ -51,6 +52,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         private query: DataEntryEpisodeEntitiesGQL,
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
+        private toastService: ToastService,
     ) {
         this.data$ = this.formService.id$.pipe(
             switchMap(id => this.query.watch({ id }).valueChanges),
@@ -139,6 +141,11 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     onError(error: any) {
         console.error(error);
+        this.toastService.show({
+            header: 'Creating agent failed',
+            body: 'Could not create agent',
+            type: 'danger',
+        })
         this.status$.next('error');
     }
 
