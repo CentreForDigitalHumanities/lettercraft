@@ -59,6 +59,7 @@ class UpdateEpisodeEntityLinkMutation(LettercraftMutation):
         data: UpdateEpisodeEntityLinkInput,
         info: ResolveInfo,
     ):
-        user = info.context.user
-        obj.episode.contributors.add(user)
-        obj.entity.contributors.add(user)
+        if info.context:
+            user = info.context.user
+            obj.episode.contributors.add(user)
+            obj.entity.contributors.add(user)

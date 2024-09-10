@@ -141,5 +141,6 @@ class UpdateAgentMutation(LettercraftMutation):
     def add_contribution(
         agent: AgentDescription, agent_data: UpdateAgentInput, info: ResolveInfo
     ):
-        user = info.context.user
-        agent.contributors.add(user)
+        if info.context:
+            user = info.context.user
+            agent.contributors.add(user)
