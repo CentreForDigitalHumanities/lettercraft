@@ -127,7 +127,7 @@ def test_update_agent_location(graphql_client, agent_description, space_descript
     assert agent_description.location.note == "!"
 
 
-def test_create_agent_mutations(graphql_client, source):
+def test_create_agent_mutation(graphql_client, source):
     result = graphql_client.execute(
         f"""
         mutation CreateAgent {{
@@ -144,6 +144,25 @@ def test_create_agent_mutations(graphql_client, source):
     agent = AgentDescription.objects.get(id=agent_id)
     assert agent.name == "Elmo"
     assert agent.source == source
+
+
+def test_create_agent_mutation_with_episode(graphql_client, source, episode):
+    result = graphql_client.execute(
+        f"""
+        mutation CreateAgent {{
+            createAgent(agentData: {{
+                name: "Big Bird"
+                source: "{source.id}"
+                episodes: ["{episode.id}"]
+            }}) {{
+                agent {{ id }}
+            }}
+        }}
+        """
+    )
+    agent_id = result["data"]["createAgent"]["agent"]["id"]
+    agent = AgentDescription.objects.get(id=agent_id)
+    assert agent.episodes.contains(episode)
 
 
 def test_delete_agent_mutations(graphql_client, agent_description):
