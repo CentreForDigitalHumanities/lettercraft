@@ -17,8 +17,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ToastService } from "@services/toast.service";
 
-const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
-
 @Component({
     selector: "lc-episode-agents-form",
     templateUrl: "./episode-agents-form.component.html",
@@ -90,7 +88,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
             entityType: Entity.Agent,
         };
         this.addMutation.mutate({ input }, {
-            refetchQueries: REFETCH_QUERIES,
+            update: (cache) => this.updateCacheOnAddRemove(episodeID, agentID, cache),
         }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver);
@@ -102,7 +100,9 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
             episode: episodeID,
             entityType: Entity.Agent,
         };
-        this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
+        this.removeMutation.mutate(data, {
+            update: (cache) => this.updateCacheOnAddRemove(episodeID, agentID, cache),
+        }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver)
     }
@@ -127,6 +127,18 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
 
     closeModal() {
         this.modal?.close();
+    }
+
+    private updateCacheOnAddRemove(episodeID: string, agentID: string, cache: any) {
+        cache.evict(cache.identify({
+            __typename: "EpisodeType",
+            id: episodeID,
+        }));
+        cache.evict(cache.identify({
+            __typename: "AgentDescriptionType",
+            id: agentID,
+        }));
+        cache.gc();
     }
 
     private availableAgents(
