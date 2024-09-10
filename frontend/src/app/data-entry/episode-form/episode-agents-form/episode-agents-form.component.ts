@@ -15,6 +15,7 @@ import {
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { ToastService } from "@services/toast.service";
 
 const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
 
@@ -48,6 +49,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
         private modalService: NgbModal,
+        private toastService: ToastService,
     ) {
         this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.formService.id$.pipe(
@@ -112,6 +114,11 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     onError(error: any) {
         console.error(error);
         this.status$.next('error');
+        this.toastService.show({
+            type: 'danger',
+            header: 'Adding agent failed',
+            body: 'Could not add agent',
+        });
     }
 
     public openNewAgentModal(newAgentModal: TemplateRef<unknown>): void {
