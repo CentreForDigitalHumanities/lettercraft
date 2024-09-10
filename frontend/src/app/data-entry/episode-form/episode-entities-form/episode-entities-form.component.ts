@@ -144,8 +144,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     onError(error: any) {
         console.error(error);
         this.toastService.show({
-            header: 'Creating agent failed',
-            body: 'Could not create agent',
+            header: `Adding ${this.entityName} failed`,
+            body: `Could not add ${this.entityName}`,
             type: 'danger',
         })
         this.status$.next('error');

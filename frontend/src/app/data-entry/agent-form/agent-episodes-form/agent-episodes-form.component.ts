@@ -15,7 +15,6 @@ import { FormStatus } from '../../shared/types';
 import { MutationResult } from 'apollo-angular';
 import { differenceBy } from '@shared/utils';
 
-const REFETCH_QUERIES = ['DataEntryAgentEpisodes'];
 
 @Component({
   selector: 'lc-agent-episodes-form',
@@ -83,7 +82,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
             entityType: Entity.Agent,
         };
         this.addMutation.mutate({ input }, {
-            refetchQueries: REFETCH_QUERIES,
+            update: (cache) => this.updateCache(episodeID, agentID, cache),
         }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver);
@@ -95,7 +94,9 @@ export class AgentEpisodesFormComponent implements OnDestroy {
             episode: episodeID,
             entityType: Entity.Agent,
         };
-        this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
+        this.removeMutation.mutate(data, {
+            update: (cache) => this.updateCache(episodeID, agentID, cache),
+        }).pipe(
             tap(() => this.status$.next('loading'))
         ).subscribe(this.mutationObserver)
     }
@@ -107,6 +108,12 @@ export class AgentEpisodesFormComponent implements OnDestroy {
     onError(error: any) {
         console.error(error);
         this.status$.next('error');
+    }
+
+    private updateCache(episodeID: string, agentID: string, cache: any) {
+        cache.evict({ id: cache.identify({ __typename: "EpisodeType", id: episodeID }) });
+        cache.evict({ id: cache.identify({ __typename: "AgentDescriptionType", id: agentID }) });
+        cache.gc();
     }
 
     private availableEpisodes(
