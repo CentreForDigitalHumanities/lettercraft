@@ -4,7 +4,9 @@ from event.models import Episode, EpisodeCategory, EpisodeEntity, EpisodeAgent
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeAgentType import EpisodeAgentType
-from event.types.EpisodeEntityType import EpisodeEntityLinkType, Entity, ENTITY_MODELS
+from event.types.EpisodeEntityLink import EpisodeEntityLink
+from core.types.entity import Entity
+from core.entity_models import ENTITY_MODELS
 
 
 class EventQueries(ObjectType):
@@ -15,7 +17,7 @@ class EventQueries(ObjectType):
         EpisodeAgentType, agent=ID(required=True), episode=ID(required=True)
     )
     episode_entity_link = Field(
-        EpisodeEntityLinkType,
+        EpisodeEntityLink,
         entity=ID(required=True),
         episode=ID(required=True),
         entity_type=Entity(required=True),
@@ -65,15 +67,8 @@ class EventQueries(ObjectType):
         entity: str,
         episode: str,
         entity_type: Entity,
-    ) -> EpisodeEntityLinkType:
+    ) -> EpisodeEntityLink:
         Model = ENTITY_MODELS[entity_type]
         query = {Model.entity_field: entity, "episode": episode}
         obj: EpisodeEntity = Model.objects.get(**query)
-        return EpisodeEntityLinkType(
-            id=obj.pk,
-            episode=obj.episode,
-            entity_type=obj.__class__.entity_field,
-            entity=obj.entity,
-            source_mention=obj.source_mention,
-            note=obj.note,
-        )
+        return obj

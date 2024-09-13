@@ -18,6 +18,7 @@ from space.types.SettlementType import SettlementType
 from space.types.StructureType import StructureType
 from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
+from core.types.entity import EntityInterface
 
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -37,6 +38,7 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
             "settlements",
             "structures",
         ] + EntityDescriptionType.fields()
+        interfaces = (EntityInterface,)
 
     @classmethod
     def get_queryset(

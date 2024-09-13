@@ -6,7 +6,7 @@ from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import GiftCategory, GiftDescription, GiftDescriptionCategory
 from letter.types.GiftDescriptionCategoryType import GiftDescriptionCategoryType
 from letter.types.GiftCategoryType import GiftCategoryType
-
+from core.types.entity import EntityInterface
 
 class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
     # Direct access to foreign key
@@ -20,6 +20,7 @@ class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
             "id",
             "categories",
         ] + EntityDescriptionType.fields()
+        interfaces = (EntityInterface,)
 
     @classmethod
     def get_queryset(

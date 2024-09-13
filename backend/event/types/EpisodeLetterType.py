@@ -4,6 +4,7 @@ from core.types.DescriptionFieldType import DescriptionFieldType
 from django.db.models import QuerySet
 
 from event.models import EpisodeLetter
+from event.types.EpisodeEntityLink import EpisodeEntityLink
 
 
 class EpisodeLetterType(DescriptionFieldType, DjangoObjectType):
@@ -14,6 +15,7 @@ class EpisodeLetterType(DescriptionFieldType, DjangoObjectType):
             "episode",
             "letter",
         ] + DescriptionFieldType.fields()
+        interfaces = (EpisodeEntityLink,)
 
     @classmethod
     def get_queryset(

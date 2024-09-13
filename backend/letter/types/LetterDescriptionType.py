@@ -6,6 +6,7 @@ from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import LetterCategory, LetterDescription, LetterDescriptionCategory
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
+from core.types.entity import EntityInterface
 
 
 class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -20,6 +21,7 @@ class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
             "id",
             "categories",
         ] + EntityDescriptionType.fields()
+        interfaces = (EntityInterface,)
 
     @classmethod
     def get_queryset(

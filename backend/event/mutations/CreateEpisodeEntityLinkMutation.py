@@ -12,7 +12,8 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from event.types.EpisodeEntityType import Entity, ENTITY_MODELS
+from core.types.entity import Entity
+from core.entity_models import ENTITY_MODELS
 
 
 class CreateEpisodeEntityLinkInput(InputObjectType):

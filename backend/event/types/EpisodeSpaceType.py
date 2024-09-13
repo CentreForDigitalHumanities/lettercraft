@@ -4,7 +4,7 @@ from core.types.DescriptionFieldType import DescriptionFieldType
 from django.db.models import QuerySet
 
 from event.models import EpisodeSpace
-
+from event.types import EpisodeEntityLink
 
 class EpisodeSpaceType(DescriptionFieldType, DjangoObjectType):
     class Meta:
@@ -14,6 +14,7 @@ class EpisodeSpaceType(DescriptionFieldType, DjangoObjectType):
             "episode",
             "space",
         ] + DescriptionFieldType.fields()
+        interfaces = (EpisodeEntityLink,)
 
     @classmethod
     def get_queryset(

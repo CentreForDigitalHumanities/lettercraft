@@ -195,6 +195,7 @@ class DescriptionField(Field, models.Model):
 
     source_mention = models.CharField(
         max_length=32,
+        blank=False,
         choices=SourceMention.choices,
         default=SourceMention.DIRECT,
         help_text="How is this information presented in the text?",

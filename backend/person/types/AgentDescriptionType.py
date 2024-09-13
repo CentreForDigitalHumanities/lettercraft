@@ -10,6 +10,7 @@ from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.models import EpisodeAgent
+from core.types.entity import EntityInterface
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -30,6 +31,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
             "location",
             "episodes",
         ] + EntityDescriptionType.fields()
+        interfaces = (EntityInterface,)
 
     @classmethod
     def get_queryset(

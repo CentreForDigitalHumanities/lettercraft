@@ -8,8 +8,8 @@ from graphene import (
 )
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from event.types.EpisodeEntityType import Entity, ENTITY_MODELS
-
+from core.types.entity import Entity
+from core.entity_models import ENTITY_MODELS
 
 class DeleteEpisodeEntityLinkMutation(Mutation):
     ok = Boolean(required=True)
