@@ -1,13 +1,14 @@
 <ng-container *ngIf="data$ | async as data">
     <ng-container *ngIf="data.episode">
-        <p>The following agents are involved in this episode:</p>
+        <p>The following {{entityName}}s are involved in this episode:</p>
         <ul class="list-unstyled vstack gap-4">
-            <li *ngFor="let agent of data.episode.agents">
+            <li *ngFor="let entity of data.episode.agents">
                 <lc-episode-link-form [entityType]="entityType" linkTo="entity"
-                        [entityID]="agent.id"
+                        [entityID]="entity.id"
                         [episodeID]="data.episode.id">
-                    <button removeControl class="btn btn-danger" aria-label="remove episode"
-                        (click)="removeAgent$.next(agent.id)">
+                    <button removeControl class="btn btn-danger"
+                        [attr.aria-label]="'remove ' + entityName"
+                        (click)="removeEntity$.next(entity.id)">
                         <lc-icon [icon]="actionIcons.remove" />
                     </button>
                 </lc-episode-link-form>
@@ -18,18 +19,20 @@
 
 <div class="mt-4 mb-4">
     <div ngbDropdown>
-        <button type="button" class="btn btn-primary" id="add-agent-dropdown-trigger"
+        <button type="button" class="btn btn-primary"
+            [id]="addDropdownTriggerID"
             ngbDropdownToggle>
-            Add agent
+            Add {{entityName}}
         </button>
-        <div ngbDropdownMenu aria-labelledby="add-agent-dropdown-trigger">
-            <button *ngFor="let agent of (availableAgents$ | async)"
-                ngbDropdownItem (click)="addAgent$.next(agent.id)">
-                {{agent.name}}
+        <div ngbDropdownMenu
+            [attr.aria-labelledby]="addDropdownTriggerID">
+            <button *ngFor="let entity of (availableEntities$ | async)"
+                ngbDropdownItem (click)="addEntity$.next(entity.id)">
+                {{entity.name}}
             </button>
             <button ngbDropdownItem disabled>
                 <lc-icon [icon]="actionIcons.create" />
-                Create new agent
+                Create new {{entityName}}
             </button>
         </div>
     </div>

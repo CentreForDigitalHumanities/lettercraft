@@ -24,10 +24,10 @@ const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
 })
 export class EpisodeAgentsFormComponent implements OnDestroy {
     data$: Observable<DataEntryEpisodeAgentsQuery>;
-    availableAgents$: Observable<{ name: string, id: string }[]>;
+    availableEntities$: Observable<{ name: string, id: string }[]>;
 
-    addAgent$ = new Subject<string>();
-    removeAgent$ = new Subject<string>();
+    addEntity$ = new Subject<string>();
+    removeEntity$ = new Subject<string>();
     actionIcons = actionIcons;
     status$ = formStatusSubject();
     formName = 'agents';
@@ -50,37 +50,52 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
             map(result => result.data),
             takeUntilDestroyed(),
         );
-        this.availableAgents$ = this.data$.pipe(
-            map(this.availableAgents)
+        this.availableEntities$ = this.data$.pipe(
+            map(this.availableEntities)
         );
 
-        this.addAgent$.pipe(
+        this.addEntity$.pipe(
             withLatestFrom(this.formService.id$),
             takeUntilDestroyed(),
-        ).subscribe(([episodeID, agentID]) =>
-            this.addAgent(episodeID, agentID)
+        ).subscribe(([episodeID, entityID]) =>
+            this.addEntity(episodeID, entityID)
         );
 
-        this.removeAgent$.pipe(
+        this.removeEntity$.pipe(
             withLatestFrom(this.formService.id$),
             takeUntilDestroyed(),
-        ).subscribe(([episodeID, agentID]) =>
-            this.removeAgent(episodeID, agentID)
+        ).subscribe(([episodeID, entityID]) =>
+            this.removeEntity(episodeID, entityID)
         );
+    }
+
+    /** name of the entity type in natural language */
+    get entityName(): string {
+        const names = {
+            [Entity.Agent]: 'agent',
+            [Entity.Gift]: 'gift',
+            [Entity.Letter]: 'letter',
+            [Entity.Space]: 'location',
+        };
+        return names[this.entityType];
+    }
+
+    get addDropdownTriggerID(): string {
+        return `add-${this.entityType}-dropdown-trigger`;
     }
 
     ngOnDestroy(): void {
         this.status$.complete();
-        this.addAgent$.complete();
-        this.removeAgent$.complete();
+        this.addEntity$.complete();
+        this.removeEntity$.complete();
         this.formService.detachForm(this.formName);
     }
 
-    addAgent(agentID: string, episodeID: string): void {
+    addEntity(entityID: string, episodeID: string): void {
         const input: CreateEpisodeEntityLinkInput = {
-            entity: agentID,
+            entity: entityID,
             episode: episodeID,
-            entityType: Entity.Agent,
+            entityType: this.entityType,
         };
         this.addMutation.mutate({ input }, {
             refetchQueries: REFETCH_QUERIES,
@@ -89,11 +104,11 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         ).subscribe(this.mutationObserver);
     }
 
-    removeAgent(agentID: string, episodeID: string): void {
+    removeEntity(entityID: string, episodeID: string): void {
         const data: DataEntryDeleteEpisodeEntityLinkMutationVariables = {
-            entity: agentID,
+            entity: entityID,
             episode: episodeID,
-            entityType: Entity.Agent,
+            entityType: this.entityType,
         };
         this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
             tap(() => this.status$.next('loading'))
@@ -109,11 +124,11 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         this.status$.next('error');
     }
 
-    private availableAgents(
+    private availableEntities(
         data: DataEntryEpisodeAgentsQuery
     ): { name: string, id: string }[] {
-        const allAgents = data.episode?.source.agents || [];
-        const linkedAgents = data.episode?.agents || [];
-        return differencyBy(allAgents, linkedAgents, 'id');
+        const allEntities = data.episode?.source.agents || [];
+        const linkedEntities = data.episode?.agents || [];
+        return differencyBy(allEntities, linkedEntities, 'id');
     }
 }
