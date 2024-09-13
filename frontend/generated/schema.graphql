@@ -30,7 +30,7 @@ type AgentDescriptionLocationType {
   sourceMention: SourceMention
 }
 
-type AgentDescriptionType {
+type AgentDescriptionType implements EntityInterface {
   """The book in the source"""
   book: String!
 
@@ -38,9 +38,7 @@ type AgentDescriptionType {
   chapter: String!
   contributors: [UserType!]!
   describes: [HistoricalPersonType!]!
-
-  """Longer description to help identify this object"""
-  description: String!
+  description: String
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
@@ -53,8 +51,6 @@ type AgentDescriptionType {
   """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
   isGroup: Boolean!
   location: AgentDescriptionLocationType
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -174,36 +170,34 @@ enum Entity {
   SPACE
 }
 
-type EntityType {
+interface EntityInterface {
   description: String
   id: ID!
   name: String
 }
 
-type EpisodeAgentType {
+type EpisodeAgentType implements EpisodeEntityLink {
   agent: AgentDescriptionType!
 
   """How certain are you of this value?"""
   certainty: EventEpisodeAgentCertaintyChoices!
+  entity: EntityInterface!
+  entityType: Entity!
   episode: EpisodeType!
   id: ID!
-
-  """Additional notes"""
-  note: String!
-  sourceMention: SourceMention
+  note: String
+  sourceMention: SourceMention!
 }
 
 type EpisodeCategoryType {
   """Longer description to help identify this object"""
   description: String!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 }
 
-type EpisodeEntityLinkType {
-  entity: EntityType!
+interface EpisodeEntityLink {
+  entity: EntityInterface!
   entityType: Entity!
   episode: EpisodeType!
   id: ID!
@@ -237,8 +231,6 @@ type EpisodeType {
 
   """letters involved in this episode"""
   letters: [LetterDescriptionType!]!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -299,8 +291,6 @@ type GiftCategoryType {
   """Longer description to help identify this object"""
   description: String!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 }
 
@@ -317,7 +307,7 @@ type GiftDescriptionCategoryType {
   sourceMention: SourceMention
 }
 
-type GiftDescriptionType {
+type GiftDescriptionType implements EntityInterface {
   """The book in the source"""
   book: String!
   categories: [GiftCategoryType!]!
@@ -326,17 +316,13 @@ type GiftDescriptionType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
-  description: String!
+  description: String
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -362,8 +348,6 @@ type HistoricalPersonType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 }
 
@@ -394,7 +378,7 @@ type LetterDescriptionCategoryType {
   sourceMention: SourceMention
 }
 
-type LetterDescriptionType {
+type LetterDescriptionType implements EntityInterface {
   """The book in the source"""
   book: String!
   categories: [LetterCategoryType!]!
@@ -403,17 +387,13 @@ type LetterDescriptionType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
-  description: String!
+  description: String
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -650,7 +630,7 @@ type Query {
   episode(id: ID!): EpisodeType
   episodeAgentLink(agent: ID!, episode: ID!): EpisodeAgentType
   episodeCategories: [EpisodeCategoryType!]!
-  episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLinkType
+  episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
@@ -688,8 +668,6 @@ type RegionType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 
   """Kind of region"""
@@ -719,8 +697,6 @@ type SettlementType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 
   """Surrounding regions of this settlement"""
@@ -795,24 +771,20 @@ type SourceWrittenDateType {
   yearUpper: Int!
 }
 
-type SpaceDescriptionType {
+type SpaceDescriptionType implements EntityInterface {
   """The book in the source"""
   book: String!
 
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
-  description: String!
+  description: String
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -930,8 +902,6 @@ type StructureType {
   """
   identifiable: Boolean!
   level: SpaceStructureLevelChoices!
-
-  """A name to help identify this object"""
   name: String!
 
   """The settlement containing this structure"""
