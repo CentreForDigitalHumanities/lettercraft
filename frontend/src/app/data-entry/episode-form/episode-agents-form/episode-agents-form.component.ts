@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
 import { formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
@@ -25,7 +25,9 @@ type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
     templateUrl: "./episode-agents-form.component.html",
     styleUrls: ["./episode-agents-form.component.scss"],
 })
-export class EpisodeAgentsFormComponent implements OnDestroy {
+export class EpisodeAgentsFormComponent implements OnChanges, OnDestroy {
+    @Input() entityType: Entity = Entity.Agent;
+
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
 
     linkedEntities$: Observable<{ id: string }[]>;
@@ -35,8 +37,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     removeEntity$ = new Subject<string>();
     actionIcons = actionIcons;
     status$ = formStatusSubject();
-    formName = 'agents';
-    entityType = Entity.Agent;
+    formName = crypto.randomUUID();
 
     private mutationObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),
@@ -49,7 +50,6 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
     ) {
-        this.formService.attachForm(this.formName, this.status$);
         this.data$ = this.formService.id$.pipe(
             switchMap(id => this.query.watch({ id }).valueChanges),
             map(result => result.data),
@@ -97,6 +97,13 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
 
     get addDropdownTriggerID(): string {
         return `add-${this.entityType}-dropdown-trigger`;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['entityType']) {
+
+            this.formService.attachForm(this.formName, this.status$);
+        }
     }
 
     ngOnDestroy(): void {
