@@ -13,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { actionIcons } from '@shared/icons';
 import { FormStatus } from '../../shared/types';
 import { MutationResult } from 'apollo-angular';
-import { differencyBy } from '../../shared/utils';
+import { differencyBy } from '@shared/utils';
 
 const REFETCH_QUERIES = ['DataEntryAgentEpisodes'];
 

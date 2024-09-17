@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
-import { differencyBy, formStatusSubject } from "../../shared/utils";
+import { formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
@@ -14,6 +14,7 @@ import {
     Entity
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { splat, differencyBy } from "@shared/utils";
 
 const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
 
@@ -55,25 +56,21 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
             takeUntilDestroyed(),
         );
         this.availableEntities$ = this.data$.pipe(
-            map(this.availableEntities)
+            map(this.availableEntities.bind(this))
         );
         this.linkedEntities$ = this.data$.pipe(
-            map(this.linkedEntities)
+            map(this.linkedEntities.bind(this))
         );
 
         this.addEntity$.pipe(
             withLatestFrom(this.formService.id$),
             takeUntilDestroyed(),
-        ).subscribe(([episodeID, entityID]) =>
-            this.addEntity(episodeID, entityID)
-        );
+        ).subscribe(splat(this.addEntity.bind(this)));
 
         this.removeEntity$.pipe(
             withLatestFrom(this.formService.id$),
             takeUntilDestroyed(),
-        ).subscribe(([episodeID, entityID]) =>
-            this.removeEntity(episodeID, entityID)
-        );
+        ).subscribe(splat(this.removeEntity.bind(this)));
     }
 
     /** name of the entity type in natural language */
@@ -143,7 +140,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
     }
 
     private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string }[] {
-        return data.episode?.source[this.entityProperty] || [];
+        return data.episode?.[this.entityProperty] || [];
     }
 
     private availableEntities(
