@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
-import { formStatusSubject } from "../../shared/utils";
+import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
@@ -75,13 +75,7 @@ export class EpisodeAgentsFormComponent implements OnChanges, OnDestroy {
 
     /** name of the entity type in natural language */
     get entityName(): string {
-        const names = {
-            [Entity.Agent]: 'agent',
-            [Entity.Gift]: 'gift',
-            [Entity.Letter]: 'letter',
-            [Entity.Space]: 'location',
-        };
-        return names[this.entityType];
+        return entityTypeNames[this.entityType];
     }
 
     /** property used for the entity relationship in graphQL data */

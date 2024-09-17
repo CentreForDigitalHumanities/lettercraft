@@ -15,7 +15,7 @@
     <form cardBody [formGroup]="form">
         <div class="mb-3">
             <label [htmlFor]="sourceMentionInput" class="form-label">
-                How is this agent's involvement in the episode represented?
+                How is this {{entityName}}'s involvement in the episode represented?
             </label>
             <select #sourceMentionInput class="form-select"
                 [formControl]="form.controls.sourceMention">

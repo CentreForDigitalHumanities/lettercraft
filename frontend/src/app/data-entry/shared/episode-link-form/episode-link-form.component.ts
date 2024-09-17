@@ -14,7 +14,7 @@ import {
 } from 'generated/graphql';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup } from '@angular/forms';
-import { formStatusSubject, sourceMentionSelectOptions } from '../utils';
+import { entityTypeNames, formStatusSubject, sourceMentionSelectOptions } from '../utils';
 import _ from 'underscore';
 import { MutationResult } from 'apollo-angular';
 import { FormService } from '../form.service';
@@ -82,6 +82,10 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
+    }
+
+    get entityName(): string {
+        return entityTypeNames[this.entityType];
     }
 
     ngOnChanges(changes: SimpleChanges): void {
