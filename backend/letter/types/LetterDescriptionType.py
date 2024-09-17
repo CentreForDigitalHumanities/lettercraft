@@ -7,19 +7,22 @@ from letter.models import LetterCategory, LetterDescription, LetterDescriptionCa
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
 from core.types.entity import EntityInterface
-
+from event.models import EpisodeLetter
+from event.types.EpisodeLetterType import EpisodeLetterType
 
 class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
     # Direct access to foreign key
     categories = List(NonNull(LetterCategoryType), required=True)
     # Through model
     categorisations = List(NonNull(LetterDescriptionCategoryType), required=True)
+    episodes = List(NonNull(EpisodeLetterType), required=True)
 
     class Meta:
         model = LetterDescription
         fields = [
             "id",
             "categories",
+            "episodes",
         ] + EntityDescriptionType.fields()
         interfaces = (EntityInterface,)
 
@@ -40,3 +43,9 @@ class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: LetterDescription, info: ResolveInfo
     ) -> QuerySet[LetterDescriptionCategory]:
         return LetterDescriptionCategory.objects.filter(letter=parent)
+
+    @staticmethod
+    def resolve_episodes(
+        parent: LetterDescription, info: ResolveInfo
+    ) -> QuerySet[EpisodeLetter]:
+        return EpisodeLetter.objects.filter(letter=parent)

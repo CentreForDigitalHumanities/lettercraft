@@ -37,9 +37,9 @@ from person.mutations.DeletePersonReferenceMutation import DeletePersonReference
 class Query(
     SourceQueries,
     PersonQueries,
-    EventQueries,
     LetterQueries,
     SpaceQueries,
+    EventQueries,
     UserQueries,
     ObjectType,
 ):

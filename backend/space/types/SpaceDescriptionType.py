@@ -19,7 +19,8 @@ from space.types.StructureType import StructureType
 from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
 from core.types.entity import EntityInterface
-
+from event.types.EpisodeSpaceType import EpisodeSpaceType
+from event.models import EpisodeSpace
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
     regions = List(NonNull(RegionType), required=True)
@@ -29,6 +30,7 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
     region_fields = List(NonNull(RegionFieldType), required=True)
     settlement_fields = List(NonNull(SettlementFieldType), required=True)
     structure_fields = List(NonNull(StructureFieldType), required=True)
+    episodes = List(NonNull(EpisodeSpaceType), required=True)
 
     class Meta:
         model = SpaceDescription
@@ -37,6 +39,7 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
             "regions",
             "settlements",
             "structures",
+            "episodes",
         ] + EntityDescriptionType.fields()
         interfaces = (EntityInterface,)
 
@@ -87,3 +90,9 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
         return StructureFieldType.get_queryset(StructureField.objects, info).filter(
             space=parent
         )
+
+    @staticmethod
+    def resolve_episodes(
+        parent: SpaceDescription, info: ResolveInfo
+    ) -> QuerySet[EpisodeSpace]:
+        return EpisodeSpace.objects.filter(space=parent)

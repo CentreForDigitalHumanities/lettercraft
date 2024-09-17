@@ -1,13 +1,17 @@
-from graphene import ResolveInfo
+from graphene import NonNull
 from graphene_django import DjangoObjectType
-from core.types.DescriptionFieldType import DescriptionFieldType
-from django.db.models import QuerySet
 
+from core.types.entity import Entity, EntityInterface
+from core.types.DescriptionFieldType import DescriptionFieldType, SourceMentionEnum
 from event.models import EpisodeGift
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 
 
 class EpisodeGiftType(DescriptionFieldType, DjangoObjectType):
+    entity = NonNull(EntityInterface)
+    entity_type = NonNull(Entity)
+    source_mention = NonNull(SourceMentionEnum)
+
     class Meta:
         model = EpisodeGift
         fields = [
@@ -16,11 +20,3 @@ class EpisodeGiftType(DescriptionFieldType, DjangoObjectType):
             "gift",
         ] + DescriptionFieldType.fields()
         interfaces = (EpisodeEntityLink,)
-
-    @classmethod
-    def get_queryset(
-        cls,
-        queryset: QuerySet[EpisodeGift],
-        info: ResolveInfo,
-    ) -> QuerySet[EpisodeGift]:
-        return queryset.all()
