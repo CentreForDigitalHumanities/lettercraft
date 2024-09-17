@@ -114,13 +114,14 @@ def space_description(db, source):
 
 
 @pytest.fixture()
-def episode(db, source, agent_description, agent_description_2):
+def episode(db, source, agent_description, agent_description_2, letter_description):
     event = Episode.objects.create(
         name="Bert writes a letter",
         source=source,
     )
     event.agents.add(agent_description)
     event.agents.add(agent_description_2)
+    event.letters.add(letter_description)
     return event
 
 
