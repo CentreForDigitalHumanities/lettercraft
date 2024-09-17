@@ -35,10 +35,10 @@ export class EpisodePreviewComponent {
                 title: "Delete episode",
                 message: `Are you sure you want to delete this episode? (${this.episode.name})`,
             })
-            .then((result) => {
-                if (result) {
-                    this.performDelete(episodeId);
-                }
+            .then(() => {
+                this.performDelete(episodeId);
+            }).catch(() => {
+                // Do nothing on cancel / dismissal.
             });
     }
 

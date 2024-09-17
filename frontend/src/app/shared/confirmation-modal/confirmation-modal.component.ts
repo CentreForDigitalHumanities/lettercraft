@@ -13,14 +13,10 @@ export class ConfirmationModalComponent {
     constructor(private activeModal: NgbActiveModal) {}
 
     public confirm(): void {
-        this.activeModal.close(true);
+        this.activeModal.close();
     }
 
     public cancel(): void {
-        this.activeModal.close(false);
-    }
-
-    public dismiss(): void {
         this.activeModal.dismiss();
     }
 }
