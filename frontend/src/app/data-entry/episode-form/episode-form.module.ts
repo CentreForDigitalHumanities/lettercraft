@@ -4,8 +4,6 @@ import { EpisodeIdentificationFormComponent } from "./episode-identification-for
 import { EpisodeSourceTextFormComponent } from "./episode-source-text-form/episode-source-text-form.component";
 import { EpisodeContentsFormComponent } from "./episode-contents-form/episode-contents-form.component";
 import { EpisodeEntitiesFormComponent } from "./episode-entities-form/episode-entities-form.component";
-import { EpisodeLocationsFormComponent } from "./episode-locations-form/episode-locations-form.component";
-import { EpisodeObjectsFormComponent } from "./episode-objects-form/episode-objects-form.component";
 import { SharedModule } from "@shared/shared.module";
 import { EpisodeFormComponent } from "./episode-form.component";
 import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
@@ -18,11 +16,9 @@ import { NewEpisodeFormComponent } from "./new-episode-form/new-episode-form.com
         EpisodeSourceTextFormComponent,
         EpisodeContentsFormComponent,
         EpisodeEntitiesFormComponent,
-        EpisodeLocationsFormComponent,
-        EpisodeObjectsFormComponent,
         NewEpisodeFormComponent,
     ],
     imports: [CommonModule, SharedModule, DataEntrySharedModule],
-    exports: [NewEpisodeFormComponent],
+    exports: [NewEpisodeFormComponent, EpisodeFormComponent],
 })
 export class EpisodeFormModule {}
