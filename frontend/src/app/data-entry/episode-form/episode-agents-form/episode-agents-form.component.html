@@ -27,14 +27,15 @@
 <div class="mt-4 mb-4">
     <div ngbDropdown>
         <button type="button" class="btn btn-primary"
-            [id]="addDropdownTriggerID"
+            #dropdownToggle
+            lcUniqueID
             ngbDropdownToggle>
             Add {{entityName}}
         </button>
         <div ngbDropdownMenu
-            [attr.aria-labelledby]="addDropdownTriggerID">
+            [attr.aria-labelledby]="dropdownToggle.id">
             <button *ngFor="let entity of (availableEntities$ | async)"
-                ngbDropdownItem (click)="addEntity$.next(entity.id)">
+                ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
                 {{entity.name}}
             </button>
             <button ngbDropdownItem disabled>

@@ -20,12 +20,13 @@
 <div class="mt-4 mb-4">
     <div ngbDropdown>
         <button type="button" class="btn btn-primary" id="episode-dropdown-trigger"
+            #dropdownToggle
             ngbDropdownToggle>
             Add episode
         </button>
         <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
             <button *ngFor="let episode of (availableEpisodes$ | async)"
-                ngbDropdownItem (click)="addEpisode$.next(episode.id)">
+                ngbDropdownItem (click)="addEpisode$.next(episode.id); dropdownToggle.focus()">
                 {{episode.name}}
             </button>
             <button ngbDropdownItem disabled>

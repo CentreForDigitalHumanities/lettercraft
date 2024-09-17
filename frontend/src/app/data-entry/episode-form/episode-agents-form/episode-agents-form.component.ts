@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
+import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
@@ -87,10 +87,6 @@ export class EpisodeAgentsFormComponent implements OnChanges, OnDestroy {
             [Entity.Space]: 'spaces',
         }
         return keys[this.entityType]
-    }
-
-    get addDropdownTriggerID(): string {
-        return `add-${this.entityType}-dropdown-trigger`;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
