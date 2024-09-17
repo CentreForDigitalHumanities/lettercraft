@@ -7,7 +7,7 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
     styleUrls: ["./confirmation-modal.component.scss"],
 })
 export class ConfirmationModalComponent {
-    @Input() public title = "Lettercraft";
+    @Input({ required: true }) public title = "";
     @Input() public message = "Are you sure you want to continue?";
 
     constructor(private activeModal: NgbActiveModal) {}
