@@ -113,7 +113,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
         data: DataEntryAgentEpisodesQuery
     ): { name: string, id: string }[] {
         const allEpisodes = data.agentDescription?.source.episodes || [];
-        const linkedEpisodes = data.agentDescription?.episodes || [];
+        const linkedEpisodes = data.agentDescription?.episodes.map(link => link.episode) || [];
         return differenceBy(allEpisodes, linkedEpisodes, 'id');
     }
 }
