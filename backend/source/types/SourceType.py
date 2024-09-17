@@ -33,32 +33,9 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_episodes(parent: Source, info: ResolveInfo) -> QuerySet[Episode]:
-        # Sort by book, chapter, page.
-        # If any of these fields are null are an empty string, sort them to the end.
-
-        SORT_LAST = Value("ZZZZZZ")
-
         return (
             EpisodeType.get_queryset(Episode.objects, info)
             .filter(source_id=parent.pk)
-            .annotate(
-                book_order=Case(
-                    When(book__isnull=True, then=SORT_LAST),
-                    When(book="", then=SORT_LAST),
-                    default=F("book"),
-                ),
-                chapter_order=Case(
-                    When(chapter__isnull=True, then=SORT_LAST),
-                    When(chapter="", then=SORT_LAST),
-                    default=F("chapter"),
-                ),
-                page_order=Case(
-                    When(page__isnull=True, then=SORT_LAST),
-                    When(page="", then=SORT_LAST),
-                    default=F("page"),
-                ),
-            )
-            .order_by("book_order", "chapter_order", "page_order")
         )
 
     @staticmethod
