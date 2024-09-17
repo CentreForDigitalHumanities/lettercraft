@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="form" (ngSubmit)="submit()">
     <div class="form-group">
         <label class="form-label" for="episode-name">Name</label>
         <p class="form-text">
@@ -14,19 +14,8 @@
             [class.is-invalid]="
                 form.controls.name.invalid && form.controls.name.touched
             "
+            ngbAutofocus
         />
         <p class="invalid-feedback">This field is required.</p>
-    </div>
-
-    <div class="form-group mt-4">
-        <label for="episode-description" class="form-label">Description</label>
-        <p class="form-text">
-            A longer description to help identify this object in the database.
-        </p>
-        <textarea
-            id="episode-description"
-            class="form-control"
-            [formControl]="form.controls.description"
-        ></textarea>
     </div>
 </form>

@@ -73,6 +73,65 @@ export type AgentDescriptionType = {
   sourceMention?: Maybe<PersonAgentDescriptionSourceMentionChoices>;
 };
 
+/** An enumeration. */
+export enum Certainty {
+  Certain = 'CERTAIN',
+  SomewhatCertain = 'SOMEWHAT_CERTAIN',
+  Uncertain = 'UNCERTAIN'
+}
+
+export type CreateAgentInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
+export type CreateAgentMutation = {
+  __typename?: 'CreateAgentMutation';
+  agent?: Maybe<AgentDescriptionType>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type CreateEpisodeInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
+export type CreateEpisodeMutation = {
+  __typename?: 'CreateEpisodeMutation';
+  episode?: Maybe<EpisodeType>;
+  errors: Array<LettercraftErrorType>;
+};
+
+export type CreatePersonReferenceInput = {
+  description: Scalars['ID']['input'];
+  person: Scalars['ID']['input'];
+};
+
+export type CreatePersonReferenceMutation = {
+  __typename?: 'CreatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteAgentMutation = {
+  __typename?: 'DeleteAgentMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeleteEpisodeMutation = {
+  __typename?: 'DeleteEpisodeMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type DeletePersonReferenceMutation = {
+  __typename?: 'DeletePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type EpisodeCategoryType = {
   __typename?: 'EpisodeCategoryType';
   /** Longer description to help identify this object */
@@ -121,6 +180,15 @@ export enum EventEpisodeSourceMentionChoices {
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
+}
+
+/** An enumeration. */
+export enum Gender {
+  Female = 'FEMALE',
+  Male = 'MALE',
+  Mixed = 'MIXED',
+  Other = 'OTHER',
+  Unknown = 'UNKNOWN'
 }
 
 export type GiftCategoryType = {
@@ -288,9 +356,46 @@ export type LettercraftErrorType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAgent?: Maybe<CreateAgentMutation>;
+  createEpisode?: Maybe<CreateEpisodeMutation>;
+  createPersonReference?: Maybe<CreatePersonReferenceMutation>;
+  deleteAgent?: Maybe<DeleteAgentMutation>;
+  deleteEpisode?: Maybe<DeleteEpisodeMutation>;
+  deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
+  updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+};
+
+
+export type MutationCreateAgentArgs = {
+  agentData: CreateAgentInput;
+};
+
+
+export type MutationCreateEpisodeArgs = {
+  episodeData: CreateEpisodeInput;
+};
+
+
+export type MutationCreatePersonReferenceArgs = {
+  referenceData: CreatePersonReferenceInput;
+};
+
+
+export type MutationDeleteAgentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteEpisodeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeletePersonReferenceArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -300,12 +405,17 @@ export type MutationUpdateAgentArgs = {
 
 
 export type MutationUpdateEpisodeArgs = {
-  input: UpdateEpisodeMutationInput;
+  episodeData: UpdateEpisodeInput;
 };
 
 
 export type MutationUpdateOrCreateSourceArgs = {
-  input: UpdateCreateSourceInput;
+  sourceData: UpdateCreateSourceInput;
+};
+
+
+export type MutationUpdatePersonReferenceArgs = {
+  referenceData: UpdatePersonReferenceInput;
 };
 
 /** An enumeration. */
@@ -448,6 +558,7 @@ export type Query = {
   agentDescription?: Maybe<AgentDescriptionType>;
   agentDescriptions: Array<AgentDescriptionType>;
   episode?: Maybe<EpisodeType>;
+  episodeCategories: Array<EpisodeCategoryType>;
   episodes: Array<EpisodeType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
@@ -591,6 +702,12 @@ export type SourceContentsDateType = {
   /** The latest possible year for this value */
   yearUpper: Scalars['Int']['output'];
 };
+
+/** An enumeration. */
+export enum SourceMention {
+  Direct = 'DIRECT',
+  Implied = 'IMPLIED'
+}
 
 export type SourceType = {
   __typename?: 'SourceType';
@@ -767,17 +884,33 @@ export type StructureType = {
   settlement?: Maybe<SettlementType>;
 };
 
+export type UpdateAgentGenderInput = {
+  gender?: InputMaybe<Gender>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
+};
+
 export type UpdateAgentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  designators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
   isGroup?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<UpdateAgentLocationInput>;
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateAgentLocationInput = {
+  location?: InputMaybe<Scalars['ID']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  sourceMention?: InputMaybe<SourceMention>;
 };
 
 export type UpdateAgentMutation = {
   __typename?: 'UpdateAgentMutation';
   agent?: Maybe<AgentDescriptionType>;
-  error?: Maybe<Scalars['String']['output']>;
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UpdateCreateSourceInput = {
@@ -789,16 +922,11 @@ export type UpdateCreateSourceInput = {
   name: Scalars['String']['input'];
 };
 
-export type UpdateEpisodeMutation = {
-  __typename?: 'UpdateEpisodeMutation';
-  errors: Array<LettercraftErrorType>;
-  ok: Scalars['Boolean']['output'];
-};
-
-export type UpdateEpisodeMutationInput = {
+export type UpdateEpisodeInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
@@ -806,10 +934,28 @@ export type UpdateEpisodeMutationInput = {
   summary?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateEpisodeMutation = {
+  __typename?: 'UpdateEpisodeMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   source?: Maybe<SourceType>;
+};
+
+export type UpdatePersonReferenceInput = {
+  certainty?: InputMaybe<Certainty>;
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdatePersonReferenceMutation = {
+  __typename?: 'UpdatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type UserType = {
@@ -855,12 +1001,17 @@ export type DataEntryEpisodeContentsQueryVariables = Exact<{
 
 export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
 
+export type DataEntryEpisodeCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryEpisodeCategoriesQuery = { __typename?: 'Query', episodeCategories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string, description: string }> };
+
 export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string } | null };
+export type DataEntryEpisodeIdentificationQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string } | null };
 
 export type DataEntryEpisodeSourceTextMentionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -877,11 +1028,18 @@ export type DataEntryEpisodeFormQueryVariables = Exact<{
 export type DataEntryEpisodeFormQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeMutationVariables = Exact<{
-  input: UpdateEpisodeMutationInput;
+  episodeData: UpdateEpisodeInput;
 }>;
 
 
 export type DataEntryUpdateEpisodeMutation = { __typename?: 'Mutation', updateEpisode?: { __typename?: 'UpdateEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryCreateEpisodeMutationVariables = Exact<{
+  episodeData: CreateEpisodeInput;
+}>;
+
+
+export type DataEntryCreateEpisodeMutation = { __typename?: 'Mutation', createEpisode?: { __typename?: 'CreateEpisodeMutation', episode?: { __typename?: 'EpisodeType', id: string } | null, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryGiftQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -903,6 +1061,13 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 
 
 export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
+export type DataEntryDeleteEpisodeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryDeleteEpisodeMutation = { __typename?: 'Mutation', deleteEpisode?: { __typename?: 'DeleteEpisodeMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntrySourceDetailQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1065,11 +1230,32 @@ export const DataEntryEpisodeContentsDocument = gql`
       super(apollo);
     }
   }
+export const DataEntryEpisodeCategoriesDocument = gql`
+    query DataEntryEpisodeCategories {
+  episodeCategories {
+    id
+    name
+    description
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeCategoriesGQL extends Apollo.Query<DataEntryEpisodeCategoriesQuery, DataEntryEpisodeCategoriesQueryVariables> {
+    override document = DataEntryEpisodeCategoriesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryEpisodeIdentificationDocument = gql`
     query DataEntryEpisodeIdentification($id: ID!) {
   episode(id: $id) {
     id
     name
+    description
   }
 }
     `;
@@ -1131,8 +1317,8 @@ export const DataEntryEpisodeFormDocument = gql`
     }
   }
 export const DataEntryUpdateEpisodeDocument = gql`
-    mutation DataEntryUpdateEpisode($input: UpdateEpisodeMutationInput!) {
-  updateEpisode(input: $input) {
+    mutation DataEntryUpdateEpisode($episodeData: UpdateEpisodeInput!) {
+  updateEpisode(episodeData: $episodeData) {
     ok
     errors {
       field
@@ -1147,6 +1333,30 @@ export const DataEntryUpdateEpisodeDocument = gql`
   })
   export class DataEntryUpdateEpisodeGQL extends Apollo.Mutation<DataEntryUpdateEpisodeMutation, DataEntryUpdateEpisodeMutationVariables> {
     override document = DataEntryUpdateEpisodeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateEpisodeDocument = gql`
+    mutation DataEntryCreateEpisode($episodeData: CreateEpisodeInput!) {
+  createEpisode(episodeData: $episodeData) {
+    episode {
+      id
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateEpisodeGQL extends Apollo.Mutation<DataEntryCreateEpisodeMutation, DataEntryCreateEpisodeMutationVariables> {
+    override document = DataEntryCreateEpisodeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -1219,6 +1429,28 @@ export const DataEntrySpaceDescriptionDocument = gql`
   })
   export class DataEntrySpaceDescriptionGQL extends Apollo.Query<DataEntrySpaceDescriptionQuery, DataEntrySpaceDescriptionQueryVariables> {
     override document = DataEntrySpaceDescriptionDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryDeleteEpisodeDocument = gql`
+    mutation DataEntryDeleteEpisode($id: ID!) {
+  deleteEpisode(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryDeleteEpisodeGQL extends Apollo.Mutation<DataEntryDeleteEpisodeMutation, DataEntryDeleteEpisodeMutationVariables> {
+    override document = DataEntryDeleteEpisodeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -1,4 +1,11 @@
-import { Component, forwardRef, Input, signal, computed, ViewChild, ElementRef } from "@angular/core";
+import {
+    Component,
+    forwardRef,
+    Input,
+    signal,
+    computed,
+    ViewChild,
+} from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 

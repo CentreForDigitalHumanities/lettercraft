@@ -9,6 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { IconComponent } from './icon/icon.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { ActionButtonGroupComponent } from './action-button-group/action-button-group.component';
+import { BaseModalComponent } from "./base-modal/base-modal.component";
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ContributorsComponent } from './contributors/contributors.component';
 
 
@@ -18,6 +20,8 @@ import { ContributorsComponent } from './contributors/contributors.component';
         IconComponent,
         BreadcrumbComponent,
         ActionButtonGroupComponent,
+        BaseModalComponent,
+        ConfirmationModalComponent,
         ContributorsComponent,
     ],
     imports: [
@@ -26,8 +30,8 @@ import { ContributorsComponent } from './contributors/contributors.component';
         BrowserAnimationsModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
-            cookieName: 'csrftoken',
-            headerName: 'X-CSRFToken'
+            cookieName: "csrftoken",
+            headerName: "X-CSRFToken",
         }),
         NgbModule,
         RouterModule,
@@ -46,6 +50,7 @@ import { ContributorsComponent } from './contributors/contributors.component';
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
+        BaseModalComponent,
     ],
 })
 export class SharedModule {}

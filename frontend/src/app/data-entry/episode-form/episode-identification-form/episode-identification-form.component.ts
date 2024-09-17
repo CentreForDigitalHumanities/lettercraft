@@ -2,19 +2,32 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
+import { MutationResult } from "apollo-angular";
 import {
     DataEntryEpisodeIdentificationGQL,
     DataEntryUpdateEpisodeGQL,
+    DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
     debounceTime,
     filter,
     map,
     Observable,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
+
+interface EpisodeIdentification {
+    name: string;
+    description: string;
+}
+
+type EpisodeIdentificationForm = {
+    [key in keyof EpisodeIdentification]: FormControl<string>;
+};
 
 @Component({
     selector: "lc-episode-identification-form",
@@ -28,13 +41,17 @@ export class EpisodeIdentificationFormComponent implements OnInit {
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode)
+        map((result) => result.data.episode),
+        shareReplay(1)
     );
 
-    public form = new FormGroup({
+    public form = new FormGroup<EpisodeIdentificationForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
             validators: [Validators.required],
+        }),
+        description: new FormControl<string>("", {
+            nonNullable: true,
         }),
     });
 
@@ -43,7 +60,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     public ngOnInit(): void {
@@ -53,24 +70,25 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 if (!episode) {
                     return;
                 }
-                this.form.patchValue(episode);
+                this.form.patchValue(episode, {
+                    emitEvent: false,
+                    onlySelf: true,
+                });
             });
 
-        this.form.valueChanges
+        this.episode$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([episode, id]) =>
-                    this.episodeMutation
-                        .mutate({
-                            input: {
-                                id,
-                                name: episode.name,
-                            },
-                        })
-                        .pipe(takeUntilDestroyed(this.destroyRef))
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([episode, id]) =>
+                            this.performMutation(episode, id)
+                        ),
+                        takeUntilDestroyed(this.destroyRef)
+                    )
                 )
             )
             .subscribe((result) => {
@@ -83,5 +101,31 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private performMutation(
+        episode: EpisodeIdentification,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateEpisodeMutation>> {
+        return this.updateEpisode.mutate(
+            {
+                episodeData: {
+                    ...episode,
+                    id,
+                },
+            },
+            {
+                update: cache => this.updateCache(cache, id),
+            }
+        );
+    }
+
+    private updateCache(cache: ApolloCache<unknown>, id: string): void {
+        const identified = cache.identify({
+            __typename: "EpisodeType",
+            id,
+        });
+        cache.evict({ id: identified });
+        cache.gc();
     }
 }
