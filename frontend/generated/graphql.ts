@@ -224,6 +224,45 @@ export type EpisodeEntityLink = {
   sourceMention: SourceMention;
 };
 
+export type EpisodeGiftType = EpisodeEntityLink & {
+  __typename?: 'EpisodeGiftType';
+  /** How certain are you of this value? */
+  certainty: EventEpisodeGiftCertaintyChoices;
+  entity: EntityInterface;
+  entityType: Entity;
+  episode: EpisodeType;
+  gift: GiftDescriptionType;
+  id: Scalars['ID']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  sourceMention: SourceMention;
+};
+
+export type EpisodeLetterType = EpisodeEntityLink & {
+  __typename?: 'EpisodeLetterType';
+  /** How certain are you of this value? */
+  certainty: EventEpisodeLetterCertaintyChoices;
+  entity: EntityInterface;
+  entityType: Entity;
+  episode: EpisodeType;
+  id: Scalars['ID']['output'];
+  letter: LetterDescriptionType;
+  note?: Maybe<Scalars['String']['output']>;
+  sourceMention: SourceMention;
+};
+
+export type EpisodeSpaceType = EpisodeEntityLink & {
+  __typename?: 'EpisodeSpaceType';
+  /** How certain are you of this value? */
+  certainty: EventEpisodeSpaceCertaintyChoices;
+  entity: EntityInterface;
+  entityType: Entity;
+  episode: EpisodeType;
+  id: Scalars['ID']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  sourceMention: SourceMention;
+  space: SpaceDescriptionType;
+};
+
 export type EpisodeType = {
   __typename?: 'EpisodeType';
   /** agents involved in this episode */
@@ -267,11 +306,41 @@ export enum EventEpisodeAgentCertaintyChoices {
 }
 
 /** An enumeration. */
+export enum EventEpisodeGiftCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
+}
+
+/** An enumeration. */
+export enum EventEpisodeLetterCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
+}
+
+/** An enumeration. */
 export enum EventEpisodeSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
+}
+
+/** An enumeration. */
+export enum EventEpisodeSpaceCertaintyChoices {
+  /** uncertain */
+  A_0 = 'A_0',
+  /** somewhat certain */
+  A_1 = 'A_1',
+  /** certain */
+  A_2 = 'A_2'
 }
 
 /** An enumeration. */
@@ -323,6 +392,7 @@ export type GiftDescriptionType = EntityInterface & {
   description?: Maybe<Scalars['String']['output']>;
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
+  episodes: Array<EpisodeGiftType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
@@ -385,6 +455,7 @@ export type LetterDescriptionType = EntityInterface & {
   description?: Maybe<Scalars['String']['output']>;
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
+  episodes: Array<EpisodeLetterType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
@@ -682,7 +753,6 @@ export type Query = {
   agentDescription?: Maybe<AgentDescriptionType>;
   agentDescriptions: Array<AgentDescriptionType>;
   episode?: Maybe<EpisodeType>;
-  episodeAgentLink?: Maybe<EpisodeAgentType>;
   episodeCategories: Array<EpisodeCategoryType>;
   episodeEntityLink?: Maybe<EpisodeEntityLink>;
   episodes: Array<EpisodeType>;
@@ -713,12 +783,6 @@ export type QueryAgentDescriptionsArgs = {
 
 export type QueryEpisodeArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type QueryEpisodeAgentLinkArgs = {
-  agent: Scalars['ID']['input'];
-  episode: Scalars['ID']['input'];
 };
 
 
@@ -892,6 +956,7 @@ export type SpaceDescriptionType = EntityInterface & {
   description?: Maybe<Scalars['String']['output']>;
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
+  episodes: Array<EpisodeSpaceType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
@@ -1341,7 +1406,7 @@ export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
+export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeGiftType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeLetterType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeSpaceType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeEntityLinkMutationVariables = Exact<{
   input: UpdateEpisodeEntityLinkInput;

@@ -205,6 +205,42 @@ interface EpisodeEntityLink {
   sourceMention: SourceMention!
 }
 
+type EpisodeGiftType implements EpisodeEntityLink {
+  """How certain are you of this value?"""
+  certainty: EventEpisodeGiftCertaintyChoices!
+  entity: EntityInterface!
+  entityType: Entity!
+  episode: EpisodeType!
+  gift: GiftDescriptionType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+}
+
+type EpisodeLetterType implements EpisodeEntityLink {
+  """How certain are you of this value?"""
+  certainty: EventEpisodeLetterCertaintyChoices!
+  entity: EntityInterface!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  letter: LetterDescriptionType!
+  note: String
+  sourceMention: SourceMention!
+}
+
+type EpisodeSpaceType implements EpisodeEntityLink {
+  """How certain are you of this value?"""
+  certainty: EventEpisodeSpaceCertaintyChoices!
+  entity: EntityInterface!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+  space: SpaceDescriptionType!
+}
+
 type EpisodeType {
   """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
@@ -262,12 +298,48 @@ enum EventEpisodeAgentCertaintyChoices {
 }
 
 """An enumeration."""
+enum EventEpisodeGiftCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
+enum EventEpisodeLetterCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
+}
+
+"""An enumeration."""
 enum EventEpisodeSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
   """implied"""
   IMPLIED
+}
+
+"""An enumeration."""
+enum EventEpisodeSpaceCertaintyChoices {
+  """uncertain"""
+  A_0
+
+  """somewhat certain"""
+  A_1
+
+  """certain"""
+  A_2
 }
 
 """An enumeration."""
@@ -322,6 +394,7 @@ type GiftDescriptionType implements EntityInterface {
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeGiftType!]!
   id: ID!
   name: String!
 
@@ -393,6 +466,7 @@ type LetterDescriptionType implements EntityInterface {
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeLetterType!]!
   id: ID!
   name: String!
 
@@ -628,7 +702,6 @@ type Query {
   agentDescription(id: ID!): AgentDescriptionType
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
-  episodeAgentLink(agent: ID!, episode: ID!): EpisodeAgentType
   episodeCategories: [EpisodeCategoryType!]!
   episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
   episodes(sourceId: ID): [EpisodeType!]!
@@ -787,6 +860,7 @@ type SpaceDescriptionType implements EntityInterface {
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeSpaceType!]!
   id: ID!
   name: String!
 
