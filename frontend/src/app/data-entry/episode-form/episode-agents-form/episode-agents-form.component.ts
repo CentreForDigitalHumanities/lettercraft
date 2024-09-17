@@ -9,13 +9,15 @@ import {
     DataEntryCreateEpisodeEntityLinkGQL,
     DataEntryDeleteEpisodeEntityLinkGQL,
     DataEntryDeleteEpisodeEntityLinkMutationVariables,
-    DataEntryEpisodeAgentsGQL,
-    DataEntryEpisodeAgentsQuery,
+    DataEntryEpisodeEntitiesGQL,
+    DataEntryEpisodeEntitiesQuery,
     Entity
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
+const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
+
+type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 
 @Component({
     selector: "lc-episode-agents-form",
@@ -23,7 +25,9 @@ const REFETCH_QUERIES = ['DataEntryEpisodeAgents'];
     styleUrls: ["./episode-agents-form.component.scss"],
 })
 export class EpisodeAgentsFormComponent implements OnDestroy {
-    data$: Observable<DataEntryEpisodeAgentsQuery>;
+    data$: Observable<DataEntryEpisodeEntitiesQuery>;
+
+    linkedEntities$: Observable<{ id: string }[]>;
     availableEntities$: Observable<{ name: string, id: string }[]>;
 
     addEntity$ = new Subject<string>();
@@ -40,7 +44,7 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
 
     constructor(
         private formService: FormService,
-        private query: DataEntryEpisodeAgentsGQL,
+        private query: DataEntryEpisodeEntitiesGQL,
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
     ) {
@@ -52,6 +56,9 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         );
         this.availableEntities$ = this.data$.pipe(
             map(this.availableEntities)
+        );
+        this.linkedEntities$ = this.data$.pipe(
+            map(this.linkedEntities)
         );
 
         this.addEntity$.pipe(
@@ -78,6 +85,17 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
             [Entity.Space]: 'location',
         };
         return names[this.entityType];
+    }
+
+    /** property used for the entity relationship in graphQL data */
+    get entityProperty(): EntityPropertyName {
+        const keys: Record<Entity, EntityPropertyName> = {
+            [Entity.Agent]: 'agents',
+            [Entity.Gift]: 'gifts',
+            [Entity.Letter]: 'letters',
+            [Entity.Space]: 'spaces',
+        }
+        return keys[this.entityType]
     }
 
     get addDropdownTriggerID(): string {
@@ -124,11 +142,19 @@ export class EpisodeAgentsFormComponent implements OnDestroy {
         this.status$.next('error');
     }
 
+    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string }[] {
+        return data.episode?.source[this.entityProperty] || [];
+    }
+
     private availableEntities(
-        data: DataEntryEpisodeAgentsQuery
+        data: DataEntryEpisodeEntitiesQuery
     ): { name: string, id: string }[] {
-        const allEntities = data.episode?.source.agents || [];
-        const linkedEntities = data.episode?.agents || [];
+        const allEntities: {
+            __typename?: string,
+            name: string,
+            id: string
+        }[] = data.episode?.source[this.entityProperty] || [];
+        const linkedEntities = data.episode?.[this.entityProperty] || [];
         return differencyBy(allEntities, linkedEntities, 'id');
     }
 }

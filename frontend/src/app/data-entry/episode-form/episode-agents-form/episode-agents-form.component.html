@@ -2,7 +2,7 @@
     <ng-container *ngIf="data.episode">
         <p>The following {{entityName}}s are involved in this episode:</p>
         <ul class="list-unstyled vstack gap-4">
-            <li *ngFor="let entity of data.episode.agents">
+            <li *ngFor="let entity of linkedEntities$ | async">
                 <lc-episode-link-form [entityType]="entityType" linkTo="entity"
                         [entityID]="entity.id"
                         [episodeID]="data.episode.id">

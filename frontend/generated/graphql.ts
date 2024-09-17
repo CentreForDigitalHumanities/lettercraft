@@ -854,7 +854,9 @@ export type SourceType = {
   /** The title of the edition used for this source */
   editionTitle: Scalars['String']['output'];
   episodes: Array<EpisodeType>;
+  gifts: Array<GiftDescriptionType>;
   id: Scalars['ID']['output'];
+  letters: Array<LetterDescriptionType>;
   /** The name of the original author of the work, if known */
   medievalAuthor: Scalars['String']['output'];
   /** The original title of the work, if known */
@@ -862,6 +864,7 @@ export type SourceType = {
   /** a unique name to identify this source in the database */
   name: Scalars['String']['output'];
   numOfEpisodes: Scalars['Int']['output'];
+  spaces: Array<SpaceDescriptionType>;
   writtenDate?: Maybe<SourceWrittenDateType>;
 };
 
@@ -1190,12 +1193,12 @@ export type DataEntryDeleteAgentMutationVariables = Exact<{
 
 export type DataEntryDeleteAgentMutation = { __typename?: 'Mutation', deleteAgent?: { __typename?: 'DeleteAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', messages: Array<string>, field: string }> } | null };
 
-export type DataEntryEpisodeAgentsQueryVariables = Exact<{
+export type DataEntryEpisodeEntitiesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DataEntryEpisodeAgentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }> } | null };
+export type DataEntryEpisodeEntitiesQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string }> } | null };
 
 export type DataEntryEpisodeContentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1616,8 +1619,8 @@ export const DataEntryDeleteAgentDocument = gql`
       super(apollo);
     }
   }
-export const DataEntryEpisodeAgentsDocument = gql`
-    query DataEntryEpisodeAgents($id: ID!) {
+export const DataEntryEpisodeEntitiesDocument = gql`
+    query DataEntryEpisodeEntities($id: ID!) {
   episode(id: $id) {
     id
     source {
@@ -1626,8 +1629,29 @@ export const DataEntryEpisodeAgentsDocument = gql`
         id
         name
       }
+      letters {
+        id
+        name
+      }
+      gifts {
+        id
+        name
+      }
+      spaces {
+        id
+        name
+      }
     }
     agents {
+      id
+    }
+    gifts {
+      id
+    }
+    letters {
+      id
+    }
+    spaces {
       id
     }
   }
@@ -1637,8 +1661,8 @@ export const DataEntryEpisodeAgentsDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class DataEntryEpisodeAgentsGQL extends Apollo.Query<DataEntryEpisodeAgentsQuery, DataEntryEpisodeAgentsQueryVariables> {
-    override document = DataEntryEpisodeAgentsDocument;
+  export class DataEntryEpisodeEntitiesGQL extends Apollo.Query<DataEntryEpisodeEntitiesQuery, DataEntryEpisodeEntitiesQueryVariables> {
+    override document = DataEntryEpisodeEntitiesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

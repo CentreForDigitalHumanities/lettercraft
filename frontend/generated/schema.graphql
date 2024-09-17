@@ -738,7 +738,9 @@ type SourceType {
   """The title of the edition used for this source"""
   editionTitle: String!
   episodes: [EpisodeType!]!
+  gifts: [GiftDescriptionType!]!
   id: ID!
+  letters: [LetterDescriptionType!]!
 
   """The name of the original author of the work, if known"""
   medievalAuthor: String!
@@ -749,6 +751,7 @@ type SourceType {
   """a unique name to identify this source in the database"""
   name: String!
   numOfEpisodes: Int!
+  spaces: [SpaceDescriptionType!]!
   writtenDate: SourceWrittenDateType
 }
 
