@@ -1,4 +1,4 @@
-import { differencyBy } from "./utils";
+import { differenceBy, splat } from "./utils";
 
 describe('differenceBy', () => {
     it('should compare lists', () => {
@@ -12,6 +12,12 @@ describe('differenceBy', () => {
             { id: '2' },
             { id: '4' },
         ];
-        expect(differencyBy(a, b, 'id')).toEqual([a[0], a[2]]);
+        expect(differenceBy(a, b, 'id')).toEqual([a[0], a[2]]);
+    });
+});
+
+describe('splat', () => {
+    it('should handle a list of arguments', () => {
+        expect(splat(Math.min)([3, 5, 2])).toBe(2)
     });
 });

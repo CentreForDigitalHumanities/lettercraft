@@ -14,7 +14,7 @@ import {
     Entity
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { splat, differencyBy } from "@shared/utils";
+import { splat, differenceBy } from "@shared/utils";
 
 const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
 
@@ -153,6 +153,6 @@ export class EpisodeAgentsFormComponent implements OnChanges, OnDestroy {
             id: string
         }[] = data.episode?.source[this.entityProperty] || [];
         const linkedEntities = data.episode?.[this.entityProperty] || [];
-        return differencyBy(allEntities, linkedEntities, 'id');
+        return differenceBy(allEntities, linkedEntities, 'id');
     }
 }

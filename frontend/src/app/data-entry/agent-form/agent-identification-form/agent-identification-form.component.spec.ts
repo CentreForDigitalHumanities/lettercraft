@@ -11,6 +11,7 @@ describe('AgentIdentificationFormComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [AgentIdentificationFormComponent],
+            providers: [FormService],
             imports: [SharedTestingModule],
             providers: [FormService],
         });

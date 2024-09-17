@@ -12,7 +12,7 @@ import _ from "underscore";
  * @returns The contents of `list` for which no value in `others` matches the `key`
  * property.
  */
-export const differencyBy = <T extends object>(
+export const differenceBy = <T extends object>(
     list: T[], others: object[], key: string
 ): T[] => {
     const getValue = (obj: object) => _.get(obj, key, undefined);
