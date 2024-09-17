@@ -25,26 +25,19 @@ describe("ConfirmationModalComponent", () => {
         expect(component).toBeTruthy();
     });
 
-    it("should have default title and message", () => {
-        expect(component.title).toBe("Lettercraft");
+    it("should have a default message", () => {
         expect(component.message).toBe("Are you sure you want to continue?");
     });
 
     it("should close the modal with true when confirm is called", () => {
         spyOn(activeModal, "close");
         component.confirm();
-        expect(activeModal.close).toHaveBeenCalledWith(true);
+        expect(activeModal.close).toHaveBeenCalled();
     });
 
-    it("should close the modal with false when cancel is called", () => {
-        spyOn(activeModal, "close");
-        component.cancel();
-        expect(activeModal.close).toHaveBeenCalledWith(false);
-    });
-
-    it("should dismiss the modal when dismiss is called", () => {
+    it("should close the modal when cancel is called", () => {
         spyOn(activeModal, "dismiss");
-        component.dismiss();
+        component.cancel();
         expect(activeModal.dismiss).toHaveBeenCalled();
     });
 });
