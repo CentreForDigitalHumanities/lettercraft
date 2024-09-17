@@ -13,6 +13,5 @@ export class CollapsibleCardComponent {
     collapsed = true;
 
     @HostBinding('class.card') card = true;
-    bodyID = crypto.randomUUID();
     actionIcons = actionIcons;
 }

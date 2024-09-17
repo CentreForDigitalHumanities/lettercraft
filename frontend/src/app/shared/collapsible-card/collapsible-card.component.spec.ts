@@ -4,6 +4,7 @@ import { CollapsibleCardComponent } from './collapsible-card.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '@shared/icon/icon.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UniqueIDDirective } from '@shared/unique-id.directive';
 
 describe('CollapsibleCardComponent', () => {
     let component: CollapsibleCardComponent;
@@ -11,7 +12,7 @@ describe('CollapsibleCardComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [CollapsibleCardComponent, IconComponent],
+            declarations: [CollapsibleCardComponent, IconComponent, UniqueIDDirective],
             imports: [CommonModule, NgbModule],
         });
         fixture = TestBed.createComponent(CollapsibleCardComponent);

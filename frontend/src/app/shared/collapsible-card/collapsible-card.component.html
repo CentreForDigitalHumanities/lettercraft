@@ -5,13 +5,13 @@
         <button class="btn btn-secondary ms-auto"
             ariaLabel="{{ collapsed ? 'show' : 'hide' }} {{contentDescription}}"
             [attr.aria-expanded]="!collapsed"
-            [attr.aria-controls]="bodyID"
+            [attr.aria-controls]="body.id"
             (click)="collapsed = !collapsed">
             <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
         </button>
         <ng-content select="[cardControl]" />
     </div>
 </div>
-<div class="card-body" [id]="bodyID" [ngbCollapse]="collapsed">
+<div class="card-body" lcUniqueID #body [ngbCollapse]="collapsed">
     <ng-content select="[cardBody]" />
 </div>
