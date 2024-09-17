@@ -8,7 +8,8 @@
                             [entityID]="entity.id"
                             [episodeID]="data.episode.id">
                         <button removeControl class="btn btn-danger"
-                            [attr.aria-label]="'remove ' + entityName"
+                            [attr.aria-label]="'remove ' + entityName + ': ' + entity.name"
+                            [ngbTooltip]="'remove this ' + entityName"
                             (click)="removeEntity$.next(entity.id)">
                             <lc-icon [icon]="actionIcons.remove" />
                         </button>

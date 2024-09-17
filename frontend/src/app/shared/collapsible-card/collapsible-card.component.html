@@ -4,6 +4,7 @@
         <ng-content select="[cardTitle]" />
         <button class="btn btn-secondary ms-auto"
             ariaLabel="{{ collapsed ? 'show' : 'hide' }} {{contentDescription}}"
+            [ngbTooltip]="(collapsed ? 'show' : 'hide') + ' ' + contentDescription"
             [attr.aria-expanded]="!collapsed"
             [attr.aria-controls]="body.id"
             (click)="collapsed = !collapsed">

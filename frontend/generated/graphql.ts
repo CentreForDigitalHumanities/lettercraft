@@ -1212,7 +1212,7 @@ export type DataEntryAgentEpisodesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string } }> } | null };
+export type DataEntryAgentEpisodesQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }> } | null };
 
 export type DataEntryCreateEpisodeEntityLinkMutationVariables = Exact<{
   input: CreateEpisodeEntityLinkInput;
@@ -1275,7 +1275,7 @@ export type DataEntryEpisodeEntitiesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeEntitiesQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string }> } | null };
+export type DataEntryEpisodeEntitiesQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> } | null };
 
 export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1530,6 +1530,7 @@ export const DataEntryAgentEpisodesDocument = gql`
       id
       episode {
         id
+        name
       }
     }
   }
@@ -1751,15 +1752,19 @@ export const DataEntryEpisodeEntitiesDocument = gql`
     }
     agents {
       id
+      name
     }
     gifts {
       id
+      name
     }
     letters {
       id
+      name
     }
     spaces {
       id
+      name
     }
   }
 }

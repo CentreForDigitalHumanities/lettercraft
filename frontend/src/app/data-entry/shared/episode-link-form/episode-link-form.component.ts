@@ -88,6 +88,10 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         return entityTypeNames[this.entityType];
     }
 
+    get linkedObjectName(): string {
+        return this.linkTo == 'episode' ? 'episode' : this.entityName;
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['entityID'] || changes['episodeID'] || changes['entityType']) {
             this.link$.next({

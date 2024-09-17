@@ -30,7 +30,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
 
-    linkedEntities$: Observable<{ id: string }[]>;
+    linkedEntities$: Observable<{ id: string, name: string }[]>;
     availableEntities$: Observable<{ name: string, id: string }[]>;
 
     addEntity$ = new Subject<string>();
@@ -136,7 +136,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.status$.next('error');
     }
 
-    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string }[] {
+    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string, name: string }[] {
         return data.episode?.[this.entityProperty] || [];
     }
 

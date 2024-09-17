@@ -3,7 +3,9 @@
     <span cardTitle>
         {{ linkedObject(linkTo, data)?.name }}
     </span>
-    <a cardControl class="btn btn-primary" aria-label="edit episode"
+    <a cardControl class="btn btn-primary"
+        [attr.aria-label]="'edit ' + linkedObjectName + ': ' + linkedObject(linkTo, data)?.name"
+        [ngbTooltip]="'edit this ' + linkedObjectName"
         [routerLink]="[
             '/data-entry',
             formUrl(linkTo, entityType),

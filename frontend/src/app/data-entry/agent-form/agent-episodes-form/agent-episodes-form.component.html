@@ -6,7 +6,9 @@
                 <lc-episode-link-form [entityType]="entityType"
                         [entityID]="data.agentDescription.id"
                         [episodeID]="item.episode.id">
-                    <button removeControl class="btn btn-danger" aria-label="remove episode"
+                    <button removeControl class="btn btn-danger"
+                        [attr.aria-label]="'remove episode: ' + item.episode.name"
+                        ngbTooltip="remove this episode"
                         (click)="removeEpisode$.next(item.episode.id)">
                         <lc-icon [icon]="actionIcons.remove" />
                     </button>

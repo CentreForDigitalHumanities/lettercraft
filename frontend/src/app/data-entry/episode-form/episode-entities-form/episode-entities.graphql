@@ -22,15 +22,19 @@ query DataEntryEpisodeEntities($id:ID!) {
     }
     agents {
       id
+      name
     }
     gifts {
       id
+      name
     }
     letters {
       id
+      name
     }
     spaces {
       id
+      name
     }
   }
 }

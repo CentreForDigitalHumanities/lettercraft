@@ -12,6 +12,7 @@ query DataEntryAgentEpisodes($id: ID!) {
             id
             episode {
                 id
+                name
             }
         }
     }
