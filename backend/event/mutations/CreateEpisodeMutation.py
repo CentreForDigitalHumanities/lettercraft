@@ -42,4 +42,7 @@ class CreateEpisodeMutation(LettercraftMutation):
             source=source,
         )
 
+        user = info.context.user
+        episode.contributors.add(user)
+
         return cls(episode=episode, errors=[])  # type: ignore
