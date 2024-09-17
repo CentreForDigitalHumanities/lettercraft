@@ -1258,13 +1258,6 @@ export type DataEntryDeleteAgentMutationVariables = Exact<{
 
 export type DataEntryDeleteAgentMutation = { __typename?: 'Mutation', deleteAgent?: { __typename?: 'DeleteAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', messages: Array<string>, field: string }> } | null };
 
-export type DataEntryEpisodeEntitiesQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DataEntryEpisodeEntitiesQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string }> } | null };
-
 export type DataEntryEpisodeContentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1276,6 +1269,13 @@ export type DataEntryEpisodeCategoriesQueryVariables = Exact<{ [key: string]: ne
 
 
 export type DataEntryEpisodeCategoriesQuery = { __typename?: 'Query', episodeCategories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string, description: string }> };
+
+export type DataEntryEpisodeEntitiesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryEpisodeEntitiesQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, source: { __typename?: 'SourceType', id: string, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }, agents: Array<{ __typename?: 'AgentDescriptionType', id: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string }> } | null };
 
 export type DataEntryEpisodeIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1684,6 +1684,48 @@ export const DataEntryDeleteAgentDocument = gql`
       super(apollo);
     }
   }
+export const DataEntryEpisodeContentsDocument = gql`
+    query DataEntryEpisodeContents($id: ID!) {
+  episode(id: $id) {
+    id
+    summary
+    categories {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeContentsGQL extends Apollo.Query<DataEntryEpisodeContentsQuery, DataEntryEpisodeContentsQueryVariables> {
+    override document = DataEntryEpisodeContentsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryEpisodeCategoriesDocument = gql`
+    query DataEntryEpisodeCategories {
+  episodeCategories {
+    id
+    name
+    description
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryEpisodeCategoriesGQL extends Apollo.Query<DataEntryEpisodeCategoriesQuery, DataEntryEpisodeCategoriesQueryVariables> {
+    override document = DataEntryEpisodeCategoriesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryEpisodeEntitiesDocument = gql`
     query DataEntryEpisodeEntities($id: ID!) {
   episode(id: $id) {
@@ -1728,48 +1770,6 @@ export const DataEntryEpisodeEntitiesDocument = gql`
   })
   export class DataEntryEpisodeEntitiesGQL extends Apollo.Query<DataEntryEpisodeEntitiesQuery, DataEntryEpisodeEntitiesQueryVariables> {
     override document = DataEntryEpisodeEntitiesDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntryEpisodeContentsDocument = gql`
-    query DataEntryEpisodeContents($id: ID!) {
-  episode(id: $id) {
-    id
-    summary
-    categories {
-      id
-    }
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntryEpisodeContentsGQL extends Apollo.Query<DataEntryEpisodeContentsQuery, DataEntryEpisodeContentsQueryVariables> {
-    override document = DataEntryEpisodeContentsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntryEpisodeCategoriesDocument = gql`
-    query DataEntryEpisodeCategories {
-  episodeCategories {
-    id
-    name
-    description
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntryEpisodeCategoriesGQL extends Apollo.Query<DataEntryEpisodeCategoriesQuery, DataEntryEpisodeCategoriesQueryVariables> {
-    override document = DataEntryEpisodeCategoriesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

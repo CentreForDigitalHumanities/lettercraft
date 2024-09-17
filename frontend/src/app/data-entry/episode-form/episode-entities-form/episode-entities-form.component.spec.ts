@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { EpisodeAgentsFormComponent } from "./episode-agents-form.component";
+import { EpisodeEntitiesFormComponent } from "./episode-entities-form.component";
 import { SharedTestingModule } from "@shared/shared-testing.module";
 import { FormService } from "../../shared/form.service";
 
-describe("EpisodeAgentsFormComponent", () => {
-    let component: EpisodeAgentsFormComponent;
-    let fixture: ComponentFixture<EpisodeAgentsFormComponent>;
+describe("EpisodeEntitiesFormComponent", () => {
+    let component: EpisodeEntitiesFormComponent;
+    let fixture: ComponentFixture<EpisodeEntitiesFormComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [EpisodeAgentsFormComponent],
+            declarations: [EpisodeEntitiesFormComponent],
             providers: [FormService],
             imports: [SharedTestingModule],
         });
-        fixture = TestBed.createComponent(EpisodeAgentsFormComponent);
+        fixture = TestBed.createComponent(EpisodeEntitiesFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

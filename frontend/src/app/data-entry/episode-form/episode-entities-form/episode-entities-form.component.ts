@@ -21,11 +21,11 @@ const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 
 @Component({
-    selector: "lc-episode-agents-form",
-    templateUrl: "./episode-agents-form.component.html",
-    styleUrls: ["./episode-agents-form.component.scss"],
+    selector: "lc-episode-entities-form",
+    templateUrl: "./episode-entities-form.component.html",
+    styleUrls: ["./episode-entities-form.component.scss"],
 })
-export class EpisodeAgentsFormComponent implements OnChanges, OnDestroy {
+export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     @Input() entityType: Entity = Entity.Agent;
 
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
