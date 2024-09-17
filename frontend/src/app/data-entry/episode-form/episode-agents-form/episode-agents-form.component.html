@@ -1,19 +1,26 @@
 <ng-container *ngIf="data$ | async as data">
     <ng-container *ngIf="data.episode">
-        <p>The following {{entityName}}s are involved in this episode:</p>
-        <ul class="list-unstyled vstack gap-4">
-            <li *ngFor="let entity of linkedEntities$ | async">
-                <lc-episode-link-form [entityType]="entityType" linkTo="entity"
-                        [entityID]="entity.id"
-                        [episodeID]="data.episode.id">
-                    <button removeControl class="btn btn-danger"
-                        [attr.aria-label]="'remove ' + entityName"
-                        (click)="removeEntity$.next(entity.id)">
-                        <lc-icon [icon]="actionIcons.remove" />
-                    </button>
-                </lc-episode-link-form>
-            </li>
-        </ul>
+        <ng-container *ngIf="(linkedEntities$ | async)?.length; else noEntities">
+            <p>The following {{entityName}}s are involved in this episode:</p>
+            <ul class="list-unstyled vstack gap-4">
+                <li *ngFor="let entity of linkedEntities$ | async">
+                    <lc-episode-link-form [entityType]="entityType" linkTo="entity"
+                            [entityID]="entity.id"
+                            [episodeID]="data.episode.id">
+                        <button removeControl class="btn btn-danger"
+                            [attr.aria-label]="'remove ' + entityName"
+                            (click)="removeEntity$.next(entity.id)">
+                            <lc-icon [icon]="actionIcons.remove" />
+                        </button>
+                    </lc-episode-link-form>
+                </li>
+            </ul>
+        </ng-container>
+        <ng-template #noEntities>
+            <p>
+                No {{entityName}}s have been added to this episode.
+            </p>
+        </ng-template>
     </ng-container>
 </ng-container>
 
