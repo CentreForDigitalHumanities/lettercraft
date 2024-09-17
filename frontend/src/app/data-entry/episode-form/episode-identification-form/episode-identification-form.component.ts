@@ -2,10 +2,13 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
+import { MutationResult } from "apollo-angular";
 import {
     DataEntryEpisodeIdentificationGQL,
     DataEntryUpdateEpisodeGQL,
+    DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
     debounceTime,
@@ -16,6 +19,15 @@ import {
     switchMap,
     withLatestFrom,
 } from "rxjs";
+
+interface EpisodeIdentification {
+    name: string;
+    description: string;
+}
+
+type EpisodeIdentificationForm = {
+    [key in keyof EpisodeIdentification]: FormControl<string>;
+};
 
 @Component({
     selector: "lc-episode-identification-form",
@@ -33,7 +45,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         shareReplay(1)
     );
 
-    public form = new FormGroup({
+    public form = new FormGroup<EpisodeIdentificationForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
             validators: [Validators.required],
@@ -73,24 +85,7 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                         debounceTime(300),
                         withLatestFrom(this.id$),
                         switchMap(([episode, id]) =>
-                            this.updateEpisode.mutate(
-                                {
-                                    episodeData: {
-                                        ...episode,
-                                        id,
-                                    },
-                                },
-                                {
-                                    update: (cache) => {
-                                        const identified = cache.identify({
-                                            __typename: "EpisodeType",
-                                            id,
-                                        });
-                                        cache.evict({ id: identified });
-                                        cache.gc();
-                                    },
-                                }
-                            )
+                            this.performMutation(episode, id)
                         ),
                         takeUntilDestroyed(this.destroyRef)
                     )
@@ -106,5 +101,31 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private performMutation(
+        episode: EpisodeIdentification,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateEpisodeMutation>> {
+        return this.updateEpisode.mutate(
+            {
+                episodeData: {
+                    ...episode,
+                    id,
+                },
+            },
+            {
+                update: cache => this.updateCache(cache, id),
+            }
+        );
+    }
+
+    private updateCache(cache: ApolloCache<unknown>, id: string): void {
+        const identified = cache.identify({
+            __typename: "EpisodeType",
+            id,
+        });
+        cache.evict({ id: identified });
+        cache.gc();
     }
 }
