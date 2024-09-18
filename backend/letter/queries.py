@@ -1,7 +1,8 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
 
-from letter.models import GiftDescription, LetterDescription
+from letter.models import GiftDescription, LetterCategory, LetterDescription
+from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
 
@@ -11,6 +12,11 @@ class LetterQueries(ObjectType):
 
     letter_descriptions = List(
         NonNull(LetterDescriptionType), required=True, episode_id=ID(), source_id=ID()
+    )
+
+    letter_categories = List(
+        NonNull(LetterCategoryType),
+        required=True,
     )
 
     gift_description = Field(GiftDescriptionType, id=ID(required=True))
@@ -48,13 +54,19 @@ class LetterQueries(ObjectType):
         ).filter(filters)
 
     @staticmethod
+    def resolve_letter_categories(
+        parent: None, info: ResolveInfo
+    ) -> QuerySet[LetterCategory]:
+        return LetterCategoryType.get_queryset(LetterCategory.objects, info).all()
+
+    @staticmethod
     def resolve_gift_description(
         parent: None, info: ResolveInfo, id: str
     ) -> GiftDescription | None:
         try:
-            return GiftDescriptionType.get_queryset(
-                GiftDescription.objects, info
-            ).get(id=id)
+            return GiftDescriptionType.get_queryset(GiftDescription.objects, info).get(
+                id=id
+            )
         except GiftDescription.DoesNotExist:
             return None
 
@@ -71,6 +83,6 @@ class LetterQueries(ObjectType):
         if source_id:
             filters &= Q(source_id=source_id)
 
-        return GiftDescriptionType.get_queryset(
-            GiftDescription.objects, info
-        ).filter(filters)
+        return GiftDescriptionType.get_queryset(GiftDescription.objects, info).filter(
+            filters
+        )

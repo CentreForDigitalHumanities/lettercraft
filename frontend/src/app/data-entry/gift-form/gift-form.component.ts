@@ -1,51 +1,55 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { dataIcons } from '@shared/icons';
-import { DataEntryGiftGQL, DataEntryGiftQuery } from 'generated/graphql';
-import { map, Observable, switchMap } from 'rxjs';
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { actionIcons, dataIcons } from "@shared/icons";
+import { DataEntryGiftFormGQL } from "generated/graphql";
+import { filter, map, share, switchMap } from "rxjs";
 
 @Component({
-    selector: 'lc-gift-form',
-    templateUrl: './gift-form.component.html',
-    styleUrls: ['./gift-form.component.scss']
+    selector: "lc-gift-form",
+    templateUrl: "./gift-form.component.html",
+    styleUrls: ["./gift-form.component.scss"],
 })
 export class GiftFormComponent {
-    id$: Observable<string>;
-    data$: Observable<DataEntryGiftQuery>;
+    private id$ = this.route.params.pipe(map((params) => params["id"]));
 
-    dataIcons = dataIcons;
+    public gift$ = this.id$.pipe(
+        switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
+        map((result) => result.data.giftDescription),
+        share()
+    );
 
-    constructor(private route: ActivatedRoute, private giftQuery: DataEntryGiftGQL) {
-        this.id$ = this.route.params.pipe(
-            map(params => params['id']),
-        );
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.giftQuery.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
-
-    getBreadcrumbs(data: DataEntryGiftQuery): Breadcrumb[] {
-        if (data.giftDescription) {
+    public breadcrumbs$ = this.gift$.pipe(
+        filter((gift) => !!gift),
+        map((gift) => {
+            if (!gift) {
+                return [];
+            }
             return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data-entry', label: 'Data entry' },
                 {
-                    link: `/data-entry/sources/${data.giftDescription.source.id}`,
-                    label: data.giftDescription.source.name
+                    label: "Lettercraft",
+                    link: "/",
                 },
                 {
-                    link: `/data-entry/gifts/${data.giftDescription.id}`,
-                    label: data.giftDescription.name
+                    label: "Data entry",
+                    link: "/data-entry",
+                },
+                {
+                    label: gift.source.name,
+                    link: `/data-entry/sources/${gift.source.id}`,
+                },
+                {
+                    label: gift.name,
+                    link: `/data-entry/gifts/${gift.id}`,
                 },
             ];
-        } else {
-            return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data-entry', label: 'Data entry' },
-                { link: '', label: 'Gift not found' }
-            ]
-        }
-    }
+        })
+    );
+
+    public dataIcons = dataIcons;
+    public actionIcons = actionIcons;
+
+    constructor(
+        private route: ActivatedRoute,
+        private giftQuery: DataEntryGiftFormGQL
+    ) {}
 }

@@ -1,0 +1,23 @@
+query DataEntryGiftCategories($id: ID!) {
+    giftDescription(id: $id) {
+        id
+        categorisations {
+            id
+            sourceMention
+            note
+            certainty
+            category {
+                id
+                name
+            }
+        }
+    }
+}
+
+query DataEntryAllGiftCategories {
+    letterCategories {
+        id
+        label
+        description
+    }
+}

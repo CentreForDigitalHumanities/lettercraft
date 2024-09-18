@@ -1,0 +1,31 @@
+<form>
+    <div class="form-group">
+        <label class="form-label" for="episode-name">Name</label>
+        <p class="form-text">
+            This is a name to identify the gift in the overview of the source.
+            For example: "golden cup", "hair shirt".
+        </p>
+        <input
+            id="episode-name"
+            type="text"
+            class="form-control"
+            [formControl]="form.controls.name"
+            [class.is-invalid]="
+                form.controls.name.invalid && form.controls.name.touched
+            "
+        />
+        <p class="invalid-feedback">This field is required.</p>
+    </div>
+
+    <div class="form-group mt-4">
+        <div class="form-label">Description</div>
+        <p class="form-text">
+            Add a description to help identify this gift in the database.
+        </p>
+        <textarea
+            class="form-control"
+            [formControl]="form.controls.description"
+        >
+        </textarea>
+    </div>
+</form>

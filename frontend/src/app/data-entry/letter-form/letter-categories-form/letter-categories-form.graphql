@@ -1,0 +1,23 @@
+query DataEntryLetterCategories($id: ID!) {
+    letterDescription(id: $id) {
+        id
+        categorisations {
+            id
+            sourceMention
+            note
+            certainty
+            category {
+                id
+                label
+            }
+        }
+    }
+}
+
+query DataEntryAllLetterCategories {
+    letterCategories {
+        id
+        label
+        description
+    }
+}
