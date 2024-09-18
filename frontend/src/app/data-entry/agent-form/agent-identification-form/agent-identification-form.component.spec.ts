@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AgentIdentificationFormComponent } from './agent-identification-form.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { FormService } from '../../shared/form.service';
 
 describe('AgentIdentificationFormComponent', () => {
     let component: AgentIdentificationFormComponent;
@@ -11,6 +12,7 @@ describe('AgentIdentificationFormComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AgentIdentificationFormComponent],
             imports: [SharedTestingModule],
+            providers: [FormService],
         });
         fixture = TestBed.createComponent(AgentIdentificationFormComponent);
         component = fixture.componentInstance;

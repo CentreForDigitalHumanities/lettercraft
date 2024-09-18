@@ -10,3 +10,17 @@ query DataEntryAgent($id: ID!) {
     }
   }
 }
+
+mutation DataEntryUpdateAgent(
+    $input: UpdateAgentInput!
+) {
+    updateAgent(
+        agentData: $input
+    ) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
