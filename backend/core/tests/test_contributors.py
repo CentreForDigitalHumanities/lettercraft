@@ -13,8 +13,8 @@ class ContributorTestCase(GraphQLTestCase):
     # For these tests, we'll use the Episode model.
 
     UPDATE_EPISODE_MUTATION = """
-        mutation UPDATE_EPISODE($input: UpdateEpisodeMutationInput!) {
-            updateEpisode(input: $input) {
+        mutation UPDATE_EPISODE($input: UpdateEpisodeInput!) {
+            updateEpisode(episodeData: $input) {
                 ok
                 errors {
                     field

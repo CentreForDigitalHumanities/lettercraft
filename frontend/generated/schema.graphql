@@ -89,11 +89,16 @@ type CreateAgentMutation {
   ok: Boolean!
 }
 
+<<<<<<< HEAD
 input CreateGiftInput {
+=======
+input CreateEpisodeInput {
+>>>>>>> develop
   name: String!
   source: ID!
 }
 
+<<<<<<< HEAD
 type CreateGiftMutation {
   errors: [LettercraftErrorType!]!
   gift: GiftDescriptionType
@@ -107,6 +112,11 @@ input CreateLetterInput {
 type CreateLetterMutation {
   errors: [LettercraftErrorType!]!
   letter: LetterDescriptionType
+=======
+type CreateEpisodeMutation {
+  episode: EpisodeType
+  errors: [LettercraftErrorType!]!
+>>>>>>> develop
 }
 
 input CreatePersonReferenceInput {
@@ -124,12 +134,16 @@ type DeleteAgentMutation {
   ok: Boolean!
 }
 
+<<<<<<< HEAD
 type DeleteGiftMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
 
 type DeleteLetterMutation {
+=======
+type DeleteEpisodeMutation {
+>>>>>>> develop
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -212,6 +226,7 @@ enum Gender {
   UNKNOWN
 }
 
+<<<<<<< HEAD
 input GiftCategorisationInput {
   category: ID!
   certainty: String
@@ -220,6 +235,8 @@ input GiftCategorisationInput {
   sourceMention: SourceMention
 }
 
+=======
+>>>>>>> develop
 type GiftCategoryType {
   """Longer description to help identify this object"""
   description: String!
@@ -425,6 +442,7 @@ type LettercraftErrorType {
 
 type Mutation {
   createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+<<<<<<< HEAD
   createGift(giftData: CreateGiftInput!): CreateGiftMutation
   createLetter(letterData: CreateLetterInput!): CreateLetterMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
@@ -437,6 +455,16 @@ type Mutation {
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(input: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+=======
+  createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
+  createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
+  deleteAgent(id: ID!): DeleteAgentMutation
+  deleteEpisode(id: ID!): DeleteEpisodeMutation
+  deletePersonReference(id: ID!): DeletePersonReferenceMutation
+  updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
+  updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
+  updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
+>>>>>>> develop
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
 
@@ -608,6 +636,7 @@ type Query {
   agentDescription(id: ID!): AgentDescriptionType
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
+  episodeCategories: [EpisodeCategoryType!]!
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
@@ -964,12 +993,7 @@ input UpdateCreateSourceInput {
   name: String!
 }
 
-type UpdateEpisodeMutation {
-  errors: [LettercraftErrorType!]!
-  ok: Boolean!
-}
-
-input UpdateEpisodeMutationInput {
+input UpdateEpisodeInput {
   book: String
   categories: [ID!]
   chapter: String
@@ -981,6 +1005,7 @@ input UpdateEpisodeMutationInput {
   summary: String
 }
 
+<<<<<<< HEAD
 input UpdateGiftInput {
   book: String
   categories: [ID!]
@@ -1011,6 +1036,9 @@ input UpdateLetterInput {
 }
 
 type UpdateLetterMutation {
+=======
+type UpdateEpisodeMutation {
+>>>>>>> develop
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }

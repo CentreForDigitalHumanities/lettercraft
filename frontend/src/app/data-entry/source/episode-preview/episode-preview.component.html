@@ -1,20 +1,19 @@
 <div class="card mb-4">
     <div class="card-header">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between align-items-center">
             <div>
                 <lc-icon [icon]="dataIcons.episode" />
                 &nbsp;
                 {{ episode.name }}
                 <br />
-                <small>
-                    <span>book {{ episode.book }}</span
-                    >,
-                    <span>chapter {{ episode.chapter }}</span>
+                <small *ngIf="episode.book || episode.chapter" class="inline-list">
+                    <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
+                    <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
                 </small>
             </div>
             <lc-action-button-group
                 [editLink]="['/', 'data-entry', 'episodes', episode.id]"
-                (delete)="deleteEpisode(episode.id)"
+                (deleteAction)="onClickDelete(episode.id)"
                 [showButtonText]="false"
             />
         </div>

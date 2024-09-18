@@ -1,5 +1,5 @@
 from graphene import Field, Int, List, NonNull, ResolveInfo
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Value, Case, When, F
 from graphene_django import DjangoObjectType
 from event.models import Episode
 from source.models import Source
@@ -33,8 +33,15 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_episodes(parent: Source, info: ResolveInfo) -> QuerySet[Episode]:
-        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk)
+        return (
+            EpisodeType.get_queryset(Episode.objects, info)
+            .filter(source_id=parent.pk)
+        )
 
     @staticmethod
     def resolve_num_of_episodes(parent: Source, info: ResolveInfo) -> int:
-        return EpisodeType.get_queryset(Episode.objects, info).filter(source_id=parent.pk).count()
+        return (
+            EpisodeType.get_queryset(Episode.objects, info)
+            .filter(source_id=parent.pk)
+            .count()
+        )
