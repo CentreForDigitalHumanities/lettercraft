@@ -1,20 +1,15 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, String
 from django.core.exceptions import ObjectDoesNotExist
+from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
 from event.models import Episode
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class UpdateEpisodeMutationInput(InputObjectType):
+class UpdateEpisodeInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
-    name = String()
-    book = String()
-    chapter = String()
-    page = String()
-    designators = List(NonNull(String))
     summary = String()
-    categories = List(NonNull(ID))
 
 
 class UpdateEpisodeMutation(LettercraftMutation):
@@ -24,25 +19,28 @@ class UpdateEpisodeMutation(LettercraftMutation):
     django_model = Episode
 
     class Arguments:
-        input = UpdateEpisodeMutationInput(required=True)
+        episode_data = UpdateEpisodeInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, input: UpdateEpisodeMutationInput):
+    def mutate(cls, root: None, info: ResolveInfo, episode_data: UpdateEpisodeInput):
         try:
-            retrieved_object = cls.get_or_create_object(info, input)
+            retrieved_object = cls.get_or_create_object(info, episode_data)
         except ObjectDoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, errors=[error])  # type: ignore
 
-        episode = retrieved_object.object
+        episode: Episode = retrieved_object.object  # type: ignore
 
         try:
-            cls.mutate_object(input, episode, info)
+            cls.mutate_object(episode_data, episode, info)
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error])  # type: ignore
+
+        user = info.context.user
+        episode.contributors.add(user)
 
         episode.save()
 

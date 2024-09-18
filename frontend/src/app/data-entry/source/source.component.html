@@ -16,11 +16,53 @@
 </p>
 
 <div class="mb-4" *ngIf="source$ | async as source">
-    <lc-episode-preview *ngFor="let episode of source.episodes" [episode]="episode" />
+    <lc-episode-preview
+        *ngFor="let episode of source.episodes; trackBy: identify"
+        [episode]="episode"
+    />
 </div>
-<div class="btn-group mb-4">
-    <button class="btn btn-primary" disabled>
+<div class="btn-group mb-4" *ngIf="source$ | async as source">
+    <button
+        class="btn btn-primary"
+        (click)="openNewEpisodeModal(newEpisodeModal)"
+    >
         <lc-icon [icon]="actionIcons.create" />
         Add a new episode
     </button>
 </div>
+
+<ng-template #newEpisodeModal>
+    <lc-base-modal (dismiss)="closeModal()" *ngIf="source$ | async as source">
+        <ng-container modal-header>
+            <h4 ngbAutofocus>Create new episode</h4>
+        </ng-container>
+        <ng-container modal-content>
+            <lc-new-episode-form
+                #newEpisodeForm
+                [sourceId]="source.id"
+                (mutationStarted)="mutationInProgress = true"
+                (episodeCreated)="closeAndNavigate($event)"
+            ></lc-new-episode-form>
+        </ng-container>
+        <ng-container modal-footer>
+            <button
+                type="button"
+                class="btn btn-primary"
+                (click)="newEpisodeForm.submit()"
+
+            >
+                Create
+                <div *ngIf="mutationInProgress" class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">Creating new episode...</span>
+                </div>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+            >
+                Cancel
+            </button>
+        </ng-container>
+    </lc-base-modal>
+</ng-template>

@@ -9,6 +9,10 @@ query DataEntrySourceDetail($id: ID!) {
             summary
             book
             chapter
+            contributors {
+                id
+                fullName
+            }
             page
             agents {
                 id

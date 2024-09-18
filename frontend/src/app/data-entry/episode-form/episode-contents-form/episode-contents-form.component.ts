@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
+    DataEntryEpisodeCategoriesGQL,
     DataEntryEpisodeContentsGQL,
     DataEntryUpdateEpisodeGQL,
 } from "generated/graphql";
@@ -12,9 +13,11 @@ import {
     filter,
     map,
     Observable,
+    shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
+import { LabelSelectOption } from "../../shared/label-select/label-select.component";
 
 @Component({
     selector: "lc-episode-contents-form",
@@ -28,7 +31,8 @@ export class EpisodeContentsFormComponent implements OnInit {
 
     private episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode)
+        map((result) => result.data.episode),
+        shareReplay(1)
     );
 
     public form = new FormGroup({
@@ -40,12 +44,25 @@ export class EpisodeContentsFormComponent implements OnInit {
         }),
     });
 
+    public episodeCategories$: Observable<LabelSelectOption[]> =
+        this.episodeCategoriesQuery.fetch().pipe(
+            map((result) => {
+                const categories = result.data.episodeCategories;
+                return categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                    description: category.description,
+                }));
+            })
+        );
+
     constructor(
         private destroyRef: DestroyRef,
         private route: ActivatedRoute,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeContentsGQL,
-        private episodeMutation: DataEntryUpdateEpisodeGQL
+        private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
+        private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
     ngOnInit(): void {
@@ -55,25 +72,36 @@ export class EpisodeContentsFormComponent implements OnInit {
                 if (!episode) {
                     return;
                 }
-                this.form.patchValue({
-                    summary: episode.summary,
-                    categories: episode.categories.map((c) => c.id),
-                });
+                this.form.patchValue(
+                    {
+                        summary: episode.summary,
+                        categories: episode.categories.map((c) => c.id),
+                    },
+                    {
+                        emitEvent: false,
+                        onlySelf: true
+                    }
+                );
             });
 
-        this.form.valueChanges
+        this.episode$
             .pipe(
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                withLatestFrom(this.id$),
-                switchMap(([episode, id]) =>
-                    this.episodeMutation.mutate({
-                        input: {
-                            id,
-                            ...episode,
-                        },
-                    })
+                switchMap(() =>
+                    this.form.valueChanges.pipe(
+                        map(() => this.form.getRawValue()),
+                        filter(() => this.form.valid),
+                        debounceTime(300),
+                        withLatestFrom(this.id$),
+                        switchMap(([episode, id]) =>
+                            this.updateEpisode
+                                .mutate({
+                                    episodeData: {
+                                        id,
+                                        ...episode,
+                                    },
+                                })
+                        )
+                    )
                 )
             )
             .subscribe((result) => {

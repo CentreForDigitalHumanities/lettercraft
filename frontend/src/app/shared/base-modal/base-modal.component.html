@@ -1,0 +1,15 @@
+<header class="modal-header">
+    <ng-content select="[modal-header]" />
+    <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="dismissModal()"
+    ></button>
+</header>
+<section class="modal-body">
+    <ng-content select="[modal-content]" />
+</section>
+<footer class="modal-footer">
+    <ng-content select="[modal-footer]" />
+</footer>
