@@ -12,8 +12,8 @@
     <lc-entity-description-lead [entity]="letter" />
 
     <div class="hstack">
-        <button class="btn btn-danger ms-auto" (click)="onClickDelete(letter.id, letter.name)">
-            <lc-icon [icon]="actionIcons.delete" />
+        <button class="btn btn-danger ms-auto" (click)="onClickDelete(letter)">
+            <lc-icon *ngIf="!deletingInProgress; else deleting" [icon]="actionIcons.delete" />
             Delete letter
         </button>
     </div>
@@ -31,5 +31,11 @@
 <ng-template #loading>
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>
+
+<ng-template #deleting>
+    <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Deleting...</span>
     </div>
 </ng-template>

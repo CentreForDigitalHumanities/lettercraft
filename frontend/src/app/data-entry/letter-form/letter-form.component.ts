@@ -1,15 +1,18 @@
 import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteLetterGQL,
     DataEntryLetterFormGQL,
-    DataEntryUpdateLetterGQL,
+    DataEntryLetterFormQuery,
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+
+type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
 
 @Component({
     selector: "lc-letter-form",
@@ -55,39 +58,44 @@ export class LetterFormComponent {
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
+    public deletingInProgress = false;
+
     constructor(
         private destroyRef: DestroyRef,
         private route: ActivatedRoute,
+        private router: Router,
         private toastService: ToastService,
         private modalService: ModalService,
         private letterQuery: DataEntryLetterFormGQL,
         private deleteLetter: DataEntryDeleteLetterGQL
     ) {}
 
-    public onClickDelete(letterId: string, letterName: string): void {
+    public onClickDelete(letter: QueriedLetter): void {
         this.modalService
             .openConfirmationModal({
                 title: "Delete letter",
-                message: `Are you sure you want to delete this letter? (${letterName})`,
+                message: `Are you sure you want to delete this letter? (${letter.name})`,
             })
-            .then(() => this.performDelete(letterId))
+            .then(() => this.performDelete(letter.id, letter.source.id))
             .catch(() => {
                 // Do nothing on cancel / dismissal.
             });
     }
 
-    private performDelete(letterId: string): void {
+    private performDelete(letterId: string, sourceId: string): void {
+        this.deletingInProgress = true;
         this.deleteLetter
             .mutate(
                 {
                     id: letterId,
                 },
                 {
-                    update: (cache) => cache.evict({ fieldName: "letter" }),
+                    update: (cache) => this.updateCache(cache, letterId),
                 }
             )
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((result) => {
+                this.deletingInProgress = false;
                 const errors = result.data?.deleteLetter?.errors;
                 if (errors && errors.length > 0) {
                     this.toastService.show({
@@ -102,6 +110,16 @@ export class LetterFormComponent {
                         header: "Success",
                     });
                 }
+                this.router.navigate([`/data-entry/sources/${sourceId}`]);
             });
+    }
+
+    private updateCache(cache: ApolloCache<unknown>, letterId: string): void {
+        const identified = cache.identify({
+            __typename: "LetterDescriptionType",
+            id: letterId,
+        });
+        cache.evict({ id: identified });
+        cache.gc();
     }
 }
