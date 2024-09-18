@@ -10,7 +10,6 @@ import {
 import {
     map, switchMap, filter, debounceTime, withLatestFrom, Observable,
     distinctUntilChanged,
-
     tap,
     BehaviorSubject,
     skip
@@ -59,18 +58,18 @@ export class AgentIdentificationFormComponent implements OnDestroy {
             takeUntilDestroyed(),
         ).subscribe(this.updateFormData.bind(this));
 
-        const changes$ = this.form.valueChanges.pipe(
-            debounceTime(500),
-            distinctUntilChanged(_.isEqual),
-            skip(1),
-        );
 
-        changes$.pipe(
-            filter(_.negate(this.isValid.bind(this))),
+
+
+        this.form.statusChanges.pipe(
+            filter(status => status == 'INVALID'),
             takeUntilDestroyed(),
         ).subscribe(() => this.status$.next('invalid'));
 
-        changes$.pipe(
+        this.form.valueChanges.pipe(
+            debounceTime(500),
+            distinctUntilChanged(_.isEqual),
+            skip(1),
             filter(this.isValid.bind(this)),
             tap(() => this.status$.next('loading')),
             withLatestFrom(this.id$),

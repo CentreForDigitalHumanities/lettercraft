@@ -37,10 +37,10 @@ export class DeleteAgentComponent implements OnDestroy {
         this.formService.detachForm(this.formName);
     }
 
-    open(content: TemplateRef<any>) {
+    open(content: TemplateRef<unknown>) {
         this.modalService.open(content, { ariaLabelledBy: 'modal-title' }).result.then(
             this.deleteAgent.bind(this),
-            _.constant(undefined),
+            _.constant(undefined), // do nothing on dismiss
         );
     }
 
