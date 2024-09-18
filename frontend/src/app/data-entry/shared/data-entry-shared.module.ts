@@ -4,6 +4,7 @@ import { DesignatorsControlComponent } from "./designators-control/designators-c
 import { MultiselectComponent } from "./multiselect/multiselect.component";
 import { LabelSelectComponent } from "./label-select/label-select.component";
 import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity-description-lead.component";
+import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entity-button.component";
 
 @NgModule({
     declarations: [
@@ -11,6 +12,7 @@ import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity
         MultiselectComponent,
         LabelSelectComponent,
         EntityDescriptionLeadComponent,
+        DeleteEntityButtonComponent,
     ],
     imports: [SharedModule],
     exports: [
@@ -18,6 +20,7 @@ import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity
         MultiselectComponent,
         LabelSelectComponent,
         EntityDescriptionLeadComponent,
+        DeleteEntityButtonComponent,
     ],
 })
 export class DataEntrySharedModule {}
