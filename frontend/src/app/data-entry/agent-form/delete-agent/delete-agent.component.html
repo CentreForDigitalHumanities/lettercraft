@@ -1,0 +1,28 @@
+<button class="btn btn-danger" (click)="open(confirmModal)">
+    <lc-icon [icon]="actionIcons.delete"></lc-icon>
+    Delete agent
+</button>
+
+<ng-template #confirmModal let-modal>
+    <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Delete agent?</h2>
+        <button type="button" class="btn-close" aria-label="close"
+            (click)="modal.dismiss('cancel')">
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>
+            Delete this agent from this source text? They will be removed from <i>all</i>
+            episodes they are involved in!
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger"
+            *ngIf="id$ | async as id" (click)="modal.close(id)">
+            Delete
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('cancel')">
+            Cancel
+        </button>
+    </div>
+</ng-template>

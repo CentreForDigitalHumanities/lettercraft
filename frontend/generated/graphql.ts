@@ -1117,6 +1117,20 @@ export type DataEntryAgentQueryVariables = Exact<{
 
 export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
+export type DataEntryUpdateAgentMutationVariables = Exact<{
+  input: UpdateAgentInput;
+}>;
+
+
+export type DataEntryUpdateAgentMutation = { __typename?: 'Mutation', updateAgent?: { __typename?: 'UpdateAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryDeleteAgentMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryDeleteAgentMutation = { __typename?: 'Mutation', deleteAgent?: { __typename?: 'DeleteAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', messages: Array<string>, field: string }> } | null };
+
 export type DataEntryEpisodeContentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1263,7 +1277,7 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes?: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean } | null> | null }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes?: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean } | null> | null }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1392,6 +1406,50 @@ export const DataEntryAgentDocument = gql`
   })
   export class DataEntryAgentGQL extends Apollo.Query<DataEntryAgentQuery, DataEntryAgentQueryVariables> {
     override document = DataEntryAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryUpdateAgentDocument = gql`
+    mutation DataEntryUpdateAgent($input: UpdateAgentInput!) {
+  updateAgent(agentData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryUpdateAgentGQL extends Apollo.Mutation<DataEntryUpdateAgentMutation, DataEntryUpdateAgentMutationVariables> {
+    override document = DataEntryUpdateAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryDeleteAgentDocument = gql`
+    mutation DataEntryDeleteAgent($id: ID!) {
+  deleteAgent(id: $id) {
+    ok
+    errors {
+      messages
+      field
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryDeleteAgentGQL extends Apollo.Mutation<DataEntryDeleteAgentMutation, DataEntryDeleteAgentMutationVariables> {
+    override document = DataEntryDeleteAgentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -1874,11 +1932,6 @@ export const DataEntrySourceDetailDocument = gql`
   source(id: $id) {
     id
     name
-    editionAuthor
-    editionTitle
-    medievalAuthor
-    medievalTitle
-    numOfEpisodes
     episodes {
       id
       name

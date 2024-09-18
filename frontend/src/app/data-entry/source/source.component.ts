@@ -36,7 +36,7 @@ export class SourceComponent {
 
     public sourceTitle = toSignal(
         this.source$.pipe(
-            map((source) => `${source.medievalAuthor}, ${source.medievalTitle}`)
+            map((source) => source.name)
         ),
         { initialValue: "" }
     );
