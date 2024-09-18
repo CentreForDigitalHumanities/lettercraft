@@ -1204,6 +1204,13 @@ export type DataEntryUpdateGiftMutationVariables = Exact<{
 
 export type DataEntryUpdateGiftMutation = { __typename?: 'Mutation', updateGift?: { __typename?: 'UpdateGiftMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
+export type DataEntryDeleteGiftMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryDeleteGiftMutation = { __typename?: 'Mutation', deleteGift?: { __typename?: 'DeleteGiftMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryLetterCategoriesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1689,6 +1696,28 @@ export const DataEntryUpdateGiftDocument = gql`
   })
   export class DataEntryUpdateGiftGQL extends Apollo.Mutation<DataEntryUpdateGiftMutation, DataEntryUpdateGiftMutationVariables> {
     override document = DataEntryUpdateGiftDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryDeleteGiftDocument = gql`
+    mutation DataEntryDeleteGift($id: ID!) {
+  deleteGift(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryDeleteGiftGQL extends Apollo.Mutation<DataEntryDeleteGiftMutation, DataEntryDeleteGiftMutationVariables> {
+    override document = DataEntryDeleteGiftDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
