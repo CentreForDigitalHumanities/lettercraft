@@ -19,3 +19,13 @@ mutation DataEntryUpdateGift($giftData: UpdateGiftInput!) {
         }
     }
 }
+
+mutation DataEntryDeleteGift($id: ID!) {
+    deleteGift(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
