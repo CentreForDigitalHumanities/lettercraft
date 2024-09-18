@@ -6,6 +6,7 @@ import { ToastService } from "@services/toast.service";
 import {
     DataEntryLetterIdentificationGQL,
     DataEntryUpdateLetterGQL,
+    LetterDescriptionType,
 } from "generated/graphql";
 import {
     debounceTime,
@@ -51,15 +52,7 @@ export class LetterIdentificationFormComponent implements OnInit {
     ngOnInit(): void {
         this.letter$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((letter) => {
-                if (!letter) {
-                    return;
-                }
-                this.form.patchValue(letter, {
-                    emitEvent: false,
-                    onlySelf: true,
-                });
-            });
+            .subscribe(this.updateFormData.bind(this));
 
         this.letter$
             .pipe(
@@ -101,5 +94,19 @@ export class LetterIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private updateFormData(letter: Partial<LetterDescriptionType> | null | undefined) {
+        if (!letter) {
+            return;
+        }
+        const value = {
+            name: letter.name,
+            description: letter.description || '',
+        }
+        this.form.patchValue(value, {
+            emitEvent: false,
+            onlySelf: true,
+        });
     }
 }

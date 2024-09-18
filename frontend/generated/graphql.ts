@@ -20,27 +20,24 @@ export type Scalars = {
 export type AgentDescriptionGenderType = {
   __typename?: 'AgentDescriptionGenderType';
   agent: AgentDescriptionType;
-  /** How certain are you of this value? */
-  certainty: PersonAgentDescriptionGenderCertaintyChoices;
-  /** The gender of this agent. The option Mixed is only applicable for groups. */
-  gender: PersonAgentDescriptionGenderGenderChoices;
+  certainty: Certainty;
+  gender: Gender;
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
 };
 
 export type AgentDescriptionLocationType = {
   __typename?: 'AgentDescriptionLocationType';
   agent: AgentDescriptionType;
-  /** How certain are you of this value? */
-  certainty: PersonAgentDescriptionLocationCertaintyChoices;
+  certainty: Certainty;
   id: Scalars['ID']['output'];
   /** location by which the agent is identified */
   location: SpaceDescriptionType;
   /** Additional notes */
   note: Scalars['String']['output'];
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
 };
 
 export type AgentDescriptionType = EntityInterface & {
@@ -197,8 +194,7 @@ export type EntityInterface = {
 export type EpisodeAgentType = EpisodeEntityLink & {
   __typename?: 'EpisodeAgentType';
   agent: AgentDescriptionType;
-  /** How certain are you of this value? */
-  certainty: EventEpisodeAgentCertaintyChoices;
+  certainty: Certainty;
   entity: EntityInterface;
   entityType: Entity;
   episode: EpisodeType;
@@ -226,8 +222,7 @@ export type EpisodeEntityLink = {
 
 export type EpisodeGiftType = EpisodeEntityLink & {
   __typename?: 'EpisodeGiftType';
-  /** How certain are you of this value? */
-  certainty: EventEpisodeGiftCertaintyChoices;
+  certainty: Certainty;
   entity: EntityInterface;
   entityType: Entity;
   episode: EpisodeType;
@@ -239,8 +234,7 @@ export type EpisodeGiftType = EpisodeEntityLink & {
 
 export type EpisodeLetterType = EpisodeEntityLink & {
   __typename?: 'EpisodeLetterType';
-  /** How certain are you of this value? */
-  certainty: EventEpisodeLetterCertaintyChoices;
+  certainty: Certainty;
   entity: EntityInterface;
   entityType: Entity;
   episode: EpisodeType;
@@ -252,8 +246,7 @@ export type EpisodeLetterType = EpisodeEntityLink & {
 
 export type EpisodeSpaceType = EpisodeEntityLink & {
   __typename?: 'EpisodeSpaceType';
-  /** How certain are you of this value? */
-  certainty: EventEpisodeSpaceCertaintyChoices;
+  certainty: Certainty;
   entity: EntityInterface;
   entityType: Entity;
   episode: EpisodeType;
@@ -296,51 +289,11 @@ export type EpisodeType = {
 };
 
 /** An enumeration. */
-export enum EventEpisodeAgentCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum EventEpisodeGiftCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum EventEpisodeLetterCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
 export enum EventEpisodeSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
-export enum EventEpisodeSpaceCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
 }
 
 /** An enumeration. */
@@ -371,13 +324,12 @@ export type GiftCategoryType = {
 export type GiftDescriptionCategoryType = {
   __typename?: 'GiftDescriptionCategoryType';
   category: GiftCategoryType;
-  /** How certain are you of this value? */
-  certainty: LetterGiftDescriptionCategoryCertaintyChoices;
+  certainty: Certainty;
   gift: GiftDescriptionType;
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
 };
 
 export type GiftDescriptionType = EntityInterface & {
@@ -434,13 +386,12 @@ export type LetterCategoryType = {
 export type LetterDescriptionCategoryType = {
   __typename?: 'LetterDescriptionCategoryType';
   category: LetterCategoryType;
-  /** How certain are you of this value? */
-  certainty: LetterLetterDescriptionCategoryCertaintyChoices;
+  certainty: Certainty;
   id: Scalars['ID']['output'];
   letter: LetterDescriptionType;
   /** Additional notes */
   note: Scalars['String']['output'];
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
 };
 
 export type LetterDescriptionType = EntityInterface & {
@@ -467,31 +418,11 @@ export type LetterDescriptionType = EntityInterface & {
 };
 
 /** An enumeration. */
-export enum LetterGiftDescriptionCategoryCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
 export enum LetterGiftDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
-export enum LetterLetterDescriptionCategoryCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
 }
 
 /** An enumeration. */
@@ -630,40 +561,6 @@ export type MutationUpdatePersonReferenceArgs = {
 };
 
 /** An enumeration. */
-export enum PersonAgentDescriptionGenderCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum PersonAgentDescriptionGenderGenderChoices {
-  /** Female */
-  Female = 'FEMALE',
-  /** Male */
-  Male = 'MALE',
-  /** Mixed */
-  Mixed = 'MIXED',
-  /** Other */
-  Other = 'OTHER',
-  /** Unknown */
-  Unknown = 'UNKNOWN'
-}
-
-/** An enumeration. */
-export enum PersonAgentDescriptionLocationCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
 export enum PersonAgentDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
@@ -673,8 +570,7 @@ export enum PersonAgentDescriptionSourceMentionChoices {
 
 export type PersonDateOfBirthType = {
   __typename?: 'PersonDateOfBirthType';
-  /** How certain are you of this value? */
-  certainty: PersonPersonDateOfBirthCertaintyChoices;
+  certainty: Certainty;
   displayDate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Additional notes */
@@ -691,8 +587,7 @@ export type PersonDateOfBirthType = {
 
 export type PersonDateOfDeathType = {
   __typename?: 'PersonDateOfDeathType';
-  /** How certain are you of this value? */
-  certainty: PersonPersonDateOfDeathCertaintyChoices;
+  certainty: Certainty;
   displayDate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   /** Additional notes */
@@ -707,40 +602,9 @@ export type PersonDateOfDeathType = {
   yearUpper: Scalars['Int']['output'];
 };
 
-/** An enumeration. */
-export enum PersonPersonDateOfBirthCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum PersonPersonDateOfDeathCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
-export enum PersonPersonReferenceCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
 export type PersonReferenceType = {
   __typename?: 'PersonReferenceType';
-  /** How certain are you of this value? */
-  certainty: PersonPersonReferenceCertaintyChoices;
+  certainty: Certainty;
   description: AgentDescriptionType;
   id: Scalars['ID']['output'];
   /** Additional notes */
@@ -841,13 +705,12 @@ export type QueryUserDescriptionArgs = {
 
 export type RegionFieldType = {
   __typename?: 'RegionFieldType';
-  /** How certain are you of this value? */
-  certainty: SpaceRegionFieldCertaintyChoices;
+  certainty: Certainty;
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
   region: RegionType;
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
   space: SpaceDescriptionType;
 };
 
@@ -866,13 +729,12 @@ export type RegionType = {
 
 export type SettlementFieldType = {
   __typename?: 'SettlementFieldType';
-  /** How certain are you of this value? */
-  certainty: SpaceSettlementFieldCertaintyChoices;
+  certainty: Certainty;
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
   settlement: SettlementType;
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
   space: SpaceDescriptionType;
 };
 
@@ -974,16 +836,6 @@ export type SpaceDescriptionType = EntityInterface & {
 };
 
 /** An enumeration. */
-export enum SpaceRegionFieldCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
 export enum SpaceRegionTypeChoices {
   /** ecclesiastical */
   Ecclesiastical = 'ECCLESIASTICAL',
@@ -994,31 +846,11 @@ export enum SpaceRegionTypeChoices {
 }
 
 /** An enumeration. */
-export enum SpaceSettlementFieldCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
-}
-
-/** An enumeration. */
 export enum SpaceSpaceDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
   Implied = 'IMPLIED'
-}
-
-/** An enumeration. */
-export enum SpaceStructureFieldCertaintyChoices {
-  /** uncertain */
-  A_0 = 'A_0',
-  /** somewhat certain */
-  A_1 = 'A_1',
-  /** certain */
-  A_2 = 'A_2'
 }
 
 /** An enumeration. */
@@ -1037,12 +869,11 @@ export enum SpaceStructureLevelChoices {
 
 export type StructureFieldType = {
   __typename?: 'StructureFieldType';
-  /** How certain are you of this value? */
-  certainty: SpaceStructureFieldCertaintyChoices;
+  certainty: Certainty;
   id: Scalars['ID']['output'];
   /** Additional notes */
   note: Scalars['String']['output'];
-  sourceMention?: Maybe<SourceMention>;
+  sourceMention: SourceMention;
   space: SpaceDescriptionType;
   structure: StructureType;
 };
@@ -1198,7 +1029,7 @@ export type DataEntryAgentDescriptionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: PersonAgentDescriptionGenderGenderChoices, sourceMention?: SourceMention | null, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention?: SourceMention | null, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
+export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention: SourceMention, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
 
 export type LocationsInSourceListQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1317,7 +1148,7 @@ export type DataEntryGiftCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categorisations: Array<{ __typename?: 'GiftDescriptionCategoryType', id: string, sourceMention?: SourceMention | null, note: string, certainty: LetterGiftDescriptionCategoryCertaintyChoices, category: { __typename?: 'GiftCategoryType', id: string, name: string } }> } | null };
+export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categorisations: Array<{ __typename?: 'GiftDescriptionCategoryType', id: string, sourceMention: SourceMention, note: string, certainty: Certainty, category: { __typename?: 'GiftCategoryType', id: string, name: string } }> } | null };
 
 export type DataEntryAllGiftCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1357,7 +1188,7 @@ export type DataEntryLetterCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categorisations: Array<{ __typename?: 'LetterDescriptionCategoryType', id: string, sourceMention?: SourceMention | null, note: string, certainty: LetterLetterDescriptionCategoryCertaintyChoices, category: { __typename?: 'LetterCategoryType', id: string, label: string } }> } | null };
+export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categorisations: Array<{ __typename?: 'LetterDescriptionCategoryType', id: string, sourceMention: SourceMention, note: string, certainty: Certainty, category: { __typename?: 'LetterCategoryType', id: string, label: string } }> } | null };
 
 export type DataEntryAllLetterCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 

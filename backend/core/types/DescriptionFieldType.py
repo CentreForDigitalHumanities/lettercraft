@@ -1,7 +1,8 @@
+from graphene import Enum, NonNull
+
 from core.models import DescriptionField, SourceMention
 from core.types.AbstractDjangoObjectType import AbstractDjangoObjectType
 from core.types.FieldType import LettercraftFieldType
-from graphene import Enum
 
 SourceMentionEnum = Enum.from_enum(SourceMention)
 
@@ -11,7 +12,7 @@ class DescriptionFieldType(LettercraftFieldType, AbstractDjangoObjectType):
     Should not be queried directly, but should be extended by other types.
     """
 
-    source_mention = SourceMentionEnum()
+    source_mention = NonNull(SourceMentionEnum)
 
     class Meta:
         model = DescriptionField

@@ -9,7 +9,6 @@ from event.types.EpisodeEntityLink import EpisodeEntityLink
 class EpisodeLetterType(DescriptionFieldType, DjangoObjectType):
     entity = NonNull(EntityInterface)
     entity_type = NonNull(Entity)
-    source_mention = NonNull(SourceMentionEnum)
 
     class Meta:
         model = EpisodeLetter

@@ -10,7 +10,6 @@ from core.types.DescriptionFieldType import SourceMentionEnum
 class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
     entity = NonNull(EntityInterface)
     entity_type = NonNull(Entity)
-    source_mention = NonNull(SourceMentionEnum)
 
     class Meta:
         model = EpisodeAgent

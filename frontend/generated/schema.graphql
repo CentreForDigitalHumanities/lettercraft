@@ -1,25 +1,17 @@
 type AgentDescriptionGenderType {
   agent: AgentDescriptionType!
-
-  """How certain are you of this value?"""
-  certainty: PersonAgentDescriptionGenderCertaintyChoices!
-
-  """
-  The gender of this agent. The option Mixed is only applicable for groups.
-  """
-  gender: PersonAgentDescriptionGenderGenderChoices!
+  certainty: Certainty!
+  gender: Gender!
   id: ID!
 
   """Additional notes"""
   note: String!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
 }
 
 type AgentDescriptionLocationType {
   agent: AgentDescriptionType!
-
-  """How certain are you of this value?"""
-  certainty: PersonAgentDescriptionLocationCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """location by which the agent is identified"""
@@ -27,7 +19,7 @@ type AgentDescriptionLocationType {
 
   """Additional notes"""
   note: String!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
 }
 
 type AgentDescriptionType implements EntityInterface {
@@ -178,9 +170,7 @@ interface EntityInterface {
 
 type EpisodeAgentType implements EpisodeEntityLink {
   agent: AgentDescriptionType!
-
-  """How certain are you of this value?"""
-  certainty: EventEpisodeAgentCertaintyChoices!
+  certainty: Certainty!
   entity: EntityInterface!
   entityType: Entity!
   episode: EpisodeType!
@@ -206,8 +196,7 @@ interface EpisodeEntityLink {
 }
 
 type EpisodeGiftType implements EpisodeEntityLink {
-  """How certain are you of this value?"""
-  certainty: EventEpisodeGiftCertaintyChoices!
+  certainty: Certainty!
   entity: EntityInterface!
   entityType: Entity!
   episode: EpisodeType!
@@ -218,8 +207,7 @@ type EpisodeGiftType implements EpisodeEntityLink {
 }
 
 type EpisodeLetterType implements EpisodeEntityLink {
-  """How certain are you of this value?"""
-  certainty: EventEpisodeLetterCertaintyChoices!
+  certainty: Certainty!
   entity: EntityInterface!
   entityType: Entity!
   episode: EpisodeType!
@@ -230,8 +218,7 @@ type EpisodeLetterType implements EpisodeEntityLink {
 }
 
 type EpisodeSpaceType implements EpisodeEntityLink {
-  """How certain are you of this value?"""
-  certainty: EventEpisodeSpaceCertaintyChoices!
+  certainty: Certainty!
   entity: EntityInterface!
   entityType: Entity!
   episode: EpisodeType!
@@ -286,60 +273,12 @@ type EpisodeType {
 }
 
 """An enumeration."""
-enum EventEpisodeAgentCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum EventEpisodeGiftCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum EventEpisodeLetterCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
 enum EventEpisodeSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
   """implied"""
   IMPLIED
-}
-
-"""An enumeration."""
-enum EventEpisodeSpaceCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
 }
 
 """An enumeration."""
@@ -368,15 +307,13 @@ type GiftCategoryType {
 
 type GiftDescriptionCategoryType {
   category: GiftCategoryType!
-
-  """How certain are you of this value?"""
-  certainty: LetterGiftDescriptionCategoryCertaintyChoices!
+  certainty: Certainty!
   gift: GiftDescriptionType!
   id: ID!
 
   """Additional notes"""
   note: String!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
 }
 
 type GiftDescriptionType implements EntityInterface {
@@ -440,15 +377,13 @@ type LetterCategoryType {
 
 type LetterDescriptionCategoryType {
   category: LetterCategoryType!
-
-  """How certain are you of this value?"""
-  certainty: LetterLetterDescriptionCategoryCertaintyChoices!
+  certainty: Certainty!
   id: ID!
   letter: LetterDescriptionType!
 
   """Additional notes"""
   note: String!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
 }
 
 type LetterDescriptionType implements EntityInterface {
@@ -481,36 +416,12 @@ type LetterDescriptionType implements EntityInterface {
 }
 
 """An enumeration."""
-enum LetterGiftDescriptionCategoryCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
 enum LetterGiftDescriptionSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
   """implied"""
   IMPLIED
-}
-
-"""An enumeration."""
-enum LetterLetterDescriptionCategoryCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
 }
 
 """An enumeration."""
@@ -553,48 +464,6 @@ type Mutation {
 }
 
 """An enumeration."""
-enum PersonAgentDescriptionGenderCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionGenderGenderChoices {
-  """Female"""
-  FEMALE
-
-  """Male"""
-  MALE
-
-  """Mixed"""
-  MIXED
-
-  """Other"""
-  OTHER
-
-  """Unknown"""
-  UNKNOWN
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionLocationCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
 enum PersonAgentDescriptionSourceMentionChoices {
   """directly mentioned"""
   DIRECT
@@ -604,8 +473,7 @@ enum PersonAgentDescriptionSourceMentionChoices {
 }
 
 type PersonDateOfBirthType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonDateOfBirthCertaintyChoices!
+  certainty: Certainty!
   displayDate: String!
   id: ID!
 
@@ -628,8 +496,7 @@ type PersonDateOfBirthType {
 }
 
 type PersonDateOfDeathType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonDateOfDeathCertaintyChoices!
+  certainty: Certainty!
   displayDate: String!
   id: ID!
 
@@ -651,45 +518,8 @@ type PersonDateOfDeathType {
   yearUpper: Int!
 }
 
-"""An enumeration."""
-enum PersonPersonDateOfBirthCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonPersonDateOfDeathCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonPersonReferenceCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
 type PersonReferenceType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonReferenceCertaintyChoices!
+  certainty: Certainty!
   description: AgentDescriptionType!
   id: ID!
 
@@ -719,14 +549,13 @@ type Query {
 }
 
 type RegionFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceRegionFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
   region: RegionType!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
 }
 
@@ -748,14 +577,13 @@ type RegionType {
 }
 
 type SettlementFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceSettlementFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
   settlement: SettlementType!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
 }
 
@@ -881,18 +709,6 @@ type SpaceDescriptionType implements EntityInterface {
 }
 
 """An enumeration."""
-enum SpaceRegionFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
 enum SpaceRegionTypeChoices {
   """ecclesiastical"""
   ECCLESIASTICAL
@@ -905,36 +721,12 @@ enum SpaceRegionTypeChoices {
 }
 
 """An enumeration."""
-enum SpaceSettlementFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
 enum SpaceSpaceDescriptionSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
   """implied"""
   IMPLIED
-}
-
-"""An enumeration."""
-enum SpaceStructureFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
 }
 
 """An enumeration."""
@@ -956,13 +748,12 @@ enum SpaceStructureLevelChoices {
 }
 
 type StructureFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceStructureFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
-  sourceMention: SourceMention
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
   structure: StructureType!
 }

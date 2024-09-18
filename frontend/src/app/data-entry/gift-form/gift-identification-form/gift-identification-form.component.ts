@@ -7,8 +7,10 @@ import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
 import {
     DataEntryGiftIdentificationGQL,
+    DataEntryGiftIdentificationQuery,
     DataEntryUpdateGiftGQL,
     DataEntryUpdateGiftMutation,
+    GiftDescriptionType,
 } from "generated/graphql";
 import {
     map,
@@ -64,15 +66,7 @@ export class GiftIdentificationFormComponent implements OnInit {
     ngOnInit(): void {
         this.gift$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((gift) => {
-                if (!gift) {
-                    return;
-                }
-                this.form.patchValue(gift, {
-                    emitEvent: false,
-                    onlySelf: true,
-                });
-            });
+            .subscribe(this.updateFormData.bind(this));
 
         this.gift$
             .pipe(
@@ -99,6 +93,20 @@ export class GiftIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private updateFormData(gift: Partial<GiftDescriptionType> | null | undefined) {
+        if (!gift) {
+            return;
+        }
+        const value = {
+            name: gift.name,
+            description: gift.description || '',
+        };
+        this.form.patchValue(value, {
+            emitEvent: false,
+            onlySelf: true,
+        });
     }
 
     private performMutation(
