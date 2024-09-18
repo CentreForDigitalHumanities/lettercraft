@@ -13,7 +13,6 @@ import { BaseModalComponent } from "./base-modal/base-modal.component";
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ContributorsComponent } from './contributors/contributors.component';
 import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
-import { UniqueIDDirective } from './unique-id.directive';
 
 
 
@@ -26,7 +25,6 @@ import { UniqueIDDirective } from './unique-id.directive';
         ConfirmationModalComponent,
         ContributorsComponent,
         CollapsibleCardComponent,
-        UniqueIDDirective
     ],
     imports: [
         CommonModule,
@@ -49,7 +47,6 @@ import { UniqueIDDirective } from './unique-id.directive';
         ActionButtonGroupComponent,
         ContributorsComponent,
         CollapsibleCardComponent,
-        UniqueIDDirective,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,

@@ -21,6 +21,7 @@ import { FormService } from '../form.service';
 
 
 type LinkTo = 'episode' | 'entity';
+let nextID = 0;
 
 @Component({
     selector: 'lc-episode-link-form',
@@ -53,7 +54,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
 
     private link$ = new Subject<UpdateEpisodeEntityLinkInput>();
     private status$ = formStatusSubject();
-    private formName = 'episode-link-' + crypto.randomUUID();
+    private id = `episode-link-${nextID++}`;
 
     actionIcons = actionIcons;
 
@@ -62,7 +63,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
         private updateMutation: DataEntryUpdateEpisodeEntityLinkGQL,
         private formService: FormService,
     ) {
-        this.formService.attachForm(this.formName, this.status$);
+        this.formService.attachForm(this.id, this.status$);
 
         this.data$ = this.link$.pipe(
             switchMap((link) => query.watch(link).valueChanges),
@@ -82,6 +83,14 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
             switchMap(this.makeMutation.bind(this)),
             takeUntilDestroyed(),
         ).subscribe(this.onMutationResult.bind(this));
+    }
+
+    get sourceMentionInputID() {
+        return this.id + '-source-mention-input';
+    }
+
+    get notesInputID() {
+        return this.id + '-notes-input';
     }
 
     get entityName(): string {
@@ -105,7 +114,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     ngOnDestroy(): void {
         this.link$.complete();
         this.status$.complete();
-        this.formService.detachForm(this.formName);
+        this.formService.detachForm(this.id);
     }
 
     formUrl(linkTo: LinkTo, entityType: Entity): string {

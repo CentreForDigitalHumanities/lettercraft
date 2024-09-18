@@ -6,13 +6,13 @@
             ariaLabel="{{ collapsed ? 'show' : 'hide' }} {{contentDescription}}"
             [ngbTooltip]="(collapsed ? 'show' : 'hide') + ' ' + contentDescription"
             [attr.aria-expanded]="!collapsed"
-            [attr.aria-controls]="body.id"
+            [attr.aria-controls]="bodyID"
             (click)="collapsed = !collapsed">
             <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
         </button>
         <ng-content select="[cardControl]" />
     </div>
 </div>
-<div class="card-body" lcUniqueID #body [ngbCollapse]="collapsed">
+<div class="card-body" [attr.id]="bodyID" [ngbCollapse]="collapsed">
     <ng-content select="[cardBody]" />
 </div>

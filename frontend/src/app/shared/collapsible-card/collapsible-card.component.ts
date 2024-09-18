@@ -1,6 +1,8 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { actionIcons } from '@shared/icons';
 
+let nextID = 0;
+
 @Component({
     selector: 'lc-collapsible-card',
     templateUrl: './collapsible-card.component.html',
@@ -14,4 +16,7 @@ export class CollapsibleCardComponent {
 
     @HostBinding('class.card') card = true;
     actionIcons = actionIcons;
+
+    id = `collapsible-card-${nextID++}`;
+    bodyID = this.id + '-body';
 }

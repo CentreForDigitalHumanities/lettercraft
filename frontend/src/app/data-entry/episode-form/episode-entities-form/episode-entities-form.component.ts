@@ -16,9 +16,11 @@ import {
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
 
+type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
+
 const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
 
-type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
+let nextID = 0;
 
 @Component({
     selector: "lc-episode-entities-form",
@@ -37,7 +39,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     removeEntity$ = new Subject<string>();
     actionIcons = actionIcons;
     status$ = formStatusSubject();
-    formName = crypto.randomUUID();
+    id = `episode-entities-${nextID++}`;
 
     private mutationObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),
@@ -73,6 +75,10 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         ).subscribe(splat(this.removeEntity.bind(this)));
     }
 
+    get dropdownToggleID() {
+        return this.id + '-dropdown-toggle';
+    }
+
     /** name of the entity type in natural language */
     get entityName(): string {
         return entityTypeNames[this.entityType];
@@ -92,7 +98,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['entityType']) {
 
-            this.formService.attachForm(this.formName, this.status$);
+            this.formService.attachForm(this.id, this.status$);
         }
     }
 
@@ -100,7 +106,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.status$.complete();
         this.addEntity$.complete();
         this.removeEntity$.complete();
-        this.formService.detachForm(this.formName);
+        this.formService.detachForm(this.id);
     }
 
     addEntity(entityID: string, episodeID: string): void {

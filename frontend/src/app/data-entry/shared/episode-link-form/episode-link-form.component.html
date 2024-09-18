@@ -16,11 +16,11 @@
     <ng-content cardControl select="[removeControl]"></ng-content>
     <form cardBody [formGroup]="form">
         <div class="mb-3">
-            <label [attr.for]="sourceMentionInput.id" class="form-label">
+            <label [attr.for]="sourceMentionInputID" class="form-label">
                 How is this {{entityName}}'s involvement in the episode represented?
             </label>
             <select #sourceMentionInput class="form-select"
-                lcUniqueID
+                [id]="sourceMentionInputID"
                 [formControl]="form.controls.sourceMention">
                 <option *ngFor="let option of sourceMentionOptions"
                     [ngValue]="option.value">
@@ -29,9 +29,9 @@
             </select>
         </div>
         <div class="mb-3">
-            <label [attr.for]="notesInput.id" class="form-label">Notes</label>
+            <label [attr.for]="notesInputID" class="form-label">Notes</label>
             <textarea #notesInput class="form-control"
-                lcUniqueID
+                [id]="notesInputID"
                 [formControl]="form.controls.note">
             </textarea>
         </div>
