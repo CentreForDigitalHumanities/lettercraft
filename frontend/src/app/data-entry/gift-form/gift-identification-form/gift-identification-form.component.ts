@@ -2,10 +2,13 @@ import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { ApolloCache } from "@apollo/client";
 import { ToastService } from "@services/toast.service";
+import { MutationResult } from "apollo-angular";
 import {
     DataEntryGiftIdentificationGQL,
     DataEntryUpdateGiftGQL,
+    DataEntryUpdateGiftMutation,
 } from "generated/graphql";
 import {
     map,
@@ -14,7 +17,17 @@ import {
     filter,
     debounceTime,
     withLatestFrom,
+    Observable,
 } from "rxjs";
+
+interface GiftIdentification {
+    name: string;
+    description: string;
+}
+
+type GiftIdentificationForm = {
+    [key in keyof GiftIdentification]: FormControl<string>;
+};
 
 @Component({
     selector: "lc-gift-identification-form",
@@ -30,7 +43,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         shareReplay(1)
     );
 
-    public form = new FormGroup({
+    public form = new FormGroup<GiftIdentificationForm>({
         name: new FormControl("", {
             validators: [Validators.required],
             nonNullable: true,
@@ -70,22 +83,7 @@ export class GiftIdentificationFormComponent implements OnInit {
                         debounceTime(300),
                         withLatestFrom(this.id$),
                         switchMap(([gift, id]) =>
-                            this.giftMutation.mutate(
-                                {
-                                    giftData: {
-                                        ...gift,
-                                        id,
-                                    },
-                                },
-                                {
-                                    update: (cache) => {
-                                        cache.evict({
-                                            id: `GiftDescriptionType:${id}`,
-                                        });
-                                        cache.gc();
-                                    },
-                                }
-                            )
+                            this.performMutation(gift, id)
                         )
                     )
                 ),
@@ -101,5 +99,29 @@ export class GiftIdentificationFormComponent implements OnInit {
                     });
                 }
             });
+    }
+
+    private performMutation(
+        gift: GiftIdentification,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateGiftMutation>> {
+        return this.giftMutation.mutate(
+            {
+                giftData: {
+                    ...gift,
+                    id,
+                },
+            },
+            {
+                update: (cache) => this.updateCache(cache, id),
+            }
+        );
+    }
+
+    private updateCache(cache: ApolloCache<unknown>, id: string): void {
+        cache.evict({
+            id: `GiftDescriptionType:${id}`,
+        });
+        cache.gc();
     }
 }
