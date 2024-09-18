@@ -1,7 +1,14 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute } from "@angular/router";
+import { ModalService } from "@services/modal.service";
+import { ToastService } from "@services/toast.service";
 import { actionIcons, dataIcons } from "@shared/icons";
-import { DataEntryLetterFormGQL } from "generated/graphql";
+import {
+    DataEntryDeleteLetterGQL,
+    DataEntryLetterFormGQL,
+    DataEntryUpdateLetterGQL,
+} from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 
 @Component({
@@ -49,7 +56,52 @@ export class LetterFormComponent {
     public actionIcons = actionIcons;
 
     constructor(
+        private destroyRef: DestroyRef,
         private route: ActivatedRoute,
-        private letterQuery: DataEntryLetterFormGQL
+        private toastService: ToastService,
+        private modalService: ModalService,
+        private letterQuery: DataEntryLetterFormGQL,
+        private deleteLetter: DataEntryDeleteLetterGQL
     ) {}
+
+    public onClickDelete(letterId: string, letterName: string): void {
+        this.modalService
+            .openConfirmationModal({
+                title: "Delete letter",
+                message: `Are you sure you want to delete this letter? (${letterName})`,
+            })
+            .then(() => this.performDelete(letterId))
+            .catch(() => {
+                // Do nothing on cancel / dismissal.
+            });
+    }
+
+    private performDelete(letterId: string): void {
+        this.deleteLetter
+            .mutate(
+                {
+                    id: letterId,
+                },
+                {
+                    update: (cache) => cache.evict({ fieldName: "letter" }),
+                }
+            )
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result) => {
+                const errors = result.data?.deleteLetter?.errors;
+                if (errors && errors.length > 0) {
+                    this.toastService.show({
+                        body: errors.map((error) => error.messages).join("\n"),
+                        type: "danger",
+                        header: "Deletion failed",
+                    });
+                } else {
+                    this.toastService.show({
+                        body: "Letter deleted",
+                        type: "success",
+                        header: "Success",
+                    });
+                }
+            });
+    }
 }
