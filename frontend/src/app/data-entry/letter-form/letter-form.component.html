@@ -9,9 +9,14 @@
         </span>
     </h1>
 
-    <p class="lead mb-4" *ngIf="letter.description">
-        {{ letter.description }}
-    </p>
+    <lc-entity-description-lead [entity]="letter" />
+
+    <div class="hstack">
+        <button class="btn btn-danger ms-auto" (click)="onClickDelete(letter.id, letter.name)">
+            <lc-icon [icon]="actionIcons.delete" />
+            Delete letter
+        </button>
+    </div>
 </ng-container>
 
 <h2 class="subform-header">Identification</h2>

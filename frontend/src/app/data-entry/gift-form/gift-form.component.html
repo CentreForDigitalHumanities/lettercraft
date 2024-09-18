@@ -9,9 +9,7 @@
         </span>
     </h1>
 
-    <p class="lead mb-4" *ngIf="gift.description">
-        {{ gift.description }}
-    </p>
+    <lc-entity-description-lead [entity]="gift" />
 </ng-container>
 
 <h2 class="subform-header">Identification</h2>
