@@ -1,1 +1,46 @@
-<p>create-agent works!</p>
+<ng-template #createAgentModal>
+    <lc-base-modal (dismiss)="closeModal()">
+        <ng-container modal-header>
+            <h4 ngbAutofocus tabindex="-1">Create new agent</h4>
+        </ng-container>
+        <form modal-content [formGroup]="form" (ngSubmit)="submit()">
+            <div class="form-group">
+                <label class="form-label" for="episode-name">Name</label>
+                <p class="form-text">
+                    This is a name to identify the agent in the overview of the
+                    source. For example: "Radegund", "messenger from Poitiers",
+                    "the citizens of Arles".
+                </p>
+                <input
+                    id="episode-name"
+                    type="text"
+                    class="form-control"
+                    [formControl]="form.controls.name"
+                    [class.is-invalid]="
+                        form.controls.name.invalid && form.controls.name.touched
+                    "
+                />
+                <p class="invalid-feedback">This field is required.</p>
+            </div>
+        </form>
+        <ng-container modal-footer>
+            <button
+                type="button"
+                class="btn btn-primary"
+                (click)="submit()"
+            >
+                Create
+                <div *ngIf="loading" class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">Creating new agent...</span>
+                </div>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+            >
+                Cancel
+            </button>
+        </ng-container>
+    </lc-base-modal>
+</ng-template>
