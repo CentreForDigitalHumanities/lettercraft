@@ -13,7 +13,6 @@ describe('AgentIdentificationFormComponent', () => {
             declarations: [AgentIdentificationFormComponent],
             providers: [FormService],
             imports: [SharedTestingModule],
-            providers: [FormService],
         });
         fixture = TestBed.createComponent(AgentIdentificationFormComponent);
         component = fixture.componentInstance;
