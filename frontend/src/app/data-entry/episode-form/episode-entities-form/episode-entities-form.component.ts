@@ -18,8 +18,7 @@ import { splat, differenceBy } from "@shared/utils";
 import { ToastService } from "@services/toast.service";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
-
-const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
+type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
 
 let nextID = 0;
 
@@ -95,6 +94,16 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Space]: 'spaces',
         }
         return keys[this.entityType]
+    }
+
+    get entityTypeName(): EntityTypeName {
+        const types: Record<Entity, EntityTypeName> = {
+            [Entity.Agent]: 'AgentDescriptionType',
+            [Entity.Gift]: 'GiftDescriptionType',
+            [Entity.Letter]: 'LetterDescriptionType',
+            [Entity.Space]: 'SpaceDescriptionType',
+        }
+        return types[this.entityType];
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -173,7 +182,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             id: episodeID,
         }));
         cache.evict(cache.identify({
-            __typename: "AgentDescriptionType",
+            __typename: this.entityTypeName,
             id: entityID,
         }));
         cache.gc();
