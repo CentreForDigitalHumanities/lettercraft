@@ -100,11 +100,7 @@ export class LetterIdentificationFormComponent implements OnInit {
         if (!letter) {
             return;
         }
-        const value = {
-            name: letter.name,
-            description: letter.description || '',
-        }
-        this.form.patchValue(value, {
+        this.form.patchValue(letter, {
             emitEvent: false,
             onlySelf: true,
         });

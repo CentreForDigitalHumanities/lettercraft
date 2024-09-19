@@ -10,6 +10,7 @@ class NamedType(AbstractDjangoObjectType):
     """
 
     name = graphene.NonNull(graphene.String)
+    description = graphene.NonNull(graphene.String)
 
     class Meta:
         model = Named

@@ -6,7 +6,6 @@ from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import LetterCategory, LetterDescription, LetterDescriptionCategory
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
-from core.types.entity import EntityInterface
 from event.models import EpisodeLetter
 from event.types.EpisodeLetterType import EpisodeLetterType
 
@@ -24,7 +23,7 @@ class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
             "categories",
             "episodes",
         ] + EntityDescriptionType.fields()
-        interfaces = (EntityInterface,)
+        interfaces = EntityDescriptionType._meta.interfaces
 
     @classmethod
     def get_queryset(

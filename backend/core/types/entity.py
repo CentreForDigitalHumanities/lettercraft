@@ -8,7 +8,7 @@ class Entity(graphene.Enum):
     SPACE = "space"
 
 
-class EntityInterface(graphene.Interface):
+class EntityDescription(graphene.Interface):
     id = graphene.NonNull(graphene.ID)
     name = graphene.String()
     description = graphene.String()

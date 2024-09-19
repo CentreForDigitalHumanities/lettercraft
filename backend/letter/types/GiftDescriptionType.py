@@ -6,7 +6,6 @@ from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import GiftCategory, GiftDescription, GiftDescriptionCategory
 from letter.types.GiftDescriptionCategoryType import GiftDescriptionCategoryType
 from letter.types.GiftCategoryType import GiftCategoryType
-from core.types.entity import EntityInterface
 from event.types.EpisodeGiftType import EpisodeGiftType
 from event.models import EpisodeGift
 
@@ -24,7 +23,7 @@ class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
             "categories",
             "episodes",
         ] + EntityDescriptionType.fields()
-        interfaces = (EntityInterface,)
+        interfaces = EntityDescriptionType._meta.interfaces
 
     @classmethod
     def get_queryset(

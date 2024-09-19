@@ -99,11 +99,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         if (!gift) {
             return;
         }
-        const value = {
-            name: gift.name,
-            description: gift.description || '',
-        };
-        this.form.patchValue(value, {
+        this.form.patchValue(gift, {
             emitEvent: false,
             onlySelf: true,
         });

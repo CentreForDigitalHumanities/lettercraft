@@ -21,6 +21,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "letters",
             "spaces",
         ] + EntityDescriptionType.fields()
+        interfaces = EntityDescriptionType._meta.interfaces
 
     @classmethod
     def get_queryset(

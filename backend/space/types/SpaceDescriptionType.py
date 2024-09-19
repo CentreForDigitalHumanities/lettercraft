@@ -18,7 +18,6 @@ from space.types.SettlementType import SettlementType
 from space.types.StructureType import StructureType
 from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
-from core.types.entity import EntityInterface
 from event.types.EpisodeSpaceType import EpisodeSpaceType
 from event.models import EpisodeSpace
 
@@ -41,7 +40,7 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
             "structures",
             "episodes",
         ] + EntityDescriptionType.fields()
-        interfaces = (EntityInterface,)
+        interfaces = EntityDescriptionType._meta.interfaces
 
     @classmethod
     def get_queryset(
