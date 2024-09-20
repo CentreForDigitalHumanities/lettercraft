@@ -6,6 +6,7 @@ import { ToastService } from '@services/toast.service';
 import { CreateAgentInput, DataEntryCreateAgentGQL } from 'generated/graphql';
 import { Observable } from 'rxjs';
 import _ from 'underscore';
+import { listNames, nameExamples } from '../../shared/utils';
 
 @Component({
   selector: 'lc-create-agent',
@@ -29,6 +30,8 @@ export class CreateAgentComponent implements AfterViewInit {
 
     loading = false;
     submitted = false;
+
+    nameExamples = listNames(nameExamples['agent']);
 
     constructor(
         private modalService: NgbModal,
