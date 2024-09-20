@@ -16,9 +16,9 @@
                     type="text"
                     class="form-control"
                     [formControl]="form.controls.name"
-                    [class.is-invalid]="
-                        form.controls.name.invalid && form.controls.name.touched
-                    "
+                    [class.is-invalid]="form.controls.name.invalid && submitted"
+                    [attr.aria-invalid]="form.controls.name.invalid && submitted"
+                    [attr.aria-required]="true"
                 />
                 <p class="invalid-feedback">This field is required.</p>
             </div>

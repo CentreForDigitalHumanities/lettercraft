@@ -28,6 +28,7 @@ export class CreateAgentComponent implements AfterViewInit {
     });
 
     loading = false;
+    submitted = false;
 
     constructor(
         private modalService: NgbModal,
@@ -37,9 +38,10 @@ export class CreateAgentComponent implements AfterViewInit {
     ) { }
 
     ngAfterViewInit(): void {
-        this.create.subscribe(() =>
-            this.modal = this.modalService.open(this.modalTempate)
-        );
+        this.create.subscribe(() => {
+            this.submitted = false;
+            this.modal = this.modalService.open(this.modalTempate);
+        });
     }
 
     closeModal() {
@@ -47,6 +49,7 @@ export class CreateAgentComponent implements AfterViewInit {
     }
 
     submit() {
+        this.submitted = true;
         this.form.updateValueAndValidity();
         this.form.controls.name.markAsTouched();
         if (this.form.invalid) {
