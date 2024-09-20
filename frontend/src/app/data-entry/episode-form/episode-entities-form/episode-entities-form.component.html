@@ -37,7 +37,8 @@
                         ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
                         {{entity.name}}
                     </button>
-                    <button ngbDropdownItem (click)="createEntity$.next()">
+                    <button ngbDropdownItem (click)="createEntity$.next()"
+                        [disabled]="entityName !== 'agent'">
                         <lc-icon [icon]="actionIcons.create" />
                         Create new {{entityName}}
                     </button>
