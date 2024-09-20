@@ -75,6 +75,7 @@ export enum Certainty {
 }
 
 export type CreateAgentInput = {
+  episodes?: InputMaybe<Array<Scalars['ID']['input']>>;
   name: Scalars['String']['input'];
   source: Scalars['ID']['input'];
 };

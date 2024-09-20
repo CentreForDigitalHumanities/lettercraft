@@ -64,6 +64,7 @@ enum Certainty {
 }
 
 input CreateAgentInput {
+  episodes: [ID!]
   name: String!
   source: ID!
 }

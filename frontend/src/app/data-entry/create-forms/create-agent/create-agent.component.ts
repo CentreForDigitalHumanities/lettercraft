@@ -15,6 +15,7 @@ import _ from 'underscore';
 export class CreateAgentComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;
     @Input({ required: true }) sourceID!: string;
+    @Input() episodeID?: string;
 
     @ViewChild('createAgentModal') modalTempate?: TemplateRef<unknown>;
 
@@ -55,12 +56,13 @@ export class CreateAgentComponent implements AfterViewInit {
         const input: CreateAgentInput = {
             name: this.form.value.name || '',
             source: this.sourceID,
+            episodes: this.episodeID ? [this.episodeID] : null
         };
         this.createMutation.mutate(
             { input },
             {
                 errorPolicy: 'all',
-                update: (cache) => this.updateCache(this.sourceID, cache),
+                update: (cache) => this.updateCache(this.sourceID, this.episodeID, cache),
             }
         )
             .pipe(takeUntilDestroyed(this.destroyRef))
@@ -73,11 +75,17 @@ export class CreateAgentComponent implements AfterViewInit {
             });
     }
 
-    private updateCache(sourceID: string, cache: any) {
+    private updateCache(sourceID: string, episodeID: string | undefined, cache: any) {
         cache.evict({
             id: cache.identify({ __typename: "SourceType", id: sourceID }),
             fieldName: 'agents',
         });
+        if (episodeID) {
+            cache.evict({
+                id: cache.identify({ __typename: "EpisodeType", id: episodeID }),
+                fieldName: 'agents',
+            });
+        }
         cache.gc();
     }
 

@@ -45,6 +45,7 @@
             </div>
         </div>
 
-        <lc-create-agent [create]="createEntity$" [sourceID]="data.episode.source.id" />
+        <lc-create-agent [create]="createEntity$" [sourceID]="data.episode.source.id"
+            [episodeID]="data.episode.id" />
     </ng-container>
 </ng-container>
