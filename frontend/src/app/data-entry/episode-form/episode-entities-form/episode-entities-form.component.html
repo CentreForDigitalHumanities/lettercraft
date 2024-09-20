@@ -22,30 +22,29 @@
                 No {{entityName}}s have been added to this episode.
             </p>
         </ng-template>
+
+        <div class="mt-4 mb-4">
+            <div ngbDropdown>
+                <button type="button" class="btn btn-primary"
+                    #dropdownToggle
+                    [attr.id]="dropdownToggleID"
+                    ngbDropdownToggle>
+                    Add {{entityName}}
+                </button>
+                <div ngbDropdownMenu
+                    [attr.aria-labelledby]="dropdownToggleID">
+                    <button *ngFor="let entity of (availableEntities$ | async)"
+                        ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
+                        {{entity.name}}
+                    </button>
+                    <button ngbDropdownItem (click)="createEntity$.next()">
+                        <lc-icon [icon]="actionIcons.create" />
+                        Create new {{entityName}}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <lc-create-agent [create]="createEntity$" [sourceID]="data.episode.source.id" />
     </ng-container>
 </ng-container>
-
-<div class="mt-4 mb-4">
-    <div ngbDropdown>
-        <button type="button" class="btn btn-primary"
-            #dropdownToggle
-            [attr.id]="dropdownToggleID"
-            ngbDropdownToggle>
-            Add {{entityName}}
-        </button>
-        <div ngbDropdownMenu
-            [attr.aria-labelledby]="dropdownToggleID">
-            <button *ngFor="let entity of (availableEntities$ | async)"
-                ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
-                {{entity.name}}
-            </button>
-            <button ngbDropdownItem (click)="createEntity$.next()">
-                <lc-icon [icon]="actionIcons.create" />
-                Create new {{entityName}}
-            </button>
-        </div>
-    </div>
-</div>
-
-
-<lc-create-agent [create]="createEntity$"></lc-create-agent>

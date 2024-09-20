@@ -1,7 +1,11 @@
-import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, Input, TemplateRef, ViewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ToastService } from '@services/toast.service';
+import { CreateAgentInput, DataEntryCreateAgentGQL } from 'generated/graphql';
 import { Observable } from 'rxjs';
+import _ from 'underscore';
 
 @Component({
   selector: 'lc-create-agent',
@@ -10,6 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class CreateAgentComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;
+    @Input({ required: true }) sourceID!: string;
 
     @ViewChild('createAgentModal') modalTempate?: TemplateRef<unknown>;
 
@@ -25,6 +30,9 @@ export class CreateAgentComponent implements AfterViewInit {
 
     constructor(
         private modalService: NgbModal,
+        private createMutation: DataEntryCreateAgentGQL,
+        private toastService: ToastService,
+        private destroyRef: DestroyRef,
     ) { }
 
     ngAfterViewInit(): void {
@@ -38,6 +46,57 @@ export class CreateAgentComponent implements AfterViewInit {
     }
 
     submit() {
+        this.form.updateValueAndValidity();
+        this.form.controls.name.markAsTouched();
+        if (this.form.invalid) {
+            return;
+        }
+        this.loading = true;
+        const input: CreateAgentInput = {
+            name: this.form.value.name || '',
+            source: this.sourceID,
+        };
+        this.createMutation.mutate(
+            { input },
+            {
+                errorPolicy: 'all',
+                update: (cache) => this.updateCache(this.sourceID, cache),
+            }
+        )
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((result) => {
+                const errors = result.errors || result.data?.createAgent?.errors;
+                if (errors && errors.length > 0) {
+                    this.onMutationError(errors);
+                }
+                this.onMutationSuccess();
+            });
+    }
+
+    private updateCache(sourceID: string, cache: any) {
+        cache.evict({
+            id: cache.identify({ __typename: "SourceType", id: sourceID }),
+            fieldName: 'agents',
+        });
+        cache.gc();
+    }
+
+    private onMutationSuccess() {
+        this.loading = false;
         this.modal?.close();
+        this.form.reset();
+    }
+
+    private onMutationError(errors: any[] | readonly any[] | undefined) {
+        console.error(errors);
+        const messages = errors?.map(error =>
+            _.get(error, 'message', undefined) || _.get(error, 'messages', []).join('\n')
+        ) || ['Unknown error'];
+        this.loading = false;
+        this.toastService.show({
+            type: 'danger',
+            header: 'Creating agent failed',
+            body: messages.join('\n'),
+        })
     }
 }
