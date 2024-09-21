@@ -7,6 +7,9 @@
         <span class="text-body-secondary"> ({{ episode.source.name }}) </span>
     </h1>
     <lc-entity-description-lead [entity]="episode" />
+
+    <lc-form-status />
+
     <lc-delete-entity-button
         (clickDelete)="onClickDelete(episode)"
         [deletingInProgress]="deletingInProgress"
