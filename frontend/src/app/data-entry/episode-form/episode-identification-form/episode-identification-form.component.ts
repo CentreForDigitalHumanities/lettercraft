@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
@@ -11,14 +11,18 @@ import {
     DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
+    BehaviorSubject,
     debounceTime,
     filter,
     map,
     Observable,
+    share,
     shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs";
+import { FormStatus } from "../../shared/types";
+import { FormService } from "../../shared/form.service";
 
 interface EpisodeIdentification {
     name: string;
@@ -34,8 +38,8 @@ type EpisodeIdentificationForm = {
     templateUrl: "./episode-identification-form.component.html",
     styleUrls: ["./episode-identification-form.component.scss"],
 })
-export class EpisodeIdentificationFormComponent implements OnInit {
-    public id$: Observable<string> = this.route.params.pipe(
+export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
+    private id$: Observable<string> = this.route.params.pipe(
         map((params) => params["id"])
     );
 
@@ -55,15 +59,21 @@ export class EpisodeIdentificationFormComponent implements OnInit {
         }),
     });
 
+    private formName = "identification";
+    private status$ = new BehaviorSubject<FormStatus>("idle");
+
     constructor(
         private destroyRef: DestroyRef,
         private route: ActivatedRoute,
+        private formService: FormService,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
     ) {}
 
-    public ngOnInit(): void {
+    ngOnInit(): void {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.episode$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((episode) => {
@@ -76,31 +86,39 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 });
             });
 
-        this.episode$
+        this.form.statusChanges
             .pipe(
-                switchMap(() =>
-                    this.form.valueChanges.pipe(
-                        map(() => this.form.getRawValue()),
-                        filter(() => this.form.valid),
-                        debounceTime(300),
-                        withLatestFrom(this.id$),
-                        switchMap(([episode, id]) =>
-                            this.performMutation(episode, id)
-                        ),
-                        takeUntilDestroyed(this.destroyRef)
-                    )
-                )
+                filter((status) => status == "INVALID"),
+                takeUntilDestroyed(this.destroyRef)
             )
-            .subscribe((result) => {
-                const errors = result.data?.updateEpisode?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((error) => error.messages).join("\n"),
-                        type: "danger",
-                        header: "Update failed",
-                    });
-                }
-            });
+            .subscribe(() => this.status$.next("invalid"));
+
+        const validFormSubmission$ = this.episode$.pipe(
+            switchMap(() =>
+                this.form.valueChanges.pipe(
+                    map(() => this.form.getRawValue()),
+                    filter(() => this.form.valid)
+                )
+            ),
+            debounceTime(300),
+            share()
+        );
+
+        validFormSubmission$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.status$.next("loading"));
+
+        validFormSubmission$
+            .pipe(
+                withLatestFrom(this.id$),
+                switchMap(([episode, id]) => this.performMutation(episode, id)),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe((result) => this.onMutationResult(result));
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm(this.formName);
     }
 
     private performMutation(
@@ -115,9 +133,24 @@ export class EpisodeIdentificationFormComponent implements OnInit {
                 },
             },
             {
-                update: cache => this.updateCache(cache, id),
+                update: (cache) => this.updateCache(cache, id),
             }
         );
+    }
+
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateEpisodeMutation>
+    ): void {
+        const errors = result.data?.updateEpisode?.errors;
+        if (errors && errors.length > 0) {
+            this.status$.next("error");
+            this.toastService.show({
+                body: errors.map((error) => error.messages).join("\n"),
+                type: "danger",
+                header: "Update failed",
+            });
+        }
+        this.status$.next("saved");
     }
 
     private updateCache(cache: ApolloCache<unknown>, id: string): void {
