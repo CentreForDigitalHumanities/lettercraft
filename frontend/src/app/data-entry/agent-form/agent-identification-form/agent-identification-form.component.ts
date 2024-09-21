@@ -61,8 +61,6 @@ export class AgentIdentificationFormComponent implements OnDestroy {
         ).subscribe(this.updateFormData.bind(this));
 
 
-
-
         this.form.statusChanges.pipe(
             filter(status => status == 'INVALID'),
             takeUntilDestroyed(),

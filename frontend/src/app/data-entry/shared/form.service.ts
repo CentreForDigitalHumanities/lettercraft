@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { asyncScheduler, BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, throttleTime } from 'rxjs';
 import { FormStatus } from './types';
 import _ from 'underscore';
 
 @Injectable()
 export class FormService {
-
     status$: Observable<FormStatus>;
 
     private statuses$ = new BehaviorSubject<Record<string, Observable<FormStatus>>>({});
 
-    constructor(private route: ActivatedRoute) {
+    constructor() {
         this.status$ = this.statuses$.pipe(
             switchMap(statuses => combineLatest(_.values(statuses))),
             map(this.combinedStatus),
