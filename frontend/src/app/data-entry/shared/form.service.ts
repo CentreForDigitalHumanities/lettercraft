@@ -6,16 +6,12 @@ import _ from 'underscore';
 
 @Injectable()
 export class FormService {
-    id$: Observable<string>;
 
     status$: Observable<FormStatus>;
 
     private statuses$ = new BehaviorSubject<Record<string, Observable<FormStatus>>>({});
 
     constructor(private route: ActivatedRoute) {
-        this.id$ = this.route.params.pipe(
-            map(params => params['id'])
-        );
         this.status$ = this.statuses$.pipe(
             switchMap(statuses => combineLatest(_.values(statuses))),
             map(this.combinedStatus),

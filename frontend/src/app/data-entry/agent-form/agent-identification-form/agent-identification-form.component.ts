@@ -17,6 +17,7 @@ import {
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
+import { ActivatedRoute } from '@angular/router';
 
 interface FormData {
     name: string;
@@ -27,7 +28,7 @@ interface FormData {
 @Component({
     selector: 'lc-agent-identification-form',
     templateUrl: './agent-identification-form.component.html',
-    styleUrls: ['./agent-identification-form.component.scss']
+    styleUrls: ['./agent-identification-form.component.scss'],
 })
 export class AgentIdentificationFormComponent implements OnDestroy {
     form = new FormGroup({
@@ -41,10 +42,11 @@ export class AgentIdentificationFormComponent implements OnDestroy {
 
     status$ = new BehaviorSubject<FormStatus>('idle');
 
-    private id$ = this.formService.id$;
+    private id$ = this.route.params.pipe(map((params) => params["id"]));
     private formName = 'identification';
 
     constructor(
+        private route: ActivatedRoute,
         private agentQuery: DataEntryAgentIdentificationGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,

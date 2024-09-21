@@ -5,6 +5,7 @@ import { AgentIdentificationFormComponent } from './agent-identification-form/ag
 import { AgentDescriptionFormComponent } from './agent-description-form/agent-description-form.component';
 import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
 import { DeleteAgentComponent } from './delete-agent/delete-agent.component';
+import { FormService } from '../shared/form.service';
 
 
 
@@ -19,6 +20,7 @@ import { DeleteAgentComponent } from './delete-agent/delete-agent.component';
         SharedModule,
         DataEntrySharedModule
     ],
+    providers: [FormService],
     exports: [
         AgentFormComponent,
     ]

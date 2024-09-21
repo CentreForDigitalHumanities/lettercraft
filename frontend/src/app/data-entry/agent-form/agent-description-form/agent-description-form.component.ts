@@ -21,6 +21,7 @@ import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinct
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -67,11 +68,12 @@ export class AgentDescriptionFormComponent implements OnDestroy {
 
     status$ = new BehaviorSubject<FormStatus>('idle');
 
-    private id$ = this.formService.id$;
+    private id$ = this.route.params.pipe(map((params) => params["id"]));
     private data$: Observable<DataEntryAgentDescriptionQuery>;
     private formName = 'description';
 
     constructor(
+        private route: ActivatedRoute,
         private agentQuery: DataEntryAgentDescriptionGQL,
         private locationsQuery: LocationsInSourceListGQL,
         private agentMutation: DataEntryUpdateAgentGQL,

@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, TemplateRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
 import { actionIcons } from '@shared/icons';
 import { DataEntryDeleteAgentGQL, LettercraftErrorType } from 'generated/graphql';
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { FormStatus } from '../../shared/types';
 
 @Component({
@@ -19,11 +19,12 @@ export class DeleteAgentComponent implements OnDestroy {
 
     actionIcons = actionIcons;
 
-    id$ = this.formService.id$;
+    id$ = this.route.params.pipe(map((params) => params["id"]));
     status$ = new BehaviorSubject<FormStatus>('idle');
     private formName = 'delete';
 
     constructor(
+        private route: ActivatedRoute,
         private modalService: NgbModal,
         private deleteMutation: DataEntryDeleteAgentGQL,
         private toastService: ToastService,
