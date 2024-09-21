@@ -20,7 +20,6 @@ import { FormService } from '../shared/form.service';
         SharedModule,
         DataEntrySharedModule
     ],
-    providers: [FormService],
     exports: [
         AgentFormComponent,
     ]
