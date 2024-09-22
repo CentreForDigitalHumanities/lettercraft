@@ -122,13 +122,13 @@ export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
     }
 
     private performMutation(
-        episode: EpisodeIdentification,
+        episodeIdentification: EpisodeIdentification,
         id: string
     ): Observable<MutationResult<DataEntryUpdateEpisodeMutation>> {
         return this.updateEpisode.mutate(
             {
                 episodeData: {
-                    ...episode,
+                    ...episodeIdentification,
                     id,
                 },
             },
