@@ -47,7 +47,7 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
     });
 
     private formName = "sourceMention";
-    public status$ = new BehaviorSubject<FormStatus>("idle");
+    private status$ = new BehaviorSubject<FormStatus>("idle");
 
     constructor(
         private destroyRef: DestroyRef,
