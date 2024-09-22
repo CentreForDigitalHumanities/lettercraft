@@ -10,6 +10,9 @@
     </h1>
 
     <lc-entity-description-lead [entity]="letter" />
+
+    <lc-form-status />
+
     <lc-delete-entity-button
         (clickDelete)="onClickDelete(letter)"
         [deletingInProgress]="deletingInProgress"

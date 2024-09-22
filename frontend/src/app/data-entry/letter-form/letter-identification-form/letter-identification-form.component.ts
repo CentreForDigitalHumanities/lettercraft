@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
@@ -6,22 +6,34 @@ import { ToastService } from "@services/toast.service";
 import {
     DataEntryLetterIdentificationGQL,
     DataEntryUpdateLetterGQL,
+    DataEntryUpdateLetterMutation,
 } from "generated/graphql";
+import { BehaviorSubject, Observable } from "rxjs";
 import {
     debounceTime,
     filter,
     map,
+    share,
     shareReplay,
     switchMap,
     withLatestFrom,
 } from "rxjs/operators";
+import { FormStatus } from "../../shared/types";
+import { FormService } from "../../shared/form.service";
+import { ApolloCache } from "@apollo/client/core";
+import { MutationResult } from "apollo-angular";
+
+interface LetterIdentification {
+    name: string;
+    description: string;
+}
 
 @Component({
     selector: "lc-letter-identification-form",
     templateUrl: "./letter-identification-form.component.html",
     styleUrls: ["./letter-identification-form.component.scss"],
 })
-export class LetterIdentificationFormComponent implements OnInit {
+export class LetterIdentificationFormComponent implements OnInit, OnDestroy {
     public id$ = this.route.params.pipe(map((params) => params["id"]));
 
     public letter$ = this.id$.pipe(
@@ -40,15 +52,21 @@ export class LetterIdentificationFormComponent implements OnInit {
         }),
     });
 
+    private formName = "identification";
+    private status$ = new BehaviorSubject<FormStatus>("idle");
+
     constructor(
         private destroyRef: DestroyRef,
         private route: ActivatedRoute,
+        private formService: FormService,
         private toastService: ToastService,
         private letterQuery: DataEntryLetterIdentificationGQL,
-        private letterMutation: DataEntryUpdateLetterGQL
+        private updateLetter: DataEntryUpdateLetterGQL
     ) {}
 
     ngOnInit(): void {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.letter$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((letter) => {
@@ -61,45 +79,79 @@ export class LetterIdentificationFormComponent implements OnInit {
                 });
             });
 
-        this.letter$
+        this.form.statusChanges
             .pipe(
-                switchMap(() =>
-                    this.form.valueChanges.pipe(
-                        map(() => this.form.getRawValue()),
-                        filter(() => this.form.valid),
-                        debounceTime(300),
-                        withLatestFrom(this.id$),
-                        switchMap(([letter, id]) =>
-                            this.letterMutation.mutate(
-                                {
-                                    letterData: {
-                                        ...letter,
-                                        id,
-                                    },
-                                },
-                                {
-                                    update: (cache) => {
-                                        cache.evict({
-                                            id: `LetterDescriptionType:${id}`,
-                                        });
-                                        cache.gc();
-                                    },
-                                }
-                            )
-                        )
-                    )
-                ),
+                filter((status) => status == "INVALID"),
                 takeUntilDestroyed(this.destroyRef)
             )
-            .subscribe((result) => {
-                const errors = result.data?.updateLetter?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((e) => e.messages).join("\n"),
-                        type: "danger",
-                        header: "Update failed",
-                    });
-                }
+            .subscribe(() => this.status$.next("invalid"));
+
+        const validFormSubmission$ = this.letter$.pipe(
+            switchMap(() =>
+                this.form.valueChanges.pipe(
+                    map(() => this.form.getRawValue()),
+                    filter(() => this.form.valid),
+                    debounceTime(300),
+                    share()
+                )
+            )
+        );
+
+        validFormSubmission$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.status$.next("loading"));
+
+        validFormSubmission$
+            .pipe(
+                withLatestFrom(this.id$),
+                switchMap(([letter, id]) => this.performMutation(letter, id)),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe((result) => this.onMutationResult(result));
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm(this.formName);
+    }
+
+    private performMutation(
+        letter: LetterIdentification,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateLetterMutation>> {
+        return this.updateLetter.mutate(
+            {
+                letterData: {
+                    ...letter,
+                    id,
+                },
+            },
+            {
+                update: (cache) => this.updateCache(cache, id),
+            }
+        );
+    }
+
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateLetterMutation>
+    ): void {
+        const errors = result.data?.updateLetter?.errors;
+        if (errors && errors.length > 0) {
+            this.status$.next("error");
+            this.toastService.show({
+                body: errors.map((e) => e.messages).join("\n"),
+                type: "danger",
+                header: "Update failed",
             });
+        }
+        this.status$.next("saved");
+    }
+
+    private updateCache(cache: ApolloCache<unknown>, id: string): void {
+        const identified = cache.identify({
+            __typename: "LetterDescriptionType",
+            id,
+        });
+        cache.evict({ id: identified });
+        cache.gc();
     }
 }
