@@ -3,10 +3,84 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
-import { CreateAgentInput, DataEntryCreateAgentGQL } from 'generated/graphql';
-import { Observable } from 'rxjs';
+import { CreateAgentInput, DataEntryCreateAgentGQL, DataEntryCreateAgentMutation } from 'generated/graphql';
+import { filter, map, Observable, shareReplay, } from 'rxjs';
 import _ from 'underscore';
 import { listNames, nameExamples } from '../../shared/utils';
+import { MutationResult } from 'apollo-angular';
+import { isLoading } from '@shared/request-utils';
+
+interface MutationOutcome<T> {
+    loading$: Observable<boolean>;
+    succes$: Observable<T>;
+    errors$: Observable<string[]>,
+}
+
+class AgentCreator {
+    constructor(
+        private createMutation: DataEntryCreateAgentGQL,
+        private destroyRef: DestroyRef
+    ) { }
+
+    submit(input: CreateAgentInput): MutationOutcome<DataEntryCreateAgentMutation> {
+        const result$ = this.createMutation.mutate(
+            { input },
+            {
+                errorPolicy: 'all',
+                update: (cache) => this.updateCache(input.source, input.episodes, cache),
+            }
+        ).pipe(
+            shareReplay(1),
+            takeUntilDestroyed(this.destroyRef),
+        );
+        return this.getOutcome(result$);
+    }
+
+    private getOutcome(result$: Observable<MutationResult<DataEntryCreateAgentMutation>>): MutationOutcome<DataEntryCreateAgentMutation> {
+        const loading$ = isLoading(result$);
+        const succes$: Observable<DataEntryCreateAgentMutation> = result$.pipe(
+            filter(result => _.isUndefined(this.resultErrors(result))),
+            map(result => result.data?.createAgent as DataEntryCreateAgentMutation),
+        );
+
+        const errors$: Observable<string[]> = result$.pipe(
+            map(this.resultErrors),
+            filter(_.negate(_.isUndefined)),
+        );
+
+        return { loading$, succes$, errors$ };
+    }
+
+    private updateCache(source: string, episodes: string[] | null | undefined, cache: any) {
+        cache.evict({
+            id: cache.identify({ __typename: "SourceType", id: source }),
+            fieldName: 'agents',
+        });
+        if (episodes) {
+            for (const episode of episodes) {
+                cache.evict({
+                    id: cache.identify({ __typename: "EpisodeType", id: episode }),
+                    fieldName: 'agents',
+                })
+            }
+        }
+        cache.gc();
+    }
+
+    private resultErrors(result: MutationResult<DataEntryCreateAgentMutation>): string[] | undefined {
+        if (result.errors?.length) {
+            return result.errors.map(error => error.message);
+        }
+        if (result.data?.createAgent?.errors.length) {
+            return result.data.createAgent.errors.flatMap(error => error.messages);
+        }
+        if (!result.data?.createAgent) {
+            return ['Unknown error'];
+        }
+        return undefined;
+    }
+
+}
 
 @Component({
   selector: 'lc-create-agent',
@@ -33,12 +107,16 @@ export class CreateAgentComponent implements AfterViewInit {
 
     nameExamples = listNames(nameExamples['agent']);
 
+    private agentCreateService: AgentCreator;
+
     constructor(
         private modalService: NgbModal,
-        private createMutation: DataEntryCreateAgentGQL,
+        createMutation: DataEntryCreateAgentGQL,
         private toastService: ToastService,
-        private destroyRef: DestroyRef,
-    ) { }
+        destroyRef: DestroyRef,
+    ) {
+        this.agentCreateService = new AgentCreator(createMutation, destroyRef);
+    }
 
     ngAfterViewInit(): void {
         this.create.subscribe(() => {
@@ -64,35 +142,10 @@ export class CreateAgentComponent implements AfterViewInit {
             source: this.sourceID,
             episodes: this.episodeID ? [this.episodeID] : null
         };
-        this.createMutation.mutate(
-            { input },
-            {
-                errorPolicy: 'all',
-                update: (cache) => this.updateCache(this.sourceID, this.episodeID, cache),
-            }
-        )
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                const errors = result.errors || result.data?.createAgent?.errors;
-                if (errors && errors.length > 0) {
-                    this.onMutationError(errors);
-                }
-                this.onMutationSuccess();
-            });
-    }
+        const outcome = this.agentCreateService.submit(input);
 
-    private updateCache(sourceID: string, episodeID: string | undefined, cache: any) {
-        cache.evict({
-            id: cache.identify({ __typename: "SourceType", id: sourceID }),
-            fieldName: 'agents',
-        });
-        if (episodeID) {
-            cache.evict({
-                id: cache.identify({ __typename: "EpisodeType", id: episodeID }),
-                fieldName: 'agents',
-            });
-        }
-        cache.gc();
+        outcome.succes$.subscribe(this.onMutationSuccess.bind(this));
+        outcome.errors$.subscribe(this.onMutationError.bind(this));
     }
 
     private onMutationSuccess() {
@@ -101,11 +154,8 @@ export class CreateAgentComponent implements AfterViewInit {
         this.form.reset();
     }
 
-    private onMutationError(errors: any[] | readonly any[] | undefined) {
-        console.error(errors);
-        const messages = errors?.map(error =>
-            _.get(error, 'message', undefined) || _.get(error, 'messages', []).join('\n')
-        ) || ['Unknown error'];
+    private onMutationError(messages: string[]) {
+        console.error(messages);
         this.loading = false;
         this.toastService.show({
             type: 'danger',
