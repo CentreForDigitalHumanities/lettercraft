@@ -33,7 +33,8 @@ export class CreateAgentComponent implements AfterViewInit {
         }),
     });
 
-    loading = false;
+    loading$?: Observable<boolean>;
+
     submitted = false;
 
     nameExamples = listNames(nameExamples['agent']);
@@ -64,7 +65,6 @@ export class CreateAgentComponent implements AfterViewInit {
         if (this.form.invalid) {
             return;
         }
-        this.loading = true;
         const input: CreateAgentInput = {
             name: this.form.value.name || '',
             source: this.sourceID,
@@ -72,6 +72,7 @@ export class CreateAgentComponent implements AfterViewInit {
         };
         const outcome = this.createAgentService.submit(input);
 
+        this.loading$ = outcome.loading$;
         outcome.succes$.subscribe(() => this.onMutationSuccess(input.name));
         outcome.errors$.subscribe(messages => this.onMutationError(messages, input.name));
     }
@@ -79,7 +80,6 @@ export class CreateAgentComponent implements AfterViewInit {
     private onMutationSuccess(agentName: string) {
         this.modal?.close();
         this.form.reset();
-        this.loading = false;
         this.submitted = false;
         this.toastService.show({
             type: 'success',
@@ -91,7 +91,6 @@ export class CreateAgentComponent implements AfterViewInit {
     private onMutationError(messages: string[], agentName: string) {
         const body = `Could not create agent "${agentName}".
         ${messages.join('\n')}`;
-        this.loading = false;
         this.toastService.show({
             type: 'danger',
             header: 'Creating agent failed',

@@ -29,8 +29,8 @@
                 (click)="submit()"
             >
                 Create
-                <div *ngIf="loading" class="spinner-border spinner-border-sm">
-                    <span class="visually-hidden">Creating new agent...</span>
+                <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">(loading)</span>
                 </div>
             </button>
             <button
