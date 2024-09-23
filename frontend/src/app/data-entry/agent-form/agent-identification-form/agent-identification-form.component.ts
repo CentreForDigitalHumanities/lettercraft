@@ -28,7 +28,7 @@ interface FormData {
 @Component({
     selector: 'lc-agent-identification-form',
     templateUrl: './agent-identification-form.component.html',
-    styleUrls: ['./agent-identification-form.component.scss'],
+    styleUrls: ['./agent-identification-form.component.scss']
 })
 export class AgentIdentificationFormComponent implements OnDestroy {
     form = new FormGroup({
