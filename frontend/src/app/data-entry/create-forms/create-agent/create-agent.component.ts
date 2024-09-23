@@ -68,23 +68,29 @@ export class CreateAgentComponent implements AfterViewInit {
         };
         const outcome = this.createAgentService.submit(input);
 
-        outcome.succes$.subscribe(this.onMutationSuccess.bind(this));
-        outcome.errors$.subscribe(this.onMutationError.bind(this));
+        outcome.succes$.subscribe(() => this.onMutationSuccess(input.name));
+        outcome.errors$.subscribe(messages => this.onMutationError(messages, input.name));
     }
 
-    private onMutationSuccess() {
+    private onMutationSuccess(agentName: string) {
         this.loading = false;
         this.modal?.close();
         this.form.reset();
+        this.toastService.show({
+            type: 'success',
+            header: 'Agent created',
+            body: `Created agent "${agentName}"`
+        })
     }
 
-    private onMutationError(messages: string[]) {
-        console.error(messages);
+    private onMutationError(messages: string[], agentName: string) {
+        const body = `Could not create agent "${agentName}".
+        ${messages.join('\n')}`;
         this.loading = false;
         this.toastService.show({
             type: 'danger',
             header: 'Creating agent failed',
-            body: messages.join('\n'),
+            body,
         })
     }
 }
