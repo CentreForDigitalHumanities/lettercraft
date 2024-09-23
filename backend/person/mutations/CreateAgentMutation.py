@@ -17,7 +17,6 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from event.models import Episode
 
-
 class CreateAgentInput(InputObjectType):
     name = String(required=True)
     source = ID(required=True)
