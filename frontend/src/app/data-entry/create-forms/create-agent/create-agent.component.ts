@@ -7,12 +7,16 @@ import { Observable } from 'rxjs';
 import { listNames, nameExamples } from '../../shared/utils';
 import { CreateAgentService } from './create-agent.service';
 
-
+/**
+ * Opens modal(s) to create new AgentDescriptions.
+ *
+ * The parent component shoud implement a trigger to create agents (e.g. a button); use
+ * the `[create]` input to signal when to open a modal.
+ */
 @Component({
   selector: 'lc-create-agent',
   templateUrl: './create-agent.component.html',
     styleUrls: ['./create-agent.component.scss'],
-    providers: [CreateAgentService],
 })
 export class CreateAgentComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;
@@ -73,9 +77,10 @@ export class CreateAgentComponent implements AfterViewInit {
     }
 
     private onMutationSuccess(agentName: string) {
-        this.loading = false;
         this.modal?.close();
         this.form.reset();
+        this.loading = false;
+        this.submitted = false;
         this.toastService.show({
             type: 'success',
             header: 'Agent created',

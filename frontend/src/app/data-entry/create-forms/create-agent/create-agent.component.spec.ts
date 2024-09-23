@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateAgentComponent } from './create-agent.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { Subject } from 'rxjs';
+import { CreateAgentService } from './create-agent.service';
 
 describe('CreateAgentComponent', () => {
     let component: CreateAgentComponent;
@@ -13,6 +14,7 @@ describe('CreateAgentComponent', () => {
         TestBed.configureTestingModule({
             declarations: [CreateAgentComponent],
             imports: [SharedTestingModule],
+            providers: [CreateAgentService],
         });
         fixture = TestBed.createComponent(CreateAgentComponent);
         component = fixture.componentInstance;
