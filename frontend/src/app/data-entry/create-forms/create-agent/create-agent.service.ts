@@ -36,7 +36,7 @@ export class CreateAgentService {
     private getOutcome(
         result$: Observable<MutationResult<DataEntryCreateAgentMutation>>
     ): MutationOutcome<DataEntryCreateAgentMutation> {
-        const loading$ = result$.pipe(isLoading);
+        const loading$ = result$.pipe(isLoading());
         const succes$: Observable<DataEntryCreateAgentMutation> = result$.pipe(
             filter(result => _.isUndefined(this.resultErrors(result))),
             map(result => result.data?.createAgent as DataEntryCreateAgentMutation),
