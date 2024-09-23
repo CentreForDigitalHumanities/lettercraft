@@ -12,6 +12,7 @@ describe("EntityDescriptionLeadComponent", () => {
         });
         fixture = TestBed.createComponent(EntityDescriptionLeadComponent);
         component = fixture.componentInstance;
+        component.entity = { description: "test" };
         fixture.detectChanges();
     });
 
