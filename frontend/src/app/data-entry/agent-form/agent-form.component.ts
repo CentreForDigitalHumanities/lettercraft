@@ -1,25 +1,27 @@
-import { Component } from "@angular/core";
-import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { dataIcons } from "@shared/icons";
-import { DataEntryAgentGQL, DataEntryAgentQuery } from "generated/graphql";
-import { map, Observable, switchMap } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
+import { Component } from '@angular/core';
+import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
+import { dataIcons } from '@shared/icons';
+import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
+import { map, Observable, switchMap } from 'rxjs';
+import { FormService } from '../shared/form.service';
 
 @Component({
     selector: 'lc-agent-form',
     templateUrl: './agent-form.component.html',
     styleUrls: ['./agent-form.component.scss'],
+    providers: [FormService],
 })
 export class AgentFormComponent {
-    public id$ = this.route.params.pipe(map((params) => params["id"]));
-
+    id$: Observable<string> = this.formService.id$;
     data$: Observable<DataEntryAgentQuery>;
 
     dataIcons = dataIcons;
 
+    status$ = this.formService.status$;
+
     constructor(
-        private route: ActivatedRoute,
         private agentQuery: DataEntryAgentGQL,
+        private formService: FormService,
     ) {
         this.data$ = this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),

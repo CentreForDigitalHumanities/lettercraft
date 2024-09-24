@@ -5,8 +5,13 @@ import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { actionIcons, dataIcons } from "@shared/icons";
-import { DataEntryDeleteEpisodeGQL, DataEntryEpisodeFormGQL, DataEntryEpisodeFormQuery } from "generated/graphql";
+import {
+    DataEntryDeleteEpisodeGQL,
+    DataEntryEpisodeFormGQL,
+    DataEntryEpisodeFormQuery,
+} from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 
@@ -14,15 +19,18 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
     selector: "lc-episode",
     templateUrl: "./episode-form.component.html",
     styleUrls: ["./episode-form.component.scss"],
+    providers: [FormService],
 })
 export class EpisodeFormComponent {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
         map((result) => result.data.episode),
         share()
     );
+
+    public status$ = this.formService.status$;
 
     public breadcrumbs$ = this.episode$.pipe(
         filter((episode) => !!episode),
@@ -58,24 +66,24 @@ export class EpisodeFormComponent {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
+        private formService: FormService,
         private router: Router,
         private toastService: ToastService,
         private modalService: ModalService,
         private episodeQuery: DataEntryEpisodeFormGQL,
         private deleteEpisode: DataEntryDeleteEpisodeGQL
-    ) { }
+    ) {}
 
     public onClickDelete(episode: QueriedEpisode): void {
         this.modalService
-        .openConfirmationModal({
-            title: "Delete episode",
-            message: `Are you sure you want to delete this episode? (${episode.name})`,
-        })
-        .then(() => this.performDelete(episode.id, episode.source.id))
-        .catch(() => {
-            // Do nothing on cancel / dismissal.
-        });
+            .openConfirmationModal({
+                title: "Delete episode",
+                message: `Are you sure you want to delete this episode? (${episode.name})`,
+            })
+            .then(() => this.performDelete(episode.id, episode.source.id))
+            .catch(() => {
+                // Do nothing on cancel / dismissal.
+            });
     }
 
     private performDelete(episodeId: string, sourceId: string): void {

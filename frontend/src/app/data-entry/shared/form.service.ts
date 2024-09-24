@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { asyncScheduler, BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, throttleTime } from 'rxjs';
 import { FormStatus } from './types';
 import _ from 'underscore';
 
+/**
+ *  This service is scoped to individual form components. That is why it can access ActivatedRoute.
+ */
 @Injectable()
 export class FormService {
+    id$: Observable<string>;
+
     status$: Observable<FormStatus>;
 
     private statuses$ = new BehaviorSubject<Record<string, Observable<FormStatus>>>({});
 
-    constructor() {
+    constructor(private route: ActivatedRoute) {
+        this.id$ = this.route.params.pipe(
+            map(params => params['id'])
+        );
         this.status$ = this.statuses$.pipe(
             switchMap(statuses => combineLatest(_.values(statuses))),
             map(this.combinedStatus),

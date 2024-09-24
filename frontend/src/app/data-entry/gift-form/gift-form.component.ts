@@ -1,6 +1,6 @@
 import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
@@ -11,6 +11,7 @@ import {
     DataEntryGiftFormQuery,
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
 
@@ -18,9 +19,12 @@ type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
     selector: "lc-gift-form",
     templateUrl: "./gift-form.component.html",
     styleUrls: ["./gift-form.component.scss"],
+    providers: [FormService]
 })
 export class GiftFormComponent {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
+
+    public status$ = this.formService.status$;
 
     public gift$ = this.id$.pipe(
         switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
@@ -62,8 +66,8 @@ export class GiftFormComponent {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private router: Router,
+        private formService: FormService,
         private toastService: ToastService,
         private modalService: ModalService,
         private giftQuery: DataEntryGiftFormGQL,

@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryEpisodeSourceTextMentionGQL,
@@ -13,7 +12,6 @@ import {
     debounceTime,
     filter,
     map,
-    Observable,
     share,
     shareReplay,
     switchMap,
@@ -29,9 +27,7 @@ import { MutationResult } from "apollo-angular";
     styleUrls: ["./episode-source-text-form.component.scss"],
 })
 export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
-    private id$: Observable<string> = this.route.params.pipe(
-        map((params) => params["id"])
-    );
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -51,7 +47,6 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,

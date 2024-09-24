@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
@@ -39,9 +38,7 @@ type EpisodeIdentificationForm = {
     styleUrls: ["./episode-identification-form.component.scss"],
 })
 export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
-    private id$: Observable<string> = this.route.params.pipe(
-        map((params) => params["id"])
-    );
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -64,7 +61,6 @@ export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeIdentificationGQL,

@@ -8,7 +8,7 @@
     </h1>
     <lc-entity-description-lead [entity]="episode" />
 
-    <lc-form-status />
+    <lc-form-status [status$]="status$" />
 
     <lc-delete-entity-button
         (clickDelete)="onClickDelete(episode)"

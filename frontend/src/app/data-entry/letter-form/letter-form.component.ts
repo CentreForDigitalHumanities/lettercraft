@@ -1,6 +1,6 @@
 import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
@@ -11,6 +11,7 @@ import {
     DataEntryLetterFormQuery,
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
 
@@ -18,9 +19,12 @@ type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
     selector: "lc-letter-form",
     templateUrl: "./letter-form.component.html",
     styleUrls: ["./letter-form.component.scss"],
+    providers: [FormService],
 })
 export class LetterFormComponent {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
+
+    public status$ = this.formService.status$;
 
     public letter$ = this.id$.pipe(
         switchMap((id) => this.letterQuery.watch({ id }).valueChanges),
@@ -60,8 +64,8 @@ export class LetterFormComponent {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private router: Router,
+        private formService: FormService,
         private toastService: ToastService,
         private modalService: ModalService,
         private letterQuery: DataEntryLetterFormGQL,

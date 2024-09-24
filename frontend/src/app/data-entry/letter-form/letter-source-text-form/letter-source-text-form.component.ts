@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryLetterSourceTextGQL,
@@ -36,7 +35,7 @@ interface LetterSourceText {
     styleUrls: ["./letter-source-text-form.component.scss"],
 })
 export class LetterSourceTextFormComponent implements OnInit, OnDestroy {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
 
     public letter$ = this.id$.pipe(
         switchMap((id) => this.letterQuery.watch({ id }).valueChanges),
@@ -64,7 +63,6 @@ export class LetterSourceTextFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private letterQuery: DataEntryLetterSourceTextGQL,

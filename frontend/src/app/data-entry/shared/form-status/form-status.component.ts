@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormStatus } from '../types';
+import { Observable } from 'rxjs';
 import { statusIcons } from '@shared/icons';
-import { FormService } from '../form.service';
 
 @Component({
     selector: 'lc-form-status',
@@ -9,13 +9,11 @@ import { FormService } from '../form.service';
     styleUrls: ['./form-status.component.scss']
 })
 export class FormStatusComponent {
-    public status$ = this.formService.status$;
+    @Input({ required: true }) status$!: Observable<FormStatus>;
 
     public statusIcons = statusIcons;
 
-    constructor(private formService: FormService) {}
-
-    messages: Record<FormStatus, string> = {
+    public messages: Record<FormStatus, string> = {
         idle: 'No changes made',
         invalid: 'Form contains errors',
         loading: 'Loading...',
@@ -23,7 +21,7 @@ export class FormStatusComponent {
         error: 'Saving failed',
     };
 
-    classes: Record<FormStatus, string> = {
+    public classes: Record<FormStatus, string> = {
         idle: 'text-secondary',
         invalid: 'text-danger',
         loading: 'text-secondary',

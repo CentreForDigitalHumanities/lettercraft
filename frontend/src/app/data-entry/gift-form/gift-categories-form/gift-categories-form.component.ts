@@ -1,6 +1,5 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryGiftCategoriesGQL,
@@ -30,10 +29,7 @@ import { MutationResult } from "apollo-angular";
     styleUrls: ["./gift-categories-form.component.scss"],
 })
 export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
-    private id$ = this.route.params.pipe(
-        map((params) => params["id"]),
-        share()
-    );
+    private id$ = this.formService.id$;
 
     public gift$ = this.id$.pipe(
         switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
@@ -62,7 +58,6 @@ export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private giftQuery: DataEntryGiftCategoriesGQL,

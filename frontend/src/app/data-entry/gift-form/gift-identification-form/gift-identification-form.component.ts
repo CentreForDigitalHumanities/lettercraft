@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
@@ -39,7 +38,7 @@ type GiftIdentificationForm = {
     styleUrls: ["./gift-identification-form.component.scss"],
 })
 export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
 
     public gift$ = this.id$.pipe(
         switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
@@ -62,7 +61,6 @@ export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private giftQuery: DataEntryGiftIdentificationGQL,

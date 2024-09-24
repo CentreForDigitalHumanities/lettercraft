@@ -17,7 +17,6 @@ import {
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
-import { ActivatedRoute } from '@angular/router';
 
 interface FormData {
     name: string;
@@ -42,11 +41,10 @@ export class AgentIdentificationFormComponent implements OnDestroy {
 
     status$ = new BehaviorSubject<FormStatus>('idle');
 
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    private id$ = this.formService.id$;
     private formName = 'identification';
 
     constructor(
-        private route: ActivatedRoute,
         private agentQuery: DataEntryAgentIdentificationGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,

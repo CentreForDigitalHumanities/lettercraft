@@ -1,6 +1,5 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryAllLetterCategoriesGQL,
@@ -21,10 +20,7 @@ import { MutationResult } from "apollo-angular";
     styleUrls: ["./letter-categories-form.component.scss"],
 })
 export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
-    private id$ = this.route.params.pipe(
-        map((params) => params["id"]),
-        share()
-    );
+    private id$ = this.formService.id$;
 
     public letter$ = this.id$.pipe(
         switchMap((id) => this.letterQuery.watch({ id }).valueChanges),
@@ -53,7 +49,6 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
         private formService: FormService,
         private toastService: ToastService,
         private letterQuery: DataEntryLetterCategoriesGQL,

@@ -11,7 +11,7 @@
 
     <lc-entity-description-lead [entity]="gift" />
 
-    <lc-form-status />
+    <lc-form-status [status$]="status$" />
 
     <lc-delete-entity-button
         (clickDelete)="onClickDelete(gift)"

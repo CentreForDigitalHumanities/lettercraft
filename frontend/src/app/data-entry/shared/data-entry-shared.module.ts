@@ -6,7 +6,6 @@ import { LabelSelectComponent } from "./label-select/label-select.component";
 import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity-description-lead.component";
 import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entity-button.component";
 import { FormStatusComponent } from './form-status/form-status.component';
-import { FormService } from "./form.service";
 
 @NgModule({
     declarations: [
@@ -18,7 +17,6 @@ import { FormService } from "./form.service";
         FormStatusComponent,
     ],
     imports: [SharedModule],
-    providers: [FormService],
     exports: [
         DesignatorsControlComponent,
         MultiselectComponent,
