@@ -1,8 +1,8 @@
 from graphene import NonNull
 from graphene_django import DjangoObjectType
 
-from core.types.entity import Entity, EntityDescription
-from core.types.DescriptionFieldType import DescriptionFieldType, SourceMentionEnum
+from core.types.entity import EntityDescription
+from core.types.DescriptionFieldType import DescriptionFieldType
 from event.models import EpisodeGift
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 

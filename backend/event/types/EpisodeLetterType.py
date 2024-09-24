@@ -2,7 +2,7 @@ from graphene import NonNull
 from graphene_django import DjangoObjectType
 
 from core.types.DescriptionFieldType import DescriptionFieldType
-from core.types.entity import Entity, EntityDescription
+from core.types.entity import EntityDescription
 from event.models import EpisodeLetter
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 
