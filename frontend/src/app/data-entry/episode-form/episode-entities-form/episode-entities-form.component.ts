@@ -110,6 +110,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     }
 
     addEntity(entityID: string, episodeID: string): void {
+        this.status$.next('loading');
         const input: CreateEpisodeEntityLinkInput = {
             entity: entityID,
             episode: episodeID,
@@ -117,19 +118,18 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         };
         this.addMutation.mutate({ input }, {
             refetchQueries: REFETCH_QUERIES,
-        }).pipe(
-            tap(() => this.status$.next('loading'))
-        ).subscribe(this.mutationRequestObserver);
+        }).subscribe(this.mutationRequestObserver);
     }
 
     removeEntity(entityID: string, episodeID: string): void {
+        this.status$.next('loading');
         const data: DataEntryDeleteEpisodeEntityLinkMutationVariables = {
             entity: entityID,
             episode: episodeID,
             entityType: this.entityType,
         };
-        this.removeMutation.mutate(data, { refetchQueries: REFETCH_QUERIES }).pipe(
-            tap(() => this.status$.next('loading'))
+        this.removeMutation.mutate(
+            data, { refetchQueries: REFETCH_QUERIES }
         ).subscribe(this.mutationRequestObserver)
     }
 
