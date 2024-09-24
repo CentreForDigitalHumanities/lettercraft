@@ -7,7 +7,6 @@ import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
 import {
     DataEntryGiftIdentificationGQL,
-    DataEntryGiftIdentificationQuery,
     DataEntryUpdateGiftGQL,
     DataEntryUpdateGiftMutation,
     GiftDescriptionType,
