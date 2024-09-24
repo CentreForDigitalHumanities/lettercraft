@@ -119,6 +119,16 @@ type CreateLetterMutation {
   letter: LetterDescriptionType
 }
 
+input CreateLocationInput {
+  name: String!
+  source: ID!
+}
+
+type CreateLocationMutation {
+  errors: [LettercraftErrorType!]!
+  location: SpaceDescriptionType
+}
+
 input CreatePersonReferenceInput {
   description: ID!
   person: ID!
@@ -145,6 +155,11 @@ type DeleteGiftMutation {
 }
 
 type DeleteLetterMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type DeleteLocationMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -443,16 +458,19 @@ type Mutation {
   createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
   createGift(giftData: CreateGiftInput!): CreateGiftMutation
   createLetter(letterData: CreateLetterInput!): CreateLetterMutation
+  createLocation(locationData: CreateLocationInput!): CreateLocationMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
   deleteGift(id: ID!): DeleteGiftMutation
   deleteLetter(id: ID!): DeleteLetterMutation
+  deleteLocation(id: ID!): DeleteLocationMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
+  updateLocation(locationData: UpdateLocationInput!): UpdateLocationMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
 }
@@ -1029,6 +1047,22 @@ input UpdateLetterInput {
 }
 
 type UpdateLetterMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateLocationInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  description: String
+  designators: [String!]
+  id: ID!
+  name: String
+  page: String
+}
+
+type UpdateLocationMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
