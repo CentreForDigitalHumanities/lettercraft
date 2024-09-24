@@ -9,7 +9,6 @@ from core.types.DescriptionFieldType import SourceMentionEnum
 
 class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
     entity = NonNull(EntityDescription)
-    entity_type = NonNull(Entity)
 
     class Meta:
         model = EpisodeAgent
@@ -18,6 +17,5 @@ class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
             "episode",
             "agent",
             "entity",
-            "entity_type",
         ] + DescriptionFieldType.fields()
         interfaces = (EpisodeEntityLink,)

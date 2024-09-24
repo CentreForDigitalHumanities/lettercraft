@@ -9,7 +9,6 @@ from event.types.EpisodeEntityLink import EpisodeEntityLink
 
 class EpisodeGiftType(DescriptionFieldType, DjangoObjectType):
     entity = NonNull(EntityDescription)
-    entity_type = NonNull(Entity)
 
     class Meta:
         model = EpisodeGift
