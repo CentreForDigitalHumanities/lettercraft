@@ -16,6 +16,7 @@ import {
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
 import { ToastService } from "@services/toast.service";
+import { ApolloCache } from "@apollo/client/core";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
@@ -177,15 +178,21 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         return differenceBy(allEntities, linkedEntities, 'id');
     }
 
-    private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: any) {
-        cache.evict(cache.identify({
-            __typename: "EpisodeType",
-            id: episodeID,
-        }));
-        cache.evict(cache.identify({
-            __typename: this.entityTypeName,
-            id: entityID,
-        }));
+    private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: ApolloCache<unknown>) {
+        cache.evict({
+            id: cache.identify({
+                __typename: "EpisodeType",
+                id: episodeID,
+            }),
+            fieldName: this.entityProperty,
+        });
+        cache.evict({
+            id: cache.identify({
+                __typename: this.entityTypeName,
+                id: entityID,
+            }),
+            fieldName: 'episodes',
+        });
         cache.gc();
     }
 

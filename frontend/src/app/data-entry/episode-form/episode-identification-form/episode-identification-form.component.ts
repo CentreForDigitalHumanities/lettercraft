@@ -20,6 +20,8 @@ import {
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
+import { ApolloCache } from "@apollo/client/core";
+
 
 interface EpisodeIdentification {
     name: string;
@@ -116,12 +118,12 @@ export class EpisodeIdentificationFormComponent implements OnDestroy {
         );
     }
 
-    private updateCache(cache: any, id: string): void {
+    private updateCache(cache: ApolloCache<unknown>, id: string): void {
         const identified = cache.identify({
             __typename: "EpisodeType",
             id,
         });
-        cache.evict({ id: identified });
+        cache.evict({ id: identified, fieldName: 'name' });
         cache.gc();
     }
 

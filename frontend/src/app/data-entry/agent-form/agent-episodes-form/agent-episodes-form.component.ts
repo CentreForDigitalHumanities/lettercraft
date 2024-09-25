@@ -14,6 +14,7 @@ import { actionIcons } from '@shared/icons';
 import { FormStatus } from '../../shared/types';
 import { MutationResult } from 'apollo-angular';
 import { differenceBy } from '@shared/utils';
+import { ApolloCache } from '@apollo/client/core';
 
 
 @Component({
@@ -110,7 +111,7 @@ export class AgentEpisodesFormComponent implements OnDestroy {
         this.status$.next('error');
     }
 
-    private updateCache(episodeID: string, agentID: string, cache: any) {
+    private updateCache(episodeID: string, agentID: string, cache: ApolloCache<unknown>) {
         cache.evict({ id: cache.identify({ __typename: "EpisodeType", id: episodeID }) });
         cache.evict({ id: cache.identify({ __typename: "AgentDescriptionType", id: agentID }) });
         cache.gc();
