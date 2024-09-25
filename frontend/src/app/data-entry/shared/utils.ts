@@ -1,7 +1,6 @@
 import { Entity, SourceMention } from "generated/graphql";
 import { FormStatus, SelectOptions } from "./types";
 import { BehaviorSubject } from "rxjs";
-import _ from "underscore";
 
 export const sourceMentionSelectOptions = (): SelectOptions<SourceMention> => [
     { value: SourceMention.Direct, label: 'Directly mentioned' },

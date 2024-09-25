@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
@@ -28,7 +28,7 @@ let nextID = 0;
     styleUrls: ["./episode-entities-form.component.scss"],
 })
 export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
-    @Input() entityType: Entity = Entity.Agent;
+    @Input() entityType!: Entity;
 
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
 
@@ -41,7 +41,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     status$ = formStatusSubject();
     id = `episode-entities-${nextID++}`;
 
-    private mutationObserver: Partial<Observer<MutationResult>> = {
+    private mutationRequestObserver: Partial<Observer<MutationResult>> = {
         next: this.onSuccess.bind(this),
         error: this.onError.bind(this),
     };
@@ -121,6 +121,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     }
 
     addEntity(entityID: string, episodeID: string): void {
+        this.status$.next('loading');
         const input: CreateEpisodeEntityLinkInput = {
             entity: entityID,
             episode: episodeID,
@@ -130,10 +131,11 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache),
         }).pipe(
             tap(() => this.status$.next('loading'))
-        ).subscribe(this.mutationObserver);
+        ).subscribe(this.mutationRequestObserver);
     }
 
     removeEntity(entityID: string, episodeID: string): void {
+        this.status$.next('loading');
         const data: DataEntryDeleteEpisodeEntityLinkMutationVariables = {
             entity: entityID,
             episode: episodeID,
@@ -142,8 +144,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.removeMutation.mutate(data, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
         }).pipe(
-            tap(() => this.status$.next('loading'))
-        ).subscribe(this.mutationObserver)
+        ).subscribe(this.mutationRequestObserver)
     }
 
     onSuccess() {
@@ -172,7 +173,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             name: string,
             id: string
         }[] = data.episode?.source[this.entityProperty] || [];
-        const linkedEntities = data.episode?.[this.entityProperty] || [];
+        const linkedEntities = this.linkedEntities(data);
         return differenceBy(allEntities, linkedEntities, 'id');
     }
 

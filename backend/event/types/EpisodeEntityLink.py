@@ -7,7 +7,6 @@ from core.types.entity import Entity, EntityDescription
 class EpisodeEntityLink(Interface):
     id = NonNull(ID)
     episode = NonNull(EpisodeType)
-    entity_type = NonNull(Entity)
     entity = NonNull(EntityDescription)
     source_mention = NonNull(SourceMentionEnum)
     note = String()
