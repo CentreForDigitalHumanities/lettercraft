@@ -1,6 +1,6 @@
 import { DestroyRef, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CreateAgentInput, DataEntryCreateAgentGQL, DataEntryCreateAgentMutation } from 'generated/graphql';
+import { CreateEntityDescriptionInput, DataEntryCreateAgentGQL, DataEntryCreateAgentMutation } from 'generated/graphql';
 import { filter, map, Observable, shareReplay, } from 'rxjs';
 import _ from 'underscore';
 import { MutationResult } from 'apollo-angular';
@@ -19,7 +19,7 @@ export class CreateAgentService {
         private destroyRef: DestroyRef
     ) { }
 
-    submit(input: CreateAgentInput): MutationOutcome<DataEntryCreateAgentMutation> {
+    submit(input: CreateEntityDescriptionInput): MutationOutcome<DataEntryCreateAgentMutation> {
         const result$ = this.createMutation.mutate(
             { input },
             {

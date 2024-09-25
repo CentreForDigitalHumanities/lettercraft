@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angula
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
-import { CreateAgentInput } from 'generated/graphql';
+import { CreateEntityDescriptionInput } from 'generated/graphql';
 import { Observable } from 'rxjs';
 import { listNames, nameExamples } from '../../shared/utils';
 import { CreateAgentService } from './create-agent.service';
@@ -65,7 +65,7 @@ export class CreateAgentComponent implements AfterViewInit {
         if (this.form.invalid) {
             return;
         }
-        const input: CreateAgentInput = {
+        const input: CreateEntityDescriptionInput = {
             name: this.form.value.name || '',
             source: this.sourceID,
             episodes: this.episodeID ? [this.episodeID] : null

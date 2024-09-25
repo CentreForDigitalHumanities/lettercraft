@@ -32,7 +32,7 @@ from letter.mutations.UpdateGiftMutation import UpdateGiftMutation
 from person.mutations.CreatePersonReferenceMutation import CreatePersonReferenceMutation
 from person.mutations.UpdatePersonReferenceMutation import UpdatePersonReferenceMutation
 from person.mutations.DeletePersonReferenceMutation import DeletePersonReferenceMutation
-
+from space.mutations.CreateSpaceMutation import CreateSpaceMutation
 
 class Query(
     SourceQueries,
@@ -66,6 +66,7 @@ class Mutation(ObjectType):
     create_person_reference = CreatePersonReferenceMutation.Field()
     update_person_reference = UpdatePersonReferenceMutation.Field()
     delete_person_reference = DeletePersonReferenceMutation.Field()
+    create_space = CreateSpaceMutation.Field()
 
 
 schema = Schema(query=Query, mutation=Mutation)
