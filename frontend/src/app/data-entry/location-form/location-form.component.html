@@ -1,21 +1,34 @@
-<ng-container *ngIf="data$ | async as data">
-    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
+<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
-    <ng-container *ngIf="data.spaceDescription as spaceDescription">
-        <h1 class="mb-4">
-            <lc-icon [icon]="dataIcons.location" />
-            {{spaceDescription.name}}
-            <span class="text-secondary">
-                ({{spaceDescription.source.name}})
-            </span>
-        </h1>
+<ng-container *ngIf="location$ | async as location; else loading">
+    <h1 class="mb-4">
+        <lc-icon [icon]="dataIcons.location" />
+        {{ location.name }}
+        <span class="text-secondary"> ({{ location.source.name }}) </span>
+    </h1>
 
-        <p class="lead mb-4" *ngIf="spaceDescription.description">
-            {{spaceDescription.description}}
-        </p>
+    <!-- <lc-entity-description-lead [entity]="location" /> -->
 
-        <p class="alert alert-warning">
-            This form is not implemented yet!
-        </p>
-    </ng-container>
+    <!-- <lc-delete-entity-button
+            (clickDelete)="onClickDelete(location)"
+            [deletingInProgress]="deletingInProgress"
+            entityName="location"
+        /> -->
+
+    <p class="alert alert-warning">This form is not implemented yet!</p>
 </ng-container>
+
+<!-- <h2 class="subform-header">Identification</h2>
+<lc-gift-identification-form />
+
+<h2 class="subform-header">Source text</h2>
+<lc-gift-source-text-form />
+
+<h2 class="subform-header">Categories</h2>
+<lc-gift-categories-form /> -->
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

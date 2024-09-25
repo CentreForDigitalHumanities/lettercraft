@@ -19,3 +19,13 @@ mutation DataEntryUpdateLocation($locationData: UpdateLocationInput!) {
         }
     }
 }
+
+mutation DataEntryDeleteLocation($id: ID!) {
+    deleteLocation(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
