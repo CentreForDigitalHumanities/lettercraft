@@ -15,10 +15,11 @@ import {
 } from "generated/graphql";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
+import { ToastService } from "@services/toast.service";
+import { ApolloCache } from "@apollo/client/core";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
-
-const REFETCH_QUERIES = ['DataEntryEpisodeEntities'];
+type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
 
 let nextID = 0;
 
@@ -51,6 +52,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         private query: DataEntryEpisodeEntitiesGQL,
         private addMutation: DataEntryCreateEpisodeEntityLinkGQL,
         private removeMutation: DataEntryDeleteEpisodeEntityLinkGQL,
+        private toastService: ToastService,
     ) {
         this.data$ = this.formService.id$.pipe(
             switchMap(id => this.query.watch({ id }).valueChanges),
@@ -95,6 +97,16 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         return keys[this.entityType]
     }
 
+    get entityTypeName(): EntityTypeName {
+        const types: Record<Entity, EntityTypeName> = {
+            [Entity.Agent]: 'AgentDescriptionType',
+            [Entity.Gift]: 'GiftDescriptionType',
+            [Entity.Letter]: 'LetterDescriptionType',
+            [Entity.Space]: 'SpaceDescriptionType',
+        }
+        return types[this.entityType];
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['entityType']) {
 
@@ -117,8 +129,10 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             entityType: this.entityType,
         };
         this.addMutation.mutate({ input }, {
-            refetchQueries: REFETCH_QUERIES,
-        }).subscribe(this.mutationRequestObserver);
+            update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache),
+        }).pipe(
+            tap(() => this.status$.next('loading'))
+        ).subscribe(this.mutationRequestObserver);
     }
 
     removeEntity(entityID: string, episodeID: string): void {
@@ -128,8 +142,9 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             episode: episodeID,
             entityType: this.entityType,
         };
-        this.removeMutation.mutate(
-            data, { refetchQueries: REFETCH_QUERIES }
+        this.removeMutation.mutate(data, {
+            update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
+        }).pipe(
         ).subscribe(this.mutationRequestObserver)
     }
 
@@ -139,6 +154,11 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     onError(error: any) {
         console.error(error);
+        this.toastService.show({
+            header: `Adding ${this.entityName} failed`,
+            body: `Could not add ${this.entityName}`,
+            type: 'danger',
+        })
         this.status$.next('error');
     }
 
@@ -157,4 +177,23 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         const linkedEntities = this.linkedEntities(data);
         return differenceBy(allEntities, linkedEntities, 'id');
     }
+
+    private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: ApolloCache<unknown>) {
+        cache.evict({
+            id: cache.identify({
+                __typename: "EpisodeType",
+                id: episodeID,
+            }),
+            fieldName: this.entityProperty,
+        });
+        cache.evict({
+            id: cache.identify({
+                __typename: this.entityTypeName,
+                id: entityID,
+            }),
+            fieldName: 'episodes',
+        });
+        cache.gc();
+    }
+
 }

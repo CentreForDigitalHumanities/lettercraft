@@ -1,13 +1,12 @@
-import { Component, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
 import { actionIcons } from '@shared/icons';
 import { DataEntryDeleteAgentGQL, LettercraftErrorType } from 'generated/graphql';
-import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { BehaviorSubject } from 'rxjs';
 import { FormStatus } from '../../shared/types';
+import { ModalService } from '@services/modal.service';
 
 @Component({
     selector: 'lc-delete-agent',
@@ -24,11 +23,11 @@ export class DeleteAgentComponent implements OnDestroy {
     private formName = 'delete';
 
     constructor(
-        private modalService: NgbModal,
         private deleteMutation: DataEntryDeleteAgentGQL,
         private toastService: ToastService,
         private router: Router,
         private formService: FormService,
+        private modalService: ModalService,
     ) {
         this.formService.attachForm(this.formName, this.status$);
     }
@@ -37,19 +36,18 @@ export class DeleteAgentComponent implements OnDestroy {
         this.formService.detachForm(this.formName);
     }
 
-    open(content: TemplateRef<unknown>) {
-        this.modalService.open(content, { ariaLabelledBy: 'modal-title' }).result.then(
-            this.deleteAgent.bind(this),
-            _.constant(undefined), // do nothing on dismiss
-        );
+    openConfirm(id: string) {
+        this.modalService.openConfirmationModal({
+            title: 'Delete agent?',
+            message: `Delete this agent from this source text? They will be removed from all
+            episodes they are involved in!`
+        }).then(() => this.deleteAgent(id));
     }
 
     deleteAgent(id: string) {
         this.status$.next('loading');
         this.deleteMutation.mutate({ id }, {
-            refetchQueries: [
-                'source'
-            ],
+            update: (cache) => cache.evict({ fieldName: "source" }),
         }).subscribe({
             next: (result) => {
                 if (result.data?.deleteAgent?.ok) {
@@ -85,7 +83,7 @@ export class DeleteAgentComponent implements OnDestroy {
         this.toastService.show({
             type: 'danger',
             header: 'Deletion failed',
-            body: `Deleting agent failed:\n${messages}`
+            body: `Deleting agent failed: \n${messages}`
         });
     }
 }

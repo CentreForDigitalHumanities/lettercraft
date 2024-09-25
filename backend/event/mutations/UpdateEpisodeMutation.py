@@ -39,8 +39,9 @@ class UpdateEpisodeMutation(LettercraftMutation):
             )
             return cls(ok=False, errors=[error])  # type: ignore
 
-        user = info.context.user
-        episode.contributors.add(user)
+        if info.context:
+            user = info.context.user
+            episode.contributors.add(user)
 
         episode.save()
 

@@ -11,9 +11,9 @@ from graphene import (
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from core.types.DescriptionFieldType import SourceMentionEnum
-from event.models import EpisodeAgent
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
+from event.models import EpisodeEntity
 
 
 class UpdateEpisodeEntityLinkInput(InputObjectType):
@@ -25,7 +25,7 @@ class UpdateEpisodeEntityLinkInput(InputObjectType):
 
 
 class UpdateEpisodeEntityLinkMutation(LettercraftMutation):
-    django_model = EpisodeAgent
+    django_model = EpisodeEntity
 
     ok = Boolean(required=True)
     errors = List(NonNull(LettercraftErrorType), required=True)
@@ -51,5 +51,16 @@ class UpdateEpisodeEntityLinkMutation(LettercraftMutation):
         cls.mutate_object(
             data, obj, info, excluded_fields=["entity", "entity_type", "episode"]
         )
+        cls.add_contribution(obj, data, info)
 
         return cls(ok=True, errors=[])
+
+    def add_contribution(
+        obj: EpisodeEntity,
+        data: UpdateEpisodeEntityLinkInput,
+        info: ResolveInfo,
+    ):
+        if info.context:
+            user = info.context.user
+            obj.episode.contributors.add(user)
+            obj.entity.contributors.add(user)
