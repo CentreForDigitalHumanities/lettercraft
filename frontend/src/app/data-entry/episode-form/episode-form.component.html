@@ -21,13 +21,17 @@
 <lc-episode-contents-form />
 
 <h2 class="subform-header">Agents</h2>
-<lc-episode-agents-form />
+<lc-episode-entities-form [entityType]="Entity.Agent" />
 
 <h2 class="subform-header">Locations</h2>
-<lc-episode-locations-form />
+<lc-episode-entities-form [entityType]="Entity.Space" />
 
-<h2 class="subform-header">Objects</h2>
-<lc-episode-objects-form />
+<h2 class="subform-header">Letters</h2>
+<lc-episode-entities-form [entityType]="Entity.Letter" />
+
+<h2 class="subform-header">Gifts</h2>
+<lc-episode-entities-form [entityType]="Entity.Gift" />
+
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

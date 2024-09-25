@@ -6,6 +6,7 @@ from django.db.models import QuerySet
 
 from user.models import User
 from user.types.UserType import UserType
+from core.types.entity import EntityDescription as EntityDescriptionInterface
 
 
 class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
@@ -27,6 +28,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
             "page",
             "contributors",
         ] + NamedType.fields()
+        interfaces = (EntityDescriptionInterface,)
 
     @staticmethod
     def resolve_contributors(

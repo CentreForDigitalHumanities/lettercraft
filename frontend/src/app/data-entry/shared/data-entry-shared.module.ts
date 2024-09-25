@@ -4,6 +4,7 @@ import { DesignatorsControlComponent } from "./designators-control/designators-c
 import { MultiselectComponent } from "./multiselect/multiselect.component";
 import { LabelSelectComponent } from "./label-select/label-select.component";
 import { FormStatusComponent } from './form-status/form-status.component';
+import { EpisodeLinkFormComponent } from './episode-link-form/episode-link-form.component';
 
 @NgModule({
     declarations: [
@@ -11,6 +12,7 @@ import { FormStatusComponent } from './form-status/form-status.component';
         MultiselectComponent,
         LabelSelectComponent,
         FormStatusComponent,
+        EpisodeLinkFormComponent,
     ],
     imports: [SharedModule],
     exports: [
@@ -18,6 +20,7 @@ import { FormStatusComponent } from './form-status/form-status.component';
         MultiselectComponent,
         LabelSelectComponent,
         FormStatusComponent,
+        EpisodeLinkFormComponent,
     ],
 })
 export class DataEntrySharedModule {}

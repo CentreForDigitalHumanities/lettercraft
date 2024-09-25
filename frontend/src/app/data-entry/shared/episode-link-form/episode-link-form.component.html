@@ -1,0 +1,39 @@
+<lc-collapsible-card *ngIf="data$ | async as data"
+    contentDescription="additional questions">
+    <span cardTitle>
+        {{ linkedObject(linkTo, data)?.name }}
+    </span>
+    <a cardControl class="btn btn-primary"
+        [attr.aria-label]="'edit ' + linkedObjectName + ': ' + linkedObject(linkTo, data)?.name"
+        [ngbTooltip]="'edit this ' + linkedObjectName"
+        [routerLink]="[
+            '/data-entry',
+            formUrl(linkTo, entityType),
+            linkedObject(linkTo, data)?.id
+        ]">
+        <lc-icon [icon]="actionIcons.edit" />
+    </a>
+    <ng-content cardControl select="[removeControl]"></ng-content>
+    <form cardBody [formGroup]="form">
+        <div class="mb-3">
+            <label [attr.for]="sourceMentionInputID" class="form-label">
+                How is this {{entityName}}'s involvement in the episode represented?
+            </label>
+            <select #sourceMentionInput class="form-select"
+                [id]="sourceMentionInputID"
+                [formControl]="form.controls.sourceMention">
+                <option *ngFor="let option of sourceMentionOptions"
+                    [ngValue]="option.value">
+                    {{ option.label }}
+                </option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label [attr.for]="notesInputID" class="form-label">Notes</label>
+            <textarea #notesInput class="form-control"
+                [id]="notesInputID"
+                [formControl]="form.controls.note">
+            </textarea>
+        </div>
+    </form>
+</lc-collapsible-card>
