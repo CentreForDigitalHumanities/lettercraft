@@ -40,7 +40,7 @@ class CreateAgentMutation(LettercraftMutation):
         try:
             with transaction.atomic():
                 cls.mutate_object(agent_data, agent, info)
-                cls._add_contribution(agent, agent_data, info)
+                cls.add_contribution(agent, agent_data, info)
                 agent.full_clean()
         except ValidationError as e:
             errors = [
@@ -51,7 +51,7 @@ class CreateAgentMutation(LettercraftMutation):
 
         return cls(ok=True, agent=agent, errors=[])
 
-    def _add_contribution(
+    def add_contribution(
         agent: AgentDescription, agent_data: CreateAgentInput, info: ResolveInfo
     ):
         if info.context:
