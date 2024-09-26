@@ -196,7 +196,6 @@ export type EpisodeAgentType = EpisodeEntityLink & {
   agent: AgentDescriptionType;
   certainty: Certainty;
   entity: EntityDescription;
-  entityType: Entity;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
   note?: Maybe<Scalars['String']['output']>;
@@ -212,7 +211,6 @@ export type EpisodeCategoryType = {
 
 export type EpisodeEntityLink = {
   entity: EntityDescription;
-  entityType: Entity;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
   note?: Maybe<Scalars['String']['output']>;
@@ -223,7 +221,6 @@ export type EpisodeGiftType = EpisodeEntityLink & {
   __typename?: 'EpisodeGiftType';
   certainty: Certainty;
   entity: EntityDescription;
-  entityType: Entity;
   episode: EpisodeType;
   gift: GiftDescriptionType;
   id: Scalars['ID']['output'];
@@ -235,7 +232,6 @@ export type EpisodeLetterType = EpisodeEntityLink & {
   __typename?: 'EpisodeLetterType';
   certainty: Certainty;
   entity: EntityDescription;
-  entityType: Entity;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
   letter: LetterDescriptionType;
@@ -247,7 +243,6 @@ export type EpisodeSpaceType = EpisodeEntityLink & {
   __typename?: 'EpisodeSpaceType';
   certainty: Certainty;
   entity: EntityDescription;
-  entityType: Entity;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
   note?: Maybe<Scalars['String']['output']>;

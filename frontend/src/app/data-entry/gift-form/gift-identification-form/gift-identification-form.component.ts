@@ -48,6 +48,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         name: new FormControl("", {
             validators: [Validators.required],
             nonNullable: true,
+            updateOn: 'blur',
         }),
         description: new FormControl("", {
             nonNullable: true,
