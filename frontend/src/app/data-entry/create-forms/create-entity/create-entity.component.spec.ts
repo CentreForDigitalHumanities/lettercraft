@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateAgentComponent } from './create-entity.component';
+import { CreateEntityComponent } from './create-entity.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { Subject } from 'rxjs';
 import { CreateAgentService } from './create-agent.service';
 
 describe('CreateAgentComponent', () => {
-    let component: CreateAgentComponent;
-    let fixture: ComponentFixture<CreateAgentComponent>;
+    let component: CreateEntityComponent;
+    let fixture: ComponentFixture<CreateEntityComponent>;
     let create$: Subject<void>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [CreateAgentComponent],
+            declarations: [CreateEntityComponent],
             imports: [SharedTestingModule],
             providers: [CreateAgentService],
         });
-        fixture = TestBed.createComponent(CreateAgentComponent);
+        fixture = TestBed.createComponent(CreateEntityComponent);
         component = fixture.componentInstance;
         create$ = new Subject<void>();
         component.create = create$;

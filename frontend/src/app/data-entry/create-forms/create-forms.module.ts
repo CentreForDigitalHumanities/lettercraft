@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CreateAgentComponent } from './create-entity/create-entity.component';
+import { CreateEntityComponent } from './create-entity/create-entity.component';
 import { SharedModule } from '@shared/shared.module';
 import { DataEntrySharedModule } from '../shared/data-entry-shared.module';
 import { CreateAgentService } from './create-entity/create-agent.service';
@@ -12,14 +12,14 @@ import { CreateEntityService } from './create-entity/create-entity.service';
 
 @NgModule({
     declarations: [
-        CreateAgentComponent
+        CreateEntityComponent
     ],
     imports: [
         SharedModule,
         DataEntrySharedModule,
     ],
     exports: [
-        CreateAgentComponent,
+        CreateEntityComponent,
     ],
     providers: [
         CreateAgentService,

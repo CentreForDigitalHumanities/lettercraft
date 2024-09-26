@@ -9,23 +9,24 @@ import { CreateEntityService } from './create-entity.service';
 
 
 /**
- * Opens modal(s) to create new AgentDescriptions.
+ * Opens modal(s) to create new AgentDescriptions, GiftDescriptions, LetterDescriptions,
+ * or SpaceDescriptions.
  *
- * The parent component shoud implement a trigger to create agents (e.g. a button); use
+ * The parent component shoud implement a trigger to create objects (e.g. a button); use
  * the `[create]` input to signal when to open a modal.
  */
 @Component({
-    selector: 'lc-create-agent',
+    selector: 'lc-create-entity',
     templateUrl: './create-entity.component.html',
     styleUrls: ['./create-entity.component.scss'],
 })
-export class CreateAgentComponent implements AfterViewInit {
+export class CreateEntityComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;
     @Input({ required: true }) sourceID!: string;
     @Input() episodeID?: string;
     @Input({ required: true }) entityType!: Entity;
 
-    @ViewChild('createEntitytModal') modalTempate?: TemplateRef<unknown>;
+    @ViewChild('createEntityModal') modalTempate?: TemplateRef<unknown>;
 
     modal: NgbModalRef | null = null;
     form = new FormGroup({
