@@ -14,8 +14,8 @@
         <lc-icon [icon]="actionIcons.edit" />
     </a>
     <ng-content cardControl select="[removeControl]"></ng-content>
-    <form cardBody [formGroup]="form">
-        <div class="mb-3">
+    <form cardBody [formGroup]="form" class="vstack gap-4">
+        <div>
             <label [attr.for]="sourceMentionInputID" class="form-label">
                 How is this {{entityName}}'s involvement in the episode represented?
             </label>
@@ -28,14 +28,14 @@
                 </option>
             </select>
         </div>
-        <div class="mb-3">
+        <div>
             <p class="form-label">Designators</p>
             <p class="form-text">
                 What terminology is used in the episode to refer to this {{entityName}}?
             </p>
             <lc-designators-control [formControl]="form.controls.designators" />
         </div>
-        <div class="mb-3">
+        <div>
             <label [attr.for]="notesInputID" class="form-label">Notes</label>
             <textarea #notesInput class="form-control"
                 [id]="notesInputID"
