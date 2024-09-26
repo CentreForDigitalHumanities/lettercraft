@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { LocationSourceTextFormComponent } from "./location-source-text-form.component";
+import { SharedTestingModule } from "@shared/shared-testing.module";
+import { FormService } from "../../shared/form.service";
 
 describe("LocationSourceTextFormComponent", () => {
     let component: LocationSourceTextFormComponent;
@@ -9,6 +11,8 @@ describe("LocationSourceTextFormComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [LocationSourceTextFormComponent],
+            imports: [SharedTestingModule],
+            providers: [FormService],
         });
         fixture = TestBed.createComponent(LocationSourceTextFormComponent);
         component = fixture.componentInstance;
