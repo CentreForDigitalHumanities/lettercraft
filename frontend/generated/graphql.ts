@@ -193,6 +193,7 @@ export type EpisodeAgentType = EpisodeEntityLink & {
   __typename?: 'EpisodeAgentType';
   agent: AgentDescriptionType;
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -208,6 +209,7 @@ export type EpisodeCategoryType = {
 };
 
 export type EpisodeEntityLink = {
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -218,6 +220,7 @@ export type EpisodeEntityLink = {
 export type EpisodeGiftType = EpisodeEntityLink & {
   __typename?: 'EpisodeGiftType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   gift: GiftDescriptionType;
@@ -229,6 +232,7 @@ export type EpisodeGiftType = EpisodeEntityLink & {
 export type EpisodeLetterType = EpisodeEntityLink & {
   __typename?: 'EpisodeLetterType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -240,6 +244,7 @@ export type EpisodeLetterType = EpisodeEntityLink & {
 export type EpisodeSpaceType = EpisodeEntityLink & {
   __typename?: 'EpisodeSpaceType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -880,7 +885,6 @@ export type UpdateAgentGenderInput = {
 
 export type UpdateAgentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
   isGroup?: InputMaybe<Scalars['Boolean']['input']>;
@@ -911,6 +915,7 @@ export type UpdateCreateSourceInput = {
 };
 
 export type UpdateEpisodeEntityLinkInput = {
+  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   entity: Scalars['ID']['input'];
   entityType: Entity;
   episode: Scalars['ID']['input'];
@@ -948,7 +953,6 @@ export type UpdateGiftInput = {
   categorisations?: InputMaybe<Array<GiftCategorisationInput>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
@@ -966,7 +970,6 @@ export type UpdateLetterInput = {
   categorisations?: InputMaybe<Array<LetterCategorisationInput>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
@@ -1217,7 +1220,7 @@ export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeGiftType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeLetterType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeSpaceType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
+export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeGiftType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeLetterType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeSpaceType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeEntityLinkMutationVariables = Exact<{
   input: UpdateEpisodeEntityLinkInput;
@@ -2001,6 +2004,7 @@ export const DataEntryEpisodeEntityLinkDocument = gql`
     id
     note
     sourceMention
+    designators
     episode {
       id
       name

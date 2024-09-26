@@ -29,6 +29,9 @@
             </select>
         </div>
         <div class="mb-3">
+            <lc-designators-control [formControl]="form.controls.designators" />
+        </div>
+        <div class="mb-3">
             <label [attr.for]="notesInputID" class="form-label">Notes</label>
             <textarea #notesInput class="form-control"
                 [id]="notesInputID"
