@@ -5,9 +5,10 @@
         <button class="btn btn-secondary ms-auto"
             ariaLabel="{{ collapsed ? 'show' : 'hide' }} {{contentDescription}}"
             [ngbTooltip]="(collapsed ? 'show' : 'hide') + ' ' + contentDescription"
+            #tooltip="ngbTooltip"
             [attr.aria-expanded]="!collapsed"
             [attr.aria-controls]="bodyID"
-            (click)="collapsed = !collapsed">
+            (click)="collapsed = !collapsed; tooltip.close()">
             <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
         </button>
         <ng-content select="[cardControl]" />
