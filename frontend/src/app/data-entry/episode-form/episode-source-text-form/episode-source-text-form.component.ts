@@ -39,7 +39,6 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
     );
 
     public form = new FormGroup({
-        designators: new FormControl<string[]>([], { nonNullable: true }),
         book: new FormControl<string>("", { nonNullable: true }),
         chapter: new FormControl<string>("", { nonNullable: true }),
         page: new FormControl<string>("", { nonNullable: true }),

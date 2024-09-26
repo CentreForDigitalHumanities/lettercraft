@@ -41,6 +41,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         summary: new FormControl<string>("", {
             nonNullable: true,
         }),
+        designators: new FormControl<string[]>([], { nonNullable: true }),
         categories: new FormControl<string[]>([], {
             nonNullable: true,
         }),

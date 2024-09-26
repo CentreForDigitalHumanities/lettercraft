@@ -1077,7 +1077,7 @@ export type DataEntryEpisodeContentsQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
+export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, designators: Array<string>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
 
 export type DataEntryEpisodeCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1103,7 +1103,7 @@ export type DataEntryEpisodeSourceTextMentionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeSourceTextMentionQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+export type DataEntryEpisodeSourceTextMentionQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, book: string, chapter: string, page: string } | null };
 
 export type DataEntryEpisodeFormQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1503,6 +1503,7 @@ export const DataEntryEpisodeContentsDocument = gql`
   episode(id: $id) {
     id
     summary
+    designators
     categories {
       id
     }
@@ -1617,7 +1618,6 @@ export const DataEntryEpisodeSourceTextMentionDocument = gql`
     query DataEntryEpisodeSourceTextMention($id: ID!) {
   episode(id: $id) {
     id
-    designators
     book
     chapter
     page
