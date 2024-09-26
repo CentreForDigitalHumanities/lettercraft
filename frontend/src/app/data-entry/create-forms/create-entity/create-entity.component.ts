@@ -15,9 +15,9 @@ import { CreateEntityService } from './create-entity.service';
  * the `[create]` input to signal when to open a modal.
  */
 @Component({
-  selector: 'lc-create-agent',
-  templateUrl: './create-agent.component.html',
-    styleUrls: ['./create-agent.component.scss'],
+    selector: 'lc-create-agent',
+    templateUrl: './create-entity.component.html',
+    styleUrls: ['./create-entity.component.scss'],
 })
 export class CreateAgentComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;

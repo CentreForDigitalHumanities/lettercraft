@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateAgentComponent } from './create-agent.component';
+import { CreateAgentComponent } from './create-entity.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { Subject } from 'rxjs';
 import { CreateAgentService } from './create-agent.service';
