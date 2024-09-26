@@ -1,11 +1,11 @@
 import { DestroyRef, Injectable } from '@angular/core';
 import { CreateLetterMutation, DataEntryCreateLetterGQL, DataEntryCreateLetterMutation } from 'generated/graphql';
 import { MutationResult } from 'apollo-angular';
-import { CreateEntityDescriptionService } from './create-entity';
+import { CreateEntityDescriptionAbstract } from './create-entity-abstract';
 
 
 @Injectable()
-export class CreateLetterService extends CreateEntityDescriptionService<DataEntryCreateLetterMutation, CreateLetterMutation> {
+export class CreateLetterService extends CreateEntityDescriptionAbstract<DataEntryCreateLetterMutation, CreateLetterMutation> {
     relatedName = 'letters';
 
     constructor(

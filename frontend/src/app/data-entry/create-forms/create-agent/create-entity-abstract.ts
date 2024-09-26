@@ -20,7 +20,7 @@ type CreateEntityMutationUnion = (
     DataEntryCreateSpaceMutation
 );
 
-export abstract class CreateEntityDescriptionService<
+export abstract class CreateEntityDescriptionAbstract<
     CreateEntityMutation extends CreateEntityMutationUnion,
     Result extends { errors?: LettercraftErrorType[] },
 > {

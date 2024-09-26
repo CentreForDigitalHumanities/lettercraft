@@ -1,17 +1,17 @@
-<ng-template #createAgentModal>
+<ng-template #createEntityModal>
     <lc-base-modal (dismiss)="closeModal()">
         <ng-container modal-header>
-            <h4 ngbAutofocus tabindex="-1">Create new agent</h4>
+            <h4 ngbAutofocus tabindex="-1">Create new {{ entityName }}</h4>
         </ng-container>
         <form modal-content [formGroup]="form" (ngSubmit)="submit()">
             <div class="form-group">
-                <label class="form-label" for="agent-name-input">Name</label>
+                <label class="form-label" for="create-entity-name-input">Name</label>
                 <p class="form-text">
-                    This is a name to identify the agent in the overview of the
+                    This is a name to identify the {{ entityName }} in the overview of the
                     source. For example: {{ nameExamples }}.
                 </p>
                 <input
-                    id="agent-name-input"
+                    id="create-entity-name-input"
                     type="text"
                     class="form-control"
                     [formControl]="form.controls.name"

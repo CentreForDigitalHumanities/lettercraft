@@ -6,6 +6,7 @@ import { CreateAgentService } from './create-agent/create-agent.service';
 import { CreateGiftService } from './create-agent/create-gift.service';
 import { CreateLetterService } from './create-agent/create-letter.service';
 import { CreateSpaceService } from './create-agent/create-space.service';
+import { CreateEntityService } from './create-agent/create-entity.service';
 
 
 
@@ -25,6 +26,7 @@ import { CreateSpaceService } from './create-agent/create-space.service';
         CreateGiftService,
         CreateLetterService,
         CreateSpaceService,
+        CreateEntityService,
     ]
 })
 export class CreateFormsModule { }

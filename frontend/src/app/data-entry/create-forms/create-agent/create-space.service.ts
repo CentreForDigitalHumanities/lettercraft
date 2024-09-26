@@ -1,11 +1,11 @@
 import { DestroyRef, Injectable } from '@angular/core';
 import { CreateSpaceMutation, DataEntryCreateSpaceGQL, DataEntryCreateSpaceMutation } from 'generated/graphql';
 import { MutationResult } from 'apollo-angular';
-import { CreateEntityDescriptionService } from './create-entity';
+import { CreateEntityDescriptionAbstract } from './create-entity-abstract';
 
 
 @Injectable()
-export class CreateSpaceService extends CreateEntityDescriptionService<DataEntryCreateSpaceMutation, CreateSpaceMutation> {
+export class CreateSpaceService extends CreateEntityDescriptionAbstract<DataEntryCreateSpaceMutation, CreateSpaceMutation> {
     relatedName = 'spaces';
 
     constructor(
