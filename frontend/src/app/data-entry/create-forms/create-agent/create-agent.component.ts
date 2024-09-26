@@ -73,7 +73,7 @@ export class CreateAgentComponent implements AfterViewInit {
         const outcome = this.createAgentService.submit(input);
 
         this.loading$ = outcome.loading$;
-        outcome.succes$.subscribe(() => this.onMutationSuccess(input.name));
+        outcome.success$.subscribe(() => this.onMutationSuccess(input.name));
         outcome.errors$.subscribe(messages => this.onMutationError(messages, input.name));
     }
 
