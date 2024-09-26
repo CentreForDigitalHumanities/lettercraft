@@ -52,7 +52,7 @@ export class CreateEntityComponent implements AfterViewInit {
             [Entity.Agent]: 'agent',
             [Entity.Gift]: 'gift',
             [Entity.Letter]: 'letter',
-            [Entity.Space]: 'space',
+            [Entity.Space]: 'location',
         }
         return names[this.entityType];
     }

@@ -59,7 +59,7 @@ export abstract class CreateEntityDescriptionAbstract<
             map(result => this.resultData(result) as Result),
         );
         const errors$: Observable<string[]> = result$.pipe(
-            map(this.resultErrors),
+            map(this.resultErrors.bind(this)),
             filter(_.negate(_.isUndefined)),
         );
         return { loading$, success$: succes$, errors$ };
