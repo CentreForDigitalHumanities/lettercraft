@@ -9,23 +9,29 @@
 
     <!-- <lc-entity-description-lead [entity]="location" /> -->
 
+    <lc-form-status [status$]="status$" />
+
     <!-- <lc-delete-entity-button
             (clickDelete)="onClickDelete(location)"
             [deletingInProgress]="deletingInProgress"
             entityName="location"
         /> -->
-
-    <p class="alert alert-warning">This form is not implemented yet!</p>
 </ng-container>
 
-<!-- <h2 class="subform-header">Identification</h2>
-<lc-gift-identification-form />
+<h2 class="subform-header">Identification</h2>
+<lc-location-identification-form />
 
 <h2 class="subform-header">Source text</h2>
-<lc-gift-source-text-form />
+<lc-location-source-text-form />
 
-<h2 class="subform-header">Categories</h2>
-<lc-gift-categories-form /> -->
+<h2 class="subform-header">Regions</h2>
+<p><i>Coming soon!</i></p>
+
+<h2 class="subform-header">Settlements</h2>
+<p><i>Coming soon!</i></p>
+
+<h2 class="subform-header">Structures</h2>
+<p><i>Coming soon!</i></p>
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

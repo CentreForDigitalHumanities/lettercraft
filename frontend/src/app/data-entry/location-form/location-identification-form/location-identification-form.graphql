@@ -1,0 +1,7 @@
+query DataEntryLocationIdentification($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        name
+        description
+    }
+}
