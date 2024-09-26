@@ -2,7 +2,6 @@ query DataEntryAgentDescription($id: ID!) {
   agentDescription(id: $id) {
     id
     isGroup
-    designators
     gender {
       id
       gender

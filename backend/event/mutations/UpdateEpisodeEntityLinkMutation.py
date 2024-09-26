@@ -22,6 +22,7 @@ class UpdateEpisodeEntityLinkInput(InputObjectType):
     entity_type = Entity(required=True)
     source_mention = SourceMentionEnum()
     note = String()
+    designators = List(NonNull(String))
 
 
 class UpdateEpisodeEntityLinkMutation(LettercraftMutation):

@@ -38,7 +38,6 @@ export class AgentDescriptionFormComponent implements OnDestroy {
     sourceMentionOptions = sourceMentionSelectOptions();
 
     form = new FormGroup({
-        designators: new FormControl<string[]>([], { nonNullable: true }),
         gender: new FormGroup({
             gender: new FormControl<string>(Gender.Unknown),
             sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
@@ -102,7 +101,6 @@ export class AgentDescriptionFormComponent implements OnDestroy {
 
     updateFormData(data: DataEntryAgentDescriptionQuery) {
         this.form.setValue({
-            designators: data.agentDescription?.designators || [],
             gender: {
                 gender: data.agentDescription?.gender?.gender || Gender.Unknown,
                 sourceMention: data.agentDescription?.gender?.sourceMention || SourceMention.Direct,
@@ -128,7 +126,6 @@ export class AgentDescriptionFormComponent implements OnDestroy {
     private toMutationInput([data, id]: [Partial<typeof this.form.value>, string]): UpdateAgentInput {
         return {
             id,
-            designators: data.designators,
             gender: {
                 gender: data.gender?.gender as Gender,
                 sourceMention: data.gender?.sourceMention as SourceMention,
