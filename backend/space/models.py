@@ -12,9 +12,12 @@ class SpaceDescription(EntityDescription, models.Model):
 
     class Meta:
         ordering = [
-            models.F("structures__identifiable").desc(nulls_last=True),
-            models.F("settlements__identifiable").desc(nulls_last=True),
-            models.F("regions__identifiable").desc(nulls_last=True),
+            models.Case(
+                models.When(structures__identifiable=True, then=1),
+                models.When(settlements__identifiable=True, then=2),
+                models.When(regions__identifiable=True, then=3),
+                default=None,
+            ).asc(nulls_last=True),
         ]
 
     regions = models.ManyToManyField(
