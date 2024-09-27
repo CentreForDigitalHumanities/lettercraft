@@ -3,7 +3,7 @@
 
     <ng-container *ngIf="data.agentDescription as agentDescription; else noAgent">
         <h1 class="mb-4">
-            <lc-icon [icon]="dataIcons.person" />
+            <lc-icon [icon]="agentDescription.isGroup ? dataIcons.group : dataIcons.person" />
             {{agentDescription.name}}
             <span class="text-secondary">
                 ({{agentDescription.source.name}})
@@ -33,7 +33,7 @@
 
         <h2>Episodes</h2>
 
-        <p><i>Coming soon!</i></p>
+        <lc-agent-episodes-form />
 
         <h2>Historical context</h2>
 

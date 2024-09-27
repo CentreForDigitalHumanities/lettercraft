@@ -1,27 +1,17 @@
 type AgentDescriptionGenderType {
   agent: AgentDescriptionType!
-
-  """How certain are you of this value?"""
-  certainty: PersonAgentDescriptionGenderCertaintyChoices!
-
-  """
-  The gender of this agent. The option Mixed is only applicable for groups.
-  """
-  gender: PersonAgentDescriptionGenderGenderChoices!
+  certainty: Certainty!
+  gender: Gender!
   id: ID!
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: PersonAgentDescriptionGenderSourceMentionChoices
+  sourceMention: SourceMention!
 }
 
 type AgentDescriptionLocationType {
   agent: AgentDescriptionType!
-
-  """How certain are you of this value?"""
-  certainty: PersonAgentDescriptionLocationCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """location by which the agent is identified"""
@@ -29,40 +19,35 @@ type AgentDescriptionLocationType {
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: PersonAgentDescriptionLocationSourceMentionChoices
+  sourceMention: SourceMention!
 }
 
-type AgentDescriptionType {
+type AgentDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
 
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-  describes: [HistoricalPersonType]
-
-  """Longer description to help identify this object"""
+  describes: [HistoricalPersonType!]!
   description: String!
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
 
   """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
   isGroup: Boolean!
   location: AgentDescriptionLocationType
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
   page: String!
-  personReferences: [PersonReferenceType]
+  personReferences: [PersonReferenceType!]!
 
   """Source text containing this description"""
   source: SourceType!
@@ -85,6 +70,17 @@ input CreateAgentInput {
 
 type CreateAgentMutation {
   agent: AgentDescriptionType
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input CreateEpisodeEntityLinkInput {
+  entity: ID!
+  entityType: Entity!
+  episode: ID!
+}
+
+type CreateEpisodeEntityLinkMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
@@ -144,6 +140,11 @@ type DeleteAgentMutation {
   ok: Boolean!
 }
 
+type DeleteEpisodeEntityLinkMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 type DeleteEpisodeMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
@@ -169,16 +170,79 @@ type DeletePersonReferenceMutation {
   ok: Boolean!
 }
 
+enum Entity {
+  AGENT
+  GIFT
+  LETTER
+  SPACE
+}
+
+interface EntityDescription {
+  description: String
+  id: ID!
+  name: String
+}
+
+type EpisodeAgentType implements EpisodeEntityLink {
+  agent: AgentDescriptionType!
+  certainty: Certainty!
+  entity: EntityDescription!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+}
+
 type EpisodeCategoryType {
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 }
 
-type EpisodeType {
+interface EpisodeEntityLink {
+  entity: EntityDescription!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+}
+
+type EpisodeGiftType implements EpisodeEntityLink {
+  certainty: Certainty!
+  entity: EntityDescription!
+  entityType: Entity!
+  episode: EpisodeType!
+  gift: GiftDescriptionType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+}
+
+type EpisodeLetterType implements EpisodeEntityLink {
+  certainty: Certainty!
+  entity: EntityDescription!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  letter: LetterDescriptionType!
+  note: String
+  sourceMention: SourceMention!
+}
+
+type EpisodeSpaceType implements EpisodeEntityLink {
+  certainty: Certainty!
+  entity: EntityDescription!
+  entityType: Entity!
+  episode: EpisodeType!
+  id: ID!
+  note: String
+  sourceMention: SourceMention!
+  space: SpaceDescriptionType!
+}
+
+type EpisodeType implements EntityDescription {
   """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
@@ -189,8 +253,6 @@ type EpisodeType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
 
   """
@@ -204,8 +266,6 @@ type EpisodeType {
 
   """letters involved in this episode"""
   letters: [LetterDescriptionType!]!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -251,30 +311,23 @@ input GiftCategorisationInput {
 }
 
 type GiftCategoryType {
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 }
 
 type GiftDescriptionCategoryType {
   category: GiftCategoryType!
-
-  """How certain are you of this value?"""
-  certainty: LetterGiftDescriptionCategoryCertaintyChoices!
+  certainty: Certainty!
   gift: GiftDescriptionType!
   id: ID!
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: LetterGiftDescriptionCategorySourceMentionChoices
+  sourceMention: SourceMention!
 }
 
-type GiftDescriptionType {
+type GiftDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
   categories: [GiftCategoryType!]!
@@ -283,17 +336,14 @@ type GiftDescriptionType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeGiftType!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -310,8 +360,6 @@ type HistoricalPersonType {
   contributors: [UserType!]!
   dateOfBirth: PersonDateOfBirthType
   dateOfDeath: PersonDateOfDeathType
-
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
 
@@ -319,8 +367,6 @@ type HistoricalPersonType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 }
 
@@ -340,20 +386,16 @@ type LetterCategoryType {
 
 type LetterDescriptionCategoryType {
   category: LetterCategoryType!
-
-  """How certain are you of this value?"""
-  certainty: LetterLetterDescriptionCategoryCertaintyChoices!
+  certainty: Certainty!
   id: ID!
   letter: LetterDescriptionType!
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: LetterLetterDescriptionCategorySourceMentionChoices
+  sourceMention: SourceMention!
 }
 
-type LetterDescriptionType {
+type LetterDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
   categories: [LetterCategoryType!]!
@@ -362,17 +404,14 @@ type LetterDescriptionType {
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeLetterType!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -386,49 +425,7 @@ type LetterDescriptionType {
 }
 
 """An enumeration."""
-enum LetterGiftDescriptionCategoryCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum LetterGiftDescriptionCategorySourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum LetterGiftDescriptionSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
-enum LetterLetterDescriptionCategoryCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum LetterLetterDescriptionCategorySourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
@@ -456,83 +453,26 @@ type LettercraftErrorType {
 type Mutation {
   createAgent(agentData: CreateAgentInput!): CreateAgentMutation
   createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
+  createEpisodeEntityLink(data: CreateEpisodeEntityLinkInput!): CreateEpisodeEntityLinkMutation
   createGift(giftData: CreateGiftInput!): CreateGiftMutation
   createLetter(letterData: CreateLetterInput!): CreateLetterMutation
   createLocation(locationData: CreateLocationInput!): CreateLocationMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
+  deleteEpisodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): DeleteEpisodeEntityLinkMutation
   deleteGift(id: ID!): DeleteGiftMutation
   deleteLetter(id: ID!): DeleteLetterMutation
   deleteLocation(id: ID!): DeleteLocationMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
+  updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateLocation(locationData: UpdateLocationInput!): UpdateLocationMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionGenderCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionGenderGenderChoices {
-  """Female"""
-  FEMALE
-
-  """Male"""
-  MALE
-
-  """Mixed"""
-  MIXED
-
-  """Other"""
-  OTHER
-
-  """Unknown"""
-  UNKNOWN
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionGenderSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionLocationCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonAgentDescriptionLocationSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
 }
 
 """An enumeration."""
@@ -545,8 +485,7 @@ enum PersonAgentDescriptionSourceMentionChoices {
 }
 
 type PersonDateOfBirthType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonDateOfBirthCertaintyChoices!
+  certainty: Certainty!
   displayDate: String!
   id: ID!
 
@@ -569,8 +508,7 @@ type PersonDateOfBirthType {
 }
 
 type PersonDateOfDeathType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonDateOfDeathCertaintyChoices!
+  certainty: Certainty!
   displayDate: String!
   id: ID!
 
@@ -592,45 +530,8 @@ type PersonDateOfDeathType {
   yearUpper: Int!
 }
 
-"""An enumeration."""
-enum PersonPersonDateOfBirthCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonPersonDateOfDeathCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum PersonPersonReferenceCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
 type PersonReferenceType {
-  """How certain are you of this value?"""
-  certainty: PersonPersonReferenceCertaintyChoices!
+  certainty: Certainty!
   description: AgentDescriptionType!
   id: ID!
 
@@ -644,6 +545,7 @@ type Query {
   agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
   episodeCategories: [EpisodeCategoryType!]!
+  episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
@@ -659,23 +561,18 @@ type Query {
 }
 
 type RegionFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceRegionFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
   region: RegionType!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceRegionFieldSourceMentionChoices
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
 }
 
 type RegionType {
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
 
@@ -683,8 +580,6 @@ type RegionType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 
   """Kind of region"""
@@ -692,23 +587,18 @@ type RegionType {
 }
 
 type SettlementFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceSettlementFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
   settlement: SettlementType!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceSettlementFieldSourceMentionChoices
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
 }
 
 type SettlementType {
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
 
@@ -716,8 +606,6 @@ type SettlementType {
   Whether this entity is identifiable (i.e. can be cross-referenced between descriptions), or a generic description
   """
   identifiable: Boolean!
-
-  """A name to help identify this object"""
   name: String!
 
   """Surrounding regions of this settlement"""
@@ -750,6 +638,7 @@ enum SourceMention {
 }
 
 type SourceType {
+  agents: [AgentDescriptionType!]!
   contentsDate: SourceContentsDateType
 
   """The name of the author of the edition"""
@@ -758,7 +647,9 @@ type SourceType {
   """The title of the edition used for this source"""
   editionTitle: String!
   episodes: [EpisodeType!]!
+  gifts: [GiftDescriptionType!]!
   id: ID!
+  letters: [LetterDescriptionType!]!
 
   """The name of the original author of the work, if known"""
   medievalAuthor: String!
@@ -769,6 +660,7 @@ type SourceType {
   """a unique name to identify this source in the database"""
   name: String!
   numOfEpisodes: Int!
+  spaces: [SpaceDescriptionType!]!
   writtenDate: SourceWrittenDateType
 }
 
@@ -791,24 +683,21 @@ type SourceWrittenDateType {
   yearUpper: Int!
 }
 
-type SpaceDescriptionType {
+type SpaceDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
 
   """The chapter or chapters in the source"""
   chapter: String!
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
 
   """
   Relevant (Latin) terminology used to describe this entity in the source text
   """
   designators: [String!]!
+  episodes: [EpisodeSpaceType!]!
   id: ID!
-
-  """A name to help identify this object"""
   name: String!
 
   """The page number or page range in the source"""
@@ -828,27 +717,6 @@ type SpaceDescriptionType {
 }
 
 """An enumeration."""
-enum SpaceRegionFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum SpaceRegionFieldSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum SpaceRegionTypeChoices {
   """ecclesiastical"""
   ECCLESIASTICAL
@@ -861,49 +729,7 @@ enum SpaceRegionTypeChoices {
 }
 
 """An enumeration."""
-enum SpaceSettlementFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum SpaceSettlementFieldSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
 enum SpaceSpaceDescriptionSourceMentionChoices {
-  """directly mentioned"""
-  DIRECT
-
-  """implied"""
-  IMPLIED
-}
-
-"""An enumeration."""
-enum SpaceStructureFieldCertaintyChoices {
-  """uncertain"""
-  A_0
-
-  """somewhat certain"""
-  A_1
-
-  """certain"""
-  A_2
-}
-
-"""An enumeration."""
-enum SpaceStructureFieldSourceMentionChoices {
   """directly mentioned"""
   DIRECT
 
@@ -930,23 +756,18 @@ enum SpaceStructureLevelChoices {
 }
 
 type StructureFieldType {
-  """How certain are you of this value?"""
-  certainty: SpaceStructureFieldCertaintyChoices!
+  certainty: Certainty!
   id: ID!
 
   """Additional notes"""
   note: String!
-
-  """How is this information presented in the text?"""
-  sourceMention: SpaceStructureFieldSourceMentionChoices
+  sourceMention: SourceMention!
   space: SpaceDescriptionType!
   structure: StructureType!
 }
 
 type StructureType {
   contributors: [UserType!]!
-
-  """Longer description to help identify this object"""
   description: String!
   id: ID!
 
@@ -955,8 +776,6 @@ type StructureType {
   """
   identifiable: Boolean!
   level: SpaceStructureLevelChoices!
-
-  """A name to help identify this object"""
   name: String!
 
   """The settlement containing this structure"""
@@ -998,6 +817,19 @@ input UpdateCreateSourceInput {
   medievalAuthor: String
   medievalTitle: String
   name: String!
+}
+
+input UpdateEpisodeEntityLinkInput {
+  entity: ID!
+  entityType: Entity!
+  episode: ID!
+  note: String
+  sourceMention: SourceMention
+}
+
+type UpdateEpisodeEntityLinkMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
 }
 
 input UpdateEpisodeInput {

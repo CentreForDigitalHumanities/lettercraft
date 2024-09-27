@@ -1,0 +1,40 @@
+query DataEntryEpisodeEntities($id:ID!) {
+  episode(id: $id) {
+    id
+    source {
+      id
+      agents {
+        id
+        name
+      }
+      letters {
+        id
+        name
+      }
+      gifts {
+        id
+        name
+      }
+      spaces {
+        id
+        name
+      }
+    }
+    agents {
+      id
+      name
+    }
+    gifts {
+      id
+      name
+    }
+    letters {
+      id
+      name
+    }
+    spaces {
+      id
+      name
+    }
+  }
+}

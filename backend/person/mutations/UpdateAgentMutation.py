@@ -9,7 +9,7 @@ from graphene import (
     Enum,
     NonNull,
 )
-
+from typing import Union
 from person.types.AgentDescriptionType import AgentDescriptionType
 from person.models import AgentDescription, Gender
 from core.models import SourceMention
@@ -21,16 +21,17 @@ from django.db.models.fields.related_descriptors import (
     ReverseOneToOneDescriptor,
     ForwardOneToOneDescriptor,
 )
+from core.types.DescriptionFieldType import SourceMentionEnum
 
 class UpdateAgentGenderInput(InputObjectType):
     gender = Enum.from_enum(Gender)()
-    source_mention = Enum.from_enum(SourceMention)()
+    source_mention = SourceMentionEnum()
     note = String()
 
 
 class UpdateAgentLocationInput(InputObjectType):
     location = ID()
-    source_mention = Enum.from_enum(SourceMention)()
+    source_mention = SourceMentionEnum()
     note = String()
 
 
@@ -71,6 +72,7 @@ class UpdateAgentMutation(LettercraftMutation):
                     excluded_fields=["gender", "location"],
                 )
                 cls.handle_nested_fields(agent, agent_data, info)
+                cls.add_contribution(agent, agent_data, info)
                 # refresh to load related objects if those were updated through nested
                 # fields
                 agent.refresh_from_db()
@@ -107,7 +109,7 @@ class UpdateAgentMutation(LettercraftMutation):
         agent_data: UpdateAgentInput,
         info: ResolveInfo,
         field_name: str,
-        descriptor: ForwardOneToOneDescriptor | ReverseOneToOneDescriptor,
+        descriptor: Union[ForwardOneToOneDescriptor, ReverseOneToOneDescriptor],
     ):
 
         if not field_name in agent_data:
@@ -135,3 +137,10 @@ class UpdateAgentMutation(LettercraftMutation):
                 related_obj = related_model(**relation)
             cls.mutate_object(nested_data, related_obj, info)
             related_obj.full_clean()
+
+    def add_contribution(
+        agent: AgentDescription, agent_data: UpdateAgentInput, info: ResolveInfo
+    ):
+        if info.context:
+            user = info.context.user
+            agent.contributors.add(user)

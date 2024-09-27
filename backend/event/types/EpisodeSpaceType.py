@@ -1,12 +1,14 @@
-from graphene import ResolveInfo
+from graphene import NonNull
 from graphene_django import DjangoObjectType
+
 from core.types.DescriptionFieldType import DescriptionFieldType
-from django.db.models import QuerySet
-
+from core.types.entity import EntityDescription
 from event.models import EpisodeSpace
-
+from event.types.EpisodeEntityLink import EpisodeEntityLink
 
 class EpisodeSpaceType(DescriptionFieldType, DjangoObjectType):
+    entity = NonNull(EntityDescription)
+
     class Meta:
         model = EpisodeSpace
         fields = [
@@ -14,11 +16,4 @@ class EpisodeSpaceType(DescriptionFieldType, DjangoObjectType):
             "episode",
             "space",
         ] + DescriptionFieldType.fields()
-
-    @classmethod
-    def get_queryset(
-        cls,
-        queryset: QuerySet[EpisodeSpace],
-        info: ResolveInfo,
-    ) -> QuerySet[EpisodeSpace]:
-        return queryset.all()
+        interfaces = (EpisodeEntityLink,)

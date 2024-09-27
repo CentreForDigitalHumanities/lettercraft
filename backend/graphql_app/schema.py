@@ -11,6 +11,15 @@ from user.queries import UserQueries
 
 from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
+from event.mutations.CreateEpisodeEntityLinkMutation import (
+    CreateEpisodeEntityLinkMutation,
+)
+from event.mutations.DeleteEpisodeEntityLinkMutation import (
+    DeleteEpisodeEntityLinkMutation,
+)
+from event.mutations.UpdateEpisodeEntityLinkMutation import (
+    UpdateEpisodeEntityLinkMutation,
+)
 from person.mutations.CreateAgentMutation import CreateAgentMutation
 from person.mutations.UpdateAgentMutation import UpdateAgentMutation
 from person.mutations.DeleteAgentMutation import DeleteAgentMutation
@@ -31,9 +40,9 @@ from person.mutations.DeletePersonReferenceMutation import DeletePersonReference
 class Query(
     SourceQueries,
     PersonQueries,
-    EventQueries,
     LetterQueries,
     SpaceQueries,
+    EventQueries,
     UserQueries,
     ObjectType,
 ):
@@ -45,6 +54,9 @@ class Mutation(ObjectType):
     update_episode = UpdateEpisodeMutation.Field()
     create_episode = CreateEpisodeMutation.Field()
     delete_episode = DeleteEpisodeMutation.Field()
+    create_episode_entity_link = CreateEpisodeEntityLinkMutation.Field()
+    update_episode_entity_link = UpdateEpisodeEntityLinkMutation.Field()
+    delete_episode_entity_link = DeleteEpisodeEntityLinkMutation.Field()
     create_agent = CreateAgentMutation.Field()
     update_agent = UpdateAgentMutation.Field()
     delete_agent = DeleteAgentMutation.Field()

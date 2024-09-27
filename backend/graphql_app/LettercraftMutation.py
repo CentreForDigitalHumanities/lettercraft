@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Optional
 from dataclasses import dataclass
 from graphene import InputObjectType, Mutation, ResolveInfo
 from django.db.models import Model
@@ -17,7 +17,7 @@ class LettercraftMutation(Mutation):
     An extension of Graphene's base Mutation class.
     """
 
-    django_model: Type[Model] | None = None
+    django_model: Optional[Type[Model]] = None
 
     @classmethod
     def get_object(cls, info: ResolveInfo, mutation_input: InputObjectType) -> Model:

@@ -1,16 +1,20 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
-import { DataEntryEpisodeFormGQL } from "generated/graphql";
+import { DataEntryEpisodeFormGQL, Entity } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 @Component({
     selector: "lc-episode",
     templateUrl: "./episode-form.component.html",
     styleUrls: ["./episode-form.component.scss"],
+    providers: [FormService],
 })
 export class EpisodeFormComponent {
-    private id$ = this.route.params.pipe(map((params) => params["id"]));
+    Entity = Entity;
+
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -45,11 +49,14 @@ export class EpisodeFormComponent {
         })
     );
 
+    status$ = this.formService.status$;
+
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
 
     constructor(
         private route: ActivatedRoute,
-        private episodeQuery: DataEntryEpisodeFormGQL
+        private episodeQuery: DataEntryEpisodeFormGQL,
+        private formService: FormService,
     ) {}
 }

@@ -6,9 +6,10 @@
                 &nbsp;
                 {{ episode.name }}
                 <br />
-                <small *ngIf="episode.book || episode.chapter" class="inline-list">
+                <small *ngIf="episode.book || episode.chapter || episode.page" class="inline-list">
                     <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
                     <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
+                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
                 </small>
             </div>
             <lc-action-button-group
@@ -19,7 +20,10 @@
         </div>
     </div>
     <div class="card-body">
-        <p>{{ episode.summary || "..." }}</p>
+        <p>
+            <span *ngIf="episode.summary; else noSummary">{{episode.summary}}</span>
+            <ng-template #noSummary><i>(No summary added.)</i></ng-template>
+        </p>
 
         <dl>
             <dt>Agents</dt>
@@ -40,7 +44,7 @@
                 </ul>
             </dd>
             <ng-template #noAgents>
-                <dd class="ms-4">No agents have been added yet.</dd>
+                <dd class="ms-4">No agents have been added.</dd>
             </ng-template>
 
             <dt>Locations</dt>
@@ -61,7 +65,7 @@
                 </ul>
             </dd>
             <ng-template #noSpaces>
-                <dd class="ms-4">No locations have been added yet.</dd>
+                <dd class="ms-4">No locations have been added.</dd>
             </ng-template>
 
             <dt>Objects</dt>
@@ -100,7 +104,7 @@
                 </ul>
             </dd>
             <ng-template #noObjects>
-                <dd class="ms-4">No objects have been added yet.</dd>
+                <dd class="ms-4">No objects have been added.</dd>
             </ng-template>
         </dl>
         <div class="d-flex justify-content-end">

@@ -13,7 +13,7 @@ interface ConfirmationModalConfig {
 export class ModalService {
     constructor(private modal: NgbModal) {}
 
-    public openConfirmationModal(config: ConfirmationModalConfig): Promise<void> {
+    public openConfirmationModal(config: ConfirmationModalConfig): Promise<any> {
         const modal = this.modal.open(ConfirmationModalComponent);
         const { title, message } = config;
         modal.componentInstance.title = title;
