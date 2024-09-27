@@ -172,7 +172,6 @@ type EpisodeAgentType implements EpisodeEntityLink {
   agent: AgentDescriptionType!
   certainty: Certainty!
   entity: EntityDescription!
-  entityType: Entity!
   episode: EpisodeType!
   id: ID!
   note: String
@@ -187,7 +186,6 @@ type EpisodeCategoryType {
 
 interface EpisodeEntityLink {
   entity: EntityDescription!
-  entityType: Entity!
   episode: EpisodeType!
   id: ID!
   note: String
@@ -197,7 +195,6 @@ interface EpisodeEntityLink {
 type EpisodeGiftType implements EpisodeEntityLink {
   certainty: Certainty!
   entity: EntityDescription!
-  entityType: Entity!
   episode: EpisodeType!
   gift: GiftDescriptionType!
   id: ID!
@@ -208,7 +205,6 @@ type EpisodeGiftType implements EpisodeEntityLink {
 type EpisodeLetterType implements EpisodeEntityLink {
   certainty: Certainty!
   entity: EntityDescription!
-  entityType: Entity!
   episode: EpisodeType!
   id: ID!
   letter: LetterDescriptionType!
@@ -219,7 +215,6 @@ type EpisodeLetterType implements EpisodeEntityLink {
 type EpisodeSpaceType implements EpisodeEntityLink {
   certainty: Certainty!
   entity: EntityDescription!
-  entityType: Entity!
   episode: EpisodeType!
   id: ID!
   note: String

@@ -35,6 +35,13 @@ class SpaceDescription(EntityDescription, models.Model):
         help_text="Man-made structures referenced in this description",
     )
 
+    def has_identifiable_features(self):
+        return (
+            self.regions.filter(identifiable=True).exists()
+            or self.settlements.filter(identifiable=True).exists()
+            or self.structures.filter(identifiable=True).exists()
+        )
+
 
 class Region(HistoricalEntity, models.Model):
     """
