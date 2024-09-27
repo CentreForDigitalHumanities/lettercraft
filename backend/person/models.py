@@ -74,6 +74,12 @@ class AgentDescription(EntityDescription, models.Model):
     A description of an agent in a source text; can be a single person or a group
     """
 
+    class Meta:
+        ordering = [
+            models.F("describes__identifiable").desc(nulls_last=True),
+            "is_group",
+        ]
+
     describes = models.ManyToManyField(
         to=HistoricalPerson,
         through=PersonReference,
