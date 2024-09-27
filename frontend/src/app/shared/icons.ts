@@ -27,8 +27,8 @@ export const authIcons = {
 export const dataIcons = {
     source: 'book',
     episode: 'bookmark',
-    person: 'person-fill',
-    personUnknown: 'person',
+    person: 'person',
+    personIdentified: 'person-fill',
     group: 'people',
     location: 'geo-alt',
     locationIdentified: 'geo-alt-fill',

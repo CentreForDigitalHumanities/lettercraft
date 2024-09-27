@@ -54,6 +54,7 @@ export type AgentDescriptionType = EntityDescription & {
   episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
+  identified: Scalars['Boolean']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
   isGroup: Scalars['Boolean']['output'];
   location?: Maybe<AgentDescriptionLocationType>;
@@ -1062,7 +1063,7 @@ export type DataEntryAgentQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateAgentMutationVariables = Exact<{
   input: UpdateAgentInput;
@@ -1247,7 +1248,7 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean }> }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }> } };
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }> } };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1443,6 +1444,7 @@ export const DataEntryAgentDocument = gql`
     name
     description
     isGroup
+    identified
     source {
       id
       name
@@ -2101,10 +2103,7 @@ export const DataEntrySourceDetailDocument = gql`
         id
         name
         isGroup
-        describes {
-          id
-          identifiable
-        }
+        identified
       }
       gifts {
         id

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { dataIcons } from '@shared/icons';
+import { locationIcon } from '@shared/icons-utils';
 import { DataEntrySpaceDescriptionGQL, DataEntrySpaceDescriptionQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 
@@ -15,6 +16,7 @@ export class LocationFormComponent {
     data$: Observable<DataEntrySpaceDescriptionQuery>;
 
     dataIcons = dataIcons;
+    locationIcon = locationIcon;
 
     constructor(
         private route: ActivatedRoute, private spaceQuery: DataEntrySpaceDescriptionGQL

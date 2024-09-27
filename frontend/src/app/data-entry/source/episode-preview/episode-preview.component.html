@@ -58,8 +58,7 @@
                             [routerLink]="['/data-entry', 'locations', space.id]"
                             class="icon-link"
                         >
-                            <lc-icon [icon]="space.hasIdentifiableFeatures ?
-                                dataIcons.locationIdentified : dataIcons.location" />
+                            <lc-icon [icon]="locationIcon(space)" />
                             {{ space.name }}
                         </a>
                     </li>

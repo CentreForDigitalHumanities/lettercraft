@@ -99,6 +99,9 @@ class AgentDescription(EntityDescription, models.Model):
                 "Only groups can describe multiple historical figures"
             )
 
+    def identified(self):
+        return self.describes.filter(identifiable=True).exists()
+
 
 class Gender(models.TextChoices):
     FEMALE = "FEMALE", "Female"
