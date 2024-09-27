@@ -34,6 +34,7 @@ query DataEntrySourceDetail($id: ID!) {
             spaces {
                 id
                 name
+                hasIdentifiableFeatures
             }
         }
     }

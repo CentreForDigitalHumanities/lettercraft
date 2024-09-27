@@ -31,6 +31,7 @@ export const dataIcons = {
     personUnknown: 'person',
     group: 'people',
     location: 'geo-alt',
+    locationIdentified: 'geo-alt-fill',
     gift: 'gift',
     letter: 'envelope',
 };

@@ -674,6 +674,7 @@ type SpaceDescriptionType implements EntityDescription {
   """
   designators: [String!]!
   episodes: [EpisodeSpaceType!]!
+  hasIdentifiableFeatures: Boolean!
   id: ID!
   name: String!
 
