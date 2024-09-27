@@ -10,6 +10,13 @@ class SpaceDescription(EntityDescription, models.Model):
     This model compounds all different aspects of space (geographical, political, etc.).
     """
 
+    class Meta:
+        ordering = [
+            models.F("structures__identifiable").desc(nulls_last=True),
+            models.F("settlements__identifiable").desc(nulls_last=True),
+            models.F("regions__identifiable").desc(nulls_last=True),
+        ]
+
     regions = models.ManyToManyField(
         to="Region",
         through="RegionField",
