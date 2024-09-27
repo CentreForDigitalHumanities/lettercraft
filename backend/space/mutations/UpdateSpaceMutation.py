@@ -9,44 +9,44 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from space.models import SpaceDescription
 
 
-class UpdateLocationInput(EntityDescriptionInputType, InputObjectType):
+class UpdateSpaceInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
 
 
-class UpdateLocationMutation(LettercraftMutation):
+class UpdateSpaceMutation(LettercraftMutation):
     ok = Boolean(required=True)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     django_model = SpaceDescription
 
     class Arguments:
-        location_data = UpdateLocationInput(required=True)
+        space_data = UpdateSpaceInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, location_data: UpdateLocationInput):
+    def mutate(cls, root: None, info: ResolveInfo, space_data: UpdateSpaceInput):
         try:
-            retrieved_object = cls.get_or_create_object(info, location_data)
+            retrieved_object = cls.get_or_create_object(info, space_data)
         except ObjectDoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, errors=[error])  # type: ignore
 
-        location: SpaceDescription = retrieved_object.object  # type: ignore
+        space: SpaceDescription = retrieved_object.object  # type: ignore
 
         try:
-            cls.mutate_object(location_data, location, info, ["categorisations"])
+            cls.mutate_object(space_data, space, info, ["categorisations"])
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error])  # type: ignore
 
-        cls.add_contribution(info, location)
-        location.save()
+        cls.add_contribution(info, space)
+        space.save()
 
         return cls(ok=True, errors=[])  # type: ignore
 
     @staticmethod
-    def add_contribution(info: ResolveInfo, location: SpaceDescription) -> None:
+    def add_contribution(info: ResolveInfo, space: SpaceDescription) -> None:
         user = info.context.user
         if user.is_authenticated:
-            location.contributors.add(user)
+            space.contributors.add(user)

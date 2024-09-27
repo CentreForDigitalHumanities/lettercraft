@@ -5,7 +5,7 @@ from space.types.SpaceDescriptionType import SpaceDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class DeleteLocationMutation(Mutation):
+class DeleteSpaceMutation(Mutation):
     ok = Boolean(required=True)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
@@ -15,12 +15,12 @@ class DeleteLocationMutation(Mutation):
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, id: str):
         try:
-            location = SpaceDescriptionType.get_queryset(SpaceDescription.objects, info).get(
-                id=id
-            )
+            space_description = SpaceDescriptionType.get_queryset(
+                SpaceDescription.objects, info
+            ).get(id=id)
         except SpaceDescription.DoesNotExist:
-            error = LettercraftErrorType(field="id", messages=["Location not found."])
+            error = LettercraftErrorType(field="id", messages=["Space not found."])
             return cls(ok=False, errors=[error])  # type: ignore
 
-        location.delete()
+        space_description.delete()
         return cls(ok=True, errors=[])  # type: ignore

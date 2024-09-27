@@ -7,39 +7,39 @@ from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 
 
-class CreateLocationInput(InputObjectType):
+class CreateSpaceInput(InputObjectType):
     name = String(required=True)
     source = ID(required=True)
 
 
-class CreateLocationMutation(LettercraftMutation):
-    location = Field(SpaceDescriptionType)
+class CreateSpaceMutation(LettercraftMutation):
+    space = Field(SpaceDescriptionType)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     django_model = SpaceDescription
 
     class Arguments:
-        location_data = CreateLocationInput(required=True)
+        space_data = CreateSpaceInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, location_data: CreateLocationInput):
+    def mutate(cls, root: None, info: ResolveInfo, space_data: CreateSpaceInput):
         try:
-            source = Source.objects.get(id=getattr(location_data, "source"))
+            source = Source.objects.get(id=getattr(space_data, "source"))
         except Source.DoesNotExist:
             error = LettercraftErrorType(field="source", messages=["Source not found."])
             return cls(errors=[error])  # type: ignore
 
-        location = SpaceDescription.objects.create(
-            name=getattr(location_data, "name"),
+        space = SpaceDescription.objects.create(
+            name=getattr(space_data, "name"),
             source=source,
         )
 
-        cls.add_contribution(info, location)
+        cls.add_contribution(info, space)
 
-        return cls(location=location, errors=[])  # type: ignore
+        return cls(space=space, errors=[])  # type: ignore
 
     @staticmethod
-    def add_contribution(info: ResolveInfo, location: SpaceDescription) -> None:
+    def add_contribution(info: ResolveInfo, space: SpaceDescription) -> None:
         user = info.context.user
         if user.is_authenticated:
-            location.contributors.add(user)
+            space.contributors.add(user)
