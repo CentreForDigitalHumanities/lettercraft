@@ -99,7 +99,7 @@ export class LocationFormComponent {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((result) => {
                 this.deletingInProgress = false;
-                const errors = result.data?.deleteLocation?.errors;
+                const errors = result.data?.deleteSpace?.errors;
                 if (errors && errors.length > 0) {
                     this.toastService.show({
                         body: errors.map((error) => error.messages).join("\n"),

@@ -10,8 +10,8 @@ query DataEntryLocation($id: ID!) {
   }
 }
 
-mutation DataEntryUpdateLocation($locationData: UpdateLocationInput!) {
-    updateLocation(locationData: $locationData) {
+mutation DataEntryUpdateLocation($spaceData: UpdateSpaceInput!) {
+    updateSpace(spaceData: $spaceData) {
         ok
         errors {
             field
@@ -21,7 +21,7 @@ mutation DataEntryUpdateLocation($locationData: UpdateLocationInput!) {
 }
 
 mutation DataEntryDeleteLocation($id: ID!) {
-    deleteLocation(id: $id) {
+    deleteSpace(id: $id) {
         ok
         errors {
             field

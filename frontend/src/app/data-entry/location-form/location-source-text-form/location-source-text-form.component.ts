@@ -30,7 +30,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;
 
     public location$ = this.id$.pipe(
-        switchMap((id) => this.locationQuery.watch({ id }).valueChanges),
+        switchMap((id) => this.spaceQuery.watch({ id }).valueChanges),
         map((result) => result.data.spaceDescription),
         shareReplay(1)
     );
@@ -57,7 +57,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
         private destroyRef: DestroyRef,
         private formService: FormService,
         private toastService: ToastService,
-        private locationQuery: DataEntryLocationSourceTextGQL,
+        private spaceQuery: DataEntryLocationSourceTextGQL,
         private updateLocation: DataEntryUpdateLocationGQL
     ) {}
 
@@ -103,7 +103,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
                 withLatestFrom(this.id$),
                 switchMap(([location, id]) =>
                     this.updateLocation.mutate({
-                        locationData: {
+                        spaceData: {
                             ...location,
                             id,
                         },
@@ -121,7 +121,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
     private onMutationResult(
         result: MutationResult<DataEntryUpdateLocationMutation>
     ): void {
-        const errors = result.data?.updateLocation?.errors;
+        const errors = result.data?.updateSpace?.errors;
         if (errors && errors.length > 0) {
             this.status$.next("error");
             this.toastService.show({

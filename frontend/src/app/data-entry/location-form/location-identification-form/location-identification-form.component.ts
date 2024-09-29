@@ -123,7 +123,7 @@ export class LocationIdentificationFormComponent implements OnInit, OnDestroy {
     ): Observable<MutationResult<DataEntryUpdateLocationMutation>> {
         return this.updateLocation.mutate(
             {
-                locationData: {
+                spaceData: {
                     ...location,
                     id,
                 },
@@ -137,7 +137,7 @@ export class LocationIdentificationFormComponent implements OnInit, OnDestroy {
     private onMutationResult(
         result: MutationResult<DataEntryUpdateLocationMutation>
     ): void {
-        const errors = result.data?.updateLocation?.errors;
+        const errors = result.data?.updateSpace?.errors;
         if (errors && errors.length > 0) {
             this.status$.next("error");
             this.toastService.show({

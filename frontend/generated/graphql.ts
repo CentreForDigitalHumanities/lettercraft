@@ -131,17 +131,6 @@ export type CreateLetterMutation = {
   letter?: Maybe<LetterDescriptionType>;
 };
 
-export type CreateLocationInput = {
-  name: Scalars['String']['input'];
-  source: Scalars['ID']['input'];
-};
-
-export type CreateLocationMutation = {
-  __typename?: 'CreateLocationMutation';
-  errors: Array<LettercraftErrorType>;
-  location?: Maybe<SpaceDescriptionType>;
-};
-
 export type CreatePersonReferenceInput = {
   description: Scalars['ID']['input'];
   person: Scalars['ID']['input'];
@@ -151,6 +140,17 @@ export type CreatePersonReferenceMutation = {
   __typename?: 'CreatePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type CreateSpaceInput = {
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
+};
+
+export type CreateSpaceMutation = {
+  __typename?: 'CreateSpaceMutation';
+  errors: Array<LettercraftErrorType>;
+  space?: Maybe<SpaceDescriptionType>;
 };
 
 export type DeleteAgentMutation = {
@@ -183,14 +183,14 @@ export type DeleteLetterMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type DeleteLocationMutation = {
-  __typename?: 'DeleteLocationMutation';
+export type DeletePersonReferenceMutation = {
+  __typename?: 'DeletePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
 
-export type DeletePersonReferenceMutation = {
-  __typename?: 'DeletePersonReferenceMutation';
+export type DeleteSpaceMutation = {
+  __typename?: 'DeleteSpaceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -455,23 +455,23 @@ export type Mutation = {
   createEpisodeEntityLink?: Maybe<CreateEpisodeEntityLinkMutation>;
   createGift?: Maybe<CreateGiftMutation>;
   createLetter?: Maybe<CreateLetterMutation>;
-  createLocation?: Maybe<CreateLocationMutation>;
   createPersonReference?: Maybe<CreatePersonReferenceMutation>;
+  createSpace?: Maybe<CreateSpaceMutation>;
   deleteAgent?: Maybe<DeleteAgentMutation>;
   deleteEpisode?: Maybe<DeleteEpisodeMutation>;
   deleteEpisodeEntityLink?: Maybe<DeleteEpisodeEntityLinkMutation>;
   deleteGift?: Maybe<DeleteGiftMutation>;
   deleteLetter?: Maybe<DeleteLetterMutation>;
-  deleteLocation?: Maybe<DeleteLocationMutation>;
   deletePersonReference?: Maybe<DeletePersonReferenceMutation>;
+  deleteSpace?: Maybe<DeleteSpaceMutation>;
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateEpisodeEntityLink?: Maybe<UpdateEpisodeEntityLinkMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
-  updateLocation?: Maybe<UpdateLocationMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
   updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+  updateSpace?: Maybe<UpdateSpaceMutation>;
 };
 
 
@@ -500,13 +500,13 @@ export type MutationCreateLetterArgs = {
 };
 
 
-export type MutationCreateLocationArgs = {
-  locationData: CreateLocationInput;
+export type MutationCreatePersonReferenceArgs = {
+  referenceData: CreatePersonReferenceInput;
 };
 
 
-export type MutationCreatePersonReferenceArgs = {
-  referenceData: CreatePersonReferenceInput;
+export type MutationCreateSpaceArgs = {
+  spaceData: CreateSpaceInput;
 };
 
 
@@ -537,12 +537,12 @@ export type MutationDeleteLetterArgs = {
 };
 
 
-export type MutationDeleteLocationArgs = {
+export type MutationDeletePersonReferenceArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type MutationDeletePersonReferenceArgs = {
+export type MutationDeleteSpaceArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -572,11 +572,6 @@ export type MutationUpdateLetterArgs = {
 };
 
 
-export type MutationUpdateLocationArgs = {
-  locationData: UpdateLocationInput;
-};
-
-
 export type MutationUpdateOrCreateSourceArgs = {
   sourceData: UpdateCreateSourceInput;
 };
@@ -584,6 +579,11 @@ export type MutationUpdateOrCreateSourceArgs = {
 
 export type MutationUpdatePersonReferenceArgs = {
   referenceData: UpdatePersonReferenceInput;
+};
+
+
+export type MutationUpdateSpaceArgs = {
+  spaceData: UpdateSpaceInput;
 };
 
 /** An enumeration. */
@@ -651,10 +651,13 @@ export type Query = {
   letterCategories: Array<LetterCategoryType>;
   letterDescription?: Maybe<LetterDescriptionType>;
   letterDescriptions: Array<LetterDescriptionType>;
+  regions: Array<RegionType>;
+  settlements: Array<SettlementType>;
   source: SourceType;
   sources: Array<SourceType>;
   spaceDescription?: Maybe<SpaceDescriptionType>;
   spaceDescriptions: Array<SpaceDescriptionType>;
+  structures: Array<StructureType>;
   userDescription?: Maybe<UserType>;
   userDescriptions: Array<UserType>;
 };
@@ -1021,23 +1024,6 @@ export type UpdateLetterMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateLocationInput = {
-  book?: InputMaybe<Scalars['String']['input']>;
-  categories?: InputMaybe<Array<Scalars['ID']['input']>>;
-  chapter?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<Scalars['String']['input']>>;
-  id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  page?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateLocationMutation = {
-  __typename?: 'UpdateLocationMutation';
-  errors: Array<LettercraftErrorType>;
-  ok: Scalars['Boolean']['output'];
-};
-
 export type UpdateOrCreateSourceMutation = {
   __typename?: 'UpdateOrCreateSourceMutation';
   errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -1052,6 +1038,23 @@ export type UpdatePersonReferenceInput = {
 
 export type UpdatePersonReferenceMutation = {
   __typename?: 'UpdatePersonReferenceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
+export type UpdateSpaceInput = {
+  book?: InputMaybe<Scalars['String']['input']>;
+  categories?: InputMaybe<Array<Scalars['ID']['input']>>;
+  chapter?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  designators?: InputMaybe<Array<Scalars['String']['input']>>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSpaceMutation = {
+  __typename?: 'UpdateSpaceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
 };
@@ -1277,6 +1280,28 @@ export type DataEntryLocationSourceTextQueryVariables = Exact<{
 
 export type DataEntryLocationSourceTextQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
 
+export type DataEntrySubspacesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntrySubspacesQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, regions: Array<{ __typename?: 'RegionType', id: string, name: string }>, settlements: Array<{ __typename?: 'SettlementType', id: string, name: string }>, structures: Array<{ __typename?: 'StructureType', id: string, name: string }> } | null };
+
+export type DataEntryRegionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryRegionsQuery = { __typename?: 'Query', regions: Array<{ __typename?: 'RegionType', id: string, name: string }> };
+
+export type DataEntrySettlementsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntrySettlementsQuery = { __typename?: 'Query', settlements: Array<{ __typename?: 'SettlementType', id: string, name: string }> };
+
+export type DataEntryStructuresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryStructuresQuery = { __typename?: 'Query', structures: Array<{ __typename?: 'StructureType', id: string, name: string }> };
+
 export type DataEntryLocationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1285,18 +1310,18 @@ export type DataEntryLocationQueryVariables = Exact<{
 export type DataEntryLocationQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateLocationMutationVariables = Exact<{
-  locationData: UpdateLocationInput;
+  spaceData: UpdateSpaceInput;
 }>;
 
 
-export type DataEntryUpdateLocationMutation = { __typename?: 'Mutation', updateLocation?: { __typename?: 'UpdateLocationMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryUpdateLocationMutation = { __typename?: 'Mutation', updateSpace?: { __typename?: 'UpdateSpaceMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryDeleteLocationMutationVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type DataEntryDeleteLocationMutation = { __typename?: 'Mutation', deleteLocation?: { __typename?: 'DeleteLocationMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+export type DataEntryDeleteLocationMutation = { __typename?: 'Mutation', deleteSpace?: { __typename?: 'DeleteSpaceMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntrySpaceDescriptionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2111,6 +2136,93 @@ export const DataEntryLocationSourceTextDocument = gql`
       super(apollo);
     }
   }
+export const DataEntrySubspacesDocument = gql`
+    query DataEntrySubspaces($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    regions {
+      id
+      name
+    }
+    settlements {
+      id
+      name
+    }
+    structures {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntrySubspacesGQL extends Apollo.Query<DataEntrySubspacesQuery, DataEntrySubspacesQueryVariables> {
+    override document = DataEntrySubspacesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryRegionsDocument = gql`
+    query DataEntryRegions {
+  regions {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryRegionsGQL extends Apollo.Query<DataEntryRegionsQuery, DataEntryRegionsQueryVariables> {
+    override document = DataEntryRegionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntrySettlementsDocument = gql`
+    query DataEntrySettlements {
+  settlements {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntrySettlementsGQL extends Apollo.Query<DataEntrySettlementsQuery, DataEntrySettlementsQueryVariables> {
+    override document = DataEntrySettlementsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryStructuresDocument = gql`
+    query DataEntryStructures {
+  structures {
+    id
+    name
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryStructuresGQL extends Apollo.Query<DataEntryStructuresQuery, DataEntryStructuresQueryVariables> {
+    override document = DataEntryStructuresDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryLocationDocument = gql`
     query DataEntryLocation($id: ID!) {
   spaceDescription(id: $id) {
@@ -2136,8 +2248,8 @@ export const DataEntryLocationDocument = gql`
     }
   }
 export const DataEntryUpdateLocationDocument = gql`
-    mutation DataEntryUpdateLocation($locationData: UpdateLocationInput!) {
-  updateLocation(locationData: $locationData) {
+    mutation DataEntryUpdateLocation($spaceData: UpdateSpaceInput!) {
+  updateSpace(spaceData: $spaceData) {
     ok
     errors {
       field
@@ -2159,7 +2271,7 @@ export const DataEntryUpdateLocationDocument = gql`
   }
 export const DataEntryDeleteLocationDocument = gql`
     mutation DataEntryDeleteLocation($id: ID!) {
-  deleteLocation(id: $id) {
+  deleteSpace(id: $id) {
     ok
     errors {
       field

@@ -1,0 +1,52 @@
+<ng-container *ngIf="selectedSubspaces.length > 0; else noEntities">
+    <p>The following {{ subspaceName }}s are involved in this episode:</p>
+    <ul class="list-unstyled vstack gap-4">
+        <li *ngFor="let subspace of selectedSubspaces">
+            <p>{{ subspace.name }}</p>
+            <!-- <lc-episode-link-form
+                [entityType]="entityType"
+                linkTo="entity"
+                [entityID]="entity.id"
+                [episodeID]="data.episode.id"
+            >
+                <button
+                    removeControl
+                    class="btn btn-danger"
+                    [attr.aria-label]="
+                        'remove ' + subspaceName + ': ' + entity.name
+                    "
+                    [ngbTooltip]="'remove this ' + subspaceName"
+                    (click)="removeSubspace(subspace.id)"
+                >
+                    <lc-icon [icon]="actionIcons.remove" />
+                </button>
+            </lc-episode-link-form> -->
+        </li>
+    </ul>
+</ng-container>
+<ng-template #noEntities>
+    <p>No {{ subspaceName }}s have been added to this location.</p>
+</ng-template>
+
+<div class="mt-4 mb-4">
+    <div ngbDropdown>
+        <button
+            type="button"
+            class="btn btn-primary"
+            #dropdownToggle
+            [attr.id]="dropdownToggleID"
+            ngbDropdownToggle
+        >
+            Add {{ subspaceName }}
+        </button>
+        <div ngbDropdownMenu [attr.aria-labelledby]="dropdownToggleID">
+            <button
+                *ngFor="let subspace of allSubspaces"
+                ngbDropdownItem
+                (click)="addSubspace(subspace.id); dropdownToggle.focus()"
+            >
+                {{ subspace.name }}
+            </button>
+        </div>
+    </div>
+</div>

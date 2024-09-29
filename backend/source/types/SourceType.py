@@ -1,5 +1,5 @@
 from graphene import Field, Int, List, NonNull, ResolveInfo
-from django.db.models import QuerySet, Value, Case, When, F
+from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 from typing import Type
 
@@ -38,6 +38,7 @@ class SourceType(DjangoObjectType):
             "edition_author",
         ]
 
+    @staticmethod
     def _entity_resolver(
         Model: Type[EntityDescription], OutputType: Type[DjangoObjectType]
     ):

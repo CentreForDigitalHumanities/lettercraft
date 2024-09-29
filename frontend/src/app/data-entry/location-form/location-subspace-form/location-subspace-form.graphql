@@ -1,0 +1,39 @@
+query DataEntrySubspaces($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        regions {
+            id
+            name
+        }
+        settlements {
+            id
+            name
+        }
+        structures {
+            id
+            name
+        }
+    }
+}
+
+query DataEntryRegions {
+    regions {
+        id
+        name
+    }
+}
+
+query DataEntrySettlements {
+    settlements {
+        id
+        name
+    }
+}
+
+query DataEntryStructures {
+    structures {
+        id
+        name
+    }
+}
+
