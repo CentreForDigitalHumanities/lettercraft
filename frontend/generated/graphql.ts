@@ -1256,6 +1256,13 @@ export type DataEntryUpdateLetterMutationVariables = Exact<{
 
 export type DataEntryUpdateLetterMutation = { __typename?: 'Mutation', updateLetter?: { __typename?: 'UpdateLetterMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
+export type DataEntryLocationEpisodesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLocationEpisodesQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeSpaceType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }> } | null };
+
 export type DataEntrySpaceDescriptionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2172,6 +2179,38 @@ export const DataEntryUpdateLetterDocument = gql`
   })
   export class DataEntryUpdateLetterGQL extends Apollo.Mutation<DataEntryUpdateLetterMutation, DataEntryUpdateLetterMutationVariables> {
     override document = DataEntryUpdateLetterDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLocationEpisodesDocument = gql`
+    query DataEntryLocationEpisodes($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    source {
+      id
+      episodes {
+        id
+        name
+      }
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLocationEpisodesGQL extends Apollo.Query<DataEntryLocationEpisodesQuery, DataEntryLocationEpisodesQueryVariables> {
+    override document = DataEntryLocationEpisodesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
