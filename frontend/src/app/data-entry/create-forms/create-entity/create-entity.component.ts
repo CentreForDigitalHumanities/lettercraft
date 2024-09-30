@@ -26,7 +26,7 @@ export class CreateEntityComponent implements AfterViewInit {
     @Input() episodeID?: string;
     @Input({ required: true }) entityType!: Entity;
 
-    @ViewChild('createEntityModal') modalTempate?: TemplateRef<unknown>;
+    @ViewChild('createEntityModal') modalTemplate?: TemplateRef<unknown>;
 
     modal: NgbModalRef | null = null;
     form = new FormGroup({
@@ -64,7 +64,7 @@ export class CreateEntityComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.create.subscribe(() => {
             this.submitted = false;
-            this.modal = this.modalService.open(this.modalTempate);
+            this.modal = this.modalService.open(this.modalTemplate);
         });
     }
 
