@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
@@ -6,6 +6,7 @@ import { CreateEntityDescriptionInput, Entity } from 'generated/graphql';
 import { Observable } from 'rxjs';
 import { listWithQuotes, nameExamples } from '../../shared/utils';
 import { CreateEntityService } from './create-entity.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 /**
@@ -45,6 +46,7 @@ export class CreateEntityComponent implements AfterViewInit {
         private modalService: NgbModal,
         private toastService: ToastService,
         private createEntityService: CreateEntityService,
+        private destroyRef: DestroyRef,
     ) { }
 
     get entityName(): string {
@@ -62,7 +64,9 @@ export class CreateEntityComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.create.subscribe(() => {
+        this.create.pipe(
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(() => {
             this.submitted = false;
             this.modal = this.modalService.open(this.modalTemplate);
         });
