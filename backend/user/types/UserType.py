@@ -24,4 +24,9 @@ class UserType(DjangoObjectType):
 
     @staticmethod
     def resolve_full_name(parent: User, info: ResolveInfo) -> str:
-        return f"{parent.first_name} {parent.last_name}"
+        if parent.first_name and parent.last_name:
+            return f"{parent.first_name} {parent.last_name}"
+        elif parent.first_name or parent.last_name:
+            return parent.first_name or parent.last_name
+        else:
+            return "nameless contributor"

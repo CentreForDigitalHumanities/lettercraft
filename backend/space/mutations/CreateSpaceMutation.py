@@ -8,34 +8,35 @@ from graphene import (
 from django.db import transaction
 from django.core.exceptions import ValidationError
 
-from letter.models import GiftDescription
-from letter.types.GiftDescriptionType import GiftDescriptionType
+from space.models import SpaceDescription
+from space.types.SpaceDescriptionType import SpaceDescriptionType
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
 
-class CreateGiftMutation(LettercraftMutation):
+
+class CreateSpaceMutation(LettercraftMutation):
     ok = Boolean(required=True)
-    gift = Field(GiftDescriptionType)
+    space = Field(SpaceDescriptionType)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
-    django_model = GiftDescription
+    django_model = SpaceDescription
 
     class Arguments:
-        gift_data = CreateEntityDescriptionInput(required=True)
+        space_data = CreateEntityDescriptionInput(required=True)
 
     @classmethod
     def mutate(
-        cls, root: None, info: ResolveInfo, gift_data: CreateEntityDescriptionInput
+        cls, root: None, info: ResolveInfo, space_data: CreateEntityDescriptionInput
     ):
-        gift = cls.create_object()
+        space = cls.create_object()
         try:
             with transaction.atomic():
-                cls.mutate_object(gift_data, gift, info)
-                cls.add_contribution(gift, gift_data, info)
-                gift.full_clean()
+                cls.mutate_object(space_data, space, info)
+                cls.add_contribution(space, space_data, info)
+                space.full_clean()
         except Source.DoesNotExist as e:
             error = LettercraftErrorType(field="source", messages=[e.args[0]])
             return cls(ok=False, errors=[error])  # type: ignore
@@ -49,19 +50,19 @@ class CreateGiftMutation(LettercraftMutation):
             ]
             return cls(ok=False, errors=errors)
 
-        return cls(ok=True, gift=gift, errors=[])
+        return cls(ok=True, space=space, errors=[])
 
     @staticmethod
     def add_contribution(
-        gift: GiftDescription,
-        gift_data: CreateEntityDescriptionInput,
+        space: SpaceDescription,
+        space_data: CreateEntityDescriptionInput,
         info: ResolveInfo,
     ):
         if info.context:
             user = info.context.user
-            gift.contributors.add(user)
+            space.contributors.add(user)
 
-            if gift_data.episodes:
-                for episode_id in gift_data.episodes:
+            if space_data.episodes:
+                for episode_id in space_data.episodes:
                     episode = Episode.objects.get(id=episode_id)
                     episode.contributors.add(user)

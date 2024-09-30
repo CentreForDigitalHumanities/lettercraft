@@ -16,3 +16,15 @@ export const entityTypeNames: Record<Entity, string> = {
     [Entity.Letter]: 'letter',
     [Entity.Space]: 'location',
 };
+
+export const nameExamples: Record<string, string[]> = {
+    episode: ['journey to Rome', 'Clovis\' response', 'Radegund asks Germanus for help'],
+    agent: ['Radegund', 'messenger from Poitiers', 'the citizens of Arles'],
+    letter: ['letter from Radegund to Germanus', 'Radegund\'s first letter'],
+    gift: ['royal gifts', 'golden cup'],
+    location: ['Alemannia', 'royal court', 'ducal villa'],
+}
+
+/** wrap each item in quotation marks and join them into a comma-separated string */
+export const listWithQuotes = (names: string[]): string =>
+    names.map(name => `"${name}"`).join(', ');

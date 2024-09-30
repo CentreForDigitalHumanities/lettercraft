@@ -20,6 +20,7 @@ import {
     withLatestFrom,
     Observable,
 } from "rxjs";
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 interface GiftIdentification {
     name: string;
@@ -55,6 +56,8 @@ export class GiftIdentificationFormComponent implements OnInit {
             updateOn: 'blur',
         }),
     });
+
+    nameExamples = listWithQuotes(nameExamples['gift']);
 
     constructor(
         private destroyRef: DestroyRef,

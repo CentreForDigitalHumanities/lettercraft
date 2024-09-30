@@ -74,16 +74,17 @@ export enum Certainty {
   Uncertain = 'UNCERTAIN'
 }
 
-export type CreateAgentInput = {
-  name: Scalars['String']['input'];
-  source: Scalars['ID']['input'];
-};
-
 export type CreateAgentMutation = {
   __typename?: 'CreateAgentMutation';
   agent?: Maybe<AgentDescriptionType>;
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type CreateEntityDescriptionInput = {
+  episodes?: InputMaybe<Array<Scalars['ID']['input']>>;
+  name: Scalars['String']['input'];
+  source: Scalars['ID']['input'];
 };
 
 export type CreateEpisodeEntityLinkInput = {
@@ -109,26 +110,18 @@ export type CreateEpisodeMutation = {
   errors: Array<LettercraftErrorType>;
 };
 
-export type CreateGiftInput = {
-  name: Scalars['String']['input'];
-  source: Scalars['ID']['input'];
-};
-
 export type CreateGiftMutation = {
   __typename?: 'CreateGiftMutation';
   errors: Array<LettercraftErrorType>;
   gift?: Maybe<GiftDescriptionType>;
-};
-
-export type CreateLetterInput = {
-  name: Scalars['String']['input'];
-  source: Scalars['ID']['input'];
+  ok: Scalars['Boolean']['output'];
 };
 
 export type CreateLetterMutation = {
   __typename?: 'CreateLetterMutation';
   errors: Array<LettercraftErrorType>;
   letter?: Maybe<LetterDescriptionType>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type CreatePersonReferenceInput = {
@@ -140,6 +133,13 @@ export type CreatePersonReferenceMutation = {
   __typename?: 'CreatePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type CreateSpaceMutation = {
+  __typename?: 'CreateSpaceMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+  space?: Maybe<SpaceDescriptionType>;
 };
 
 export type DeleteAgentMutation = {
@@ -439,6 +439,7 @@ export type Mutation = {
   createGift?: Maybe<CreateGiftMutation>;
   createLetter?: Maybe<CreateLetterMutation>;
   createPersonReference?: Maybe<CreatePersonReferenceMutation>;
+  createSpace?: Maybe<CreateSpaceMutation>;
   deleteAgent?: Maybe<DeleteAgentMutation>;
   deleteEpisode?: Maybe<DeleteEpisodeMutation>;
   deleteEpisodeEntityLink?: Maybe<DeleteEpisodeEntityLinkMutation>;
@@ -456,7 +457,7 @@ export type Mutation = {
 
 
 export type MutationCreateAgentArgs = {
-  agentData: CreateAgentInput;
+  agentData: CreateEntityDescriptionInput;
 };
 
 
@@ -471,17 +472,22 @@ export type MutationCreateEpisodeEntityLinkArgs = {
 
 
 export type MutationCreateGiftArgs = {
-  giftData: CreateGiftInput;
+  giftData: CreateEntityDescriptionInput;
 };
 
 
 export type MutationCreateLetterArgs = {
-  letterData: CreateLetterInput;
+  letterData: CreateEntityDescriptionInput;
 };
 
 
 export type MutationCreatePersonReferenceArgs = {
   referenceData: CreatePersonReferenceInput;
+};
+
+
+export type MutationCreateSpaceArgs = {
+  spaceData: CreateEntityDescriptionInput;
 };
 
 
@@ -1077,6 +1083,34 @@ export type DataEntryDeleteAgentMutationVariables = Exact<{
 
 export type DataEntryDeleteAgentMutation = { __typename?: 'Mutation', deleteAgent?: { __typename?: 'DeleteAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', messages: Array<string>, field: string }> } | null };
 
+export type DataEntryCreateAgentMutationVariables = Exact<{
+  input: CreateEntityDescriptionInput;
+}>;
+
+
+export type DataEntryCreateAgentMutation = { __typename?: 'Mutation', createAgent?: { __typename?: 'CreateAgentMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryCreateGiftMutationVariables = Exact<{
+  input: CreateEntityDescriptionInput;
+}>;
+
+
+export type DataEntryCreateGiftMutation = { __typename?: 'Mutation', createGift?: { __typename?: 'CreateGiftMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryCreateLetterMutationVariables = Exact<{
+  input: CreateEntityDescriptionInput;
+}>;
+
+
+export type DataEntryCreateLetterMutation = { __typename?: 'Mutation', createLetter?: { __typename?: 'CreateLetterMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryCreateSpaceMutationVariables = Exact<{
+  input: CreateEntityDescriptionInput;
+}>;
+
+
+export type DataEntryCreateSpaceMutation = { __typename?: 'Mutation', createSpace?: { __typename?: 'CreateSpaceMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryEpisodeContentsQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1499,6 +1533,94 @@ export const DataEntryDeleteAgentDocument = gql`
   })
   export class DataEntryDeleteAgentGQL extends Apollo.Mutation<DataEntryDeleteAgentMutation, DataEntryDeleteAgentMutationVariables> {
     override document = DataEntryDeleteAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateAgentDocument = gql`
+    mutation DataEntryCreateAgent($input: CreateEntityDescriptionInput!) {
+  createAgent(agentData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateAgentGQL extends Apollo.Mutation<DataEntryCreateAgentMutation, DataEntryCreateAgentMutationVariables> {
+    override document = DataEntryCreateAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateGiftDocument = gql`
+    mutation DataEntryCreateGift($input: CreateEntityDescriptionInput!) {
+  createGift(giftData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateGiftGQL extends Apollo.Mutation<DataEntryCreateGiftMutation, DataEntryCreateGiftMutationVariables> {
+    override document = DataEntryCreateGiftDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateLetterDocument = gql`
+    mutation DataEntryCreateLetter($input: CreateEntityDescriptionInput!) {
+  createLetter(letterData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateLetterGQL extends Apollo.Mutation<DataEntryCreateLetterMutation, DataEntryCreateLetterMutationVariables> {
+    override document = DataEntryCreateLetterDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryCreateSpaceDocument = gql`
+    mutation DataEntryCreateSpace($input: CreateEntityDescriptionInput!) {
+  createSpace(spaceData: $input) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryCreateSpaceGQL extends Apollo.Mutation<DataEntryCreateSpaceMutation, DataEntryCreateSpaceMutationVariables> {
+    override document = DataEntryCreateSpaceDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
