@@ -5,11 +5,13 @@ import { dataIcons } from '@shared/icons';
 import { locationIcon } from '@shared/icons-utils';
 import { DataEntrySpaceDescriptionGQL, DataEntrySpaceDescriptionQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { FormService } from '../shared/form.service';
 
 @Component({
     selector: 'lc-location-form',
     templateUrl: './location-form.component.html',
-    styleUrls: ['./location-form.component.scss']
+    styleUrls: ['./location-form.component.scss'],
+    providers: [FormService],
 })
 export class LocationFormComponent {
     id$: Observable<string>;
