@@ -1174,6 +1174,13 @@ export type DataEntryAllGiftCategoriesQueryVariables = Exact<{ [key: string]: ne
 
 export type DataEntryAllGiftCategoriesQuery = { __typename?: 'Query', letterCategories: Array<{ __typename?: 'LetterCategoryType', id: string, label: string, description: string }> };
 
+export type DataEntryGiftEpisodesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryGiftEpisodesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeGiftType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }> } | null };
+
 export type DataEntryGiftIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1879,6 +1886,38 @@ export const DataEntryAllGiftCategoriesDocument = gql`
   })
   export class DataEntryAllGiftCategoriesGQL extends Apollo.Query<DataEntryAllGiftCategoriesQuery, DataEntryAllGiftCategoriesQueryVariables> {
     override document = DataEntryAllGiftCategoriesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryGiftEpisodesDocument = gql`
+    query DataEntryGiftEpisodes($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    source {
+      id
+      episodes {
+        id
+        name
+      }
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryGiftEpisodesGQL extends Apollo.Query<DataEntryGiftEpisodesQuery, DataEntryGiftEpisodesQueryVariables> {
+    override document = DataEntryGiftEpisodesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
