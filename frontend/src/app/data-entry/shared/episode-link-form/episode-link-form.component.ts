@@ -47,7 +47,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     data$: Observable<DataEntryEpisodeEntityLinkQuery | undefined>;
     form = new FormGroup({
         sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
-        note: new FormControl<string>('', { nonNullable: true }),
+        note: new FormControl<string>('', { nonNullable: true, updateOn: 'blur' }),
     });
 
     sourceMentionOptions: SelectOptions<SourceMention> = sourceMentionSelectOptions();

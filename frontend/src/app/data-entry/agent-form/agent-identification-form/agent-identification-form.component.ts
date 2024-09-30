@@ -34,9 +34,13 @@ export class AgentIdentificationFormComponent implements OnDestroy {
     form = new FormGroup({
         name: new FormControl<string>('', {
             nonNullable: true,
+            updateOn: 'blur',
             validators: [Validators.required]
         }),
-        description: new FormControl<string>('', { nonNullable: true }),
+        description: new FormControl<string>('', {
+            nonNullable: true,
+            updateOn: 'blur',
+        }),
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
     });
 

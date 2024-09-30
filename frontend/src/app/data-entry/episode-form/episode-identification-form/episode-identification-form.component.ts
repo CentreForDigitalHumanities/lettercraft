@@ -47,6 +47,7 @@ export class EpisodeIdentificationFormComponent implements OnDestroy {
     public form = new FormGroup<EpisodeIdentificationForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
+            updateOn: 'blur',
             validators: [Validators.required],
         }),
     });
