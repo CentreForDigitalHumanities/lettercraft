@@ -39,6 +39,7 @@ export class LetterIdentificationFormComponent implements OnInit {
         }),
         description: new FormControl("", {
             nonNullable: true,
+            updateOn: 'blur',
         }),
     });
 

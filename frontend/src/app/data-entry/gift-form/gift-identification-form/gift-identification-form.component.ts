@@ -52,6 +52,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         }),
         description: new FormControl("", {
             nonNullable: true,
+            updateOn: 'blur',
         }),
     });
 
