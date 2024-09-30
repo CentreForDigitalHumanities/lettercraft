@@ -20,7 +20,7 @@ import {
     withLatestFrom,
     Observable,
 } from "rxjs";
-import { listNames, nameExamples } from "../../shared/utils";
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 interface GiftIdentification {
     name: string;
@@ -55,7 +55,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         }),
     });
 
-    nameExamples = listNames(nameExamples['gift']);
+    nameExamples = listWithQuotes(nameExamples['gift']);
 
     constructor(
         private destroyRef: DestroyRef,

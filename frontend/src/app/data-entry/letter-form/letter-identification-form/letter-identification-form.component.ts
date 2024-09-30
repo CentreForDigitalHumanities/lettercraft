@@ -16,7 +16,7 @@ import {
     switchMap,
     withLatestFrom,
 } from "rxjs/operators";
-import { listNames, nameExamples } from "../../shared/utils";
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 @Component({
     selector: "lc-letter-identification-form",
@@ -42,7 +42,7 @@ export class LetterIdentificationFormComponent implements OnInit {
         }),
     });
 
-    nameExamples = listNames(nameExamples['letter']);
+    nameExamples = listWithQuotes(nameExamples['letter']);
 
     constructor(
         private destroyRef: DestroyRef,

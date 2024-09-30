@@ -25,5 +25,6 @@ export const nameExamples: Record<string, string[]> = {
     location: ['Alemannia', 'royal court', 'ducal villa'],
 }
 
-export const listNames = (names: string[]): string =>
+/** wrap each item in quotation marks and join them into a comma-separated string */
+export const listWithQuotes = (names: string[]): string =>
     names.map(name => `"${name}"`).join(', ');

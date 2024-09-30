@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '@services/toast.service';
 import { CreateEntityDescriptionInput, Entity } from 'generated/graphql';
 import { Observable } from 'rxjs';
-import { listNames, nameExamples } from '../../shared/utils';
+import { listWithQuotes, nameExamples } from '../../shared/utils';
 import { CreateEntityService } from './create-entity.service';
 
 
@@ -58,7 +58,7 @@ export class CreateEntityComponent implements AfterViewInit {
     }
 
     get nameExamples(): string {
-        return listNames(nameExamples[this.entityName]);
+        return listWithQuotes(nameExamples[this.entityName]);
     }
 
     ngAfterViewInit(): void {
