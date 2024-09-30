@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LocationFormComponent } from './location-form.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { LocationEpisodesFormComponent } from './location-episodes-form/location-episodes-form.component';
 
 describe('LocationFormComponent', () => {
     let component: LocationFormComponent;
@@ -9,7 +10,10 @@ describe('LocationFormComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [LocationFormComponent],
+            declarations: [
+                LocationFormComponent,
+                LocationEpisodesFormComponent
+            ],
             imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(LocationFormComponent);
