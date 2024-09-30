@@ -3,11 +3,13 @@ import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntryGiftFormGQL } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 @Component({
     selector: "lc-gift-form",
     templateUrl: "./gift-form.component.html",
     styleUrls: ["./gift-form.component.scss"],
+    providers: [FormService],
 })
 export class GiftFormComponent {
     private id$ = this.route.params.pipe(map((params) => params["id"]));
