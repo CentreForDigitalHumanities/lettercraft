@@ -47,6 +47,7 @@ class CreateAgentMutation(LettercraftMutation):
 
         return cls(ok=True, agent=agent, errors=[])
 
+    @staticmethod
     def add_contribution(
         agent: AgentDescription,
         agent_data: CreateEntityDescriptionInput,

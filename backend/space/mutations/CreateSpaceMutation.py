@@ -52,6 +52,7 @@ class CreateSpaceMutation(LettercraftMutation):
 
         return cls(ok=True, space=space, errors=[])
 
+    @staticmethod
     def add_contribution(
         space: SpaceDescription,
         space_data: CreateEntityDescriptionInput,

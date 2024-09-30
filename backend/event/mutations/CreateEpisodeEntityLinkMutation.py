@@ -76,6 +76,7 @@ class CreateEpisodeEntityLinkMutation(LettercraftMutation):
 
         return cls(ok=True, errors=[])
 
+    @staticmethod
     def add_contribution(
         episode_entity_link: EpisodeEntity,
         data: CreateEpisodeEntityLinkInput,

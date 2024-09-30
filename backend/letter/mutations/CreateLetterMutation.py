@@ -51,6 +51,7 @@ class CreateLetterMutation(LettercraftMutation):
 
         return cls(ok=True, letter=letter, errors=[])
 
+    @staticmethod
     def add_contribution(
         letter: LetterDescription,
         letter_data: CreateEntityDescriptionInput,

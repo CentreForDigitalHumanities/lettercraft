@@ -51,6 +51,7 @@ class CreateGiftMutation(LettercraftMutation):
 
         return cls(ok=True, gift=gift, errors=[])
 
+    @staticmethod
     def add_contribution(
         gift: GiftDescription,
         gift_data: CreateEntityDescriptionInput,
