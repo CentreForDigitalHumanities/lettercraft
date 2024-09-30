@@ -39,6 +39,7 @@ type AgentDescriptionType implements EntityDescription {
   episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
+  identified: Boolean!
 
   """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
   isGroup: Boolean!
@@ -674,6 +675,7 @@ type SpaceDescriptionType implements EntityDescription {
   """
   designators: [String!]!
   episodes: [EpisodeSpaceType!]!
+  hasIdentifiableFeatures: Boolean!
   id: ID!
   name: String!
 

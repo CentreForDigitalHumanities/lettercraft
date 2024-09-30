@@ -54,6 +54,7 @@ export type AgentDescriptionType = EntityDescription & {
   episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
+  identified: Scalars['Boolean']['output'];
   /** Whether this agent is a group of people (e.g. 'the nuns of Poitiers'). */
   isGroup: Scalars['Boolean']['output'];
   location?: Maybe<AgentDescriptionLocationType>;
@@ -814,6 +815,7 @@ export type SpaceDescriptionType = EntityDescription & {
   /** Relevant (Latin) terminology used to describe this entity in the source text */
   designators: Array<Scalars['String']['output']>;
   episodes: Array<EpisodeSpaceType>;
+  hasIdentifiableFeatures: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   /** The page number or page range in the source */
@@ -1067,7 +1069,7 @@ export type DataEntryAgentQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type DataEntryAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryUpdateAgentMutationVariables = Exact<{
   input: UpdateAgentInput;
@@ -1250,7 +1252,7 @@ export type DataEntrySpaceDescriptionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type DataEntrySpaceDescriptionQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, hasIdentifiableFeatures: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
   entity: Scalars['ID']['input'];
@@ -1280,7 +1282,7 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 }>;
 
 
-export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string, identifiable: boolean }> }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> }> } };
+export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }> } };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1476,6 +1478,7 @@ export const DataEntryAgentDocument = gql`
     name
     description
     isGroup
+    identified
     source {
       id
       name
@@ -2110,6 +2113,7 @@ export const DataEntrySpaceDescriptionDocument = gql`
     id
     name
     description
+    hasIdentifiableFeatures
     source {
       id
       name
@@ -2221,10 +2225,7 @@ export const DataEntrySourceDetailDocument = gql`
         id
         name
         isGroup
-        describes {
-          id
-          identifiable
-        }
+        identified
       }
       gifts {
         id
@@ -2237,6 +2238,7 @@ export const DataEntrySourceDetailDocument = gql`
       spaces {
         id
         name
+        hasIdentifiableFeatures
       }
     }
   }

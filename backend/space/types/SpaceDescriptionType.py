@@ -1,4 +1,4 @@
-from graphene import List, NonNull, ResolveInfo
+from graphene import List, NonNull, ResolveInfo, Boolean
 from graphene_django.types import DjangoObjectType
 from django.db.models import QuerySet
 
@@ -25,10 +25,12 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
     regions = List(NonNull(RegionType), required=True)
     settlements = List(NonNull(SettlementType), required=True)
     structures = List(NonNull(StructureType), required=True)
+    has_identifiable_features = Boolean(required=True)
 
     region_fields = List(NonNull(RegionFieldType), required=True)
     settlement_fields = List(NonNull(SettlementFieldType), required=True)
     structure_fields = List(NonNull(StructureFieldType), required=True)
+
     episodes = List(NonNull(EpisodeSpaceType), required=True)
 
     class Meta:
@@ -95,3 +97,9 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: SpaceDescription, info: ResolveInfo
     ) -> QuerySet[EpisodeSpace]:
         return EpisodeSpace.objects.filter(space=parent)
+
+    @staticmethod
+    def resolve_has_identifiable_features(
+        parent: SpaceDescription, info: ResolveInfo
+    ) -> Boolean:
+        return parent.has_identifiable_features()

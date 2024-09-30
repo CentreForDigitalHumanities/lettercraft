@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { dataIcons } from "@shared/icons";
+import { agentIcon, locationIcon } from "@shared/icons-utils";
 import {
     DataEntryDeleteEpisodeGQL,
     DataEntrySourceDetailQuery,
@@ -21,6 +22,8 @@ export class EpisodePreviewComponent {
     @Input({ required: true })
     public episode!: QueriedEpisode;
     public dataIcons = dataIcons;
+    agentIcon = agentIcon;
+    locationIcon = locationIcon;
 
     constructor(
         private destroyRef: DestroyRef,
@@ -40,16 +43,6 @@ export class EpisodePreviewComponent {
             }).catch(() => {
                 // Do nothing on cancel / dismissal.
             });
-    }
-
-    public agentIcon(agent: QueriedEpisode["agents"][0]): string {
-        if (agent.isGroup) {
-            return dataIcons.group;
-        }
-        if (agent.describes?.some((person) => person?.identifiable)) {
-            return dataIcons.person;
-        }
-        return dataIcons.personUnknown;
     }
 
     private performDelete(episodeId: string): void {

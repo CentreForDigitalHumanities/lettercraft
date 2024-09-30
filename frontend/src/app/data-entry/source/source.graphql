@@ -18,10 +18,7 @@ query DataEntrySourceDetail($id: ID!) {
                 id
                 name
                 isGroup
-                describes {
-                    id
-                    identifiable
-                }
+                identified
             }
             gifts {
                 id
@@ -34,6 +31,7 @@ query DataEntrySourceDetail($id: ID!) {
             spaces {
                 id
                 name
+                hasIdentifiableFeatures
             }
         }
     }

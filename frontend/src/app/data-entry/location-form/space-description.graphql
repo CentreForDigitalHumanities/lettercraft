@@ -3,6 +3,7 @@ query DataEntrySpaceDescription($id: ID!) {
     id
     name
     description
+    hasIdentifiableFeatures
     source {
       id
       name
