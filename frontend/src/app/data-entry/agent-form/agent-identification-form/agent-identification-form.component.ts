@@ -17,6 +17,7 @@ import {
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
+import { listWithQuotes, nameExamples } from '../../shared/utils';
 
 interface FormData {
     name: string;
@@ -40,6 +41,8 @@ export class AgentIdentificationFormComponent implements OnDestroy {
     });
 
     status$ = new BehaviorSubject<FormStatus>('idle');
+
+    nameExamples = listWithQuotes(nameExamples['agent']);
 
     private id$ = this.formService.id$;
     private formName = 'identification';

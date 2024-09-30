@@ -48,6 +48,7 @@ class CreateEpisodeMutation(LettercraftMutation):
 
         return cls(episode=episode, errors=[])  # type: ignore
 
+    @staticmethod
     def add_contribution(obj: Episode, data: CreateEpisodeInput, info: ResolveInfo):
         if info.context:
             user = info.context.user

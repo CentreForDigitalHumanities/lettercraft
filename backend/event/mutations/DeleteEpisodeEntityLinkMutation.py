@@ -47,6 +47,7 @@ class DeleteEpisodeEntityLinkMutation(Mutation):
 
         return cls(ok=True, errors=[])
 
+    @staticmethod
     def add_contribution(obj: EpisodeEntity, info: ResolveInfo):
         if info.context:
             user = info.context.user

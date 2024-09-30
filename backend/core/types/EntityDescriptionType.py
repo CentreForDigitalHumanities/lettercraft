@@ -1,3 +1,4 @@
+import graphene
 from core.models import EntityDescription
 from core.types.AbstractDjangoObjectType import AbstractDjangoObjectType
 from core.types.NamedType import NamedType
@@ -35,3 +36,9 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
         parent: EntityDescription, info: ResolveInfo
     ) -> QuerySet[User]:
         return parent.contributors.all()
+
+
+class CreateEntityDescriptionInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    source = graphene.ID(required=True)
+    episodes = graphene.List(graphene.NonNull(graphene.ID))
