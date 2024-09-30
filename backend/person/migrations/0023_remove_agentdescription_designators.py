@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('space', '0018_alter_regionfield_source_mention_and_more'),
+        ("person", "0022_alter_agentdescription_options"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='spacedescription',
-            name='designators',
+            model_name="agentdescription",
+            name="designators",
         ),
     ]
