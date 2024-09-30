@@ -5,6 +5,7 @@ import { LetterCategoriesFormComponent } from "./letter-categories-form/letter-c
 import { LetterSourceTextFormComponent } from "./letter-source-text-form/letter-source-text-form.component";
 import { LetterIdentificationFormComponent } from "./letter-identification-form/letter-identification-form.component";
 import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
+import { LetterEpisodesFormComponent } from './letter-episodes-form/letter-episodes-form.component';
 
 @NgModule({
     declarations: [
@@ -12,6 +13,7 @@ import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
         LetterCategoriesFormComponent,
         LetterSourceTextFormComponent,
         LetterIdentificationFormComponent,
+        LetterEpisodesFormComponent,
     ],
     imports: [SharedModule, DataEntrySharedModule],
     exports: [LetterFormComponent],
