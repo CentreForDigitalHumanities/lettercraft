@@ -38,6 +38,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     addEntity$ = new Subject<string>();
     removeEntity$ = new Subject<string>();
+    createEntity$ = new Subject<void>();
+
     actionIcons = actionIcons;
     status$ = formStatusSubject();
     id = `episode-entities-${nextID++}`;
@@ -191,7 +193,6 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
                 __typename: this.entityTypeName,
                 id: entityID,
             }),
-            fieldName: 'episodes',
         });
         cache.gc();
     }

@@ -48,7 +48,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     form = new FormGroup({
         sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
         designators: new FormControl<string[]>([], { nonNullable: true }),
-        note: new FormControl<string>('', { nonNullable: true }),
+        note: new FormControl<string>('', { nonNullable: true, updateOn: 'blur' }),
     });
 
     sourceMentionOptions: SelectOptions<SourceMention> = sourceMentionSelectOptions();

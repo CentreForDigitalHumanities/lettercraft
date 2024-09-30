@@ -3,7 +3,7 @@
 
     <ng-container *ngIf="data.agentDescription as agentDescription; else noAgent">
         <h1 class="mb-4">
-            <lc-icon [icon]="agentDescription.isGroup ? dataIcons.group : dataIcons.person" />
+            <lc-icon [icon]="agentIcon(agentDescription)" />
             {{agentDescription.name}}
             <span class="text-secondary">
                 ({{agentDescription.source.name}})

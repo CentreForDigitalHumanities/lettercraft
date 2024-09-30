@@ -41,13 +41,13 @@ export class AgentDescriptionFormComponent implements OnDestroy {
         gender: new FormGroup({
             gender: new FormControl<string>(Gender.Unknown),
             sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
-            note: new FormControl<string>(''),
+            note: new FormControl<string>('', { updateOn: 'blur' }),
         }),
         location: new FormGroup({
             hasLocation: new FormControl<boolean>(false, { nonNullable: true }),
             location: new FormControl<string | null>(null),
             sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
-            note: new FormControl<string>(''),
+            note: new FormControl<string>('', { updateOn: 'blur' }),
         })
     });
 

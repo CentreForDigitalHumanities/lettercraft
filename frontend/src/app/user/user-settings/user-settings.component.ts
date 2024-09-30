@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
-import { UserSettings } from "../models/user";
+import { UserResponse, UserSettings } from "../models/user";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { filter } from "rxjs";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../utils";
 import { ToastService } from "@services/toast.service";
 import { usernameValidators } from "../validation";
+import { Apollo } from "apollo-angular";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -58,6 +59,7 @@ export class UserSettingsComponent implements OnInit {
         private authService: AuthService,
         private toastService: ToastService,
         private destroyRef: DestroyRef,
+        private apollo: Apollo,
     ) {}
 
     ngOnInit(): void {
@@ -106,11 +108,7 @@ export class UserSettingsComponent implements OnInit {
 
         this.authService.updateSettings.success$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => this.toastService.show({
-                header: "Settings updated",
-                body: "Your settings have been successfully updated.",
-                type: "success",
-            }));
+            .subscribe(this.onSuccess.bind(this));
     }
 
     public requestPasswordReset(): void {
@@ -131,5 +129,23 @@ export class UserSettingsComponent implements OnInit {
         }
         const userSettings = this.form.getRawValue();
         this.authService.newUserSettings(userSettings);
+    }
+
+    private onSuccess(user: UserResponse) {
+        this.toastService.show({
+            header: "Settings updated",
+            body: "Your settings have been successfully updated.",
+            type: "success",
+        });
+        this.updateCache(user.id);
+    }
+
+    private updateCache(id: number) {
+        const cache = this.apollo.client.cache;
+        const identified = cache.identify({ __typename: 'UserType', id });
+        cache.evict({ id: identified, fieldName: 'firstName' });
+        cache.evict({ id: identified, fieldName: 'lastName' });
+        cache.evict({ id: identified, fieldName: 'fullName' });
+        cache.gc();
     }
 }

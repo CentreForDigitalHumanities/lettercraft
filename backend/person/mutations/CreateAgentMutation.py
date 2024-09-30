@@ -16,13 +16,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from event.models import Episode
-from source.models import Source
-
-
-class CreateAgentInput(InputObjectType):
-    name = String(required=True)
-    source = ID(required=True)
-
+from core.types.EntityDescriptionType import CreateEntityDescriptionInput
 
 class CreateAgentMutation(LettercraftMutation):
     django_model = AgentDescription
@@ -32,10 +26,12 @@ class CreateAgentMutation(LettercraftMutation):
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     class Arguments:
-        agent_data = CreateAgentInput(required=True)
+        agent_data = CreateEntityDescriptionInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, agent_data: CreateAgentInput):
+    def mutate(
+        cls, root: None, info: ResolveInfo, agent_data: CreateEntityDescriptionInput
+    ):
         agent = cls.create_object()
         try:
             with transaction.atomic():
@@ -51,8 +47,11 @@ class CreateAgentMutation(LettercraftMutation):
 
         return cls(ok=True, agent=agent, errors=[])
 
+    @staticmethod
     def add_contribution(
-        agent: AgentDescription, agent_data: CreateAgentInput, info: ResolveInfo
+        agent: AgentDescription,
+        agent_data: CreateEntityDescriptionInput,
+        info: ResolveInfo,
     ):
         if info.context:
             user = info.context.user

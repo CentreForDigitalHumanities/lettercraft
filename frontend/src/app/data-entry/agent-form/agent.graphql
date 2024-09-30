@@ -4,6 +4,7 @@ query DataEntryAgent($id: ID!) {
     name
     description
     isGroup
+    identified
     source {
       id
       name

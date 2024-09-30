@@ -41,24 +41,28 @@ class Episode(EntityDescription, models.Model):
     agents = models.ManyToManyField(
         to=AgentDescription,
         through="EpisodeAgent",
+        related_name="episodes",
         blank=True,
         help_text="agents involved in this episode",
     )
     gifts = models.ManyToManyField(
         to=GiftDescription,
         through="EpisodeGift",
+        related_name="episodes",
         blank=True,
         help_text="gifts involved in this episode",
     )
     letters = models.ManyToManyField(
         to=LetterDescription,
         through="EpisodeLetter",
+        related_name="episodes",
         blank=True,
         help_text="letters involved in this episode",
     )
     spaces = models.ManyToManyField(
         to=SpaceDescription,
         through="EpisodeSpace",
+        related_name="episodes",
         blank=True,
         help_text="locations involved in this episode",
     )

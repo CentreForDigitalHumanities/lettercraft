@@ -34,6 +34,7 @@ type AgentDescriptionType implements EntityDescription {
   episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
+  identified: Boolean!
 
   """Whether this agent is a group of people (e.g. 'the nuns of Poitiers')."""
   isGroup: Boolean!
@@ -58,15 +59,16 @@ enum Certainty {
   UNCERTAIN
 }
 
-input CreateAgentInput {
-  name: String!
-  source: ID!
-}
-
 type CreateAgentMutation {
   agent: AgentDescriptionType
   errors: [LettercraftErrorType!]!
   ok: Boolean!
+}
+
+input CreateEntityDescriptionInput {
+  episodes: [ID!]
+  name: String!
+  source: ID!
 }
 
 input CreateEpisodeEntityLinkInput {
@@ -90,24 +92,16 @@ type CreateEpisodeMutation {
   errors: [LettercraftErrorType!]!
 }
 
-input CreateGiftInput {
-  name: String!
-  source: ID!
-}
-
 type CreateGiftMutation {
   errors: [LettercraftErrorType!]!
   gift: GiftDescriptionType
-}
-
-input CreateLetterInput {
-  name: String!
-  source: ID!
+  ok: Boolean!
 }
 
 type CreateLetterMutation {
   errors: [LettercraftErrorType!]!
   letter: LetterDescriptionType
+  ok: Boolean!
 }
 
 input CreatePersonReferenceInput {
@@ -118,6 +112,12 @@ input CreatePersonReferenceInput {
 type CreatePersonReferenceMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
+}
+
+type CreateSpaceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+  space: SpaceDescriptionType
 }
 
 type DeleteAgentMutation {
@@ -421,12 +421,13 @@ type LettercraftErrorType {
 }
 
 type Mutation {
-  createAgent(agentData: CreateAgentInput!): CreateAgentMutation
+  createAgent(agentData: CreateEntityDescriptionInput!): CreateAgentMutation
   createEpisode(episodeData: CreateEpisodeInput!): CreateEpisodeMutation
   createEpisodeEntityLink(data: CreateEpisodeEntityLinkInput!): CreateEpisodeEntityLinkMutation
-  createGift(giftData: CreateGiftInput!): CreateGiftMutation
-  createLetter(letterData: CreateLetterInput!): CreateLetterMutation
+  createGift(giftData: CreateEntityDescriptionInput!): CreateGiftMutation
+  createLetter(letterData: CreateEntityDescriptionInput!): CreateLetterMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
+  createSpace(spaceData: CreateEntityDescriptionInput!): CreateSpaceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
   deleteEpisodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): DeleteEpisodeEntityLinkMutation
@@ -659,6 +660,7 @@ type SpaceDescriptionType implements EntityDescription {
   contributors: [UserType!]!
   description: String!
   episodes: [EpisodeSpaceType!]!
+  hasIdentifiableFeatures: Boolean!
   id: ID!
   name: String!
 

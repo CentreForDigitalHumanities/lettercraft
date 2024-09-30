@@ -137,6 +137,7 @@ class UpdateAgentMutation(LettercraftMutation):
             cls.mutate_object(nested_data, related_obj, info)
             related_obj.full_clean()
 
+    @staticmethod
     def add_contribution(
         agent: AgentDescription, agent_data: UpdateAgentInput, info: ResolveInfo
     ):

@@ -19,9 +19,8 @@ import {
     withLatestFrom,
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
-import { formStatusSubject } from "../../shared/utils";
+import { formStatusSubject, listWithQuotes, nameExamples } from "../../shared/utils";
 import { ApolloCache } from "@apollo/client/core";
-
 
 interface EpisodeIdentification {
     name: string;
@@ -48,9 +47,12 @@ export class EpisodeIdentificationFormComponent implements OnDestroy {
     public form = new FormGroup<EpisodeIdentificationForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
+            updateOn: 'blur',
             validators: [Validators.required],
         }),
     });
+
+    nameExamples = listWithQuotes(nameExamples['episode']);
 
     private status$ = formStatusSubject();
 
