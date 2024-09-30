@@ -1,1 +1,40 @@
-<p>letter-episodes-form works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.letterDescription">
+        <p>This letter is involved in the following episodes:</p>
+        <ul class="list-unstyled vstack gap-4">
+            <li *ngFor="let item of data.letterDescription.episodes">
+                <lc-episode-link-form [entityType]="entityType"
+                        [entityID]="data.letterDescription.id"
+                        [episodeID]="item.episode.id">
+                    <button removeControl class="btn btn-danger"
+                        [attr.aria-label]="'remove episode: ' + item.episode.name"
+                        ngbTooltip="remove this episode"
+                        (click)="removeEpisode$.next(item.episode.id)">
+                        <lc-icon [icon]="actionIcons.remove" />
+                    </button>
+                </lc-episode-link-form>
+            </li>
+        </ul>
+    </ng-container>
+</ng-container>
+
+
+<div class="mt-4 mb-4">
+    <div ngbDropdown>
+        <button type="button" class="btn btn-primary" id="episode-dropdown-trigger"
+            #dropdownToggle
+            ngbDropdownToggle>
+            Add episode
+        </button>
+        <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
+            <button *ngFor="let episode of (availableEpisodes$ | async)"
+                ngbDropdownItem (click)="addEpisode$.next(episode.id); dropdownToggle.focus()">
+                {{episode.name}}
+            </button>
+            <button ngbDropdownItem disabled>
+                <lc-icon [icon]="actionIcons.create" />
+                Create new episode
+            </button>
+        </div>
+    </div>
+</div>

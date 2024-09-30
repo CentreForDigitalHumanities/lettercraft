@@ -1214,6 +1214,13 @@ export type DataEntryAllLetterCategoriesQueryVariables = Exact<{ [key: string]: 
 
 export type DataEntryAllLetterCategoriesQuery = { __typename?: 'Query', letterCategories: Array<{ __typename?: 'LetterCategoryType', id: string, label: string, description: string }> };
 
+export type DataEntryLetterEpisodesQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLetterEpisodesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, source: { __typename?: 'SourceType', id: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string }> }, episodes: Array<{ __typename?: 'EpisodeLetterType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }> } | null };
+
 export type DataEntryLetterIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2007,6 +2014,38 @@ export const DataEntryAllLetterCategoriesDocument = gql`
   })
   export class DataEntryAllLetterCategoriesGQL extends Apollo.Query<DataEntryAllLetterCategoriesQuery, DataEntryAllLetterCategoriesQueryVariables> {
     override document = DataEntryAllLetterCategoriesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLetterEpisodesDocument = gql`
+    query DataEntryLetterEpisodes($id: ID!) {
+  letterDescription(id: $id) {
+    id
+    source {
+      id
+      episodes {
+        id
+        name
+      }
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLetterEpisodesGQL extends Apollo.Query<DataEntryLetterEpisodesQuery, DataEntryLetterEpisodesQueryVariables> {
+    override document = DataEntryLetterEpisodesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -3,11 +3,13 @@ import { ActivatedRoute } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import { DataEntryLetterFormGQL } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
+import { FormService } from "../shared/form.service";
 
 @Component({
     selector: "lc-letter-form",
     templateUrl: "./letter-form.component.html",
     styleUrls: ["./letter-form.component.scss"],
+    providers: [FormService],
 })
 export class LetterFormComponent {
     private id$ = this.route.params.pipe(map((params) => params["id"]));
