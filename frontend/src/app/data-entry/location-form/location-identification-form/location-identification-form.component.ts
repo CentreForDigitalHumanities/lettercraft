@@ -22,6 +22,7 @@ import {
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
 import { FormStatus } from "../../shared/types";
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 interface LocationIdentification {
     name: string;
@@ -50,11 +51,16 @@ export class LocationIdentificationFormComponent implements OnInit, OnDestroy {
         name: new FormControl("", {
             validators: [Validators.required],
             nonNullable: true,
+            updateOn: "blur",
         }),
         description: new FormControl("", {
             nonNullable: true,
+            updateOn: "blur",
         }),
     });
+
+    public listWithQuotes = listWithQuotes;
+    public nameExamples = nameExamples;
 
     private formName = "identification";
     private status$ = new BehaviorSubject<FormStatus>("idle");
