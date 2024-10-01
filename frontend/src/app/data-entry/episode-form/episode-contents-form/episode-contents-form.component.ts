@@ -40,6 +40,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
     public form = new FormGroup({
         summary: new FormControl<string>("", {
             nonNullable: true,
+            updateOn: 'blur',
         }),
         categories: new FormControl<string[]>([], {
             nonNullable: true,

@@ -1,4 +1,4 @@
-from graphene import Field, List, ResolveInfo, NonNull
+from graphene import Field, List, ResolveInfo, NonNull, Boolean
 from graphene_django import DjangoObjectType
 
 from django.db.models import QuerySet
@@ -18,6 +18,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     gender = Field(AgentDescriptionGenderType)
     location = Field(AgentDescriptionLocationType)
     episodes = List(NonNull(EpisodeAgentType), required=True)
+    identified = Boolean(required=True)
 
     class Meta:
         model = AgentDescription
@@ -55,3 +56,7 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: AgentDescription, info: ResolveInfo
     ) -> QuerySet[EpisodeAgent]:
         return EpisodeAgent.objects.filter(agent=parent)
+
+    @staticmethod
+    def resolve_identified(parent: AgentDescription, info: ResolveInfo) -> bool:
+        return parent.identified()
