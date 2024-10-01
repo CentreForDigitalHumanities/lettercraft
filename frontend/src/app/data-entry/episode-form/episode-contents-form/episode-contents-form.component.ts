@@ -9,7 +9,6 @@ import {
     DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
-    BehaviorSubject,
     debounceTime,
     filter,
     map,
@@ -17,11 +16,11 @@ import {
     share,
     shareReplay,
     switchMap,
-    withLatestFrom,
+    withLatestFrom
 } from "rxjs";
 import { LabelSelectOption } from "../../shared/label-select/label-select.component";
-import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
+import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
 
 @Component({
@@ -41,7 +40,9 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
     public form = new FormGroup({
         summary: new FormControl<string>("", {
             nonNullable: true,
+            updateOn: 'blur',
         }),
+        designators: new FormControl<string[]>([], { nonNullable: true }),
         categories: new FormControl<string[]>([], {
             nonNullable: true,
         }),
@@ -60,7 +61,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         );
 
     private formName = "contents";
-    private status$ = new BehaviorSubject<FormStatus>("idle");
+    private status$ = formStatusSubject();
 
     constructor(
         private destroyRef: DestroyRef,
@@ -69,7 +70,9 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         private episodeQuery: DataEntryEpisodeContentsGQL,
         private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) {}
+    ) {
+        this.formService.attachForm('contents', this.status$);
+    }
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);
@@ -144,7 +147,8 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
                 type: "danger",
                 header: "Update failed",
             });
+        } else {
+            this.status$.next('saved');
         }
-        this.status$.next("saved");
     }
 }

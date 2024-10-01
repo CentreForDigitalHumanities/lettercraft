@@ -6,6 +6,7 @@ import {
     DataEntryLetterIdentificationGQL,
     DataEntryUpdateLetterGQL,
     DataEntryUpdateLetterMutation,
+    LetterDescriptionType,
 } from "generated/graphql";
 import { BehaviorSubject, Observable } from "rxjs";
 import {
@@ -26,6 +27,7 @@ interface LetterIdentification {
     name: string;
     description: string;
 }
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 @Component({
     selector: "lc-letter-identification-form",
@@ -45,11 +47,15 @@ export class LetterIdentificationFormComponent implements OnInit, OnDestroy {
         name: new FormControl("", {
             validators: [Validators.required],
             nonNullable: true,
+            updateOn: "blur",
         }),
         description: new FormControl("", {
             nonNullable: true,
+            updateOn: "blur",
         }),
     });
+
+    public nameExamples = listWithQuotes(nameExamples["letter"]);
 
     private formName = "identification";
     private status$ = new BehaviorSubject<FormStatus>("idle");
@@ -67,15 +73,7 @@ export class LetterIdentificationFormComponent implements OnInit, OnDestroy {
 
         this.letter$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((letter) => {
-                if (!letter) {
-                    return;
-                }
-                this.form.patchValue(letter, {
-                    emitEvent: false,
-                    onlySelf: true,
-                });
-            });
+            .subscribe(this.updateFormData.bind(this));
 
         this.form.statusChanges
             .pipe(
@@ -151,5 +149,17 @@ export class LetterIdentificationFormComponent implements OnInit, OnDestroy {
         });
         cache.evict({ id: identified });
         cache.gc();
+    }
+
+    private updateFormData(
+        letter: Partial<LetterDescriptionType> | null | undefined
+    ) {
+        if (!letter) {
+            return;
+        }
+        this.form.patchValue(letter, {
+            emitEvent: false,
+            onlySelf: true,
+        });
     }
 }

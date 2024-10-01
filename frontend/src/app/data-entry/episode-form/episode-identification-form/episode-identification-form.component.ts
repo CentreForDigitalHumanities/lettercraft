@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
 import {
@@ -10,7 +9,6 @@ import {
     DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
-    BehaviorSubject,
     debounceTime,
     filter,
     map,
@@ -20,12 +18,16 @@ import {
     switchMap,
     withLatestFrom,
 } from "rxjs";
-import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
+import {
+    formStatusSubject,
+    listWithQuotes,
+    nameExamples,
+} from "../../shared/utils";
+import { ApolloCache } from "@apollo/client/core";
 
 interface EpisodeIdentification {
     name: string;
-    description: string;
 }
 
 type EpisodeIdentificationForm = {
@@ -49,15 +51,15 @@ export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
     public form = new FormGroup<EpisodeIdentificationForm>({
         name: new FormControl<string>("", {
             nonNullable: true,
+            updateOn: "blur",
             validators: [Validators.required],
-        }),
-        description: new FormControl<string>("", {
-            nonNullable: true,
         }),
     });
 
+    public nameExamples = listWithQuotes(nameExamples["episode"]);
+
     private formName = "identification";
-    private status$ = new BehaviorSubject<FormStatus>("idle");
+    private status$ = formStatusSubject();
 
     constructor(
         private destroyRef: DestroyRef,
@@ -154,7 +156,23 @@ export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
             __typename: "EpisodeType",
             id,
         });
-        cache.evict({ id: identified });
+        cache.evict({ id: identified, fieldName: "name" });
         cache.gc();
+    }
+
+    private handleResult(
+        result: MutationResult<DataEntryUpdateEpisodeMutation>
+    ): void {
+        const errors = result.data?.updateEpisode?.errors;
+        if (errors && errors.length > 0) {
+            this.status$.next("error");
+            this.toastService.show({
+                body: errors.map((error) => error.messages).join("\n"),
+                type: "danger",
+                header: "Update failed",
+            });
+        } else {
+            this.status$.next("saved");
+        }
     }
 }

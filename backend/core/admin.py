@@ -3,7 +3,7 @@ from django.db.models.fields.related import RelatedField
 from django.db.models.query import QuerySet
 from django.http import HttpRequest
 import re
-
+from typing import Union
 
 named_fieldset = (
     "Name and description",
@@ -17,7 +17,7 @@ description_source_fieldset = (
     "Source information",
     {
         "description": "Information about the source from which this description is taken.",
-        "fields": ["source", "source_mention", "designators", "book", "chapter", "page"],
+        "fields": ["source", "source_mention", "book", "chapter", "page"],
     },
 )
 
@@ -38,14 +38,18 @@ class EntityDescriptionAdmin(admin.ModelAdmin):
     search_fields = ["name", "description"]
     filter_horizontal = ["contributors"]
     fieldsets = [
-        named_fieldset,
+        (
+            "Name",
+            {"fields": ["name"]},
+        ),
         contributions_fieldset,
         description_source_fieldset,
+        ("Contents", {"fields": ["summary", "designators"]}),
     ]
 
 
 def get_queryset_matching_parent_source(
-    admin: admin.StackedInline | admin.TabularInline,
+    admin: Union[admin.StackedInline, admin.TabularInline],
     db_field: RelatedField,
     request: HttpRequest,
 ) -> QuerySet:

@@ -4,6 +4,7 @@ import { dataIcons } from '@shared/icons';
 import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { FormService } from '../shared/form.service';
+import { agentIcon } from '@shared/icons-utils';
 
 @Component({
     selector: 'lc-agent-form',
@@ -16,6 +17,7 @@ export class AgentFormComponent {
     data$: Observable<DataEntryAgentQuery>;
 
     dataIcons = dataIcons;
+    agentIcon = agentIcon;
 
     status$ = this.formService.status$;
 

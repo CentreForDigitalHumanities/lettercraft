@@ -7,5 +7,4 @@ class EntityDescriptionInputType(NamedInputType, InputObjectType):
     book = String()
     chapter = String()
     page = String()
-    designators = List(NonNull(String))
     categories = List(NonNull(ID))

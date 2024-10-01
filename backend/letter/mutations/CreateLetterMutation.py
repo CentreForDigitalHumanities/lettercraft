@@ -1,45 +1,67 @@
 from graphene import (
-    ID,
     Field,
-    InputObjectType,
     List,
     NonNull,
     ResolveInfo,
-    String,
+    Boolean,
 )
+from django.db import transaction
+from django.core.exceptions import ValidationError
 
 from letter.models import LetterDescription
 from letter.types.LetterDescriptionType import LetterDescriptionType
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
-
-
-class CreateLetterInput(InputObjectType):
-    name = String(required=True)
-    source = ID(required=True)
-
+from event.models import Episode
+from core.types.EntityDescriptionType import CreateEntityDescriptionInput
 
 class CreateLetterMutation(LettercraftMutation):
+    ok = Boolean(required=True)
     letter = Field(LetterDescriptionType)
     errors = List(NonNull(LettercraftErrorType), required=True)
 
     django_model = LetterDescription
 
     class Arguments:
-        letter_data = CreateLetterInput(required=True)
+        letter_data = CreateEntityDescriptionInput(required=True)
 
     @classmethod
-    def mutate(cls, root: None, info: ResolveInfo, letter_data: CreateLetterInput):
+    def mutate(
+        cls, root: None, info: ResolveInfo, letter_data: CreateEntityDescriptionInput
+    ):
+        letter = cls.create_object()
         try:
-            source = Source.objects.get(id=getattr(letter_data, "source"))
-        except Source.DoesNotExist:
-            error = LettercraftErrorType(field="source", messages=["Source not found."])
-            return cls(errors=[error])  # type: ignore
+            with transaction.atomic():
+                cls.mutate_object(letter_data, letter, info)
+                cls.add_contribution(letter, letter_data, info)
+                letter.full_clean()
+        except Source.DoesNotExist as e:
+            error = LettercraftErrorType(field="source", messages=[e.args[0]])
+            return cls(ok=False, errors=[error])  # type: ignore
+        except Episode.DoesNotExist as e:
+            error = LettercraftErrorType(field="episodes", messages=[e.args[0]])
+            return cls(ok=False, errors=[error])
+        except ValidationError as e:
+            errors = [
+                LettercraftErrorType(field, messages)
+                for field, messages in e.message_dict.items()
+            ]
+            return cls(ok=False, errors=errors)
 
-        letter = LetterDescription.objects.create(
-            name=getattr(letter_data, "name"),
-            source=source,
-        )
+        return cls(ok=True, letter=letter, errors=[])
 
-        return cls(Letter=letter, errors=[])  # type: ignore
+    @staticmethod
+    def add_contribution(
+        letter: LetterDescription,
+        letter_data: CreateEntityDescriptionInput,
+        info: ResolveInfo,
+    ):
+        if info.context:
+            user = info.context.user
+            letter.contributors.add(user)
+
+            if letter_data.episodes:
+                for episode_id in letter_data.episodes:
+                    episode = Episode.objects.get(id=episode_id)
+                    episode.contributors.add(user)

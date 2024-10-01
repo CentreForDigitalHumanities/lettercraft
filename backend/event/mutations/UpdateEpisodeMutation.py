@@ -10,6 +10,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 class UpdateEpisodeInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
     summary = String()
+    designators = List(NonNull(String))
 
 
 class UpdateEpisodeMutation(LettercraftMutation):
@@ -39,8 +40,9 @@ class UpdateEpisodeMutation(LettercraftMutation):
             )
             return cls(ok=False, errors=[error])  # type: ignore
 
-        user = info.context.user
-        episode.contributors.add(user)
+        if info.context:
+            user = info.context.user
+            episode.contributors.add(user)
 
         episode.save()
 

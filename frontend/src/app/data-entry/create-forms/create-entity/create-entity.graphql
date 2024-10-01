@@ -1,0 +1,39 @@
+mutation DataEntryCreateAgent($input: CreateEntityDescriptionInput!) {
+    createAgent(agentData: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryCreateGift($input: CreateEntityDescriptionInput!) {
+    createGift(giftData: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryCreateLetter($input: CreateEntityDescriptionInput!) {
+    createLetter(letterData: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryCreateSpace($input: CreateEntityDescriptionInput!) {
+    createSpace(spaceData: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

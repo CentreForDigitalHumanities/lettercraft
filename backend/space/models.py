@@ -10,6 +10,16 @@ class SpaceDescription(EntityDescription, models.Model):
     This model compounds all different aspects of space (geographical, political, etc.).
     """
 
+    class Meta:
+        ordering = [
+            models.Case(
+                models.When(structures__identifiable=True, then=1),
+                models.When(settlements__identifiable=True, then=2),
+                models.When(regions__identifiable=True, then=3),
+                default=None,
+            ).asc(nulls_last=True),
+        ]
+
     regions = models.ManyToManyField(
         to="Region",
         through="RegionField",
@@ -27,6 +37,13 @@ class SpaceDescription(EntityDescription, models.Model):
         through="StructureField",
         help_text="Man-made structures referenced in this description",
     )
+
+    def has_identifiable_features(self):
+        return (
+            self.regions.filter(identifiable=True).exists()
+            or self.settlements.filter(identifiable=True).exists()
+            or self.structures.filter(identifiable=True).exists()
+        )
 
 
 class Region(HistoricalEntity, models.Model):

@@ -6,6 +6,7 @@ import { LabelSelectComponent } from "./label-select/label-select.component";
 import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity-description-lead.component";
 import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entity-button.component";
 import { FormStatusComponent } from './form-status/form-status.component';
+import { EpisodeLinkFormComponent } from './episode-link-form/episode-link-form.component';
 
 @NgModule({
     declarations: [
@@ -15,6 +16,7 @@ import { FormStatusComponent } from './form-status/form-status.component';
         EntityDescriptionLeadComponent,
         DeleteEntityButtonComponent,
         FormStatusComponent,
+        EpisodeLinkFormComponent,
     ],
     imports: [SharedModule],
     exports: [
@@ -24,6 +26,7 @@ import { FormStatusComponent } from './form-status/form-status.component';
         EntityDescriptionLeadComponent,
         DeleteEntityButtonComponent,
         FormStatusComponent,
+        EpisodeLinkFormComponent,
     ],
 })
 export class DataEntrySharedModule {}

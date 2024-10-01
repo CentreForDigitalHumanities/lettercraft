@@ -8,6 +8,7 @@ import {
     DataEntryGiftIdentificationGQL,
     DataEntryUpdateGiftGQL,
     DataEntryUpdateGiftMutation,
+    GiftDescriptionType,
 } from "generated/graphql";
 import {
     map,
@@ -22,6 +23,7 @@ import {
 } from "rxjs";
 import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
+import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 interface GiftIdentification {
     name: string;
@@ -50,11 +52,15 @@ export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
         name: new FormControl("", {
             validators: [Validators.required],
             nonNullable: true,
+            updateOn: 'blur',
         }),
         description: new FormControl("", {
             nonNullable: true,
+            updateOn: 'blur',
         }),
     });
+
+    public nameExamples = listWithQuotes(nameExamples['gift']);
 
     private formName = "identification";
     private status$ = new BehaviorSubject<FormStatus>("idle");
@@ -72,15 +78,7 @@ export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
 
         this.gift$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((gift) => {
-                if (!gift) {
-                    return;
-                }
-                this.form.patchValue(gift, {
-                    emitEvent: false,
-                    onlySelf: true,
-                });
-            });
+            .subscribe(this.updateFormData.bind(this));
 
         this.form.statusChanges
             .pipe(
@@ -115,6 +113,16 @@ export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.formService.detachForm(this.formName);
+    }
+
+    private updateFormData(gift: Partial<GiftDescriptionType> | null | undefined) {
+        if (!gift) {
+            return;
+        }
+        this.form.patchValue(gift, {
+            emitEvent: false,
+            onlySelf: true,
+        });
     }
 
     private performMutation(

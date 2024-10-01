@@ -15,10 +15,12 @@ import {
     share,
     shareReplay,
     switchMap,
+    tap,
     withLatestFrom,
 } from "rxjs";
 import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
+import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
 
 @Component({
@@ -36,22 +38,23 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
     );
 
     public form = new FormGroup({
-        designators: new FormControl<string[]>([], { nonNullable: true }),
         book: new FormControl<string>("", { nonNullable: true }),
         chapter: new FormControl<string>("", { nonNullable: true }),
         page: new FormControl<string>("", { nonNullable: true }),
     });
 
     private formName = "sourceMention";
-    private status$ = new BehaviorSubject<FormStatus>("idle");
+    private status$ = formStatusSubject();
 
     constructor(
         private destroyRef: DestroyRef,
         private formService: FormService,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,
-        private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) {}
+        private updateEpisode: DataEntryUpdateEpisodeGQL,
+    ) {
+        this.formService.attachForm('source-text', this.status$);
+    }
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);
@@ -77,11 +80,10 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
 
         const validFormSubmission$ = this.episode$.pipe(
             switchMap(() =>
-                this.form.valueChanges.pipe(
-                    map(() => this.form.getRawValue()),
-                    filter(() => this.form.valid)
-                )
+                this.form.valueChanges
             ),
+            map(() => this.form.getRawValue()),
+            filter(() => this.form.valid),
             debounceTime(300),
             share()
         );
@@ -121,7 +123,8 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
                 type: "danger",
                 header: "Update failed",
             });
+        } else {
+            this.status$.next("saved");
         }
-        this.status$.next("saved");
     }
 }

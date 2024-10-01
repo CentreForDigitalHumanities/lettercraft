@@ -1,0 +1,26 @@
+query DataEntryEpisodeEntityLink($entity: ID!, $episode: ID!, $entityType: Entity!) {
+    episodeEntityLink(entity: $entity, episode: $episode, entityType: $entityType) {
+        id
+        note
+        sourceMention
+        designators
+        episode {
+            id
+            name
+        }
+        entity {
+            id
+            name
+        }
+    }
+}
+
+mutation DataEntryUpdateEpisodeEntityLink($input:UpdateEpisodeEntityLinkInput!) {
+    updateEpisodeEntityLink(data: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

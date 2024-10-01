@@ -1,5 +1,6 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import Q, QuerySet
+from typing import Optional
 
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
@@ -14,7 +15,7 @@ class SpaceQueries(ObjectType):
     @staticmethod
     def resolve_space_description(
         parent: None, info: ResolveInfo, id: str
-    ) -> SpaceDescription | None:
+    ) -> Optional[SpaceDescription]:
         try:
             return SpaceDescriptionType.get_queryset(
                 SpaceDescription.objects, info
@@ -26,7 +27,7 @@ class SpaceQueries(ObjectType):
     def resolve_space_descriptions(
         parent: None,
         info: ResolveInfo,
-        source_id: str | None = None,
+        source_id: Optional[str] = None,
     ) -> QuerySet[SpaceDescription]:
         filters = Q() if source_id is None else Q(source_id=source_id)
 

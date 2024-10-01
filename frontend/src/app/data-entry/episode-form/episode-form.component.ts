@@ -9,9 +9,11 @@ import {
     DataEntryDeleteEpisodeGQL,
     DataEntryEpisodeFormGQL,
     DataEntryEpisodeFormQuery,
+    Entity
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
+
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 
@@ -22,6 +24,8 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
     providers: [FormService],
 })
 export class EpisodeFormComponent {
+    Entity = Entity;
+
     private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(

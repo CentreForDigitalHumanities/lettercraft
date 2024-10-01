@@ -1,0 +1,47 @@
+<ng-template #createEntityModal>
+    <lc-base-modal (dismiss)="closeModal()">
+        <ng-container modal-header>
+            <h4 ngbAutofocus tabindex="-1">Create new {{ entityName }}</h4>
+        </ng-container>
+        <form modal-content [formGroup]="form" (ngSubmit)="submit()">
+            <div class="form-group">
+                <label class="form-label" for="create-entity-name-input">Name</label>
+                <p class="form-text">
+                    This is a name to identify the {{ entityName }} in the overview of the
+                    source. For example: {{ nameExamples }}.
+                </p>
+                <input
+                    id="create-entity-name-input"
+                    type="text"
+                    class="form-control"
+                    [formControl]="form.controls.name"
+                    [class.is-invalid]="form.controls.name.invalid && submitted"
+                    [attr.aria-invalid]="form.controls.name.invalid && submitted"
+                    [attr.aria-required]="true"
+                />
+                <p class="invalid-feedback">This field is required.</p>
+            </div>
+        </form>
+        <ng-container modal-footer>
+            <button
+                type="button"
+                class="btn btn-primary"
+                (click)="submit()"
+            >
+                Create
+                <span role="status">
+                    <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm">
+                        <span class="visually-hidden">(loading)</span>
+                    </div>
+                </span>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="closeModal()"
+            >
+                Cancel
+            </button>
+        </ng-container>
+    </lc-base-modal>
+</ng-template>

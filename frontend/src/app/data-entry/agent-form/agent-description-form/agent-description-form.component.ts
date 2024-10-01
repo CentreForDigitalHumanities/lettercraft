@@ -9,18 +9,16 @@ import {
     DataEntryUpdateAgentGQL,
     DataEntryUpdateAgentMutation,
     Gender,
-    PersonAgentDescriptionGenderGenderChoices as GenderChoices,
-    PersonAgentDescriptionGenderSourceMentionChoices as GenderSourceMentionChoices,
+    SourceMention,
     LocationsInSourceListGQL,
     LocationsInSourceListQuery,
-    PersonAgentDescriptionSourceMentionChoices as LocationSourceMentionChoices,
-    SourceMention,
     UpdateAgentInput,
 } from 'generated/graphql';
 import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap, skip } from 'rxjs';
 import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
+import { sourceMentionSelectOptions } from '../../shared/utils';
 
 
 @Component({
@@ -29,36 +27,27 @@ import { FormStatus } from '../../shared/types';
     styleUrls: ['./agent-description-form.component.scss'],
 })
 export class AgentDescriptionFormComponent implements OnDestroy {
-    genderOptions: { value: GenderChoices, label: string }[] = [
-        { value: GenderChoices.Female, label: 'Female' },
-        { value: GenderChoices.Male, label: 'Male' },
-        { value: GenderChoices.Other, label: 'Other' },
-        { value: GenderChoices.Mixed, label: 'Mixed (for groups)' },
-        { value: GenderChoices.Unknown, label: 'Unknown' }
+    genderOptions: { value: Gender, label: string }[] = [
+        { value: Gender.Female, label: 'Female' },
+        { value: Gender.Male, label: 'Male' },
+        { value: Gender.Other, label: 'Other' },
+        { value: Gender.Mixed, label: 'Mixed (for groups)' },
+        { value: Gender.Unknown, label: 'Unknown' }
     ];
 
-    genderSourceMentionOptions: { value: GenderSourceMentionChoices, label: string }[] = [
-        { value: GenderSourceMentionChoices.Direct, label: 'Mentioned' },
-        { value: GenderSourceMentionChoices.Implied, label: 'Implied' },
-    ];
-
-    locationSourceMentionOptions: { value: LocationSourceMentionChoices, label: string }[] = [
-        { value: LocationSourceMentionChoices.Direct, label: 'Mentioned' },
-        { value: LocationSourceMentionChoices.Implied, label: 'Implied' },
-    ];
+    sourceMentionOptions = sourceMentionSelectOptions();
 
     form = new FormGroup({
-        designators: new FormControl<string[]>([], { nonNullable: true }),
         gender: new FormGroup({
-            gender: new FormControl<string>(GenderChoices.Unknown),
-            sourceMention: new FormControl<string>(GenderSourceMentionChoices.Direct),
-            note: new FormControl<string>(''),
+            gender: new FormControl<string>(Gender.Unknown),
+            sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
+            note: new FormControl<string>('', { updateOn: 'blur' }),
         }),
         location: new FormGroup({
             hasLocation: new FormControl<boolean>(false, { nonNullable: true }),
             location: new FormControl<string | null>(null),
-            sourceMention: new FormControl<string>(LocationSourceMentionChoices.Direct),
-            note: new FormControl<string>(''),
+            sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
+            note: new FormControl<string>('', { updateOn: 'blur' }),
         })
     });
 
@@ -112,16 +101,15 @@ export class AgentDescriptionFormComponent implements OnDestroy {
 
     updateFormData(data: DataEntryAgentDescriptionQuery) {
         this.form.setValue({
-            designators: data.agentDescription?.designators || [],
             gender: {
-                gender: data.agentDescription?.gender?.gender || GenderChoices.Unknown,
-                sourceMention: data.agentDescription?.gender?.sourceMention || GenderSourceMentionChoices.Direct,
+                gender: data.agentDescription?.gender?.gender || Gender.Unknown,
+                sourceMention: data.agentDescription?.gender?.sourceMention || SourceMention.Direct,
                 note: data.agentDescription?.gender?.note || '',
             },
             location: {
                 hasLocation: data.agentDescription?.location !== null,
                 location: data.agentDescription?.location?.location.id || null,
-                sourceMention: data.agentDescription?.location?.sourceMention || LocationSourceMentionChoices.Direct,
+                sourceMention: data.agentDescription?.location?.sourceMention || SourceMention.Direct,
                 note: data.agentDescription?.location?.note || '',
             }
         });
@@ -138,7 +126,6 @@ export class AgentDescriptionFormComponent implements OnDestroy {
     private toMutationInput([data, id]: [Partial<typeof this.form.value>, string]): UpdateAgentInput {
         return {
             id,
-            designators: data.designators,
             gender: {
                 gender: data.gender?.gender as Gender,
                 sourceMention: data.gender?.sourceMention as SourceMention,

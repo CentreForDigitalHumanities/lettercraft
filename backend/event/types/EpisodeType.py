@@ -16,11 +16,13 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "id",
             "summary",
             "categories",
+            "designators",
             "agents",
             "gifts",
             "letters",
             "spaces",
         ] + EntityDescriptionType.fields()
+        interfaces = EntityDescriptionType._meta.interfaces
 
     @classmethod
     def get_queryset(
