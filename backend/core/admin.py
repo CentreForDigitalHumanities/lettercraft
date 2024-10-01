@@ -17,7 +17,7 @@ description_source_fieldset = (
     "Source information",
     {
         "description": "Information about the source from which this description is taken.",
-        "fields": ["source", "source_mention", "designators", "book", "chapter", "page"],
+        "fields": ["source", "source_mention", "book", "chapter", "page"],
     },
 )
 
@@ -38,9 +38,13 @@ class EntityDescriptionAdmin(admin.ModelAdmin):
     search_fields = ["name", "description"]
     filter_horizontal = ["contributors"]
     fieldsets = [
-        named_fieldset,
+        (
+            "Name",
+            {"fields": ["name"]},
+        ),
         contributions_fieldset,
         description_source_fieldset,
+        ("Contents", {"fields": ["summary", "designators"]}),
     ]
 
 

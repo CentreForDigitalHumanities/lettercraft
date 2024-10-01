@@ -49,8 +49,6 @@ export type AgentDescriptionType = EntityDescription & {
   contributors: Array<UserType>;
   describes: Array<HistoricalPersonType>;
   description: Scalars['String']['output'];
-  /** Relevant (Latin) terminology used to describe this entity in the source text */
-  designators: Array<Scalars['String']['output']>;
   episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
@@ -196,6 +194,7 @@ export type EpisodeAgentType = EpisodeEntityLink & {
   __typename?: 'EpisodeAgentType';
   agent: AgentDescriptionType;
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -211,6 +210,7 @@ export type EpisodeCategoryType = {
 };
 
 export type EpisodeEntityLink = {
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -221,6 +221,7 @@ export type EpisodeEntityLink = {
 export type EpisodeGiftType = EpisodeEntityLink & {
   __typename?: 'EpisodeGiftType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   gift: GiftDescriptionType;
@@ -232,6 +233,7 @@ export type EpisodeGiftType = EpisodeEntityLink & {
 export type EpisodeLetterType = EpisodeEntityLink & {
   __typename?: 'EpisodeLetterType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -243,6 +245,7 @@ export type EpisodeLetterType = EpisodeEntityLink & {
 export type EpisodeSpaceType = EpisodeEntityLink & {
   __typename?: 'EpisodeSpaceType';
   certainty: Certainty;
+  designators?: Maybe<Array<Scalars['String']['output']>>;
   entity: EntityDescription;
   episode: EpisodeType;
   id: Scalars['ID']['output'];
@@ -262,7 +265,7 @@ export type EpisodeType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
-  /** Relevant (Latin) terminology used to describe this entity in the source text */
+  /** Relevant (Latin) terminology used to describe the actions in the episode */
   designators: Array<Scalars['String']['output']>;
   /** gifts involved in this episode */
   gifts: Array<GiftDescriptionType>;
@@ -335,8 +338,6 @@ export type GiftDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
-  /** Relevant (Latin) terminology used to describe this entity in the source text */
-  designators: Array<Scalars['String']['output']>;
   episodes: Array<EpisodeGiftType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -396,8 +397,6 @@ export type LetterDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
-  /** Relevant (Latin) terminology used to describe this entity in the source text */
-  designators: Array<Scalars['String']['output']>;
   episodes: Array<EpisodeLetterType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -812,8 +811,6 @@ export type SpaceDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
-  /** Relevant (Latin) terminology used to describe this entity in the source text */
-  designators: Array<Scalars['String']['output']>;
   episodes: Array<EpisodeSpaceType>;
   hasIdentifiableFeatures: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -896,7 +893,6 @@ export type UpdateAgentGenderInput = {
 
 export type UpdateAgentInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
   isGroup?: InputMaybe<Scalars['Boolean']['input']>;
@@ -927,6 +923,7 @@ export type UpdateCreateSourceInput = {
 };
 
 export type UpdateEpisodeEntityLinkInput = {
+  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   entity: Scalars['ID']['input'];
   entityType: Entity;
   episode: Scalars['ID']['input'];
@@ -964,7 +961,6 @@ export type UpdateGiftInput = {
   categorisations?: InputMaybe<Array<GiftCategorisationInput>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
@@ -982,7 +978,6 @@ export type UpdateLetterInput = {
   categorisations?: InputMaybe<Array<LetterCategorisationInput>>;
   chapter?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  designators?: InputMaybe<Array<Scalars['String']['input']>>;
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
@@ -1025,7 +1020,7 @@ export type DataEntryAgentDescriptionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, designators: Array<string>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention: SourceMention, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
+export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention: SourceMention, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
 
 export type LocationsInSourceListQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1118,7 +1113,7 @@ export type DataEntryEpisodeContentsQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
+export type DataEntryEpisodeContentsQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, summary: string, designators: Array<string>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string }> } | null };
 
 export type DataEntryEpisodeCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1144,7 +1139,7 @@ export type DataEntryEpisodeSourceTextMentionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeSourceTextMentionQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+export type DataEntryEpisodeSourceTextMentionQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, book: string, chapter: string, page: string } | null };
 
 export type DataEntryEpisodeFormQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1191,7 +1186,7 @@ export type DataEntryGiftSourceTextQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryGiftSourceTextQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+export type DataEntryGiftSourceTextQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, book: string, chapter: string, page: string } | null };
 
 export type DataEntryGiftFormQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1231,7 +1226,7 @@ export type DataEntryLetterSourceTextQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryLetterSourceTextQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+export type DataEntryLetterSourceTextQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, book: string, chapter: string, page: string } | null };
 
 export type DataEntryLetterFormQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1261,7 +1256,7 @@ export type DataEntryEpisodeEntityLinkQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeGiftType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeLetterType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeSpaceType', id: string, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
+export type DataEntryEpisodeEntityLinkQuery = { __typename?: 'Query', episodeEntityLink?: { __typename?: 'EpisodeAgentType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeGiftType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeLetterType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | { __typename?: 'EpisodeSpaceType', id: string, note?: string | null, sourceMention: SourceMention, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string }, entity: { __typename?: 'AgentDescriptionType', id: string, name: string } | { __typename?: 'EpisodeType', id: string, name: string } | { __typename?: 'GiftDescriptionType', id: string, name: string } | { __typename?: 'LetterDescriptionType', id: string, name: string } | { __typename?: 'SpaceDescriptionType', id: string, name: string } } | null };
 
 export type DataEntryUpdateEpisodeEntityLinkMutationVariables = Exact<{
   input: UpdateEpisodeEntityLinkInput;
@@ -1319,7 +1314,6 @@ export const DataEntryAgentDescriptionDocument = gql`
   agentDescription(id: $id) {
     id
     isGroup
-    designators
     gender {
       id
       gender
@@ -1634,6 +1628,7 @@ export const DataEntryEpisodeContentsDocument = gql`
   episode(id: $id) {
     id
     summary
+    designators
     categories {
       id
     }
@@ -1748,7 +1743,6 @@ export const DataEntryEpisodeSourceTextMentionDocument = gql`
     query DataEntryEpisodeSourceTextMention($id: ID!) {
   episode(id: $id) {
     id
-    designators
     book
     chapter
     page
@@ -1907,7 +1901,6 @@ export const DataEntryGiftSourceTextDocument = gql`
     query DataEntryGiftSourceText($id: ID!) {
   giftDescription(id: $id) {
     id
-    designators
     book
     chapter
     page
@@ -2043,7 +2036,6 @@ export const DataEntryLetterSourceTextDocument = gql`
     query DataEntryLetterSourceText($id: ID!) {
   letterDescription(id: $id) {
     id
-    designators
     book
     chapter
     page
@@ -2138,6 +2130,7 @@ export const DataEntryEpisodeEntityLinkDocument = gql`
     id
     note
     sourceMention
+    designators
     episode {
       id
       name

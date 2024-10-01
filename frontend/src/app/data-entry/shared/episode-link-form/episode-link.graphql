@@ -3,6 +3,7 @@ query DataEntryEpisodeEntityLink($entity: ID!, $episode: ID!, $entityType: Entit
         id
         note
         sourceMention
+        designators
         episode {
             id
             name

@@ -16,6 +16,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "id",
             "summary",
             "categories",
+            "designators",
             "agents",
             "gifts",
             "letters",

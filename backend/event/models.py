@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
+
 from core.models import EntityDescription, DescriptionField, Named
 from person.models import AgentDescription
 from letter.models import GiftDescription, LetterDescription
@@ -26,6 +28,16 @@ class Episode(EntityDescription, models.Model):
         help_text="labels assigned to this episode",
         blank=True,
     )
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe the actions in the episode",
+    )
+
     agents = models.ManyToManyField(
         to=AgentDescription,
         through="EpisodeAgent",
@@ -73,6 +85,16 @@ class EpisodeEntity(DescriptionField, models.Model):
     episode = models.ForeignKey(
         to=Episode,
         on_delete=models.CASCADE,
+    )
+
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe the entity in the episode",
     )
 
     @property

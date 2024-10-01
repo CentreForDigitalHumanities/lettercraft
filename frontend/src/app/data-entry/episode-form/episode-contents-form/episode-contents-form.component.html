@@ -1,4 +1,4 @@
-<form>
+<form class="vstack gap-4">
     <div class="form-group">
         <label for="summary" class="form-label">Summary</label>
         <p class="form-text">Describe the events in this passage.</p>
@@ -9,11 +9,19 @@
         ></textarea>
     </div>
 
-    <div *ngIf="episodeCategories$ | async as episodeCategories" class="form-group mt-4">
-        <label for="labels" class="form-label">Labels</label>
+    <fieldset>
+        <legend>Designators</legend>
+        <p class="form-text">
+            What (latin) terminology is used to describe the actions in the passage?
+        </p>
+        <lc-designators-control [formControl]="form.controls.designators" />
+    </fieldset>
+
+    <fieldset *ngIf="episodeCategories$ | async as episodeCategories">
+        <legend>Labels</legend>
         <p class="form-text">
             Pick one or more labels that describe this episode.
         </p>
         <lc-label-select [formControl]="form.controls.categories" [options]="episodeCategories" />
-    </div>
+    </fieldset>
 </form>

@@ -31,9 +31,6 @@ export class LetterSourceTextFormComponent implements OnInit {
     );
 
     public form = new FormGroup({
-        designators: new FormControl<string[]>([], {
-            nonNullable: true,
-        }),
         book: new FormControl<string>("", {
             nonNullable: true,
         }),

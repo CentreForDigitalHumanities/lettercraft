@@ -31,11 +31,6 @@ type AgentDescriptionType implements EntityDescription {
   contributors: [UserType!]!
   describes: [HistoricalPersonType!]!
   description: String!
-
-  """
-  Relevant (Latin) terminology used to describe this entity in the source text
-  """
-  designators: [String!]!
   episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
@@ -171,6 +166,7 @@ interface EntityDescription {
 type EpisodeAgentType implements EpisodeEntityLink {
   agent: AgentDescriptionType!
   certainty: Certainty!
+  designators: [String!]
   entity: EntityDescription!
   episode: EpisodeType!
   id: ID!
@@ -185,6 +181,7 @@ type EpisodeCategoryType {
 }
 
 interface EpisodeEntityLink {
+  designators: [String!]
   entity: EntityDescription!
   episode: EpisodeType!
   id: ID!
@@ -194,6 +191,7 @@ interface EpisodeEntityLink {
 
 type EpisodeGiftType implements EpisodeEntityLink {
   certainty: Certainty!
+  designators: [String!]
   entity: EntityDescription!
   episode: EpisodeType!
   gift: GiftDescriptionType!
@@ -204,6 +202,7 @@ type EpisodeGiftType implements EpisodeEntityLink {
 
 type EpisodeLetterType implements EpisodeEntityLink {
   certainty: Certainty!
+  designators: [String!]
   entity: EntityDescription!
   episode: EpisodeType!
   id: ID!
@@ -214,6 +213,7 @@ type EpisodeLetterType implements EpisodeEntityLink {
 
 type EpisodeSpaceType implements EpisodeEntityLink {
   certainty: Certainty!
+  designators: [String!]
   entity: EntityDescription!
   episode: EpisodeType!
   id: ID!
@@ -236,7 +236,7 @@ type EpisodeType implements EntityDescription {
   description: String!
 
   """
-  Relevant (Latin) terminology used to describe this entity in the source text
+  Relevant (Latin) terminology used to describe the actions in the episode
   """
   designators: [String!]!
 
@@ -317,11 +317,6 @@ type GiftDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
-
-  """
-  Relevant (Latin) terminology used to describe this entity in the source text
-  """
-  designators: [String!]!
   episodes: [EpisodeGiftType!]!
   id: ID!
   name: String!
@@ -385,11 +380,6 @@ type LetterDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
-
-  """
-  Relevant (Latin) terminology used to describe this entity in the source text
-  """
-  designators: [String!]!
   episodes: [EpisodeLetterType!]!
   id: ID!
   name: String!
@@ -669,11 +659,6 @@ type SpaceDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
-
-  """
-  Relevant (Latin) terminology used to describe this entity in the source text
-  """
-  designators: [String!]!
   episodes: [EpisodeSpaceType!]!
   hasIdentifiableFeatures: Boolean!
   id: ID!
@@ -769,7 +754,6 @@ input UpdateAgentGenderInput {
 
 input UpdateAgentInput {
   description: String
-  designators: [String]
   gender: UpdateAgentGenderInput
   id: ID!
   isGroup: Boolean
@@ -799,6 +783,7 @@ input UpdateCreateSourceInput {
 }
 
 input UpdateEpisodeEntityLinkInput {
+  designators: [String!]
   entity: ID!
   entityType: Entity!
   episode: ID!
@@ -834,7 +819,6 @@ input UpdateGiftInput {
   categorisations: [GiftCategorisationInput!]
   chapter: String
   description: String
-  designators: [String!]
   id: ID!
   name: String
   page: String
@@ -851,7 +835,6 @@ input UpdateLetterInput {
   categorisations: [LetterCategorisationInput!]
   chapter: String
   description: String
-  designators: [String!]
   id: ID!
   name: String
   page: String
