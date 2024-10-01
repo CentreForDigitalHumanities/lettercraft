@@ -13,5 +13,6 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             "first_name",
             "last_name",
             "is_staff",
+            "is_contributor",
         )
-        read_only_fields = ["is_staff", "id", "email"]
+        read_only_fields = ["is_staff", "id", "email", "is_contributor"]
