@@ -17,9 +17,19 @@ import {
     debounceTime,
     share,
     withLatestFrom,
+    Observable,
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
 import { FormStatus } from "../../shared/types";
+
+type LocationSourceText = Pick<
+    DataEntryUpdateLocationMutationVariables["spaceData"],
+    "book" | "chapter" | "page"
+>;
+
+type LocationSourceTextForm = {
+    [key in keyof LocationSourceText]: FormControl<string>;
+};
 
 @Component({
     selector: "lc-location-source-text-form",
@@ -35,10 +45,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
         shareReplay(1)
     );
 
-    public form = new FormGroup({
-        designators: new FormControl<string[]>([], {
-            nonNullable: true,
-        }),
+    public form = new FormGroup<LocationSourceTextForm>({
         book: new FormControl<string>("", {
             nonNullable: true,
         }),
