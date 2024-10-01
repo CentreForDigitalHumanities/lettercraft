@@ -15,6 +15,7 @@ import { FormService } from "../shared/form.service";
 
 type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
 
+
 @Component({
     selector: "lc-letter-form",
     templateUrl: "./letter-form.component.html",

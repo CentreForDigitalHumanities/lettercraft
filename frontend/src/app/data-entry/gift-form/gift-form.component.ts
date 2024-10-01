@@ -15,11 +15,12 @@ import { FormService } from "../shared/form.service";
 
 type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
 
+
 @Component({
     selector: "lc-gift-form",
     templateUrl: "./gift-form.component.html",
     styleUrls: ["./gift-form.component.scss"],
-    providers: [FormService]
+    providers: [FormService],
 })
 export class GiftFormComponent {
     private id$ = this.formService.id$;

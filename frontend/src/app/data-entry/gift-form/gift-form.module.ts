@@ -5,6 +5,7 @@ import { GiftIdentificationFormComponent } from './gift-identification-form/gift
 import { GiftSourceTextFormComponent } from './gift-source-text-form/gift-source-text-form.component';
 import { GiftCategoriesFormComponent } from './gift-categories-form/gift-categories-form.component';
 import { DataEntrySharedModule } from '../shared/data-entry-shared.module';
+import { GiftEpisodesFormComponent } from './gift-episodes-form/gift-episodes-form.component';
 
 
 
@@ -14,6 +15,7 @@ import { DataEntrySharedModule } from '../shared/data-entry-shared.module';
         GiftIdentificationFormComponent,
         GiftSourceTextFormComponent,
         GiftCategoriesFormComponent,
+        GiftEpisodesFormComponent,
     ],
     imports: [
         SharedModule, DataEntrySharedModule
