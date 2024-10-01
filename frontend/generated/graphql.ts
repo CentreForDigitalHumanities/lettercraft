@@ -1297,7 +1297,7 @@ export type DataEntryLocationSourceTextQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryLocationSourceTextQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
+export type DataEntryLocationSourceTextQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, book: string, chapter: string, page: string } | null };
 
 export type DataEntryLocationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2204,7 +2204,6 @@ export const DataEntryLocationSourceTextDocument = gql`
     query DataEntryLocationSourceText($id: ID!) {
   spaceDescription(id: $id) {
     id
-    designators
     book
     chapter
     page

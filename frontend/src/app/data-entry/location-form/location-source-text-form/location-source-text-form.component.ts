@@ -23,10 +23,11 @@ import {
 import { FormService } from "../../shared/form.service";
 import { FormStatus } from "../../shared/types";
 
-type LocationSourceText = Pick<
-    DataEntryUpdateLocationMutationVariables["spaceData"],
-    "book" | "chapter" | "page"
->;
+interface LocationSourceText {
+    book: string;
+    chapter: string;
+    page: string;
+}
 
 type LocationSourceTextForm = {
     [key in keyof LocationSourceText]: FormControl<string>;
