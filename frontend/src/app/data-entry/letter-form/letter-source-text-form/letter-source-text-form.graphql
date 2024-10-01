@@ -1,0 +1,8 @@
+query DataEntryLetterSourceText($id: ID!) {
+    letterDescription(id: $id) {
+        id
+        book
+        chapter
+        page
+    }
+}

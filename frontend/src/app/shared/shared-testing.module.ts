@@ -1,35 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-
+import { SharedModule } from './shared.module';
+import { ApolloTestingModule } from 'apollo-angular/testing';
+import { DataEntrySharedModule } from '../data-entry/shared/data-entry-shared.module';
 
 
 @NgModule({
-    declarations: [],
     imports: [
-        CommonModule,
-        BrowserModule,
-        FontAwesomeModule,
+        SharedModule,
         HttpClientTestingModule,
-        NgbModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        ReactiveFormsModule,
+        DataEntrySharedModule
     ], exports: [
-        CommonModule,
-        BrowserModule,
-        FontAwesomeModule,
+        SharedModule,
         HttpClientTestingModule,
-        NgbModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        ReactiveFormsModule,
+        ApolloTestingModule,
+        DataEntrySharedModule,
     ]
 })
 export class SharedTestingModule { }

@@ -57,17 +57,28 @@ class PersonReference(Field, models.Model):
     person = models.ForeignKey(
         to=HistoricalPerson,
         on_delete=models.CASCADE,
+        related_name="description_references",
     )
     description = models.ForeignKey(
         to="AgentDescription",
         on_delete=models.CASCADE,
+        related_name="person_references",
     )
+
+    def __str__(self):
+        return f"{self.description} describes {self.person}"
 
 
 class AgentDescription(EntityDescription, models.Model):
     """
     A description of an agent in a source text; can be a single person or a group
     """
+
+    class Meta:
+        ordering = [
+            models.F("describes__identifiable").desc(nulls_last=True),
+            "is_group",
+        ]
 
     describes = models.ManyToManyField(
         to=HistoricalPerson,
@@ -87,6 +98,9 @@ class AgentDescription(EntityDescription, models.Model):
             raise ValidationError(
                 "Only groups can describe multiple historical figures"
             )
+
+    def identified(self):
+        return self.describes.filter(identifiable=True).exists()
 
 
 class Gender(models.TextChoices):
@@ -132,10 +146,10 @@ class AgentDescriptionLocation(DescriptionField, models.Model):
     May be used for groups ("the nuns of Poitiers").
     """
 
-    agent = models.ForeignKey(
+    agent = models.OneToOneField(
         to=AgentDescription,
         on_delete=models.CASCADE,
-        related_name="locations",
+        related_name="location",
     )
     location = models.ForeignKey(
         to=SpaceDescription,

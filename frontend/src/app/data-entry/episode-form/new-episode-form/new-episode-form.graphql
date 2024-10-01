@@ -1,0 +1,11 @@
+mutation DataEntryCreateEpisode($episodeData: CreateEpisodeInput!) {
+    createEpisode(episodeData: $episodeData) {
+        episode {
+            id
+        }
+        errors {
+            field
+            messages
+        }
+    }
+}

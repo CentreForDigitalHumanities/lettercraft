@@ -1,0 +1,8 @@
+query DataEntryEpisodeSourceTextMention($id: ID!) {
+    episode(id: $id) {
+        id
+        book
+        chapter
+        page
+    }
+}

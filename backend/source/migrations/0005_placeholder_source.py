@@ -7,7 +7,7 @@ def create_placeholder_source(apps, schema_editor):
     Source = apps.get_model("source", "Source")
     Source.objects.create(
         name="MISSING SOURCE",
-        bibliographical_info="This is a placeholder value for older data that is mising source information",
+        bibliographical_info="This is a placeholder value for older data that is missing source information",
     )
 
 

@@ -1,0 +1,4 @@
+<button class="btn btn-danger" *ngIf="id$ | async as id" (click)="openConfirm(id)">
+    <lc-icon [icon]="actionIcons.delete"></lc-icon>
+    Delete agent
+</button>

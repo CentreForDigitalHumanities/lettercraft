@@ -1,0 +1,8 @@
+query DataEntryGiftSourceText($id: ID!) {
+    giftDescription(id: $id) {
+        id
+        book
+        chapter
+        page
+    }
+}

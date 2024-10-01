@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
 
 from core.models import EntityDescription, DescriptionField, Named
 from person.models import AgentDescription
@@ -7,14 +8,14 @@ from letter.models import GiftDescription, LetterDescription
 from space.models import SpaceDescription
 
 
-class EventCategory(Named):
+class EpisodeCategory(Named):
     class Meta:
-        verbose_name_plural = "event categories"
+        verbose_name_plural = "episode categories"
 
 
-class EventDescription(EntityDescription, models.Model):
+class Episode(EntityDescription, models.Model):
     """
-    An epistolary event described in as source text
+    An episode described in a source text
     """
 
     summary = models.TextField(
@@ -22,131 +23,157 @@ class EventDescription(EntityDescription, models.Model):
         help_text="full description of the events in the passage",
     )
     categories = models.ManyToManyField(
-        to=EventCategory,
-        related_name="event_descriptions",
-        help_text="labels assigned to this event",
+        to=EpisodeCategory,
+        related_name="episodes",
+        help_text="labels assigned to this episode",
+        blank=True,
     )
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe the actions in the episode",
+    )
+
     agents = models.ManyToManyField(
         to=AgentDescription,
-        through="EventDescriptionAgent",
+        through="EpisodeAgent",
+        related_name="episodes",
         blank=True,
-        help_text="agents involved in this event",
+        help_text="agents involved in this episode",
     )
     gifts = models.ManyToManyField(
         to=GiftDescription,
-        through="EventDescriptionGift",
+        through="EpisodeGift",
+        related_name="episodes",
         blank=True,
-        help_text="gifts involved in this event",
+        help_text="gifts involved in this episode",
     )
     letters = models.ManyToManyField(
         to=LetterDescription,
-        through="EventDescriptionLetter",
+        through="EpisodeLetter",
+        related_name="episodes",
         blank=True,
-        help_text="letters involved in this event",
+        help_text="letters involved in this episode",
     )
     spaces = models.ManyToManyField(
         to=SpaceDescription,
-        through="EventDescriptionSpace",
+        through="EpisodeSpace",
+        related_name="episodes",
         blank=True,
-        help_text="locations involved in this event",
+        help_text="locations involved in this episode",
     )
 
 
-class EventDescriptionAgent(DescriptionField, models.Model):
+class EpisodeEntity(DescriptionField, models.Model):
     """
-    Relationship between an agent and an event described in a source text
+    Relationship between an episode and an entity described in a source text
+
+    Child classes should set:
+    - a ForeignKey relation to AgentDescription/GiftDescription/etc
+    - `entity_field` with the name of this field in the model class
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
+    class Meta:
+        abstract = True
+
+    entity_field = None
+
+    episode = models.ForeignKey(
+        to=Episode,
         on_delete=models.CASCADE,
     )
+
+    designators = ArrayField(
+        models.CharField(
+            max_length=200,
+        ),
+        default=list,
+        blank=True,
+        size=5,
+        help_text="Relevant (Latin) terminology used to describe the entity in the episode",
+    )
+
+    @property
+    def entity(self) -> EntityDescription:
+        entity_field = getattr(self, "entity_field")
+        return getattr(self, entity_field)
+
+    def clean(self):
+        if self.episode.source != self.entity.source:
+            raise ValidationError(
+                "Can only link episodes and entities in the same source text"
+            )
+
+    def __str__(self):
+        return f"{self.entity.name} / {self.episode}"
+
+
+class EpisodeAgent(EpisodeEntity, models.Model):
+    """
+    Relationship between an episode and an agent described in a source text
+    """
+
+    entity_field = "agent"
+
     agent = models.ForeignKey(
         to=AgentDescription,
         on_delete=models.CASCADE,
     )
 
-    def clean(self):
-        if self.event.source != self.agent.source:
-            raise ValidationError("Can only link descriptions in the same source text")
 
-    def __str__(self):
-        return f"{self.agent.name} / {self.event}"
-
-
-class EventDescriptionGift(DescriptionField, models.Model):
+class EpisodeGift(EpisodeEntity, models.Model):
     """
-    Relationship between an agent and an gift described in a source text
+    Relationship between an episode and a gift described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
-        on_delete=models.CASCADE,
-    )
+    entity_field = "gift"
+
     gift = models.ForeignKey(
         to=GiftDescription,
         on_delete=models.CASCADE,
     )
 
-    def clean(self):
-        if self.event.source != self.gift.source:
-            raise ValidationError("Can only link descriptions in the same source text")
 
-    def __str__(self):
-        return f"{self.gift.name} / {self.event}"
-
-
-class EventDescriptionLetter(DescriptionField, models.Model):
+class EpisodeLetter(EpisodeEntity, models.Model):
     """
-    Relationship between an agent and a letter described in a source text
+    Relationship between an episode and a letter described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
-        on_delete=models.CASCADE,
-    )
+    entity_field = "letter"
+
     letter = models.ForeignKey(
         to=LetterDescription,
         on_delete=models.CASCADE,
     )
 
-    def clean(self):
-        if self.event.source != self.letter.source:
-            raise ValidationError("Can only link descriptions in the same source text")
 
-    def __str__(self):
-        return f"{self.letter.name} / {self.event}"
-
-
-class EventDescriptionSpace(DescriptionField, models.Model):
+class EpisodeSpace(EpisodeEntity, models.Model):
     """
-    Relationship between an agent and a space described in a source text
+    Relationship between an episode and a space described in a source text
     """
 
-    event = models.ForeignKey(
-        to=EventDescription,
-        on_delete=models.CASCADE,
-    )
+    entity_field = "space"
+
     space = models.ForeignKey(
         to=SpaceDescription,
         on_delete=models.CASCADE,
     )
 
-    def clean(self):
-        if self.event.source != self.space.source:
-            raise ValidationError("Can only link descriptions in the same source text")
 
-    def __str__(self):
-        return f"{self.space.name} / {self.event}"
-
-
-class Episode(Named, models.Model):
+class Series(Named, models.Model):
     """
-    A higher abstraction of events into connected "episodes"
+    A set of connected "episodes".
     """
 
-    events = models.ManyToManyField(
-        to=EventDescription,
+    episodes = models.ManyToManyField(
+        to=Episode,
         blank=True,
-        help_text="Events that make up this episode",
+        help_text="Episodes that make up this series",
     )
+
+    class Meta:
+        verbose_name_plural = "series"

@@ -1,8 +1,8 @@
-@import 'variables';
-@import 'bootstrap';
+@import "variables";
+@import "bootstrap";
+@import "bootstrap-icons";
 
 @media print {
-
     .is-hidden-print,
     .is-hidden-print * {
         display: none !important;
@@ -11,4 +11,25 @@
     .is-print-paddingless {
         padding: 0 !important;
     }
+}
+
+.always-block {
+    display: block !important;
+}
+
+// Adds a comma + non-breaking space (\00A0) after each non-final item in an .inline-list.
+.inline-list {
+    padding-left: 0;
+
+    .inline-list-item {
+        display: inline;
+    }
+
+    & > .inline-list-item:not(:last-child)::after {
+        content: ",\00A0";
+    }
+}
+
+.subform-header {
+    margin-top: 1.5rem;
 }

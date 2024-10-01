@@ -5,5 +5,5 @@ from . import models
 @admin.register(models.CaseStudy)
 class CaseStudyAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
-    fields = ["name", "description", "episodes", "key_persons", "key_sites"]
-    filter_horizontal = ["episodes", "key_persons", "key_sites"]
+    fields = ["name", "description", "series", "key_persons", "key_sites"]
+    filter_horizontal = ["series", "key_persons", "key_sites"]

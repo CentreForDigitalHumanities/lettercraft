@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "source",
     "space",
     "user",
+    "graphene_django",
+    "graphql_app",
 ]
 
 MIDDLEWARE = [
@@ -92,6 +94,15 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
     ]
 }
+
+# GraphQL
+GRAPHENE = {
+    "SCHEMA": "graphql_app.schema.schema",
+    "MIDDLEWARE": [
+        "graphql_app.middleware.GraphQLAuthMiddleware",
+    ],
+}
+ENABLE_GRAPHIQL = DEBUG
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

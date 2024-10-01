@@ -7,17 +7,23 @@ import { HomeComponent } from './home/home.component';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
+import { GraphQLModule } from './graphql.module';
+import { HttpClientModule } from '@angular/common/http';
+import { DataEntryModule } from './data-entry/data-entry.module';
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
     ],
     imports: [
         AppRoutingModule,
         SharedModule,
         CoreModule,
         UserModule,
+        GraphQLModule,
+        HttpClientModule,
+        DataEntryModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

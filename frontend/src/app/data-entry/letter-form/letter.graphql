@@ -1,0 +1,31 @@
+query DataEntryLetterForm($id: ID!) {
+    letterDescription(id: $id) {
+        id
+        name
+        description
+        source {
+            id
+            name
+        }
+    }
+}
+
+mutation DataEntryUpdateLetter($letterData: UpdateLetterInput!) {
+    updateLetter(letterData: $letterData) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryDeleteLetter($id: ID!) {
+    deleteLetter(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

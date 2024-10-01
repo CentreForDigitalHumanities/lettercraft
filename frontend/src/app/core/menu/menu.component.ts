@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '@services/auth.service';
 
 @Component({
     selector: 'lc-menu',
@@ -6,9 +7,12 @@ import { Component } from '@angular/core';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-    burgerActive = false;
+    public burgerActive = false;
+    public isAuthenticated$ = this.authService.isAuthenticated$;
 
-    toggleBurger() {
+    constructor(private authService: AuthService) {}
+
+    toggleBurger(): void {
         this.burgerActive = !this.burgerActive;
     }
 }

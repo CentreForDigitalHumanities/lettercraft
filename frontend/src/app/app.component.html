@@ -1,9 +1,10 @@
 <div class="app">
     <lc-menu role="banner"></lc-menu>
+    <lc-toast-container aria-live="polite" aria-atomic="true" />
     <main class="main-content mt-5 mb-5">
         <div class="container">
             <router-outlet></router-outlet>
         </div>
     </main>
-    <lc-footer role="contentinfo"></lc-footer>
+    <lc-footer role="contentinfo" class="is-hidden-print text-bg-light p-5" />
 </div>

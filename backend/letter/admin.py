@@ -23,8 +23,8 @@ class GiftDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     ]
 
 
-@admin.register(models.Category)
-class CategoryAdmin(admin.ModelAdmin):
+@admin.register(models.LetterCategory)
+class LetterCategoryAdmin(admin.ModelAdmin):
     fields = ["label", "description"]
 
 
@@ -52,7 +52,8 @@ class PreservedLetterRoleAdmin(admin.StackedInline):
 @admin.register(models.PreservedLetter)
 class PreservedLetterAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
-    fields = ["name", "description"]
+    fields = ["name", "description", "contributors"]
+    filter_horizontal = ["contributors"]
     inlines = [
         PreservedLetterRoleAdmin,
     ]

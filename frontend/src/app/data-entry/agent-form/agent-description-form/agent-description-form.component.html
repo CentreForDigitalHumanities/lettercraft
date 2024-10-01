@@ -1,0 +1,92 @@
+<form>
+    <h3>Gender</h3>
+
+    <p>Does the text establish the gender of this agent?</p>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender">Gender</label>
+        <select class="form-select" id="input-gender"
+            [formControl]="form.controls.gender.controls.gender">
+            <option *ngFor="let option of genderOptions" [value]="option.value">
+                {{option.label}}
+            </option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender-mention">
+            How is this information presented in the text?
+        </label>
+        <select class="form-select" id="input-gender-mention"
+            [formControl]="form.controls.gender.controls.sourceMention">
+            <option *ngFor="let option of sourceMentionOptions" [value]="option.value">
+                {{option.label}}
+            </option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="input-gender-notes">
+            Additional notes
+        </label>
+        <textarea class="form-control" id="input-gender-notes"
+            [formControl]="form.controls.gender.controls.note">
+        </textarea>
+    </div>
+
+    <ng-container *ngIf="isGroup$ | async">
+        <h3>Location</h3>
+
+        <div class="mb-4">
+            <label class="form-label" for="input-has-location">
+                Is the group characterised by their location? (For example, "the citizens of
+                Arles", "the nuns at the abbey in Poitiers".)
+            </label>
+            <select class="form-select" id="input-has-location"
+                [formControl]="form.controls.location.controls.hasLocation">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+
+        <div [ngbCollapse]="!form.controls.location.controls.hasLocation.value">
+            <div class="mb-4">
+                <label class="form-label" for="input-location">
+                    By which location is the group defined?
+                </label>
+                <select class="form-select" id="input-location"
+                    [formControl]="form.controls.location.controls.location">
+                    <ng-container *ngIf="locations$ | async as locationData">
+                        <option *ngFor="let location of locationData.spaceDescriptions"
+                            [value]="location.id">
+                            {{location.name}}
+                        </option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="input-location-mention">
+                    How is this information presented in the text?
+                </label>
+                <select class="form-select" id="input-location-mention"
+                    [formControl]="form.controls.location.controls.sourceMention">
+                    <option *ngFor="let option of sourceMentionOptions"
+                        [value]="option.value">
+                        {{option.label}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="input-location-notes">
+                    Additional notes
+                </label>
+                <textarea class="form-control" id="input-location-notes"
+                    [formControl]="form.controls.location.controls.note">
+                </textarea>
+            </div>
+        </div>
+
+    </ng-container>
+</form>

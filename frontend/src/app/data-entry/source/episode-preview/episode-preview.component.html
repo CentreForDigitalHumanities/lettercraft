@@ -1,0 +1,114 @@
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <lc-icon [icon]="dataIcons.episode" />
+                &nbsp;
+                {{ episode.name }}
+                <br />
+                <small *ngIf="episode.book || episode.chapter || episode.page" class="inline-list">
+                    <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
+                    <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
+                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
+                </small>
+            </div>
+            <lc-action-button-group
+                [editLink]="['/', 'data-entry', 'episodes', episode.id]"
+                (deleteAction)="onClickDelete(episode.id)"
+                [showButtonText]="false"
+            />
+        </div>
+    </div>
+    <div class="card-body">
+        <p>
+            <span *ngIf="episode.summary; else noSummary">{{episode.summary}}</span>
+            <ng-template #noSummary><i>(No summary added.)</i></ng-template>
+        </p>
+
+        <dl>
+            <dt>Agents</dt>
+            <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
+                <ul class="inline-list">
+                    <li
+                        *ngFor="let agent of episode.agents"
+                        class="inline-list-item"
+                    >
+                        <a
+                            [routerLink]="['/', 'data-entry', 'agents', agent.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="agentIcon(agent)" />
+                            {{ agent.name }}
+                        </a>
+                    </li>
+                </ul>
+            </dd>
+            <ng-template #noAgents>
+                <dd class="ms-4">No agents have been added.</dd>
+            </ng-template>
+
+            <dt>Locations</dt>
+            <dd *ngIf="episode.spaces.length > 0; else noSpaces" class="ms-4">
+                <ul class="inline-list">
+                    <li
+                        *ngFor="let space of episode.spaces"
+                        class="inline-list-item"
+                    >
+                        <a
+                            [routerLink]="['/', 'data-entry', 'locations', space.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="locationIcon(space)" />
+                            {{ space.name }}
+                        </a>
+                    </li>
+                </ul>
+            </dd>
+            <ng-template #noSpaces>
+                <dd class="ms-4">No locations have been added.</dd>
+            </ng-template>
+
+            <dt>Objects</dt>
+            <dd
+                *ngIf="
+                    episode.gifts.length > 0 || episode.letters.length > 0;
+                    else noObjects
+                "
+                class="ms-4"
+            >
+                <ul class="inline-list">
+                    <li
+                        *ngFor="let gift of episode.gifts"
+                        class="inline-list-item"
+                    >
+                        <a
+                            [routerLink]="['/', 'data-entry', 'gifts', gift.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="dataIcons.gift" />
+                            {{ gift.name }}
+                        </a>
+                    </li>
+                    <li
+                        *ngFor="let letter of episode.letters"
+                        class="inline-list-item"
+                    >
+                        <a
+                            [routerLink]="['/data-entry', 'letters', letter.id]"
+                            class="icon-link"
+                        >
+                            <lc-icon [icon]="dataIcons.letter" />
+                            {{ letter.name }}
+                        </a>
+                    </li>
+                </ul>
+            </dd>
+            <ng-template #noObjects>
+                <dd class="ms-4">No objects have been added.</dd>
+            </ng-template>
+        </dl>
+        <div class="d-flex justify-content-end">
+            <lc-contributors [contributors]="episode.contributors" />
+        </div>
+    </div>
+</div>

@@ -2,39 +2,59 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { IconComponent } from './icon/icon.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ActionButtonGroupComponent } from './action-button-group/action-button-group.component';
+import { BaseModalComponent } from "./base-modal/base-modal.component";
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { ContributorsComponent } from './contributors/contributors.component';
+import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
 
 
 
 @NgModule({
-    declarations: [],
+    declarations: [
+        IconComponent,
+        BreadcrumbComponent,
+        ActionButtonGroupComponent,
+        BaseModalComponent,
+        ConfirmationModalComponent,
+        ContributorsComponent,
+        CollapsibleCardComponent,
+    ],
     imports: [
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
-        FontAwesomeModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
-            cookieName: 'csrftoken',
-            headerName: 'X-CSRFToken'
+            cookieName: "csrftoken",
+            headerName: "X-CSRFToken",
         }),
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-    ], exports: [
+    ],
+    exports: [
+        IconComponent,
+        BreadcrumbComponent,
+        BaseModalComponent,
+        ConfirmationModalComponent,
+        ActionButtonGroupComponent,
+        ContributorsComponent,
+        CollapsibleCardComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
-        FontAwesomeModule,
         HttpClientModule,
         HttpClientXsrfModule,
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-    ]
+    ],
 })
-export class SharedModule { }
+export class SharedModule {}

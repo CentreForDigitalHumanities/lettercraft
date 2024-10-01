@@ -9,3 +9,5 @@ pytest-django
 pytest-xdist
 dj_rest_auth
 django-allauth
+graphene
+graphene-django

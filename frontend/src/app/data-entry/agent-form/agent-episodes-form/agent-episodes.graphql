@@ -1,0 +1,39 @@
+query DataEntryAgentEpisodes($id: ID!) {
+    agentDescription(id: $id) {
+        id
+        source {
+            id
+            episodes {
+                id
+                name
+            }
+        }
+        episodes {
+            id
+            episode {
+                id
+                name
+            }
+        }
+    }
+}
+
+mutation DataEntryCreateEpisodeEntityLink($input: CreateEpisodeEntityLinkInput!) {
+    createEpisodeEntityLink(data: $input) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryDeleteEpisodeEntityLink($entity: ID!, $episode: ID!, $entityType: Entity!) {
+    deleteEpisodeEntityLink(entity: $entity, episode: $episode, entityType: $entityType) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

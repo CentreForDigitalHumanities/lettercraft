@@ -1,0 +1,11 @@
+query DataEntrySourceList {
+    sources {
+        id
+        name
+        editionAuthor
+        editionTitle
+        medievalAuthor
+        medievalTitle
+        numOfEpisodes
+    }
+}

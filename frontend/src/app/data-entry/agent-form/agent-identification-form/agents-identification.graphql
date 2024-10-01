@@ -1,0 +1,8 @@
+query DataEntryAgentIdentification($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    isGroup
+  }
+}

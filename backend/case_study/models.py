@@ -1,22 +1,23 @@
 from django.db import models
 from core.models import Named
-from event.models import Episode
+from event.models import Series
 from person.models import HistoricalPerson
 from space.models import Structure
 
+
 class CaseStudy(Named, models.Model):
     """
-    A case study is an overarching collection of epistolary events, bound together by a common theme, e.g. `The Saga of St. Boniface` or `The  Nun Rebellion of Poitiers`.
+    A case study is an overarching collection of series, bound together by a common theme, e.g. `The Saga of St. Boniface` or `The Nun Rebellion of Poitiers`.
     """
 
     class Meta:
         verbose_name = "case study"
         verbose_name_plural = "case studies"
 
-    episodes = models.ManyToManyField(
-        to=Episode,
+    series = models.ManyToManyField(
+        to=Series,
         blank=True,
-        help_text="Episodes involved in this case study",
+        help_text="Series involved in this case study",
     )
 
     key_persons = models.ManyToManyField(

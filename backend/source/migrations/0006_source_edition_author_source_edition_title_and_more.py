@@ -9,7 +9,10 @@ def migrate_bibliographical_info_to_edition_title(apps, schema_editor):
     Source = apps.get_model("source", "Source")
     for source in Source.objects.all():
         if source.bibliographical_info:
-            source.edition_title = source.bibliographical_info
+            title = source.bibliographical_info[
+                : min(255, len(source.bibliographical_info))
+            ]
+            source.edition_title = title
             source.save()
 
 

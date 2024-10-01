@@ -1,0 +1,18 @@
+query DataEntryEpisodeContents($id: ID!) {
+    episode(id: $id) {
+        id
+        summary
+        designators
+        categories {
+            id
+        }
+    }
+}
+
+query DataEntryEpisodeCategories {
+    episodeCategories {
+        id
+        name
+        description
+    }
+}

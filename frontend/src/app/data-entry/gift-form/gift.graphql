@@ -1,0 +1,31 @@
+query DataEntryGiftForm($id: ID!) {
+    giftDescription(id: $id) {
+        id
+        name
+        description
+        source {
+            id
+            name
+        }
+    }
+}
+
+mutation DataEntryUpdateGift($giftData: UpdateGiftInput!) {
+    updateGift(giftData: $giftData) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryDeleteGift($id: ID!) {
+    deleteGift(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

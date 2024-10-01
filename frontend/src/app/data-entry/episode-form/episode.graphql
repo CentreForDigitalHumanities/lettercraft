@@ -1,0 +1,20 @@
+query DataEntryEpisodeForm($id: ID!) {
+    episode(id: $id) {
+        id
+        name
+        source {
+            id
+            name
+        }
+    }
+}
+
+mutation DataEntryUpdateEpisode($episodeData: UpdateEpisodeInput!) {
+    updateEpisode(episodeData: $episodeData) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

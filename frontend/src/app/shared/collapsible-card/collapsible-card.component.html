@@ -1,0 +1,19 @@
+<div class="card-header"
+    [class.border-bottom-0]="collapsed">
+    <div class="hstack gap-2">
+        <ng-content select="[cardTitle]" />
+        <button class="btn btn-secondary ms-auto"
+            ariaLabel="{{ collapsed ? 'show' : 'hide' }} {{contentDescription}}"
+            [ngbTooltip]="(collapsed ? 'show' : 'hide') + ' ' + contentDescription"
+            #tooltip="ngbTooltip"
+            [attr.aria-expanded]="!collapsed"
+            [attr.aria-controls]="bodyID"
+            (click)="collapsed = !collapsed; tooltip.close()">
+            <lc-icon [icon]="collapsed ? actionIcons.expand : actionIcons.collapse" />
+        </button>
+        <ng-content select="[cardControl]" />
+    </div>
+</div>
+<div class="card-body" [attr.id]="bodyID" [ngbCollapse]="collapsed">
+    <ng-content select="[cardBody]" />
+</div>

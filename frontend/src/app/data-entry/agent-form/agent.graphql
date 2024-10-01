@@ -1,0 +1,27 @@
+query DataEntryAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    isGroup
+    identified
+    source {
+      id
+      name
+    }
+  }
+}
+
+mutation DataEntryUpdateAgent(
+    $input: UpdateAgentInput!
+) {
+    updateAgent(
+        agentData: $input
+    ) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

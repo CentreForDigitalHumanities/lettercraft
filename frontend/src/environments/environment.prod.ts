@@ -4,5 +4,6 @@ export const environment = {
   production: true,
     assets: '/static/assets',
     version,
-    apiUrl: '/api/'
+    apiUrl: '/api/',
+    graphqlUrl: '/api/graphql',
 };
