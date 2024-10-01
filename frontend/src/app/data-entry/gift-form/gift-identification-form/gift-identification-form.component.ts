@@ -1,7 +1,6 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ToastService } from "@services/toast.service";
 import { MutationResult } from "apollo-angular";
@@ -19,7 +18,11 @@ import {
     debounceTime,
     withLatestFrom,
     Observable,
+    BehaviorSubject,
+    share,
 } from "rxjs";
+import { FormStatus } from "../../shared/types";
+import { FormService } from "../../shared/form.service";
 import { listWithQuotes, nameExamples } from "../../shared/utils";
 
 interface GiftIdentification {
@@ -36,8 +39,8 @@ type GiftIdentificationForm = {
     templateUrl: "./gift-identification-form.component.html",
     styleUrls: ["./gift-identification-form.component.scss"],
 })
-export class GiftIdentificationFormComponent implements OnInit {
-    public id$ = this.route.params.pipe(map((params) => params["id"]));
+export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
+    private id$ = this.formService.id$;
 
     public gift$ = this.id$.pipe(
         switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
@@ -57,46 +60,59 @@ export class GiftIdentificationFormComponent implements OnInit {
         }),
     });
 
-    nameExamples = listWithQuotes(nameExamples['gift']);
+    public nameExamples = listWithQuotes(nameExamples['gift']);
+
+    private formName = "identification";
+    private status$ = new BehaviorSubject<FormStatus>("idle");
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
+        private formService: FormService,
         private toastService: ToastService,
         private giftQuery: DataEntryGiftIdentificationGQL,
-        private giftMutation: DataEntryUpdateGiftGQL
+        private updateGift: DataEntryUpdateGiftGQL
     ) {}
 
     ngOnInit(): void {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.gift$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(this.updateFormData.bind(this));
 
-        this.gift$
+        this.form.statusChanges
             .pipe(
-                switchMap(() =>
-                    this.form.valueChanges.pipe(
-                        map(() => this.form.getRawValue()),
-                        filter(() => this.form.valid),
-                        debounceTime(300),
-                        withLatestFrom(this.id$),
-                        switchMap(([gift, id]) =>
-                            this.performMutation(gift, id)
-                        )
-                    )
-                ),
+                filter((status) => status == "INVALID"),
                 takeUntilDestroyed(this.destroyRef)
             )
-            .subscribe((result) => {
-                const errors = result.data?.updateGift?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((e) => e.messages).join("\n"),
-                        type: "danger",
-                        header: "Update failed",
-                    });
-                }
-            });
+            .subscribe(() => this.status$.next("invalid"));
+
+        const validFormSubmission$ = this.gift$.pipe(
+            switchMap(() =>
+                this.form.valueChanges.pipe(
+                    map(() => this.form.getRawValue()),
+                    filter(() => this.form.valid)
+                )
+            ),
+            debounceTime(300),
+            share()
+        );
+
+        validFormSubmission$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.status$.next("loading"));
+
+        validFormSubmission$
+            .pipe(
+                withLatestFrom(this.id$),
+                switchMap(([gift, id]) => this.performMutation(gift, id)),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe((result) => this.onMutationResult(result));
+    }
+
+    ngOnDestroy(): void {
+        this.formService.detachForm(this.formName);
     }
 
     private updateFormData(gift: Partial<GiftDescriptionType> | null | undefined) {
@@ -113,7 +129,7 @@ export class GiftIdentificationFormComponent implements OnInit {
         gift: GiftIdentification,
         id: string
     ): Observable<MutationResult<DataEntryUpdateGiftMutation>> {
-        return this.giftMutation.mutate(
+        return this.updateGift.mutate(
             {
                 giftData: {
                     ...gift,
@@ -126,10 +142,27 @@ export class GiftIdentificationFormComponent implements OnInit {
         );
     }
 
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateGiftMutation>
+    ): void {
+        const errors = result.data?.updateGift?.errors;
+        if (errors && errors.length > 0) {
+            this.status$.next("error");
+            this.toastService.show({
+                body: errors.map((e) => e.messages).join("\n"),
+                type: "danger",
+                header: "Update failed",
+            });
+        }
+        this.status$.next("saved");
+    }
+
     private updateCache(cache: ApolloCache<unknown>, id: string): void {
-        cache.evict({
-            id: `GiftDescriptionType:${id}`,
+        const identified = cache.identify({
+            __typename: "GiftDescriptionType",
+            id,
         });
+        cache.evict({ id: identified });
         cache.gc();
     }
 }
