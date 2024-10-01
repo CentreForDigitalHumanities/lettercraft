@@ -150,6 +150,11 @@ type DeletePersonReferenceMutation {
   ok: Boolean!
 }
 
+type DeleteSpaceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 enum Entity {
   AGENT
   GIFT
@@ -434,6 +439,7 @@ type Mutation {
   deleteGift(id: ID!): DeleteGiftMutation
   deleteLetter(id: ID!): DeleteLetterMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
+  deleteSpace(id: ID!): DeleteSpaceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
@@ -441,6 +447,7 @@ type Mutation {
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
+  updateSpace(spaceData: UpdateSpaceInput!): UpdateSpaceMutation
 }
 
 """An enumeration."""
@@ -520,10 +527,13 @@ type Query {
   letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
   letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  regions: [RegionType!]!
+  settlements: [SettlementType!]!
   source(id: ID!): SourceType!
   sources: [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  structures: [StructureType!]!
   userDescription(id: ID!): UserType
   userDescriptions: [UserType!]!
 }
@@ -857,6 +867,21 @@ input UpdatePersonReferenceInput {
 }
 
 type UpdatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateSpaceInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  description: String
+  id: ID!
+  name: String
+  page: String
+}
+
+type UpdateSpaceMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }

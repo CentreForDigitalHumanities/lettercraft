@@ -1,5 +1,5 @@
 from graphene import Field, Int, List, NonNull, ResolveInfo
-from django.db.models import QuerySet, Value, Case, When, F
+from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 from typing import Type
 
@@ -16,6 +16,7 @@ from letter.models import GiftDescription, LetterDescription
 from core.models import EntityDescription
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
+
 
 class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
@@ -38,6 +39,12 @@ class SourceType(DjangoObjectType):
             "edition_author",
         ]
 
+    # It would be proper to decorate _entity_resolver() with @staticmethod,
+    # but we are running Python 3.9 on the server, which does not support
+    # calling static methods as regular functions, so the tests fail.
+    # This is solved in Python 3.10, cf. https://github.com/python/cpython/issues/87848
+
+    # @staticmethod
     def _entity_resolver(
         Model: Type[EntityDescription], OutputType: Type[DjangoObjectType]
     ):

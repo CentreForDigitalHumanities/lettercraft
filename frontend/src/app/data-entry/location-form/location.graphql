@@ -1,0 +1,31 @@
+query DataEntryLocation($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+  }
+}
+
+mutation DataEntryUpdateLocation($spaceData: UpdateSpaceInput!) {
+    updateSpace(spaceData: $spaceData) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}
+
+mutation DataEntryDeleteLocation($id: ID!) {
+    deleteSpace(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

@@ -1,25 +1,50 @@
-<ng-container *ngIf="data$ | async as data">
-    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
+<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
-    <ng-container *ngIf="data.spaceDescription as spaceDescription">
-        <h1 class="mb-4">
-            <lc-icon [icon]="locationIcon(spaceDescription)" />
-            {{spaceDescription.name}}
-            <span class="text-secondary">
-                ({{spaceDescription.source.name}})
-            </span>
-        </h1>
+<ng-container *ngIf="location$ | async as location; else loading">
+    <h1 class="mb-4">
+        <lc-icon [icon]="dataIcons.location" />
+        {{ location.name }}
+        <span class="text-secondary"> ({{ location.source.name }}) </span>
+    </h1>
 
-        <p class="lead mb-4" *ngIf="spaceDescription.description">
-            {{spaceDescription.description}}
-        </p>
+    <p class="lead mb-4">
+        <span *ngIf="location.description; else noDescription">
+            {{location.description}}
+        </span>
+        <ng-template #noDescription>
+            <i>(No description)</i>
+        </ng-template>
+    </p>
 
-    </ng-container>
+    <lc-form-status [status$]="status$" />
+
+    <lc-delete-entity-button
+            (clickDelete)="onClickDelete(location)"
+            [deletingInProgress]="deletingInProgress"
+            entityName="location"
+        />
 </ng-container>
 
-
 <h2 class="subform-header">Identification</h2>
+<lc-location-identification-form />
+
+<h2 class="subform-header">Source text</h2>
+<lc-location-source-text-form />
+
+<h2 class="subform-header">Regions</h2>
+<p><i>Coming soon!</i></p>
+
+<h2 class="subform-header">Settlements</h2>
+<p><i>Coming soon!</i></p>
+
+<h2 class="subform-header">Structures</h2>
 <p><i>Coming soon!</i></p>
 
 <h2 class="subform-header">Episodes</h2>
 <lc-location-episodes-form />
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

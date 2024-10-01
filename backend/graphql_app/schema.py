@@ -29,6 +29,9 @@ from letter.mutations.UpdateLetterMutation import UpdateLetterMutation
 from letter.mutations.CreateGiftMutation import CreateGiftMutation
 from letter.mutations.DeleteGiftMutation import DeleteGiftMutation
 from letter.mutations.UpdateGiftMutation import UpdateGiftMutation
+from space.mutations.CreateSpaceMutation import CreateSpaceMutation
+from space.mutations.DeleteSpaceMutation import DeleteSpaceMutation
+from space.mutations.UpdateSpaceMutation import UpdateSpaceMutation
 from person.mutations.CreatePersonReferenceMutation import CreatePersonReferenceMutation
 from person.mutations.UpdatePersonReferenceMutation import UpdatePersonReferenceMutation
 from person.mutations.DeletePersonReferenceMutation import DeletePersonReferenceMutation
@@ -63,6 +66,9 @@ class Mutation(ObjectType):
     create_gift = CreateGiftMutation.Field()
     update_gift = UpdateGiftMutation.Field()
     delete_gift = DeleteGiftMutation.Field()
+    create_space = CreateSpaceMutation.Field()
+    update_space = UpdateSpaceMutation.Field()
+    delete_space = DeleteSpaceMutation.Field()
     create_person_reference = CreatePersonReferenceMutation.Field()
     update_person_reference = UpdatePersonReferenceMutation.Field()
     delete_person_reference = DeletePersonReferenceMutation.Field()

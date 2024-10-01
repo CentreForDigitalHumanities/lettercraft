@@ -1,4 +1,4 @@
-query DataEntryEpisodeEntities($id:ID!) {
+query DataEntryEpisodeEntities($id: ID!) {
   episode(id: $id) {
     id
     source {
