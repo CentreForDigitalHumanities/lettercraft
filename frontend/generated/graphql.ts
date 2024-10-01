@@ -1280,28 +1280,6 @@ export type DataEntryLocationSourceTextQueryVariables = Exact<{
 
 export type DataEntryLocationSourceTextQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, designators: Array<string>, book: string, chapter: string, page: string } | null };
 
-export type DataEntrySubspacesQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type DataEntrySubspacesQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, regions: Array<{ __typename?: 'RegionType', id: string, name: string }>, settlements: Array<{ __typename?: 'SettlementType', id: string, name: string }>, structures: Array<{ __typename?: 'StructureType', id: string, name: string }> } | null };
-
-export type DataEntryRegionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DataEntryRegionsQuery = { __typename?: 'Query', regions: Array<{ __typename?: 'RegionType', id: string, name: string }> };
-
-export type DataEntrySettlementsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DataEntrySettlementsQuery = { __typename?: 'Query', settlements: Array<{ __typename?: 'SettlementType', id: string, name: string }> };
-
-export type DataEntryStructuresQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DataEntryStructuresQuery = { __typename?: 'Query', structures: Array<{ __typename?: 'StructureType', id: string, name: string }> };
-
 export type DataEntryLocationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2131,93 +2109,6 @@ export const DataEntryLocationSourceTextDocument = gql`
   })
   export class DataEntryLocationSourceTextGQL extends Apollo.Query<DataEntryLocationSourceTextQuery, DataEntryLocationSourceTextQueryVariables> {
     override document = DataEntryLocationSourceTextDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntrySubspacesDocument = gql`
-    query DataEntrySubspaces($id: ID!) {
-  spaceDescription(id: $id) {
-    id
-    regions {
-      id
-      name
-    }
-    settlements {
-      id
-      name
-    }
-    structures {
-      id
-      name
-    }
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntrySubspacesGQL extends Apollo.Query<DataEntrySubspacesQuery, DataEntrySubspacesQueryVariables> {
-    override document = DataEntrySubspacesDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntryRegionsDocument = gql`
-    query DataEntryRegions {
-  regions {
-    id
-    name
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntryRegionsGQL extends Apollo.Query<DataEntryRegionsQuery, DataEntryRegionsQueryVariables> {
-    override document = DataEntryRegionsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntrySettlementsDocument = gql`
-    query DataEntrySettlements {
-  settlements {
-    id
-    name
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntrySettlementsGQL extends Apollo.Query<DataEntrySettlementsQuery, DataEntrySettlementsQueryVariables> {
-    override document = DataEntrySettlementsDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const DataEntryStructuresDocument = gql`
-    query DataEntryStructures {
-  structures {
-    id
-    name
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class DataEntryStructuresGQL extends Apollo.Query<DataEntryStructuresQuery, DataEntryStructuresQueryVariables> {
-    override document = DataEntryStructuresDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

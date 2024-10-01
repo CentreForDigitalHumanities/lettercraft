@@ -7,7 +7,15 @@
         <span class="text-secondary"> ({{ location.source.name }}) </span>
     </h1>
 
-    <!-- <lc-entity-description-lead [entity]="location" /> -->
+    <p class="lead mb-4">
+        <span *ngIf="location.description; else noDescription">
+            {{location.description}}
+        </span>
+        <ng-template #noDescription>
+            <i>(No description)</i>
+        </ng-template>
+    </p>
+
 
     <lc-form-status [status$]="status$" />
 
@@ -25,7 +33,7 @@
 <lc-location-source-text-form />
 
 <h2 class="subform-header">Regions</h2>
-<lc-location-subspace-form subspaceType="region"/>
+<p><i>Coming soon!</i></p>
 
 <h2 class="subform-header">Settlements</h2>
 <p><i>Coming soon!</i></p>
