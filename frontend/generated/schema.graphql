@@ -876,7 +876,6 @@ input UpdateSpaceInput {
   categories: [ID!]
   chapter: String
   description: String
-  designators: [String!]
   id: ID!
   name: String
   page: String
