@@ -1,21 +1,21 @@
-import json
-from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+from user.models import User
+from typing import Union
+from graphene import ResolveInfo
+
+
+def has_mutation_permission(user: Union[AnonymousUser, User]) -> bool:
+    return user.is_superuser or getattr(user, "is_contributor", False)
+
+
+def is_mutation(info: ResolveInfo) -> bool:
+    return info.parent_type.name == "Mutation"
 
 
 class GraphQLAuthMiddleware:
-    def resolve(self, next, root, info, **kwargs):
-        request = info.context
 
-        # Allow introspection queries to pass through in development mode.
-        if settings.DEBUG and self.is_introspection_query(request):
-            return next(root, info, **kwargs)
+    def resolve(self, next, root, info: ResolveInfo, **kwargs):
+        if is_mutation(info) and not has_mutation_permission(info.context.user):
+            raise Exception("User is not authorised to make mutations")
 
-        if info.context.user.is_authenticated:
-            return next(root, info, **kwargs)
-
-        raise Exception("User is not authenticated")
-
-    def is_introspection_query(self, request):
-        data = json.loads(request.body)
-        query = data.get("query")  # type: str
-        return query.startswith("query IntrospectionQuery")
+        return next(root, info, **kwargs)
