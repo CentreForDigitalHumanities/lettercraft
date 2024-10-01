@@ -40,7 +40,6 @@ class UpdateAgentInput(InputObjectType):
     name = String()
     description = String()
     is_group = Boolean()
-    designators = List(String)
     gender = UpdateAgentGenderInput()
     location = UpdateAgentLocationInput()
 

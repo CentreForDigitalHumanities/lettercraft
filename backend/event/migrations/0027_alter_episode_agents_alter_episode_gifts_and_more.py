@@ -6,10 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('letter', '0019_alter_giftdescriptioncategory_source_mention_and_more'),
-        ('space', '0018_alter_regionfield_source_mention_and_more'),
-        ('person', '0021_alter_agentdescriptiongender_source_mention_and_more'),
-        ('event', '0025_fill_in_blank_sourcemention'),
+        ("letter", "0019_alter_giftdescriptioncategory_source_mention_and_more"),
+        ("space", "0018_alter_regionfield_source_mention_and_more"),
+        ("person", "0021_alter_agentdescriptiongender_source_mention_and_more"),
+        ("event", "0026_episodeagent_designators_episodegift_designators_and_more"),
     ]
 
     operations = [

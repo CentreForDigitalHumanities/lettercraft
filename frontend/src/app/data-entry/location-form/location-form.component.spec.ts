@@ -10,7 +10,6 @@ describe('LocationFormComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [LocationFormComponent],
             imports: [LocationFormModule, SharedTestingModule],
         });
         fixture = TestBed.createComponent(LocationFormComponent);

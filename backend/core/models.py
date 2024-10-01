@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.postgres.fields import ArrayField
 
 from user.models import User
 
@@ -142,16 +141,6 @@ class EntityDescription(Named, models.Model):
         blank=True,
         choices=SourceMention.choices,
         help_text="How is this entity presented in the text?",
-    )
-
-    designators = ArrayField(
-        models.CharField(
-            max_length=200,
-        ),
-        default=list,
-        blank=True,
-        size=5,
-        help_text="Relevant (Latin) terminology used to describe this entity in the source text",
     )
 
     book = models.CharField(

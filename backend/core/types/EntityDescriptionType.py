@@ -23,7 +23,6 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
         fields = [
             "source",
             "source_mention",
-            "designators",
             "book",
             "chapter",
             "page",

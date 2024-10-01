@@ -11,7 +11,7 @@ class EpisodeCategoryAdmin(admin.ModelAdmin):
 
 class EpisodeAgentAdmin(admin.StackedInline):
     model = models.EpisodeAgent
-    fields = ["agent"] + core_admin.description_field_fields
+    fields = ["agent", "source_mention", "designators", "note"]
     extra = 0
     verbose_name = "involved agent"
 
@@ -26,7 +26,7 @@ class EpisodeAgentAdmin(admin.StackedInline):
 
 class EpisodeGiftAdmin(admin.StackedInline):
     model = models.EpisodeGift
-    fields = ["gift"] + core_admin.description_field_fields
+    fields = ["gift", "source_mention", "designators", "note"]
     extra = 0
     verbose_name = "involved gift"
 
@@ -41,7 +41,7 @@ class EpisodeGiftAdmin(admin.StackedInline):
 
 class EpisodeLetterAdmin(admin.StackedInline):
     model = models.EpisodeLetter
-    fields = ["letter"] + core_admin.description_field_fields
+    fields = ["letter", "source_mention", "designators", "note"]
     extra = 0
     verbose_name = "involved letter"
 
@@ -56,7 +56,7 @@ class EpisodeLetterAdmin(admin.StackedInline):
 
 class EpisodeSpaceAdmin(admin.StackedInline):
     model = models.EpisodeSpace
-    fields = ["space"] + core_admin.description_field_fields
+    fields = ["space", "source_mention", "designators", "note"]
     extra = 0
     verbose_name = "involved space"
 
@@ -79,7 +79,7 @@ class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
         (
             "Contents",
             {
-                "fields": ["summary", "categories"],
+                "fields": ["summary", "designators", "categories"],
             },
         ),
     ]

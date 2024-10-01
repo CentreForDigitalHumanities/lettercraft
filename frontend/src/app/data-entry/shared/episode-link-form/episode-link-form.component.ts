@@ -47,6 +47,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     data$: Observable<DataEntryEpisodeEntityLinkQuery | undefined>;
     form = new FormGroup({
         sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
+        designators: new FormControl<string[]>([], { nonNullable: true }),
         note: new FormControl<string>('', { nonNullable: true, updateOn: 'blur' }),
     });
 
@@ -141,6 +142,7 @@ export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     private updateFormValues(data?: DataEntryEpisodeEntityLinkQuery): void {
         this.form.setValue({
             sourceMention: data?.episodeEntityLink?.sourceMention || SourceMention.Direct,
+            designators: data?.episodeEntityLink?.designators || [],
             note: data?.episodeEntityLink?.note || '',
         });
     }

@@ -1,0 +1,19 @@
+query DataEntryGiftEpisodes($id: ID!) {
+    giftDescription(id: $id) {
+        id
+        source {
+            id
+            episodes {
+                id
+                name
+            }
+        }
+        episodes {
+            id
+            episode {
+                id
+                name
+            }
+        }
+    }
+}

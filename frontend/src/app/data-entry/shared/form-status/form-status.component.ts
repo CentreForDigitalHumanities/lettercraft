@@ -11,21 +11,21 @@ import { statusIcons } from '@shared/icons';
 export class FormStatusComponent {
     @Input({ required: true }) status$!: Observable<FormStatus>;
 
-    statusIcons = statusIcons;
+    public statusIcons = statusIcons;
 
-    messages: Record<FormStatus, string> = {
-        'idle': 'No changes made',
-        'invalid': 'Form contains errors',
-        'loading': 'Loading...',
-        'saved': 'Changes saved',
-        'error': 'Saving failed',
+    public messages: Record<FormStatus, string> = {
+        idle: 'No changes made',
+        invalid: 'Form contains errors',
+        loading: 'Loading...',
+        saved: 'Changes saved',
+        error: 'Saving failed',
     };
 
-    classes: Record<FormStatus, string> = {
-        'idle': 'text-secondary',
-        'invalid': 'text-danger',
-        'loading': 'text-secondary',
-        'saved': 'text-success',
-        'error': 'text-danger',
+    public classes: Record<FormStatus, string> = {
+        idle: 'text-secondary',
+        invalid: 'text-danger',
+        loading: 'text-secondary',
+        saved: 'text-success',
+        error: 'text-danger',
     };
 }

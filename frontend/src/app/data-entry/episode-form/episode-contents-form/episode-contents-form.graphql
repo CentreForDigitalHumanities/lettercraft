@@ -2,6 +2,7 @@ query DataEntryEpisodeContents($id: ID!) {
     episode(id: $id) {
         id
         summary
+        designators
         categories {
             id
         }

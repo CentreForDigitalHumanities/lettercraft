@@ -18,9 +18,9 @@ import { MutationResult } from "apollo-angular";
 type QueriedLocation = NonNullable<DataEntryLocationQuery["spaceDescription"]>
 
 @Component({
-    selector: "lc-location-form",
-    templateUrl: "./location-form.component.html",
-    styleUrls: ["./location-form.component.scss"],
+    selector: 'lc-location-form',
+    templateUrl: './location-form.component.html',
+    styleUrls: ['./location-form.component.scss'],
     providers: [FormService],
 })
 export class LocationFormComponent {
