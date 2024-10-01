@@ -7,6 +7,7 @@ import {
     DataEntryLocationSourceTextGQL,
     DataEntryUpdateLocationGQL,
     DataEntryUpdateLocationMutation,
+    DataEntryUpdateLocationMutationVariables,
 } from "generated/graphql";
 import {
     switchMap,
@@ -92,11 +93,10 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
 
         const validFormSubmission$ = this.location$.pipe(
             switchMap(() =>
-                this.form.valueChanges.pipe(
-                    map(() => this.form.getRawValue()),
-                    filter(() => this.form.valid)
-                )
+                this.form.valueChanges
             ),
+            map(() => this.form.getRawValue()),
+            filter(() => this.form.valid),
             debounceTime(300),
             share()
         );
@@ -109,12 +109,7 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
             .pipe(
                 withLatestFrom(this.id$),
                 switchMap(([location, id]) =>
-                    this.updateLocation.mutate({
-                        spaceData: {
-                            ...location,
-                            id,
-                        },
-                    })
+                    this.performMutation(location, id)
                 ),
                 takeUntilDestroyed(this.destroyRef)
             )
@@ -123,6 +118,18 @@ export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.formService.detachForm(this.formName);
+    }
+
+    private performMutation(
+        location: LocationSourceText,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateLocationMutation>> {
+        return this.updateLocation.mutate({
+            spaceData: {
+                ...location,
+                id,
+            },
+        });
     }
 
     private onMutationResult(
