@@ -52,9 +52,7 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL,
-    ) {
-        this.formService.attachForm('source-text', this.status$);
-    }
+    ) { }
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);

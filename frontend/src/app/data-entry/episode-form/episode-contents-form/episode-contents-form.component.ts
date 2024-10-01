@@ -70,9 +70,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         private episodeQuery: DataEntryEpisodeContentsGQL,
         private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) {
-        this.formService.attachForm('contents', this.status$);
-    }
+    ) { }
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);

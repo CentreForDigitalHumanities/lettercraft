@@ -1,18 +1,20 @@
 import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteEpisodeGQL,
+    DataEntryDeleteEpisodeMutation,
     DataEntryEpisodeFormGQL,
     DataEntryEpisodeFormQuery,
     Entity
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
+import { MutationResult } from "apollo-angular";
 
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
@@ -102,24 +104,26 @@ export class EpisodeFormComponent {
                 }
             )
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) => {
-                this.deletingInProgress = false;
-                const errors = result.data?.deleteEpisode?.errors;
-                if (errors && errors.length > 0) {
-                    this.toastService.show({
-                        body: errors.map((error) => error.messages).join("\n"),
-                        type: "danger",
-                        header: "Deletion failed",
-                    });
-                } else {
-                    this.toastService.show({
-                        body: "Episode deleted",
-                        type: "success",
-                        header: "Success",
-                    });
-                }
-                this.router.navigate([`/data-entry/sources/${sourceId}`]);
+            .subscribe((result) => this.onMutationResult(result, sourceId));
+    }
+
+    private onMutationResult(result: MutationResult<DataEntryDeleteEpisodeMutation>, sourceId: string): void {
+        this.deletingInProgress = false;
+        const errors = result.data?.deleteEpisode?.errors;
+        if (errors && errors.length > 0) {
+            this.toastService.show({
+                body: errors.map((error) => error.messages).join("\n"),
+                type: "danger",
+                header: "Deletion failed",
             });
+        } else {
+            this.toastService.show({
+                body: "Episode deleted",
+                type: "success",
+                header: "Success",
+            });
+        }
+        this.router.navigate([`/data-entry/sources/${sourceId}`]);
     }
 
     private updateCache(cache: ApolloCache<unknown>, episodeId: string): void {

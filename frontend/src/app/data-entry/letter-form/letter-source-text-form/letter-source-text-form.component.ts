@@ -23,7 +23,6 @@ import { FormStatus } from "../../shared/types";
 import { MutationResult } from "apollo-angular";
 
 interface LetterSourceText {
-    designators: string[];
     book: string;
     chapter: string;
     page: string;
