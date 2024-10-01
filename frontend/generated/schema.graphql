@@ -119,13 +119,9 @@ type CreatePersonReferenceMutation {
   ok: Boolean!
 }
 
-input CreateSpaceInput {
-  name: String!
-  source: ID!
-}
-
 type CreateSpaceMutation {
   errors: [LettercraftErrorType!]!
+  ok: Boolean!
   space: SpaceDescriptionType
 }
 
@@ -446,7 +442,7 @@ type Mutation {
   createGift(giftData: CreateEntityDescriptionInput!): CreateGiftMutation
   createLetter(letterData: CreateEntityDescriptionInput!): CreateLetterMutation
   createPersonReference(referenceData: CreatePersonReferenceInput!): CreatePersonReferenceMutation
-  createSpace(spaceData: CreateSpaceInput!): CreateSpaceMutation
+  createSpace(spaceData: CreateEntityDescriptionInput!): CreateSpaceMutation
   deleteAgent(id: ID!): DeleteAgentMutation
   deleteEpisode(id: ID!): DeleteEpisodeMutation
   deleteEpisodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): DeleteEpisodeEntityLinkMutation
