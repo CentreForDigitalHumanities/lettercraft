@@ -1209,6 +1209,13 @@ export type DataEntryUpdateGiftMutationVariables = Exact<{
 
 export type DataEntryUpdateGiftMutation = { __typename?: 'Mutation', updateGift?: { __typename?: 'UpdateGiftMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
+export type DataEntryDeleteGiftMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryDeleteGiftMutation = { __typename?: 'Mutation', deleteGift?: { __typename?: 'DeleteGiftMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
 export type DataEntryLetterCategoriesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1255,6 +1262,13 @@ export type DataEntryUpdateLetterMutationVariables = Exact<{
 
 
 export type DataEntryUpdateLetterMutation = { __typename?: 'Mutation', updateLetter?: { __typename?: 'UpdateLetterMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryDeleteLetterMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryDeleteLetterMutation = { __typename?: 'Mutation', deleteLetter?: { __typename?: 'DeleteLetterMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntryLocationEpisodesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2017,6 +2031,28 @@ export const DataEntryUpdateGiftDocument = gql`
       super(apollo);
     }
   }
+export const DataEntryDeleteGiftDocument = gql`
+    mutation DataEntryDeleteGift($id: ID!) {
+  deleteGift(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryDeleteGiftGQL extends Apollo.Mutation<DataEntryDeleteGiftMutation, DataEntryDeleteGiftMutationVariables> {
+    override document = DataEntryDeleteGiftDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryLetterCategoriesDocument = gql`
     query DataEntryLetterCategories($id: ID!) {
   letterDescription(id: $id) {
@@ -2179,6 +2215,28 @@ export const DataEntryUpdateLetterDocument = gql`
   })
   export class DataEntryUpdateLetterGQL extends Apollo.Mutation<DataEntryUpdateLetterMutation, DataEntryUpdateLetterMutationVariables> {
     override document = DataEntryUpdateLetterDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryDeleteLetterDocument = gql`
+    mutation DataEntryDeleteLetter($id: ID!) {
+  deleteLetter(id: $id) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryDeleteLetterGQL extends Apollo.Mutation<DataEntryDeleteLetterMutation, DataEntryDeleteLetterMutationVariables> {
+    override document = DataEntryDeleteLetterDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

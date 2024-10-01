@@ -34,7 +34,7 @@
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data-entry', 'agents', agent.id]"
+                            [routerLink]="['/', 'data-entry', 'agents', agent.id]"
                             class="icon-link"
                         >
                             <lc-icon [icon]="agentIcon(agent)" />
@@ -55,7 +55,7 @@
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data-entry', 'locations', space.id]"
+                            [routerLink]="['/', 'data-entry', 'locations', space.id]"
                             class="icon-link"
                         >
                             <lc-icon [icon]="locationIcon(space)" />

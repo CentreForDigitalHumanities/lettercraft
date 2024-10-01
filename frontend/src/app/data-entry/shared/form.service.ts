@@ -4,6 +4,9 @@ import { asyncScheduler, BehaviorSubject, combineLatest, map, Observable, shareR
 import { FormStatus } from './types';
 import _ from 'underscore';
 
+/**
+ *  This service is scoped to individual form components. That is why it can access ActivatedRoute.
+ */
 @Injectable()
 export class FormService {
     id$: Observable<string>;

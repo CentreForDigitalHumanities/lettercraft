@@ -1,0 +1,8 @@
+<p class="lead mb-4">
+    <span *ngIf="entity.description; else noDescription">
+        {{entity.description}}
+    </span>
+    <ng-template #noDescription>
+        <i>(No description)</i>
+    </ng-template>
+</p>
