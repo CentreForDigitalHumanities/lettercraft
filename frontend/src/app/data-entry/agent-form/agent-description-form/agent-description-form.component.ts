@@ -10,8 +10,6 @@ import {
     DataEntryUpdateAgentMutation,
     Gender,
     SourceMention,
-    LocationsInSourceListGQL,
-    LocationsInSourceListQuery,
     UpdateAgentInput,
 } from 'generated/graphql';
 import { Observable, map, switchMap, shareReplay, filter, debounceTime, distinctUntilChanged, withLatestFrom, BehaviorSubject, tap, skip } from 'rxjs';
@@ -48,11 +46,11 @@ export class AgentDescriptionFormComponent implements OnDestroy {
             location: new FormControl<string | null>(null),
             sourceMention: new FormControl<SourceMention>(SourceMention.Direct),
             note: new FormControl<string>('', { updateOn: 'blur' }),
-        })
+        }),
     });
 
     isGroup$: Observable<boolean>;
-    locations$: Observable<LocationsInSourceListQuery>;
+    locations$: Observable<{ id: string, name: string }[]>;
 
     status$ = new BehaviorSubject<FormStatus>('idle');
 
@@ -62,7 +60,6 @@ export class AgentDescriptionFormComponent implements OnDestroy {
 
     constructor(
         private agentQuery: DataEntryAgentDescriptionGQL,
-        private locationsQuery: LocationsInSourceListGQL,
         private agentMutation: DataEntryUpdateAgentGQL,
         private toastService: ToastService,
         private formService: FormService,
@@ -78,10 +75,8 @@ export class AgentDescriptionFormComponent implements OnDestroy {
             map(result => result.agentDescription?.isGroup || false),
         );
         this.locations$ = this.data$.pipe(
-            map(data => data.agentDescription?.source.id),
+            map(data => data.agentDescription?.source.spaces),
             filter(_.negate(_.isUndefined)),
-            switchMap(id => this.locationsQuery.watch({ id }).valueChanges),
-            map(result => result.data),
             shareReplay(1),
         );
         this.data$.subscribe(this.updateFormData.bind(this));

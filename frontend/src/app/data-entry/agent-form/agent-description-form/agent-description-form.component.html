@@ -57,7 +57,7 @@
                 <select class="form-select" id="input-location"
                     [formControl]="form.controls.location.controls.location">
                     <ng-container *ngIf="locations$ | async as locationData">
-                        <option *ngFor="let location of locationData.spaceDescriptions"
+                        <option *ngFor="let location of locationData"
                             [value]="location.id">
                             {{location.name}}
                         </option>

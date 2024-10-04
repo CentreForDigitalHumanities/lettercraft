@@ -18,6 +18,10 @@ query DataEntryAgentDescription($id: ID!) {
     }
     source {
         id
+        spaces {
+            id
+            name
+        }
     }
   }
 }
