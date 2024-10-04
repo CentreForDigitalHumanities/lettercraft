@@ -84,6 +84,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
                 this.form.patchValue(
                     {
                         summary: episode.summary,
+                        designators: episode.designators,
                         categories: episode.categories.map((c) => c.id),
                     },
                     {
