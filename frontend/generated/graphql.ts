@@ -1057,14 +1057,7 @@ export type DataEntryAgentDescriptionQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention: SourceMention, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string } } | null };
-
-export type LocationsInSourceListQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type LocationsInSourceListQuery = { __typename?: 'Query', spaceDescriptions: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> };
+export type DataEntryAgentDescriptionQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, location?: { __typename?: 'AgentDescriptionLocationType', id: string, sourceMention: SourceMention, note: string, location: { __typename?: 'SpaceDescriptionType', id: string } } | null, source: { __typename?: 'SourceType', id: string, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string }> } } | null };
 
 export type DataEntryAgentEpisodesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1437,6 +1430,10 @@ export const DataEntryAgentDescriptionDocument = gql`
     }
     source {
       id
+      spaces {
+        id
+        name
+      }
     }
   }
 }
@@ -1447,25 +1444,6 @@ export const DataEntryAgentDescriptionDocument = gql`
   })
   export class DataEntryAgentDescriptionGQL extends Apollo.Query<DataEntryAgentDescriptionQuery, DataEntryAgentDescriptionQueryVariables> {
     override document = DataEntryAgentDescriptionDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const LocationsInSourceListDocument = gql`
-    query LocationsInSourceList($id: ID!) {
-  spaceDescriptions(sourceId: $id) {
-    id
-    name
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class LocationsInSourceListGQL extends Apollo.Query<LocationsInSourceListQuery, LocationsInSourceListQueryVariables> {
-    override document = LocationsInSourceListDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
