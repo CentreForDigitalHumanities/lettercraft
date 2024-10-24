@@ -276,6 +276,9 @@ enum EventEpisodeSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""
@@ -406,6 +409,9 @@ enum LetterGiftDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""
@@ -415,6 +421,9 @@ enum LetterLetterDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """
@@ -457,6 +466,9 @@ enum PersonAgentDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 type PersonDateOfBirthType {
@@ -613,6 +625,7 @@ type SourceContentsDateType {
 enum SourceMention {
   DIRECT
   IMPLIED
+  UP_FOR_DEBATE
 }
 
 type SourceType {
@@ -709,6 +722,9 @@ enum SpaceSpaceDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""

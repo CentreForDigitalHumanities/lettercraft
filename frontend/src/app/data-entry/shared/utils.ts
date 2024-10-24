@@ -4,7 +4,8 @@ import { BehaviorSubject } from "rxjs";
 
 export const sourceMentionSelectOptions = (): SelectOptions<SourceMention> => [
     { value: SourceMention.Direct, label: 'Directly mentioned' },
-    { value: SourceMention.Implied, label: 'Implied' }
+    { value: SourceMention.Implied, label: 'Implied' },
+    { value: SourceMention.UpForDebate, label: 'Up for debate' },
 ];
 
 export const formStatusSubject = () => new BehaviorSubject<FormStatus>('idle');

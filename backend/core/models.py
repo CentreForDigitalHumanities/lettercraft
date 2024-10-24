@@ -121,6 +121,7 @@ class HistoricalEntity(Named, models.Model):
 class SourceMention(models.TextChoices):
     DIRECT = "direct", "directly mentioned"
     IMPLIED = "implied", "implied"
+    UP_FOR_DEBATE = "up_for_debate", "up for debate"
 
 
 class EntityDescription(Named, models.Model):

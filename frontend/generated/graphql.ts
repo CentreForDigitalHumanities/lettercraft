@@ -296,7 +296,9 @@ export enum EventEpisodeSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  /** up for debate */
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 /** An enumeration. */
@@ -419,7 +421,9 @@ export enum LetterGiftDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  /** up for debate */
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 /** An enumeration. */
@@ -427,7 +431,9 @@ export enum LetterLetterDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  /** up for debate */
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 /** A simple wrapper around Graphene-Django's ErrorType with a constructor. */
@@ -580,7 +586,9 @@ export enum PersonAgentDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  /** up for debate */
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 export type PersonDateOfBirthType = {
@@ -784,7 +792,8 @@ export type SourceContentsDateType = {
 /** An enumeration. */
 export enum SourceMention {
   Direct = 'DIRECT',
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 export type SourceType = {
@@ -865,7 +874,9 @@ export enum SpaceSpaceDescriptionSourceMentionChoices {
   /** directly mentioned */
   Direct = 'DIRECT',
   /** implied */
-  Implied = 'IMPLIED'
+  Implied = 'IMPLIED',
+  /** up for debate */
+  UpForDebate = 'UP_FOR_DEBATE'
 }
 
 /** An enumeration. */
