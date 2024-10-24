@@ -1,6 +1,8 @@
 from allauth.account.models import EmailAddress
 import pytest
-from graphene.test import Client
+from graphene.test import Client as GrapheneClient
+from typing import Generator
+from django.test import Client as APIClient
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
@@ -11,7 +13,6 @@ from event.models import Episode
 from user.models import User
 from space.models import SpaceDescription
 from graphql_app.schema import schema
-
 
 @pytest.fixture()
 def user_data():
@@ -40,7 +41,7 @@ def user(db, user_data):
 
 
 @pytest.fixture
-def user_client(client, user):
+def user_client(client, user) -> Generator[APIClient, None, None]:
     client.force_login(user)
     yield client
     client.logout()
@@ -133,5 +134,5 @@ def case_study(db):
 
 @pytest.fixture()
 def graphql_client():
-    client = Client(schema)
+    client = GrapheneClient(schema)
     return client

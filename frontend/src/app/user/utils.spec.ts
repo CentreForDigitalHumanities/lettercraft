@@ -39,6 +39,7 @@ describe("User utils", () => {
                 first_name: "Test",
                 last_name: "User",
                 is_staff: true,
+                is_contributor: true,
             };
             const user = parseUserData(result);
             expect(user).toBeInstanceOf(User);
@@ -48,6 +49,7 @@ describe("User utils", () => {
             expect(user?.firstName).toBe("Test");
             expect(user?.lastName).toBe("User");
             expect(user?.isStaff).toBe(true);
+            expect(user?.isContributor).toBe(true);
         });
     });
 
@@ -59,7 +61,6 @@ describe("User utils", () => {
                 email: "test@example.com",
                 firstName: "Test",
                 lastName: "User",
-                isStaff: true,
             };
             const encoded = encodeUserData(data);
             expect(encoded).toEqual({
@@ -68,9 +69,20 @@ describe("User utils", () => {
                 email: "test@example.com",
                 first_name: "Test",
                 last_name: "User",
-                is_staff: true,
             });
         });
+
+        it('should omit is_staff and is_contributor', () => {
+            const data: Partial<User> = {
+                id: 1,
+                isStaff: true,
+                isContributor: true,
+            };
+            const encoded = encodeUserData(data);
+            expect(encoded).toEqual({
+                id: 1,
+            });
+        })
     });
 
     describe("setErrors", () => {

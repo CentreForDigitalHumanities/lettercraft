@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '@services/auth.service';
+import { map } from 'rxjs';
 
 @Component({
     selector: 'lc-menu',
@@ -8,7 +9,9 @@ import { AuthService } from '@services/auth.service';
 })
 export class MenuComponent {
     public burgerActive = false;
-    public isAuthenticated$ = this.authService.isAuthenticated$;
+    public isContributor$ = this.authService.currentUser$.pipe(
+        map(user => user?.isContributor || false)
+    );
 
     constructor(private authService: AuthService) {}
 

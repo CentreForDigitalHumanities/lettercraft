@@ -11,6 +11,7 @@ def test_user_details(user_client, user_data):
         "first_name": user_data["first_name"],
         "last_name": user_data["last_name"],
         "is_staff": False,
+        "is_contributor": False,
     }
 
 
@@ -28,10 +29,11 @@ def test_user_updates(user_client, user_data):
     assert response.status_code == 200
     assert details()["username"] == "NewName"
 
-    # is_staff is readonly, so nothing should happen
+    # is_staff and is_contributor are readonly, so nothing should happen
     response = user_client.patch(
         route,
-        {"is_staff": True},
+        {"is_staff": True, "is_contributor": True},
         content_type="application/json",
     )
     assert not details()["is_staff"]
+    assert not details()["is_contributor"]

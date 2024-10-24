@@ -7,7 +7,7 @@ import { RegisterComponent } from './user/register/register.component';
 import { PasswordForgottenComponent } from './user/password-forgotten/password-forgotten.component';
 import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
 import { UserSettingsComponent } from './user/user-settings/user-settings.component';
-import { LoggedOnGuard } from '@shared/logged-on.guard';
+import { ContributorGuard, LoggedOnGuard } from '@shared/logged-on.guard';
 import { SourcesComponent } from './data-entry/sources/sources.component';
 import { LocationFormComponent } from './data-entry/location-form/location-form.component';
 import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
@@ -55,11 +55,12 @@ const routes: Routes = [
     {
         path: 'user-settings',
         title: pageTitle('Settings'),
+        canActivate: [LoggedOnGuard],
         component: UserSettingsComponent
     },
     {
         path: 'data-entry',
-        canActivate: [LoggedOnGuard],
+        canActivate: [ContributorGuard],
         children: [
             {
                 path: 'agents/:id',
