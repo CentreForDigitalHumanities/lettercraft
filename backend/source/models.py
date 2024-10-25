@@ -1,5 +1,6 @@
 from django.db import models
 from core.models import LettercraftDate
+from event.models import Episode
 
 
 class Source(models.Model):
@@ -36,6 +37,15 @@ class Source(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_last_episode_rank(self) -> int:
+        """
+        Returns the rank of the last episode in this source, or -1 if the source has no episodes.
+        """
+        last_episode = Episode.objects.filter(source=self).order_by("-rank").first()
+        if last_episode is None:
+            return -1
+        return last_episode.rank
 
 
 class SourceWrittenDate(LettercraftDate):

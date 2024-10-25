@@ -40,6 +40,7 @@ class CreateEpisodeMutation(LettercraftMutation):
         episode = Episode.objects.create(
             name=getattr(episode_data, "name"),
             source=source,
+            rank=source.get_last_episode_rank() + 1,
         )
         cls.add_contribution(episode, episode_data, info)
 
