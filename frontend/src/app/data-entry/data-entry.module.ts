@@ -8,6 +8,7 @@ import { AgentFormModule } from "./agent-form/agent-form.module";
 import { SourceComponent } from "./source/source.component";
 import { EpisodePreviewComponent } from "./source/episode-preview/episode-preview.component";
 import { EpisodeFormModule } from "./episode-form/episode-form.module";
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
     declarations: [SourcesComponent, SourceComponent, EpisodePreviewComponent],
@@ -18,6 +19,7 @@ import { EpisodeFormModule } from "./episode-form/episode-form.module";
         LetterFormModule,
         LocationFormModule,
         EpisodeFormModule,
+        DragDropModule,
     ],
     exports: [
         AgentFormModule,
