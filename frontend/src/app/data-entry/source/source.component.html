@@ -15,11 +15,18 @@
     objects, and locations are involved.
 </p>
 
-<div class="mb-4" *ngIf="source$ | async as source">
-    <lc-episode-preview
-        *ngFor="let episode of source.episodes; trackBy: identify"
-        [episode]="episode"
-    />
+<div
+    class="mb-4"
+    (cdkDropListDropped)="drop($event)"
+    cdkDropList
+>
+    <div
+        *ngFor="let episode of episodes; trackBy: identify"
+        cdkDragLockAxis="y"
+        cdkDrag
+    >
+        <lc-episode-preview [episode]="episode" />
+    </div>
 </div>
 <div class="btn-group mb-4" *ngIf="source$ | async as source">
     <button
@@ -49,10 +56,12 @@
                 type="button"
                 class="btn btn-primary"
                 (click)="newEpisodeForm.submit()"
-
             >
                 Create
-                <div *ngIf="mutationInProgress" class="spinner-border spinner-border-sm">
+                <div
+                    *ngIf="mutationInProgress"
+                    class="spinner-border spinner-border-sm"
+                >
                     <span class="visually-hidden">Creating new episode...</span>
                 </div>
             </button>

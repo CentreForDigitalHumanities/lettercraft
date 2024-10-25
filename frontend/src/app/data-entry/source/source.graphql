@@ -9,6 +9,7 @@ query DataEntrySourceDetail($id: ID!) {
             summary
             book
             chapter
+            rank
             contributors {
                 id
                 fullName
@@ -33,6 +34,16 @@ query DataEntrySourceDetail($id: ID!) {
                 name
                 hasIdentifiableFeatures
             }
+        }
+    }
+}
+
+mutation DataEntryUpdateEpisodeOrder($episodeOrderData: [EpisodeOrderInput!]!) {
+    updateEpisodeOrder(episodeOrderData: $episodeOrderData) {
+        ok
+        errors {
+            field
+            messages
         }
     }
 }
