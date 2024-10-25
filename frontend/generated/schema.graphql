@@ -45,6 +45,9 @@ type AgentDescriptionType implements EntityDescription {
   page: String!
   personReferences: [PersonReferenceType!]!
 
+  """The relative position of this description in the source"""
+  rank: Int!
+
   """Source text containing this description"""
   source: SourceType!
 
@@ -216,6 +219,11 @@ type EpisodeLetterType implements EpisodeEntityLink {
   sourceMention: SourceMention!
 }
 
+input EpisodeOrderInput {
+  id: ID!
+  rank: Int!
+}
+
 type EpisodeSpaceType implements EpisodeEntityLink {
   certainty: Certainty!
   designators: [String!]
@@ -255,6 +263,9 @@ type EpisodeType implements EntityDescription {
 
   """The page number or page range in the source"""
   page: String!
+
+  """The relative position of this description in the source"""
+  rank: Int!
 
   """Source text containing this description"""
   source: SourceType!
@@ -332,6 +343,9 @@ type GiftDescriptionType implements EntityDescription {
   """The page number or page range in the source"""
   page: String!
 
+  """The relative position of this description in the source"""
+  rank: Int!
+
   """Source text containing this description"""
   source: SourceType!
 
@@ -395,6 +409,9 @@ type LetterDescriptionType implements EntityDescription {
   """The page number or page range in the source"""
   page: String!
 
+  """The relative position of this description in the source"""
+  rank: Int!
+
   """Source text containing this description"""
   source: SourceType!
 
@@ -452,6 +469,7 @@ type Mutation {
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
+  updateEpisodeOrder(episodeOrderData: [EpisodeOrderInput!]!): UpdateEpisodeOrderMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
@@ -689,6 +707,9 @@ type SpaceDescriptionType implements EntityDescription {
 
   """The page number or page range in the source"""
   page: String!
+
+  """The relative position of this description in the source"""
+  rank: Int!
   regionFields: [RegionFieldType!]!
   regions: [RegionType!]!
   settlementFields: [SettlementFieldType!]!
@@ -835,6 +856,11 @@ input UpdateEpisodeInput {
 }
 
 type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type UpdateEpisodeOrderMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }
