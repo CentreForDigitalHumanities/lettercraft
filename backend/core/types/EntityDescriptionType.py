@@ -26,6 +26,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
             "book",
             "chapter",
             "page",
+            "rank",
             "contributors",
         ] + NamedType.fields()
         interfaces = (EntityDescriptionInterface,)

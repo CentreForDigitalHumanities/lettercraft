@@ -162,6 +162,11 @@ class EntityDescription(Named, models.Model):
         help_text="The page number or page range in the source",
     )
 
+    rank = models.IntegerField(
+        default=0,
+        help_text="The relative position of this description in the source",
+    )
+
     contributors = models.ManyToManyField(
         to=User,
         blank=True,
@@ -170,6 +175,7 @@ class EntityDescription(Named, models.Model):
 
     class Meta:
         abstract = True
+        ordering = ["rank"]
 
     def __str__(self):
         return f"{self.name} ({self.source})"
