@@ -36,3 +36,13 @@ query DataEntrySourceDetail($id: ID!) {
         }
     }
 }
+
+mutation DataEntryUpdateEpisodeOrder($episodeIds: [ID!]!) {
+    updateEpisodeOrder(episodeIds: $episodeIds) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

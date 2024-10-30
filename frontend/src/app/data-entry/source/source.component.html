@@ -19,6 +19,7 @@
     <lc-episode-preview
         *ngFor="let episode of source.episodes; trackBy: identify"
         [episode]="episode"
+        (changeEpisodeOrder)="reorderEpisodes(source.episodes, episode.id, $event)"
     />
 </div>
 <div class="btn-group mb-4" *ngIf="source$ | async as source">

@@ -18,6 +18,8 @@ export const actionIcons = {
     expand: 'caret-down',
     collapse: 'caret-up',
     edit: 'pencil',
+    up: 'chevron-up',
+    down: 'chevron-down',
 };
 
 export const authIcons = {

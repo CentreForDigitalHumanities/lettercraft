@@ -35,3 +35,29 @@ export const differenceBy = <T extends object>(
  */
 export const splat = <I, O>(func: (...a: I[]) => O) =>
     (args: I[]) => func(...args);
+
+
+/**
+ * Moves an item within an array from one index to another. Returns the same array if the from and to indices are identical or out of bounds.
+ *
+ * @param {T[]} array - The array containing the item to move.
+ * @param {number} fromIndex - The index of the item to move.
+ * @param {number} toIndex - The index to move the item to.
+ * @returns {T[]} The array with the item moved to the new index.
+ */
+export function moveItemInArray<T>(array: T[], fromIndex: number, toIndex: number): T[] {
+    if (fromIndex === toIndex) {
+        return array;
+    }
+
+    const fromIndexOutOfBounds = fromIndex < 0 || fromIndex >= array.length;
+    const toIndexOutOfBounds = toIndex < 0 || toIndex >= array.length;
+
+    if (fromIndexOutOfBounds || toIndexOutOfBounds) {
+        return array;
+    }
+
+    const item = array.splice(fromIndex, 1)[0];
+    array.splice(toIndex, 0, item);
+    return array;
+}

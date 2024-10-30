@@ -1,9 +1,16 @@
-import { Component, DestroyRef, Input } from "@angular/core";
+import {
+    Component,
+    DestroyRef,
+    EventEmitter,
+    Input,
+    Output,
+} from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { dataIcons } from "@shared/icons";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
+import { OrderChange } from "@shared/order-button-group/order-button-group.component";
 import {
     DataEntryDeleteEpisodeGQL,
     DataEntrySourceDetailQuery,
@@ -21,7 +28,12 @@ type QueriedEpisode = NonNullable<
 export class EpisodePreviewComponent {
     @Input({ required: true })
     public episode!: QueriedEpisode;
+
+    @Output()
+    public changeEpisodeOrder = new EventEmitter<OrderChange>();
+
     public dataIcons = dataIcons;
+
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 
@@ -40,7 +52,8 @@ export class EpisodePreviewComponent {
             })
             .then(() => {
                 this.performDelete(episodeId);
-            }).catch(() => {
+            })
+            .catch(() => {
                 // Do nothing on cancel / dismissal.
             });
     }

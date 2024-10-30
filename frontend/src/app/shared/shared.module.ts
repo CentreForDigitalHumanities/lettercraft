@@ -13,6 +13,7 @@ import { BaseModalComponent } from "./base-modal/base-modal.component";
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { ContributorsComponent } from './contributors/contributors.component';
 import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
+import { OrderButtonGroupComponent } from './order-button-group/order-button-group.component';
 
 
 
@@ -25,6 +26,7 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         ConfirmationModalComponent,
         ContributorsComponent,
         CollapsibleCardComponent,
+        OrderButtonGroupComponent,
     ],
     imports: [
         CommonModule,
@@ -47,6 +49,7 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
         ActionButtonGroupComponent,
         ContributorsComponent,
         CollapsibleCardComponent,
+        OrderButtonGroupComponent,
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,

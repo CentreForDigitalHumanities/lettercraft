@@ -12,11 +12,17 @@
                     <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
                 </small>
             </div>
-            <lc-action-button-group
-                [editLink]="['/', 'data-entry', 'episodes', episode.id]"
-                (deleteAction)="onClickDelete(episode.id)"
-                [showButtonText]="false"
-            />
+            <div class="button-group-wrapper">
+                <lc-order-button-group
+                    entityName="episode"
+                    (changeOrder)="changeEpisodeOrder.emit($event)"
+                />
+                <lc-action-button-group
+                    [editLink]="['/', 'data-entry', 'episodes', episode.id]"
+                    (deleteAction)="onClickDelete(episode.id)"
+                    [showButtonText]="false"
+                />
+            </div>
         </div>
     </div>
     <div class="card-body">
