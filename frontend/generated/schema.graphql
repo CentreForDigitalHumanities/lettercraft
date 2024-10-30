@@ -452,6 +452,10 @@ type Mutation {
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
+  updateEpisodeOrder(
+    """Ordered list of episode IDs"""
+    episodeIds: [ID!]!
+  ): UpdateEpisodeOrderMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
@@ -835,6 +839,11 @@ input UpdateEpisodeInput {
 }
 
 type UpdateEpisodeMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+type UpdateEpisodeOrderMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }

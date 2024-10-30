@@ -462,6 +462,7 @@ export type Mutation = {
   updateAgent?: Maybe<UpdateAgentMutation>;
   updateEpisode?: Maybe<UpdateEpisodeMutation>;
   updateEpisodeEntityLink?: Maybe<UpdateEpisodeEntityLinkMutation>;
+  updateEpisodeOrder?: Maybe<UpdateEpisodeOrderMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
   updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
@@ -554,6 +555,11 @@ export type MutationUpdateEpisodeArgs = {
 
 export type MutationUpdateEpisodeEntityLinkArgs = {
   data: UpdateEpisodeEntityLinkInput;
+};
+
+
+export type MutationUpdateEpisodeOrderArgs = {
+  episodeIds: Array<Scalars['ID']['input']>;
 };
 
 
@@ -987,6 +993,12 @@ export type UpdateEpisodeMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
+export type UpdateEpisodeOrderMutation = {
+  __typename?: 'UpdateEpisodeOrderMutation';
+  errors: Array<LettercraftErrorType>;
+  ok: Scalars['Boolean']['output'];
+};
+
 export type UpdateGiftInput = {
   book?: InputMaybe<Scalars['String']['input']>;
   categories?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -1389,6 +1401,13 @@ export type DataEntrySourceDetailQueryVariables = Exact<{
 
 
 export type DataEntrySourceDetailQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }> } };
+
+export type DataEntryUpdateEpisodeOrderMutationVariables = Exact<{
+  episodeIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryUpdateEpisodeOrderMutation = { __typename?: 'Mutation', updateEpisodeOrder?: { __typename?: 'UpdateEpisodeOrderMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
 
 export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2588,6 +2607,28 @@ export const DataEntrySourceDetailDocument = gql`
   })
   export class DataEntrySourceDetailGQL extends Apollo.Query<DataEntrySourceDetailQuery, DataEntrySourceDetailQueryVariables> {
     override document = DataEntrySourceDetailDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryUpdateEpisodeOrderDocument = gql`
+    mutation DataEntryUpdateEpisodeOrder($episodeIds: [ID!]!) {
+  updateEpisodeOrder(episodeIds: $episodeIds) {
+    ok
+    errors {
+      field
+      messages
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryUpdateEpisodeOrderGQL extends Apollo.Mutation<DataEntryUpdateEpisodeOrderMutation, DataEntryUpdateEpisodeOrderMutationVariables> {
+    override document = DataEntryUpdateEpisodeOrderDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
