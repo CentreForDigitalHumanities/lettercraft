@@ -15,17 +15,30 @@ class UpdateEpisodeOrderMutation(Mutation):
 
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, episode_ids: list[str]):
-        source = Source.objects.filter(episode__in=episode_ids).distinct()
+        if len(episode_ids) == 0:
+            error=LettercraftErrorType(
+                field="episode_ids",
+                messages=["No episode IDs provided."]
+            )
+            return cls(ok=False, errors=[error]) # type: ignore
 
-        if source.count() > 1:
+        corresponding_sources = Source.objects.filter(episode__in=episode_ids)
+        if corresponding_sources.count() != len(episode_ids):
             error = LettercraftErrorType(
                 field="episode_ids",
-                messages=["Multiple sources found for given episode IDs."],
+                messages=["Not every episode has a corresponding source."]
+            )
+            return cls(ok=False, errors=[error]) # type: ignore
+
+        distinct_sources = corresponding_sources.distinct()
+        if distinct_sources.count() > 1:
+            error = LettercraftErrorType(
+                field="episode_ids",
+                messages=["The provided episode IDs belong to more than one source."],
             )
             return cls(ok=False, errors=[error])  # type: ignore
 
-        source = source.first()
-
+        source = distinct_sources.first()
         if not source:
             error = LettercraftErrorType(
                 field="episode_ids",
