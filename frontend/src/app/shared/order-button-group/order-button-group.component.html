@@ -1,14 +1,18 @@
 <div class="btn-group">
-    <button type="button" class="btn btn-light" (click)="onUp()">
-        <lc-icon
-            [icon]="actionIcons.up"
-            [title]="entityName ? 'Move ' + entityName + ' up' : 'Move up'"
-        />
+    <button
+        type="button"
+        class="btn btn-light"
+        (click)="onUp()"
+        [disabled]="upDisabled"
+    >
+        <lc-icon [icon]="actionIcons.up" title="Move episode up" />
     </button>
-    <button type="button" class="btn btn-light" (click)="onDown()">
-        <lc-icon
-            [icon]="actionIcons.down"
-            [title]="entityName ? 'Move ' + entityName + ' down' : 'Move down'"
-        />
+    <button
+        type="button"
+        class="btn btn-light"
+        (click)="onDown()"
+        [disabled]="downDisabled"
+    >
+        <lc-icon [icon]="actionIcons.down" title="Move episode down" />
     </button>
 </div>

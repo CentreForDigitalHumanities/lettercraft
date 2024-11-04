@@ -9,8 +9,9 @@ export type OrderChange = "up" | "down";
     styleUrls: ["./order-button-group.component.scss"],
 })
 export class OrderButtonGroupComponent {
-    @Input() entityName: string | null = null;
     @Output() changeOrder = new EventEmitter<OrderChange>();
+    @Input() upDisabled = false;
+    @Input() downDisabled = false;
 
     public actionIcons = actionIcons;
 

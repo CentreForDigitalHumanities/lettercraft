@@ -26,11 +26,10 @@ type QueriedEpisode = NonNullable<
     styleUrls: ["./episode-preview.component.scss"],
 })
 export class EpisodePreviewComponent {
-    @Input({ required: true })
-    public episode!: QueriedEpisode;
-
-    @Output()
-    public changeEpisodeOrder = new EventEmitter<OrderChange>();
+    @Input({ required: true }) public episode!: QueriedEpisode;
+    @Input() public isLast = false;
+    @Input() public isFirst = false;
+    @Output() public changeEpisodeOrder = new EventEmitter<OrderChange>();
 
     public dataIcons = dataIcons;
 

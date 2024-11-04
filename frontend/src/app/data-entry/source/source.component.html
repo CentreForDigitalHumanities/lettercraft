@@ -17,9 +17,18 @@
 
 <div class="mb-4" *ngIf="source$ | async as source">
     <lc-episode-preview
-        *ngFor="let episode of source.episodes; trackBy: identify"
+        *ngFor="
+            let episode of source.episodes;
+            trackBy: identify;
+            first as isFirst;
+            last as isLast
+        "
         [episode]="episode"
-        (changeEpisodeOrder)="reorderEpisodes(source.episodes, episode.id, $event)"
+        [isFirst]="isFirst"
+        [isLast]="isLast"
+        (changeEpisodeOrder)="
+            reorderEpisodes(source.episodes, episode.id, $event)
+        "
     />
 </div>
 <div class="btn-group mb-4" *ngIf="source$ | async as source">
@@ -50,10 +59,12 @@
                 type="button"
                 class="btn btn-primary"
                 (click)="newEpisodeForm.submit()"
-
             >
                 Create
-                <div *ngIf="mutationInProgress" class="spinner-border spinner-border-sm">
+                <div
+                    *ngIf="mutationInProgress"
+                    class="spinner-border spinner-border-sm"
+                >
                     <span class="visually-hidden">Creating new episode...</span>
                 </div>
             </button>
