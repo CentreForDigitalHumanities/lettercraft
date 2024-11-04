@@ -39,8 +39,8 @@ describe("moveItemInArray", () => {
         expect(moveItemInArray(array, 4, 4)).toBe(array);
     });
 
-    it("should return the same array if the indices are out of bounds", () => {
+    it("should throw an error if the indices are out of bounds", () => {
         const array = ["Alice", "Bernard", "Claire", "David", "Eve"];
-        expect(moveItemInArray(array, -99, 99)).toBe(array);
+        expect(() => moveItemInArray(array, -99, 99)).toThrowError();
     });
 });
