@@ -54,7 +54,7 @@ export function moveItemInArray<T>(array: T[], fromIndex: number, toIndex: numbe
     const toIndexOutOfBounds = toIndex < 0 || toIndex >= array.length;
 
     if (fromIndexOutOfBounds || toIndexOutOfBounds) {
-        return array;
+        throw new Error(`Index out of bounds: from ${fromIndex} to ${toIndex}.`);
     }
 
     const item = array.splice(fromIndex, 1)[0];
