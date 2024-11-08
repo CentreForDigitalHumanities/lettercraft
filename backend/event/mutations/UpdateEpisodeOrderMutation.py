@@ -1,5 +1,6 @@
 from graphene import Mutation, Boolean, List, NonNull, ID, ResolveInfo
 
+from event.models import Episode
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 
@@ -16,35 +17,39 @@ class UpdateEpisodeOrderMutation(Mutation):
     @classmethod
     def mutate(cls, root: None, info: ResolveInfo, episode_ids: list[str]):
         if len(episode_ids) == 0:
-            error=LettercraftErrorType(
-                field="episode_ids",
-                messages=["No episode IDs provided."]
+            error = LettercraftErrorType(
+                field="episode_ids", messages=["No episode IDs provided."]
             )
-            return cls(ok=False, errors=[error]) # type: ignore
+            return cls(ok=False, errors=[error])  # type: ignore
 
-        corresponding_sources = Source.objects.filter(episode__in=episode_ids)
-        if corresponding_sources.count() != len(episode_ids):
+        # Check if all episode IDs are valid.
+        episodes = Episode.objects.filter(id__in=episode_ids).prefetch_related("source")
+        if episodes.count() != len(episode_ids):
             error = LettercraftErrorType(
                 field="episode_ids",
-                messages=["Not every episode has a corresponding source."]
+                messages=["Not every provided episode ID is valid."],
             )
-            return cls(ok=False, errors=[error]) # type: ignore
+            return cls(ok=False, errors=[error])  # type: ignore
 
-        distinct_sources = corresponding_sources.distinct()
-        if distinct_sources.count() > 1:
+        corresponding_sources: set[Source] = {episode.source for episode in episodes}
+
+        # Check if there is at least one source for the provided episode IDs.
+        # (There should always be.)
+        if len(corresponding_sources) == 0:
+            error = LettercraftErrorType(
+                field="episode_ids", messages=["No source found for given episode IDs."]
+            )
+            return cls(ok=False, errors=[error])  # type: ignore
+
+        # Check if all provided episode IDs belong to the same source.
+        if len(corresponding_sources) > 1:
             error = LettercraftErrorType(
                 field="episode_ids",
                 messages=["The provided episode IDs belong to more than one source."],
             )
             return cls(ok=False, errors=[error])  # type: ignore
 
-        source = distinct_sources.first()
-        if not source:
-            error = LettercraftErrorType(
-                field="episode_ids",
-                messages=["No source found for given episode IDs."],
-            )
-            return cls(ok=False, errors=[error])  # type: ignore
+        source = corresponding_sources.pop()
 
         source.set_episode_order(episode_ids)  # type: ignore
 
