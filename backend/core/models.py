@@ -170,6 +170,7 @@ class EntityDescription(Named, models.Model):
 
     class Meta:
         abstract = True
+        order_with_respect_to = "source"
 
     def __str__(self):
         return f"{self.name} ({self.source})"

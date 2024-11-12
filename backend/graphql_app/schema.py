@@ -2,6 +2,7 @@ from graphene import ObjectType, Schema
 
 from event.mutations.CreateEpisodeMutation import CreateEpisodeMutation
 from event.mutations.DeleteEpisodeMutation import DeleteEpisodeMutation
+from event.mutations.UpdateEpisodeOrderMutation import UpdateEpisodeOrderMutation
 from event.queries import EventQueries
 from letter.queries import LetterQueries
 from person.queries import PersonQueries
@@ -57,6 +58,7 @@ class Mutation(ObjectType):
     create_episode_entity_link = CreateEpisodeEntityLinkMutation.Field()
     update_episode_entity_link = UpdateEpisodeEntityLinkMutation.Field()
     delete_episode_entity_link = DeleteEpisodeEntityLinkMutation.Field()
+    update_episode_order = UpdateEpisodeOrderMutation.Field()
     create_agent = CreateAgentMutation.Field()
     update_agent = UpdateAgentMutation.Field()
     delete_agent = DeleteAgentMutation.Field()
