@@ -164,6 +164,10 @@ REST_AUTH = {
     "USER_DETAILS_SERIALIZER": "user.serializers.CustomUserDetailsSerializer",
 }
 
+# Explicitly sets the auto field to the Django 3.2+ default,
+# cf. https://docs.djangoproject.com/en/4.2/releases/3.2/#customizing-type-of-auto-created-primary-keys
+# Silences warnings from django-allauth.
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
