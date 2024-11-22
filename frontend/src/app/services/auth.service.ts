@@ -72,7 +72,8 @@ export class AuthService {
 
     public currentUser$ = merge(
         this.login.subject.pipe(map(() => undefined)),
-        this.logout.result$.pipe(map(() => null)),
+        this.logout.success$.pipe(map(() => null)),
+        this.deleteUser.success$.pipe(map(() => null)),
         this.backendUser$,
         this.updateSettingsUser$
     ).pipe(

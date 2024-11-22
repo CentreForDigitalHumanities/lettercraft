@@ -13,6 +13,8 @@ import {
 import { ToastService } from "@services/toast.service";
 import { usernameValidators } from "../validation";
 import { Apollo } from "apollo-angular";
+import { Router } from "@angular/router";
+import { ModalService } from "@services/modal.service";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -35,10 +37,7 @@ export class UserSettingsComponent implements OnInit {
         }),
         username: new FormControl<string>("", {
             nonNullable: true,
-            validators: [
-                Validators.required,
-                ...usernameValidators
-            ],
+            validators: [Validators.required, ...usernameValidators],
         }),
         firstName: new FormControl<string>("", {
             nonNullable: true,
@@ -56,17 +55,19 @@ export class UserSettingsComponent implements OnInit {
     public deleteUserLoading$ = this.authService.deleteUser.loading$;
 
     constructor(
+        private router: Router,
         private authService: AuthService,
         private toastService: ToastService,
+        private modalService: ModalService,
         private destroyRef: DestroyRef,
-        private apollo: Apollo,
+        private apollo: Apollo
     ) {}
 
     ngOnInit(): void {
         this.authService.currentUser$
             .pipe(
                 filter((user) => !!user),
-                takeUntilDestroyed(this.destroyRef),
+                takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((user) => {
                 if (!user) {
@@ -85,7 +86,6 @@ export class UserSettingsComponent implements OnInit {
                 });
             });
 
-
         this.authService.deleteUser.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => this.toastService.show({
@@ -96,11 +96,14 @@ export class UserSettingsComponent implements OnInit {
 
         this.authService.deleteUser.success$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => this.toastService.show({
-                header: "Account deleted",
-                body: "Your account has been successfully deleted.",
-                type: "success",
-            }));
+            .subscribe(() => {
+                this.toastService.show({
+                    header: "Account deleted",
+                    body: "Your account has been successfully deleted.",
+                    type: "success",
+                });
+                this.router.navigate(["/"]);
+            });
 
         this.authService.updateSettings.error$
             .pipe(takeUntilDestroyed(this.destroyRef))
@@ -118,7 +121,18 @@ export class UserSettingsComponent implements OnInit {
     }
 
     public deleteAccount(): void {
-        this.authService.deleteUser.subject.next();
+        this.modalService
+            .openConfirmationModal({
+                title: "Delete account",
+                message:
+                    "Are you sure you want to delete your account? This action cannot be undone.",
+            })
+            .then(() => {
+                this.authService.deleteUser.subject.next();
+            })
+            .catch(() => {
+                // Do nothing on cancel / dismissal.
+            });
     }
 
     public submit(): void {

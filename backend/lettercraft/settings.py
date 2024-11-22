@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "allauth",
     "allauth.account",
+    # Required for deleting accounts, but not actually used,
+    # cf. https://github.com/iMerica/dj-rest-auth/pull/110.
+    "allauth.socialaccount",
     "revproxy",
     "core",
     "case_study",
