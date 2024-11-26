@@ -1,9 +1,10 @@
 from allauth.account.models import EmailConfirmationHMAC
 from django.http import HttpRequest, HttpResponseRedirect
+from django.contrib.auth import logout
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
@@ -43,10 +44,18 @@ class KeyInfoView(APIView):
         except Exception as e:
             raise APIException(e)
 
+
 class DeleteUser(APIView):
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request: HttpRequest):
         user = request.user
+        if user.is_anonymous:
+            return Response({"detail": "not authenticated"}, status=HTTP_401_UNAUTHORIZED)
+        logout(request)
         user.delete()
+        return Response({"detail": "ok"}, status=HTTP_200_OK)
+
 
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
