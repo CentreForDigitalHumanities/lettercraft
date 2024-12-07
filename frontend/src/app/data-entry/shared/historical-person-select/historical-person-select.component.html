@@ -1,0 +1,46 @@
+<p *ngIf="control.value.length > 0">Currently selected:</p>
+<ng-container *ngIf="multiple; else singleSelected">
+    <ul class="ps-0">
+        <li
+            *ngFor="let person of selectedPersons()"
+            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
+        >
+            <span class="ms-1">{{ person.label }}</span>
+            <button
+                class="btn btn-sm btn-primary py-0 px-1 ms-1"
+                type="button"
+                [attr.aria-label]="'remove ' + person.label"
+                (click)="removePerson(person.value)"
+            >
+                <lc-icon [icon]="actionIcons.cancel" />
+            </button>
+        </li>
+    </ul>
+</ng-container>
+<ng-template #singleSelected>
+    <div *ngIf="control.value.length === 1" class="single-selected">
+        <p
+            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
+        >
+            <span class="ms-1">{{ selectedPersons()[0].label }}</span>
+            <button
+                class="btn btn-sm btn-primary py-0 px-1 ms-1"
+                type="button"
+                [attr.aria-label]="'remove ' + selectedPersons()[0].label"
+                (click)="removePerson(selectedPersons()[0].value)"
+            >
+                <lc-icon [icon]="actionIcons.cancel" />
+            </button>
+        </p>
+    </div>
+</ng-template>
+
+<form *ngIf="multiple === true || control.value.length !== 1">
+    <lc-multiselect
+        id="historical-person-select"
+        [options]="options"
+        [formControl]="control"
+        [showSelected]="false"
+        placeholderEmpty="Select a historical person"
+    />
+</form>

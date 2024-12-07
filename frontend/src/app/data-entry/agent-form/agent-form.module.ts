@@ -6,6 +6,7 @@ import { AgentDescriptionFormComponent } from './agent-description-form/agent-de
 import { DataEntrySharedModule } from "../shared/data-entry-shared.module";
 import { DeleteAgentComponent } from './delete-agent/delete-agent.component';
 import { AgentEpisodesFormComponent } from './agent-episodes-form/agent-episodes-form.component';
+import { AgentHistoricalPersonFormComponent } from './agent-historical-person-form/agent-historical-person-form.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { AgentEpisodesFormComponent } from './agent-episodes-form/agent-episodes
         AgentDescriptionFormComponent,
         DeleteAgentComponent,
         AgentEpisodesFormComponent,
+        AgentHistoricalPersonFormComponent,
     ],
     imports: [
         SharedModule,

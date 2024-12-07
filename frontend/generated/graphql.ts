@@ -651,6 +651,7 @@ export type Query = {
   episodes: Array<EpisodeType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
+  historicalPersons: Array<HistoricalPersonType>;
   letterCategories: Array<LetterCategoryType>;
   letterDescription?: Maybe<LetterDescriptionType>;
   letterDescriptions: Array<LetterDescriptionType>;
@@ -930,6 +931,7 @@ export type UpdateAgentGenderInput = {
 };
 
 export type UpdateAgentInput = {
+  describes?: InputMaybe<Array<Scalars['String']['input']>>;
   description?: InputMaybe<Scalars['String']['input']>;
   gender?: InputMaybe<UpdateAgentGenderInput>;
   id: Scalars['ID']['input'];
@@ -1104,6 +1106,18 @@ export type DataEntryDeleteEpisodeEntityLinkMutationVariables = Exact<{
 
 
 export type DataEntryDeleteEpisodeEntityLinkMutation = { __typename?: 'Mutation', deleteEpisodeEntityLink?: { __typename?: 'DeleteEpisodeEntityLinkMutation', ok: boolean, errors: Array<{ __typename?: 'LettercraftErrorType', field: string, messages: Array<string> }> } | null };
+
+export type DataEntryAgentHistoricalPersonQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryAgentHistoricalPersonQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string }> } | null };
+
+export type DataEntryHistoricalPersonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryHistoricalPersonsQuery = { __typename?: 'Query', historicalPersons: Array<{ __typename?: 'HistoricalPersonType', id: string, name: string, dateOfBirth?: { __typename?: 'PersonDateOfBirthType', id: string, displayDate: string } | null, dateOfDeath?: { __typename?: 'PersonDateOfDeathType', id: string, displayDate: string } | null }> };
 
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1554,6 +1568,55 @@ export const DataEntryDeleteEpisodeEntityLinkDocument = gql`
   })
   export class DataEntryDeleteEpisodeEntityLinkGQL extends Apollo.Mutation<DataEntryDeleteEpisodeEntityLinkMutation, DataEntryDeleteEpisodeEntityLinkMutationVariables> {
     override document = DataEntryDeleteEpisodeEntityLinkDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryAgentHistoricalPersonDocument = gql`
+    query DataEntryAgentHistoricalPerson($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    isGroup
+    describes {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryAgentHistoricalPersonGQL extends Apollo.Query<DataEntryAgentHistoricalPersonQuery, DataEntryAgentHistoricalPersonQueryVariables> {
+    override document = DataEntryAgentHistoricalPersonDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryHistoricalPersonsDocument = gql`
+    query DataEntryHistoricalPersons {
+  historicalPersons {
+    id
+    name
+    dateOfBirth {
+      id
+      displayDate
+    }
+    dateOfDeath {
+      id
+      displayDate
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryHistoricalPersonsGQL extends Apollo.Query<DataEntryHistoricalPersonsQuery, DataEntryHistoricalPersonsQueryVariables> {
+    override document = DataEntryHistoricalPersonsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

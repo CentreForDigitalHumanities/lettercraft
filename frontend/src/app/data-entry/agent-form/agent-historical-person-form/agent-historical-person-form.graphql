@@ -1,0 +1,24 @@
+query DataEntryAgentHistoricalPerson($id: ID!) {
+    agentDescription(id: $id) {
+        id
+        isGroup
+        describes {
+            id
+        }
+    }
+}
+
+query DataEntryHistoricalPersons {
+    historicalPersons {
+        id
+        name
+        dateOfBirth {
+            id
+            displayDate
+        }
+        dateOfDeath {
+            id
+            displayDate
+        }
+    }
+}

@@ -42,6 +42,7 @@ class UpdateAgentInput(InputObjectType):
     is_group = Boolean()
     gender = UpdateAgentGenderInput()
     location = UpdateAgentLocationInput()
+    describes = List(NonNull(String))
 
 
 class UpdateAgentMutation(LettercraftMutation):
