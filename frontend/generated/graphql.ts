@@ -1124,7 +1124,7 @@ export type DataEntryAgentIdentificationQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryAgentIdentificationQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean } | null };
+export type DataEntryAgentIdentificationQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, describes: Array<{ __typename?: 'HistoricalPersonType', id: string }> } | null };
 
 export type DataEntryAgentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1629,6 +1629,9 @@ export const DataEntryAgentIdentificationDocument = gql`
     name
     description
     isGroup
+    describes {
+      id
+    }
   }
 }
     `;

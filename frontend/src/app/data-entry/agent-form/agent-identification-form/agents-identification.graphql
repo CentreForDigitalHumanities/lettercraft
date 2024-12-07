@@ -4,5 +4,8 @@ query DataEntryAgentIdentification($id: ID!) {
     name
     description
     isGroup
+    describes {
+        id
+    }
   }
 }

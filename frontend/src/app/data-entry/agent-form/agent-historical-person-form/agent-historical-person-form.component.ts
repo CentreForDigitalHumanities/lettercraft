@@ -128,21 +128,6 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((result) => this.onMutationResult(result));
-
-        // If the agent switches from being a group to a person,
-        // the list of selected persons is truncated to the first one.
-        this.isGroup$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((isGroup) => {
-                const currentDescribesValue =
-                    this.form.controls.describes.value;
-
-                if (isGroup || currentDescribesValue.length < 1) {
-                    return;
-                }
-
-                this.form.patchValue({ describes: [currentDescribesValue[0]] });
-            });
     }
 
     ngOnDestroy(): void {
@@ -158,6 +143,9 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
                 id,
                 describes: form.describes,
             },
+        }, {
+            // Refetch the form with the isGroup control to update validation.
+            refetchQueries: ["DataEntryAgentIdentification"],
         });
     }
 
