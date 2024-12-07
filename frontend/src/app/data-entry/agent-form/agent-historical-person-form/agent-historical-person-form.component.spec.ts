@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AgentHistoricalPersonFormComponent } from "./agent-historical-person-form.component";
+import { FormService } from "../../shared/form.service";
+import { SharedTestingModule } from "@shared/shared-testing.module";
 
 describe("AgentHistoricalPersonFormComponent", () => {
     let component: AgentHistoricalPersonFormComponent;
@@ -9,6 +11,8 @@ describe("AgentHistoricalPersonFormComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [AgentHistoricalPersonFormComponent],
+            imports: [SharedTestingModule],
+            providers: [FormService],
         });
         fixture = TestBed.createComponent(AgentHistoricalPersonFormComponent);
         component = fixture.componentInstance;
