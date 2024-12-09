@@ -12,12 +12,12 @@ export const LoggedOnGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return authService.currentUser$.pipe(
         filter((user) => user !== undefined),
         map((user) => {
-            toastService.show({
-                type: 'danger',
-                header: 'Not signed in',
-                body: 'You must be signed in to view this page.'
-            });
             if (user === null) {
+                toastService.show({
+                    type: 'danger',
+                    header: 'Not signed in',
+                    body: 'You must be signed in to view this page.'
+                });
                 return router.createUrlTree(['/login'], {
                     queryParams: { next: route.url }
                 });
