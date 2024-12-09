@@ -1,24 +1,25 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './user/login/login.component';
-import { VerifyEmailComponent } from './user/verify-email/verify-email.component';
-import { RegisterComponent } from './user/register/register.component';
-import { PasswordForgottenComponent } from './user/password-forgotten/password-forgotten.component';
-import { ResetPasswordComponent } from './user/reset-password/reset-password.component';
-import { UserSettingsComponent } from './user/user-settings/user-settings.component';
-import { LoggedOnGuard } from '@shared/logged-on.guard';
-import { SourcesComponent } from './data-entry/sources/sources.component';
-import { LocationFormComponent } from './data-entry/location-form/location-form.component';
-import { GiftFormComponent } from './data-entry/gift-form/gift-form.component';
-import { LetterFormComponent } from './data-entry/letter-form/letter-form.component';
-import { AgentFormComponent } from './data-entry/agent-form/agent-form.component';
-import { SourceComponent } from './data-entry/source/source.component';
+import { HomeComponent } from '../home/home.component';
+import { LoginComponent } from '../user/login/login.component';
+import { VerifyEmailComponent } from '../user/verify-email/verify-email.component';
+import { RegisterComponent } from '../user/register/register.component';
+import { PasswordForgottenComponent } from '../user/password-forgotten/password-forgotten.component';
+import { ResetPasswordComponent } from '../user/reset-password/reset-password.component';
+import { UserSettingsComponent } from '../user/user-settings/user-settings.component';
+import { LoggedOnGuard } from './logged-on.guard';
+import { SourcesComponent } from '../data-entry/sources/sources.component';
+import { LocationFormComponent } from '../data-entry/location-form/location-form.component';
+import { GiftFormComponent } from '../data-entry/gift-form/gift-form.component';
+import { LetterFormComponent } from '../data-entry/letter-form/letter-form.component';
+import { AgentFormComponent } from '../data-entry/agent-form/agent-form.component';
+import { SourceComponent } from '../data-entry/source/source.component';
 import {
     agentFormTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
     SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
-} from './titles';
-import { EpisodeFormComponent } from './data-entry/episode-form/episode-form.component';
+} from '../titles';
+import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
+import { ContributorGuard } from './contributor.guard';
 
 
 const routes: Routes = [
@@ -55,11 +56,12 @@ const routes: Routes = [
     {
         path: 'user-settings',
         title: pageTitle('Settings'),
+        canActivate: [LoggedOnGuard],
         component: UserSettingsComponent
     },
     {
         path: 'data-entry',
-        canActivate: [LoggedOnGuard],
+        canActivate: [ContributorGuard],
         children: [
             {
                 path: 'agents/:id',

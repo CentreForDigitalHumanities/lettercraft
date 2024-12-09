@@ -12,7 +12,8 @@ const fakeUserResponse: UserResponse = {
     email: "frodo@shire.me",
     first_name: "Frodo",
     last_name: "Baggins",
-    is_staff: false
+    is_staff: false,
+    is_contributor: true,
 }
 
 const fakeAdminResponse: UserResponse = {
@@ -21,7 +22,8 @@ const fakeAdminResponse: UserResponse = {
     email: "gandalf@istari.me",
     first_name: "Gandalf",
     last_name: "The Grey",
-    is_staff: true
+    is_staff: true,
+    is_contributor: false,
 }
 
 
