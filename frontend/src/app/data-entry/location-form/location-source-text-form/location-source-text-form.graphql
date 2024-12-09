@@ -1,0 +1,8 @@
+query DataEntryLocationSourceText($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        book
+        chapter
+        page
+    }
+}

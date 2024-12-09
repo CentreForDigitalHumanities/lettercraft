@@ -1,0 +1,18 @@
+<div class="btn-group">
+    <button
+        type="button"
+        class="btn btn-light"
+        (click)="onUp()"
+        [disabled]="upDisabled"
+    >
+        <lc-icon [icon]="actionIcons.up" title="Move episode up" />
+    </button>
+    <button
+        type="button"
+        class="btn btn-light"
+        (click)="onDown()"
+        [disabled]="downDisabled"
+    >
+        <lc-icon [icon]="actionIcons.down" title="Move episode down" />
+    </button>
+</div>

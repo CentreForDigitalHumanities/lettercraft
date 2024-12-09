@@ -9,9 +9,15 @@
         </span>
     </h1>
 
-    <p class="lead mb-4" *ngIf="gift.description">
-        {{ gift.description }}
-    </p>
+    <lc-entity-description-lead [entity]="gift" />
+
+    <lc-form-status [status$]="status$" />
+
+    <lc-delete-entity-button
+        (clickDelete)="onClickDelete(gift)"
+        [deletingInProgress]="deletingInProgress"
+        entityName="gift"
+    />
 </ng-container>
 
 <h2 class="subform-header">Identification</h2>
@@ -22,6 +28,9 @@
 
 <h2 class="subform-header">Categories</h2>
 <lc-gift-categories-form />
+
+<h2 class="subform-header">Episodes</h2>
+<lc-gift-episodes-form />
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

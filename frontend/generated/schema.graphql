@@ -150,6 +150,11 @@ type DeletePersonReferenceMutation {
   ok: Boolean!
 }
 
+type DeleteSpaceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 enum Entity {
   AGENT
   GIFT
@@ -271,6 +276,9 @@ enum EventEpisodeSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""
@@ -401,6 +409,9 @@ enum LetterGiftDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""
@@ -410,6 +421,9 @@ enum LetterLetterDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """
@@ -434,13 +448,19 @@ type Mutation {
   deleteGift(id: ID!): DeleteGiftMutation
   deleteLetter(id: ID!): DeleteLetterMutation
   deletePersonReference(id: ID!): DeletePersonReferenceMutation
+  deleteSpace(id: ID!): DeleteSpaceMutation
   updateAgent(agentData: UpdateAgentInput!): UpdateAgentMutation
   updateEpisode(episodeData: UpdateEpisodeInput!): UpdateEpisodeMutation
   updateEpisodeEntityLink(data: UpdateEpisodeEntityLinkInput!): UpdateEpisodeEntityLinkMutation
+  updateEpisodeOrder(
+    """Ordered list of episode IDs"""
+    episodeIds: [ID!]!
+  ): UpdateEpisodeOrderMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
   updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
+  updateSpace(spaceData: UpdateSpaceInput!): UpdateSpaceMutation
 }
 
 """An enumeration."""
@@ -450,6 +470,9 @@ enum PersonAgentDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 type PersonDateOfBirthType {
@@ -520,10 +543,13 @@ type Query {
   letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
   letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  regions: [RegionType!]!
+  settlements: [SettlementType!]!
   source(id: ID!): SourceType!
   sources: [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  structures: [StructureType!]!
   userDescription(id: ID!): UserType
   userDescriptions: [UserType!]!
 }
@@ -603,6 +629,7 @@ type SourceContentsDateType {
 enum SourceMention {
   DIRECT
   IMPLIED
+  UP_FOR_DEBATE
 }
 
 type SourceType {
@@ -699,6 +726,9 @@ enum SpaceSpaceDescriptionSourceMentionChoices {
 
   """implied"""
   IMPLIED
+
+  """up for debate"""
+  UP_FOR_DEBATE
 }
 
 """An enumeration."""
@@ -813,6 +843,11 @@ type UpdateEpisodeMutation {
   ok: Boolean!
 }
 
+type UpdateEpisodeOrderMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
 input UpdateGiftInput {
   book: String
   categories: [ID!]
@@ -857,6 +892,21 @@ input UpdatePersonReferenceInput {
 }
 
 type UpdatePersonReferenceMutation {
+  errors: [LettercraftErrorType!]!
+  ok: Boolean!
+}
+
+input UpdateSpaceInput {
+  book: String
+  categories: [ID!]
+  chapter: String
+  description: String
+  id: ID!
+  name: String
+  page: String
+}
+
+type UpdateSpaceMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
 }

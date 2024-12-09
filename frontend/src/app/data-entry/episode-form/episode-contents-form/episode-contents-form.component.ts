@@ -13,9 +13,9 @@ import {
     filter,
     map,
     Observable,
+    share,
     shareReplay,
     switchMap,
-    tap,
     withLatestFrom
 } from "rxjs";
 import { LabelSelectOption } from "../../shared/label-select/label-select.component";
@@ -60,6 +60,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
             })
         );
 
+    private formName = "contents";
     private status$ = formStatusSubject();
 
     constructor(
@@ -69,11 +70,11 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         private episodeQuery: DataEntryEpisodeContentsGQL,
         private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) {
-        this.formService.attachForm('contents', this.status$);
-    }
+    ) { }
 
     ngOnInit(): void {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.episode$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((episode) => {
@@ -83,55 +84,63 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
                 this.form.patchValue(
                     {
                         summary: episode.summary,
+                        designators: episode.designators,
                         categories: episode.categories.map((c) => c.id),
                     },
                     {
                         emitEvent: false,
-                        onlySelf: true
+                        onlySelf: true,
                     }
                 );
             });
 
-        this.episode$
+        this.form.statusChanges
             .pipe(
-                switchMap(() => this.form.valueChanges),
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
-                tap(() => this.status$.next('loading')),
-                withLatestFrom(this.id$),
-                switchMap(this.makeMutation.bind(this))
+                filter((status) => status == "INVALID"),
+                takeUntilDestroyed(this.destroyRef)
             )
-            .subscribe(this.handleResult.bind(this));
+            .subscribe(() => this.status$.next("invalid"));
+
+        const validFormSubmission$ = this.episode$.pipe(
+            switchMap(() =>
+                this.form.valueChanges.pipe(
+                    map(() => this.form.getRawValue()),
+                    filter(() => this.form.valid)
+                )
+            ),
+            debounceTime(300),
+            share()
+        );
+
+        validFormSubmission$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.status$.next("loading"));
+
+        validFormSubmission$
+            .pipe(
+                withLatestFrom(this.id$),
+                switchMap(([episode, id]) =>
+                    this.updateEpisode.mutate({
+                        episodeData: {
+                            id,
+                            ...episode,
+                        },
+                    })
+                )
+            )
+            .subscribe((result) => this.onMutationResult(result));
     }
 
     ngOnDestroy(): void {
-        this.formService.detachForm('contents');
-        this.status$.complete();
+        this.formService.detachForm(this.formName);
     }
 
-    private makeMutation([episode, id]: [typeof this.form.value, string]) {
-        return this.updateEpisode.mutate({
-            episodeData: {
-                id,
-                ...episode,
-            },
-        }, {
-            update: (cache) => {
-                const identified = cache.identify({
-                    __typename: "EpisodeType",
-                    id,
-                });
-                cache.evict({ id: identified });
-                cache.gc();
-            },
-        });
-    }
-
-    private handleResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateEpisodeMutation>
+    ): void {
         const errors = result.data?.updateEpisode?.errors;
         if (errors && errors.length > 0) {
-            this.status$.next('error');
+            this.status$.next("error");
             this.toastService.show({
                 body: errors.map((error) => error.messages).join("\n"),
                 type: "danger",

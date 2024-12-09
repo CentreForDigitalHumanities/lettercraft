@@ -41,12 +41,25 @@ class CreateEpisodeMutation(LettercraftMutation):
             name=getattr(episode_data, "name"),
             source=source,
         )
+        cls.append_to_source_episode_order(episode)
         cls.add_contribution(episode, episode_data, info)
 
         user = info.context.user
         episode.contributors.add(user)
 
         return cls(episode=episode, errors=[])  # type: ignore
+
+    @staticmethod
+    def append_to_source_episode_order(episode: Episode) -> None:
+        """
+        Append the episode ID to the source's episode order.
+
+        This makes sure that the newly created episode is at the bottom of the episode list.
+        """
+        ordered_episodes = episode.source.get_episode_order()
+        episode_ids = list(ordered_episodes.values_list("id", flat=True))
+        episode_ids.append(episode.pk)
+        episode.source.set_episode_order(episode_ids)
 
     @staticmethod
     def add_contribution(obj: Episode, data: CreateEpisodeInput, info: ResolveInfo):

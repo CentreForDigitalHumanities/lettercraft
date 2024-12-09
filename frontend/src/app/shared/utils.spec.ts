@@ -1,4 +1,4 @@
-import { differenceBy, splat } from "./utils";
+import { differenceBy, moveItemInArray, splat } from "./utils";
 
 describe('differenceBy', () => {
     it('should compare lists', () => {
@@ -19,5 +19,28 @@ describe('differenceBy', () => {
 describe('splat', () => {
     it('should handle a list of arguments', () => {
         expect(splat(Math.min)([3, 5, 2])).toBe(2)
+    });
+});
+
+describe("moveItemInArray", () => {
+    it("should move an item in an array", () => {
+        const array = ["Alice", "Bernard", "Claire", "David", "Eve"];
+        expect(moveItemInArray(array, 1, 3)).toEqual([
+            "Alice",
+            "Claire",
+            "David",
+            "Bernard",
+            "Eve",
+        ]);
+    });
+
+    it("should return the same array if the indices are the same", () => {
+        const array = ["Alice", "Bernard", "Claire", "David", "Eve"];
+        expect(moveItemInArray(array, 4, 4)).toBe(array);
+    });
+
+    it("should throw an error if the indices are out of bounds", () => {
+        const array = ["Alice", "Bernard", "Claire", "David", "Eve"];
+        expect(() => moveItemInArray(array, -99, 99)).toThrowError();
     });
 });

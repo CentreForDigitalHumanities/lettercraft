@@ -1,0 +1,19 @@
+query DataEntryLocationEpisodes($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        source {
+            id
+            episodes {
+                id
+                name
+            }
+        }
+        episodes {
+            id
+            episode {
+                id
+                name
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
 import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
-import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings } from '../user/models/user';
+import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings, KeyInfoResult } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
@@ -32,7 +32,7 @@ export class AuthService {
         this.authRoute('password/reset/confirm/'),
         'post'
     );
-    public verifyEmail = this.createRequest<string, AuthAPIResult>(
+    public verifyEmail = this.createRequest<KeyInfo, AuthAPIResult>(
         this.authRoute('registration/verify-email/'),
         'post'
     );
@@ -40,7 +40,7 @@ export class AuthService {
         this.authRoute('user/'),
         'patch'
     );
-    public keyInfo = this.createRequest<string, KeyInfo>(
+    public keyInfo = this.createRequest<KeyInfo, KeyInfoResult>(
         this.authRoute('registration/key-info/'),
         'post'
     )
@@ -72,7 +72,8 @@ export class AuthService {
 
     public currentUser$ = merge(
         this.login.subject.pipe(map(() => undefined)),
-        this.logout.result$.pipe(map(() => null)),
+        this.logout.success$.pipe(map(() => null)),
+        this.deleteUser.success$.pipe(map(() => null)),
         this.backendUser$,
         this.updateSettingsUser$
     ).pipe(

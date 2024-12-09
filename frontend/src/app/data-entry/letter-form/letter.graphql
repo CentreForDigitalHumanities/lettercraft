@@ -19,3 +19,13 @@ mutation DataEntryUpdateLetter($letterData: UpdateLetterInput!) {
         }
     }
 }
+
+mutation DataEntryDeleteLetter($id: ID!) {
+    deleteLetter(id: $id) {
+        ok
+        errors {
+            field
+            messages
+        }
+    }
+}

@@ -1,7 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import {
     DataEntryEpisodeSourceTextMentionGQL,
@@ -9,15 +8,17 @@ import {
     DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
+    BehaviorSubject,
     debounceTime,
     filter,
     map,
-    Observable,
+    share,
     shareReplay,
     switchMap,
     tap,
     withLatestFrom,
 } from "rxjs";
+import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
@@ -28,9 +29,7 @@ import { MutationResult } from "apollo-angular";
     styleUrls: ["./episode-source-text-form.component.scss"],
 })
 export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
-    private id$: Observable<string> = this.route.params.pipe(
-        map((params) => params["id"])
-    );
+    private id$ = this.formService.id$;
 
     public episode$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
@@ -44,20 +43,20 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
         page: new FormControl<string>("", { nonNullable: true }),
     });
 
+    private formName = "sourceMention";
     private status$ = formStatusSubject();
 
     constructor(
         private destroyRef: DestroyRef,
-        private route: ActivatedRoute,
+        private formService: FormService,
         private toastService: ToastService,
         private episodeQuery: DataEntryEpisodeSourceTextMentionGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL,
-        private formService: FormService,
-    ) {
-        this.formService.attachForm('source-text', this.status$);
-    }
+    ) { }
 
     ngOnInit(): void {
+        this.formService.attachForm(this.formName, this.status$);
+
         this.episode$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((episode) => {
@@ -70,14 +69,30 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
                 });
             });
 
-        this.episode$
+        this.form.statusChanges
             .pipe(
-                switchMap(() => this.form.valueChanges),
-                map(() => this.form.getRawValue()),
-                filter(() => this.form.valid),
-                debounceTime(300),
+                filter((status) => status == "INVALID"),
+                takeUntilDestroyed(this.destroyRef)
+            )
+            .subscribe(() => this.status$.next("invalid"));
+
+        const validFormSubmission$ = this.episode$.pipe(
+            switchMap(() =>
+                this.form.valueChanges
+            ),
+            map(() => this.form.getRawValue()),
+            filter(() => this.form.valid),
+            debounceTime(300),
+            share()
+        );
+
+        validFormSubmission$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.status$.next("loading"));
+
+        validFormSubmission$
+            .pipe(
                 withLatestFrom(this.id$),
-                tap(() => this.status$.next('loading')),
                 switchMap(([episode, id]) =>
                     this.updateEpisode.mutate({
                         episodeData: {
@@ -87,25 +102,27 @@ export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
                     })
                 ),
                 takeUntilDestroyed(this.destroyRef)
-        )
-            .subscribe(this.handleResult.bind(this));
+            )
+            .subscribe((result) => this.onMutationResult(result));
     }
 
     ngOnDestroy(): void {
-        this.formService.detachForm('source-text');
+        this.formService.detachForm(this.formName);
     }
 
-    private handleResult(result: MutationResult<DataEntryUpdateEpisodeMutation>) {
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateEpisodeMutation>
+    ): void {
         const errors = result.data?.updateEpisode?.errors;
         if (errors && errors.length > 0) {
-            this.status$.next('error');
+            this.status$.next("error");
             this.toastService.show({
                 body: errors.map((error) => error.messages).join("\n"),
                 type: "danger",
                 header: "Update failed",
             });
         } else {
-            this.status$.next('saved');
+            this.status$.next("saved");
         }
     }
 }

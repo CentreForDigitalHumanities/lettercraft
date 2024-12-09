@@ -127,6 +127,18 @@ def episode(db, source, agent_description, agent_description_2, letter_descripti
 
 
 @pytest.fixture()
+def episode_2(db, source, agent_description, agent_description_2, letter_description):
+    event = Episode.objects.create(
+        name="Ernie eats a letter",
+        source=source,
+    )
+    event.agents.add(agent_description)
+    event.agents.add(agent_description_2)
+    event.letters.add(letter_description)
+    return event
+
+
+@pytest.fixture()
 def case_study(db):
     case_study = CaseStudy.objects.create(name="Test Case Study")
     return case_study
