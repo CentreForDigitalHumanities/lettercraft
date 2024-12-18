@@ -18,7 +18,7 @@ import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
 import { listWithQuotes, nameExamples } from '../../shared/utils';
-import { isGroupValidator } from '../validators/isGroupValidator';
+import { isGroupValidator } from '../validators/validators';
 
 interface FormData {
     name: string;

@@ -52,11 +52,9 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
     public historicalPersonOptions$: Observable<MultiselectOption[]> =
         this.allHistoricalPersons$.pipe(
             map((persons) =>
-                persons.map((person) => ({
-                    value: person.id,
-                    label: `${person.name} (${
-                        person.dateOfBirth?.displayDate ?? " ?"
-                    } – ${person.dateOfDeath?.displayDate ?? "? "})`,
+                persons.map(({ id, name }) => ({
+                    value: id,
+                    label: name,
                 }))
             )
         );

@@ -12,13 +12,5 @@ query DataEntryHistoricalPersons {
     historicalPersons {
         id
         name
-        dateOfBirth {
-            id
-            displayDate
-        }
-        dateOfDeath {
-            id
-            displayDate
-        }
     }
 }
