@@ -1,0 +1,12 @@
+<form>
+    <p class="form-text">
+        Pick one or more structures that contain the location represented here.
+    </p>
+
+    <lc-subspace-select
+        *ngIf="structureOptions$ | async as options"
+        [formControl]="form.controls.structures"
+        [options]="options"
+        subspaceType="structure"
+    />
+</form>
