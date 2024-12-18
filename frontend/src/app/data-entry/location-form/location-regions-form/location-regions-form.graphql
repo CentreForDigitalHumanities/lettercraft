@@ -1,0 +1,16 @@
+query DataEntryLocationRegions($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        regions {
+            id
+        }
+    }
+}
+
+query DataEntryRegions {
+    regions {
+        id
+        name
+        type
+    }
+}

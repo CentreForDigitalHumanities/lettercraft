@@ -12,6 +12,7 @@ import { NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 export interface MultiselectOption {
     value: string;
     label: string;
+    icon?: string;
 }
 
 @Component({

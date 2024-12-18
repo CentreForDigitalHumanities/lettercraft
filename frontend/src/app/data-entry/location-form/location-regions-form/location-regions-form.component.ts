@@ -1,11 +1,6 @@
 import { Component, DestroyRef, OnDestroy, OnInit } from "@angular/core";
+import { ToastService } from "@services/toast.service";
 import { FormService } from "../../shared/form.service";
-import {
-    DataEntryAgentHistoricalPersonGQL,
-    DataEntryHistoricalPersonsGQL,
-    DataEntryUpdateAgentGQL,
-    DataEntryUpdateAgentMutation,
-} from "generated/graphql";
 import {
     debounceTime,
     filter,
@@ -15,77 +10,89 @@ import {
     switchMap,
     withLatestFrom,
 } from "rxjs";
+import {
+    DataEntryLocationRegionsGQL,
+    DataEntryRegionsGQL,
+    DataEntryUpdateLocationGQL,
+    DataEntryUpdateLocationMutation,
+    DataEntryUpdateLocationMutationVariables,
+    SpaceRegionTypeChoices,
+} from "generated/graphql";
 import { FormControl, FormGroup } from "@angular/forms";
 import { formStatusSubject } from "../../shared/utils";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 import { MutationResult } from "apollo-angular";
-import { ToastService } from "@services/toast.service";
+import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 
-interface HistoricalPerson {
-    describes: string[];
-}
+type LocationRegionsSpaceDescription = Required<
+    Pick<DataEntryUpdateLocationMutationVariables["spaceData"], "regions">
+>;
 
-type HistoricalPersonForm = {
-    [key in keyof HistoricalPerson]: FormControl<string[]>;
+type LocationRegionsForm = {
+    [K in keyof LocationRegionsSpaceDescription]: FormControl<
+        LocationRegionsSpaceDescription[K]
+    >;
+};
+
+const regionTypeIconMapping: Record<SpaceRegionTypeChoices, string> = {
+    [SpaceRegionTypeChoices.Ecclesiastical]: "church",
+    [SpaceRegionTypeChoices.Geographical]: "land",
+    [SpaceRegionTypeChoices.Political]: "crown",
 };
 
 @Component({
-    selector: "lc-agent-historical-person-form",
-    templateUrl: "./agent-historical-person-form.component.html",
-    styleUrls: ["./agent-historical-person-form.component.scss"],
+    selector: "lc-location-regions-form",
+    templateUrl: "./location-regions-form.component.html",
+    styleUrls: ["./location-regions-form.component.scss"],
 })
-export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
+export class LocationRegionsFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;
 
-    private agent$ = this.id$.pipe(
-        switchMap((id) => this.agentQuery.watch({ id }).valueChanges),
-        map((result) => result.data.agentDescription),
+    private location$ = this.id$.pipe(
+        switchMap((id) => this.locationQuery.watch({ id }).valueChanges),
+        map((result) => result.data.spaceDescription),
         share()
     );
 
-    public historicalPersonOptions$: Observable<MultiselectOption[]> =
-        this.historicalPersonsQuery.fetch().pipe(
-            map((result) => result.data.historicalPersons),
-            map((persons) =>
-                persons.map(({ id, name }) => ({
+    public regionOptions$: Observable<MultiselectOption[]> = this.regionsQuery
+        .fetch()
+        .pipe(
+            map((result) => result.data.regions),
+            map((regions) =>
+                regions.map(({ id, name, type }) => ({
                     value: id,
                     label: name,
+                    icon: regionTypeIconMapping[type],
                 }))
             )
         );
 
-    public isGroup$ = this.agent$.pipe(
-        map((agent) => agent?.isGroup ?? false),
-        share()
-    );
-
-    public form = new FormGroup<HistoricalPersonForm>({
-        describes: new FormControl<string[]>([], { nonNullable: true }),
+    public form = new FormGroup<LocationRegionsForm>({
+        regions: new FormControl<string[]>([], {
+            nonNullable: true,
+        }),
     });
 
-    private formName = "historicalPersons";
+    private formName = "regions";
     private status$ = formStatusSubject();
 
     constructor(
         private destroyRef: DestroyRef,
         private formService: FormService,
         private toastService: ToastService,
-        private agentQuery: DataEntryAgentHistoricalPersonGQL,
-        private historicalPersonsQuery: DataEntryHistoricalPersonsGQL,
-        private updateAgent: DataEntryUpdateAgentGQL
+        private locationQuery: DataEntryLocationRegionsGQL,
+        private regionsQuery: DataEntryRegionsGQL,
+        private updateLocation: DataEntryUpdateLocationGQL
     ) {}
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);
 
-        this.agent$
+        this.location$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((agent) => {
-                const historicalPersonIds = agent?.describes.map(
-                    (person) => person.id
-                );
-                this.form.patchValue({ describes: historicalPersonIds });
+            .subscribe((location) => {
+                const regionIds = location?.regions.map((region) => region.id);
+                this.form.patchValue({ regions: regionIds });
             });
 
         this.form.statusChanges
@@ -95,7 +102,7 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
             )
             .subscribe(() => this.status$.next("invalid"));
 
-        const validFormSubmission$ = this.agent$.pipe(
+        const validFormSubmission$ = this.location$.pipe(
             switchMap(() =>
                 this.form.valueChanges.pipe(
                     map(() => this.form.getRawValue()),
@@ -105,7 +112,6 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
             debounceTime(300),
             share()
         );
-
         validFormSubmission$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(() => this.status$.next("loading"));
@@ -124,24 +130,21 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
     }
 
     private performMutation(
-        form: HistoricalPerson,
+        form: LocationRegionsSpaceDescription,
         id: string
-    ): Observable<MutationResult<DataEntryUpdateAgentMutation>> {
-        return this.updateAgent.mutate({
-            input: {
+    ): Observable<MutationResult<DataEntryUpdateLocationMutation>> {
+        return this.updateLocation.mutate({
+            spaceData: {
                 id,
-                describes: form.describes,
+                regions: form.regions,
             },
-        }, {
-            // Refetch the form with the isGroup control to update validation.
-            refetchQueries: ["DataEntryAgentIdentification"],
         });
     }
 
     private onMutationResult(
-        result: MutationResult<DataEntryUpdateAgentMutation>
+        result: MutationResult<DataEntryUpdateLocationMutation>
     ): void {
-        const errors = result.data?.updateAgent?.errors;
+        const errors = result.data?.updateSpace?.errors;
         if (errors && errors.length > 0) {
             this.status$.next("error");
             this.toastService.show({

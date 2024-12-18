@@ -1,0 +1,39 @@
+<p *ngIf="control.value.length > 0">Currently selected</p>
+<ul class="ps-0">
+    <li
+        *ngFor="let subSpace of selectedSubspaces()"
+        class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
+    >
+        <svg
+            *ngIf="subSpace.icon"
+            width="1rem"
+            height="1rem"
+            aria-hidden="true"
+            role="img"
+            [style.fill]="'currentColor'"
+        >
+            <use
+                [attr.href]="'assets/icons/' + subSpace.icon + '.svg#img'"
+            ></use>
+        </svg>
+        <span class="mx-2">{{ subSpace.label }}</span>
+        <button
+            class="btn btn-sm btn-primary p-1"
+            type="button"
+            [attr.aria-label]="'remove ' + subSpace.label"
+            (click)="removeSubspace(subSpace.value)"
+        >
+            <lc-icon [icon]="actionIcons.cancel" />
+        </button>
+    </li>
+</ul>
+
+<form>
+    <lc-multiselect
+        id="subspace-select"
+        [options]="options"
+        [formControl]="control"
+        [showSelected]="false"
+        placeholderEmpty="Select a {{ subspaceType }}"
+    />
+</form>

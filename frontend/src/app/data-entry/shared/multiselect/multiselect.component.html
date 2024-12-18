@@ -17,9 +17,23 @@
                 "
                 (click)="selectOption(option)"
                 [disabled]="selectedOptions().includes(option.value)"
+                class="d-inline-flex align-items-center"
                 ngbDropdownItem
             >
-                {{ option.label }}
+                <svg
+                    *ngIf="option.icon"
+                    width="1rem"
+                    height="1rem"
+                    aria-hidden="true"
+                    role="img"
+                    [style.fill]="'currentColor'"
+                    class="me-2"
+                >
+                    <use
+                        [attr.href]="'assets/icons/' + option.icon + '.svg#img'"
+                    ></use>
+                </svg>
+                <span>{{ option.dropdownLabel ?? option.label }}</span>
             </button>
         </ng-container>
         <ng-template #noOptions>

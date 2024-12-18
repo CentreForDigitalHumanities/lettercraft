@@ -1,0 +1,12 @@
+<form>
+    <p class="form-text">
+        Pick one or more regions that contain the location represented here.
+    </p>
+
+    <lc-subspace-select
+        *ngIf="regionOptions$ | async as options"
+        [formControl]="form.controls.regions"
+        [options]="options"
+        subspaceType="region"
+    />
+</form>

@@ -905,6 +905,9 @@ input UpdateSpaceInput {
   id: ID!
   name: String
   page: String
+  regions: [ID!]
+  settlements: [ID!]
+  structures: [ID!]
 }
 
 type UpdateSpaceMutation {

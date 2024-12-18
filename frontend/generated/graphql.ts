@@ -1060,6 +1060,9 @@ export type UpdateSpaceInput = {
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
+  regions?: InputMaybe<Array<Scalars['ID']['input']>>;
+  settlements?: InputMaybe<Array<Scalars['ID']['input']>>;
+  structures?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type UpdateSpaceMutation = {
@@ -1349,6 +1352,30 @@ export type DataEntryLocationIdentificationQueryVariables = Exact<{
 
 
 export type DataEntryLocationIdentificationQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string } | null };
+
+export type DataEntryLocationRegionsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLocationRegionsQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, regions: Array<{ __typename?: 'RegionType', id: string }> } | null };
+
+export type DataEntryRegionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryRegionsQuery = { __typename?: 'Query', regions: Array<{ __typename?: 'RegionType', id: string, name: string, type: SpaceRegionTypeChoices }> };
+
+export type DataEntryLocationSettlementsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLocationSettlementsQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, settlements: Array<{ __typename?: 'SettlementType', id: string }> } | null };
+
+export type DataEntrySettlementsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntrySettlementsQuery = { __typename?: 'Query', settlements: Array<{ __typename?: 'SettlementType', id: string, name: string, regions: Array<{ __typename?: 'RegionType', id: string, name: string }> }> };
 
 export type DataEntryLocationSourceTextQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2426,6 +2453,91 @@ export const DataEntryLocationIdentificationDocument = gql`
   })
   export class DataEntryLocationIdentificationGQL extends Apollo.Query<DataEntryLocationIdentificationQuery, DataEntryLocationIdentificationQueryVariables> {
     override document = DataEntryLocationIdentificationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLocationRegionsDocument = gql`
+    query DataEntryLocationRegions($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    regions {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLocationRegionsGQL extends Apollo.Query<DataEntryLocationRegionsQuery, DataEntryLocationRegionsQueryVariables> {
+    override document = DataEntryLocationRegionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryRegionsDocument = gql`
+    query DataEntryRegions {
+  regions {
+    id
+    name
+    type
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryRegionsGQL extends Apollo.Query<DataEntryRegionsQuery, DataEntryRegionsQueryVariables> {
+    override document = DataEntryRegionsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLocationSettlementsDocument = gql`
+    query DataEntryLocationSettlements($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    settlements {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLocationSettlementsGQL extends Apollo.Query<DataEntryLocationSettlementsQuery, DataEntryLocationSettlementsQueryVariables> {
+    override document = DataEntryLocationSettlementsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntrySettlementsDocument = gql`
+    query DataEntrySettlements {
+  settlements {
+    id
+    name
+    regions {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntrySettlementsGQL extends Apollo.Query<DataEntrySettlementsQuery, DataEntrySettlementsQueryVariables> {
+    override document = DataEntrySettlementsDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
