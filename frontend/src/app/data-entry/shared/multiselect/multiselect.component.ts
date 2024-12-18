@@ -13,6 +13,8 @@ export interface MultiselectOption {
     value: string;
     label: string;
     icon?: string;
+    // The label to be shown in the dropdown. If not supplied, `label` will be used.
+    dropdownLabel?: string;
 }
 
 @Component({

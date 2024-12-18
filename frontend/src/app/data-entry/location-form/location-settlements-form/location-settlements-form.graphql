@@ -1,0 +1,19 @@
+query DataEntryLocationSettlements($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        settlements {
+            id
+        }
+    }
+}
+
+query DataEntrySettlements {
+    settlements {
+        id
+        name
+        regions {
+            id
+            name
+        }
+    }
+}
