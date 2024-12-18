@@ -30,8 +30,8 @@ class ContributorTestCase(GraphQLTestCase):
         cls.episode = Episode.objects.create(
             name="Death Star destroyed", source_id=source.pk
         )
-        cls.user_1 = User.objects.create(username="Yoda")
-        cls.user_2 = User.objects.create(username="Obi-Wan")
+        cls.user_1 = User.objects.create(username="Yoda", is_contributor=True)
+        cls.user_2 = User.objects.create(username="Obi-Wan", is_contributor=True)
 
     def test_single_contributor_one_contribution(self):
         self.client.force_login(self.user_1)

@@ -5,6 +5,7 @@ export interface UserResponse {
     first_name: string;
     last_name: string;
     is_staff: boolean;
+    is_contributor: boolean;
 }
 
 export class User {
@@ -14,8 +15,9 @@ export class User {
         public email: string,
         public firstName: string,
         public lastName: string,
-        public isStaff: boolean
-    ) {}
+        public isStaff: boolean,
+        public isContributor: boolean,
+    ) { }
 }
 
 export interface UserRegistration {

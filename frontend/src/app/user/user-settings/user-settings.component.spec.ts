@@ -16,7 +16,8 @@ const fakeUser: User = {
     firstName: 'Frodo',
     lastName: 'Baggins',
     username: 'frodo',
-    isStaff: false
+    isStaff: false,
+    isContributor: true,
 }
 
 @Injectable({ providedIn: 'root' })
