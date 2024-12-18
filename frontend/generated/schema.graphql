@@ -260,8 +260,6 @@ type EpisodeType implements EntityDescription {
 
   """How is this entity presented in the text?"""
   sourceMention: EventEpisodeSourceMentionChoices
-
-  """locations involved in this episode"""
   spaces: [SpaceDescriptionType!]!
 
   """full description of the events in the passage"""

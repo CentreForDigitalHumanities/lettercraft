@@ -284,7 +284,6 @@ export type EpisodeType = EntityDescription & {
   source: SourceType;
   /** How is this entity presented in the text? */
   sourceMention?: Maybe<EventEpisodeSourceMentionChoices>;
-  /** locations involved in this episode */
   spaces: Array<SpaceDescriptionType>;
   /** full description of the events in the passage */
   summary: Scalars['String']['output'];
@@ -1383,6 +1382,18 @@ export type DataEntryLocationSourceTextQueryVariables = Exact<{
 
 
 export type DataEntryLocationSourceTextQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, book: string, chapter: string, page: string } | null };
+
+export type DataEntryLocationStructuresQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DataEntryLocationStructuresQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, structures: Array<{ __typename?: 'StructureType', id: string }> } | null };
+
+export type DataEntryStructuresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DataEntryStructuresQuery = { __typename?: 'Query', structures: Array<{ __typename?: 'StructureType', id: string, name: string, level: SpaceStructureLevelChoices, settlement?: { __typename?: 'SettlementType', id: string, name: string } | null }> };
 
 export type DataEntryLocationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2559,6 +2570,51 @@ export const DataEntryLocationSourceTextDocument = gql`
   })
   export class DataEntryLocationSourceTextGQL extends Apollo.Query<DataEntryLocationSourceTextQuery, DataEntryLocationSourceTextQueryVariables> {
     override document = DataEntryLocationSourceTextDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryLocationStructuresDocument = gql`
+    query DataEntryLocationStructures($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    structures {
+      id
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryLocationStructuresGQL extends Apollo.Query<DataEntryLocationStructuresQuery, DataEntryLocationStructuresQueryVariables> {
+    override document = DataEntryLocationStructuresDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DataEntryStructuresDocument = gql`
+    query DataEntryStructures {
+  structures {
+    id
+    name
+    level
+    settlement {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DataEntryStructuresGQL extends Apollo.Query<DataEntryStructuresQuery, DataEntryStructuresQueryVariables> {
+    override document = DataEntryStructuresDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
