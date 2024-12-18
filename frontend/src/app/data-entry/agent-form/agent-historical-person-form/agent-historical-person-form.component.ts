@@ -49,7 +49,7 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
         .fetch()
         .pipe(map((result) => result.data.historicalPersons));
 
-    private historicalPersonOptions$: Observable<MultiselectOption[]> =
+    public historicalPersonOptions$: Observable<MultiselectOption[]> =
         this.allHistoricalPersons$.pipe(
             map((persons) =>
                 persons.map((person) => ({
@@ -61,15 +61,10 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
             )
         );
 
-    private isGroup$ = this.agent$.pipe(
+    public isGroup$ = this.agent$.pipe(
         map((agent) => agent?.isGroup ?? false),
         share()
     );
-
-    public combined$ = combineLatest([
-        this.historicalPersonOptions$,
-        this.isGroup$,
-    ]).pipe(map(([options, isGroup]) => ({ options, isGroup })));
 
     public form = new FormGroup<HistoricalPersonForm>({
         describes: new FormControl<string[]>([], { nonNullable: true }),
