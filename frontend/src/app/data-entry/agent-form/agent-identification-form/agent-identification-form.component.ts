@@ -18,6 +18,7 @@ import _ from 'underscore';
 import { FormService } from '../../shared/form.service';
 import { FormStatus } from '../../shared/types';
 import { listWithQuotes, nameExamples } from '../../shared/utils';
+import { isGroupValidator } from '../validators/validators';
 
 interface FormData {
     name: string;
@@ -42,6 +43,9 @@ export class AgentIdentificationFormComponent implements OnDestroy {
             updateOn: 'blur',
         }),
         isGroup: new FormControl<boolean>(false, { nonNullable: true }),
+        numberOfHistoricalPersons: new FormControl<number>(0, { nonNullable: true }),
+    }, {
+        validators: [isGroupValidator()]
     });
 
     status$ = new BehaviorSubject<FormStatus>('idle');
@@ -61,7 +65,7 @@ export class AgentIdentificationFormComponent implements OnDestroy {
 
         this.id$.pipe(
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
-            map(result => result.data),
+            map(result => result.data.agentDescription),
             takeUntilDestroyed(),
         ).subscribe(this.updateFormData.bind(this));
 
@@ -88,20 +92,27 @@ export class AgentIdentificationFormComponent implements OnDestroy {
         this.formService.detachForm(this.formName);
     }
 
-    updateFormData(data: DataEntryAgentIdentificationQuery) {
+    updateFormData(agentDescription: DataEntryAgentIdentificationQuery['agentDescription']) {
         this.form.setValue({
-            name: data.agentDescription?.name || '',
-            description: data.agentDescription?.description || '',
-            isGroup: data.agentDescription?.isGroup || false,
+            name: agentDescription?.name || '',
+            description: agentDescription?.description || '',
+            isGroup: agentDescription?.isGroup || false,
+            numberOfHistoricalPersons: agentDescription?.describes.length || 0,
         });
     }
 
     private isValid(): boolean {
+        this.form.updateValueAndValidity();
         return this.form.valid;
     }
 
     private toMutationInput([data, id]: [Partial<FormData>, string]): UpdateAgentInput {
-        return { id, ...data };
+        return {
+            id,
+            name: data.name,
+            description: data.description,
+            isGroup: data.isGroup,
+        };
     }
 
     private makeMutation(input: UpdateAgentInput):

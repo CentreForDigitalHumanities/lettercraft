@@ -5,8 +5,9 @@ import { MultiselectComponent } from "./multiselect/multiselect.component";
 import { LabelSelectComponent } from "./label-select/label-select.component";
 import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity-description-lead.component";
 import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entity-button.component";
-import { FormStatusComponent } from './form-status/form-status.component';
-import { EpisodeLinkFormComponent } from './episode-link-form/episode-link-form.component';
+import { FormStatusComponent } from "./form-status/form-status.component";
+import { EpisodeLinkFormComponent } from "./episode-link-form/episode-link-form.component";
+import { HistoricalPersonSelectComponent } from "./historical-person-select/historical-person-select.component";
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import { EpisodeLinkFormComponent } from './episode-link-form/episode-link-form.
         DeleteEntityButtonComponent,
         FormStatusComponent,
         EpisodeLinkFormComponent,
+        HistoricalPersonSelectComponent,
     ],
     imports: [SharedModule],
     exports: [
@@ -27,6 +29,7 @@ import { EpisodeLinkFormComponent } from './episode-link-form/episode-link-form.
         DeleteEntityButtonComponent,
         FormStatusComponent,
         EpisodeLinkFormComponent,
+        HistoricalPersonSelectComponent,
     ],
 })
 export class DataEntrySharedModule {}

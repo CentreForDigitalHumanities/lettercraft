@@ -1,0 +1,20 @@
+<fieldset *ngIf="isGroup$ | async as isGroup">
+    <ng-container >
+        <legend>
+            {{ isGroup ? "Historical persons" : "Historical person" }}
+        </legend>
+        <p class="form-text">
+            {{
+                isGroup
+                    ? "Pick one or more historical persons that are represented by this agent in this source."
+                    : "Pick an historical person that is represented by this agent in this source."
+            }}
+        </p>
+    </ng-container>
+    <lc-historical-person-select
+    *ngIf="historicalPersonOptions$ | async as options"
+        [formControl]="form.controls.describes"
+        [options]="options"
+        [multiple]="isGroup"
+    />
+</fieldset>

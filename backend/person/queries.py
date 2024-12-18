@@ -2,7 +2,8 @@ from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
 from django.db.models import QuerySet, Q
 from typing import Optional
 
-from person.models import AgentDescription
+from person.models import AgentDescription, HistoricalPerson
+from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.AgentDescriptionType import AgentDescriptionType
 
 
@@ -11,6 +12,7 @@ class PersonQueries(ObjectType):
     agent_descriptions = List(
         NonNull(AgentDescriptionType), required=True, episode_id=ID(), source_id=ID()
     )
+    historical_persons = List(NonNull(HistoricalPersonType), required=True)
 
     @staticmethod
     def resolve_agent_description(
@@ -39,3 +41,9 @@ class PersonQueries(ObjectType):
         return AgentDescriptionType.get_queryset(AgentDescription.objects, info).filter(
             filters
         )
+
+    @staticmethod
+    def resolve_historical_persons(
+        parent: None, info: ResolveInfo
+    ) -> QuerySet[HistoricalPerson]:
+        return HistoricalPersonType.get_queryset(HistoricalPerson.objects, info)

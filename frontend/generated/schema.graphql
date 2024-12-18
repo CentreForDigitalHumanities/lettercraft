@@ -228,7 +228,6 @@ type EpisodeSpaceType implements EpisodeEntityLink {
 }
 
 type EpisodeType implements EntityDescription {
-  """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
   """The book in the source"""
@@ -540,6 +539,7 @@ type Query {
   episodes(sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
+  historicalPersons: [HistoricalPersonType!]!
   letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
   letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
@@ -783,6 +783,7 @@ input UpdateAgentGenderInput {
 }
 
 input UpdateAgentInput {
+  describes: [String!]
   description: String
   gender: UpdateAgentGenderInput
   id: ID!

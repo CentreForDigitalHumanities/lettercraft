@@ -8,17 +8,14 @@ import {
     DataEntryUpdateEpisodeMutation,
 } from "generated/graphql";
 import {
-    BehaviorSubject,
     debounceTime,
     filter,
     map,
     share,
     shareReplay,
     switchMap,
-    tap,
     withLatestFrom,
 } from "rxjs";
-import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
