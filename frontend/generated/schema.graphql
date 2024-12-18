@@ -228,7 +228,6 @@ type EpisodeSpaceType implements EpisodeEntityLink {
 }
 
 type EpisodeType implements EntityDescription {
-  """agents involved in this episode"""
   agents: [AgentDescriptionType!]!
 
   """The book in the source"""

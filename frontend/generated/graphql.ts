@@ -262,7 +262,6 @@ export type EpisodeSpaceType = EpisodeEntityLink & {
 
 export type EpisodeType = EntityDescription & {
   __typename?: 'EpisodeType';
-  /** agents involved in this episode */
   agents: Array<AgentDescriptionType>;
   /** The book in the source */
   book: Scalars['String']['output'];
@@ -1117,7 +1116,7 @@ export type DataEntryAgentHistoricalPersonQuery = { __typename?: 'Query', agentD
 export type DataEntryHistoricalPersonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DataEntryHistoricalPersonsQuery = { __typename?: 'Query', historicalPersons: Array<{ __typename?: 'HistoricalPersonType', id: string, name: string, dateOfBirth?: { __typename?: 'PersonDateOfBirthType', id: string, displayDate: string } | null, dateOfDeath?: { __typename?: 'PersonDateOfDeathType', id: string, displayDate: string } | null }> };
+export type DataEntryHistoricalPersonsQuery = { __typename?: 'Query', historicalPersons: Array<{ __typename?: 'HistoricalPersonType', id: string, name: string }> };
 
 export type DataEntryAgentIdentificationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1600,14 +1599,6 @@ export const DataEntryHistoricalPersonsDocument = gql`
   historicalPersons {
     id
     name
-    dateOfBirth {
-      id
-      displayDate
-    }
-    dateOfDeath {
-      id
-      displayDate
-    }
   }
 }
     `;
