@@ -36,8 +36,12 @@
         <label class="form-label" for="input-isgroup">
             Is this agent a person or a group?
         </label>
-        <select id="input-isgroup" class="form-select" [class.is-invalid]="form.invalid"
-            [formControl]="form.controls.isGroup">
+        <select
+            id="input-isgroup"
+            class="form-select"
+            [class.is-invalid]="form.hasError('numberOfHistoricalPersons')"
+            [formControl]="form.controls.isGroup"
+        >
             <option [ngValue]="false">Person</option>
             <option [ngValue]="true">Group</option>
         </select>
