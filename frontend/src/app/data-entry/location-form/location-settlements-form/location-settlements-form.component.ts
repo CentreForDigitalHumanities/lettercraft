@@ -22,6 +22,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { formStatusSubject } from "../../shared/utils";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MutationResult } from "apollo-angular";
+import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 
 type LocationSettlementsSpaceDescription = Required<
     Pick<DataEntryUpdateLocationMutationVariables["spaceData"], "settlements">
@@ -51,16 +52,18 @@ export class LocationSettlementsFormComponent implements OnInit, OnDestroy {
         share()
     );
 
-    public settlementOptions$ = this.settlementsQuery.fetch().pipe(
-        map((result) => result.data.settlements),
-        map((settlements) =>
-            settlements.map((settlement) => ({
-                value: settlement.id,
-                label: settlement.name,
-                dropdownLabel: this.formatDropdownLabel(settlement),
-            }))
-        )
-    );
+    public settlementOptions$: Observable<MultiselectOption[]> =
+        this.settlementsQuery.fetch().pipe(
+            map((result) => result.data.settlements),
+            map((settlements) =>
+                settlements.map((settlement) => ({
+                    value: settlement.id,
+                    label: settlement.name,
+                    icon: "city",
+                    dropdownLabel: this.formatDropdownLabel(settlement),
+                }))
+            )
+        );
 
     public form = new FormGroup<LocationSettlementsForm>({
         settlements: new FormControl<string[]>([], {

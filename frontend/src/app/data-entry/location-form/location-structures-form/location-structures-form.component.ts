@@ -23,6 +23,7 @@ import {
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
+import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 
 type LocationStructuresSpaceDescription = Required<
     Pick<DataEntryUpdateLocationMutationVariables["spaceData"], "structures">
@@ -60,7 +61,7 @@ export class LocationStructuresFormComponent implements OnInit, OnDestroy {
         share()
     );
 
-    public structureOptions$ = this.structuresQuery.fetch().pipe(
+    public structureOptions$: Observable<MultiselectOption[]> = this.structuresQuery.fetch().pipe(
         map((result) => result.data.structures),
         map((structures) =>
             structures.map((structure) => ({
