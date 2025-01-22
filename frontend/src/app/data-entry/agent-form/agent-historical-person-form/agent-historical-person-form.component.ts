@@ -58,10 +58,7 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
             )
         );
 
-    public isGroup$ = this.agent$.pipe(
-        map((agent) => agent?.isGroup ?? false),
-        share()
-    );
+    public isGroup?: boolean;
 
     public form = new FormGroup<HistoricalPersonForm>({
         describes: new FormControl<string[]>([], { nonNullable: true }),
@@ -85,7 +82,11 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
         this.agent$
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((agent) => {
-                const historicalPersonIds = agent?.describes.map(
+                if (!agent) {
+                    return;
+                }
+                this.isGroup = agent.isGroup;
+                const historicalPersonIds = agent.describes.map(
                     (person) => person.id
                 );
                 this.form.patchValue({ describes: historicalPersonIds });
