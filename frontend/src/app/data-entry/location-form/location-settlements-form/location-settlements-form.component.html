@@ -1,0 +1,12 @@
+<form>
+    <p class="form-text">
+        Select one or more settlements by which the text identifies or contextualises the location.
+    </p>
+
+    <lc-subspace-select
+        *ngIf="settlementOptions$ | async as options"
+        [formControl]="form.controls.settlements"
+        [options]="options"
+        subspaceType="settlement"
+    />
+</form>

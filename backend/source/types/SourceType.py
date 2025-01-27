@@ -51,7 +51,7 @@ class SourceType(DjangoObjectType):
         def resolve(parent: Source, info: ResolveInfo) -> QuerySet[Model]:
             return OutputType.get_queryset(Model.objects, info).filter(
                 source__id=parent.pk
-            )
+            ).distinct()
 
         return resolve
 

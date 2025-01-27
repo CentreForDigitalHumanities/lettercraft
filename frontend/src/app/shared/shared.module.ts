@@ -14,6 +14,7 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { ContributorsComponent } from './contributors/contributors.component';
 import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.component';
 import { OrderButtonGroupComponent } from './order-button-group/order-button-group.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -40,6 +41,7 @@ import { OrderButtonGroupComponent } from './order-button-group/order-button-gro
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
+        FontAwesomeModule,
     ],
     exports: [
         IconComponent,
@@ -58,6 +60,7 @@ import { OrderButtonGroupComponent } from './order-button-group/order-button-gro
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
+        FontAwesomeModule,
     ],
 })
 export class SharedModule {}

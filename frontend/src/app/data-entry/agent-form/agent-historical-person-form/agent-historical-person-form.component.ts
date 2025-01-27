@@ -44,12 +44,9 @@ export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
         share()
     );
 
-    private allHistoricalPersons$ = this.historicalPersonsQuery
-        .fetch()
-        .pipe(map((result) => result.data.historicalPersons));
-
     public historicalPersonOptions$: Observable<MultiselectOption[]> =
-        this.allHistoricalPersons$.pipe(
+        this.historicalPersonsQuery.fetch().pipe(
+            map((result) => result.data.historicalPersons),
             map((persons) =>
                 persons.map(({ id, name }) => ({
                     value: id,

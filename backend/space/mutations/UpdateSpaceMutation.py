@@ -1,8 +1,6 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo
 from django.core.exceptions import ObjectDoesNotExist
-from core.types.input.DescriptionFieldInputType import DescriptionFieldInputType
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
-from letter.models import LetterDescription
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
@@ -11,6 +9,9 @@ from space.models import SpaceDescription
 
 class UpdateSpaceInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
+    regions = List(NonNull(ID))
+    settlements = List(NonNull(ID))
+    structures = List(NonNull(ID))
 
 
 class UpdateSpaceMutation(LettercraftMutation):

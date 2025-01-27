@@ -1,0 +1,20 @@
+query DataEntryLocationStructures($id: ID!) {
+    spaceDescription(id: $id) {
+        id
+        structures {
+            id
+        }
+    }
+}
+
+query DataEntryStructures {
+    structures {
+        id
+        name
+        level
+        settlement {
+            id
+            name
+        }
+    }
+}

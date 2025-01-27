@@ -17,9 +17,11 @@
                 "
                 (click)="selectOption(option)"
                 [disabled]="selectedOptions().includes(option.value)"
+                class="d-inline-flex align-items-center"
                 ngbDropdownItem
             >
-                {{ option.label }}
+                <fa-icon *ngIf="option.icon" [icon]="option.icon" class="me-2" aria-hidden="true" />
+                <span>{{ option.dropdownLabel ?? option.label }}</span>
             </button>
         </ng-container>
         <ng-template #noOptions>

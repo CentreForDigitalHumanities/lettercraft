@@ -260,8 +260,6 @@ type EpisodeType implements EntityDescription {
 
   """How is this entity presented in the text?"""
   sourceMention: EventEpisodeSourceMentionChoices
-
-  """locations involved in this episode"""
   spaces: [SpaceDescriptionType!]!
 
   """full description of the events in the passage"""
@@ -905,6 +903,9 @@ input UpdateSpaceInput {
   id: ID!
   name: String
   page: String
+  regions: [ID!]
+  settlements: [ID!]
+  structures: [ID!]
 }
 
 type UpdateSpaceMutation {

@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DataEntryModule } from './data-entry/data-entry.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { DataEntryModule } from './data-entry/data-entry.module';
         GraphQLModule,
         HttpClientModule,
         DataEntryModule,
+        FontAwesomeModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
