@@ -4,18 +4,7 @@
         *ngFor="let subSpace of selectedSubspaces()"
         class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
     >
-        <svg
-            *ngIf="subSpace.icon"
-            width="1rem"
-            height="1rem"
-            aria-hidden="true"
-            role="img"
-            [style.fill]="'currentColor'"
-        >
-            <use
-                [attr.href]="'assets/icons/' + subSpace.icon + '.svg#img'"
-            ></use>
-        </svg>
+        <fa-icon *ngIf="subSpace.icon" [icon]="subSpace.icon" aria-hidden="true" />
         <span class="mx-2">{{ subSpace.label }}</span>
         <button
             class="btn btn-sm btn-primary p-1"

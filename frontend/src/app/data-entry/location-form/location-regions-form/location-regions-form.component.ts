@@ -23,6 +23,7 @@ import { formStatusSubject } from "../../shared/utils";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MutationResult } from "apollo-angular";
 import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
+import { faChurch, faCrown, faMountainSun, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 type LocationRegionsSpaceDescription = Required<
     Pick<DataEntryUpdateLocationMutationVariables["spaceData"], "regions">
@@ -34,10 +35,10 @@ type LocationRegionsForm = {
     >;
 };
 
-const regionTypeIconMapping: Record<SpaceRegionTypeChoices, string> = {
-    [SpaceRegionTypeChoices.Ecclesiastical]: "church",
-    [SpaceRegionTypeChoices.Geographical]: "land",
-    [SpaceRegionTypeChoices.Political]: "crown",
+const regionTypeIconMapping: Record<SpaceRegionTypeChoices, IconDefinition> = {
+    [SpaceRegionTypeChoices.Ecclesiastical]: faChurch,
+    [SpaceRegionTypeChoices.Geographical]: faMountainSun,
+    [SpaceRegionTypeChoices.Political]: faCrown,
 };
 
 @Component({

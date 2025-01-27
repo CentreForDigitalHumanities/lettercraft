@@ -23,6 +23,7 @@ import { formStatusSubject } from "../../shared/utils";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MutationResult } from "apollo-angular";
 import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
+import { faCity } from "@fortawesome/free-solid-svg-icons";
 
 type LocationSettlementsSpaceDescription = Required<
     Pick<DataEntryUpdateLocationMutationVariables["spaceData"], "settlements">
@@ -59,7 +60,7 @@ export class LocationSettlementsFormComponent implements OnInit, OnDestroy {
                 settlements.map((settlement) => ({
                     value: settlement.id,
                     label: settlement.name,
-                    icon: "city",
+                    icon: faCity,
                     dropdownLabel: this.formatDropdownLabel(settlement),
                 }))
             )

@@ -28,7 +28,10 @@ import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
     ],
 })
 export class SubspaceSelectComponent implements ControlValueAccessor, OnInit {
-    @Input({ required: true }) subspaceType: 'region' | 'settlement' | 'structure' = 'region';
+    @Input({ required: true }) subspaceType:
+        | "region"
+        | "settlement"
+        | "structure" = "region";
     @Input({ required: true }) options: MultiselectOption[] = [];
 
     public control = new FormControl<string[]>([], { nonNullable: true });

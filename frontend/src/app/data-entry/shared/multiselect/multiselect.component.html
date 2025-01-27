@@ -20,19 +20,7 @@
                 class="d-inline-flex align-items-center"
                 ngbDropdownItem
             >
-                <svg
-                    *ngIf="option.icon"
-                    width="1rem"
-                    height="1rem"
-                    aria-hidden="true"
-                    role="img"
-                    [style.fill]="'currentColor'"
-                    class="me-2"
-                >
-                    <use
-                        [attr.href]="'assets/icons/' + option.icon + '.svg#img'"
-                    ></use>
-                </svg>
+                <fa-icon *ngIf="option.icon" [icon]="option.icon" class="me-2" aria-hidden="true" />
                 <span>{{ option.dropdownLabel ?? option.label }}</span>
             </button>
         </ng-container>

@@ -23,6 +23,8 @@ import {
 } from "rxjs";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { faChessRook, faHouse, faLocationCrosshairs, faPersonShelter, faRoad } from "@fortawesome/free-solid-svg-icons";
 import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 
 type LocationStructuresSpaceDescription = Required<
@@ -39,12 +41,12 @@ type QueriedStructure = NonNullable<
     DataEntryStructuresQuery["structures"][number]
 >;
 
-const structureTypeIconMapping: Record<SpaceStructureLevelChoices, string> = {
-    [SpaceStructureLevelChoices.A_1]: "road",
-    [SpaceStructureLevelChoices.A_2]: "fort",
-    [SpaceStructureLevelChoices.A_3]: "house",
-    [SpaceStructureLevelChoices.A_4]: "room",
-    [SpaceStructureLevelChoices.A_5]: "spot",
+const structureTypeIconMapping: Record<SpaceStructureLevelChoices, IconDefinition> = {
+    [SpaceStructureLevelChoices.A_1]: faRoad,
+    [SpaceStructureLevelChoices.A_2]: faChessRook,
+    [SpaceStructureLevelChoices.A_3]: faHouse,
+    [SpaceStructureLevelChoices.A_4]: faPersonShelter,
+    [SpaceStructureLevelChoices.A_5]: faLocationCrosshairs,
 };
 
 @Component({
