@@ -2,7 +2,9 @@ from allauth.account.models import EmailAddress
 import pytest
 from graphene.test import Client as GrapheneClient
 from typing import Generator
-from django.test import Client as APIClient
+from django.contrib.auth.models import AnonymousUser
+from django.test import Client as APIClient, RequestFactory
+from django.core.handlers.wsgi import WSGIRequest
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
@@ -148,3 +150,23 @@ def case_study(db):
 def graphql_client():
     client = GrapheneClient(schema)
     return client
+
+
+@pytest.fixture()
+def user_request(user) -> WSGIRequest:
+    """Reproduces a request by the user to the graphql API. Can be used as context for
+    the graphql_client."""
+    factory = RequestFactory()
+    request = factory.post("/api/graphql")
+    request.user = user
+    return request
+
+
+@pytest.fixture()
+def anonymous_request() -> WSGIRequest:
+    """Reproduces an anonymous request to the graphql API. Can be used as context for
+    the graphql_client."""
+    factory = RequestFactory()
+    request = factory.post("/api/graphql")
+    request.user = AnonymousUser()
+    return request
