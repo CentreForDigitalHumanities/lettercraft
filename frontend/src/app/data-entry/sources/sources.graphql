@@ -1,5 +1,5 @@
 query DataEntrySourceList {
-    sources {
+    sources(editable: true) {
         id
         name
         editionAuthor
