@@ -11,7 +11,7 @@ def editable_sources(
     if user.is_superuser:
         return sources.all()
 
-    if not user or user.is_anonymous or not user.is_contributor:
+    if not user or user.is_anonymous:
         return sources.none()
 
     return sources.filter(groups__user=user).distinct()

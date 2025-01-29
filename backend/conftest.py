@@ -60,9 +60,6 @@ def contributor_group(db, source, user):
     user.groups.add(group)
     source.groups.add(group)
 
-    user.is_contributor = True
-    user.save()
-
     return group
 
 

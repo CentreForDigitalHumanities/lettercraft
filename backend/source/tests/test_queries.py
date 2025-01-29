@@ -3,13 +3,9 @@ from django.contrib.auth.models import Group
 from source.models import Source
 
 
-def test_sources_query(graphql_client, user, source, user_request, anonymous_request):
-    user.is_contributor = True
-    group = Group.objects.create(name="test users")
-    user.groups.add(group)
-    user.save()
-
-    source.groups.add(group)
+def test_sources_query(
+    graphql_client, user, source, user_request, anonymous_request, contributor_group
+):
 
     other_source = Source.objects.create(name="Pat & Mat")
 
