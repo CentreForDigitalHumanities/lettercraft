@@ -1,4 +1,4 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
 from event.models import Episode, EpisodeCategory, EpisodeEntity
 from typing import Optional
@@ -7,11 +7,17 @@ from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
+from source.permissions import editable_sources
 
 
 class EventQueries(ObjectType):
     episode = Field(EpisodeType, id=ID(required=True))
-    episodes = List(NonNull(EpisodeType), required=True, source_id=ID())
+    episodes = List(
+        NonNull(EpisodeType),
+        required=True,
+        source_id=ID(),
+        editable=Boolean(),
+    )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
         EpisodeEntityLink,
@@ -32,8 +38,15 @@ class EventQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
+        editable: bool = False,
     ) -> QuerySet[Episode]:
-        filters = Q() if source_id is None else Q(source_id=source_id)
+        filters = Q()
+
+        if source_id is not None:
+            filters &= Q(source_id=source_id)
+        if editable:
+            user = info.context.user
+            filters &= Q(source__in=editable_sources(user))
 
         return EpisodeType.get_queryset(Episode.objects, info).filter(filters)
 

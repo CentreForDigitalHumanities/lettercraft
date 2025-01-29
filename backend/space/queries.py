@@ -1,4 +1,4 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import Q, QuerySet
 from typing import Optional
 
@@ -7,12 +7,16 @@ from space.types.RegionType import RegionType
 from space.types.SettlementType import SettlementType
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from space.types.StructureType import StructureType
+from source.permissions import editable_sources
 
 
 class SpaceQueries(ObjectType):
     space_description = Field(SpaceDescriptionType, id=ID(required=True))
     space_descriptions = List(
-        NonNull(SpaceDescriptionType), required=True, source_id=ID()
+        NonNull(SpaceDescriptionType),
+        required=True,
+        source_id=ID(),
+        editable=Boolean(),
     )
     regions = List(NonNull(RegionType), required=True)
     settlements = List(NonNull(SettlementType), required=True)
@@ -34,8 +38,15 @@ class SpaceQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
+        editable: bool = False,
     ) -> QuerySet[SpaceDescription]:
-        filters = Q() if source_id is None else Q(source_id=source_id)
+        filters = Q()
+
+        if source_id is not None:
+            filters &= Q(source_id=source_id)
+        if editable:
+            user = info.context.user
+            filters &= Q(source__in=editable_sources(user))
 
         return SpaceDescriptionType.get_queryset(SpaceDescription.objects, info).filter(
             filters
