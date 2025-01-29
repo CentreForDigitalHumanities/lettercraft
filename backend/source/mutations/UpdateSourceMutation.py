@@ -6,35 +6,30 @@ from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class UpdateCreateSourceInput(InputObjectType):
-    id = ID()
-    name = String(required=True)
+class UpdateSourceInput(InputObjectType):
+    id = ID(required=True)
+    name = String()
     edition_author = String()
     edition_title = String()
     medieval_author = String()
     medieval_title = String()
 
 
-class UpdateOrCreateSourceMutation(Mutation):
+class UpdateSourceMutation(Mutation):
     source = Field(SourceType)
     errors = List(String)
 
     class Arguments:
-        source_data = UpdateCreateSourceInput(required=True)
+        source_data = UpdateSourceInput(required=True)
 
     @classmethod
-    def mutate(
-        cls, root: None, info: ResolveInfo, source_data: UpdateCreateSourceInput
-    ):
+    def mutate(cls, root: None, info: ResolveInfo, source_data: UpdateSourceInput):
         source_id = getattr(source_data, "id", None)
 
-        if source_id:
-            try:
-                source = SourceType.get_queryset(Source.objects, info).get(pk=source_id)
-            except Source.DoesNotExist:
-                return cls(errors=["Source not found."])  # type: ignore
-        else:
-            source = Source()
+        try:
+            source = SourceType.get_queryset(Source.objects, info).get(pk=source_id)
+        except Source.DoesNotExist:
+            return cls(errors=["Source not found."])  # type: ignore
 
         if not can_edit_source(info.context.user, source):
             return cls(
