@@ -12,6 +12,7 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from source.permissions import can_edit_source
 
 
 class CreatePersonReferenceInput(InputObjectType):
@@ -56,6 +57,13 @@ class CreatePersonReferenceMutation(LettercraftMutation):
                 ok=False,
                 errors=[LettercraftErrorType("description", [str(e)])],
             )
+
+        if not can_edit_source(info.context.user, description.source):
+            error = LettercraftErrorType(
+                field="description",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         try:
             with transaction.atomic():

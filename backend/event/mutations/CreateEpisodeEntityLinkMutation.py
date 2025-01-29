@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
+from source.permissions import can_edit_source
 
 
 class CreateEpisodeEntityLinkInput(InputObjectType):
@@ -59,6 +60,13 @@ class CreateEpisodeEntityLinkMutation(LettercraftMutation):
                 ok=False,
                 errors=[LettercraftErrorType("entity", [str(e)])],
             )
+
+        if not can_edit_source(info.context.user, episode.source):
+            error = LettercraftErrorType(
+                field="episode",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         try:
             with transaction.atomic():

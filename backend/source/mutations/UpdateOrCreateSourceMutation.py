@@ -2,6 +2,8 @@ from graphene import ID, Field, InputObjectType, List, Mutation, ResolveInfo, St
 
 from source.models import Source
 from source.types.SourceType import SourceType
+from source.permissions import can_edit_source
+from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
 class UpdateCreateSourceInput(InputObjectType):
@@ -33,6 +35,11 @@ class UpdateOrCreateSourceMutation(Mutation):
                 return cls(errors=["Source not found."])  # type: ignore
         else:
             source = Source()
+
+        if not can_edit_source(info.context.user, source):
+            return cls(
+                errors=[LettercraftErrorType("Not authorised to edit this source")]
+            )
 
         for field, value in source_data.items():  # type: ignore
             setattr(source, field, value)

@@ -15,6 +15,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
+from source.permissions import can_edit_source
 
 class CreateLetterMutation(LettercraftMutation):
     ok = Boolean(required=True)
@@ -34,6 +35,7 @@ class CreateLetterMutation(LettercraftMutation):
         try:
             with transaction.atomic():
                 cls.mutate_object(letter_data, letter, info)
+                assert can_edit_source(info.context.user, letter.source)
                 cls.add_contribution(letter, letter_data, info)
                 letter.full_clean()
         except Source.DoesNotExist as e:
@@ -42,6 +44,12 @@ class CreateLetterMutation(LettercraftMutation):
         except Episode.DoesNotExist as e:
             error = LettercraftErrorType(field="episodes", messages=[e.args[0]])
             return cls(ok=False, errors=[error])
+        except AssertionError:
+            error = LettercraftErrorType(
+                field="source",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
         except ValidationError as e:
             errors = [
                 LettercraftErrorType(field, messages)

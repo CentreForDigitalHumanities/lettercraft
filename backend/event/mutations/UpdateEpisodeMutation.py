@@ -1,10 +1,11 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo, String
 from django.core.exceptions import ObjectDoesNotExist
+
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
 from event.models import Episode
 from graphql_app.LettercraftMutation import LettercraftMutation
-
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
+from source.permissions import can_edit_source
 
 
 class UpdateEpisodeInput(EntityDescriptionInputType, InputObjectType):
@@ -31,6 +32,13 @@ class UpdateEpisodeMutation(LettercraftMutation):
             return cls(ok=False, errors=[error])  # type: ignore
 
         episode: Episode = retrieved_object.object  # type: ignore
+
+        if not can_edit_source(info.context.user, episode.source):
+            error = LettercraftErrorType(
+                field="source",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         try:
             cls.mutate_object(episode_data, episode, info)

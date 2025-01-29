@@ -9,7 +9,7 @@ from graphene import (
 
 from person.models import PersonReference
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-
+from source.permissions import can_edit_source
 
 class DeletePersonReferenceMutation(Mutation):
     ok = Boolean(required=True)
@@ -31,6 +31,13 @@ class DeletePersonReferenceMutation(Mutation):
             return cls(
                 ok=False, errors=LettercraftErrorType("id", ["Reference not found"])
             )
+
+        if not can_edit_source(info.context.user, reference.description.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         reference.delete()
 

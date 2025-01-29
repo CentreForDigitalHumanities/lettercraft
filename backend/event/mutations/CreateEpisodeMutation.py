@@ -13,6 +13,7 @@ from event.types.EpisodeType import EpisodeType
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
+from source.permissions import can_edit_source
 
 
 class CreateEpisodeInput(InputObjectType):
@@ -36,6 +37,13 @@ class CreateEpisodeMutation(LettercraftMutation):
         except Source.DoesNotExist:
             error = LettercraftErrorType(field="source", messages=["Source not found."])
             return cls(errors=[error])  # type: ignore
+
+        if not can_edit_source(info.context.user, source):
+            error = LettercraftErrorType(
+                field="source",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         episode = Episode.objects.create(
             name=getattr(episode_data, "name"),

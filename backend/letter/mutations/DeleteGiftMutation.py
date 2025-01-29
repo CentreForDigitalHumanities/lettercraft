@@ -3,6 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from letter.models import GiftDescription
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
+from source.permissions import can_edit_source
 
 
 class DeleteGiftMutation(Mutation):
@@ -21,6 +22,13 @@ class DeleteGiftMutation(Mutation):
         except GiftDescription.DoesNotExist:
             error = LettercraftErrorType(field="id", messages=["Gift not found."])
             return cls(ok=False, errors=[error])  # type: ignore
+
+        if not can_edit_source(info.context.user, gift.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=["Not authorised to edit data related to this source"],
+            )
+            return cls(errors=[error])
 
         gift.delete()
         return cls(ok=True, errors=[])  # type: ignore
