@@ -14,6 +14,7 @@ from core.types.DescriptionFieldType import SourceMentionEnum
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from event.models import EpisodeEntity
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class UpdateEpisodeEntityLinkInput(InputObjectType):
@@ -48,6 +49,13 @@ class UpdateEpisodeEntityLinkMutation(LettercraftMutation):
                     "episode", ["Relation object does not exist"]
                 ),
             )
+
+        if not can_edit_source(info.context.user, obj.episode.source):
+            error = LettercraftErrorType(
+                field="episode",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         cls.mutate_object(
             data, obj, info, excluded_fields=["entity", "entity_type", "episode"]

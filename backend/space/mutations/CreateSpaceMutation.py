@@ -15,7 +15,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
-
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class CreateSpaceMutation(LettercraftMutation):
     ok = Boolean(required=True)
@@ -35,6 +35,7 @@ class CreateSpaceMutation(LettercraftMutation):
         try:
             with transaction.atomic():
                 cls.mutate_object(space_data, space, info)
+                assert can_edit_source(info.context.user, space.source)
                 cls.add_contribution(space, space_data, info)
                 space.full_clean()
         except Source.DoesNotExist as e:
@@ -42,6 +43,12 @@ class CreateSpaceMutation(LettercraftMutation):
             return cls(ok=False, errors=[error])  # type: ignore
         except Episode.DoesNotExist as e:
             error = LettercraftErrorType(field="episodes", messages=[e.args[0]])
+            return cls(ok=False, errors=[error])
+        except AssertionError:
+            error = LettercraftErrorType(
+                field="source",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
             return cls(ok=False, errors=[error])
         except ValidationError as e:
             errors = [

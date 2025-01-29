@@ -11,6 +11,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from event.models import EpisodeEntity
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteEpisodeEntityLinkMutation(Mutation):
     ok = Boolean(required=True)
@@ -42,6 +43,13 @@ class DeleteEpisodeEntityLinkMutation(Mutation):
                     "episode", ["Relation object does not exist"]
                 ),
             )
+
+        if not can_edit_source(info.context.user, obj.episode.source):
+            error = LettercraftErrorType(
+                field="episode",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         obj.delete()
 

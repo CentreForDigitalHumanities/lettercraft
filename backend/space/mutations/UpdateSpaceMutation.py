@@ -1,12 +1,11 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo
 from django.core.exceptions import ObjectDoesNotExist
-from core.types.input.DescriptionFieldInputType import DescriptionFieldInputType
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
-from letter.models import LetterDescription
 from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from space.models import SpaceDescription
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class UpdateSpaceInput(EntityDescriptionInputType, InputObjectType):
@@ -31,6 +30,13 @@ class UpdateSpaceMutation(LettercraftMutation):
             return cls(ok=False, errors=[error])  # type: ignore
 
         space: SpaceDescription = retrieved_object.object  # type: ignore
+
+        if not can_edit_source(info.context.user, space.source):
+            error = LettercraftErrorType(
+                field="description",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         try:
             cls.mutate_object(space_data, space, info, ["categorisations"])

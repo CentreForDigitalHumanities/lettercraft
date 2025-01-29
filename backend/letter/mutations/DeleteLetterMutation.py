@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from letter.models import LetterDescription
 from letter.types.LetterDescriptionType import LetterDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteLetterMutation(Mutation):
     ok = Boolean(required=True)
@@ -21,6 +21,13 @@ class DeleteLetterMutation(Mutation):
         except LetterDescription.DoesNotExist:
             error = LettercraftErrorType(field="id", messages=["Letter not found."])
             return cls(ok=False, errors=[error])  # type: ignore
+
+        if not can_edit_source(info.context.user, letter.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         letter.delete()
         return cls(ok=True, errors=[])  # type: ignore

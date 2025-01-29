@@ -1,7 +1,9 @@
 from django.db.models.query import QuerySet
 
 
-def test_episode_order_mutation(graphql_client, episode, episode_2):
+def test_episode_order_mutation(
+    graphql_client, episode, episode_2, contributor_group, user_request
+):
     result = graphql_client.execute(
         f"""
         mutation TestMutation {{
@@ -17,7 +19,8 @@ def test_episode_order_mutation(graphql_client, episode, episode_2):
                 }}
             }}
         }}
-        """
+        """,
+        context=user_request,
     )
 
     assert result["data"]["updateEpisodeOrder"]["ok"] == True

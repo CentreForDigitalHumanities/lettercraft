@@ -46,10 +46,9 @@ def test_middleware_blocks_mutation_from_unauthorised_user(user_client, source):
     assert data["errors"][0]["message"] == "User is not authorised to make mutations"
 
 
-def test_middleware_passes_mutation_from_authorised_user(user, user_client, source):
-    user.is_contributor = True
-    user.save()
-
+def test_middleware_passes_mutation_from_authorised_user(
+    user, user_client, source, contributor_group
+):
     response = user_client.post(
         "/api/graphql",
         {

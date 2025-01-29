@@ -1,6 +1,6 @@
 from django.db import models
-from core.models import LettercraftDate
 
+from core.models import LettercraftDate
 
 class Source(models.Model):
     """

@@ -22,6 +22,7 @@ from django.db.models.fields.related_descriptors import (
     ForwardOneToOneDescriptor,
 )
 from core.types.DescriptionFieldType import SourceMentionEnum
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdateAgentGenderInput(InputObjectType):
     gender = Enum.from_enum(Gender)()
@@ -62,6 +63,13 @@ class UpdateAgentMutation(LettercraftMutation):
         except AgentDescription.DoesNotExist as e:
             error = LettercraftErrorType(field="id", messages=[str(e)])
             return cls(ok=False, error=[error])
+
+        if not can_edit_source(info.context.user, agent.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         try:
             with transaction.atomic():
