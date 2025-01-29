@@ -10,13 +10,13 @@ SOURCE_NOT_PERMITTED_MSG = (
 
 
 def editable_sources(
-    user: User | AnonymousUser, sources: QuerySet[Source] = Source.objects
+    user: User | AnonymousUser | None, sources: QuerySet[Source] = Source.objects
 ):
-    if user.is_superuser:
-        return sources.all()
-
     if not user or user.is_anonymous:
         return sources.none()
+
+    if user.is_superuser:
+        return sources.all()
 
     return sources.filter(contributor_groups__users=user).distinct()
 
