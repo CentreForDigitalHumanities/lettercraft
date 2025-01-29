@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet
+from typing import Union
 
 from user.models import User
 from source.models import Source
@@ -10,7 +11,7 @@ SOURCE_NOT_PERMITTED_MSG = (
 
 
 def editable_sources(
-    user: User | AnonymousUser | None, sources: QuerySet[Source] = Source.objects
+    user: Union[User, AnonymousUser, None], sources: QuerySet[Source] = Source.objects
 ):
     if not user or user.is_anonymous:
         return sources.none()
@@ -21,7 +22,7 @@ def editable_sources(
     return sources.filter(contributor_groups__users=user).distinct()
 
 
-def can_edit_source(user: User | AnonymousUser | None, source: Source) -> bool:
+def can_edit_source(user: Union[User, AnonymousUser, None], source: Source) -> bool:
     """
     Whether a user is allowed to edit a source
     """
