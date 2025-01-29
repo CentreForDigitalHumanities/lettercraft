@@ -11,7 +11,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from event.models import EpisodeEntity
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteEpisodeEntityLinkMutation(Mutation):
     ok = Boolean(required=True)
@@ -47,7 +47,7 @@ class DeleteEpisodeEntityLinkMutation(Mutation):
         if not can_edit_source(info.context.user, obj.episode.source):
             error = LettercraftErrorType(
                 field="episode",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

@@ -5,7 +5,7 @@ from graphql_app.LettercraftMutation import LettercraftMutation
 
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from space.models import SpaceDescription
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class UpdateSpaceInput(EntityDescriptionInputType, InputObjectType):
@@ -34,7 +34,7 @@ class UpdateSpaceMutation(LettercraftMutation):
         if not can_edit_source(info.context.user, space.source):
             error = LettercraftErrorType(
                 field="description",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

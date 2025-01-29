@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from letter.models import LetterDescription
 from letter.types.LetterDescriptionType import LetterDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteLetterMutation(Mutation):
     ok = Boolean(required=True)
@@ -25,7 +25,7 @@ class DeleteLetterMutation(Mutation):
         if not can_edit_source(info.context.user, letter.source):
             error = LettercraftErrorType(
                 field="id",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

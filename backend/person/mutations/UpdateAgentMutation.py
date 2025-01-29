@@ -22,7 +22,7 @@ from django.db.models.fields.related_descriptors import (
     ForwardOneToOneDescriptor,
 )
 from core.types.DescriptionFieldType import SourceMentionEnum
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdateAgentGenderInput(InputObjectType):
     gender = Enum.from_enum(Gender)()
@@ -67,7 +67,7 @@ class UpdateAgentMutation(LettercraftMutation):
         if not can_edit_source(info.context.user, agent.source):
             error = LettercraftErrorType(
                 field="id",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

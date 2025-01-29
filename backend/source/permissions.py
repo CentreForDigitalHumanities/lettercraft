@@ -4,6 +4,10 @@ from django.db.models import QuerySet
 from user.models import User
 from source.models import Source
 
+SOURCE_NOT_PERMITTED_MSG = (
+    "Mutation affects a source text for which you do not have contributor access"
+)
+
 
 def editable_sources(
     user: User | AnonymousUser, sources: QuerySet[Source] = Source.objects

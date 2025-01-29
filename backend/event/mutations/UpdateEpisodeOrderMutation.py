@@ -3,7 +3,7 @@ from graphene import Mutation, Boolean, List, NonNull, ID, ResolveInfo
 from event.models import Episode
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdateEpisodeOrderMutation(Mutation):
     ok = Boolean(required=True)
@@ -54,7 +54,7 @@ class UpdateEpisodeOrderMutation(Mutation):
         if not can_edit_source(info.context.user, source):
             error = LettercraftErrorType(
                 field="episode_ids",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

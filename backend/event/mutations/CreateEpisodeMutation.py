@@ -13,7 +13,7 @@ from event.types.EpisodeType import EpisodeType
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class CreateEpisodeInput(InputObjectType):
@@ -41,7 +41,7 @@ class CreateEpisodeMutation(LettercraftMutation):
         if not can_edit_source(info.context.user, source):
             error = LettercraftErrorType(
                 field="source",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(errors=[error])
 

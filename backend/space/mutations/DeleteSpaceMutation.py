@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class DeleteSpaceMutation(Mutation):
@@ -26,7 +26,7 @@ class DeleteSpaceMutation(Mutation):
         if not can_edit_source(info.context.user, space_description.source):
             error = LettercraftErrorType(
                 field="id",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 

@@ -2,7 +2,7 @@ from graphene import ID, Field, InputObjectType, List, Mutation, ResolveInfo, St
 
 from source.models import Source
 from source.types.SourceType import SourceType
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
@@ -38,7 +38,11 @@ class UpdateOrCreateSourceMutation(Mutation):
 
         if not can_edit_source(info.context.user, source):
             return cls(
-                errors=[LettercraftErrorType("Not authorised to edit this source")]
+                errors=[
+                    LettercraftErrorType(
+                        field=["id"], messages=[SOURCE_NOT_PERMITTED_MSG]
+                    )
+                ]
             )
 
         for field, value in source_data.items():  # type: ignore

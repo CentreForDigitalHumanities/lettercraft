@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
-from source.permissions import can_edit_source
+from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class CreateAgentMutation(LettercraftMutation):
     django_model = AgentDescription
@@ -46,7 +46,7 @@ class CreateAgentMutation(LettercraftMutation):
         except AssertionError:
             error = LettercraftErrorType(
                 field="source",
-                messages=["Not authorised to edit data related to this source"],
+                messages=[SOURCE_NOT_PERMITTED_MSG],
             )
             return cls(ok=False, errors=[error])
 
