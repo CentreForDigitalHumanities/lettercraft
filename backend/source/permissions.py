@@ -14,7 +14,7 @@ def editable_sources(
     if not user or user.is_anonymous:
         return sources.none()
 
-    return sources.filter(groups__user=user).distinct()
+    return sources.filter(contributor_groups__users=user).distinct()
 
 
 def can_edit_source(user: User | AnonymousUser | None, source: Source) -> bool:

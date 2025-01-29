@@ -1,7 +1,7 @@
 import pytest
-from django.contrib.auth.models import Group
 
 from source.permissions import can_edit_source
+from user.models import ContributorGroup
 
 
 @pytest.mark.parametrize(
@@ -19,8 +19,8 @@ def test_source_edit_permission(user, source, is_superuser, in_group, has_access
         user.save()
 
     if in_group:
-        group = Group.objects.create(name="test users")
-        user.groups.add(group)
-        source.groups.add(group)
+        group = ContributorGroup.objects.create(name="test users")
+        group.users.add(user)
+        group.sources.add(source)
 
     assert can_edit_source(user, source) == has_access

@@ -19,8 +19,24 @@ class User(django_auth_models.AbstractUser):
         """
         Whether this user has been granted permission to contribute to the project.
 
-        This is true iff the user is a superuser, OR has been granted permission to edit
-        at least one source text (through group membership).
+        This is true iff the user is a superuser or the user is a member of a contributor
+        group.
         """
 
-        return self.is_superuser or self.groups.filter(sources__isnull=False).exists()
+        return self.is_superuser or self.contributor_groups.exists()
+
+
+class ContributorGroup(models.Model):
+    name = models.CharField(
+        max_length=128,
+    )
+    users = models.ManyToManyField(
+        to=User,
+        related_name="contributor_groups",
+        blank=True,
+    )
+    sources = models.ManyToManyField(
+        to="source.Source",
+        related_name="contributor_groups",
+        blank=True,
+    )

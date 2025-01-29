@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import Group
 
 from core.models import LettercraftDate
-
 
 class Source(models.Model):
     """
@@ -34,13 +32,6 @@ class Source(models.Model):
 
     edition_author = models.CharField(
         max_length=255, blank=True, help_text="The name of the author of the edition"
-    )
-
-    groups = models.ManyToManyField(
-        to=Group,
-        related_name="sources",
-        blank=True,
-        help_text="User groups that can edit the source",
     )
 
     def __str__(self):

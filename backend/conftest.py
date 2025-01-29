@@ -2,7 +2,7 @@ from allauth.account.models import EmailAddress
 import pytest
 from graphene.test import Client as GrapheneClient
 from typing import Generator
-from django.contrib.auth.models import AnonymousUser, Group
+from django.contrib.auth.models import AnonymousUser
 from django.test import Client as APIClient, RequestFactory
 from django.core.handlers.wsgi import WSGIRequest
 
@@ -12,7 +12,7 @@ from letter.models import LetterDescription
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
-from user.models import User
+from user.models import User, ContributorGroup
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
@@ -56,10 +56,9 @@ def source(db):
 
 @pytest.fixture()
 def contributor_group(db, source, user):
-    group = Group.objects.create(name="contributors")
-    user.groups.add(group)
-    source.groups.add(group)
-
+    group = ContributorGroup.objects.create(name="contributors")
+    group.users.add(user)
+    group.sources.add(source)
     return group
 
 

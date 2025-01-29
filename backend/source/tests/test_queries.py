@@ -1,5 +1,3 @@
-from django.contrib.auth.models import Group
-
 from source.models import Source
 
 

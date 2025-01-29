@@ -532,23 +532,23 @@ type PersonReferenceType {
 
 type Query {
   agentDescription(id: ID!): AgentDescriptionType
-  agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
+  agentDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
   episodeCategories: [EpisodeCategoryType!]!
   episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
-  episodes(sourceId: ID): [EpisodeType!]!
+  episodes(editable: Boolean, sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
-  giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
+  giftDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
   historicalPersons: [HistoricalPersonType!]!
   letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
-  letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  letterDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
   regions: [RegionType!]!
   settlements: [SettlementType!]!
   source(id: ID!): SourceType!
-  sources: [SourceType!]!
+  sources(editable: Boolean): [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
-  spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  spaceDescriptions(editable: Boolean, sourceId: ID): [SpaceDescriptionType!]!
   structures: [StructureType!]!
   userDescription(id: ID!): UserType
   userDescriptions: [UserType!]!

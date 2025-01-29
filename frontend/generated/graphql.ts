@@ -672,6 +672,7 @@ export type QueryAgentDescriptionArgs = {
 
 
 export type QueryAgentDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -690,6 +691,7 @@ export type QueryEpisodeEntityLinkArgs = {
 
 
 export type QueryEpisodesArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -700,6 +702,7 @@ export type QueryGiftDescriptionArgs = {
 
 
 export type QueryGiftDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -711,6 +714,7 @@ export type QueryLetterDescriptionArgs = {
 
 
 export type QueryLetterDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -721,12 +725,18 @@ export type QuerySourceArgs = {
 };
 
 
+export type QuerySourcesArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QuerySpaceDescriptionArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type QuerySpaceDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -2693,7 +2703,7 @@ export const DataEntryUpdateEpisodeOrderDocument = gql`
   }
 export const DataEntrySourceListDocument = gql`
     query DataEntrySourceList {
-  sources {
+  sources(editable: true) {
     id
     name
     editionAuthor
