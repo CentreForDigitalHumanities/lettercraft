@@ -31,9 +31,12 @@ def assert_agent_data(result, expected_agent):
     assert data["agent"] == expected_agent
 
 
-def test_update_agent_description(graphql_client, agent_description):
+def test_update_agent_description(
+    graphql_client, agent_description, user_request, contributor_group
+):
     result = graphql_client.execute(
-        update_agent_body(f'id: "{agent_description.pk}", name: "Bertus"')
+        update_agent_body(f'id: "{agent_description.pk}", name: "Bertus"'),
+        context=user_request,
     )
     assert_agent_data(
         result,
@@ -47,8 +50,9 @@ def test_update_agent_description(graphql_client, agent_description):
 
     result_2 = graphql_client.execute(
         update_agent_body(
-            f'id: "{agent_description.pk}", description: "Friend of Ernie"'
-        )
+            f'id: "{agent_description.pk}", description: "Friend of Ernie"',
+        ),
+        context=user_request,
     )
     assert_agent_data(
         result_2,
@@ -61,7 +65,8 @@ def test_update_agent_description(graphql_client, agent_description):
     )
 
     result_3 = graphql_client.execute(
-        update_agent_body(f'id: "{agent_description.pk}", description: ""')
+        update_agent_body(f'id: "{agent_description.pk}", description: ""'),
+        context=user_request,
     )
     assert_agent_data(
         result_3,
@@ -74,9 +79,12 @@ def test_update_agent_description(graphql_client, agent_description):
     )
 
 
-def test_update_agent_gender(graphql_client, agent_description):
+def test_update_agent_gender(
+    graphql_client, agent_description, user_request, contributor_group
+):
     add_gender_result = graphql_client.execute(
-        update_agent_body(f'id: "{agent_description.pk}", gender: {{ gender: MALE}}')
+        update_agent_body(f'id: "{agent_description.pk}", gender: {{ gender: MALE}}'),
+        context=user_request,
     )
     assert_agent_data(
         add_gender_result,
@@ -89,8 +97,9 @@ def test_update_agent_gender(graphql_client, agent_description):
     )
     update_gender_note_result = graphql_client.execute(
         update_agent_body(
-            f'id: "{agent_description.pk}", gender: {{ note: "Blablabla"}}'
-        )
+            f'id: "{agent_description.pk}", gender: {{ note: "Blablabla"}}',
+        ),
+        context=user_request,
     )
     assert_agent_data(
         update_gender_note_result,
@@ -103,7 +112,8 @@ def test_update_agent_gender(graphql_client, agent_description):
     )
 
     remove_gender_result = graphql_client.execute(
-        update_agent_body(f'id: "{agent_description.id}", gender: null')
+        update_agent_body(f'id: "{agent_description.id}", gender: null'),
+        context=user_request,
     )
     assert_agent_data(
         remove_gender_result,
@@ -116,18 +126,27 @@ def test_update_agent_gender(graphql_client, agent_description):
     )
 
 
-def test_update_agent_location(graphql_client, agent_description, space_description):
+def test_update_agent_location(
+    graphql_client,
+    agent_description,
+    space_description,
+    user_request,
+    contributor_group,
+):
     result = graphql_client.execute(
         update_agent_body(
             f"""id: "{agent_description.id}"
             location: {{ location: "{space_description.id}", note: "!" }}"""
-        )
+        ),
+        context=user_request,
     )
     assert agent_description.location.location == space_description
     assert agent_description.location.note == "!"
 
 
-def test_create_agent_mutations(graphql_client, source):
+def test_create_agent_mutations(
+    graphql_client, source, user_request, contributor_group
+):
     result = graphql_client.execute(
         f"""
         mutation CreateAgent {{
@@ -138,7 +157,8 @@ def test_create_agent_mutations(graphql_client, source):
                 agent {{ id }}
             }}
         }}
-        """
+        """,
+        context=user_request,
     )
     agent_id = result["data"]["createAgent"]["agent"]["id"]
     agent = AgentDescription.objects.get(id=agent_id)
@@ -146,13 +166,16 @@ def test_create_agent_mutations(graphql_client, source):
     assert agent.source == source
 
 
-def test_delete_agent_mutations(graphql_client, agent_description):
+def test_delete_agent_mutations(
+    graphql_client, agent_description, user_request, contributor_group
+):
     result = graphql_client.execute(
         f"""
         mutation DeleteAgent {{
             deleteAgent(id: "{agent_description.id}") {{ ok }}
         }}
-        """
+        """,
+        context=user_request,
     )
     assert result["data"]["deleteAgent"]["ok"]
     with pytest.raises(AgentDescription.DoesNotExist):
@@ -178,7 +201,9 @@ def person_reference(graphql_client, agent_description):
     return reference
 
 
-def test_update_person_reference_mutation(graphql_client, person_reference):
+def test_update_person_reference_mutation(
+    graphql_client, person_reference, user_request, contributor_group
+):
     update_result = graphql_client.execute(
         f"""
         mutation AddReferenceNote {{
@@ -187,7 +212,8 @@ def test_update_person_reference_mutation(graphql_client, person_reference):
                 note: "?"
             }}) {{ ok }}
         }}
-        """
+        """,
+        context=user_request,
     )
     assert update_result["data"]["updatePersonReference"]["ok"]
 
@@ -195,13 +221,16 @@ def test_update_person_reference_mutation(graphql_client, person_reference):
     assert person_reference.note == "?"
 
 
-def test_delete_person_reference_mutation(graphql_client, person_reference):
+def test_delete_person_reference_mutation(
+    graphql_client, person_reference, user_request, contributor_group
+):
     delete_result = graphql_client.execute(
         f"""
         mutation DeleteReference {{
             deletePersonReference(id: "{person_reference.id}") {{ ok }}
         }}
-        """
+        """,
+        context=user_request,
     )
     assert delete_result["data"]["deletePersonReference"]["ok"]
 
@@ -210,7 +239,12 @@ def test_delete_person_reference_mutation(graphql_client, person_reference):
 
 
 def test_create_person_reference_mutation(
-    graphql_client, agent_description, historical_person, historical_person_2
+    graphql_client,
+    agent_description,
+    historical_person,
+    historical_person_2,
+    user_request,
+    contributor_group,
 ):
     # create a new reference
     PersonReference.objects.filter(description=agent_description).delete()
@@ -222,7 +256,8 @@ def test_create_person_reference_mutation(
                 description: "{agent_description.id}"
             }}) {{ ok }}
         }}
-        """
+        """,
+        context=user_request,
     )
     is_ok = lambda result: result["data"]["createPersonReference"]["ok"]
     assert is_ok(valid_result)
@@ -239,7 +274,8 @@ def test_create_person_reference_mutation(
                 description: "{agent_description.id}"
             }}) {{ ok }}
         }}
-        """
+        """,
+        context=user_request,
     )
 
     assert not is_ok(already_exists_result)
@@ -253,7 +289,8 @@ def test_create_person_reference_mutation(
                 description: "{agent_description.id}"
             }}) {{ ok, errors {{ field, messages }} }}
         }}
-        """
+        """,
+        context=user_request,
     )
     assert not is_ok(description_already_has_reference_result)
     assert not PersonReference.objects.filter(

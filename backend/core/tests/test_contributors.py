@@ -1,5 +1,5 @@
-import json
 from graphene_django.utils.testing import GraphQLTestCase
+from django.contrib.auth.models import Group
 
 from event.models import Episode
 from source.models import Source
@@ -32,6 +32,10 @@ class ContributorTestCase(GraphQLTestCase):
         )
         cls.user_1 = User.objects.create(username="Yoda", is_contributor=True)
         cls.user_2 = User.objects.create(username="Obi-Wan", is_contributor=True)
+        group = Group.objects.create(name="Jedi")
+        cls.user_1.groups.add(group)
+        cls.user_2.groups.add(group)
+        source.groups.add(group)
 
     def test_single_contributor_one_contribution(self):
         self.client.force_login(self.user_1)

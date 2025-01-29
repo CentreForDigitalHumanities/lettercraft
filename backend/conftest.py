@@ -2,7 +2,7 @@ from allauth.account.models import EmailAddress
 import pytest
 from graphene.test import Client as GrapheneClient
 from typing import Generator
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group
 from django.test import Client as APIClient, RequestFactory
 from django.core.handlers.wsgi import WSGIRequest
 
@@ -52,6 +52,18 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
 @pytest.fixture()
 def source(db):
     return Source.objects.create(name="Sesame Street")
+
+
+@pytest.fixture()
+def contributor_group(db, source, user):
+    group = Group.objects.create(name="contributors")
+    user.groups.add(group)
+    source.groups.add(group)
+
+    user.is_contributor = True
+    user.save()
+
+    return group
 
 
 @pytest.fixture()
@@ -118,26 +130,26 @@ def space_description(db, source):
 
 @pytest.fixture()
 def episode(db, source, agent_description, agent_description_2, letter_description):
-    event = Episode.objects.create(
+    episode = Episode.objects.create(
         name="Bert writes a letter",
         source=source,
     )
-    event.agents.add(agent_description)
-    event.agents.add(agent_description_2)
-    event.letters.add(letter_description)
-    return event
+    episode.agents.add(agent_description)
+    episode.agents.add(agent_description_2)
+    episode.letters.add(letter_description)
+    return episode
 
 
 @pytest.fixture()
 def episode_2(db, source, agent_description, agent_description_2, letter_description):
-    event = Episode.objects.create(
+    episode = Episode.objects.create(
         name="Ernie eats a letter",
         source=source,
     )
-    event.agents.add(agent_description)
-    event.agents.add(agent_description_2)
-    event.letters.add(letter_description)
-    return event
+    episode.agents.add(agent_description)
+    episode.agents.add(agent_description_2)
+    episode.letters.add(letter_description)
+    return episode
 
 
 @pytest.fixture()
