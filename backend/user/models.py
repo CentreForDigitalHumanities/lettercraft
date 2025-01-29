@@ -40,3 +40,6 @@ class ContributorGroup(models.Model):
         related_name="contributor_groups",
         blank=True,
     )
+
+    def __str__(self):
+        return self.name

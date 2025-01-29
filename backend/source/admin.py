@@ -26,10 +26,8 @@ class SourceAdmin(admin.ModelAdmin):
         "medieval_author",
         "edition_title",
         "edition_author",
-        "contributor_groups",
     ]
     inlines = [
         SourceWrittenDateAdmin,
         SourceContentsDateAdmin,
     ]
-    filter_horizontal = ["contributor_groups"]
