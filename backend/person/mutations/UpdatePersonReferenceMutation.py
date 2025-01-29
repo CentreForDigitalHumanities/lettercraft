@@ -47,7 +47,7 @@ class UpdatePersonReferenceMutation(LettercraftMutation):
                 field="id",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         cls.mutate_object(reference_data, reference, info)
 

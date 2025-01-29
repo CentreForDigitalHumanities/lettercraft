@@ -25,7 +25,7 @@ class DeleteEpisodeMutation(Mutation):
                 field="id",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         episode.delete()
         return cls(ok=True, errors=[])  # type: ignore

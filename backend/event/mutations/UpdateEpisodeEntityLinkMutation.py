@@ -55,7 +55,7 @@ class UpdateEpisodeEntityLinkMutation(LettercraftMutation):
                 field="episode",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         cls.mutate_object(
             data, obj, info, excluded_fields=["entity", "entity_type", "episode"]

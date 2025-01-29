@@ -56,7 +56,7 @@ class UpdateEpisodeOrderMutation(Mutation):
                 field="episode_ids",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         source.set_episode_order(episode_ids)  # type: ignore
 

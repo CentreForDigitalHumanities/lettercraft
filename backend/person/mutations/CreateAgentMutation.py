@@ -48,7 +48,7 @@ class CreateAgentMutation(LettercraftMutation):
                 field="source",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         return cls(ok=True, agent=agent, errors=[])
 

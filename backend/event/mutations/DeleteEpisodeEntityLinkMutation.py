@@ -49,7 +49,7 @@ class DeleteEpisodeEntityLinkMutation(Mutation):
                 field="episode",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         obj.delete()
 

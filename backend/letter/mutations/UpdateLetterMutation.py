@@ -42,7 +42,7 @@ class UpdateLetterMutation(LettercraftMutation):
                 field="id",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         try:
             cls.mutate_object(letter_data, letter, info, ["categorisations"])

@@ -28,7 +28,7 @@ class DeleteGiftMutation(Mutation):
                 field="id",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
 
         gift.delete()
         return cls(ok=True, errors=[])  # type: ignore

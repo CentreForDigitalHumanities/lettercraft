@@ -49,7 +49,7 @@ class CreateSpaceMutation(LettercraftMutation):
                 field="source",
                 messages=["Not authorised to edit data related to this source"],
             )
-            return cls(errors=[error])
+            return cls(ok=False, errors=[error])
         except ValidationError as e:
             errors = [
                 LettercraftErrorType(field, messages)
