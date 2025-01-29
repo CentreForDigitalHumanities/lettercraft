@@ -2,7 +2,7 @@ from graphene import ID, Field, InputObjectType, List, Mutation, ResolveInfo, St
 
 from source.models import Source
 from source.types.SourceType import SourceType
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 

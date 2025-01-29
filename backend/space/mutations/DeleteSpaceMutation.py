@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class DeleteSpaceMutation(Mutation):

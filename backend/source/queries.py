@@ -5,7 +5,7 @@ from django.db.models import QuerySet
 
 from source.models import Source
 from source.types.SourceType import SourceType
-from source.permissions import editable_sources
+from user.permissions import editable_sources
 
 
 class SourceQueries(ObjectType):

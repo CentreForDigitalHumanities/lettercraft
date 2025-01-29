@@ -7,7 +7,7 @@ from space.types.RegionType import RegionType
 from space.types.SettlementType import SettlementType
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from space.types.StructureType import StructureType
-from source.permissions import editable_sources
+from user.permissions import editable_sources
 
 
 class SpaceQueries(ObjectType):

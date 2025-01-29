@@ -9,7 +9,7 @@ from graphene import (
 
 from person.models import PersonReference
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeletePersonReferenceMutation(Mutation):
     ok = Boolean(required=True)

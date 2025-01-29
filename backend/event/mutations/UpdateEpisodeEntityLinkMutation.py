@@ -14,7 +14,7 @@ from core.types.DescriptionFieldType import SourceMentionEnum
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from event.models import EpisodeEntity
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class UpdateEpisodeEntityLinkInput(InputObjectType):

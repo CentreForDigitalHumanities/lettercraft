@@ -3,7 +3,7 @@ from graphene import Mutation, Boolean, List, NonNull, ID, ResolveInfo
 from event.models import Episode
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdateEpisodeOrderMutation(Mutation):
     ok = Boolean(required=True)

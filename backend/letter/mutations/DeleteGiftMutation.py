@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from letter.models import GiftDescription
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class DeleteGiftMutation(Mutation):

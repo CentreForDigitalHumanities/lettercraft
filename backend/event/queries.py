@@ -7,7 +7,7 @@ from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
-from source.permissions import editable_sources
+from user.permissions import editable_sources
 
 
 class EventQueries(ObjectType):

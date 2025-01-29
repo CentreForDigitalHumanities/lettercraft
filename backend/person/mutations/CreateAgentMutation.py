@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class CreateAgentMutation(LettercraftMutation):
     django_model = AgentDescription

@@ -3,7 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from letter.models import LetterDescription
 from letter.types.LetterDescriptionType import LetterDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteLetterMutation(Mutation):
     ok = Boolean(required=True)

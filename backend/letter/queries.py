@@ -6,7 +6,7 @@ from letter.models import GiftDescription, LetterCategory, LetterDescription
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
-from source.permissions import editable_sources
+from user.permissions import editable_sources
 
 class LetterQueries(ObjectType):
     letter_description = Field(LetterDescriptionType, id=ID(required=True))

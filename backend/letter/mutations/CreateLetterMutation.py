@@ -15,7 +15,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from source.models import Source
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class CreateLetterMutation(LettercraftMutation):
     ok = Boolean(required=True)

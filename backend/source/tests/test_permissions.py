@@ -1,6 +1,6 @@
 import pytest
 
-from source.permissions import can_edit_source
+from user.permissions import can_edit_source
 from user.models import ContributorGroup
 
 

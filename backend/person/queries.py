@@ -5,7 +5,7 @@ from typing import Optional
 from person.models import AgentDescription, HistoricalPerson
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.AgentDescriptionType import AgentDescriptionType
-from source.permissions import editable_sources
+from user.permissions import editable_sources
 
 
 class PersonQueries(ObjectType):

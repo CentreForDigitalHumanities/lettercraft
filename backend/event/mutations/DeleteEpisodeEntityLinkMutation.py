@@ -11,7 +11,7 @@ from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from event.models import EpisodeEntity
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class DeleteEpisodeEntityLinkMutation(Mutation):
     ok = Boolean(required=True)

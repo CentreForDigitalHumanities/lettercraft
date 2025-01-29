@@ -15,7 +15,7 @@ from person.models import (
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 from core.models import Certainty
-from source.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdatePersonReferenceInput(InputObjectType):
     id = ID(required=True)
