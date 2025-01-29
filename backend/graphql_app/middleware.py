@@ -5,7 +5,7 @@ from graphene import ResolveInfo
 
 
 def has_mutation_permission(user: Union[AnonymousUser, User]) -> bool:
-    return user.is_superuser or getattr(user, "is_contributor_alt", False)
+    return user.is_superuser or getattr(user, "is_contributor", False)
 
 
 def is_mutation(info: ResolveInfo) -> bool:

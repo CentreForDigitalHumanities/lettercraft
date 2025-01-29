@@ -15,7 +15,7 @@ class User(django_auth_models.AbstractUser):
         db_table = "auth_user"
 
     @property
-    def is_contributor_alt(self) -> bool:
+    def is_contributor(self) -> bool:
         """
         Whether this user has been granted permission to contribute to the project.
 

@@ -6,8 +6,8 @@ def test_user_model(db, user, user_data):
 
 
 def test_is_contributor(db, user: User, source, contributor_group: Group):
-    assert user.is_contributor_alt
+    assert user.is_contributor
 
     contributor_group.sources.remove(source)
 
-    assert not user.is_contributor_alt
+    assert not user.is_contributor
