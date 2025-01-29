@@ -19,3 +19,14 @@ class User(django_auth_models.AbstractUser):
         help_text="Whether this user is a contributor on the project; this enables them "
         "to enter or edit research data.",
     )
+
+    @property
+    def is_contributor_alt(self) -> bool:
+        """
+        Whether this user has been granted permission to contribute to the project.
+
+        This is true iff the user has been added to at least one source text (through
+        group membership).
+        """
+
+        return self.groups.filter(sources__isnull=False).exists()
