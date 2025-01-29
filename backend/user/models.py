@@ -19,8 +19,8 @@ class User(django_auth_models.AbstractUser):
         """
         Whether this user has been granted permission to contribute to the project.
 
-        This is true iff the user has been added to at least one source text (through
-        group membership).
+        This is true iff the user is a superuser, OR has been granted permission to edit
+        at least one source text (through group membership).
         """
 
-        return self.groups.filter(sources__isnull=False).exists()
+        return self.is_superuser or self.groups.filter(sources__isnull=False).exists()
