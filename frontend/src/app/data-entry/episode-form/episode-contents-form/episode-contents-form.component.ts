@@ -88,10 +88,6 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
                         summary: episode.summary,
                         designators: episode.designators,
                         categories: episode.categories.map((c) => c.id),
-                    },
-                    {
-                        emitEvent: false,
-                        onlySelf: true,
                     }
                 );
             });
