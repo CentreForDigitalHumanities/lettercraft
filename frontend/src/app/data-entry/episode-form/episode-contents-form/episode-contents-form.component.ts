@@ -10,18 +10,20 @@ import {
 } from "generated/graphql";
 import {
     debounceTime,
+    distinctUntilChanged,
     filter,
     map,
     Observable,
     share,
     shareReplay,
     switchMap,
-    withLatestFrom
+    withLatestFrom,
 } from "rxjs";
 import { LabelSelectOption } from "../../shared/label-select/label-select.component";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
+import { isEqual } from "underscore";
 
 @Component({
     selector: "lc-episode-contents-form",
@@ -40,7 +42,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
     public form = new FormGroup({
         summary: new FormControl<string>("", {
             nonNullable: true,
-            updateOn: 'blur',
+            updateOn: "blur",
         }),
         designators: new FormControl<string[]>([], { nonNullable: true }),
         categories: new FormControl<string[]>([], {
@@ -70,7 +72,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         private episodeQuery: DataEntryEpisodeContentsGQL,
         private episodeCategoriesQuery: DataEntryEpisodeCategoriesGQL,
         private updateEpisode: DataEntryUpdateEpisodeGQL
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);
@@ -105,6 +107,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
             switchMap(() =>
                 this.form.valueChanges.pipe(
                     map(() => this.form.getRawValue()),
+                    distinctUntilChanged((prev, curr) => isEqual(prev, curr)),
                     filter(() => this.form.valid)
                 )
             ),
@@ -120,12 +123,17 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
             .pipe(
                 withLatestFrom(this.id$),
                 switchMap(([episode, id]) =>
-                    this.updateEpisode.mutate({
-                        episodeData: {
-                            id,
-                            ...episode,
+                    this.updateEpisode.mutate(
+                        {
+                            episodeData: {
+                                id,
+                                ...episode,
+                            },
                         },
-                    })
+                        {
+                            refetchQueries: [this.episodeQuery.document],
+                        }
+                    )
                 )
             )
             .subscribe((result) => this.onMutationResult(result));
@@ -147,7 +155,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
                 header: "Update failed",
             });
         } else {
-            this.status$.next('saved');
+            this.status$.next("saved");
         }
     }
 }
