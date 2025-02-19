@@ -38,5 +38,9 @@ query ViewSource($id: ID!) {
                 hasIdentifiableFeatures
             }
         }
+        contributors {
+            id
+            fullName
+        }
     }
 }

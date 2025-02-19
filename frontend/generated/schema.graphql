@@ -633,6 +633,7 @@ enum SourceMention {
 type SourceType {
   agents: [AgentDescriptionType!]!
   contentsDate: SourceContentsDateType
+  contributors: [UserType!]!
 
   """The name of the author of the edition"""
   editionAuthor: String!

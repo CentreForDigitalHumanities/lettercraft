@@ -31,5 +31,9 @@ query ViewAgent($id: ID!) {
             name
         }
     }
+    contributors {
+        id
+        fullName
+    }
   }
 }

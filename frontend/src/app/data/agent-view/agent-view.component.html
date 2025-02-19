@@ -14,6 +14,13 @@
             {{agent.description}}
         </p>
 
+        <p *ngIf="agent.contributors.length">
+            <b>Contributors:</b>
+            <ng-container *ngFor="let user of agent.contributors; last as isLast">
+                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+        </p>
+
         <h2>Description</h2>
 
         <p *ngIf="agent.gender as gender">
