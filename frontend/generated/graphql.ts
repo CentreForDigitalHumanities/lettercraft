@@ -1483,6 +1483,11 @@ export type ViewAgentQueryVariables = Exact<{
 
 export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }> } | null };
 
+export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ViewSourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
+
 export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2944,6 +2949,30 @@ export const ViewAgentDocument = gql`
   })
   export class ViewAgentGQL extends Apollo.Query<ViewAgentQuery, ViewAgentQueryVariables> {
     override document = ViewAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewSourcesDocument = gql`
+    query ViewSources {
+  sources {
+    id
+    name
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    numOfEpisodes
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewSourcesGQL extends Apollo.Query<ViewSourcesQuery, ViewSourcesQueryVariables> {
+    override document = ViewSourcesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

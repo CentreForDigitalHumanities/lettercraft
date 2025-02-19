@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
+import { ViewSourcesGQL, ViewSourcesQuery } from 'generated/graphql';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'lc-data-overview',
@@ -11,4 +13,14 @@ export class DataOverviewComponent {
         { link: '/', label: 'Lettercraft' },
         { link: '/data', label: 'Browse data' },
     ];
+
+    data$: Observable<ViewSourcesQuery>;
+
+    constructor(
+        private query: ViewSourcesGQL
+    ) {
+        this.data$ = query.watch().valueChanges.pipe(
+            map(result => result.data)
+        );
+    }
 }
