@@ -21,6 +21,7 @@ import {
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
 import { AgentViewComponent } from '../data/agent-view/agent-view.component';
+import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
 
 
 const routes: Routes = [
@@ -67,6 +68,11 @@ const routes: Routes = [
                 path: 'agents/:id',
                 title: agentViewTitleResolver,
                 component: AgentViewComponent,
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                component: DataOverviewComponent,
             }
         ],
     },
