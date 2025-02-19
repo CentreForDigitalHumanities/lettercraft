@@ -5,4 +5,23 @@
         <lc-icon [icon]="dataIcons.source"/>
         {{data.source.name}}
     </h1>
+
+    <p>
+        {{data.source.name}} is one of the source texts that have been analysed in the
+        Lettercraft project.
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h5 card-title">Bibliographical information</h2>
+
+            <ng-container *ngIf="data.source.medievalAuthor || data.source.medievalTitle">
+                {{ data.source.medievalAuthor }}<ng-container *ngIf="data.source.medievalAuthor && data.source.medievalTitle">, </ng-container><em>{{ data.source.medievalTitle }}</em>.
+            </ng-container>
+            <ng-container *ngIf="data.source.editionAuthor || data.source.editionTitle">
+                (Ed. {{ data.source.editionAuthor }}<ng-container *ngIf="data.source.editionAuthor && data.source.editionTitle">, </ng-container>{{ data.source.editionTitle }}.)
+            </ng-container>
+
+        </div>
+    </div>
 </ng-container>
