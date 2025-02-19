@@ -3,6 +3,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AgentViewComponent } from './agent-view/agent-view.component';
 import { DataOverviewComponent } from './data-overview/data-overview.component';
 import { SourceViewComponent } from './source-view/source-view.component';
+import { EpisodeViewComponent } from './episode-view/episode-view.component';
 
 
 
@@ -11,6 +12,7 @@ import { SourceViewComponent } from './source-view/source-view.component';
         AgentViewComponent,
         DataOverviewComponent,
         SourceViewComponent,
+        EpisodeViewComponent,
     ],
     imports: [
         SharedModule,
@@ -19,6 +21,7 @@ import { SourceViewComponent } from './source-view/source-view.component';
         AgentViewComponent,
         DataOverviewComponent,
         SourceViewComponent,
+        EpisodeViewComponent,
     ]
 })
 export class DataModule { }

@@ -23,6 +23,7 @@ import { ContributorGuard } from './contributor.guard';
 import { AgentViewComponent } from '../data/agent-view/agent-view.component';
 import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
 import { SourceViewComponent } from '../data/source-view/source-view.component';
+import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
 
 
 const routes: Routes = [
@@ -69,6 +70,10 @@ const routes: Routes = [
                 path: 'sources/:id',
                 title: sourceViewTitleResolver,
                 component: SourceViewComponent,
+            },
+            {
+                path: 'episodes/:id',
+                component: EpisodeViewComponent,
             },
             {
                 path: 'agents/:id',
