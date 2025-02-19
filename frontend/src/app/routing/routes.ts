@@ -15,11 +15,12 @@ import { LetterFormComponent } from '../data-entry/letter-form/letter-form.compo
 import { AgentFormComponent } from '../data-entry/agent-form/agent-form.component';
 import { SourceComponent } from '../data-entry/source/source.component';
 import {
-    agentFormTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
+    agentFormTitleResolver, agentViewTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
     SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
+import { AgentViewComponent } from '../data/agent-view/agent-view.component';
 
 
 const routes: Routes = [
@@ -58,6 +59,16 @@ const routes: Routes = [
         title: pageTitle('Settings'),
         canActivate: [LoggedOnGuard],
         component: UserSettingsComponent
+    },
+    {
+        path: 'data',
+        children: [
+            {
+                path: 'agents/:id',
+                title: agentViewTitleResolver,
+                component: AgentViewComponent,
+            }
+        ],
     },
     {
         path: 'data-entry',

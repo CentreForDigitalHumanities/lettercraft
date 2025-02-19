@@ -131,3 +131,10 @@ const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
 export const spaceFormTitleResolver = queryTitleResolver(
     spaceTitleQuery, entityDescriptionFormTitle, true
 );
+
+const agentViewTitle = (data: AgentTitleQueryData): string =>
+    `${data.agentDescription?.name} (${data.agentDescription?.source.name})`;
+
+export const agentViewTitleResolver = queryTitleResolver(
+    agentTitleQuery, agentViewTitle
+);
