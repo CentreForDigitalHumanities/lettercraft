@@ -16,12 +16,13 @@ import { AgentFormComponent } from '../data-entry/agent-form/agent-form.componen
 import { SourceComponent } from '../data-entry/source/source.component';
 import {
     agentFormTitleResolver, agentViewTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
-    SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
+    SITE_NAME, sourceFormTitleResolver, sourceViewTitleResolver, spaceFormTitleResolver
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
 import { AgentViewComponent } from '../data/agent-view/agent-view.component';
 import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
+import { SourceViewComponent } from '../data/source-view/source-view.component';
 
 
 const routes: Routes = [
@@ -65,6 +66,11 @@ const routes: Routes = [
         path: 'data',
         children: [
             {
+                path: 'sources/:id',
+                title: sourceViewTitleResolver,
+                component: SourceViewComponent,
+            },
+            {
                 path: 'agents/:id',
                 title: agentViewTitleResolver,
                 component: AgentViewComponent,
@@ -72,6 +78,7 @@ const routes: Routes = [
             {
                 path: '',
                 pathMatch: 'full',
+                title: pageTitle('Browse data'),
                 component: DataOverviewComponent,
             }
         ],

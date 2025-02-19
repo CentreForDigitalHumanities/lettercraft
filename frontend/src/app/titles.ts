@@ -138,3 +138,9 @@ const agentViewTitle = (data: AgentTitleQueryData): string =>
 export const agentViewTitleResolver = queryTitleResolver(
     agentTitleQuery, agentViewTitle
 );
+
+const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
+
+export const sourceViewTitleResolver = queryTitleResolver(
+    sourceTitleQuery, sourceViewTitle
+);
