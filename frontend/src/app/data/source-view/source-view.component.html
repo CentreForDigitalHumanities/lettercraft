@@ -36,7 +36,8 @@
 
     <div class="card mb-4" *ngFor="let episode of data.source.episodes">
         <div class="card-header position-relative">
-            <a class="icon-link stretched-link" href="/data/episodes/{{episode.id}}">
+            <a class="icon-link stretched-link"
+                [routerLink]="['/data/episodes', episode.id]">
                 <lc-icon [icon]="dataIcons.episode" />
                 {{episode.name}}
             </a>

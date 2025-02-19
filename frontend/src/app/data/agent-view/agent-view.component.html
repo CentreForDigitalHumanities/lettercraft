@@ -36,7 +36,7 @@
 
         <p>
             {{agent.name}} is an agent in
-            <a href="/data/sources/{{agent.source.id}}" class="icon-link">
+            <a [routerLink]="['/data/sources', agent.source.id]" class="icon-link">
                 <lc-icon [icon]="dataIcons.source" />
                 {{agent.source.name}}
             </a>.
@@ -52,7 +52,7 @@
 
         <ul *ngIf="agent.episodes.length">
             <li *ngFor="let link of agent.episodes">
-                <a href="/data/episodes/{{link.episode.id}}" class="icon-link">
+                <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
                     <lc-icon [icon]="dataIcons.episode"/>
                     {{link.episode.name}}
                 </a>
@@ -68,7 +68,7 @@
                 </p>
                 <ul>
                     <li *ngFor="let ref of agent.personReferences">
-                        <a href="/data/historical-figures/{{ref.person.id}}">{{ref.person.name}}</a>
+                        <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
                         <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">(somewhat certain)</ng-container>
                         <ng-container *ngIf="ref.certainty === Certainty.Uncertain">(uncertain)</ng-container>
                         <ng-container *ngIf="ref.note">; <i>Note: {{ref.note}}</i></ng-container>
@@ -79,7 +79,7 @@
                 <ng-container *ngIf="agent.personReferences[0] as ref">
                     <p>
                         This agent is a representation of
-                        <a href="/data/historical-figures/{{ref.person.id}}">
+                        <a [routerLink]="['/data/historical-figures', ref.person.id]">
                             {{ref.person.name}}</a>
                         <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">
                             (somewhat certain)
