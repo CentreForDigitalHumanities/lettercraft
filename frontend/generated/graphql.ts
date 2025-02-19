@@ -1493,7 +1493,7 @@ export type ViewEpisodeQueryVariables = Exact<{
 }>;
 
 
-export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }> } | null };
+export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
 
 export type ViewSourceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3018,6 +3018,25 @@ export const ViewEpisodeDocument = gql`
     summary
     designators
     categories {
+      id
+      name
+    }
+    agents {
+      id
+      name
+      isGroup
+      identified
+    }
+    spaces {
+      id
+      name
+      hasIdentifiableFeatures
+    }
+    letters {
+      id
+      name
+    }
+    gifts {
       id
       name
     }

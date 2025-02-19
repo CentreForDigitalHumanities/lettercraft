@@ -23,14 +23,18 @@
 
         <h2>Description</h2>
 
-        <p *ngIf="agent.gender as gender">
-            The text describes the gender of this agent as
-            <b>{{gender.gender | lowercase}}</b>
-            <ng-container >
-                ({{gender.sourceMention | lowercase}})
-            </ng-container>.
-            <i *ngIf="gender.note">Note: {{gender.note}}</i>
-        </p>
+        <dl>
+            <dt *ngIf="agent.gender">Gender</dt>
+            <dd *ngIf="agent.gender as gender" class="ms-4">
+                <p>
+                    {{gender.gender | lowercase}}
+                    ({{gender.sourceMention | lowercase}})
+                </p>
+                <p *ngIf="gender.note">
+                    <small><i>Note: {{gender.note}} </i></small>
+                </p>
+            </dd>
+        </dl>
 
         <h2>Source text</h2>
 
@@ -50,8 +54,8 @@
             </ng-container>
         </p>
 
-        <ul *ngIf="agent.episodes.length">
-            <li *ngFor="let link of agent.episodes">
+        <ul *ngIf="agent.episodes.length" class="list-group">
+            <li *ngFor="let link of agent.episodes" class="list-group-item">
                 <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
                     <lc-icon [icon]="dataIcons.episode"/>
                     {{link.episode.name}}

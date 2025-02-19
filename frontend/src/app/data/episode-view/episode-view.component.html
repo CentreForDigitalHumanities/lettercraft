@@ -24,24 +24,24 @@
             </ng-container>
         </p>
 
-        <h2>Content</h2>
+        <h2 class="mt-5">Content</h2>
 
         <dl>
             <dt>Summary</dt>
-            <dl style="white-space: pre-line;" class="ms-4">{{ episode.summary }}</dl>
+            <dd style="white-space: pre-line;" class="ms-4">{{ episode.summary }}</dd>
 
             <dt>Designators</dt>
-            <dl class="ms-4">
+            <dd class="ms-4">
                 <ul class="inline-list" *ngIf="episode.designators.length; else noDesignators">
                     <li *ngFor="let designator of episode.designators" class="inline-list-item">
                         {{designator}}
                     </li>
                 </ul>
                 <ng-template #noDesignators>None.</ng-template>
-            </dl>
+            </dd>
 
             <dt>Labels</dt>
-            <dl class="ms-4">
+            <dd class="ms-4">
                 <ul class="inline-list mt-1">
                     <li *ngFor="let category of episode.categories" class="inline-list-item">
                         <span class="badge rounded-pill text-bg-primary fs-6 fw-normal">
@@ -49,7 +49,56 @@
                         </span>
                     </li>
                 </ul>
-            </dl>
+            </dd>
         </dl>
+
+        <h2 class="mt-5">Agents</h2>
+
+        <p>
+            This episode involves the following agents:
+        </p>
+
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let agent of episode.agents">
+                <a [routerLink]="['/data/agents', agent.id]" class="icon-link">
+                    <lc-icon [icon]="agentIcon(agent)" />
+                    {{agent.name}}
+                </a>
+            </li>
+        </ul>
+
+        <h2 class="mt-5">Objects</h2>
+
+        <p>This episode involves the following epistolary objects:</p>
+
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let letter of episode.letters">
+                <a [routerLink]="['/data/letters', letter.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.letter" />
+                    {{letter.name}}
+                </a>
+            </li>
+            <li class="list-group-item" *ngFor="let gift of episode.gifts">
+                <a [routerLink]="['/data/gifts', gift.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.gift" />
+                    {{gift.name}}
+                </a>
+            </li>
+        </ul>
+
+        <h2 class="mt-5">Locations</h2>
+
+        <p>
+            This episode involves the following locations:
+        </p>
+
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let location of episode.spaces">
+                <a [routerLink]="['/data/locations', location.id]" class="icon-link">
+                    <lc-icon [icon]="locationIcon(location)" />
+                    {{location.name}}
+                </a>
+            </li>
+        </ul>
     </ng-container>
 </ng-container>

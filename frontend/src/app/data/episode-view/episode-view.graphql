@@ -17,5 +17,24 @@ query ViewEpisode($id: ID!) {
         id
         name
     }
+    agents {
+        id
+        name
+        isGroup
+        identified
+    }
+    spaces {
+        id
+        name
+        hasIdentifiableFeatures
+    }
+    letters {
+        id
+        name
+    }
+    gifts {
+        id
+        name
+    }
   }
 }
