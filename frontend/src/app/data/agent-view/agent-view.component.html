@@ -1,8 +1,89 @@
 <ng-container *ngIf="data$ | async as data">
-    <h1>
-        {{data.agentDescription?.name}}
-        <span class="text-secondary">
-            ({{data.agentDescription?.source?.name}})
-        </span>
-    </h1>
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.agentDescription as agent">
+
+        <h1>
+            <lc-icon [icon]="agentIcon(data.agentDescription)" />
+            {{agent.name}}
+            <span class="text-secondary">
+                ({{agent.source.name}})
+            </span>
+        </h1>
+        <p class="lead">
+            {{agent.description}}
+        </p>
+
+        <h2>Description</h2>
+
+        <p *ngIf="agent.gender as gender">
+            The text describes the gender of this agent as
+            <b>{{gender.gender | lowercase}}</b>
+            <ng-container >
+                ({{gender.sourceMention | lowercase}})
+            </ng-container>.
+            <i *ngIf="gender.note">Note: {{gender.note}}</i>
+        </p>
+
+        <h2>Source text</h2>
+
+        <p>
+            {{agent.name}} is an agent in
+            <a href="/data/sources/{{agent.source.id}}" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{agent.source.name}}
+            </a>.
+            <ng-container *ngIf="agent.episodes.length">
+                <ng-container [ngSwitch]="agent.gender?.gender">
+                    <ng-container *ngSwitchCase="'MALE'">He appears</ng-container>
+                    <ng-container *ngSwitchCase="'FEMALE'">She appears</ng-container>
+                    <ng-container *ngSwitchDefault>They appear</ng-container>
+                </ng-container>
+                in the following episodes:
+            </ng-container>
+        </p>
+
+        <ul *ngIf="agent.episodes.length">
+            <li *ngFor="let link of agent.episodes">
+                <a href="/data/episodes/{{link.episode.id}}" class="icon-link">
+                    <lc-icon [icon]="dataIcons.episode"/>
+                    {{link.episode.name}}
+                </a>
+            </li>
+        </ul>
+
+        <ng-container *ngIf="agent.personReferences.length">
+            <h2>Historical context</h2>
+
+            <ng-container *ngIf="agent.isGroup; else singularReference">
+                <p>
+                    This group includes the following historical figures:
+                </p>
+                <ul>
+                    <li *ngFor="let ref of agent.personReferences">
+                        <a href="/data/historical-figures/{{ref.person.id}}">{{ref.person.name}}</a>
+                        <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">(somewhat certain)</ng-container>
+                        <ng-container *ngIf="ref.certainty === Certainty.Uncertain">(uncertain)</ng-container>
+                        <ng-container *ngIf="ref.note">; <i>Note: {{ref.note}}</i></ng-container>
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-template #singularReference>
+                <ng-container *ngIf="agent.personReferences[0] as ref">
+                    <p>
+                        This agent is a representation of
+                        <a href="/data/historical-figures/{{ref.person.id}}">
+                            {{ref.person.name}}</a>
+                        <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">
+                            (somewhat certain)
+                        </ng-container>
+                        <ng-container *ngIf="ref.certainty === Certainty.Uncertain">
+                            (uncertain)
+                        </ng-container>.
+                        <i *ngIf="ref.note">Note: {{ref.note}}</i>
+                    </p>
+                </ng-container>
+            </ng-template>
+        </ng-container>
+    </ng-container>
 </ng-container>

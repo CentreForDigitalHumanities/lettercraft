@@ -1481,7 +1481,7 @@ export type ViewAgentQueryVariables = Exact<{
 }>;
 
 
-export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }> } | null };
 
 export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2912,6 +2912,28 @@ export const ViewAgentDocument = gql`
     source {
       id
       name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+    }
+    gender {
+      id
+      gender
+      sourceMention
+      note
+    }
+    personReferences {
+      id
+      certainty
+      note
+      person {
+        id
+        name
+      }
     }
   }
 }
