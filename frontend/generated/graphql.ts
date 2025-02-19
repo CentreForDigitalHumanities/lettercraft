@@ -1476,6 +1476,13 @@ export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export type ViewAgentQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
 export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2889,6 +2896,32 @@ export const DataEntrySourceListDocument = gql`
   })
   export class DataEntrySourceListGQL extends Apollo.Query<DataEntrySourceListQuery, DataEntrySourceListQueryVariables> {
     override document = DataEntrySourceListDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewAgentDocument = gql`
+    query ViewAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    isGroup
+    identified
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewAgentGQL extends Apollo.Query<ViewAgentQuery, ViewAgentQueryVariables> {
+    override document = ViewAgentDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

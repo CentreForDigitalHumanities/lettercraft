@@ -1,0 +1,13 @@
+query ViewAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    isGroup
+    identified
+    source {
+      id
+      name
+    }
+  }
+}
