@@ -1500,6 +1500,11 @@ export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SourceTitleQueryQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string } };
 
+export type EpisodeTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EpisodeTitleQueryQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
+
 export type AgentTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3062,6 +3067,29 @@ export const SourceTitleQueryDocument = gql`
   })
   export class SourceTitleQueryGQL extends Apollo.Query<SourceTitleQueryQuery, SourceTitleQueryQueryVariables> {
     override document = SourceTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const EpisodeTitleQueryDocument = gql`
+    query EpisodeTitleQuery {
+  episode(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EpisodeTitleQueryGQL extends Apollo.Query<EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables> {
+    override document = EpisodeTitleQueryDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

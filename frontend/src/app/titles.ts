@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Params, ResolveFn } from "@angular/router";
 import { Apollo, gql, TypedDocumentNode } from "apollo-angular";
-import { SourceTitleQueryQuery, SourceTitleQueryQueryVariables } from "generated/graphql";
+import { EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables, SourceTitleQueryQuery, SourceTitleQueryQueryVariables } from "generated/graphql";
 import { map } from "rxjs";
 import _ from "underscore";
 
@@ -48,6 +48,22 @@ const sourceFormTitle = (data: SourceTitleQueryQuery) => `Edit ${data.source?.na
 
 export const sourceFormTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceFormTitle
+);
+
+const episodeTitleQuery = (params: Params) => gql<EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables>(`
+    query EpisodeTitleQuery {
+        episode(id: "${params['id']}") {
+            id
+            name
+            source { id, name }
+        }
+    }`);
+
+const episodeFormTitle = (data: EpisodeTitleQueryQuery) =>
+    `Edit ${data.episode?.name} (${data.episode?.source.name})`;
+
+export const episodeFormTitleResolver = queryTitleResolver(
+    episodeTitleQuery, episodeFormTitle
 );
 
 type EntityDescriptionTitleQueryData<Key extends string> =
@@ -143,4 +159,12 @@ const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
 
 export const sourceViewTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceViewTitle
+);
+
+
+const episodeViewTitle = (data: EpisodeTitleQueryQuery) =>
+    `${data.episode?.name} (${data.episode?.source.name})`;
+
+export const episodeViewTitleResolver = queryTitleResolver(
+    episodeTitleQuery, episodeViewTitle
 );
