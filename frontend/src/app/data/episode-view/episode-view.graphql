@@ -1,0 +1,21 @@
+query ViewEpisode($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    source {
+        id
+        name
+    }
+    contributors {
+        id
+        fullName
+    }
+    summary
+    designators
+    categories {
+        id
+        name
+    }
+  }
+}

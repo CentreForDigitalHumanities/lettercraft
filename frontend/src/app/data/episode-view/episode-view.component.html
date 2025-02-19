@@ -1,1 +1,55 @@
-<p>episode-view works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.episode as episode">
+        <h1>
+            <lc-icon [icon]="dataIcons.episode" />
+            {{ episode.name }}
+            <span class="text-secondary">
+                ({{episode.source.name}})
+            </span>
+        </h1>
+
+        <p>
+            "{{ episode.name }}" is an epistolary episode in
+            <a [routerLink]="['/data/sources', episode.source.id]" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{episode.source.name}}</a>.
+        </p>
+
+        <p *ngIf="episode.contributors.length">
+            <b>Contributors:</b>
+            <ng-container *ngFor="let user of episode.contributors; last as isLast">
+                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+        </p>
+
+        <h2>Content</h2>
+
+        <dl>
+            <dt>Summary</dt>
+            <dl style="white-space: pre-line;" class="ms-4">{{ episode.summary }}</dl>
+
+            <dt>Designators</dt>
+            <dl class="ms-4">
+                <ul class="inline-list" *ngIf="episode.designators.length; else noDesignators">
+                    <li *ngFor="let designator of episode.designators" class="inline-list-item">
+                        {{designator}}
+                    </li>
+                </ul>
+                <ng-template #noDesignators>None.</ng-template>
+            </dl>
+
+            <dt>Labels</dt>
+            <dl class="ms-4">
+                <ul class="inline-list mt-1">
+                    <li *ngFor="let category of episode.categories" class="inline-list-item">
+                        <span class="badge rounded-pill text-bg-primary fs-6 fw-normal">
+                            {{category.name}}
+                        </span>
+                    </li>
+                </ul>
+            </dl>
+        </dl>
+    </ng-container>
+</ng-container>

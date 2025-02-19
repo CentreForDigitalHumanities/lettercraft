@@ -1488,6 +1488,13 @@ export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ViewSourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export type ViewEpisodeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }> } | null };
+
 export type ViewSourceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -2989,6 +2996,40 @@ export const ViewSourcesDocument = gql`
   })
   export class ViewSourcesGQL extends Apollo.Query<ViewSourcesQuery, ViewSourcesQueryVariables> {
     override document = ViewSourcesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewEpisodeDocument = gql`
+    query ViewEpisode($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    source {
+      id
+      name
+    }
+    contributors {
+      id
+      fullName
+    }
+    summary
+    designators
+    categories {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewEpisodeGQL extends Apollo.Query<ViewEpisodeQuery, ViewEpisodeQueryVariables> {
+    override document = ViewEpisodeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
