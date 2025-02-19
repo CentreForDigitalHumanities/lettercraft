@@ -76,6 +76,10 @@ const routes: Routes = [
                 component: AgentViewComponent,
             },
             {
+                path: 'sources',
+                redirectTo: '',
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 title: pageTitle('Browse data'),

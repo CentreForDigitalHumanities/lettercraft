@@ -1,1 +1,8 @@
-<p>source-view works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <h1>
+        <lc-icon [icon]="dataIcons.source"/>
+        {{data.source.name}}
+    </h1>
+</ng-container>
