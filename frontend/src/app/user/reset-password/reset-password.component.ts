@@ -1,5 +1,5 @@
 import { Component, DestroyRef, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ResetPassword } from "../models/user";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { identicalPasswordsValidator, passwordValidators } from "../validation";
@@ -76,6 +76,7 @@ export class ResetPasswordComponent implements OnInit {
         private authService: AuthService,
         private toastService: ToastService,
         private destroyRef: DestroyRef,
+        private router: Router,
     ) {}
 
     ngOnInit(): void {
@@ -85,11 +86,7 @@ export class ResetPasswordComponent implements OnInit {
 
         this.authService.resetPassword.success$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => this.toastService.show({
-                header: "Password reset",
-                body: "Your password has been successfully reset.",
-                type: "success",
-            }));
+            .subscribe(this.onSuccess.bind(this));
     }
 
     public submit(): void {
@@ -99,5 +96,14 @@ export class ResetPasswordComponent implements OnInit {
             return;
         }
         this.authService.resetPassword.subject.next(this.form.getRawValue());
+    }
+
+    private onSuccess() {
+        this.toastService.show({
+            header: "Password reset",
+            body: "Your password has been successfully reset.",
+            type: "success",
+        });
+        this.router.navigate(['/']);
     }
 }
