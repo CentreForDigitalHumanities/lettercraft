@@ -1,0 +1,18 @@
+query BrowseEpisodeList {
+    episodes {
+        id
+        name
+        summary
+        book
+        chapter
+        page
+        categories {
+            id
+            name
+        }
+        source {
+            id
+            name
+        }
+    }
+}

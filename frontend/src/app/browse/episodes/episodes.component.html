@@ -1,0 +1,33 @@
+<div *ngIf="loading$ | async">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading episode data...</span>
+    </div>
+</div>
+
+<table class="table table-striped" [hidden]="loading$ | async">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Source</th>
+            <th scope="col">Summary</th>
+            <th scope="col">Labels</th>
+            <th scope="col">Letters</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let episode of episodes$ | async; trackBy: identify">
+            <td>
+                <b>{{ episode.name }}</b>
+            </td>
+            <td>{{ episode.source.name }}</td>
+            <td>{{ episode.summary }}</td>
+            <td>
+                {{ episode.categories.map(cat => cat.name).join(', ') }}
+            </td>
+            <td>hey
+
+            </td>
+        </tr>
+    </tbody>
+</table>
+
