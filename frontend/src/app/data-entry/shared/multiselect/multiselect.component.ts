@@ -7,11 +7,15 @@ import {
     ViewChild,
 } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 
 export interface MultiselectOption {
     value: string;
     label: string;
+    icon?: IconDefinition;
+    // The label to be shown in the dropdown. If not supplied, `label` will be used.
+    dropdownLabel?: string;
 }
 
 @Component({

@@ -6,6 +6,7 @@ from django.db.models import QuerySet
 from event.models import Episode, EpisodeCategory
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from person.models import AgentDescription
+from space.models import SpaceDescription
 
 
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
@@ -13,6 +14,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
     agents = List(
         NonNull("person.types.AgentDescriptionType.AgentDescriptionType"), required=True
     )
+    spaces = List(NonNull("space.types.SpaceDescriptionType.SpaceDescriptionType"), required=True)
 
     class Meta:
         model = Episode
@@ -42,6 +44,12 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         # Without distinct(), this returns one agent for every HistoricalPerson linked
         # to that agent, for some reason.
         return parent.agents.distinct()
+
+    @staticmethod
+    def resolve_spaces(
+        parent: Episode, info: ResolveInfo
+    ) -> QuerySet[SpaceDescription]:
+        return parent.spaces.distinct()
 
     @staticmethod
     def resolve_categories(
