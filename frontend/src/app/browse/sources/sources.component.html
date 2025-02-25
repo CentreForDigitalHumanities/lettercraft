@@ -1,0 +1,34 @@
+<div *ngIf="loading$ | async">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading source data...</span>
+    </div>
+</div>
+
+<table class="table table-striped" [hidden]="loading$ | async">
+    <thead>
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Edition title</th>
+            <th scope="col">Edition author</th>
+            <th scope="col">Original title</th>
+            <th scope="col">Original author</th>
+            <th scope="col">Number of episodes</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let source of sources$ | async; trackBy: identify">
+            <td>
+                <b>{{ source.name }}</b>
+            </td>
+            <td>
+                <i>{{ source.editionTitle }}</i>
+            </td>
+            <td>{{ source.editionAuthor }}</td>
+            <td>
+                <i>{{ source.medievalTitle }}</i>
+            </td>
+            <td>{{ source.medievalAuthor }}</td>
+            <td>{{ source.numOfEpisodes }}</td>
+        </tr>
+    </tbody>
+</table>

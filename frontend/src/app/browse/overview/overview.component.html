@@ -1,0 +1,16 @@
+<ul ngbNav #nav="ngbNav" [(activeId)]="selectedTab" class="nav-tabs">
+    <li ngbNavItem="sources">
+        <button ngbNavLink>Sources</button>
+        <ng-template ngbNavContent>
+            <lc-browse-sources />
+        </ng-template>
+    </li>
+    <li ngbNavItem="episodes">
+        <button ngbNavLink>Episodes</button>
+        <ng-template ngbNavContent>
+            <lc-browse-episodes />
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

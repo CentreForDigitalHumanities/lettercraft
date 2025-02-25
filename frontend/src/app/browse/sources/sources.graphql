@@ -1,0 +1,11 @@
+query BrowseSourceList {
+    sources {
+        id
+        name
+        editionAuthor
+        editionTitle
+        medievalAuthor
+        medievalTitle
+        numOfEpisodes
+    }
+}

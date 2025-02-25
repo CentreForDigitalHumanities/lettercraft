@@ -20,6 +20,7 @@ import {
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
+import { OverviewComponent as BrowseOverview } from '../browse/overview/overview.component';
 
 
 const routes: Routes = [
@@ -101,6 +102,20 @@ const routes: Routes = [
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'sources'
+            }
+        ]
+    },
+    {
+        'path': 'browse',
+        children: [
+            {
+                path: 'overview',
+                component: BrowseOverview
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'overview'
             }
         ]
     },
