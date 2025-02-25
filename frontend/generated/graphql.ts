@@ -1076,6 +1076,16 @@ export type UserType = {
   lastName: Scalars['String']['output'];
 };
 
+export type BrowseEpisodeListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BrowseEpisodeListQuery = { __typename?: 'Query', episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, summary: string, book: string, chapter: string, page: string, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, source: { __typename?: 'SourceType', id: string, name: string } }> };
+
+export type BrowseSourceListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BrowseSourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
+
 export type DataEntryAgentDescriptionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1452,6 +1462,61 @@ export type SpaceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SpaceTitleQueryQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
+export const BrowseEpisodeListDocument = gql`
+    query BrowseEpisodeList {
+  episodes {
+    id
+    name
+    summary
+    book
+    chapter
+    page
+    categories {
+      id
+      name
+    }
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class BrowseEpisodeListGQL extends Apollo.Query<BrowseEpisodeListQuery, BrowseEpisodeListQueryVariables> {
+    override document = BrowseEpisodeListDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const BrowseSourceListDocument = gql`
+    query BrowseSourceList {
+  sources {
+    id
+    name
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    numOfEpisodes
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class BrowseSourceListGQL extends Apollo.Query<BrowseSourceListQuery, BrowseSourceListQueryVariables> {
+    override document = BrowseSourceListDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const DataEntryAgentDescriptionDocument = gql`
     query DataEntryAgentDescription($id: ID!) {
   agentDescription(id: $id) {
