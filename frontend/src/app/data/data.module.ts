@@ -9,6 +9,7 @@ import { LetterViewComponent } from './letter-view/letter-view.component';
 import { GiftViewComponent } from './gift-view/gift-view.component';
 import { EpisodeLinksComponent } from './shared/episode-links/episode-links.component';
 import { ObjectPageHeaderComponent } from './shared/object-page-header/object-page-header.component';
+import { EpisodePreviewComponent } from './source-view/episode-preview/episode-preview.component';
 
 
 
@@ -23,6 +24,7 @@ import { ObjectPageHeaderComponent } from './shared/object-page-header/object-pa
         GiftViewComponent,
         EpisodeLinksComponent,
         ObjectPageHeaderComponent,
+        EpisodePreviewComponent,
     ],
     imports: [
         SharedModule,
