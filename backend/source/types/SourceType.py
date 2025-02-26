@@ -1,4 +1,4 @@
-from graphene import Field, Int, List, NonNull, ResolveInfo
+from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
 from django.db.models import QuerySet
 from graphene_django import DjangoObjectType
 from typing import Type
@@ -16,6 +16,7 @@ from letter.models import GiftDescription, LetterDescription
 from core.models import EntityDescription
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
+from user.permissions import can_edit_source
 
 
 class SourceType(DjangoObjectType):
@@ -27,6 +28,7 @@ class SourceType(DjangoObjectType):
     gifts = List(NonNull(GiftDescriptionType), required=True)
     letters = List(NonNull(LetterDescriptionType), required=True)
     spaces = List(NonNull(SpaceDescriptionType), required=True)
+    editable = Boolean(required=True)
 
     class Meta:
         model = Source
@@ -64,3 +66,7 @@ class SourceType(DjangoObjectType):
     @staticmethod
     def resolve_num_of_episodes(parent: Source, info: ResolveInfo) -> int:
         return SourceType.resolve_episodes(parent, info).count()
+
+    @staticmethod
+    def resolve_editable(parent: Source, info: ResolveInfo) -> bool:
+        return can_edit_source(info.context.user, parent)
