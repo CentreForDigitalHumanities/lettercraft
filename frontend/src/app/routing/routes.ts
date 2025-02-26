@@ -24,6 +24,7 @@ import { AgentViewComponent } from '../data/agent-view/agent-view.component';
 import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
 import { SourceViewComponent } from '../data/source-view/source-view.component';
 import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
+import { LocationViewComponent } from '../data/location-view/location-view.component';
 
 
 const routes: Routes = [
@@ -80,6 +81,10 @@ const routes: Routes = [
                 path: 'agents/:id',
                 title: agentViewTitleResolver,
                 component: AgentViewComponent,
+            },
+            {
+                path: 'locations/:id',
+                component: LocationViewComponent,
             },
             {
                 path: 'sources',
