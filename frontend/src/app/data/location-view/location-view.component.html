@@ -38,14 +38,7 @@
                 </a>. It features in the following episodes:
             </p>
 
-            <ul class="list-group">
-                <li *ngFor="let link of location.episodes" class="list-group-item">
-                    <a [routerLink]="['data/episodes', link.episode.id]" class="icon-link">
-                        <lc-icon [icon]="dataIcons.episode" />
-                        {{link.episode.name}}
-                    </a>
-                </li>
-            </ul>
+            <lc-episode-links [episodes]="location.episodes" />
         </section>
 
         <section class="mb-5">

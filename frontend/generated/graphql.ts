@@ -1487,7 +1487,7 @@ export type ViewAgentQueryVariables = Exact<{
 }>;
 
 
-export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, editable: boolean, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, editable: boolean, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, sourceMention: SourceMention, note?: string | null, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
 
 export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1506,14 +1506,14 @@ export type ViewGiftQueryVariables = Exact<{
 }>;
 
 
-export type ViewGiftQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeGiftType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+export type ViewGiftQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeGiftType', id: string, sourceMention: SourceMention, designators?: Array<string> | null, note?: string | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
 
 export type ViewLetterQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type ViewLetterQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeLetterType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+export type ViewLetterQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeLetterType', id: string, sourceMention: SourceMention, designators?: Array<string> | null, note?: string | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
 
 export type ViewLocationQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2967,6 +2967,9 @@ export const ViewAgentDocument = gql`
     }
     episodes {
       id
+      sourceMention
+      note
+      designators
       episode {
         id
         name
@@ -3096,6 +3099,9 @@ export const ViewGiftDocument = gql`
     }
     episodes {
       id
+      sourceMention
+      designators
+      note
       episode {
         id
         name
@@ -3136,6 +3142,9 @@ export const ViewLetterDocument = gql`
         id
         name
       }
+      sourceMention
+      designators
+      note
     }
     contributors {
       id

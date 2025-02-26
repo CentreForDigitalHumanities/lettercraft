@@ -12,6 +12,9 @@ query ViewAgent($id: ID!) {
     }
     episodes {
         id
+        sourceMention
+        note
+        designators
         episode {
             id
             name

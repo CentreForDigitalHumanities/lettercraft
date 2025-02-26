@@ -55,22 +55,15 @@
                 </a>.
                 <ng-container *ngIf="agent.episodes.length">
                     <ng-container [ngSwitch]="agent.gender?.gender">
-                        <ng-container *ngSwitchCase="'MALE'">He appears</ng-container>
-                        <ng-container *ngSwitchCase="'FEMALE'">She appears</ng-container>
+                        <ng-container *ngSwitchCase="Gender.Male">He appears</ng-container>
+                        <ng-container *ngSwitchCase="Gender.Female">She appears</ng-container>
                         <ng-container *ngSwitchDefault>They appear</ng-container>
                     </ng-container>
                     in the following episodes:
                 </ng-container>
             </p>
 
-            <ul *ngIf="agent.episodes.length" class="list-group">
-                <li *ngFor="let link of agent.episodes" class="list-group-item">
-                    <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
-                        <lc-icon [icon]="dataIcons.episode"/>
-                        {{link.episode.name}}
-                    </a>
-                </li>
-            </ul>
+            <lc-episode-links [episodes]="agent.episodes" />
         </section>
 
         <section *ngIf="agent.personReferences.length">

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
-import { Certainty, SourceMention, ViewAgentGQL, ViewAgentQuery } from 'generated/graphql';
+import { Certainty, Gender, SourceMention, ViewAgentGQL, ViewAgentQuery } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
@@ -24,6 +24,7 @@ export class AgentViewComponent {
 
     Certainty = Certainty;
     SourceMention = SourceMention;
+    Gender = Gender;
 
     constructor(
         private route: ActivatedRoute,
