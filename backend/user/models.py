@@ -14,8 +14,32 @@ class User(django_auth_models.AbstractUser):
     class Meta:
         db_table = "auth_user"
 
-    is_contributor = models.BooleanField(
-        default=False,
-        help_text="Whether this user is a contributor on the project; this enables them "
-        "to enter or edit research data.",
+    @property
+    def is_contributor(self) -> bool:
+        """
+        Whether this user has been granted permission to contribute to the project.
+
+        This is true iff the user is a superuser or the user is a member of a contributor
+        group.
+        """
+
+        return self.is_superuser or self.contributor_groups.exists()
+
+
+class ContributorGroup(models.Model):
+    name = models.CharField(
+        max_length=128,
     )
+    users = models.ManyToManyField(
+        to=User,
+        related_name="contributor_groups",
+        blank=True,
+    )
+    sources = models.ManyToManyField(
+        to="source.Source",
+        related_name="contributor_groups",
+        blank=True,
+    )
+
+    def __str__(self):
+        return self.name

@@ -10,7 +10,7 @@ from source.queries import SourceQueries
 from space.queries import SpaceQueries
 from user.queries import UserQueries
 
-from source.mutations.UpdateOrCreateSourceMutation import UpdateOrCreateSourceMutation
+from source.mutations.UpdateSourceMutation import UpdateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
 from event.mutations.CreateEpisodeEntityLinkMutation import (
     CreateEpisodeEntityLinkMutation,
@@ -51,7 +51,7 @@ class Query(
 
 
 class Mutation(ObjectType):
-    update_or_create_source = UpdateOrCreateSourceMutation.Field()
+    update_source = UpdateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
     create_episode = CreateEpisodeMutation.Field()
     delete_episode = DeleteEpisodeMutation.Field()

@@ -4,7 +4,7 @@ from core.types.input.DescriptionFieldInputType import DescriptionFieldInputType
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
 from letter.models import LetterDescription
 from graphql_app.LettercraftMutation import LettercraftMutation
-
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
@@ -36,6 +36,13 @@ class UpdateLetterMutation(LettercraftMutation):
             return cls(ok=False, errors=[error])  # type: ignore
 
         letter: LetterDescription = retrieved_object.object  # type: ignore
+
+        if not can_edit_source(info.context.user, letter.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         try:
             cls.mutate_object(letter_data, letter, info, ["categorisations"])

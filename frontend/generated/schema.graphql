@@ -455,8 +455,8 @@ type Mutation {
   ): UpdateEpisodeOrderMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
-  updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
+  updateSource(sourceData: UpdateSourceInput!): UpdateSourceMutation
   updateSpace(spaceData: UpdateSpaceInput!): UpdateSpaceMutation
 }
 
@@ -530,23 +530,23 @@ type PersonReferenceType {
 
 type Query {
   agentDescription(id: ID!): AgentDescriptionType
-  agentDescriptions(episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
+  agentDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [AgentDescriptionType!]!
   episode(id: ID!): EpisodeType
   episodeCategories: [EpisodeCategoryType!]!
   episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
-  episodes(sourceId: ID): [EpisodeType!]!
+  episodes(editable: Boolean, sourceId: ID): [EpisodeType!]!
   giftDescription(id: ID!): GiftDescriptionType
-  giftDescriptions(episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
+  giftDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
   historicalPersons: [HistoricalPersonType!]!
   letterCategories: [LetterCategoryType!]!
   letterDescription(id: ID!): LetterDescriptionType
-  letterDescriptions(episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
+  letterDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [LetterDescriptionType!]!
   regions: [RegionType!]!
   settlements: [SettlementType!]!
   source(id: ID!): SourceType!
-  sources: [SourceType!]!
+  sources(editable: Boolean): [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
-  spaceDescriptions(sourceId: ID): [SpaceDescriptionType!]!
+  spaceDescriptions(editable: Boolean, sourceId: ID): [SpaceDescriptionType!]!
   structures: [StructureType!]!
   userDescription(id: ID!): UserType
   userDescriptions: [UserType!]!
@@ -802,15 +802,6 @@ type UpdateAgentMutation {
   ok: Boolean!
 }
 
-input UpdateCreateSourceInput {
-  editionAuthor: String
-  editionTitle: String
-  id: ID
-  medievalAuthor: String
-  medievalTitle: String
-  name: String!
-}
-
 input UpdateEpisodeEntityLinkInput {
   designators: [String!]
   entity: ID!
@@ -879,11 +870,6 @@ type UpdateLetterMutation {
   ok: Boolean!
 }
 
-type UpdateOrCreateSourceMutation {
-  errors: [String]
-  source: SourceType
-}
-
 input UpdatePersonReferenceInput {
   certainty: Certainty
   id: ID!
@@ -893,6 +879,20 @@ input UpdatePersonReferenceInput {
 type UpdatePersonReferenceMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
+}
+
+input UpdateSourceInput {
+  editionAuthor: String
+  editionTitle: String
+  id: ID!
+  medievalAuthor: String
+  medievalTitle: String
+  name: String
+}
+
+type UpdateSourceMutation {
+  errors: [String]
+  source: SourceType
 }
 
 input UpdateSpaceInput {

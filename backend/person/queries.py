@@ -1,16 +1,21 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
 from typing import Optional
 
 from person.models import AgentDescription, HistoricalPerson
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.AgentDescriptionType import AgentDescriptionType
+from user.permissions import editable_sources
 
 
 class PersonQueries(ObjectType):
     agent_description = Field(AgentDescriptionType, id=ID(required=True))
     agent_descriptions = List(
-        NonNull(AgentDescriptionType), required=True, episode_id=ID(), source_id=ID()
+        NonNull(AgentDescriptionType),
+        required=True,
+        episode_id=ID(),
+        source_id=ID(),
+        editable=Boolean(),
     )
     historical_persons = List(NonNull(HistoricalPersonType), required=True)
 
@@ -31,12 +36,16 @@ class PersonQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
+        editable: bool = False,
     ) -> QuerySet[AgentDescription]:
         filters = Q()
         if episode_id:
             filters &= Q(episode_id=episode_id)
         if source_id:
             filters &= Q(source_id=source_id)
+        if editable:
+            user = info.context.user
+            filters &= Q(source__in=editable_sources(user))
 
         return AgentDescriptionType.get_queryset(AgentDescription.objects, info).filter(
             filters

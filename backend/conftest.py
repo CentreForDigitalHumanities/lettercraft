@@ -2,7 +2,9 @@ from allauth.account.models import EmailAddress
 import pytest
 from graphene.test import Client as GrapheneClient
 from typing import Generator
-from django.test import Client as APIClient
+from django.contrib.auth.models import AnonymousUser
+from django.test import Client as APIClient, RequestFactory
+from django.core.handlers.wsgi import WSGIRequest
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
@@ -10,7 +12,7 @@ from letter.models import LetterDescription
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
-from user.models import User
+from user.models import User, ContributorGroup
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
@@ -50,6 +52,14 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
 @pytest.fixture()
 def source(db):
     return Source.objects.create(name="Sesame Street")
+
+
+@pytest.fixture()
+def contributor_group(db, source, user):
+    group = ContributorGroup.objects.create(name="contributors")
+    group.users.add(user)
+    group.sources.add(source)
+    return group
 
 
 @pytest.fixture()
@@ -116,26 +126,26 @@ def space_description(db, source):
 
 @pytest.fixture()
 def episode(db, source, agent_description, agent_description_2, letter_description):
-    event = Episode.objects.create(
+    episode = Episode.objects.create(
         name="Bert writes a letter",
         source=source,
     )
-    event.agents.add(agent_description)
-    event.agents.add(agent_description_2)
-    event.letters.add(letter_description)
-    return event
+    episode.agents.add(agent_description)
+    episode.agents.add(agent_description_2)
+    episode.letters.add(letter_description)
+    return episode
 
 
 @pytest.fixture()
 def episode_2(db, source, agent_description, agent_description_2, letter_description):
-    event = Episode.objects.create(
+    episode = Episode.objects.create(
         name="Ernie eats a letter",
         source=source,
     )
-    event.agents.add(agent_description)
-    event.agents.add(agent_description_2)
-    event.letters.add(letter_description)
-    return event
+    episode.agents.add(agent_description)
+    episode.agents.add(agent_description_2)
+    episode.letters.add(letter_description)
+    return episode
 
 
 @pytest.fixture()
@@ -148,3 +158,23 @@ def case_study(db):
 def graphql_client():
     client = GrapheneClient(schema)
     return client
+
+
+@pytest.fixture()
+def user_request(user) -> WSGIRequest:
+    """Reproduces a request by the user to the graphql API. Can be used as context for
+    the graphql_client."""
+    factory = RequestFactory()
+    request = factory.post("/api/graphql")
+    request.user = user
+    return request
+
+
+@pytest.fixture()
+def anonymous_request() -> WSGIRequest:
+    """Reproduces an anonymous request to the graphql API. Can be used as context for
+    the graphql_client."""
+    factory = RequestFactory()
+    request = factory.post("/api/graphql")
+    request.user = AnonymousUser()
+    return request

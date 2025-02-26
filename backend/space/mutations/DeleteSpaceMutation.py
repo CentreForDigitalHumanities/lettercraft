@@ -3,6 +3,7 @@ from graphene import ID, Boolean, List, Mutation, NonNull, ResolveInfo
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 
 class DeleteSpaceMutation(Mutation):
@@ -21,6 +22,13 @@ class DeleteSpaceMutation(Mutation):
         except SpaceDescription.DoesNotExist:
             error = LettercraftErrorType(field="id", messages=["Space not found."])
             return cls(ok=False, errors=[error])  # type: ignore
+
+        if not can_edit_source(info.context.user, space_description.source):
+            error = LettercraftErrorType(
+                field="id",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         space_description.delete()
         return cls(ok=True, errors=[])  # type: ignore

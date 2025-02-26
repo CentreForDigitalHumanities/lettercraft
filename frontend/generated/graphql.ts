@@ -463,8 +463,8 @@ export type Mutation = {
   updateEpisodeOrder?: Maybe<UpdateEpisodeOrderMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
-  updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
   updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+  updateSource?: Maybe<UpdateSourceMutation>;
   updateSpace?: Maybe<UpdateSpaceMutation>;
 };
 
@@ -571,13 +571,13 @@ export type MutationUpdateLetterArgs = {
 };
 
 
-export type MutationUpdateOrCreateSourceArgs = {
-  sourceData: UpdateCreateSourceInput;
+export type MutationUpdatePersonReferenceArgs = {
+  referenceData: UpdatePersonReferenceInput;
 };
 
 
-export type MutationUpdatePersonReferenceArgs = {
-  referenceData: UpdatePersonReferenceInput;
+export type MutationUpdateSourceArgs = {
+  sourceData: UpdateSourceInput;
 };
 
 
@@ -671,6 +671,7 @@ export type QueryAgentDescriptionArgs = {
 
 
 export type QueryAgentDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -689,6 +690,7 @@ export type QueryEpisodeEntityLinkArgs = {
 
 
 export type QueryEpisodesArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -699,6 +701,7 @@ export type QueryGiftDescriptionArgs = {
 
 
 export type QueryGiftDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -710,6 +713,7 @@ export type QueryLetterDescriptionArgs = {
 
 
 export type QueryLetterDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   episodeId?: InputMaybe<Scalars['ID']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -720,12 +724,18 @@ export type QuerySourceArgs = {
 };
 
 
+export type QuerySourcesArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QuerySpaceDescriptionArgs = {
   id: Scalars['ID']['input'];
 };
 
 
 export type QuerySpaceDescriptionsArgs = {
+  editable?: InputMaybe<Scalars['Boolean']['input']>;
   sourceId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -951,15 +961,6 @@ export type UpdateAgentMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateCreateSourceInput = {
-  editionAuthor?: InputMaybe<Scalars['String']['input']>;
-  editionTitle?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
-  medievalTitle?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-};
-
 export type UpdateEpisodeEntityLinkInput = {
   designators?: InputMaybe<Array<Scalars['String']['input']>>;
   entity: Scalars['ID']['input'];
@@ -1033,12 +1034,6 @@ export type UpdateLetterMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateOrCreateSourceMutation = {
-  __typename?: 'UpdateOrCreateSourceMutation';
-  errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  source?: Maybe<SourceType>;
-};
-
 export type UpdatePersonReferenceInput = {
   certainty?: InputMaybe<Certainty>;
   id: Scalars['ID']['input'];
@@ -1049,6 +1044,21 @@ export type UpdatePersonReferenceMutation = {
   __typename?: 'UpdatePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type UpdateSourceInput = {
+  editionAuthor?: InputMaybe<Scalars['String']['input']>;
+  editionTitle?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
+  medievalTitle?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSourceMutation = {
+  __typename?: 'UpdateSourceMutation';
+  errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  source?: Maybe<SourceType>;
 };
 
 export type UpdateSpaceInput = {
@@ -2861,7 +2871,7 @@ export const DataEntryUpdateEpisodeOrderDocument = gql`
   }
 export const DataEntrySourceListDocument = gql`
     query DataEntrySourceList {
-  sources {
+  sources(editable: true) {
     id
     name
     editionAuthor

@@ -1,11 +1,8 @@
 from graphene import (
-    ID,
-    InputObjectType,
     Boolean,
     ResolveInfo,
     List,
     NonNull,
-    String,
     Field,
 )
 
@@ -17,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from event.models import Episode
 from core.types.EntityDescriptionType import CreateEntityDescriptionInput
+from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class CreateAgentMutation(LettercraftMutation):
     django_model = AgentDescription
@@ -36,6 +34,7 @@ class CreateAgentMutation(LettercraftMutation):
         try:
             with transaction.atomic():
                 cls.mutate_object(agent_data, agent, info)
+                assert can_edit_source(info.context.user, agent.source)
                 cls.add_contribution(agent, agent_data, info)
                 agent.full_clean()
         except ValidationError as e:
@@ -44,6 +43,12 @@ class CreateAgentMutation(LettercraftMutation):
                 for field, messages in e.message_dict.items()
             ]
             return cls(ok=False, agent=None, errors=errors)
+        except AssertionError:
+            error = LettercraftErrorType(
+                field="source",
+                messages=[SOURCE_NOT_PERMITTED_MSG],
+            )
+            return cls(ok=False, errors=[error])
 
         return cls(ok=True, agent=agent, errors=[])
 
