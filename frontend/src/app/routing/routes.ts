@@ -26,6 +26,7 @@ import { SourceViewComponent } from '../data/source-view/source-view.component';
 import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
 import { LocationViewComponent } from '../data/location-view/location-view.component';
 import { LetterViewComponent } from '../data/letter-view/letter-view.component';
+import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 
 
 const routes: Routes = [
@@ -90,6 +91,10 @@ const routes: Routes = [
             {
                 path: 'letters/:id',
                 component: LetterViewComponent,
+            },
+            {
+                path: 'gifts/:id',
+                component: GiftViewComponent,
             },
             {
                 path: 'sources',

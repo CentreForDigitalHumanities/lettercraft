@@ -1,0 +1,54 @@
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.giftDescription?.editable"
+        [routerLink]="['/data-entry/gifts', data.giftDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this gift
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.giftDescription as gift">
+
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.gift" />
+            {{gift.name}}
+            <span class="text-secondary">
+                ({{gift.source.name}})
+            </span>
+        </h1>
+        <p class="lead mb-4">
+            {{gift.description}}
+        </p>
+
+        <p *ngIf="gift.contributors.length">
+            <b>Contributors:</b>
+            <ng-container *ngFor="let user of gift.contributors; last as isLast">
+                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+        </p>
+
+        <section class="mb-5">
+            <h2>Source text</h2>
+
+            <p>
+                {{gift.name}} is a gift described in
+                <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{gift.source.name}}
+                </a>.
+                <ng-container *ngIf="gift.episodes.length">
+                    It appears in the following epistolary episodes:
+                </ng-container>
+            </p>
+
+            <ul *ngIf="gift.episodes.length" class="list-group">
+                <li *ngFor="let link of gift.episodes" class="list-group-item">
+                    <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
+                        <lc-icon [icon]="dataIcons.episode"/>
+                        {{link.episode.name}}
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </ng-container>
+</ng-container>

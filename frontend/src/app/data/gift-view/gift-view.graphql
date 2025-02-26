@@ -1,0 +1,23 @@
+query ViewGift($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+        id
+        name
+    }
+    episodes {
+        id
+        episode {
+            id
+            name
+        }
+    }
+    contributors {
+        id
+        fullName
+    }
+  }
+}

@@ -1501,6 +1501,13 @@ export type ViewEpisodeQueryVariables = Exact<{
 
 export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, editable: boolean, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
 
+export type ViewGiftQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewGiftQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeGiftType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+
 export type ViewLetterQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -3071,6 +3078,42 @@ export const ViewEpisodeDocument = gql`
   })
   export class ViewEpisodeGQL extends Apollo.Query<ViewEpisodeQuery, ViewEpisodeQueryVariables> {
     override document = ViewEpisodeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewGiftDocument = gql`
+    query ViewGift($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+    }
+    contributors {
+      id
+      fullName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewGiftGQL extends Apollo.Query<ViewGiftQuery, ViewGiftQueryVariables> {
+    override document = ViewGiftDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
