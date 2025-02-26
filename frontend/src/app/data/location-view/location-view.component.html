@@ -16,7 +16,7 @@
                 ({{location.source.name}})
             </span>
         </h1>
-        <p class="lead">
+        <p class="lead mb-4">
             {{location.description}}
         </p>
 
@@ -27,58 +27,64 @@
             </ng-container>
         </p>
 
-        <h2 class="mt-4">Source text</h2>
+        <section class="mt-4 mb-5">
+            <h2>Source text</h2>
 
-        <p>
-            {{location.name}} is a location in
-            <a [routerLink]="['/data/sources', location.source.id]" class="icon-link">
-                <lc-icon [icon]="dataIcons.source" />
-                {{ location.source.name }}
-            </a>. It features in the following episodes:
-        </p>
+            <p>
+                {{location.name}} is a location in
+                <a [routerLink]="['/data/sources', location.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{ location.source.name }}
+                </a>. It features in the following episodes:
+            </p>
 
-        <ul class="list-group">
-            <li *ngFor="let link of location.episodes" class="list-group-item">
-                <a [routerLink]="['data/episodes', link.episode.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.episode" />
-                    {{link.episode.name}}
-                </a>
-            </li>
-        </ul>
+            <ul class="list-group">
+                <li *ngFor="let link of location.episodes" class="list-group-item">
+                    <a [routerLink]="['data/episodes', link.episode.id]" class="icon-link">
+                        <lc-icon [icon]="dataIcons.episode" />
+                        {{link.episode.name}}
+                    </a>
+                </li>
+            </ul>
+        </section>
 
-        <h2 class="mt-4">Historical context</h2>
+        <section class="mb-5">
+            <h2>Historical context</h2>
 
-        <p>This location is identified in the text through the following references.</p>
+            <p>This location is identified in the text through the following references.</p>
 
-        <dl>
-            <dt>Regions</dt>
-            <dd class="ms-4">
-                <ul class="inline-list" *ngIf="location.regionFields.length; else noItems">
-                    <li *ngFor="let region of location.regionFields" class="inline-list-item">
-                        {{region.region.name}}
-                    </li>
-                </ul>
-            </dd>
+            <dl>
+                <dt>Regions</dt>
+                <dd class="ms-4">
+                    <ul class="inline-list" *ngIf="location.regionFields.length; else noItems">
+                        <li *ngFor="let region of location.regionFields" class="inline-list-item">
+                            {{region.region.name}}
+                        </li>
+                    </ul>
+                </dd>
 
-            <dt>Settlements</dt>
-            <dd class="ms-4">
-                <ul class="inline-list" *ngIf="location.settlementFields.length; else noItems">
-                    <li *ngFor="let settlement of location.settlementFields" class="inline-list-item">
-                        {{settlement.settlement.name}}
-                    </li>
-                </ul>
-            </dd>
+                <dt>Settlements</dt>
+                <dd class="ms-4">
+                    <ul class="inline-list" *ngIf="location.settlementFields.length; else noItems">
+                        <li *ngFor="let settlement of location.settlementFields" class="inline-list-item">
+                            {{settlement.settlement.name}}
+                        </li>
+                    </ul>
+                </dd>
 
-            <dt>Structures</dt>
-            <dd class="ms-4">
-                <ul class="inline-list" *ngIf="location.structureFields.length; else noItems">
-                    <li *ngFor="let structure of location.structureFields" class="inline-list-item">
-                        {{structure.structure.name}}
-                    </li>
-                </ul>
-            </dd>
+                <dt>Structures</dt>
+                <dd class="ms-4">
+                    <ul class="inline-list" *ngIf="location.structureFields.length; else noItems">
+                        <li *ngFor="let structure of location.structureFields" class="inline-list-item">
+                            {{structure.structure.name}}
+                        </li>
+                    </ul>
+                </dd>
 
-            <ng-template #noItems>None</ng-template>
-        </dl>
+                <ng-template #noItems>
+                    <i>None</i>
+                </ng-template>
+            </dl>
+        </section>
     </ng-container>
 </ng-container>

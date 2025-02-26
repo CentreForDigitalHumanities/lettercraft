@@ -9,14 +9,14 @@
 
     <ng-container *ngIf="data.agentDescription as agent">
 
-        <h1>
+        <h1 class="mb-4">
             <lc-icon [icon]="agentIcon(data.agentDescription)" />
             {{agent.name}}
             <span class="text-secondary">
                 ({{agent.source.name}})
             </span>
         </h1>
-        <p class="lead">
+        <p class="lead mb-4">
             {{agent.description}}
         </p>
 
@@ -27,49 +27,53 @@
             </ng-container>
         </p>
 
-        <h2>Description</h2>
+        <section class="mb-5">
+            <h2>Description</h2>
 
-        <dl>
-            <dt *ngIf="agent.gender">Gender</dt>
-            <dd *ngIf="agent.gender as gender" class="ms-4">
-                <p>
-                    {{gender.gender | lowercase}}
-                    ({{gender.sourceMention | lowercase}})
-                </p>
-                <p *ngIf="gender.note">
-                    <small><i>Note: {{gender.note}} </i></small>
-                </p>
-            </dd>
-        </dl>
+            <dl>
+                <dt *ngIf="agent.gender">Gender</dt>
+                <dd *ngIf="agent.gender as gender" class="ms-4">
+                    <p>
+                        {{gender.gender | lowercase}}
+                        ({{gender.sourceMention | lowercase}})
+                    </p>
+                    <p *ngIf="gender.note">
+                        <small><i>Note: {{gender.note}} </i></small>
+                    </p>
+                </dd>
+            </dl>
+        </section>
 
-        <h2>Source text</h2>
+        <section class="mb-5">
+            <h2>Source text</h2>
 
-        <p>
-            {{agent.name}} is an agent in
-            <a [routerLink]="['/data/sources', agent.source.id]" class="icon-link">
-                <lc-icon [icon]="dataIcons.source" />
-                {{agent.source.name}}
-            </a>.
-            <ng-container *ngIf="agent.episodes.length">
-                <ng-container [ngSwitch]="agent.gender?.gender">
-                    <ng-container *ngSwitchCase="'MALE'">He appears</ng-container>
-                    <ng-container *ngSwitchCase="'FEMALE'">She appears</ng-container>
-                    <ng-container *ngSwitchDefault>They appear</ng-container>
+            <p>
+                {{agent.name}} is an agent in
+                <a [routerLink]="['/data/sources', agent.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{agent.source.name}}
+                </a>.
+                <ng-container *ngIf="agent.episodes.length">
+                    <ng-container [ngSwitch]="agent.gender?.gender">
+                        <ng-container *ngSwitchCase="'MALE'">He appears</ng-container>
+                        <ng-container *ngSwitchCase="'FEMALE'">She appears</ng-container>
+                        <ng-container *ngSwitchDefault>They appear</ng-container>
+                    </ng-container>
+                    in the following episodes:
                 </ng-container>
-                in the following episodes:
-            </ng-container>
-        </p>
+            </p>
 
-        <ul *ngIf="agent.episodes.length" class="list-group">
-            <li *ngFor="let link of agent.episodes" class="list-group-item">
-                <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.episode"/>
-                    {{link.episode.name}}
-                </a>
-            </li>
-        </ul>
+            <ul *ngIf="agent.episodes.length" class="list-group">
+                <li *ngFor="let link of agent.episodes" class="list-group-item">
+                    <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
+                        <lc-icon [icon]="dataIcons.episode"/>
+                        {{link.episode.name}}
+                    </a>
+                </li>
+            </ul>
+        </section>
 
-        <ng-container *ngIf="agent.personReferences.length">
+        <section *ngIf="agent.personReferences.length">
             <h2>Historical context</h2>
 
             <ng-container *ngIf="agent.isGroup; else singularReference">
@@ -101,6 +105,6 @@
                     </p>
                 </ng-container>
             </ng-template>
-        </ng-container>
+        </section>
     </ng-container>
 </ng-container>
