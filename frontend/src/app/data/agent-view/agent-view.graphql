@@ -3,6 +3,7 @@ query ViewAgent($id: ID!) {
     id
     name
     description
+    editable
     isGroup
     identified
     source {

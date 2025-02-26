@@ -2,6 +2,7 @@ query ViewSource($id: ID!) {
     source(id: $id) {
         id
         name
+        editable
         editionAuthor
         editionTitle
         medievalAuthor

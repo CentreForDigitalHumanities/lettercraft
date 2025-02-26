@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { dataIcons } from '@shared/icons';
+import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewSourceGQL, ViewSourceQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
@@ -18,6 +18,7 @@ export class SourceViewComponent {
     data$: Observable<ViewSourceQuery>
 
     dataIcons = dataIcons;
+    actionIcons = actionIcons;
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 

@@ -1,4 +1,10 @@
 <ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.agentDescription?.editable"
+        [routerLink]="['/data-entry/agents', data.agentDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this agent
+    </a>
+
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.agentDescription as agent">

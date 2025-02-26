@@ -49,6 +49,7 @@ export type AgentDescriptionType = EntityDescription & {
   contributors: Array<UserType>;
   describes: Array<HistoricalPersonType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
@@ -272,6 +273,7 @@ export type EpisodeType = EntityDescription & {
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe the actions in the episode */
   designators: Array<Scalars['String']['output']>;
+  editable: Scalars['Boolean']['output'];
   /** gifts involved in this episode */
   gifts: Array<GiftDescriptionType>;
   id: Scalars['ID']['output'];
@@ -344,6 +346,7 @@ export type GiftDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeGiftType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -403,6 +406,7 @@ export type LetterDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeLetterType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -816,6 +820,7 @@ export type SourceType = {
   agents: Array<AgentDescriptionType>;
   contentsDate?: Maybe<SourceContentsDateType>;
   contributors: Array<UserType>;
+  editable: Scalars['Boolean']['output'];
   /** The name of the author of the edition */
   editionAuthor: Scalars['String']['output'];
   /** The title of the edition used for this source */
@@ -857,6 +862,7 @@ export type SpaceDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeSpaceType>;
   hasIdentifiableFeatures: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -1481,7 +1487,7 @@ export type ViewAgentQueryVariables = Exact<{
 }>;
 
 
-export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, editable: boolean, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
 
 export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1493,14 +1499,14 @@ export type ViewEpisodeQueryVariables = Exact<{
 }>;
 
 
-export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
+export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, editable: boolean, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
 
 export type ViewSourceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type ViewSourceQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } };
+export type ViewSourceQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editable: boolean, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } };
 
 export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2931,6 +2937,7 @@ export const ViewAgentDocument = gql`
     id
     name
     description
+    editable
     isGroup
     identified
     source {
@@ -3007,6 +3014,7 @@ export const ViewEpisodeDocument = gql`
     id
     name
     description
+    editable
     source {
       id
       name
@@ -3059,6 +3067,7 @@ export const ViewSourceDocument = gql`
   source(id: $id) {
     id
     name
+    editable
     editionAuthor
     editionTitle
     medievalAuthor

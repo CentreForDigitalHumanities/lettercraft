@@ -1,4 +1,10 @@
 <ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.episode?.editable"
+        [routerLink]="['/data-entry/episodes', data.episode?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this episode
+    </a>
+
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.episode as episode">

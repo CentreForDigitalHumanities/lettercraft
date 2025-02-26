@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { dataIcons } from '@shared/icons';
+import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
 import { Certainty, SourceMention, ViewAgentGQL, ViewAgentQuery } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
@@ -19,6 +19,7 @@ export class AgentViewComponent {
 
     agentIcon = agentIcon;
     dataIcons = dataIcons;
+    actionIcons = actionIcons;
 
     Certainty = Certainty;
     SourceMention = SourceMention;

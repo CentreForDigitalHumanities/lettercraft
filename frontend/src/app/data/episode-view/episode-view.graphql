@@ -3,6 +3,7 @@ query ViewEpisode($id: ID!) {
     id
     name
     description
+    editable
     source {
         id
         name

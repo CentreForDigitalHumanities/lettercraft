@@ -1,3 +1,11 @@
+<ng-container *ngIf="episode$ | async as episode">
+    <a class="float-end btn btn-light"
+        [routerLink]="['/data/episodes', episode.id]">
+        <lc-icon [icon]="actionIcons.view" />
+        View on public interface
+    </a>
+</ng-container>
+
 <lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
 <ng-container *ngIf="episode$ | async as episode; else loading">
