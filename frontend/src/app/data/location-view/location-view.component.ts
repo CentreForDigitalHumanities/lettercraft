@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { actionIcons } from '@shared/icons';
+import { actionIcons, dataIcons } from '@shared/icons';
 import { locationIcon } from '@shared/icons-utils';
 import { ViewLocationGQL, ViewLocationQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
@@ -17,6 +17,7 @@ export class LocationViewComponent {
     );
     data$: Observable<ViewLocationQuery>;
 
+    dataIcons = dataIcons;
     actionIcons = actionIcons;
     locationIcon = locationIcon;
 
