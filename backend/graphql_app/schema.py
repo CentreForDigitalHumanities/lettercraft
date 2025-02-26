@@ -51,7 +51,7 @@ class Query(
 
 
 class Mutation(ObjectType):
-    update_or_create_source = UpdateSourceMutation.Field()
+    update_source = UpdateSourceMutation.Field()
     update_episode = UpdateEpisodeMutation.Field()
     create_episode = CreateEpisodeMutation.Field()
     delete_episode = DeleteEpisodeMutation.Field()

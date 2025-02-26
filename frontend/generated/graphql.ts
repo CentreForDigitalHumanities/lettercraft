@@ -464,8 +464,8 @@ export type Mutation = {
   updateEpisodeOrder?: Maybe<UpdateEpisodeOrderMutation>;
   updateGift?: Maybe<UpdateGiftMutation>;
   updateLetter?: Maybe<UpdateLetterMutation>;
-  updateOrCreateSource?: Maybe<UpdateOrCreateSourceMutation>;
   updatePersonReference?: Maybe<UpdatePersonReferenceMutation>;
+  updateSource?: Maybe<UpdateSourceMutation>;
   updateSpace?: Maybe<UpdateSpaceMutation>;
 };
 
@@ -572,13 +572,13 @@ export type MutationUpdateLetterArgs = {
 };
 
 
-export type MutationUpdateOrCreateSourceArgs = {
-  sourceData: UpdateCreateSourceInput;
+export type MutationUpdatePersonReferenceArgs = {
+  referenceData: UpdatePersonReferenceInput;
 };
 
 
-export type MutationUpdatePersonReferenceArgs = {
-  referenceData: UpdatePersonReferenceInput;
+export type MutationUpdateSourceArgs = {
+  sourceData: UpdateSourceInput;
 };
 
 
@@ -962,15 +962,6 @@ export type UpdateAgentMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateCreateSourceInput = {
-  editionAuthor?: InputMaybe<Scalars['String']['input']>;
-  editionTitle?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
-  medievalTitle?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-};
-
 export type UpdateEpisodeEntityLinkInput = {
   designators?: InputMaybe<Array<Scalars['String']['input']>>;
   entity: Scalars['ID']['input'];
@@ -1044,12 +1035,6 @@ export type UpdateLetterMutation = {
   ok: Scalars['Boolean']['output'];
 };
 
-export type UpdateOrCreateSourceMutation = {
-  __typename?: 'UpdateOrCreateSourceMutation';
-  errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
-  source?: Maybe<SourceType>;
-};
-
 export type UpdatePersonReferenceInput = {
   certainty?: InputMaybe<Certainty>;
   id: Scalars['ID']['input'];
@@ -1060,6 +1045,21 @@ export type UpdatePersonReferenceMutation = {
   __typename?: 'UpdatePersonReferenceMutation';
   errors: Array<LettercraftErrorType>;
   ok: Scalars['Boolean']['output'];
+};
+
+export type UpdateSourceInput = {
+  editionAuthor?: InputMaybe<Scalars['String']['input']>;
+  editionTitle?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  medievalAuthor?: InputMaybe<Scalars['String']['input']>;
+  medievalTitle?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateSourceMutation = {
+  __typename?: 'UpdateSourceMutation';
+  errors?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  source?: Maybe<SourceType>;
 };
 
 export type UpdateSpaceInput = {

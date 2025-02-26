@@ -457,8 +457,8 @@ type Mutation {
   ): UpdateEpisodeOrderMutation
   updateGift(giftData: UpdateGiftInput!): UpdateGiftMutation
   updateLetter(letterData: UpdateLetterInput!): UpdateLetterMutation
-  updateOrCreateSource(sourceData: UpdateCreateSourceInput!): UpdateOrCreateSourceMutation
   updatePersonReference(referenceData: UpdatePersonReferenceInput!): UpdatePersonReferenceMutation
+  updateSource(sourceData: UpdateSourceInput!): UpdateSourceMutation
   updateSpace(spaceData: UpdateSpaceInput!): UpdateSpaceMutation
 }
 
@@ -804,15 +804,6 @@ type UpdateAgentMutation {
   ok: Boolean!
 }
 
-input UpdateCreateSourceInput {
-  editionAuthor: String
-  editionTitle: String
-  id: ID
-  medievalAuthor: String
-  medievalTitle: String
-  name: String!
-}
-
 input UpdateEpisodeEntityLinkInput {
   designators: [String!]
   entity: ID!
@@ -881,11 +872,6 @@ type UpdateLetterMutation {
   ok: Boolean!
 }
 
-type UpdateOrCreateSourceMutation {
-  errors: [String]
-  source: SourceType
-}
-
 input UpdatePersonReferenceInput {
   certainty: Certainty
   id: ID!
@@ -895,6 +881,20 @@ input UpdatePersonReferenceInput {
 type UpdatePersonReferenceMutation {
   errors: [LettercraftErrorType!]!
   ok: Boolean!
+}
+
+input UpdateSourceInput {
+  editionAuthor: String
+  editionTitle: String
+  id: ID!
+  medievalAuthor: String
+  medievalTitle: String
+  name: String
+}
+
+type UpdateSourceMutation {
+  errors: [String]
+  source: SourceType
 }
 
 input UpdateSpaceInput {
