@@ -1,0 +1,23 @@
+query ViewLetter($id: ID!) {
+  letterDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+        id
+        name
+    }
+    episodes {
+        id
+        episode {
+            id
+            name
+        }
+    }
+    contributors {
+        id
+        fullName
+    }
+  }
+}

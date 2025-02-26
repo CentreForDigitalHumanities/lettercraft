@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LocationViewComponent } from './location-view.component';
+import { LetterViewComponent } from './letter-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 
-describe('LocationViewComponent', () => {
-    let component: LocationViewComponent;
-    let fixture: ComponentFixture<LocationViewComponent>;
+describe('LetterViewComponent', () => {
+    let component: LetterViewComponent;
+    let fixture: ComponentFixture<LetterViewComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [LocationViewComponent],
+            declarations: [LetterViewComponent],
             imports: [SharedTestingModule],
         });
-        fixture = TestBed.createComponent(LocationViewComponent);
+        fixture = TestBed.createComponent(LetterViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

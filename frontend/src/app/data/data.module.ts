@@ -5,6 +5,7 @@ import { DataOverviewComponent } from './data-overview/data-overview.component';
 import { SourceViewComponent } from './source-view/source-view.component';
 import { EpisodeViewComponent } from './episode-view/episode-view.component';
 import { LocationViewComponent } from './location-view/location-view.component';
+import { LetterViewComponent } from './letter-view/letter-view.component';
 
 
 
@@ -15,6 +16,7 @@ import { LocationViewComponent } from './location-view/location-view.component';
         SourceViewComponent,
         EpisodeViewComponent,
         LocationViewComponent,
+        LetterViewComponent,
     ],
     imports: [
         SharedModule,

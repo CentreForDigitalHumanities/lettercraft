@@ -1,0 +1,54 @@
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.letterDescription?.editable"
+        [routerLink]="['/data-entry/letters', data.letterDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this letter
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.letterDescription as letter">
+
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.letter" />
+            {{letter.name}}
+            <span class="text-secondary">
+                ({{letter.source.name}})
+            </span>
+        </h1>
+        <p class="lead mb-4">
+            {{letter.description}}
+        </p>
+
+        <p *ngIf="letter.contributors.length">
+            <b>Contributors:</b>
+            <ng-container *ngFor="let user of letter.contributors; last as isLast">
+                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+        </p>
+
+        <section class="mb-5">
+            <h2>Source text</h2>
+
+            <p>
+                {{letter.name}} is a letter in
+                <a [routerLink]="['/data/sources', letter.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{letter.source.name}}
+                </a>.
+                <ng-container *ngIf="letter.episodes.length">
+                    It appears in the following epistolary episodes:
+                </ng-container>
+            </p>
+
+            <ul *ngIf="letter.episodes.length" class="list-group">
+                <li *ngFor="let link of letter.episodes" class="list-group-item">
+                    <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
+                        <lc-icon [icon]="dataIcons.episode"/>
+                        {{link.episode.name}}
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </ng-container>
+</ng-container>
