@@ -1501,6 +1501,13 @@ export type ViewEpisodeQueryVariables = Exact<{
 
 export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, editable: boolean, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
 
+export type ViewLocationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewLocationQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, editable: boolean, hasIdentifiableFeatures: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeSpaceType', id: string, designators?: Array<string> | null, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, regionFields: Array<{ __typename?: 'RegionFieldType', id: string, note: string, sourceMention: SourceMention, region: { __typename?: 'RegionType', id: string, name: string } }>, settlementFields: Array<{ __typename?: 'SettlementFieldType', id: string, note: string, sourceMention: SourceMention, settlement: { __typename?: 'SettlementType', id: string, name: string } }>, structureFields: Array<{ __typename?: 'StructureFieldType', sourceMention: SourceMention, note: string, id: string, structure: { __typename?: 'StructureType', id: string, name: string } }> } | null };
+
 export type ViewSourceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -3057,6 +3064,73 @@ export const ViewEpisodeDocument = gql`
   })
   export class ViewEpisodeGQL extends Apollo.Query<ViewEpisodeQuery, ViewEpisodeQueryVariables> {
     override document = ViewEpisodeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewLocationDocument = gql`
+    query ViewLocation($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+      designators
+      note
+      sourceMention
+    }
+    contributors {
+      id
+      fullName
+    }
+    hasIdentifiableFeatures
+    regionFields {
+      region {
+        id
+        name
+      }
+      id
+      note
+      sourceMention
+    }
+    settlementFields {
+      id
+      note
+      sourceMention
+      settlement {
+        id
+        name
+      }
+    }
+    structureFields {
+      sourceMention
+      note
+      id
+      structure {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewLocationGQL extends Apollo.Query<ViewLocationQuery, ViewLocationQueryVariables> {
+    override document = ViewLocationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

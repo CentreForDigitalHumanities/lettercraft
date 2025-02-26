@@ -1,1 +1,30 @@
-<p>location-view works!</p>
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.spaceDescription?.editable"
+        [routerLink]="['/data-entry/locations', data.spaceDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this location
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.spaceDescription as location">
+
+        <h1 class="mb-4">
+            <lc-icon [icon]="locationIcon(data.spaceDescription)" />
+            {{location.name}}
+            <span class="text-secondary">
+                ({{location.source.name}})
+            </span>
+        </h1>
+        <p class="lead">
+            {{location.description}}
+        </p>
+
+        <p *ngIf="location.contributors.length">
+            <b>Contributors:</b>
+            <ng-container *ngFor="let user of location.contributors; last as isLast">
+                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
+            </ng-container>
+        </p>
+    </ng-container>
+</ng-container>
