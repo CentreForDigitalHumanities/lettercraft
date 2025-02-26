@@ -10,12 +10,7 @@
     <ng-container *ngIf="data.giftDescription as gift">
         <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
 
-        <p *ngIf="gift.contributors.length">
-            <b>Contributors:</b>
-            <ng-container *ngFor="let user of gift.contributors; last as isLast">
-                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
-            </ng-container>
-        </p>
+        <lc-contributors [contributors]="gift.contributors" />
 
         <section class="mb-5">
             <h2>Source text</h2>

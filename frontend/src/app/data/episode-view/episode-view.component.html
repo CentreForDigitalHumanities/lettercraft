@@ -17,12 +17,7 @@
                 {{episode.source.name}}</a>.
         </p>
 
-        <p *ngIf="episode.contributors.length">
-            <b>Contributors:</b>
-            <ng-container *ngFor="let user of episode.contributors; last as isLast">
-                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
-            </ng-container>
-        </p>
+        <lc-contributors [contributors]="episode.contributors" />
 
         <h2 class="mt-5">Content</h2>
 

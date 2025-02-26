@@ -14,12 +14,7 @@
         Lettercraft project.
     </p>
 
-    <p *ngIf="data.source.contributors.length">
-        <b>Contributors:</b>
-        <ng-container *ngFor="let user of data.source.contributors; last as isLast">
-            {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
-        </ng-container>
-    </p>
+    <lc-contributors [contributors]="data.source.contributors" />
 
     <div class="card mb-4 mt-4">
         <div class="card-body">

@@ -10,12 +10,7 @@
     <ng-container *ngIf="data.spaceDescription as location">
         <lc-object-page-header [object]="location" [icon]="locationIcon(location)" />
 
-        <p *ngIf="location.contributors.length">
-            <b>Contributors:</b>
-            <ng-container *ngFor="let user of location.contributors; last as isLast">
-                {{user.fullName}}<ng-container *ngIf="!isLast">, </ng-container>
-            </ng-container>
-        </p>
+        <lc-contributors [contributors]="location.contributors" />
 
         <section class="mt-4 mb-5">
             <h2>Source text</h2>
