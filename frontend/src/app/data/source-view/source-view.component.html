@@ -7,10 +7,7 @@
 
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data.source)" />
 
-    <h1 class="mb-4">
-        <lc-icon [icon]="dataIcons.source"/>
-        {{data.source.name}}
-    </h1>
+    <lc-object-page-header [object]="data.source" [icon]="dataIcons.source" />
 
     <p>
         {{data.source.name}} is one of the source texts that have been analysed in the

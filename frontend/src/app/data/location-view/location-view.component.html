@@ -8,17 +8,7 @@
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.spaceDescription as location">
-
-        <h1 class="mb-4">
-            <lc-icon [icon]="locationIcon(data.spaceDescription)" />
-            {{location.name}}
-            <span class="text-secondary">
-                ({{location.source.name}})
-            </span>
-        </h1>
-        <p class="lead mb-4">
-            {{location.description}}
-        </p>
+        <lc-object-page-header [object]="location" [icon]="locationIcon(location)" />
 
         <p *ngIf="location.contributors.length">
             <b>Contributors:</b>

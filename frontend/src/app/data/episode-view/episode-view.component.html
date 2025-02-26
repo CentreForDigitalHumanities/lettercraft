@@ -8,13 +8,7 @@
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.episode as episode">
-        <h1>
-            <lc-icon [icon]="dataIcons.episode" />
-            {{ episode.name }}
-            <span class="text-secondary">
-                ({{episode.source.name}})
-            </span>
-        </h1>
+        <lc-object-page-header [object]="episode" [icon]="dataIcons.episode" />
 
         <p>
             "{{ episode.name }}" is an epistolary episode in

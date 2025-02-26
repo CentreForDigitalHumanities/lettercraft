@@ -8,17 +8,7 @@
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.letterDescription as letter">
-
-        <h1 class="mb-4">
-            <lc-icon [icon]="dataIcons.letter" />
-            {{letter.name}}
-            <span class="text-secondary">
-                ({{letter.source.name}})
-            </span>
-        </h1>
-        <p class="lead mb-4">
-            {{letter.description}}
-        </p>
+        <lc-object-page-header [object]="letter" [icon]="dataIcons.letter" />
 
         <p *ngIf="letter.contributors.length">
             <b>Contributors:</b>

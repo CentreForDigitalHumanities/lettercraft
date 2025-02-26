@@ -8,17 +8,8 @@
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
     <ng-container *ngIf="data.agentDescription as agent">
-
-        <h1 class="mb-4">
-            <lc-icon [icon]="agentIcon(data.agentDescription)" />
-            {{agent.name}}
-            <span class="text-secondary">
-                ({{agent.source.name}})
-            </span>
-        </h1>
-        <p class="lead mb-4">
-            {{agent.description}}
-        </p>
+        <lc-object-page-header [object]="data.agentDescription"
+            [icon]="agentIcon(data.agentDescription)" />
 
         <p *ngIf="agent.contributors.length">
             <b>Contributors:</b>
