@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewSourceGQL, ViewSourceQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { sourceBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-source-view',
@@ -22,6 +22,8 @@ export class SourceViewComponent {
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 
+    makeBreadcrumbs = sourceBreadcrumbs;
+
     constructor(
         private route: ActivatedRoute,
         private query: ViewSourceGQL,
@@ -30,13 +32,5 @@ export class SourceViewComponent {
             switchMap(id => this.query.watch({ id }).valueChanges),
             map(result => result.data),
         );
-    }
-
-    makeBreadcrumbs(data: ViewSourceQuery): Breadcrumb[] {
-        return [
-            { link: '/', label: 'Lettercraft' },
-            { link: '/data', label: 'Data' },
-            { link: '.', label: data.source.name },
-        ]
     }
 }

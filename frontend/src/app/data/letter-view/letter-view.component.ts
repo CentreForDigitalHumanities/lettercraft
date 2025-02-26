@@ -4,6 +4,7 @@ import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { ViewLetterGQL, ViewLetterQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-letter-view',
@@ -31,18 +32,7 @@ export class LetterViewComponent {
 
     makeBreadcrumbs(data: ViewLetterQuery): Breadcrumb[] {
         if (data.letterDescription) {
-            return [
-                { label: 'Lettercraft', link: '/', },
-                { label: 'Data', link: '/data', },
-                {
-                    label: data.letterDescription.source.name,
-                    link: `/data/sources/${data.letterDescription.source.id}`,
-                },
-                {
-                    label: `${data.letterDescription.name}`,
-                    link: `/data/agents/${data.letterDescription.id}`,
-                }
-            ]
+            return entityDescriptionBreadcrumbs(data.letterDescription);
         } else {
             return [];
         }

@@ -5,6 +5,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-episode-view',
@@ -34,12 +35,7 @@ export class EpisodeViewComponent {
 
     makeBreadcrumbs(data: ViewEpisodeQuery): Breadcrumb[] {
         if (data.episode) {
-            return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data', label: 'Data' },
-                { link: `/data/sources/${data.episode.source.id}`, label: data.episode.source.name },
-                { link: '.', label: data.episode.name }
-            ];
+            return entityDescriptionBreadcrumbs(data.episode);
         } else {
             return [
                 { link: '/', label: 'Lettercraft' },

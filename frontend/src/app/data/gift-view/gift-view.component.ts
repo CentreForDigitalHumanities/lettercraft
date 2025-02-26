@@ -4,6 +4,7 @@ import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { ViewGiftGQL, ViewGiftQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-gift-view',
@@ -31,18 +32,7 @@ export class GiftViewComponent {
 
     makeBreadcrumbs(data: ViewGiftQuery): Breadcrumb[] {
         if (data.giftDescription) {
-            return [
-                { label: 'Lettercraft', link: '/', },
-                { label: 'Data', link: '/data', },
-                {
-                    label: data.giftDescription.source.name,
-                    link: `/data/sources/${data.giftDescription.source.id}`,
-                },
-                {
-                    label: `${data.giftDescription.name}`,
-                    link: `/data/agents/${data.giftDescription.id}`,
-                }
-            ]
+            return entityDescriptionBreadcrumbs(data.giftDescription);
         } else {
             return [];
         }

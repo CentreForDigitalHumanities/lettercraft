@@ -5,6 +5,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
 import { Certainty, SourceMention, ViewAgentGQL, ViewAgentQuery } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-agent-view',
@@ -36,24 +37,7 @@ export class AgentViewComponent {
 
     makeBreadcrumbs(data: ViewAgentQuery): Breadcrumb[] {
         if (data.agentDescription) {
-            return [
-                {
-                    label: 'Lettercraft',
-                    link: '/',
-                },
-                {
-                    label: 'Data',
-                    link: '/data',
-                },
-                {
-                    label: data.agentDescription.source.name,
-                    link: `/data/sources/${data.agentDescription.source.id}`,
-                },
-                {
-                    label: `${data.agentDescription.name} (${data.agentDescription.source.name})`,
-                    link: `/data/agents/${data.agentDescription.id}`,
-                }
-            ]
+            return entityDescriptionBreadcrumbs(data.agentDescription);
         } else {
             return [];
         }

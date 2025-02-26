@@ -5,6 +5,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { locationIcon } from '@shared/icons-utils';
 import { ViewLocationGQL, ViewLocationQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-location-view',
@@ -33,12 +34,7 @@ export class LocationViewComponent {
 
     makeBreadcrumbs(data: ViewLocationQuery): Breadcrumb[] {
         if (data.spaceDescription) {
-            return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data', label: 'Data' },
-                { link: `/data/sources/${data.spaceDescription.source.id}`, label: data.spaceDescription.source.name },
-                { link: '.', label: data.spaceDescription.name }
-            ];
+            return entityDescriptionBreadcrumbs(data.spaceDescription);
         } else {
             return [
                 { link: '/', label: 'Lettercraft' },
