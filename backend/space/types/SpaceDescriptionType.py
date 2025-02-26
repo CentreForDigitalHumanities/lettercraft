@@ -20,7 +20,6 @@ from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
 from event.types.EpisodeSpaceType import EpisodeSpaceType
 from event.models import EpisodeSpace
-from user.permissions import can_edit_source
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
     regions = List(NonNull(RegionType), required=True)
@@ -33,8 +32,6 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
     structure_fields = List(NonNull(StructureFieldType), required=True)
 
     episodes = List(NonNull(EpisodeSpaceType), required=True)
-
-    editable = Boolean(required=True)
 
     class Meta:
         model = SpaceDescription
@@ -106,7 +103,3 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: SpaceDescription, info: ResolveInfo
     ) -> Boolean:
         return parent.has_identifiable_features()
-
-    @staticmethod
-    def resolve_editable(parent: SpaceDescription, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)

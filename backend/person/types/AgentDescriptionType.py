@@ -10,7 +10,6 @@ from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.models import EpisodeAgent
-from user.permissions import can_edit_source
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -20,7 +19,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     location = Field(AgentDescriptionLocationType)
     episodes = List(NonNull(EpisodeAgentType), required=True)
     identified = Boolean(required=True)
-    editable = Boolean(required=True)
 
     class Meta:
         model = AgentDescription
@@ -62,7 +60,3 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     @staticmethod
     def resolve_identified(parent: AgentDescription, info: ResolveInfo) -> bool:
         return parent.identified()
-
-    @staticmethod
-    def resolve_editable(parent: AgentDescription, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)
