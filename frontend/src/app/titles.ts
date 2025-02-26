@@ -155,6 +155,27 @@ export const agentViewTitleResolver = queryTitleResolver(
     agentTitleQuery, agentViewTitle
 );
 
+const locationViewTitle = (data: SpaceTitleQueryData): string =>
+    `${data.spaceDescription?.name} (${data.spaceDescription?.source.name})`;
+
+export const locationViewTitleResolver = queryTitleResolver(
+    spaceTitleQuery, locationViewTitle
+);
+
+const letterViewTitle = (data: LetterTitleQueryData): string =>
+    `${data.letterDescription?.name} (${data.letterDescription?.source.name})`;
+
+export const letterViewTitleResolver = queryTitleResolver(
+    letterTitleQuery, letterViewTitle
+);
+
+const giftViewTitle = (data: GiftTitleQueryData): string =>
+    `${data.giftDescription?.name} (${data.giftDescription?.source.name})`;
+
+export const giftViewTitleResolver = queryTitleResolver(
+    giftTitleQuery, giftViewTitle
+);
+
 const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
 
 export const sourceViewTitleResolver = queryTitleResolver(

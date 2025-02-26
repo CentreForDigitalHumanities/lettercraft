@@ -15,7 +15,7 @@ import { LetterFormComponent } from '../data-entry/letter-form/letter-form.compo
 import { AgentFormComponent } from '../data-entry/agent-form/agent-form.component';
 import { SourceComponent } from '../data-entry/source/source.component';
 import {
-    agentFormTitleResolver, agentViewTitleResolver, episodeFormTitleResolver, episodeViewTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
+    agentFormTitleResolver, agentViewTitleResolver, episodeFormTitleResolver, episodeViewTitleResolver, giftFormTitleResolver, giftViewTitleResolver, letterFormTitleResolver, letterViewTitleResolver, locationViewTitleResolver, pageTitle,
     SITE_NAME, sourceFormTitleResolver, sourceViewTitleResolver, spaceFormTitleResolver
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
@@ -86,14 +86,17 @@ const routes: Routes = [
             },
             {
                 path: 'locations/:id',
+                title: locationViewTitleResolver,
                 component: LocationViewComponent,
             },
             {
                 path: 'letters/:id',
+                title: letterViewTitleResolver,
                 component: LetterViewComponent,
             },
             {
                 path: 'gifts/:id',
+                title: giftViewTitleResolver,
                 component: GiftViewComponent,
             },
             {
