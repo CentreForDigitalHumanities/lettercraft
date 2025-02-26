@@ -46,8 +46,8 @@ export class AgentViewComponent {
                     link: '/data',
                 },
                 {
-                    label: 'Agents',
-                    link: '/data/agents',
+                    label: data.agentDescription.source.name,
+                    link: `/data/sources/${data.agentDescription.source.id}`,
                 },
                 {
                     label: `${data.agentDescription.name} (${data.agentDescription.source.name})`,

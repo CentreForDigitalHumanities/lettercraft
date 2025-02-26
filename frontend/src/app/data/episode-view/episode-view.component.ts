@@ -37,14 +37,13 @@ export class EpisodeViewComponent {
             return [
                 { link: '/', label: 'Lettercraft' },
                 { link: '/data', label: 'Data' },
-                { link: '/data/episodes', label: 'Episodes' },
+                { link: `/data/sources/${data.episode.source.id}`, label: data.episode.source.name },
                 { link: '.', label: data.episode.name }
             ];
         } else {
             return [
                 { link: '/', label: 'Lettercraft' },
                 { link: '/data', label: 'Data' },
-                { link: '/data/episodes', label: 'Episodes' },
                 { link: '.', label: 'Not found' }
 
             ];

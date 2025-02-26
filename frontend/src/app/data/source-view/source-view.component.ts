@@ -36,7 +36,6 @@ export class SourceViewComponent {
         return [
             { link: '/', label: 'Lettercraft' },
             { link: '/data', label: 'Data' },
-            { link: '/data/sources', label: 'Sources' },
             { link: '.', label: data.source.name },
         ]
     }
