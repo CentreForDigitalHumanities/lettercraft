@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AgentViewComponent } from './agent-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
+import { EpisodeLinksComponent } from '../shared/episode-links/episode-links.component';
 
 describe('AgentViewComponent', () => {
     let component: AgentViewComponent;
@@ -9,7 +11,11 @@ describe('AgentViewComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [AgentViewComponent],
+            declarations: [
+                AgentViewComponent,
+                ObjectPageHeaderComponent,
+                EpisodeLinksComponent,
+            ],
             imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(AgentViewComponent);
