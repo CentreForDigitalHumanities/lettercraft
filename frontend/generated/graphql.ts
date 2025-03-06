@@ -815,6 +815,7 @@ export type SourceType = {
   __typename?: 'SourceType';
   agents: Array<AgentDescriptionType>;
   contentsDate?: Maybe<SourceContentsDateType>;
+  contributors: Array<UserType>;
   /** The name of the author of the edition */
   editionAuthor: Scalars['String']['output'];
   /** The title of the edition used for this source */
