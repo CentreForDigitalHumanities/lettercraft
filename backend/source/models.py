@@ -2,6 +2,7 @@ from django.db import models
 
 from core.models import LettercraftDate
 
+
 class Source(models.Model):
     """
     A Source is a text of any kind.
@@ -32,6 +33,11 @@ class Source(models.Model):
 
     edition_author = models.CharField(
         max_length=255, blank=True, help_text="The name of the author of the edition"
+    )
+
+    is_public = models.BooleanField(
+        default=False,
+        help_text="Whether this source is available in the browsing interface or not.",
     )
 
     def __str__(self):

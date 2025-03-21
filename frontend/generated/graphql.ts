@@ -730,6 +730,7 @@ export type QuerySourceArgs = {
 
 export type QuerySourcesArgs = {
   editable?: InputMaybe<Scalars['Boolean']['input']>;
+  isPublic?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -828,6 +829,8 @@ export type SourceType = {
   episodes: Array<EpisodeType>;
   gifts: Array<GiftDescriptionType>;
   id: Scalars['ID']['output'];
+  /** Whether this source is available in the browsing interface or not. */
+  isPublic: Scalars['Boolean']['output'];
   letters: Array<LetterDescriptionType>;
   /** The name of the original author of the work, if known */
   medievalAuthor: Scalars['String']['output'];
@@ -3010,7 +3013,7 @@ export const ViewAgentDocument = gql`
   }
 export const ViewSourcesDocument = gql`
     query ViewSources {
-  sources {
+  sources(isPublic: true) {
     id
     name
     editionAuthor

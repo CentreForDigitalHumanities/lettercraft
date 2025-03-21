@@ -548,7 +548,7 @@ type Query {
   regions: [RegionType!]!
   settlements: [SettlementType!]!
   source(id: ID!): SourceType!
-  sources(editable: Boolean): [SourceType!]!
+  sources(editable: Boolean, isPublic: Boolean): [SourceType!]!
   spaceDescription(id: ID!): SpaceDescriptionType
   spaceDescriptions(editable: Boolean, sourceId: ID): [SpaceDescriptionType!]!
   structures: [StructureType!]!
@@ -648,6 +648,9 @@ type SourceType {
   episodes: [EpisodeType!]!
   gifts: [GiftDescriptionType!]!
   id: ID!
+
+  """Whether this source is available in the browsing interface or not."""
+  isPublic: Boolean!
   letters: [LetterDescriptionType!]!
 
   """The name of the original author of the work, if known"""

@@ -20,12 +20,14 @@ class SourceContentsDateAdmin(admin.StackedInline):
 @admin.register(models.Source)
 class SourceAdmin(admin.ModelAdmin):
     list_filter = ["contributor_groups"]
+    list_display = ["name", "medieval_title", "edition_title", "is_public"]
     fields = [
         "name",
         "medieval_title",
         "medieval_author",
         "edition_title",
         "edition_author",
+        "is_public",
     ]
     inlines = [
         SourceWrittenDateAdmin,

@@ -13,6 +13,7 @@ class SourceQueries(ObjectType):
     sources = DjangoListField(
         NonNull(SourceType),
         editable=Boolean(),
+        is_public=Boolean(),
         required=True,
     )
 
@@ -28,6 +29,11 @@ class SourceQueries(ObjectType):
         root: None,
         info: ResolveInfo,
         editable: bool = False,
+        is_public: bool = False,
     ) -> QuerySet[Source]:
         queryset = SourceType.get_queryset(Source.objects, info)
+
+        if is_public:
+            queryset = queryset.filter(is_public=True)
+
         return editable_sources(info.context.user, queryset) if editable else queryset
