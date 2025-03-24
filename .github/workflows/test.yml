@@ -100,8 +100,10 @@ jobs:
       - name: Generate static GraphQL schema
         working-directory: backend
         run: python manage.py graphql_schema --out ../schema.json
+      - name: Run pre-build
+        run: yarn front yarn prebuild
       - name: Generate TypeScript types
-        run: yarn codegen
+        run: yarn codegen-once
       - name: Run tests
         env:
             CODEGEN_PATH: ../schema.json
