@@ -104,6 +104,8 @@ jobs:
         run: yarn front yarn prebuild
       - name: Generate TypeScript types
         run: yarn codegen-once
+        env:
+            CODEGEN_PATH: ../schema.json
       - name: Run tests
         env:
             CODEGEN_PATH: ../schema.json
