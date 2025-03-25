@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
-import { dataIcons } from "@shared/icons";
+import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteLetterGQL,
     DataEntryLetterFormGQL,
@@ -61,6 +61,7 @@ export class LetterFormComponent {
     );
 
     public dataIcons = dataIcons;
+    public actionIcons = actionIcons;
     public deletingInProgress = false;
 
     constructor(
