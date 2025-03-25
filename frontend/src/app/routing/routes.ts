@@ -27,6 +27,8 @@ import { EpisodeViewComponent } from '../data/episode-view/episode-view.componen
 import { LocationViewComponent } from '../data/location-view/location-view.component';
 import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
+import { SourceListComponent } from '../data/source-list/source-list.component';
+import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
 
 
 const routes: Routes = [
@@ -101,7 +103,13 @@ const routes: Routes = [
             },
             {
                 path: 'sources',
-                redirectTo: '',
+                title: pageTitle('Browse sources'),
+                component: SourceListComponent,
+            },
+            {
+                path: 'episodes',
+                title: pageTitle('Browse epsiodes'),
+                component: EpisodeListComponent,
             },
             {
                 path: '',

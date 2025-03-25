@@ -1,5 +1,15 @@
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<h1 class="mb-4">Source texts</h1>
+
+<p>
+    The list below shows the medieval texts that have been analysed in the Lettercraft
+    project. Click on a source to view more information and explore its epistolary
+    events.
+</p>
+
 <ng-container *ngIf="data$ | async as data">
-    <ul class="list-group">
+    <ul class="list-group mt-4">
         <li *ngFor="let source of data.sources"
             class="list-group-item list-group-item-action">
             <div class="d-flex align-items-center">
