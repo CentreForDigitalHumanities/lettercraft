@@ -3,8 +3,22 @@
 <h1>Browse data</h1>
 
 <p>
-    Use the overview of source texts
-    below to view the data per source.
+    You can browse the data in the project per source, or view all epistolary episodes.
 </p>
 
-<lc-source-list />
+<ul ngbNav #nav="ngbNav" class="nav-tabs mt-4 mb-4">
+    <li ngbNavItem>
+        <button ngbNavLink>Sources</button>
+        <ng-template ngbNavContent>
+            <lc-source-list />
+        </ng-template>
+    </li>
+    <li ngbNavItem>
+        <button ngbNavLink>Episodes</button>
+        <ng-template ngbNavContent>
+            <lc-episode-list />
+        </ng-template>
+    </li>
+</ul>
+
+<div [ngbNavOutlet]="nav"></div>

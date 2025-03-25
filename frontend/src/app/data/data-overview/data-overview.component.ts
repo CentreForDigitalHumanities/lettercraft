@@ -4,9 +4,9 @@ import { ViewSourcesGQL, ViewSourcesQuery } from 'generated/graphql';
 import { map, Observable } from 'rxjs';
 
 @Component({
-  selector: 'lc-data-overview',
-  templateUrl: './data-overview.component.html',
-  styleUrls: ['./data-overview.component.scss']
+    selector: 'lc-data-overview',
+    templateUrl: './data-overview.component.html',
+    styleUrls: ['./data-overview.component.scss'],
 })
 export class DataOverviewComponent {
     breadcrumbs: Breadcrumb[] = [
