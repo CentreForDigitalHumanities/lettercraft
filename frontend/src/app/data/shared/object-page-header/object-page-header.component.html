@@ -1,0 +1,10 @@
+<h1 class="mb-4">
+    <lc-icon *ngIf="icon" [icon]="icon" />
+    {{object.name}}
+    <span class="text-secondary" *ngIf="object.source">
+        ({{object.source.name}})
+    </span>
+</h1>
+<p class="lead mb-4" *ngIf="object.description">
+    {{object.description}}
+</p>

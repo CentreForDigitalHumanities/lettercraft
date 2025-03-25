@@ -1,0 +1,47 @@
+query ViewSource($id: ID!) {
+    source(id: $id) {
+        id
+        name
+        editable
+        editionAuthor
+        editionTitle
+        medievalAuthor
+        medievalTitle
+        episodes {
+            id
+            name
+            description
+            summary
+            book
+            chapter
+            contributors {
+                id
+                fullName
+            }
+            page
+            agents {
+                id
+                name
+                isGroup
+                identified
+            }
+            gifts {
+                id
+                name
+            }
+            letters {
+                id
+                name
+            }
+            spaces {
+                id
+                name
+                hasIdentifiableFeatures
+            }
+        }
+        contributors {
+            id
+            fullName
+        }
+    }
+}

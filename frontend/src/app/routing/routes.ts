@@ -15,11 +15,18 @@ import { LetterFormComponent } from '../data-entry/letter-form/letter-form.compo
 import { AgentFormComponent } from '../data-entry/agent-form/agent-form.component';
 import { SourceComponent } from '../data-entry/source/source.component';
 import {
-    agentFormTitleResolver, giftFormTitleResolver, letterFormTitleResolver, pageTitle,
-    SITE_NAME, sourceFormTitleResolver, spaceFormTitleResolver
+    agentFormTitleResolver, agentViewTitleResolver, episodeFormTitleResolver, episodeViewTitleResolver, giftFormTitleResolver, giftViewTitleResolver, letterFormTitleResolver, letterViewTitleResolver, locationViewTitleResolver, pageTitle,
+    SITE_NAME, sourceFormTitleResolver, sourceViewTitleResolver, spaceFormTitleResolver
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
+import { AgentViewComponent } from '../data/agent-view/agent-view.component';
+import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
+import { SourceViewComponent } from '../data/source-view/source-view.component';
+import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
+import { LocationViewComponent } from '../data/location-view/location-view.component';
+import { LetterViewComponent } from '../data/letter-view/letter-view.component';
+import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 
 
 const routes: Routes = [
@@ -60,6 +67,51 @@ const routes: Routes = [
         component: UserSettingsComponent
     },
     {
+        path: 'data',
+        children: [
+            {
+                path: 'sources/:id',
+                title: sourceViewTitleResolver,
+                component: SourceViewComponent,
+            },
+            {
+                path: 'episodes/:id',
+                title: episodeViewTitleResolver,
+                component: EpisodeViewComponent,
+            },
+            {
+                path: 'agents/:id',
+                title: agentViewTitleResolver,
+                component: AgentViewComponent,
+            },
+            {
+                path: 'locations/:id',
+                title: locationViewTitleResolver,
+                component: LocationViewComponent,
+            },
+            {
+                path: 'letters/:id',
+                title: letterViewTitleResolver,
+                component: LetterViewComponent,
+            },
+            {
+                path: 'gifts/:id',
+                title: giftViewTitleResolver,
+                component: GiftViewComponent,
+            },
+            {
+                path: 'sources',
+                redirectTo: '',
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                title: pageTitle('Browse data'),
+                component: DataOverviewComponent,
+            }
+        ],
+    },
+    {
         path: 'data-entry',
         canActivate: [ContributorGuard],
         children: [
@@ -95,6 +147,7 @@ const routes: Routes = [
             },
             {
                 path: 'episodes/:id',
+                title: episodeFormTitleResolver,
                 component: EpisodeFormComponent,
             },
             {

@@ -19,6 +19,11 @@
                         Home
                     </a>
                 </li>
+                <li class="nav-item" *ngIf="isContributor$ | async">
+                    <a [routerLink]="['/data']" routerLinkActive="active" class="nav-link">
+                        Browse
+                    </a>
+                </li>
                 <li *ngIf="isContributor$ | async" class="nav-item">
                     <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
                         Data entry

@@ -1,0 +1,54 @@
+query ViewLocation($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+      designators
+      note
+      sourceMention
+    }
+    contributors {
+      id
+      fullName
+    }
+    hasIdentifiableFeatures
+    regionFields {
+      region {
+        id
+        name
+      }
+      id
+      note
+      sourceMention
+    }
+    settlementFields {
+      id
+      note
+      sourceMention
+      settlement {
+        id
+        name
+      }
+    }
+    structureFields {
+      sourceMention
+      note
+      id
+      structure {
+        id
+        name
+      }
+    }
+  }
+}

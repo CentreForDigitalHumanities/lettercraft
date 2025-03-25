@@ -1,3 +1,12 @@
+<ng-container *ngIf="location$ | async as location">
+    <a class="float-end btn btn-light"
+        [routerLink]="['/data/locations', location.id]">
+        <lc-icon [icon]="actionIcons.view" />
+        View on public interface
+    </a>
+</ng-container>
+
+
 <lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
 <ng-container *ngIf="location$ | async as location; else loading">

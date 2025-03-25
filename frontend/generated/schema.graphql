@@ -31,6 +31,7 @@ type AgentDescriptionType implements EntityDescription {
   contributors: [UserType!]!
   describes: [HistoricalPersonType!]!
   description: String!
+  editable: Boolean!
   episodes: [EpisodeAgentType!]!
   gender: AgentDescriptionGenderType
   id: ID!
@@ -243,6 +244,7 @@ type EpisodeType implements EntityDescription {
   Relevant (Latin) terminology used to describe the actions in the episode
   """
   designators: [String!]!
+  editable: Boolean!
 
   """gifts involved in this episode"""
   gifts: [GiftDescriptionType!]!
@@ -322,6 +324,7 @@ type GiftDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
+  editable: Boolean!
   episodes: [EpisodeGiftType!]!
   id: ID!
   name: String!
@@ -385,6 +388,7 @@ type LetterDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
+  editable: Boolean!
   episodes: [EpisodeLetterType!]!
   id: ID!
   name: String!
@@ -633,6 +637,8 @@ enum SourceMention {
 type SourceType {
   agents: [AgentDescriptionType!]!
   contentsDate: SourceContentsDateType
+  contributors: [UserType!]!
+  editable: Boolean!
 
   """The name of the author of the edition"""
   editionAuthor: String!
@@ -684,6 +690,7 @@ type SpaceDescriptionType implements EntityDescription {
   chapter: String!
   contributors: [UserType!]!
   description: String!
+  editable: Boolean!
   episodes: [EpisodeSpaceType!]!
   hasIdentifiableFeatures: Boolean!
   id: ID!

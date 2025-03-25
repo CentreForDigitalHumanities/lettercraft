@@ -1,4 +1,10 @@
 <ng-container *ngIf="data$ | async as data; else loading">
+    <a class="float-end btn btn-light"
+        [routerLink]="['/data/agents', data.agentDescription?.id]">
+        <lc-icon [icon]="actionIcons.view" />
+        View on public interface
+    </a>
+
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
 
     <ng-container *ngIf="data.agentDescription as agentDescription; else noAgent">

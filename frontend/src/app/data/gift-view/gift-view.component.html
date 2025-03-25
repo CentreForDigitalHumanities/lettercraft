@@ -1,0 +1,32 @@
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.giftDescription?.editable"
+        [routerLink]="['/data-entry/gifts', data.giftDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this gift
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.giftDescription as gift">
+        <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
+
+        <lc-contributors [contributors]="gift.contributors" />
+
+        <section class="mb-5">
+            <h2>Source text</h2>
+
+            <p>
+                {{gift.name}} is a gift described in
+                <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{gift.source.name}}
+                </a>.
+                <ng-container *ngIf="gift.episodes.length">
+                    It appears in the following epistolary episodes:
+                </ng-container>
+            </p>
+
+            <lc-episode-links [episodes]="gift.episodes" />
+        </section>
+    </ng-container>
+</ng-container>

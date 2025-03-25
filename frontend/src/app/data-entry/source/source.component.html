@@ -1,3 +1,9 @@
+<a class="float-end btn btn-light" *ngIf="source$ | async as source"
+    [routerLink]="['/data/sources', source.id]">
+    <lc-icon [icon]="actionIcons.view" />
+    View on public interface
+</a>
+
 <lc-breadcrumb [breadcrumbs]="breadcrumbs()" />
 
 <h1 class="mb-4">

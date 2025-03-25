@@ -49,6 +49,7 @@ export type AgentDescriptionType = EntityDescription & {
   contributors: Array<UserType>;
   describes: Array<HistoricalPersonType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeAgentType>;
   gender?: Maybe<AgentDescriptionGenderType>;
   id: Scalars['ID']['output'];
@@ -272,6 +273,7 @@ export type EpisodeType = EntityDescription & {
   description: Scalars['String']['output'];
   /** Relevant (Latin) terminology used to describe the actions in the episode */
   designators: Array<Scalars['String']['output']>;
+  editable: Scalars['Boolean']['output'];
   /** gifts involved in this episode */
   gifts: Array<GiftDescriptionType>;
   id: Scalars['ID']['output'];
@@ -344,6 +346,7 @@ export type GiftDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeGiftType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -403,6 +406,7 @@ export type LetterDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeLetterType>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
@@ -816,6 +820,7 @@ export type SourceType = {
   agents: Array<AgentDescriptionType>;
   contentsDate?: Maybe<SourceContentsDateType>;
   contributors: Array<UserType>;
+  editable: Scalars['Boolean']['output'];
   /** The name of the author of the edition */
   editionAuthor: Scalars['String']['output'];
   /** The title of the edition used for this source */
@@ -857,6 +862,7 @@ export type SpaceDescriptionType = EntityDescription & {
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
   description: Scalars['String']['output'];
+  editable: Scalars['Boolean']['output'];
   episodes: Array<EpisodeSpaceType>;
   hasIdentifiableFeatures: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
@@ -1476,10 +1482,62 @@ export type DataEntrySourceListQueryVariables = Exact<{ [key: string]: never; }>
 
 export type DataEntrySourceListQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
+export type ViewAgentQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, editable: boolean, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, sourceMention: SourceMention, note?: string | null, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+
+export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ViewSourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
+
+export type ViewEpisodeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewEpisodeQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, description: string, editable: boolean, summary: string, designators: Array<string>, source: { __typename?: 'SourceType', id: string, name: string }, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, categories: Array<{ __typename?: 'EpisodeCategoryType', id: string, name: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }> } | null };
+
+export type ViewGiftQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewGiftQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeGiftType', id: string, sourceMention: SourceMention, designators?: Array<string> | null, note?: string | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+
+export type ViewLetterQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewLetterQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, name: string, description: string, editable: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeLetterType', id: string, sourceMention: SourceMention, designators?: Array<string> | null, note?: string | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
+
+export type ViewLocationQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewLocationQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, editable: boolean, hasIdentifiableFeatures: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeSpaceType', id: string, designators?: Array<string> | null, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, regionFields: Array<{ __typename?: 'RegionFieldType', id: string, note: string, sourceMention: SourceMention, region: { __typename?: 'RegionType', id: string, name: string } }>, settlementFields: Array<{ __typename?: 'SettlementFieldType', id: string, note: string, sourceMention: SourceMention, settlement: { __typename?: 'SettlementType', id: string, name: string } }>, structureFields: Array<{ __typename?: 'StructureFieldType', sourceMention: SourceMention, note: string, id: string, structure: { __typename?: 'StructureType', id: string, name: string } }> } | null };
+
+export type ViewSourceQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ViewSourceQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string, editable: boolean, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }> }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } };
+
 export type SourceTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SourceTitleQueryQuery = { __typename?: 'Query', source: { __typename?: 'SourceType', id: string, name: string } };
+
+export type EpisodeTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EpisodeTitleQueryQuery = { __typename?: 'Query', episode?: { __typename?: 'EpisodeType', id: string, name: string, source: { __typename?: 'SourceType', id: string, name: string } } | null };
 
 export type AgentTitleQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2894,6 +2952,345 @@ export const DataEntrySourceListDocument = gql`
       super(apollo);
     }
   }
+export const ViewAgentDocument = gql`
+    query ViewAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    isGroup
+    identified
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      sourceMention
+      note
+      designators
+      episode {
+        id
+        name
+      }
+    }
+    gender {
+      id
+      gender
+      sourceMention
+      note
+    }
+    personReferences {
+      id
+      certainty
+      note
+      person {
+        id
+        name
+      }
+    }
+    contributors {
+      id
+      fullName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewAgentGQL extends Apollo.Query<ViewAgentQuery, ViewAgentQueryVariables> {
+    override document = ViewAgentDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewSourcesDocument = gql`
+    query ViewSources {
+  sources {
+    id
+    name
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    numOfEpisodes
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewSourcesGQL extends Apollo.Query<ViewSourcesQuery, ViewSourcesQueryVariables> {
+    override document = ViewSourcesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewEpisodeDocument = gql`
+    query ViewEpisode($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    contributors {
+      id
+      fullName
+    }
+    summary
+    designators
+    categories {
+      id
+      name
+    }
+    agents {
+      id
+      name
+      isGroup
+      identified
+    }
+    spaces {
+      id
+      name
+      hasIdentifiableFeatures
+    }
+    letters {
+      id
+      name
+    }
+    gifts {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewEpisodeGQL extends Apollo.Query<ViewEpisodeQuery, ViewEpisodeQueryVariables> {
+    override document = ViewEpisodeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewGiftDocument = gql`
+    query ViewGift($id: ID!) {
+  giftDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      sourceMention
+      designators
+      note
+      episode {
+        id
+        name
+      }
+    }
+    contributors {
+      id
+      fullName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewGiftGQL extends Apollo.Query<ViewGiftQuery, ViewGiftQueryVariables> {
+    override document = ViewGiftDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewLetterDocument = gql`
+    query ViewLetter($id: ID!) {
+  letterDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+      sourceMention
+      designators
+      note
+    }
+    contributors {
+      id
+      fullName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewLetterGQL extends Apollo.Query<ViewLetterQuery, ViewLetterQueryVariables> {
+    override document = ViewLetterDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewLocationDocument = gql`
+    query ViewLocation($id: ID!) {
+  spaceDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+      id
+      name
+    }
+    episodes {
+      id
+      episode {
+        id
+        name
+      }
+      designators
+      note
+      sourceMention
+    }
+    contributors {
+      id
+      fullName
+    }
+    hasIdentifiableFeatures
+    regionFields {
+      region {
+        id
+        name
+      }
+      id
+      note
+      sourceMention
+    }
+    settlementFields {
+      id
+      note
+      sourceMention
+      settlement {
+        id
+        name
+      }
+    }
+    structureFields {
+      sourceMention
+      note
+      id
+      structure {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewLocationGQL extends Apollo.Query<ViewLocationQuery, ViewLocationQueryVariables> {
+    override document = ViewLocationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ViewSourceDocument = gql`
+    query ViewSource($id: ID!) {
+  source(id: $id) {
+    id
+    name
+    editable
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    episodes {
+      id
+      name
+      description
+      summary
+      book
+      chapter
+      contributors {
+        id
+        fullName
+      }
+      page
+      agents {
+        id
+        name
+        isGroup
+        identified
+      }
+      gifts {
+        id
+        name
+      }
+      letters {
+        id
+        name
+      }
+      spaces {
+        id
+        name
+        hasIdentifiableFeatures
+      }
+    }
+    contributors {
+      id
+      fullName
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewSourceGQL extends Apollo.Query<ViewSourceQuery, ViewSourceQueryVariables> {
+    override document = ViewSourceDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const SourceTitleQueryDocument = gql`
     query SourceTitleQuery {
   source(id: "") {
@@ -2908,6 +3305,29 @@ export const SourceTitleQueryDocument = gql`
   })
   export class SourceTitleQueryGQL extends Apollo.Query<SourceTitleQueryQuery, SourceTitleQueryQueryVariables> {
     override document = SourceTitleQueryDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const EpisodeTitleQueryDocument = gql`
+    query EpisodeTitleQuery {
+  episode(id: "") {
+    id
+    name
+    source {
+      id
+      name
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class EpisodeTitleQueryGQL extends Apollo.Query<EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables> {
+    override document = EpisodeTitleQueryDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

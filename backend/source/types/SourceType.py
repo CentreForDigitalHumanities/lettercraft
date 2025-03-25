@@ -1,5 +1,5 @@
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model, Q
 from graphene_django import DjangoObjectType
 from typing import Type
 
@@ -17,6 +17,8 @@ from core.models import EntityDescription
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
 from user.permissions import can_edit_source
+from user.types.UserType import UserType
+from user.models import User
 
 
 class SourceType(DjangoObjectType):
@@ -29,6 +31,8 @@ class SourceType(DjangoObjectType):
     letters = List(NonNull(LetterDescriptionType), required=True)
     spaces = List(NonNull(SpaceDescriptionType), required=True)
     editable = Boolean(required=True)
+    contributors = List(NonNull(UserType), required=True)
+
 
     class Meta:
         model = Source
@@ -48,10 +52,10 @@ class SourceType(DjangoObjectType):
 
     # @staticmethod
     def _entity_resolver(
-        Model: Type[EntityDescription], OutputType: Type[DjangoObjectType]
+        EntityModel: Type[EntityDescription], OutputType: Type[DjangoObjectType]
     ):
         def resolve(parent: Source, info: ResolveInfo) -> QuerySet[Model]:
-            return OutputType.get_queryset(Model.objects, info).filter(
+            return OutputType.get_queryset(EntityModel.objects, info).filter(
                 source__id=parent.pk
             ).distinct()
 
@@ -70,3 +74,12 @@ class SourceType(DjangoObjectType):
     @staticmethod
     def resolve_editable(parent: Source, info: ResolveInfo) -> bool:
         return can_edit_source(info.context.user, parent)
+
+    @staticmethod
+    def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
+        filters = Q(contributed_episodes__source=parent) | \
+            Q(contributed_agentdescriptions__source=parent) | \
+            Q(contributed_letterdescriptions__source=parent) | \
+            Q(contributed_giftdescriptions__source=parent) | \
+            Q(contributed_spacedescriptions__source=parent)
+        return User.objects.filter(filters).distinct()

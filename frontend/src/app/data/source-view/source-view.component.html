@@ -1,0 +1,37 @@
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.source.editable"
+        [routerLink]="['/data-entry/sources', data.source.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this source
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data.source)" />
+
+    <lc-object-page-header [object]="data.source" [icon]="dataIcons.source" />
+
+    <p>
+        {{data.source.name}} is one of the source texts that have been analysed in the
+        Lettercraft project.
+    </p>
+
+    <lc-contributors [contributors]="data.source.contributors" />
+
+    <div class="card mb-4 mt-4">
+        <div class="card-body">
+            <h2 class="h5 card-title">Bibliographical information</h2>
+
+            <ng-container *ngIf="data.source.medievalAuthor || data.source.medievalTitle">
+                {{ data.source.medievalAuthor }}<ng-container *ngIf="data.source.medievalAuthor && data.source.medievalTitle">, </ng-container><em>{{ data.source.medievalTitle }}</em>.
+            </ng-container>
+            <ng-container *ngIf="data.source.editionAuthor || data.source.editionTitle">
+                (Ed. {{ data.source.editionAuthor }}<ng-container *ngIf="data.source.editionAuthor && data.source.editionTitle">, </ng-container>{{ data.source.editionTitle }}.)
+            </ng-container>
+
+        </div>
+    </div>
+
+    <h2 class="mb-4">Episodes</h2>
+
+    <lc-episode-preview *ngFor="let episode of data.source.episodes"
+        [episode]="episode" />
+</ng-container>

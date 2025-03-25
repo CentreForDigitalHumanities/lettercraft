@@ -166,6 +166,7 @@ class EntityDescription(Named, models.Model):
         to=User,
         blank=True,
         help_text="Users who contributed to this entry",
+        related_name="contributed_%(class)ss",
     )
 
     class Meta:
