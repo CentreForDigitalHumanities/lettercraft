@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataOverviewComponent } from './data-overview.component';
+import { SourceListComponent } from './source-list.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
-import { SourceListComponent } from '../source-list/source-list.component';
 
-describe('DataOverviewComponent', () => {
-    let component: DataOverviewComponent;
-    let fixture: ComponentFixture<DataOverviewComponent>;
+describe('SourceListComponent', () => {
+    let component: SourceListComponent;
+    let fixture: ComponentFixture<SourceListComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [DataOverviewComponent, SourceListComponent],
+            declarations: [SourceListComponent],
             imports: [SharedTestingModule],
         });
-        fixture = TestBed.createComponent(DataOverviewComponent);
+        fixture = TestBed.createComponent(SourceListComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
