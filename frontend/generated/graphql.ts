@@ -1489,6 +1489,11 @@ export type ViewAgentQueryVariables = Exact<{
 
 export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __typename?: 'AgentDescriptionType', id: string, name: string, description: string, editable: boolean, isGroup: boolean, identified: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeAgentType', id: string, sourceMention: SourceMention, note?: string | null, designators?: Array<string> | null, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, gender?: { __typename?: 'AgentDescriptionGenderType', id: string, gender: Gender, sourceMention: SourceMention, note: string } | null, personReferences: Array<{ __typename?: 'PersonReferenceType', id: string, certainty: Certainty, note: string, person: { __typename?: 'HistoricalPersonType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }> } | null };
 
+export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ViewSourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
+
 export type ViewEpisodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1521,11 +1526,6 @@ export type ViewLocationQueryVariables = Exact<{
 
 
 export type ViewLocationQuery = { __typename?: 'Query', spaceDescription?: { __typename?: 'SpaceDescriptionType', id: string, name: string, description: string, editable: boolean, hasIdentifiableFeatures: boolean, source: { __typename?: 'SourceType', id: string, name: string }, episodes: Array<{ __typename?: 'EpisodeSpaceType', id: string, designators?: Array<string> | null, note?: string | null, sourceMention: SourceMention, episode: { __typename?: 'EpisodeType', id: string, name: string } }>, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, regionFields: Array<{ __typename?: 'RegionFieldType', id: string, note: string, sourceMention: SourceMention, region: { __typename?: 'RegionType', id: string, name: string } }>, settlementFields: Array<{ __typename?: 'SettlementFieldType', id: string, note: string, sourceMention: SourceMention, settlement: { __typename?: 'SettlementType', id: string, name: string } }>, structureFields: Array<{ __typename?: 'StructureFieldType', sourceMention: SourceMention, note: string, id: string, structure: { __typename?: 'StructureType', id: string, name: string } }> } | null };
-
-export type ViewSourcesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ViewSourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'SourceType', id: string, name: string, editionAuthor: string, editionTitle: string, medievalAuthor: string, medievalTitle: string, numOfEpisodes: number }> };
 
 export type ViewSourceQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3013,6 +3013,30 @@ export const ViewAgentDocument = gql`
       super(apollo);
     }
   }
+export const ViewSourcesDocument = gql`
+    query ViewSources {
+  sources {
+    id
+    name
+    editionAuthor
+    editionTitle
+    medievalAuthor
+    medievalTitle
+    numOfEpisodes
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ViewSourcesGQL extends Apollo.Query<ViewSourcesQuery, ViewSourcesQueryVariables> {
+    override document = ViewSourcesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const ViewEpisodesDocument = gql`
     query ViewEpisodes {
   episodes {
@@ -3239,30 +3263,6 @@ export const ViewLocationDocument = gql`
   })
   export class ViewLocationGQL extends Apollo.Query<ViewLocationQuery, ViewLocationQueryVariables> {
     override document = ViewLocationDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const ViewSourcesDocument = gql`
-    query ViewSources {
-  sources {
-    id
-    name
-    editionAuthor
-    editionTitle
-    medievalAuthor
-    medievalTitle
-    numOfEpisodes
-  }
-}
-    `;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class ViewSourcesGQL extends Apollo.Query<ViewSourcesQuery, ViewSourcesQueryVariables> {
-    override document = ViewSourcesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

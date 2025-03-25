@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DataOverviewComponent } from './data-overview.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
-import { SourceListComponent } from '../source-list/source-list.component';
 
 describe('DataOverviewComponent', () => {
     let component: DataOverviewComponent;
@@ -10,7 +9,7 @@ describe('DataOverviewComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [DataOverviewComponent, SourceListComponent],
+            declarations: [DataOverviewComponent],
             imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(DataOverviewComponent);
