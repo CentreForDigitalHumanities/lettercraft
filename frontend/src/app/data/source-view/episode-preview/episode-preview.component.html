@@ -92,13 +92,14 @@
             </ng-template>
         </dl>
     </div>
-    <div class="card-footer bg-body text-body-secondary position-relative">
+    <div class="card-footer bg-body text-body-secondary position-relative"
+        *ngIf="hasSource(episode) || hasSourceLocation(episode)">
         <a *ngIf="hasSource(episode)" [routerLink]="['/data/sources', episode.source.id]"
             class="text-reset icon-link stretched-link">
             <lc-icon [icon]="dataIcons.source"/>
             {{episode.source.name}}
         </a>
-        <small *ngIf="episode.book || episode.chapter || episode.page">
+        <small *ngIf="hasSourceLocation(episode)">
             <span *ngIf="hasSource(episode)" class="ms-1">(</span>
             <span class="inline-list">
                 <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>

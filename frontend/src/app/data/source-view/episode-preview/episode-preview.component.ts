@@ -24,4 +24,8 @@ export class EpisodePreviewComponent {
     hasEntities(episode: Episode): episode is ViewSourceQuery['source']['episodes'][number] {
         return 'agents' in episode;
     }
+
+    hasSourceLocation(episode: Episode): boolean {
+        return !!(episode.book || episode.chapter || episode.page);
+    }
 }
