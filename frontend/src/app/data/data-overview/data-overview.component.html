@@ -3,22 +3,30 @@
 <h1>Browse data</h1>
 
 <p>
-    You can browse the data in the project per source, or view all epistolary episodes.
+    Where do you want to start?
 </p>
 
-<ul ngbNav #nav="ngbNav" [activeId]="'episodes'" class="nav-tabs mt-4 mb-4">
-    <li ngbNavItem="sources">
-        <button ngbNavLink>Sources</button>
-        <ng-template ngbNavContent>
-            <lc-source-list />
-        </ng-template>
-    </li>
-    <li ngbNavItem="episodes">
-        <button ngbNavLink>Episodes</button>
-        <ng-template ngbNavContent>
-            <lc-episode-list />
-        </ng-template>
-    </li>
-</ul>
+<div class="vstack gap-3">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4">
+                <a class="card-link" [routerLink]="['sources']">Source texts</a>
+            </h2>
+            <p>
+                Browse the medieval texts that have been analysed in the Lettercraft
+                project.
+            </p>
+        </div>
+    </div>
 
-<div [ngbNavOutlet]="nav"></div>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4">
+                <a class="card-link" [routerLink]="['episodes']">Epistolary episodes</a>
+            </h2>
+            <p>
+                Search through the epistolary episodes found across all source texts.
+            </p>
+        </div>
+    </div>
+</div>

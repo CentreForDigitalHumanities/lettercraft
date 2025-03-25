@@ -1,3 +1,12 @@
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<h1 class="mb-4">Epistolary episodes</h1>
+
+<p class="mb-4">
+    The list below shows the epistolary episodes that have been identified across all
+    source texts. Click on an episode to view more information about it.
+</p>
+
 <ng-container *ngIf="data$ | async as data">
     <lc-episode-preview *ngFor="let episode of data.episodes" [episode]="episode" />
 </ng-container>
