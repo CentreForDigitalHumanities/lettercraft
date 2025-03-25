@@ -11,25 +11,6 @@ query ViewEpisodes {
       fullName
     }
     page
-    agents {
-      id
-      name
-      isGroup
-      identified
-    }
-    gifts {
-      id
-      name
-    }
-    letters {
-      id
-      name
-    }
-    spaces {
-      id
-      name
-      hasIdentifiableFeatures
-    }
     source {
       id
       name

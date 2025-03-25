@@ -1492,7 +1492,7 @@ export type ViewAgentQuery = { __typename?: 'Query', agentDescription?: { __type
 export type ViewEpisodesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ViewEpisodesQuery = { __typename?: 'Query', episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, agents: Array<{ __typename?: 'AgentDescriptionType', id: string, name: string, isGroup: boolean, identified: boolean }>, gifts: Array<{ __typename?: 'GiftDescriptionType', id: string, name: string }>, letters: Array<{ __typename?: 'LetterDescriptionType', id: string, name: string }>, spaces: Array<{ __typename?: 'SpaceDescriptionType', id: string, name: string, hasIdentifiableFeatures: boolean }>, source: { __typename?: 'SourceType', id: string, name: string } }> };
+export type ViewEpisodesQuery = { __typename?: 'Query', episodes: Array<{ __typename?: 'EpisodeType', id: string, name: string, description: string, summary: string, book: string, chapter: string, page: string, contributors: Array<{ __typename?: 'UserType', id: string, fullName: string }>, source: { __typename?: 'SourceType', id: string, name: string } }> };
 
 export type ViewEpisodeQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3027,25 +3027,6 @@ export const ViewEpisodesDocument = gql`
       fullName
     }
     page
-    agents {
-      id
-      name
-      isGroup
-      identified
-    }
-    gifts {
-      id
-      name
-    }
-    letters {
-      id
-      name
-    }
-    spaces {
-      id
-      name
-      hasIdentifiableFeatures
-    }
     source {
       id
       name

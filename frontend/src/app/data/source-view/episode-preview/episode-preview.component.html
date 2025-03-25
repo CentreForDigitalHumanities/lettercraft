@@ -1,21 +1,15 @@
 <div class="card mb-4">
     <div class="card-header position-relative">
-        <a class="icon-link stretched-link"
+        <a class="icon-link stretched-link mb-1 "
             [routerLink]="['/data/episodes', episode.id]">
             <lc-icon [icon]="dataIcons.episode" />
             {{episode.name}}
         </a>
-        <br />
-        <small *ngIf="episode.book || episode.chapter || episode.page" class="inline-list">
-            <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
-            <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
-            <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
-        </small>
     </div>
     <div class="card-body">
         <p *ngIf="episode.summary">{{episode.summary}}</p>
 
-        <dl>
+        <dl *ngIf="hasEntities(episode)">
             <dt>Agents</dt>
             <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
                 <ul class="inline-list">
@@ -97,5 +91,22 @@
                 <dd class="ms-4">None.</dd>
             </ng-template>
         </dl>
+    </div>
+    <div class="card-footer bg-body text-body-secondary position-relative">
+        <a *ngIf="hasSource(episode)" [routerLink]="['/data/sources', episode.source.id]"
+            class="text-reset icon-link stretched-link">
+            <lc-icon [icon]="dataIcons.source"/>
+            {{episode.source.name}}
+        </a>
+        <small *ngIf="episode.book || episode.chapter || episode.page">
+            <span *ngIf="hasSource(episode)" class="ms-1">(</span>
+            <span class="inline-list">
+                <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
+                <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
+                <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
+            </span>
+            <span *ngIf="hasSource(episode)">)</span>
+        </small>
+
     </div>
 </div>
