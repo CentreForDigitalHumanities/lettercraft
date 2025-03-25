@@ -10,8 +10,6 @@ import { GiftViewComponent } from './gift-view/gift-view.component';
 import { EpisodeLinksComponent } from './shared/episode-links/episode-links.component';
 import { ObjectPageHeaderComponent } from './shared/object-page-header/object-page-header.component';
 import { EpisodePreviewComponent } from './source-view/episode-preview/episode-preview.component';
-import { SourceListComponent } from './source-list/source-list.component';
-import { EpisodeListComponent } from './episode-list/episode-list.component';
 
 
 
@@ -27,8 +25,6 @@ import { EpisodeListComponent } from './episode-list/episode-list.component';
         EpisodeLinksComponent,
         ObjectPageHeaderComponent,
         EpisodePreviewComponent,
-        SourceListComponent,
-        EpisodeListComponent,
     ],
     imports: [
         SharedModule,
