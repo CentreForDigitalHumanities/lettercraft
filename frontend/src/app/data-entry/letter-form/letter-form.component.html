@@ -1,6 +1,12 @@
 <lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
 
 <ng-container *ngIf="letter$ | async as letter; else loading">
+    <a class="float-end btn btn-light"
+        [routerLink]="['/data/letters', letter.id]">
+        <lc-icon [icon]="actionIcons.view" />
+        View on public interface
+    </a>
+
     <h1 class="mb-4">
         <lc-icon [icon]="dataIcons.letter" />
         <span class="ms-2">{{ letter.name }}</span>
