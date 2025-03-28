@@ -16,22 +16,23 @@ import { MultiselectOption } from "../multiselect/multiselect.component";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
-    selector: "lc-historical-person-select",
-    templateUrl: "./historical-person-select.component.html",
-    styleUrls: ["./historical-person-select.component.scss"],
+    selector: "lc-single-multi-select",
+    templateUrl: "./single-multi-select.component.html",
+    styleUrls: ["./single-multi-select.component.scss"],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => HistoricalPersonSelectComponent),
+            useExisting: forwardRef(() => SingleMultiSelectComponent),
             multi: true,
         },
     ],
 })
-export class HistoricalPersonSelectComponent
+export class SingleMultiSelectComponent
     implements ControlValueAccessor, OnInit
 {
     @Input() multiple = false;
     @Input({ required: true }) options: MultiselectOption[] = [];
+    @Input() placeholder = "Select...";
 
     public control = new FormControl<string[]>([], { nonNullable: true });
     public actionIcons = actionIcons;
@@ -40,7 +41,7 @@ export class HistoricalPersonSelectComponent
     private onTouched: (() => void) | null = null;
 
     public formValue = toSignal<string[]>(this.control.valueChanges);
-    public selectedPersons = computed(() => {
+    public selectedItems = computed(() => {
         const selectedIds = this.formValue();
         return this.options.filter((item) => selectedIds?.includes(item.value));
     });
@@ -60,7 +61,7 @@ export class HistoricalPersonSelectComponent
             });
     }
 
-    public removePerson(id: string): void {
+    public removeItem(id: string): void {
         const newValue = this.control.value.filter((item) => item !== id);
         this.control.setValue(newValue);
     }

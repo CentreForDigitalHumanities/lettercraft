@@ -2,15 +2,15 @@
 <ng-container *ngIf="multiple; else singleSelected">
     <ul class="ps-0">
         <li
-            *ngFor="let person of selectedPersons()"
+            *ngFor="let item of selectedItems()"
             class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
         >
-            <span class="ms-1">{{ person.label }}</span>
+            <span class="ms-1">{{ item.label }}</span>
             <button
                 class="btn btn-sm btn-primary py-0 px-1 ms-1"
                 type="button"
-                [attr.aria-label]="'remove ' + person.label"
-                (click)="removePerson(person.value)"
+                [attr.aria-label]="'remove ' + item.label"
+                (click)="removeItem(item.value)"
             >
                 <lc-icon [icon]="actionIcons.cancel" />
             </button>
@@ -22,12 +22,12 @@
         <p
             class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
         >
-            <span class="ms-1">{{ selectedPersons()[0].label }}</span>
+            <span class="ms-1">{{ selectedItems()[0].label }}</span>
             <button
                 class="btn btn-sm btn-primary py-0 px-1 ms-1"
                 type="button"
-                [attr.aria-label]="'remove ' + selectedPersons()[0].label"
-                (click)="removePerson(selectedPersons()[0].value)"
+                [attr.aria-label]="'remove ' + selectedItems()[0].label"
+                (click)="removeItem(selectedItems()[0].value)"
             >
                 <lc-icon [icon]="actionIcons.cancel" />
             </button>
@@ -37,10 +37,9 @@
 
 <form *ngIf="multiple === true || control.value.length !== 1">
     <lc-multiselect
-        id="historical-person-select"
         [options]="options"
         [formControl]="control"
         [showSelected]="false"
-        placeholderEmpty="Select a historical person"
+        [placeholderEmpty]="placeholder"
     />
 </form>
