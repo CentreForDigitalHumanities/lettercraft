@@ -1,6 +1,6 @@
 import { Component, DestroyRef } from "@angular/core";
 import { Router } from "@angular/router";
-import { dataIcons } from "@shared/icons";
+import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteLocationGQL,
     DataEntryDeleteLocationMutation,
@@ -61,6 +61,7 @@ export class LocationFormComponent {
 
 
     public dataIcons = dataIcons;
+    public actionIcons = actionIcons;
     public deletingInProgress = false;
 
     constructor(

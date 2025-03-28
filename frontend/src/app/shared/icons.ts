@@ -20,6 +20,7 @@ export const actionIcons = {
     edit: 'pencil',
     up: 'arrow-up',
     down: 'arrow-down',
+    view: 'eye',
 };
 
 export const authIcons = {

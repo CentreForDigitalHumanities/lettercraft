@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { dataIcons } from '@shared/icons';
+import { actionIcons, dataIcons } from '@shared/icons';
 import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { FormService } from '../shared/form.service';
@@ -17,6 +17,7 @@ export class AgentFormComponent {
     data$: Observable<DataEntryAgentQuery>;
 
     dataIcons = dataIcons;
+    actionIcons = actionIcons;
     agentIcon = agentIcon;
 
     status$ = this.formService.status$;

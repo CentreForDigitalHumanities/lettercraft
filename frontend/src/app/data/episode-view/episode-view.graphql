@@ -1,0 +1,41 @@
+query ViewEpisode($id: ID!) {
+  episode(id: $id) {
+    id
+    name
+    description
+    editable
+    source {
+        id
+        name
+    }
+    contributors {
+        id
+        fullName
+    }
+    summary
+    designators
+    categories {
+        id
+        name
+    }
+    agents {
+        id
+        name
+        isGroup
+        identified
+    }
+    spaces {
+        id
+        name
+        hasIdentifiableFeatures
+    }
+    letters {
+        id
+        name
+    }
+    gifts {
+        id
+        name
+    }
+  }
+}

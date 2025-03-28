@@ -1,0 +1,32 @@
+<ng-container *ngIf="data$ | async as data">
+    <a class="float-end btn btn-light" *ngIf="data.letterDescription?.editable"
+        [routerLink]="['/data-entry/letters', data.letterDescription?.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this letter
+    </a>
+
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.letterDescription as letter">
+        <lc-object-page-header [object]="letter" [icon]="dataIcons.letter" />
+
+        <lc-contributors [contributors]="letter.contributors" />
+
+        <section class="mb-5">
+            <h2>Source text</h2>
+
+            <p>
+                {{letter.name}} is a letter in
+                <a [routerLink]="['/data/sources', letter.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{letter.source.name}}
+                </a>.
+                <ng-container *ngIf="letter.episodes.length">
+                    It appears in the following epistolary episodes:
+                </ng-container>
+            </p>
+
+            <lc-episode-links [episodes]="letter.episodes" />
+        </section>
+    </ng-container>
+</ng-container>

@@ -1,0 +1,43 @@
+query ViewAgent($id: ID!) {
+  agentDescription(id: $id) {
+    id
+    name
+    description
+    editable
+    isGroup
+    identified
+    source {
+        id
+        name
+    }
+    episodes {
+        id
+        sourceMention
+        note
+        designators
+        episode {
+            id
+            name
+        }
+    }
+    gender {
+        id
+        gender
+        sourceMention
+        note
+    }
+    personReferences {
+        id
+        certainty
+        note
+        person {
+            id
+            name
+        }
+    }
+    contributors {
+        id
+        fullName
+    }
+  }
+}
