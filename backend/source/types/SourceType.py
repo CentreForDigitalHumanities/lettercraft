@@ -1,5 +1,5 @@
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
-from django.db.models import QuerySet, Model
+from django.db.models import QuerySet, Model, Q
 from graphene_django import DjangoObjectType
 from typing import Type
 
@@ -84,9 +84,9 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
-        users = User.objects.filter(contributed_episodes__source=parent) | \
-            User.objects.filter(contributed_agentdescriptions__source=parent) | \
-            User.objects.filter(contributed_letterdescriptions__source=parent) | \
-            User.objects.filter(contributed_giftdescriptions__source=parent) | \
-            User.objects.filter(contributed_spacedescriptions__source=parent)
-        return users.distinct()
+        filters = Q(contributed_episodes__source=parent) | \
+            Q(contributed_agentdescriptions__source=parent) | \
+            Q(contributed_letterdescriptions__source=parent) | \
+            Q(contributed_giftdescriptions__source=parent) | \
+            Q(contributed_spacedescriptions__source=parent)
+        return User.objects.filter(filters).distinct()

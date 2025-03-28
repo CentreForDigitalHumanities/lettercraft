@@ -1,6 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
-import { SourceMention } from 'generated/graphql';
+import { ViewAgentQuery, ViewGiftQuery, ViewLetterQuery, ViewLocationQuery } from 'generated/graphql';
+
+type QueriedEpisodeLink =
+    | NonNullable<ViewAgentQuery["agentDescription"]>["episodes"][number]
+    | NonNullable<ViewLetterQuery["letterDescription"]>["episodes"][number]
+    | NonNullable<ViewGiftQuery["giftDescription"]>["episodes"][number]
+    | NonNullable<ViewLocationQuery["spaceDescription"]>["episodes"][number];
 
 @Component({
   selector: 'lc-episode-links',
@@ -9,16 +15,7 @@ import { SourceMention } from 'generated/graphql';
 })
 export class EpisodeLinksComponent {
     @Input({required: true})
-    episodes!: {
-        id: string,
-        sourceMention: SourceMention,
-        designators?: string[] | null,
-        note?: string | null,
-        episode: {
-            id: string,
-            name: string,
-        }
-    }[];
+    episodes!: QueriedEpisodeLink[];
 
     dataIcons = dataIcons;
 }
