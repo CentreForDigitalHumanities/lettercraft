@@ -21,6 +21,7 @@
         "start-front": "yarn front yarn serve",
         "start-back": "cd backend && python manage.py runserver --settings glue --pythonpath ..",
         "codegen": "yarn front yarn codegen",
+        "codegen-once": "yarn front yarn codegen-once",
         "livereload-back": "cd backend && python manage.py livereload --settings glue --pythonpath ..",
         "watch-test-front": "yarn front yarn watch-test",
         "watch-test-back": "yarn test-back --looponfail",
@@ -34,8 +35,7 @@
         "watch-front-p": "yarn front yarn watch",
         "start-back-p": "cd backend && python manage.py runserver --settings production --insecure --pythonpath ..",
         "start-p": "yarn static-p && yarn watch-front-p & yarn start-back-p",
-        "stop-back": "kill $(lsof -t -i:8000)",
-        "codegen-once": "yarn start-back & yarn front yarn graphql-codegen && yarn stop-back"
+        "stop-back": "kill $(lsof -t -i:8000)"
     },
     "devDependencies": {
         "@angular/cli": ">=15 <16"
