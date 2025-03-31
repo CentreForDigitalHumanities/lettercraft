@@ -322,18 +322,7 @@ export type GiftCategoryType = {
   __typename?: 'GiftCategoryType';
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-};
-
-export type GiftDescriptionCategoryType = {
-  __typename?: 'GiftDescriptionCategoryType';
-  category: GiftCategoryType;
-  certainty: Certainty;
-  gift: GiftDescriptionType;
-  id: Scalars['ID']['output'];
-  /** Additional notes */
-  note: Scalars['String']['output'];
-  sourceMention: SourceMention;
+  label: Scalars['String']['output'];
 };
 
 export type GiftDescriptionType = EntityDescription & {
@@ -341,7 +330,6 @@ export type GiftDescriptionType = EntityDescription & {
   /** The book in the source */
   book: Scalars['String']['output'];
   categories: Array<GiftCategoryType>;
-  categorisations: Array<GiftDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
@@ -385,23 +373,11 @@ export type LetterCategoryType = {
   label: Scalars['String']['output'];
 };
 
-export type LetterDescriptionCategoryType = {
-  __typename?: 'LetterDescriptionCategoryType';
-  category: LetterCategoryType;
-  certainty: Certainty;
-  id: Scalars['ID']['output'];
-  letter: LetterDescriptionType;
-  /** Additional notes */
-  note: Scalars['String']['output'];
-  sourceMention: SourceMention;
-};
-
 export type LetterDescriptionType = EntityDescription & {
   __typename?: 'LetterDescriptionType';
   /** The book in the source */
   book: Scalars['String']['output'];
   categories: Array<LetterCategoryType>;
-  categorisations: Array<LetterDescriptionCategoryType>;
   /** The chapter or chapters in the source */
   chapter: Scalars['String']['output'];
   contributors: Array<UserType>;
@@ -651,6 +627,7 @@ export type Query = {
   episodeCategories: Array<EpisodeCategoryType>;
   episodeEntityLink?: Maybe<EpisodeEntityLink>;
   episodes: Array<EpisodeType>;
+  giftCategories: Array<GiftCategoryType>;
   giftDescription?: Maybe<GiftDescriptionType>;
   giftDescriptions: Array<GiftDescriptionType>;
   historicalPersons: Array<HistoricalPersonType>;
@@ -1252,12 +1229,12 @@ export type DataEntryGiftCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categorisations: Array<{ __typename?: 'GiftDescriptionCategoryType', id: string, sourceMention: SourceMention, note: string, certainty: Certainty, category: { __typename?: 'GiftCategoryType', id: string, name: string } }> } | null };
+export type DataEntryGiftCategoriesQuery = { __typename?: 'Query', giftDescription?: { __typename?: 'GiftDescriptionType', id: string, categories: Array<{ __typename?: 'GiftCategoryType', id: string, label: string, description: string }> } | null };
 
 export type DataEntryAllGiftCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type DataEntryAllGiftCategoriesQuery = { __typename?: 'Query', letterCategories: Array<{ __typename?: 'LetterCategoryType', id: string, label: string, description: string }> };
+export type DataEntryAllGiftCategoriesQuery = { __typename?: 'Query', giftCategories: Array<{ __typename?: 'GiftCategoryType', id: string, label: string, description: string }> };
 
 export type DataEntryGiftEpisodesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1306,7 +1283,7 @@ export type DataEntryLetterCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categorisations: Array<{ __typename?: 'LetterDescriptionCategoryType', id: string, sourceMention: SourceMention, note: string, certainty: Certainty, category: { __typename?: 'LetterCategoryType', id: string, label: string } }> } | null };
+export type DataEntryLetterCategoriesQuery = { __typename?: 'Query', letterDescription?: { __typename?: 'LetterDescriptionType', id: string, categories: Array<{ __typename?: 'LetterCategoryType', id: string, label: string, description: string }> } | null };
 
 export type DataEntryAllLetterCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2117,15 +2094,10 @@ export const DataEntryGiftCategoriesDocument = gql`
     query DataEntryGiftCategories($id: ID!) {
   giftDescription(id: $id) {
     id
-    categorisations {
+    categories {
       id
-      sourceMention
-      note
-      certainty
-      category {
-        id
-        name
-      }
+      label
+      description
     }
   }
 }
@@ -2143,7 +2115,7 @@ export const DataEntryGiftCategoriesDocument = gql`
   }
 export const DataEntryAllGiftCategoriesDocument = gql`
     query DataEntryAllGiftCategories {
-  letterCategories {
+  giftCategories {
     id
     label
     description
@@ -2306,15 +2278,10 @@ export const DataEntryLetterCategoriesDocument = gql`
     query DataEntryLetterCategories($id: ID!) {
   letterDescription(id: $id) {
     id
-    categorisations {
+    categories {
       id
-      sourceMention
-      note
-      certainty
-      category {
-        id
-        label
-      }
+      label
+      description
     }
   }
 }

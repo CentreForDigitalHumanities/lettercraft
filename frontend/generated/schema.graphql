@@ -300,25 +300,13 @@ input GiftCategorisationInput {
 type GiftCategoryType {
   description: String!
   id: ID!
-  name: String!
-}
-
-type GiftDescriptionCategoryType {
-  category: GiftCategoryType!
-  certainty: Certainty!
-  gift: GiftDescriptionType!
-  id: ID!
-
-  """Additional notes"""
-  note: String!
-  sourceMention: SourceMention!
+  label: String!
 }
 
 type GiftDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
   categories: [GiftCategoryType!]!
-  categorisations: [GiftDescriptionCategoryType!]!
 
   """The chapter or chapters in the source"""
   chapter: String!
@@ -367,22 +355,10 @@ type LetterCategoryType {
   label: String!
 }
 
-type LetterDescriptionCategoryType {
-  category: LetterCategoryType!
-  certainty: Certainty!
-  id: ID!
-  letter: LetterDescriptionType!
-
-  """Additional notes"""
-  note: String!
-  sourceMention: SourceMention!
-}
-
 type LetterDescriptionType implements EntityDescription {
   """The book in the source"""
   book: String!
   categories: [LetterCategoryType!]!
-  categorisations: [LetterDescriptionCategoryType!]!
 
   """The chapter or chapters in the source"""
   chapter: String!
@@ -539,6 +515,7 @@ type Query {
   episodeCategories: [EpisodeCategoryType!]!
   episodeEntityLink(entity: ID!, entityType: Entity!, episode: ID!): EpisodeEntityLink
   episodes(editable: Boolean, sourceId: ID): [EpisodeType!]!
+  giftCategories: [GiftCategoryType!]!
   giftDescription(id: ID!): GiftDescriptionType
   giftDescriptions(editable: Boolean, episodeId: ID, sourceId: ID): [GiftDescriptionType!]!
   historicalPersons: [HistoricalPersonType!]!
