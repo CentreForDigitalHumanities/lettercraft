@@ -5,6 +5,7 @@
             *ngFor="let item of selectedItems()"
             class="badge rounded-pill text-bg-primary me-2 small fw-normal d-inline-flex align-items-center"
         >
+            <fa-icon *ngIf="item.icon" [icon]="item.icon" aria-hidden="true" />
             <span class="ms-1">{{ item.label }}</span>
             <button
                 class="btn btn-sm btn-primary py-0 px-1 ms-1"

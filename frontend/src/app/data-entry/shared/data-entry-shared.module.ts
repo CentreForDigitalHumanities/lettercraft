@@ -7,7 +7,6 @@ import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entit
 import { FormStatusComponent } from "./form-status/form-status.component";
 import { EpisodeLinkFormComponent } from "./episode-link-form/episode-link-form.component";
 import { SingleMultiSelectComponent } from "./single-multi-select/single-multi-select.component";
-import { SubspaceSelectComponent } from "./subspace-select/subspace-select.component";
 
 @NgModule({
     declarations: [
@@ -18,7 +17,6 @@ import { SubspaceSelectComponent } from "./subspace-select/subspace-select.compo
         FormStatusComponent,
         EpisodeLinkFormComponent,
         SingleMultiSelectComponent,
-        SubspaceSelectComponent,
     ],
     imports: [SharedModule],
     exports: [
@@ -29,7 +27,6 @@ import { SubspaceSelectComponent } from "./subspace-select/subspace-select.compo
         FormStatusComponent,
         EpisodeLinkFormComponent,
         SingleMultiSelectComponent,
-        SubspaceSelectComponent,
     ],
 })
 export class DataEntrySharedModule {}

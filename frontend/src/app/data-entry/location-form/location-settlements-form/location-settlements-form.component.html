@@ -3,10 +3,11 @@
         Select one or more settlements by which the text identifies or contextualises the location.
     </p>
 
-    <lc-subspace-select
+    <lc-single-multi-select
         *ngIf="settlementOptions$ | async as options"
         [formControl]="form.controls.settlements"
         [options]="options"
-        subspaceType="settlement"
+        [placeholder]="'Select a settlement...'"
+        [multiple]="true"
     />
 </form>
