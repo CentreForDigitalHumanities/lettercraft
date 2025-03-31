@@ -10,62 +10,38 @@ from core.models import (
 from person.models import HistoricalPerson
 
 
-class GiftDescription(EntityDescription, models.Model):
-    """
-    A gift described in an narrative source text
-    """
-
-    categories = models.ManyToManyField(
-        to="GiftCategory",
-        through="GiftDescriptionCategory",
-        blank=True,
-        help_text="categories assigned to the gift",
-    )
-
-
-class GiftCategory(Named, models.Model):
+class GiftCategory(models.Model):
     """
     A type of gift (e.g. "silver cup", "hairshirt")
     """
 
+    label = models.CharField(max_length=200, blank=False, null=False, unique=True)
+    description = models.TextField(blank=True, null=False)
+
     class Meta:
+        verbose_name = "gift category"
         verbose_name_plural = "gift categories"
 
+    def __str__(self):
+        return self.label
 
-class GiftDescriptionCategory(DescriptionField, models.Model):
+
+class GiftDescription(EntityDescription, models.Model):
     """
-    Categorisation of a gift in a narrative source.
+    A gift described in an narrative source text
     """
-
-    gift = models.ForeignKey(
-        to=GiftDescription,
-        on_delete=models.CASCADE,
-        related_name="categorisations",
-    )
-    category = models.ForeignKey(
-        to=GiftCategory,
-        on_delete=models.CASCADE,
-        related_name="categorisations",
-    )
-
-    def __str__(self) -> str:
-        return f"category {self.category} on {self.gift}"
-
-
-class LetterDescription(EntityDescription, models.Model):
-    """
-    A letter described in a narrative source text
-    """
-
     categories = models.ManyToManyField(
-        to="LetterCategory",
-        through="LetterDescriptionCategory",
+        to=GiftCategory,
         blank=True,
-        help_text="categories assigned to the letter",
+        help_text="categories assigned to the gift",
+        related_name="gifts",
     )
 
 
 class LetterCategory(models.Model):
+    """
+    A type of letter (e.g. "private correspondence", "letter of entreaty")
+    """
     label = models.CharField(max_length=200, blank=False, null=False, unique=True)
     description = models.TextField(blank=True, null=False)
 
@@ -77,24 +53,16 @@ class LetterCategory(models.Model):
         return self.label
 
 
-class LetterDescriptionCategory(DescriptionField, models.Model):
+class LetterDescription(EntityDescription, models.Model):
     """
-    Categorisation of a letter in a narrative source.
+    A letter described in a narrative source text
     """
-
-    letter = models.ForeignKey(
-        to=LetterDescription,
-        on_delete=models.CASCADE,
-        related_name="categorisations",
-    )
-    category = models.ForeignKey(
+    categories = models.ManyToManyField(
         to=LetterCategory,
-        on_delete=models.CASCADE,
-        related_name="categorisations",
+        blank=True,
+        help_text="categories assigned to the letter",
+        related_name="letters",
     )
-
-    def __str__(self) -> str:
-        return f"category {self.category} on {self.letter}"
 
 
 class PreservedLetter(HistoricalEntity, models.Model):
