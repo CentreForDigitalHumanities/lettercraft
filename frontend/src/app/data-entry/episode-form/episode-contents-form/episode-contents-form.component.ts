@@ -18,10 +18,10 @@ import {
     switchMap,
     withLatestFrom
 } from "rxjs";
-import { LabelSelectOption } from "../../shared/label-select/label-select.component";
 import { FormService } from "../../shared/form.service";
 import { formStatusSubject } from "../../shared/utils";
 import { MutationResult } from "apollo-angular";
+import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 
 @Component({
     selector: "lc-episode-contents-form",
@@ -48,7 +48,7 @@ export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
         }),
     });
 
-    public episodeCategories$: Observable<LabelSelectOption[]> =
+    public episodeCategories$: Observable<MultiselectOption[]> =
         this.episodeCategoriesQuery.fetch().pipe(
             map((result) => {
                 const categories = result.data.episodeCategories;
