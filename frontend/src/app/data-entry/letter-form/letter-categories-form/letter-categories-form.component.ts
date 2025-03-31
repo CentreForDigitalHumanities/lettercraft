@@ -7,12 +7,29 @@ import {
     DataEntryUpdateLetterGQL,
     DataEntryUpdateLetterMutation,
 } from "generated/graphql";
-import { BehaviorSubject, debounceTime, filter, map, Observable, share, switchMap, withLatestFrom } from "rxjs";
+import {
+    BehaviorSubject,
+    debounceTime,
+    filter,
+    map,
+    Observable,
+    share,
+    switchMap,
+    withLatestFrom,
+} from "rxjs";
 import { MultiselectOption } from "../../shared/multiselect/multiselect.component";
 import { FormStatus } from "../../shared/types";
 import { FormService } from "../../shared/form.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MutationResult } from "apollo-angular";
+
+interface LetterCategories {
+    categories: string[];
+}
+
+type LetterCategoriesForm = {
+    [key in keyof LetterCategories]: FormControl<string[]>;
+};
 
 @Component({
     selector: "lc-letter-categories-form",
@@ -27,8 +44,8 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
         map((result) => result.data.letterDescription)
     );
 
-    public form = new FormGroup({
-        categorisations: new FormControl<string[]>([], {
+    public form = new FormGroup<LetterCategoriesForm>({
+        categories: new FormControl<string[]>([], {
             nonNullable: true,
         }),
     });
@@ -54,19 +71,21 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
         private letterQuery: DataEntryLetterCategoriesGQL,
         private letterCategoriesQuery: DataEntryAllLetterCategoriesGQL,
         private updateLetter: DataEntryUpdateLetterGQL
-    ) { }
+    ) {}
 
     ngOnInit(): void {
         this.formService.attachForm(this.formName, this.status$);
 
-        this.letter$.pipe(
-            takeUntilDestroyed(this.destroyRef)
-        ).subscribe(letter => {
-            if (!letter) {
-                return;
-            }
-            // TODO: patch form with letter data.
-        });
+        this.letter$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((letter) => {
+                if (!letter) {
+                    return;
+                }
+                this.form.controls.categories.setValue(
+                    letter.categories.map((category) => category.id)
+                );
+            });
 
         this.form.statusChanges
             .pipe(
@@ -93,7 +112,7 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
         validFormSubmission$
             .pipe(
                 withLatestFrom(this.id$),
-                switchMap(([letter, id]) => this.performMutation(letter, id)),
+                switchMap(([form, id]) => this.performMutation(form, id)),
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((result) => this.onMutationResult(result));
@@ -103,16 +122,21 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
         this.formService.detachForm(this.formName);
     }
 
-    private performMutation(letterCategories: unknown, id: string): Observable<MutationResult<DataEntryUpdateLetterMutation>> {
+    private performMutation(
+        form: LetterCategories,
+        id: string
+    ): Observable<MutationResult<DataEntryUpdateLetterMutation>> {
         return this.updateLetter.mutate({
             letterData: {
-                // ...Add letterCategory data here
                 id,
-            }
-        })
+                categories: form.categories,
+            },
+        });
     }
 
-    private onMutationResult(result: MutationResult<DataEntryUpdateLetterMutation>): void {
+    private onMutationResult(
+        result: MutationResult<DataEntryUpdateLetterMutation>
+    ): void {
         const errors = result.data?.updateLetter?.errors;
         if (errors && errors.length > 0) {
             this.status$.next("error");

@@ -42,17 +42,15 @@ class UpdateLetterMutation(LettercraftMutation):
                 field="id",
                 messages=[SOURCE_NOT_PERMITTED_MSG],
             )
-            return cls(ok=False, errors=[error])
+            return cls(ok=False, errors=[error]) # type: ignore
 
         try:
-            cls.mutate_object(letter_data, letter, info, ["categorisations"])
+            cls.mutate_object(letter_data, letter, info)
         except ObjectDoesNotExist as field:
             error = LettercraftErrorType(
                 field=str(field), messages=["Related object cannot be found."]
             )
             return cls(ok=False, errors=[error])  # type: ignore
-
-        # TODO: resolve categorisations
 
         user = info.context.user
         letter.contributors.add(user)
