@@ -21,7 +21,7 @@
                 ngbDropdownItem
             >
                 <fa-icon *ngIf="option.icon" [icon]="option.icon" class="me-2" aria-hidden="true" />
-                <span>{{ option.dropdownLabel ?? option.label }}</span>
+                <p class="m-0 text-wrap">{{ option.dropdownLabel ?? option.label }} <span *ngIf="option.description" class="text-muted small">({{option.description}})</span></p>
             </button>
         </ng-container>
         <ng-template #noOptions>

@@ -13,6 +13,7 @@ import { NgbDropdownToggle } from "@ng-bootstrap/ng-bootstrap";
 export interface MultiselectOption {
     value: string;
     label: string;
+    description?: string;
     icon?: IconDefinition;
     // The label to be shown in the dropdown. If not supplied, `label` will be used.
     dropdownLabel?: string;

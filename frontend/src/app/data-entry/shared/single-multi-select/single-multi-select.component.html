@@ -1,9 +1,9 @@
-<p *ngIf="control.value.length > 0">Currently selected:</p>
-<ng-container *ngIf="multiple; else singleSelected">
+<div *ngIf="control.value.length > 0" class="d-flex align-items-center">
+    <p class="me-2">Currently selected:</p>
     <ul class="ps-0">
         <li
             *ngFor="let item of selectedItems()"
-            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
+            class="badge rounded-pill text-bg-primary me-2 small fw-normal d-inline-flex align-items-center"
         >
             <span class="ms-1">{{ item.label }}</span>
             <button
@@ -16,24 +16,7 @@
             </button>
         </li>
     </ul>
-</ng-container>
-<ng-template #singleSelected>
-    <div *ngIf="control.value.length === 1" class="single-selected">
-        <p
-            class="badge rounded-pill text-bg-primary me-2 fs-6 fw-normal d-inline-flex align-items-center"
-        >
-            <span class="ms-1">{{ selectedItems()[0].label }}</span>
-            <button
-                class="btn btn-sm btn-primary py-0 px-1 ms-1"
-                type="button"
-                [attr.aria-label]="'remove ' + selectedItems()[0].label"
-                (click)="removeItem(selectedItems()[0].value)"
-            >
-                <lc-icon [icon]="actionIcons.cancel" />
-            </button>
-        </p>
-    </div>
-</ng-template>
+</div>
 
 <form *ngIf="multiple === true || control.value.length !== 1">
     <lc-multiselect

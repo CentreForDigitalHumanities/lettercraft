@@ -57,6 +57,7 @@ export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
                 categories.map((category) => ({
                     value: category.id,
                     label: category.label,
+                    description: category.description,
                 }))
             )
         );
