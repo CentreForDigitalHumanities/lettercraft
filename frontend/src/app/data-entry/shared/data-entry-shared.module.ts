@@ -7,7 +7,7 @@ import { EntityDescriptionLeadComponent } from "./entity-description-lead/entity
 import { DeleteEntityButtonComponent } from "./delete-entity-button/delete-entity-button.component";
 import { FormStatusComponent } from "./form-status/form-status.component";
 import { EpisodeLinkFormComponent } from "./episode-link-form/episode-link-form.component";
-import { HistoricalPersonSelectComponent } from "./historical-person-select/historical-person-select.component";
+import { SingleMultiSelectComponent } from "./single-multi-select/single-multi-select.component";
 import { SubspaceSelectComponent } from "./subspace-select/subspace-select.component";
 
 @NgModule({
@@ -19,7 +19,7 @@ import { SubspaceSelectComponent } from "./subspace-select/subspace-select.compo
         DeleteEntityButtonComponent,
         FormStatusComponent,
         EpisodeLinkFormComponent,
-        HistoricalPersonSelectComponent,
+        SingleMultiSelectComponent,
         SubspaceSelectComponent,
     ],
     imports: [SharedModule],
@@ -31,7 +31,7 @@ import { SubspaceSelectComponent } from "./subspace-select/subspace-select.compo
         DeleteEntityButtonComponent,
         FormStatusComponent,
         EpisodeLinkFormComponent,
-        HistoricalPersonSelectComponent,
+        SingleMultiSelectComponent,
         SubspaceSelectComponent,
     ],
 })
