@@ -2,12 +2,14 @@ query ViewEpisode($id: ID!) {
   episode(id: $id) {
     id
     name
-    description
     editable
     source {
         id
         name
     }
+    book
+    chapter
+    page
     contributors {
         id
         fullName

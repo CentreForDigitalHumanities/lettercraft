@@ -19,6 +19,28 @@
 
         <lc-contributors [contributors]="episode.contributors" />
 
+        <h2 class="mt-5">Source text</h2>
+
+        <dl>
+            <dt>Source text</dt>
+            <dd class="ms-4">
+                <a [routerLink]="['/data/sources', episode.source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{episode.source.name}}</a>
+            </dd>
+            <dt>Location in text</dt>
+            <dd class="ms-4">
+                <span class="inline-list">
+                    <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
+                    <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
+                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
+                </span>
+                <i *ngIf="!(episode.book || episode.chapter || episode.page)">
+                    Location not specified.
+                </i>
+            </dd>
+        </dl>
+
         <h2 class="mt-5">Content</h2>
 
         <dl>
@@ -37,9 +59,10 @@
 
             <dt>Labels</dt>
             <dd class="ms-4">
-                <ul class="inline-list mt-1">
-                    <li *ngFor="let category of episode.categories" class="inline-list-item">
-                        <span class="badge rounded-pill text-bg-primary fs-6 fw-normal">
+                <ul class="inline-list no-delimiter">
+                    <li *ngFor="let category of episode.categories"
+                        class="inline-list-item">
+                        <span class="badge rounded-pill text-bg-secondary">
                             {{category.name}}
                         </span>
                     </li>
