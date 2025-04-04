@@ -9,6 +9,15 @@
     <div class="card-body">
         <p *ngIf="episode.summary">{{episode.summary}}</p>
 
+        <ul class="inline-list no-delimiter">
+            <li *ngFor="let category of episode.categories"
+                class="inline-list-item">
+                <span class="badge rounded-pill text-bg-secondary">
+                    {{category.name}}
+                </span>
+            </li>
+        </ul>
+
         <dl *ngIf="hasEntities(episode)">
             <dt>Agents</dt>
             <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">

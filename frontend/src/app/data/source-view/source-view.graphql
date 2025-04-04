@@ -10,8 +10,11 @@ query ViewSource($id: ID!) {
         episodes {
             id
             name
-            description
             summary
+            categories {
+                id
+                name
+            }
             book
             chapter
             contributors {

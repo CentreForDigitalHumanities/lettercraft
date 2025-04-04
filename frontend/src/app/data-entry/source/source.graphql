@@ -5,8 +5,11 @@ query DataEntrySourceDetail($id: ID!) {
         episodes {
             id
             name
-            description
             summary
+            categories {
+                id
+                name
+            }
             book
             chapter
             contributors {
