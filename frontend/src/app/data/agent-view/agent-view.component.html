@@ -13,10 +13,15 @@
 
         <lc-contributors [contributors]="agent.contributors" />
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Description</h2>
 
             <dl>
+                <dt>Indivdual or group</dt>
+                <dd class="ms-4">
+                    {{ agent.isGroup ? 'Group' : 'Individual' }}
+                </dd>
+
                 <dt *ngIf="agent.gender">Gender</dt>
                 <dd *ngIf="agent.gender as gender" class="ms-4">
                     <p>
@@ -30,7 +35,7 @@
             </dl>
         </section>
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Source text</h2>
 
             <p>
@@ -52,8 +57,13 @@
             <lc-episode-links [episodes]="agent.episodes" />
         </section>
 
-        <section *ngIf="agent.personReferences.length">
+        <section class="mt-5">
             <h2>Historical context</h2>
+
+            <p *ngIf="!agent.personReferences.length">
+                <i>This agent is not linked to any historic figures in the database.
+                </i>
+            </p>
 
             <ng-container *ngIf="agent.isGroup; else singularReference">
                 <p>
