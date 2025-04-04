@@ -1,0 +1,19 @@
+query ViewEpisodes {
+  episodes {
+    id
+    name
+    description
+    summary
+    book
+    chapter
+    contributors {
+      id
+      fullName
+    }
+    page
+    source {
+      id
+      name
+    }
+  }
+}

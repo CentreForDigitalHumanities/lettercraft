@@ -3,29 +3,30 @@
 <h1>Browse data</h1>
 
 <p>
-    Use the overview of source texts
-    below to view the data per source.
+    Where do you want to start?
 </p>
 
-<ng-container *ngIf="data$ | async as data">
-    <ul class="list-group">
-        <li *ngFor="let source of data.sources"
-            class="list-group-item list-group-item-action">
-            <div class="d-flex align-items-center">
-                <a [routerLink]="['sources/', source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
-                <small class="text-body-secondary ms-2">
-                    ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other {{{ source.numOfEpisodes}} episodes}})
-                </small>
-            </div>
-            <p class="mb-1">
-                <ng-container *ngIf="source.medievalAuthor || source.medievalTitle">
-                    {{ source.medievalAuthor }}<ng-container *ngIf="source.medievalAuthor && source.medievalTitle">, </ng-container><em>{{ source.medievalTitle }}</em>.
-                </ng-container>
-                <ng-container *ngIf="source.editionAuthor || source.editionTitle">
-                    (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container><em>{{ source.editionTitle }}</em>.)
-                </ng-container>
+<div class="vstack gap-3">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4">
+                <a class="card-link" [routerLink]="['sources']">Source texts</a>
+            </h2>
+            <p>
+                Browse the medieval texts that have been analysed in the Lettercraft
+                project.
             </p>
-        </li>
-    </ul>
-</ng-container>
+        </div>
+    </div>
 
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4">
+                <a class="card-link" [routerLink]="['episodes']">Epistolary episodes</a>
+            </h2>
+            <p>
+                Search through the epistolary episodes found across all source texts.
+            </p>
+        </div>
+    </div>
+</div>

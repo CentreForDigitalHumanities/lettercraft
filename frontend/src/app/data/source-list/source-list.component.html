@@ -1,0 +1,31 @@
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<h1 class="mb-4">Source texts</h1>
+
+<p>
+    The list below shows the medieval texts that have been analysed in the Lettercraft
+    project. Click on a source to view more information and explore its epistolary
+    events.
+</p>
+
+<ng-container *ngIf="data$ | async as data">
+    <ul class="list-group mt-4">
+        <li *ngFor="let source of data.sources"
+            class="list-group-item list-group-item-action">
+            <div class="d-flex align-items-center">
+                <a [routerLink]="[source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
+                <small class="text-body-secondary ms-2">
+                    ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other {{{ source.numOfEpisodes}} episodes}})
+                </small>
+            </div>
+            <p class="mb-1">
+                <ng-container *ngIf="source.medievalAuthor || source.medievalTitle">
+                    {{ source.medievalAuthor }}<ng-container *ngIf="source.medievalAuthor && source.medievalTitle">, </ng-container><em>{{ source.medievalTitle }}</em>.
+                </ng-container>
+                <ng-container *ngIf="source.editionAuthor || source.editionTitle">
+                    (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container><em>{{ source.editionTitle }}</em>.)
+                </ng-container>
+            </p>
+        </li>
+    </ul>
+</ng-container>
