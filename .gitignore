@@ -37,3 +37,7 @@ frontend/src/environments/version.ts
 
 # VS code
 .vscode
+
+# Generated files
+frontend/generated/
+
