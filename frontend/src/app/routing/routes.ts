@@ -108,7 +108,7 @@ const routes: Routes = [
             },
             {
                 path: 'episodes',
-                title: pageTitle('Browse epsiodes'),
+                title: pageTitle('Browse episodes'),
                 component: EpisodeListComponent,
             },
             {
