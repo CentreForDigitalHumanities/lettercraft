@@ -43,7 +43,14 @@ class SourceType(DjangoObjectType):
             "medieval_author",
             "edition_title",
             "edition_author",
+            "is_public",
         ]
+
+    @classmethod
+    def get_queryset(
+        cls, queryset: QuerySet[Source], info: ResolveInfo
+    ) -> QuerySet[Source]:
+        return queryset
 
     # It would be proper to decorate _entity_resolver() with @staticmethod,
     # but we are running Python 3.9 on the server, which does not support

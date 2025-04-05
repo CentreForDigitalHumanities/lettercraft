@@ -13,7 +13,8 @@
     "pretest": "yarn prebuild",
     "watch-test": "ng test --watch=true",
     "lint": "ng lint",
-    "codegen": "yarn graphql-codegen --verbose --watch"
+    "codegen": "yarn graphql-codegen --verbose --watch",
+    "codegen-once": "yarn graphql-codegen"
   },
   "private": true,
   "dependencies": {

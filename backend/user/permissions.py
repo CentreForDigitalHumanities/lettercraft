@@ -12,7 +12,7 @@ SOURCE_NOT_PERMITTED_MSG = (
 
 def editable_sources(
     user: Union[User, AnonymousUser, None], sources: QuerySet[Source] = Source.objects
-):
+) -> QuerySet[Source]:
     if not user or user.is_anonymous:
         return sources.none()
 

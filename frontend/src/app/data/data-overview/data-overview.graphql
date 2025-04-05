@@ -1,5 +1,5 @@
 query ViewSources {
-    sources {
+    sources(isPublic: true) {
         id
         name
         editionAuthor
