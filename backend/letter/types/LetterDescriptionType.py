@@ -3,18 +3,15 @@ from graphene_django import DjangoObjectType
 from django.db.models import QuerySet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
-from letter.models import LetterCategory, LetterDescription, LetterDescriptionCategory
+from letter.models import LetterCategory, LetterDescription
 from letter.types.LetterCategoryType import LetterCategoryType
-from letter.types.LetterDescriptionCategoryType import LetterDescriptionCategoryType
 from event.models import EpisodeLetter
 from event.types.EpisodeLetterType import EpisodeLetterType
 from user.permissions import can_edit_source
 
+
 class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
-    # Direct access to foreign key
     categories = List(NonNull(LetterCategoryType), required=True)
-    # Through model
-    categorisations = List(NonNull(LetterDescriptionCategoryType), required=True)
     episodes = List(NonNull(EpisodeLetterType), required=True)
     # Computed
     editable = Boolean(required=True)
@@ -39,12 +36,6 @@ class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: LetterDescription, info: ResolveInfo
     ) -> QuerySet[LetterCategory]:
         return parent.categories.all()
-
-    @staticmethod
-    def resolve_categorisations(
-        parent: LetterDescription, info: ResolveInfo
-    ) -> QuerySet[LetterDescriptionCategory]:
-        return LetterDescriptionCategory.objects.filter(letter=parent)
 
     @staticmethod
     def resolve_episodes(

@@ -3,10 +3,11 @@
         Select one or more structures by which the text identifies or contextualises the location.
     </p>
 
-    <lc-subspace-select
+    <lc-single-multi-select
         *ngIf="structureOptions$ | async as options"
         [formControl]="form.controls.structures"
         [options]="options"
-        subspaceType="structure"
+        [placeholder]="'Select a structure...'"
+        [multiple]="true"
     />
 </form>

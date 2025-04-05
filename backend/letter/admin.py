@@ -5,22 +5,27 @@ from core import admin as core_admin
 
 @admin.register(models.GiftCategory)
 class GiftCategoryAdmin(admin.ModelAdmin):
-    pass
-
-
-class GiftDescriptionCategoryAdmin(admin.StackedInline):
-    model = models.GiftDescriptionCategory
-    fields = ["category"] + core_admin.description_field_fields
-    extra = 0
-    verbose_name = "category"
-    verbose_name_plural = "categories"
+    fields = ["label", "description"]
+    verbose_name = "gift category"
+    verbose_name_plural = "gift categories"
 
 
 @admin.register(models.GiftDescription)
 class GiftDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
-    inlines = [
-        GiftDescriptionCategoryAdmin
-    ]
+    filter_horizontal = ["categories"]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets.append(
+            (
+                "Gift categories",
+                {
+                    "description": "Categories assigned to the gift",
+                    "fields": ["categories"],
+                },
+            )
+        )
+        return fieldsets
 
 
 @admin.register(models.LetterCategory)
@@ -28,17 +33,22 @@ class LetterCategoryAdmin(admin.ModelAdmin):
     fields = ["label", "description"]
 
 
-class LetterDescriptionCategoryAdmin(admin.StackedInline):
-    model = models.LetterDescriptionCategory
-    fields = ["category"] + core_admin.description_field_fields
-    extra = 0
-    verbose_name = "category"
-    verbose_name_plural = "categories"
-
-
 @admin.register(models.LetterDescription)
 class LetterDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
-    inlines = [LetterDescriptionCategoryAdmin]
+    filter_horizontal = ["categories"]
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets.append(
+            (
+                "Letter categories",
+                {
+                    "description": "Categories assigned to the letter",
+                    "fields": ["categories"],
+                },
+            )
+        )
+        return fieldsets
 
 
 class PreservedLetterRoleAdmin(admin.StackedInline):

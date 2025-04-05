@@ -23,6 +23,14 @@ import { FormService } from "../../shared/form.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MutationResult } from "apollo-angular";
 
+interface GiftCategories {
+    categories: string[];
+}
+
+type GiftCategoriesForm = {
+    [key in keyof GiftCategories]: FormControl<string[]>;
+};
+
 @Component({
     selector: "lc-gift-categories-form",
     templateUrl: "./gift-categories-form.component.html",
@@ -36,19 +44,20 @@ export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
         map((result) => result.data.giftDescription)
     );
 
-    public form = new FormGroup({
-        categorisations: new FormControl<string[]>([], {
+    public form = new FormGroup<GiftCategoriesForm>({
+        categories: new FormControl<string[]>([], {
             nonNullable: true,
         }),
     });
 
     public giftCategories$: Observable<MultiselectOption[]> =
         this.giftCategoriesQuery.watch().valueChanges.pipe(
-            map((result) => result.data.letterCategories),
+            map((result) => result.data.giftCategories),
             map((categories) =>
                 categories.map((category) => ({
                     value: category.id,
                     label: category.label,
+                    description: category.description,
                 }))
             )
         );
@@ -70,11 +79,13 @@ export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
 
         this.gift$
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((letter) => {
-                if (!letter) {
+            .subscribe((gift) => {
+                if (!gift) {
                     return;
                 }
-                // TODO: patch form with gift data.
+                this.form.controls.categories.setValue(
+                    gift.categories.map((category) => category.id)
+                );
             });
 
         this.form.statusChanges
@@ -102,7 +113,7 @@ export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
         validFormSubmission$
             .pipe(
                 withLatestFrom(this.id$),
-                switchMap(([letter, id]) => this.performMutation(letter, id)),
+                switchMap(([form, id]) => this.performMutation(form, id)),
                 takeUntilDestroyed(this.destroyRef)
             )
             .subscribe((result) => this.onMutationResult(result));
@@ -113,13 +124,13 @@ export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
     }
 
     private performMutation(
-        giftCategories: unknown,
+        form: GiftCategories,
         id: string
     ): Observable<MutationResult<DataEntryUpdateGiftMutation>> {
         return this.updateGift.mutate({
             giftData: {
-                // ...Add letterCategory data here
                 id,
+                categories: form.categories,
             },
         });
     }

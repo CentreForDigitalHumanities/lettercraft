@@ -44,7 +44,6 @@ class EntityDescriptionAdmin(admin.ModelAdmin):
         ),
         contributions_fieldset,
         description_source_fieldset,
-        ("Contents", {"fields": ["summary", "designators"]}),
     ]
 
 

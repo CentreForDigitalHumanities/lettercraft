@@ -2,11 +2,18 @@ from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
 from typing import Optional
 
-from letter.models import GiftDescription, LetterCategory, LetterDescription
+from letter.models import (
+    GiftCategory,
+    GiftDescription,
+    LetterCategory,
+    LetterDescription,
+)
+from letter.types.GiftCategoryType import GiftCategoryType
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
 from user.permissions import editable_sources
+
 
 class LetterQueries(ObjectType):
     letter_description = Field(LetterDescriptionType, id=ID(required=True))
@@ -32,6 +39,11 @@ class LetterQueries(ObjectType):
         episode_id=ID(),
         source_id=ID(),
         editable=Boolean(),
+    )
+
+    gift_categories = List(
+        NonNull(GiftCategoryType),
+        required=True,
     )
 
     @staticmethod
@@ -103,3 +115,9 @@ class LetterQueries(ObjectType):
         return GiftDescriptionType.get_queryset(GiftDescription.objects, info).filter(
             filters
         )
+
+    @staticmethod
+    def resolve_gift_categories(
+        parent: None, info: ResolveInfo
+    ) -> QuerySet[GiftCategory]:
+        return GiftCategoryType.get_queryset(GiftCategory.objects, info).all()

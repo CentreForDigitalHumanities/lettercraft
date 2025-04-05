@@ -12,7 +12,7 @@
     <fieldset>
         <legend>Designators</legend>
         <p class="form-text">
-            What (latin) terminology is used to describe the actions in the passage?
+            What (Latin) terminology is used to describe the actions in the passage?
             List key nouns and verbs in nominative or infinitive form (e.g. epistula,
             missus, dirigere).
         </p>
@@ -24,6 +24,11 @@
         <p class="form-text">
             Pick one or more labels that describe this episode.
         </p>
-        <lc-label-select [formControl]="form.controls.categories" [options]="episodeCategories" />
+        <lc-single-multi-select
+            [formControl]="form.controls.categories"
+            [options]="episodeCategories"
+            [multiple]="true"
+            placeholder="Select episode labels"
+        />
     </fieldset>
 </form>

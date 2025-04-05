@@ -3,18 +3,15 @@ from graphene_django import DjangoObjectType
 from django.db.models import QuerySet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
-from letter.models import GiftCategory, GiftDescription, GiftDescriptionCategory
-from letter.types.GiftDescriptionCategoryType import GiftDescriptionCategoryType
+from letter.models import GiftCategory, GiftDescription
 from letter.types.GiftCategoryType import GiftCategoryType
 from event.types.EpisodeGiftType import EpisodeGiftType
 from event.models import EpisodeGift
 from user.permissions import can_edit_source
 
+
 class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
-    # Direct access to foreign key
     categories = List(NonNull(GiftCategoryType), required=True)
-    # Through model
-    categorisations = List(NonNull(GiftDescriptionCategoryType), required=True)
     episodes = List(NonNull(EpisodeGiftType), required=True)
     # Computed
     editable = Boolean(required=True)
@@ -39,12 +36,6 @@ class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: GiftDescription, info: ResolveInfo
     ) -> QuerySet[GiftCategory]:
         return parent.categories.all()
-
-    @staticmethod
-    def resolve_categorisations(
-        parent: GiftDescription, info: ResolveInfo
-    ) -> QuerySet[GiftDescriptionCategory]:
-        return GiftDescriptionCategory.objects.filter(gift=parent)
 
     @staticmethod
     def resolve_episodes(
