@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { actionIcons } from "@shared/icons";
 import { Observable } from "rxjs";
