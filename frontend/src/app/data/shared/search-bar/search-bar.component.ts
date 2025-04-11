@@ -15,6 +15,12 @@ export class SearchBarComponent {
     @Input({ required: true })
     public loading$!: Observable<boolean>;
 
+    @Input()
+    public placeholderText = "Search...";
+
+    @Input()
+    public searchText = "Searching...";
+
     public actionIcons = actionIcons;
 
     public clearSearch(): void {

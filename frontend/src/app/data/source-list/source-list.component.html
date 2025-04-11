@@ -13,7 +13,12 @@
 </p>
 
 <ng-container *ngIf="data$ | async as data">
-    <lc-search-bar [searchControl]="searchControl" [loading$]="loading$" />
+    <lc-search-bar
+        [searchControl]="searchControl"
+        [loading$]="loading$"
+        placeholderText="Search sources..."
+        searchText="Searching sources"
+    />
 
     <ul class="list-group mt-2">
         <li
