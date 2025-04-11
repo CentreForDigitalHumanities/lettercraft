@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
-import { ViewAgentQuery, ViewGiftQuery, ViewLetterQuery, ViewLocationQuery } from 'generated/graphql';
+import { sourceMentionLabels } from '@shared/labels';
+import { SourceMention, ViewAgentQuery, ViewGiftQuery, ViewLetterQuery, ViewLocationQuery } from 'generated/graphql';
 
 type QueriedEpisodeLink =
     | NonNullable<ViewAgentQuery["agentDescription"]>["episodes"][number]
@@ -18,4 +19,7 @@ export class EpisodeLinksComponent {
     episodes!: QueriedEpisodeLink[];
 
     dataIcons = dataIcons;
+
+    SourceMention = SourceMention;
+    sourceMentionLabels = sourceMentionLabels;
 }
