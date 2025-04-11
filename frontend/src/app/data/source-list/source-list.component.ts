@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { actionIcons } from "@shared/icons";
 import { ViewSourcesGQL, ViewSourcesQuery } from "generated/graphql";
 import {
     map,
@@ -14,18 +13,16 @@ import {
 } from "rxjs";
 
 @Component({
-  selector: 'lc-source-list',
-  templateUrl: './source-list.component.html',
-  styleUrls: ['./source-list.component.scss']
+    selector: "lc-source-list",
+    templateUrl: "./source-list.component.html",
+    styleUrls: ["./source-list.component.scss"],
 })
 export class SourceListComponent {
     breadcrumbs: Breadcrumb[] = [
-        { link: '/', label: 'Lettercraft' },
-        { link: '/data', label: 'Data' },
-        { link: '.', label: 'Sources' },
+        { link: "/", label: "Lettercraft" },
+        { link: "/data", label: "Data" },
+        { link: ".", label: "Sources" },
     ];
-
-    public actionIcons = actionIcons;
 
     public searchControl = new FormControl<string>("", {
         nonNullable: true,
@@ -46,13 +43,9 @@ export class SourceListComponent {
     );
 
     public loading$ = merge(
-        this.searchInput$.pipe(startWith(true)),
+        this.searchInput$.pipe(map(() => true)),
         this.data$.pipe(map(() => false))
     );
 
     constructor(private query: ViewSourcesGQL) {}
-
-    public clearSearch(): void {
-        this.searchControl.setValue("");
-    }
 }

@@ -13,35 +13,7 @@
 </p>
 
 <ng-container *ngIf="data$ | async as data">
-    <div class="input-group mb-3 mt-4">
-        <span class="input-group-text">
-            <div
-                *ngIf="loading$ | async; else notLoading"
-                class="spinner-border spinner-border-sm"
-                role="status"
-            >
-                <span class="visually-hidden">Searching sources...</span>
-            </div>
-            <ng-template #notLoading>
-                <lc-icon [icon]="actionIcons.search" />
-            </ng-template>
-        </span>
-        <input
-            type="text"
-            class="form-control"
-            placeholder="Search sources..."
-            [formControl]="searchControl"
-        />
-        <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="clearSearch()"
-            [disabled]="searchControl.value === ''"
-        >
-            <lc-icon [icon]="actionIcons.cancel" />
-            Clear search
-        </button>
-    </div>
+    <lc-search-bar [searchControl]="searchControl" [loading$]="loading$" />
 
     <ul class="list-group mt-2">
         <li

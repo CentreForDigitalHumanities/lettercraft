@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { actionIcons } from "@shared/icons";
 import { ViewEpisodesGQL, ViewEpisodesQuery } from "generated/graphql";
 import {
     debounceTime,
@@ -25,8 +24,6 @@ export class EpisodeListComponent {
         { link: ".", label: "Episodes" },
     ];
 
-    public actionIcons = actionIcons;
-
     public searchControl = new FormControl<string>("", {
         nonNullable: true,
     });
@@ -46,12 +43,9 @@ export class EpisodeListComponent {
     );
 
     public loading$ = merge(
-        this.searchInput$.pipe(startWith(true)),
+        this.searchInput$.pipe(map(() => true)),
         this.data$.pipe(map(() => false))
     );
 
     constructor(private query: ViewEpisodesGQL) {}
-    public clearSearch(): void {
-        this.searchControl.setValue("");
-    }
 }
