@@ -11,3 +11,4 @@ dj_rest_auth
 django-allauth
 graphene
 graphene-django
+django-filter
