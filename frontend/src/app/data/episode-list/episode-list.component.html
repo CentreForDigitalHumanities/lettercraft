@@ -3,10 +3,48 @@
 <h1 class="mb-4">Epistolary episodes</h1>
 
 <p class="mb-4">
-    The list below shows the epistolary episodes that have been identified across all
-    source texts. Click on an episode to view more information about it.
+    The list below shows the epistolary episodes that have been identified
+    across all source texts. Click on an episode to view more information about
+    it.
+</p>
+
+<p>
+    Use the search box to filter the list of episodes by name, description or summary.
 </p>
 
 <ng-container *ngIf="data$ | async as data">
-    <lc-episode-preview *ngFor="let episode of data.episodes" [episode]="episode" />
+    <div class="input-group mb-3 mt-4">
+        <span class="input-group-text">
+            <div
+                *ngIf="loading$ | async; else notLoading"
+                class="spinner-border spinner-border-sm"
+                role="status"
+            >
+                <span class="visually-hidden">Searching episodes...</span>
+            </div>
+            <ng-template #notLoading>
+                <lc-icon [icon]="actionIcons.search" />
+            </ng-template>
+        </span>
+        <input
+            type="text"
+            class="form-control"
+            placeholder="Search episodes..."
+            [formControl]="searchControl"
+        />
+        <button
+            class="btn btn-outline-secondary"
+            type="button"
+            (click)="clearSearch()"
+            [disabled]="searchControl.value === ''"
+        >
+            <lc-icon [icon]="actionIcons.cancel" />
+            Clear search
+        </button>
+    </div>
+
+    <lc-episode-preview
+        *ngFor="let episode of data.episodes"
+        [episode]="episode"
+    />
 </ng-container>

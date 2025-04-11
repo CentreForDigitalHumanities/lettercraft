@@ -1,7 +1,8 @@
 from graphene import List, NonNull, ResolveInfo, Boolean
 from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
+from django_filters import FilterSet, CharFilter
 
 from event.models import Episode, EpisodeCategory
 from event.types.EpisodeCategoryType import EpisodeCategoryType
@@ -9,7 +10,16 @@ from person.models import AgentDescription
 from space.models import SpaceDescription
 from user.permissions import can_edit_source
 
+class EpisodeFilter(FilterSet):
+    search = CharFilter(method="search_episodes")
 
+    def search_episodes(self, queryset: QuerySet[Episode], name: str, value: str) -> QuerySet[Episode]:
+        """Filter episodes by name, description or summary."""
+        return queryset.filter(
+            Q(name__icontains=value)
+            | Q(description__icontains=value)
+            | Q(summary__icontains=value)
+        )
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(EpisodeCategoryType), required=True)
     agents = List(
@@ -30,6 +40,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "spaces",
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
+        filterset_class = EpisodeFilter
 
     @classmethod
     def get_queryset(

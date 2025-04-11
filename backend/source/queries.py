@@ -25,7 +25,7 @@ class SourceQueries(ObjectType):
 
     @staticmethod
     def resolve_sources(
-        root: None, info: ResolveInfo, editable: bool = False, **kwargs
+        root: None, info: ResolveInfo, editable: bool = False, **kwargs: dict
     ) -> QuerySet[Source]:
         queryset = SourceType.get_queryset(Source.objects, info)
 
