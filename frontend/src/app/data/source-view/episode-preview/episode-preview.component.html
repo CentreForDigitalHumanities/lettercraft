@@ -7,9 +7,16 @@
         </a>
     </div>
     <div class="card-body">
-        <p *ngIf="episode.summary">{{episode.summary}}</p>
+        <p class="block">
+            <span *ngIf="episode.summary; else noSummary">
+                {{episode.summary}}
+            </span>
+            <ng-template #noSummary>
+                <i>No summary.</i>
+            </ng-template>
+        </p>
 
-        <ul class="inline-list no-delimiter">
+        <ul class="block inline-list no-delimiter" *ngIf="episode.categories.length">
             <li *ngFor="let category of episode.categories"
                 class="inline-list-item">
                 <span class="badge rounded-pill text-bg-secondary">
@@ -18,7 +25,7 @@
             </li>
         </ul>
 
-        <dl *ngIf="hasEntities(episode)">
+        <dl class="block" *ngIf="hasEntities(episode)">
             <dt>Agents</dt>
             <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
                 <ul class="inline-list">
