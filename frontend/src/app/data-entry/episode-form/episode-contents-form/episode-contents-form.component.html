@@ -24,11 +24,7 @@
         <p class="form-text">
             Pick one or more labels that describe this episode.
         </p>
-        <lc-single-multi-select
-            [formControl]="form.controls.categories"
-            [options]="episodeCategories"
-            [multiple]="true"
-            placeholder="Select episode labels"
-        />
+
+        <lc-label-select [labels]="episodeCategories" />
     </fieldset>
 </form>
