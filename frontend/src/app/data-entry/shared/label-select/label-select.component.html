@@ -5,6 +5,7 @@
             [attr.aria-selected]="isSelected(label)"
             type="button"
             (click)="toggle(label)">
+            <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'" />
             {{label.label}}
         </button>
     </li>
