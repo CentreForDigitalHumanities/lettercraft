@@ -1,4 +1,4 @@
-<ul class="d-flex d-wrap list-unstyled">
+<ul class="d-flex d-wrap list-unstyled" *ngIf="labels.length; else noLabels">
     <li *ngFor="let label of labels" class="p-1">
         <button class="btn btn-tag"
             [class]="isSelected(label) ? 'btn-secondary' : 'btn-light'"
@@ -13,3 +13,9 @@
         </button>
     </li>
 </ul>
+
+<ng-template #noLabels>
+    <p>
+        <i>No labels available.</i>
+    </p>
+</ng-template>
