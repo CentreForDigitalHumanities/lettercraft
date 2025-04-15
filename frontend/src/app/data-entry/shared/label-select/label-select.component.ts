@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-type Label = { value: string, label: string };
+type Label = { value: string, label: string, description?: string };
 
 @Component({
     selector: 'lc-label-select',
