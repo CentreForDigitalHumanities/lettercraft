@@ -1,5 +1,11 @@
-<div *ngFor="let label of labels">
-    <button class="btn btn-light">
-        {{label.label}}
-    </button>
-</div>
+<ul class="d-flex d-wrap list-unstyled">
+    <li *ngFor="let label of labels" class="p-1">
+        <button class="btn btn-tag"
+            [class]="isSelected(label) ? 'btn-secondary' : 'btn-light'"
+            [attr.aria-selected]="isSelected(label)"
+            type="button"
+            (click)="toggle(label)">
+            {{label.label}}
+        </button>
+    </li>
+</ul>
