@@ -25,6 +25,7 @@
             Pick one or more labels that describe this episode.
         </p>
 
-        <lc-label-select [labels]="episodeCategories" />
+        <lc-label-select [labels]="episodeCategories"
+            [formControl]="form.controls.categories" />
     </fieldset>
 </form>

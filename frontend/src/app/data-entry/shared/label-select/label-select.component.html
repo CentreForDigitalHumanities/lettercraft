@@ -4,7 +4,8 @@
             [class]="isSelected(label) ? 'btn-secondary' : 'btn-light'"
             [attr.aria-selected]="isSelected(label)"
             type="button"
-            (click)="toggle(label)">
+            (click)="toggle(label)"
+            (blur)="blur()">
             <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'" />
             {{label.label}}
         </button>
