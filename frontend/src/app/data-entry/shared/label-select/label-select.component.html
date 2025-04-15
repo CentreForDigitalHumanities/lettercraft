@@ -7,7 +7,8 @@
             (click)="toggle(label)"
             (blur)="blur()"
             [ngbTooltip]="label.description">
-            <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'" />
+            <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'"
+                class="me-1" />
             {{label.label}}
         </button>
     </li>
