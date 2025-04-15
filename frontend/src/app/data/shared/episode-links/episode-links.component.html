@@ -1,9 +1,10 @@
-<ul *ngIf="episodes.length" class="list-group">
-    <li *ngFor="let link of episodes" class="list-group-item">
+<ul *ngIf="data.length" class="list-group">
+    <li *ngFor="let link of data" class="list-group-item">
         <p>
-            <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
-                <lc-icon [icon]="dataIcons.episode"/>
-                {{link.episode.name}}
+            <a *ngIf="linkedObject(link) as obj" [routerLink]="[obj.urlSegment, obj.id]"
+                class="icon-link">
+                <lc-icon [icon]="obj.icon"/>
+                {{obj.name}}
             </a>
         </p>
         <dl>

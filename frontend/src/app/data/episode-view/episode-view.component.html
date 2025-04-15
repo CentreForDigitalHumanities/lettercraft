@@ -72,51 +72,19 @@
 
         <h2 class="mt-5">Agents</h2>
 
-        <p>
-            This episode involves the following agents:
-        </p>
-
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let link of episode.agents">
-                <a [routerLink]="['/data/agents', link.agent.id]" class="icon-link">
-                    <lc-icon [icon]="agentIcon(link.agent)" />
-                    {{link.agent.name}}
-                </a>
-            </li>
-        </ul>
+        <p>This episode involves the following agents:</p>
+        <lc-episode-links [data]="episode.agents" />
 
         <h2 class="mt-5">Objects</h2>
 
         <p>This episode involves the following epistolary objects:</p>
 
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let link of episode.letters">
-                <a [routerLink]="['/data/letters', link.letter.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.letter" />
-                    {{link.letter.name}}
-                </a>
-            </li>
-            <li class="list-group-item" *ngFor="let link of episode.gifts">
-                <a [routerLink]="['/data/gifts', link.gift.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.gift" />
-                    {{link.gift.name}}
-                </a>
-            </li>
-        </ul>
+        <lc-episode-links [data]="episodeObjects(episode)" />
 
         <h2 class="mt-5">Locations</h2>
 
-        <p>
-            This episode involves the following locations:
-        </p>
+        <p>This episode involves the following locations:</p>
+        <lc-episode-links [data]="episode.spaces" />
 
-        <ul class="list-group">
-            <li class="list-group-item" *ngFor="let link of episode.spaces">
-                <a [routerLink]="['/data/locations', link.space.id]" class="icon-link">
-                    <lc-icon [icon]="locationIcon(link.space)" />
-                    {{link.space.name}}
-                </a>
-            </li>
-        </ul>
     </ng-container>
 </ng-container>

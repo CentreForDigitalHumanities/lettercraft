@@ -21,6 +21,10 @@ query ViewEpisode($id: ID!) {
         name
     }
     agents {
+        id
+        sourceMention
+        note
+        designators
         agent {
             id
             name
@@ -29,6 +33,10 @@ query ViewEpisode($id: ID!) {
         }
     }
     spaces {
+        id
+        sourceMention
+        note
+        designators
         space {
             id
             name
@@ -36,12 +44,20 @@ query ViewEpisode($id: ID!) {
         }
     }
     letters {
+        id
+        sourceMention
+        note
+        designators
         letter {
             id
             name
         }
     }
     gifts {
+        id
+        sourceMention
+        note
+        designators
         gift {
             id
             name
