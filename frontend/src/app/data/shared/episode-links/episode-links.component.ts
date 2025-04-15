@@ -31,31 +31,31 @@ export class EpisodeLinksComponent {
         if ('episode' in link) {
             return {
                 ...link.episode,
-                urlSegment: 'data/episodes',
+                urlSegment: '/data/episodes',
                 icon: dataIcons.episode,
             };
         } else if ('agent' in link) {
             return {
                 ...link.agent,
-                urlSegment: 'data/agents',
+                urlSegment: 'agents',
                 icon: agentIcon(link.agent),
             };
         } else if ('gift' in link) {
             return {
                 ...link.gift,
-                urlSegment: 'data/gifts',
+                urlSegment: 'gifts',
                 icon: dataIcons.gift,
             };
         } else if ('letter' in link) {
             return {
                 ...link.letter,
-                urlSegment: 'data/letters',
+                urlSegment: 'letters',
                 icon: dataIcons.letter,
             };
         } else {
             return {
                 ...link.space,
-                urlSegment: 'data/locations',
+                urlSegment: 'locations',
                 icon: locationIcon(link.space),
             };
         }

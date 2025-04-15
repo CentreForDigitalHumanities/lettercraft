@@ -1,7 +1,7 @@
 <ul *ngIf="data.length" class="list-group">
     <li *ngFor="let link of data" class="list-group-item">
         <p>
-            <a *ngIf="linkedObject(link) as obj" [routerLink]="[obj.urlSegment, obj.id]"
+            <a *ngIf="linkedObject(link) as obj" [routerLink]="['/data', obj.urlSegment, obj.id]"
                 class="icon-link">
                 <lc-icon [icon]="obj.icon"/>
                 {{obj.name}}
