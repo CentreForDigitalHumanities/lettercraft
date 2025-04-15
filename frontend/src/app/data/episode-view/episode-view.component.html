@@ -77,10 +77,10 @@
         </p>
 
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let agent of episode.agents">
-                <a [routerLink]="['/data/agents', agent.id]" class="icon-link">
-                    <lc-icon [icon]="agentIcon(agent)" />
-                    {{agent.name}}
+            <li class="list-group-item" *ngFor="let link of episode.agents">
+                <a [routerLink]="['/data/agents', link.agent.id]" class="icon-link">
+                    <lc-icon [icon]="agentIcon(link.agent)" />
+                    {{link.agent.name}}
                 </a>
             </li>
         </ul>
@@ -90,16 +90,16 @@
         <p>This episode involves the following epistolary objects:</p>
 
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let letter of episode.letters">
-                <a [routerLink]="['/data/letters', letter.id]" class="icon-link">
+            <li class="list-group-item" *ngFor="let link of episode.letters">
+                <a [routerLink]="['/data/letters', link.letter.id]" class="icon-link">
                     <lc-icon [icon]="dataIcons.letter" />
-                    {{letter.name}}
+                    {{link.letter.name}}
                 </a>
             </li>
-            <li class="list-group-item" *ngFor="let gift of episode.gifts">
-                <a [routerLink]="['/data/gifts', gift.id]" class="icon-link">
+            <li class="list-group-item" *ngFor="let link of episode.gifts">
+                <a [routerLink]="['/data/gifts', link.gift.id]" class="icon-link">
                     <lc-icon [icon]="dataIcons.gift" />
-                    {{gift.name}}
+                    {{link.gift.name}}
                 </a>
             </li>
         </ul>
@@ -111,10 +111,10 @@
         </p>
 
         <ul class="list-group">
-            <li class="list-group-item" *ngFor="let location of episode.spaces">
-                <a [routerLink]="['/data/locations', location.id]" class="icon-link">
-                    <lc-icon [icon]="locationIcon(location)" />
-                    {{location.name}}
+            <li class="list-group-item" *ngFor="let link of episode.spaces">
+                <a [routerLink]="['/data/locations', link.space.id]" class="icon-link">
+                    <lc-icon [icon]="locationIcon(link.space)" />
+                    {{link.space.name}}
                 </a>
             </li>
         </ul>

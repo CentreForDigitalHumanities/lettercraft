@@ -21,23 +21,31 @@ query ViewEpisode($id: ID!) {
         name
     }
     agents {
-        id
-        name
-        isGroup
-        identified
+        agent {
+            id
+            name
+            isGroup
+            identified
+        }
     }
     spaces {
-        id
-        name
-        hasIdentifiableFeatures
+        space {
+            id
+            name
+            hasIdentifiableFeatures
+        }
     }
     letters {
-        id
-        name
+        letter {
+            id
+            name
+        }
     }
     gifts {
-        id
-        name
+        gift {
+            id
+            name
+        }
     }
   }
 }

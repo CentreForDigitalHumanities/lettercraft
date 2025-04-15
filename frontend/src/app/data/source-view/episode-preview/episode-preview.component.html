@@ -30,15 +30,15 @@
             <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
                 <ul class="inline-list">
                     <li
-                        *ngFor="let agent of episode.agents"
+                        *ngFor="let link of episode.agents"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data', 'agents', agent.id]"
+                            [routerLink]="['/data', 'agents', link.agent.id]"
                             class="icon-link"
                         >
-                            <lc-icon [icon]="agentIcon(agent)" />
-                            {{ agent.name }}
+                            <lc-icon [icon]="agentIcon(link.agent)" />
+                            {{ link.agent.name }}
                         </a>
                     </li>
                 </ul>
@@ -51,15 +51,15 @@
             <dd *ngIf="episode.spaces.length > 0; else noSpaces" class="ms-4">
                 <ul class="inline-list">
                     <li
-                        *ngFor="let space of episode.spaces"
+                        *ngFor="let link of episode.spaces"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data', 'locations', space.id]"
+                            [routerLink]="['/data', 'locations', link.space.id]"
                             class="icon-link"
                         >
-                            <lc-icon [icon]="locationIcon(space)" />
-                            {{ space.name }}
+                            <lc-icon [icon]="locationIcon(link.space)" />
+                            {{ link.space.name }}
                         </a>
                     </li>
                 </ul>
@@ -78,27 +78,27 @@
             >
                 <ul class="inline-list">
                     <li
-                        *ngFor="let gift of episode.gifts"
+                        *ngFor="let link of episode.gifts"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data', 'gifts', gift.id]"
+                            [routerLink]="['/data', 'gifts', link.gift.id]"
                             class="icon-link"
                         >
                             <lc-icon [icon]="dataIcons.gift" />
-                            {{ gift.name }}
+                            {{ link.gift.name }}
                         </a>
                     </li>
                     <li
-                        *ngFor="let letter of episode.letters"
+                        *ngFor="let link of episode.letters"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/data', 'letters', letter.id]"
+                            [routerLink]="['/data', 'letters', link.letter.id]"
                             class="icon-link"
                         >
                             <lc-icon [icon]="dataIcons.letter" />
-                            {{ letter.name }}
+                            {{ link.letter.name }}
                         </a>
                     </li>
                 </ul>

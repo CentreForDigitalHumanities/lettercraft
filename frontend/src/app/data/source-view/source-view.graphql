@@ -23,23 +23,31 @@ query ViewSource($id: ID!) {
             }
             page
             agents {
-                id
-                name
-                isGroup
-                identified
+                agent {
+                    id
+                    name
+                    isGroup
+                    identified
+                }
             }
             gifts {
-                id
-                name
+                gift {
+                    id
+                    name
+                }
             }
             letters {
-                id
-                name
+                letter {
+                    id
+                    name
+                }
             }
             spaces {
-                id
-                name
-                hasIdentifiableFeatures
+                space {
+                    id
+                    name
+                    hasIdentifiableFeatures
+                }
             }
         }
         contributors {
