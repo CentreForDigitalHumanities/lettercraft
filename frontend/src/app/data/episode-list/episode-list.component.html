@@ -8,16 +8,11 @@
     it.
 </p>
 
-<p>
-    Use the search box to filter the list of episodes by name, description or
-    summary.
-</p>
-
 <ng-container *ngIf="data$ | async as data">
     <lc-search-bar
         [searchControl]="searchControl"
         [loading$]="loading$"
-        placeholderText="Search episodes..."
+        labelText="Search episodes by name, description or summary."
         searchText="Searching episodes"
     />
 

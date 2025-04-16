@@ -1,29 +1,22 @@
-<div class="input-group mb-3 mt-4">
-    <span class="input-group-text">
-        <div
-            *ngIf="loading$ | async; else notLoading"
-            class="spinner-border spinner-border-sm"
-            role="status"
-        >
-            <span class="visually-hidden">{{ searchText }}</span>
-        </div>
-        <ng-template #notLoading>
-            <lc-icon [icon]="actionIcons.search" />
-        </ng-template>
-    </span>
-    <input
-        type="text"
-        class="form-control"
-        [placeholder]="placeholderText"
-        [formControl]="searchControl"
-    />
-    <button
-        class="btn btn-outline-secondary"
-        type="button"
-        (click)="clearSearch()"
-        [disabled]="searchControl.value === ''"
-    >
-        <lc-icon [icon]="actionIcons.cancel" />
-        Clear search
-    </button>
-</div>
+<form class="mb-4 mt-4" role="search">
+    <label for="search" class="mb-2">{{ labelText }}</label>
+    <div class="input-group">
+        <span class="input-group-text" role="status">
+            <div
+                *ngIf="loading$ | async; else notLoading"
+                class="spinner-border spinner-border-sm"
+            >
+                <span class="visually-hidden">{{ searchText }}</span>
+            </div>
+            <ng-template #notLoading>
+                <lc-icon [icon]="actionIcons.search" />
+            </ng-template>
+        </span>
+        <input
+            id="search"
+            type="search"
+            class="form-control"
+            [formControl]="searchControl"
+        />
+    </div>
+</form>

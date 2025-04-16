@@ -8,15 +8,12 @@
     its epistolary events.
 </p>
 
-<p>
-    Use the search box to filter the list of sources by name, author, editor or title.
-</p>
 
 <ng-container *ngIf="data$ | async as data">
     <lc-search-bar
         [searchControl]="searchControl"
         [loading$]="loading$"
-        placeholderText="Search sources..."
+        labelText="Search sources by name, author, editor or title."
         searchText="Searching sources"
     />
 

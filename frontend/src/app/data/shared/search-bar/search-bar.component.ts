@@ -16,7 +16,7 @@ export class SearchBarComponent {
     public loading$!: Observable<boolean>;
 
     @Input()
-    public placeholderText = "Search...";
+    public labelText = "Search";
 
     @Input()
     public searchText = "Searching...";
