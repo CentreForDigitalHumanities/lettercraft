@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, HostListener, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 type Label = { value: string, label: string, description?: string };
@@ -36,7 +36,8 @@ export class LabelSelectComponent implements ControlValueAccessor {
         this.onChange?.(this.value);
     }
 
-    blur() {
+    @HostListener('focusout')
+    onFocusOut(): void {
         this.onTouched?.();
     }
 

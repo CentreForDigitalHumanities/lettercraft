@@ -5,7 +5,6 @@
             [attr.aria-selected]="isSelected(label)"
             type="button"
             (click)="toggle(label)"
-            (blur)="blur()"
             [ngbTooltip]="label.description">
             <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'"
                 class="me-1" />
