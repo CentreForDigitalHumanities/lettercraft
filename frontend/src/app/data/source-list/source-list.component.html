@@ -3,15 +3,25 @@
 <h1 class="mb-4">Source texts</h1>
 
 <p>
-    The list below shows the medieval texts that have been analysed in the Lettercraft
-    project. Click on a source to view more information and explore its epistolary
-    events.
+    The list below shows the medieval texts that have been analysed in the
+    Lettercraft project. Click on a source to view more information and explore
+    its epistolary events.
 </p>
 
+
 <ng-container *ngIf="data$ | async as data">
-    <ul class="list-group mt-4">
-        <li *ngFor="let source of data.sources"
-            class="list-group-item list-group-item-action">
+    <lc-search-bar
+        [searchControl]="searchControl"
+        [loading$]="loading$"
+        labelText="Search sources by name, author, editor or title."
+        searchText="Searching sources"
+    />
+
+    <ul class="list-group mt-2">
+        <li
+            *ngFor="let source of data.sources"
+            class="list-group-item list-group-item-action"
+        >
             <div class="d-flex align-items-center">
                 <a [routerLink]="[source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
                 <small class="text-body-secondary ms-2">
@@ -28,4 +38,8 @@
             </p>
         </li>
     </ul>
+
+    <div *ngIf="data.sources.length === 0" class="mt-3 text-center">
+        <p class="text-muted">No sources found matching "{{ searchControl.value }}."</p>
+    </div>
 </ng-container>

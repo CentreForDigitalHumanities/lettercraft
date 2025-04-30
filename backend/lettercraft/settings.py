@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "user",
     "graphene_django",
     "graphql_app",
+    "django_filters"
 ]
 
 MIDDLEWARE = [

@@ -1,7 +1,8 @@
+from typing import Type
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
 from django.db.models import QuerySet, Model, Q
 from graphene_django import DjangoObjectType
-from typing import Type
+from django_filters import FilterSet, CharFilter, BooleanFilter
 
 from event.models import Episode
 from source.models import Source
@@ -21,6 +22,21 @@ from user.types.UserType import UserType
 from user.models import User
 
 
+class SourceFilter(FilterSet):
+    search = CharFilter(method="search_sources")
+    is_public = BooleanFilter(field_name="is_public")
+
+    def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
+        """Filter sources by name, title or author name."""
+        return queryset.filter(
+            Q(name__icontains=value)
+            | Q(medieval_title__icontains=value)
+            | Q(edition_title__icontains=value)
+            | Q(medieval_author__icontains=value)
+            | Q(edition_author__icontains=value)
+        )
+
+
 class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
@@ -33,7 +49,6 @@ class SourceType(DjangoObjectType):
     editable = Boolean(required=True)
     contributors = List(NonNull(UserType), required=True)
 
-
     class Meta:
         model = Source
         fields = [
@@ -45,6 +60,7 @@ class SourceType(DjangoObjectType):
             "edition_author",
             "is_public",
         ]
+        filterset_class = SourceFilter
 
     @classmethod
     def get_queryset(

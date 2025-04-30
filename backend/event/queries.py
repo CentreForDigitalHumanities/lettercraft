@@ -7,12 +7,13 @@ from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
+from graphql_app.types.FilterableListField import FilterableListField
 from user.permissions import editable_sources
 
 
 class EventQueries(ObjectType):
     episode = Field(EpisodeType, id=ID(required=True))
-    episodes = List(
+    episodes = FilterableListField(
         NonNull(EpisodeType),
         required=True,
         source_id=ID(),
@@ -39,6 +40,7 @@ class EventQueries(ObjectType):
         info: ResolveInfo,
         source_id: Optional[str] = None,
         editable: bool = False,
+        **kwargs: dict,
     ) -> QuerySet[Episode]:
         filters = Q()
 

@@ -12,6 +12,7 @@ import { ObjectPageHeaderComponent } from './shared/object-page-header/object-pa
 import { EpisodePreviewComponent } from './source-view/episode-preview/episode-preview.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { SourceListComponent } from './source-list/source-list.component';
+import { SearchBarComponent } from './shared/search-bar/search-bar.component';
 
 
 
@@ -29,6 +30,7 @@ import { SourceListComponent } from './source-list/source-list.component';
         EpisodePreviewComponent,
         SourceListComponent,
         EpisodeListComponent,
+        SearchBarComponent,
     ],
     imports: [
         SharedModule,
