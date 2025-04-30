@@ -15,7 +15,7 @@ describe('EpisodeLinksComponent', () => {
         });
         fixture = TestBed.createComponent(EpisodeLinksComponent);
         component = fixture.componentInstance;
-        component.episodes = [
+        component.data = [
             {
                 id: '1',
                 episode: {

@@ -2,12 +2,14 @@ query ViewEpisode($id: ID!) {
   episode(id: $id) {
     id
     name
-    description
     editable
     source {
         id
         name
     }
+    book
+    chapter
+    page
     contributors {
         id
         fullName
@@ -20,22 +22,46 @@ query ViewEpisode($id: ID!) {
     }
     agents {
         id
-        name
-        isGroup
-        identified
+        sourceMention
+        note
+        designators
+        agent {
+            id
+            name
+            isGroup
+            identified
+        }
     }
     spaces {
         id
-        name
-        hasIdentifiableFeatures
+        sourceMention
+        note
+        designators
+        space {
+            id
+            name
+            hasIdentifiableFeatures
+        }
     }
     letters {
         id
-        name
+        sourceMention
+        note
+        designators
+        letter {
+            id
+            name
+        }
     }
     gifts {
         id
-        name
+        sourceMention
+        note
+        designators
+        gift {
+            id
+            name
+        }
     }
   }
 }

@@ -2,8 +2,11 @@ query ViewEpisodes {
   episodes {
     id
     name
-    description
     summary
+    categories {
+        id
+        name
+    }
     book
     chapter
     contributors {

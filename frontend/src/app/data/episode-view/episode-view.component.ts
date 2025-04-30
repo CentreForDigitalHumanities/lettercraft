@@ -45,4 +45,13 @@ export class EpisodeViewComponent {
             ];
         }
     }
+
+    episodeObjects(episode: ViewEpisodeQuery['episode']): any[] {
+        if (episode) {
+            return [...episode.letters, ...episode.gifts];
+        } else {
+            return [];
+        }
+
+    }
 }

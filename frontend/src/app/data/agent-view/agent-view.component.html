@@ -13,10 +13,15 @@
 
         <lc-contributors [contributors]="agent.contributors" />
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Description</h2>
 
             <dl>
+                <dt>Individual or group</dt>
+                <dd class="ms-4">
+                    {{ agent.isGroup ? 'Group' : 'Individual' }}
+                </dd>
+
                 <dt *ngIf="agent.gender">Gender</dt>
                 <dd *ngIf="agent.gender as gender" class="ms-4">
                     <p>
@@ -30,7 +35,7 @@
             </dl>
         </section>
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Source text</h2>
 
             <p>
@@ -49,40 +54,48 @@
                 </ng-container>
             </p>
 
-            <lc-episode-links [episodes]="agent.episodes" />
+            <lc-episode-links [data]="agent.episodes" />
         </section>
 
-        <section *ngIf="agent.personReferences.length">
+        <section class="mt-5">
             <h2>Historical context</h2>
 
-            <ng-container *ngIf="agent.isGroup; else singularReference">
-                <p>
-                    This group includes the following historical figures:
-                </p>
-                <ul>
-                    <li *ngFor="let ref of agent.personReferences">
-                        <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
-                        <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">(somewhat certain)</ng-container>
-                        <ng-container *ngIf="ref.certainty === Certainty.Uncertain">(uncertain)</ng-container>
-                        <ng-container *ngIf="ref.note">; <i>Note: {{ref.note}}</i></ng-container>
-                    </li>
-                </ul>
-            </ng-container>
-            <ng-template #singularReference>
-                <ng-container *ngIf="agent.personReferences[0] as ref">
+            <ng-container *ngIf="agent.personReferences.length; else noReferences">
+                <ng-container *ngIf="agent.isGroup; else singularReference">
                     <p>
-                        This agent is a representation of
-                        <a [routerLink]="['/data/historical-figures', ref.person.id]">
-                            {{ref.person.name}}</a>
-                        <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">
-                            (somewhat certain)
-                        </ng-container>
-                        <ng-container *ngIf="ref.certainty === Certainty.Uncertain">
-                            (uncertain)
-                        </ng-container>.
-                        <i *ngIf="ref.note">Note: {{ref.note}}</i>
+                        This group includes the following historical figures:
                     </p>
+                    <ul>
+                        <li *ngFor="let ref of agent.personReferences">
+                            <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
+                            <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">(somewhat certain)</ng-container>
+                            <ng-container *ngIf="ref.certainty === Certainty.Uncertain">(uncertain)</ng-container>
+                            <ng-container *ngIf="ref.note">; <i>Note: {{ref.note}}</i></ng-container>
+                        </li>
+                    </ul>
                 </ng-container>
+                <ng-template #singularReference>
+                    <ng-container *ngIf="agent.personReferences[0] as ref">
+                        <p>
+                            This agent is a representation of
+                            <a [routerLink]="['/data/historical-figures', ref.person.id]">
+                                {{ref.person.name}}</a>
+                            <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">
+                                (somewhat certain)
+                            </ng-container>
+                            <ng-container *ngIf="ref.certainty === Certainty.Uncertain">
+                                (uncertain)
+                            </ng-container>.
+                            <i *ngIf="ref.note">Note: {{ref.note}}</i>
+                        </p>
+                    </ng-container>
+                </ng-template>
+            </ng-container>
+
+            <ng-template #noReferences>
+                <p><i>
+                    This agent is not linked to any historic figures in the database.
+                </i></p>
             </ng-template>
         </section>
     </ng-container>

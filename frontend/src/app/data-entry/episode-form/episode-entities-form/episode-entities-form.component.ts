@@ -89,7 +89,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     }
 
     /** property used for the entity relationship in graphQL data */
-    get entityProperty(): EntityPropertyName {
+    get entityListPath(): EntityPropertyName {
         const keys: Record<Entity, EntityPropertyName> = {
             [Entity.Agent]: 'agents',
             [Entity.Gift]: 'gifts',
@@ -165,7 +165,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     }
 
     private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string, name: string }[] {
-        return data.episode?.[this.entityProperty] || [];
+        return data.episode?.[this.entityListPath].map(link => link.entity) || [];
     }
 
     private availableEntities(
@@ -175,7 +175,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             __typename?: string,
             name: string,
             id: string
-        }[] = data.episode?.source[this.entityProperty] || [];
+        }[] = data.episode?.source[this.entityListPath] || [];
         const linkedEntities = this.linkedEntities(data);
         return differenceBy(allEntities, linkedEntities, 'id');
     }
@@ -186,7 +186,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
                 __typename: "EpisodeType",
                 id: episodeID,
             }),
-            fieldName: this.entityProperty,
+            fieldName: this.entityListPath,
         });
         cache.evict({
             id: cache.identify({
