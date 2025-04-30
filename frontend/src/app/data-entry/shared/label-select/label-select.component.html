@@ -1,0 +1,20 @@
+<ul class="d-flex flex-wrap list-unstyled" *ngIf="labels.length; else noLabels">
+    <li *ngFor="let label of labels" class="p-1">
+        <button class="btn btn-tag"
+            [class]="isSelected(label) ? 'btn-secondary' : 'btn-light'"
+            [attr.aria-selected]="isSelected(label)"
+            type="button"
+            (click)="toggle(label)"
+            [ngbTooltip]="label.description">
+            <lc-icon [icon]="isSelected(label) ? 'check-square' : 'square'"
+                class="me-1" />
+            {{label.label}}
+        </button>
+    </li>
+</ul>
+
+<ng-template #noLabels>
+    <p>
+        <i>No labels available.</i>
+    </p>
+</ng-template>
