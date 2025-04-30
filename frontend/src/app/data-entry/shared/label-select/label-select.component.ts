@@ -1,7 +1,6 @@
 import { Component, forwardRef, HostListener, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-type Label = { value: string, label: string, description?: string };
+import { MultiselectOption } from '../multiselect/multiselect.component';
 
 @Component({
     selector: 'lc-label-select',
@@ -16,18 +15,18 @@ type Label = { value: string, label: string, description?: string };
     ],
 })
 export class LabelSelectComponent implements ControlValueAccessor {
-    @Input({ required: true }) labels!: Label[];
+    @Input({ required: true }) labels!: MultiselectOption[];
 
     value: string[] = [];
 
     private onChange?: (value: string[]) => any;
     private onTouched?: () => any;
 
-    isSelected(label: Label): boolean {
+    isSelected(label: MultiselectOption): boolean {
         return this.value.includes(label.value);
     }
 
-    toggle(label: Label): void {
+    toggle(label: MultiselectOption): void {
         if (this.isSelected(label)) {
             this.value = this.value.filter(i => i !== label.value);
         } else {
