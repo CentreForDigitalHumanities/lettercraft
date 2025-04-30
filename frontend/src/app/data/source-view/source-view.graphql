@@ -23,6 +23,7 @@ query ViewSource($id: ID!) {
             }
             page
             agents {
+                id
                 agent {
                     id
                     name
@@ -31,18 +32,21 @@ query ViewSource($id: ID!) {
                 }
             }
             gifts {
+                id
                 gift {
                     id
                     name
                 }
             }
             letters {
+                id
                 letter {
                     id
                     name
                 }
             }
             spaces {
+                id
                 space {
                     id
                     name
