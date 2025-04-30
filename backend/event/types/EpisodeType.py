@@ -3,19 +3,21 @@ from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
 from django.db.models import QuerySet
 
-from event.models import Episode, EpisodeCategory
+from event.models import (
+    Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
+)
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from person.models import AgentDescription
-from space.models import SpaceDescription
 from user.permissions import can_edit_source
 
 
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(EpisodeCategoryType), required=True)
     agents = List(
-        NonNull("person.types.AgentDescriptionType.AgentDescriptionType"), required=True
+        NonNull("event.types.EpisodeAgentType.EpisodeAgentType"), required=True
     )
-    spaces = List(NonNull("space.types.SpaceDescriptionType.SpaceDescriptionType"), required=True)
+    spaces = List(NonNull("event.types.EpisodeSpaceType.EpisodeSpaceType"), required=True)
+    letters = List(NonNull("event.types.EpisodeLetterType.EpisodeLetterType"), required=True)
+    gifts = List(NonNull("event.types.EpisodeGiftType.EpisodeGiftType"), required=True)
     editable = Boolean(required=True)
 
     class Meta:
@@ -42,16 +44,27 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
     @staticmethod
     def resolve_agents(
         parent: Episode, info: ResolveInfo
-    ) -> QuerySet[AgentDescription]:
-        # Without distinct(), this returns one agent for every HistoricalPerson linked
-        # to that agent, for some reason.
-        return parent.agents.distinct()
+    ) -> QuerySet[EpisodeAgent]:
+        return EpisodeAgent.objects.filter(episode=parent)
 
     @staticmethod
     def resolve_spaces(
         parent: Episode, info: ResolveInfo
-    ) -> QuerySet[SpaceDescription]:
-        return parent.spaces.distinct()
+    ) -> QuerySet[EpisodeSpace]:
+        return EpisodeSpace.objects.filter(episode=parent)
+
+    @staticmethod
+    def resolve_gifts(
+        parent: Episode, info: ResolveInfo
+    ) -> QuerySet[EpisodeGift]:
+        return EpisodeGift.objects.filter(episode=parent)
+
+    @staticmethod
+    def resolve_letters(
+        parent: Episode, info: ResolveInfo
+    ) -> QuerySet[EpisodeLetter]:
+        return EpisodeLetter.objects.filter(episode=parent)
+
 
     @staticmethod
     def resolve_categories(

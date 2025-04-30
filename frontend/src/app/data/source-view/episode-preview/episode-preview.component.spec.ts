@@ -17,7 +17,7 @@ describe('EpisodePreviewComponent', () => {
         component.episode = {
             id: '1',
             name: 'Test',
-            description: '',
+            categories: [],
             summary: 'Some stuff happens.',
             book: '',
             chapter: '1',

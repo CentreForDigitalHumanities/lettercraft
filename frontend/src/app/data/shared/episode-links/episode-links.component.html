@@ -1,8 +1,38 @@
-<ul *ngIf="episodes.length" class="list-group">
-    <li *ngFor="let link of episodes" class="list-group-item">
-        <a [routerLink]="['/data/episodes', link.episode.id]" class="icon-link">
-            <lc-icon [icon]="dataIcons.episode"/>
-            {{link.episode.name}}
-        </a>
+<ul *ngIf="data.length" class="list-group">
+    <li *ngFor="let link of data" class="list-group-item">
+        <p>
+            <a *ngIf="linkedObject(link) as obj" [routerLink]="['/data', obj.urlSegment, obj.id]"
+                class="icon-link">
+                <lc-icon [icon]="obj.icon"/>
+                {{obj.name}}
+            </a>
+        </p>
+        <dl>
+            <dt>
+                Involvement
+            </dt>
+            <dd class="ms-4">
+                {{sourceMentionLabels[link.sourceMention] | sentenceCase}}
+            </dd>
+            <ng-container *ngIf="link.designators?.length">
+                <dt>
+                    Designators
+                </dt>
+                <dd class="ms-4">
+                    <ul class="inline-list">
+                        <li *ngFor="let designator of link.designators"
+                            class="inline-list-item">"{{designator}}"</li>
+                    </ul>
+                </dd>
+            </ng-container>
+            <ng-container *ngIf="link.note">
+                <dt>
+                    Note
+                </dt>
+                <dd class="ms-4">
+                    {{link.note}}
+                </dd>
+            </ng-container>
+        </dl>
     </li>
 </ul>

@@ -21,20 +21,32 @@ query DataEntryEpisodeEntities($id: ID!) {
       }
     }
     agents {
-      id
-      name
+        id
+        entity {
+            id
+            name
+        }
     }
     gifts {
-      id
-      name
+        id
+        entity {
+            id
+            name
+        }
     }
     letters {
-      id
-      name
+        id
+        entity {
+            id
+            name
+        }
     }
     spaces {
-      id
-      name
+        id
+        entity {
+            id
+            name
+        }
     }
   }
 }

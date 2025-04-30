@@ -17,7 +17,6 @@ describe("EpisodePreviewComponent", () => {
         component.episode = {
             id: '1',
             name: 'Test',
-            description: 'Test episode',
             summary: '',
             book: '',
             chapter: '',
@@ -27,6 +26,7 @@ describe("EpisodePreviewComponent", () => {
             gifts: [],
             letters: [],
             spaces: [],
+            categories: [],
         }
         fixture.detectChanges();
     });
