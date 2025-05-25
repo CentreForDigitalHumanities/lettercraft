@@ -18,6 +18,7 @@ class EventQueries(ObjectType):
         required=True,
         source_id=ID(),
         editable=Boolean(),
+        include_private=Boolean(),
     )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
@@ -40,6 +41,7 @@ class EventQueries(ObjectType):
         info: ResolveInfo,
         source_id: Optional[str] = None,
         editable: bool = False,
+        include_private: bool = True,
         **kwargs: dict,
     ) -> QuerySet[Episode]:
         filters = Q()
@@ -49,6 +51,8 @@ class EventQueries(ObjectType):
         if editable:
             user = info.context.user
             filters &= Q(source__in=editable_sources(user))
+        if include_private is False:
+            filters &= Q(source__is_public=True)
 
         return EpisodeType.get_queryset(Episode.objects, info).filter(filters)
 

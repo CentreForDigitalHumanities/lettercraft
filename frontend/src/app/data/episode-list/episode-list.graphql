@@ -1,5 +1,5 @@
 query ViewEpisodes($search: String) {
-  episodes(search: $search) {
+  episodes(search: $search, includePrivate: false) {
     id
     name
     summary
