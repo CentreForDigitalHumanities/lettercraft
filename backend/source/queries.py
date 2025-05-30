@@ -10,27 +10,28 @@ from user.permissions import editable_sources
 
 
 class SourceQueries(ObjectType):
-    source = Field(SourceType, id=ID(required=True), is_public=Boolean())
+    source = Field(SourceType, id=ID(required=True))
     sources = FilterableListField(
         NonNull(SourceType),
         editable=Boolean(),
         required=True,
+        public_only=Boolean()
     )
 
     @staticmethod
-    def resolve_source(root: None, info: ResolveInfo, id: str, is_public = False) -> Optional[Source]:
+    def resolve_source(root: None, info: ResolveInfo, id: str) -> Optional[Source]:
         try:
             source = SourceType.get_queryset(Source.objects, info).get(pk=id)
         except Source.DoesNotExist:
             return None
 
-        # Public browsing interface.
-        if is_public:
-            return source if source.is_public else None
-
         user: User = info.context.user
 
-        # Non-public sources are visible to users allowed to edit them.
+        # Public sources are visible to everyone.
+        if user.is_superuser or source.is_public:
+            return source
+
+        # Non-public sources are visible to contributing users.
         if user.is_anonymous or not user.can_edit_source(source):
             return None
 
@@ -39,8 +40,18 @@ class SourceQueries(ObjectType):
 
     @staticmethod
     def resolve_sources(
-        root: None, info: ResolveInfo, editable: bool = False, **kwargs: dict
+        root: None, info: ResolveInfo, editable = False, public_only = False, **kwargs: dict
     ) -> QuerySet[Source]:
         queryset = SourceType.get_queryset(Source.objects, info)
+        user: User = info.context.user
 
-        return editable_sources(info.context.user, queryset) if editable else queryset
+        if user.is_superuser:
+            return queryset
+
+        if editable:
+            queryset = editable_sources(user)
+
+        if public_only:
+            queryset = queryset.filter(is_public=True)
+
+        return queryset

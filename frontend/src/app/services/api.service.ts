@@ -1,18 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '@env';
+import { Router } from '@angular/router';
+import { ToastService } from './toast.service';
 
+interface RerouteConfig<T> {
+    data: T | null;
+    targetRoute: string[];
+    message?: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-    private apiUrl = environment.apiUrl;
 
-    constructor(protected http: HttpClient) { }
+    constructor(private router: Router, private toastService: ToastService) {}
 
-    private apiRoute(route: string): string {
-        return `${this.apiUrl}/${route}`;
+    public rerouteIfEmpty<T>(config: RerouteConfig<T>): void {
+        if (!config.data) {
+            this.toastService.show({
+                type: "danger",
+                header: "Not Found",
+                body: config.message ?? "The requested resource could not be found.",
+            });
+            this.router.navigate(config.targetRoute, {
+                replaceUrl: true,
+            });
+        }
     }
-
 }

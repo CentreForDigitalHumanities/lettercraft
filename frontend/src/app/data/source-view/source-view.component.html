@@ -1,6 +1,9 @@
-<ng-container *ngIf="(data$ | async)?.source as source">
-    <a class="float-end btn btn-light" *ngIf="source.editable"
-        [routerLink]="['/data-entry/sources', source.id]">
+<ng-container *ngIf="source$ | async as source">
+    <a
+        class="float-end btn btn-light"
+        *ngIf="source.editable"
+        [routerLink]="['/data-entry/sources', source.id]"
+    >
         <lc-icon [icon]="actionIcons.edit" />
         Edit this source
     </a>
@@ -10,8 +13,8 @@
     <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
 
     <p>
-        {{source.name}} is one of the source texts that have been analysed in the
-        Lettercraft project.
+        {{ source.name }} is one of the source texts that have been analysed in
+        the Lettercraft project.
     </p>
 
     <lc-contributors [contributors]="source.contributors" />
@@ -21,17 +24,27 @@
             <h2 class="h5 card-title">Bibliographical information</h2>
 
             <ng-container *ngIf="source.medievalAuthor || source.medievalTitle">
-                {{ source.medievalAuthor }}<ng-container *ngIf="source.medievalAuthor && source.medievalTitle">, </ng-container><em>{{ source.medievalTitle }}</em>.
+                {{ source.medievalAuthor
+                }}<ng-container
+                    *ngIf="source.medievalAuthor && source.medievalTitle"
+                    >, </ng-container
+                ><em>{{ source.medievalTitle }}</em
+                >.
             </ng-container>
             <ng-container *ngIf="source.editionAuthor || source.editionTitle">
-                (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container>{{ source.editionTitle }}.)
+                (Ed. {{ source.editionAuthor
+                }}<ng-container
+                    *ngIf="source.editionAuthor && source.editionTitle"
+                    >, </ng-container
+                >{{ source.editionTitle }}.)
             </ng-container>
-
         </div>
     </div>
 
     <h2 class="mb-4">Epistolary episodes</h2>
 
-    <lc-episode-preview *ngFor="let episode of source.episodes"
-        [episode]="episode" />
+    <lc-episode-preview
+        *ngFor="let episode of source.episodes"
+        [episode]="episode"
+    />
 </ng-container>

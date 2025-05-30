@@ -8,6 +8,7 @@ from event.types.EpisodeEntityLink import EpisodeEntityLink
 from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from graphql_app.types.FilterableListField import FilterableListField
+from user.models import User
 from user.permissions import editable_sources
 
 
@@ -18,7 +19,7 @@ class EventQueries(ObjectType):
         required=True,
         source_id=ID(),
         editable=Boolean(),
-        include_private=Boolean(),
+        public_only=Boolean(),
     )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
@@ -31,30 +32,46 @@ class EventQueries(ObjectType):
     @staticmethod
     def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Optional[Episode]:
         try:
-            return EpisodeType.get_queryset(Episode.objects, info).get(id=id)
+            episode = EpisodeType.get_queryset(Episode.objects, info).get(id=id)
         except Episode.DoesNotExist:
             return None
+
+        user: User = info.context.user
+
+        if user.is_superuser or episode.source.is_public:
+            return episode
+
+        if user.is_anonymous or not user.can_edit_source(episode.source):
+            return None
+
+        return episode
+
+
 
     @staticmethod
     def resolve_episodes(
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
-        editable: bool = False,
-        include_private: bool = True,
+        editable = False,
+        public_only = False,
         **kwargs: dict,
     ) -> QuerySet[Episode]:
-        filters = Q()
+        queryset = EpisodeType.get_queryset(Episode.objects, info)
+        user: User = info.context.user
 
+        if user.is_superuser:
+            return queryset
+
+        filters = Q()
         if source_id is not None:
             filters &= Q(source_id=source_id)
         if editable:
-            user = info.context.user
             filters &= Q(source__in=editable_sources(user))
-        if include_private is False:
+        if public_only:
             filters &= Q(source__is_public=True)
 
-        return EpisodeType.get_queryset(Episode.objects, info).filter(filters)
+        return queryset.filter(filters)
 
     @staticmethod
     def resolve_episode_categories(

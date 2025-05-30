@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from "@angular/core";
+import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
@@ -10,12 +10,12 @@ import {
     DataEntryDeleteEpisodeMutation,
     DataEntryEpisodeFormGQL,
     DataEntryEpisodeFormQuery,
-    Entity
+    Entity,
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
 import { MutationResult } from "apollo-angular";
-
+import { ApiService } from "@services/api.service";
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 
@@ -25,7 +25,7 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
     styleUrls: ["./episode-form.component.scss"],
     providers: [FormService],
 })
-export class EpisodeFormComponent {
+export class EpisodeFormComponent implements OnInit {
     Entity = Entity;
 
     private id$ = this.formService.id$;
@@ -72,6 +72,7 @@ export class EpisodeFormComponent {
 
     constructor(
         private destroyRef: DestroyRef,
+        private apiService: ApiService,
         private formService: FormService,
         private router: Router,
         private toastService: ToastService,
@@ -79,6 +80,18 @@ export class EpisodeFormComponent {
         private episodeQuery: DataEntryEpisodeFormGQL,
         private deleteEpisode: DataEntryDeleteEpisodeGQL
     ) {}
+
+    ngOnInit(): void {
+        this.episode$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((episode) => {
+                this.apiService.rerouteIfEmpty({
+                    data: episode,
+                    targetRoute: ["/", "data-entry"],
+                    message: "Episode not found",
+                });
+            });
+    }
 
     public onClickDelete(episode: QueriedEpisode): void {
         this.modalService
@@ -107,7 +120,10 @@ export class EpisodeFormComponent {
             .subscribe((result) => this.onMutationResult(result, sourceId));
     }
 
-    private onMutationResult(result: MutationResult<DataEntryDeleteEpisodeMutation>, sourceId: string): void {
+    private onMutationResult(
+        result: MutationResult<DataEntryDeleteEpisodeMutation>,
+        sourceId: string
+    ): void {
         this.deletingInProgress = false;
         const errors = result.data?.deleteEpisode?.errors;
         if (errors && errors.length > 0) {
