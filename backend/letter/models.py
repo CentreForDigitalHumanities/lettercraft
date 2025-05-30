@@ -1,9 +1,7 @@
 from django.db import models
 
 from core.models import (
-    DescriptionField,
     EntityDescription,
-    Named,
     HistoricalEntity,
     Field,
 )

@@ -155,7 +155,7 @@ def case_study(db):
 
 
 @pytest.fixture()
-def graphql_client():
+def graphql_client() -> GrapheneClient:
     client = GrapheneClient(schema)
     return client
 
