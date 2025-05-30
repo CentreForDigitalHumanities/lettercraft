@@ -16,7 +16,9 @@ import { MutationResult } from "apollo-angular";
 import { moveItemInArray } from "@shared/utils";
 import { OrderChange } from "@shared/order-button-group/order-button-group.component";
 
-type QueriedEpisode = DataEntrySourceDetailQuery["source"]["episodes"][number];
+type QueriedEpisode = NonNullable<
+    DataEntrySourceDetailQuery["source"]
+>["episodes"][number];
 
 @Component({
     selector: "lc-source",
@@ -47,7 +49,7 @@ export class SourceComponent {
     );
 
     public sourceTitle = toSignal(
-        this.source$.pipe(map((source) => source.name)),
+        this.source$.pipe(map((source) => source?.name ?? "Unknown source")),
         { initialValue: "" }
     );
 

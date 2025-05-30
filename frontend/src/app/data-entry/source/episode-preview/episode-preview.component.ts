@@ -17,8 +17,8 @@ import {
 } from "generated/graphql";
 
 type QueriedEpisode = NonNullable<
-    DataEntrySourceDetailQuery["source"]["episodes"]
->[0];
+    DataEntrySourceDetailQuery["source"]
+>["episodes"][0];
 
 @Component({
     selector: "lc-episode-preview",

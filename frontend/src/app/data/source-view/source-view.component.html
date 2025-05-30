@@ -1,30 +1,30 @@
-<ng-container *ngIf="data$ | async as data">
-    <a class="float-end btn btn-light" *ngIf="data.source.editable"
-        [routerLink]="['/data-entry/sources', data.source.id]">
+<ng-container *ngIf="(data$ | async)?.source as source">
+    <a class="float-end btn btn-light" *ngIf="source.editable"
+        [routerLink]="['/data-entry/sources', source.id]">
         <lc-icon [icon]="actionIcons.edit" />
         Edit this source
     </a>
 
-    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data.source)" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(source)" />
 
-    <lc-object-page-header [object]="data.source" [icon]="dataIcons.source" />
+    <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
 
     <p>
-        {{data.source.name}} is one of the source texts that have been analysed in the
+        {{source.name}} is one of the source texts that have been analysed in the
         Lettercraft project.
     </p>
 
-    <lc-contributors [contributors]="data.source.contributors" />
+    <lc-contributors [contributors]="source.contributors" />
 
     <div class="card mb-4 mt-4">
         <div class="card-body">
             <h2 class="h5 card-title">Bibliographical information</h2>
 
-            <ng-container *ngIf="data.source.medievalAuthor || data.source.medievalTitle">
-                {{ data.source.medievalAuthor }}<ng-container *ngIf="data.source.medievalAuthor && data.source.medievalTitle">, </ng-container><em>{{ data.source.medievalTitle }}</em>.
+            <ng-container *ngIf="source.medievalAuthor || source.medievalTitle">
+                {{ source.medievalAuthor }}<ng-container *ngIf="source.medievalAuthor && source.medievalTitle">, </ng-container><em>{{ source.medievalTitle }}</em>.
             </ng-container>
-            <ng-container *ngIf="data.source.editionAuthor || data.source.editionTitle">
-                (Ed. {{ data.source.editionAuthor }}<ng-container *ngIf="data.source.editionAuthor && data.source.editionTitle">, </ng-container>{{ data.source.editionTitle }}.)
+            <ng-container *ngIf="source.editionAuthor || source.editionTitle">
+                (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container>{{ source.editionTitle }}.)
             </ng-container>
 
         </div>
@@ -32,6 +32,6 @@
 
     <h2 class="mb-4">Epistolary episodes</h2>
 
-    <lc-episode-preview *ngFor="let episode of data.source.episodes"
+    <lc-episode-preview *ngFor="let episode of source.episodes"
         [episode]="episode" />
 </ng-container>
