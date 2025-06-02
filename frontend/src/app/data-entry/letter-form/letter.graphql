@@ -1,5 +1,5 @@
 query DataEntryLetterForm($id: ID!) {
-    letterDescription(id: $id) {
+    letterDescription(id: $id, editable: true) {
         id
         name
         description
