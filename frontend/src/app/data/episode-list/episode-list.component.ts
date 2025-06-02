@@ -1,16 +1,9 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { ViewEpisodesGQL, ViewEpisodesQuery } from "generated/graphql";
-import {
-    debounceTime,
-    distinctUntilChanged,
-    map,
-    merge,
-    Observable,
-    startWith,
-    switchMap,
-} from "rxjs";
+import { distinctUntilChanged, filter, map, startWith } from "rxjs";
 
 @Component({
     selector: "lc-episode-list",
@@ -28,24 +21,24 @@ export class EpisodeListComponent {
         nonNullable: true,
     });
 
-    private searchInput$ = this.searchControl.valueChanges.pipe(
+    private search$ = this.searchService.createSearch<ViewEpisodesQuery>(
+        this.searchControl.valueChanges,
+        this.query
+    );
+
+    public data$ = this.search$.pipe(
+        filter((state) => !state.loading),
+        map((state) => state.data)
+    );
+
+    public loading$ = this.search$.pipe(
+        map((state) => state.loading),
         distinctUntilChanged(),
-        debounceTime(300)
+        startWith(false)
     );
 
-    public data$: Observable<ViewEpisodesQuery> = this.searchInput$.pipe(
-        startWith(""),
-        switchMap((search) =>
-            this.query
-                .watch({ search })
-                .valueChanges.pipe(map((result) => result.data))
-        )
-    );
-
-    public loading$ = merge(
-        this.searchInput$.pipe(map(() => true)),
-        this.data$.pipe(map(() => false))
-    );
-
-    constructor(private query: ViewEpisodesGQL) {}
+    constructor(
+        private query: ViewEpisodesGQL,
+        private searchService: SearchService
+    ) {}
 }

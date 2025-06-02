@@ -1,0 +1,108 @@
+import { Injectable } from "@angular/core";
+import { ApolloQueryResult } from "@apollo/client/core";
+import { Query as ApolloAngularQuery } from "apollo-angular/query";
+import { Exact, InputMaybe } from "generated/graphql";
+import {
+    Observable,
+    of,
+    concat,
+    map,
+    switchMap,
+    catchError,
+    distinctUntilChanged,
+    startWith,
+    debounceTime,
+} from "rxjs";
+
+export interface SearchState<T> {
+    loading: boolean;
+    data: T | null;
+    error: string | null;
+    searchTerm?: string;
+}
+
+type SearchQueryVariable = {
+    search?: string | null;
+};
+
+@Injectable({
+    providedIn: "root",
+})
+export class SearchService {
+    /**
+     * Creates a reactive search observable that performs a GraphQL query.
+     * The query must accept a `search` variable of type `string | null`.
+     * The search term is debounced by 300ms and emits a loading state
+     * before the query is executed.
+     *
+     * This guarantees that a loading state of true is always emitted first,
+     * and that it is terminated by the query result (either success or error).
+     */
+    public createSearch<TQuery>(
+        newSearch$: Observable<string>,
+        query: ApolloAngularQuery<TQuery, SearchQueryVariable>
+    ): Observable<SearchState<TQuery>> {
+        const debouncedInput$: Observable<string> = newSearch$.pipe(
+            startWith(""),
+            debounceTime(300),
+            distinctUntilChanged()
+        );
+
+        return debouncedInput$.pipe(
+            switchMap((searchTerm) => {
+                const query$ = query
+                    .watch({
+                        search: searchTerm,
+                    })
+                    .valueChanges.pipe(
+                        map((result) => {
+                            const errorMessage = this.handleApolloError(result);
+                            if (errorMessage) {
+                                return {
+                                    loading: false,
+                                    data: null,
+                                    error: errorMessage,
+                                };
+                            }
+                            return {
+                                loading: false,
+                                data: result.data || null,
+                                error: null,
+                            };
+                        }),
+                        catchError((error) => {
+                            return of({
+                                loading: false,
+                                data: null,
+                                error:
+                                    error.message ||
+                                    "An error occurred while fetching data.",
+                                searchTerm: searchTerm,
+                            });
+                        })
+                    );
+
+                const loadingState: SearchState<TQuery> = {
+                    loading: true,
+                    data: null,
+                    error: null,
+                };
+
+                // First emit loading state, then a query result to
+                // ensure the loading state is always terminated.
+                return concat(of(loadingState), query$);
+            })
+        );
+    }
+
+    private handleApolloError(
+        result: ApolloQueryResult<unknown>
+    ): string | null {
+        if (result.errors && result.errors.length > 0) {
+            return result.errors.map((e) => e.message).join(", ");
+        } else if (result.error) {
+            return result.error.message;
+        }
+        return null;
+    }
+}
