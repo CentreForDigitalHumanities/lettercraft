@@ -12,7 +12,9 @@
 
         <lc-contributors [contributors]="letter.contributors" />
 
-        <section class="mb-5">
+        <lc-preview-notification *ngIf="!letter.source.isPublic" />
+
+        <section class="mt-4 mb-5">
             <h2>Source text</h2>
 
             <p>

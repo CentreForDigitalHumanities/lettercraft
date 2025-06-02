@@ -9,6 +9,7 @@ query ViewAgent($id: ID!) {
     source {
         id
         name
+        isPublic
     }
     episodes {
         id

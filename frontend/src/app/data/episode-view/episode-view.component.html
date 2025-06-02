@@ -25,6 +25,8 @@
 
     <lc-contributors [contributors]="episode.contributors" />
 
+    <lc-preview-notification *ngIf="!episode.source.isPublic" />
+
     <h2 class="mt-5">Source text</h2>
 
     <dl>

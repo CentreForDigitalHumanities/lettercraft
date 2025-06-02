@@ -13,6 +13,8 @@
 
         <lc-contributors [contributors]="agent.contributors" />
 
+        <lc-preview-notification *ngIf="!agent.source.isPublic" />
+
         <section class="mt-5">
             <h2>Description</h2>
 

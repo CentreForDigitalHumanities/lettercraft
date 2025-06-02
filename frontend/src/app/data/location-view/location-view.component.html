@@ -12,6 +12,8 @@
 
         <lc-contributors [contributors]="location.contributors" />
 
+        <lc-preview-notification *ngIf="!location.source.isPublic" />
+
         <section class="mt-4 mb-5">
             <h2>Source text</h2>
 

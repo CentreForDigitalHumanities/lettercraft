@@ -13,6 +13,7 @@ import { EpisodePreviewComponent } from './source-view/episode-preview/episode-p
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { SourceListComponent } from './source-list/source-list.component';
 import { SearchBarComponent } from './shared/search-bar/search-bar.component';
+import { PreviewNotificationComponent } from './shared/preview-notification/preview-notification.component';
 
 
 
@@ -31,6 +32,7 @@ import { SearchBarComponent } from './shared/search-bar/search-bar.component';
         SourceListComponent,
         EpisodeListComponent,
         SearchBarComponent,
+        PreviewNotificationComponent,
     ],
     imports: [
         SharedModule,

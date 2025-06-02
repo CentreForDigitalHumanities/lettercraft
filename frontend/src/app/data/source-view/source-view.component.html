@@ -19,6 +19,8 @@
 
     <lc-contributors [contributors]="source.contributors" />
 
+    <lc-preview-notification *ngIf="!source.isPublic" />
+
     <div class="card mb-4 mt-4">
         <div class="card-body">
             <h2 class="h5 card-title">Bibliographical information</h2>

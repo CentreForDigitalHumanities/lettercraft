@@ -3,6 +3,7 @@ query ViewSource($id: ID!) {
         id
         name
         editable
+        isPublic
         editionAuthor
         editionTitle
         medievalAuthor
