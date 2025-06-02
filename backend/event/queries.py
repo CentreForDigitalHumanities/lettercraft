@@ -1,4 +1,5 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet, Q
 from event.models import Episode, EpisodeCategory, EpisodeEntity
 from typing import Optional
@@ -44,13 +45,14 @@ class EventQueries(ObjectType):
         except Episode.DoesNotExist:
             return None
 
-        user: User = info.context.user
+        user: User | AnonymousUser = info.context.user
 
-        if user.is_anonymous:
-            return None
+        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
+            episode.source
+        )
 
         # Always return the requested object if the user can edit it.
-        if user.is_superuser or user.can_edit_source(episode.source):
+        if user.is_superuser or user_can_edit_source:
             return episode
 
         # The user cannot edit this object
@@ -66,8 +68,8 @@ class EventQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
-        editable = False,
-        public_only = False,
+        editable=False,
+        public_only=False,
         **kwargs: dict,
     ) -> QuerySet[Episode]:
         queryset = EpisodeType.get_queryset(Episode.objects, info)

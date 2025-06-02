@@ -1,5 +1,6 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
+from django.contrib.auth.models import AnonymousUser
 from typing import Optional
 
 from letter.models import (
@@ -70,13 +71,14 @@ class LetterQueries(ObjectType):
         except LetterDescription.DoesNotExist:
             return None
 
-        user: User = info.context.user
+        user: User | AnonymousUser = info.context.user
 
-        if user.is_anonymous:
-            return None
+        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
+            letter_description.source
+        )
 
         # Always return the requested object if the user can edit it.
-        if user.is_superuser or user.can_edit_source(letter_description.source):
+        if user.is_superuser or user_can_edit_source:
             return letter_description
 
         # The user cannot edit this object
@@ -125,13 +127,14 @@ class LetterQueries(ObjectType):
         except GiftDescription.DoesNotExist:
             return None
 
-        user: User = info.context.user
+        user: User | AnonymousUser = info.context.user
 
-        if user.is_anonymous:
-            return None
+        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
+            gift_description.source
+        )
 
         # Always return the requested object if the user can edit it.
-        if user.is_superuser or user.can_edit_source(gift_description.source):
+        if user.is_superuser or user_can_edit_source:
             return gift_description
 
         # The user cannot edit this object

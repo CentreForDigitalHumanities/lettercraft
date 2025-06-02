@@ -1,6 +1,7 @@
 from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean
 from typing import Optional
 from django.db.models import QuerySet
+from django.contrib.auth.models import AnonymousUser
 
 from graphql_app.types.FilterableListField import FilterableListField
 from source.models import Source
@@ -35,13 +36,14 @@ class SourceQueries(ObjectType):
         except Source.DoesNotExist:
             return None
 
-        user: User = info.context.user
+        user: User | AnonymousUser = info.context.user
 
-        if user.is_anonymous:
-            return None
+        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
+            source
+        )
 
         # Always return the source if the user can edit it.
-        if user.is_superuser or user.can_edit_source(source):
+        if user.is_superuser or user_can_edit_source:
             return source
 
         # The user cannot edit the source

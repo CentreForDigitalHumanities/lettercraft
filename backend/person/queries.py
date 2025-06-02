@@ -1,5 +1,6 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
+from django.contrib.auth.models import AnonymousUser
 from typing import Optional
 
 from person.models import AgentDescription, HistoricalPerson
@@ -37,12 +38,13 @@ class PersonQueries(ObjectType):
         except AgentDescription.DoesNotExist:
             return None
 
-        user: User = info.context.user
+        user: User | AnonymousUser = info.context.user
 
-        if user.is_anonymous:
-            return None
+        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
+            agent_description.source
+        )
 
-        if user.is_superuser or user.can_edit_source(agent_description.source):
+        if user.is_superuser or user_can_edit_source:
             return agent_description
 
         # The user cannot edit the agent description
