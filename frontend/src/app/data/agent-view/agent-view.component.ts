@@ -37,10 +37,12 @@ export class AgentViewComponent {
     }
 
     makeBreadcrumbs(data: ViewAgentQuery): Breadcrumb[] {
-        if (data.agentDescription) {
-            return entityDescriptionBreadcrumbs(data.agentDescription);
-        } else {
-            return [];
-        }
+        return data.agentDescription
+            ? entityDescriptionBreadcrumbs(data.agentDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }

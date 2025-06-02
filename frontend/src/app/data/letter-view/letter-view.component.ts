@@ -31,10 +31,12 @@ export class LetterViewComponent {
     }
 
     makeBreadcrumbs(data: ViewLetterQuery): Breadcrumb[] {
-        if (data.letterDescription) {
-            return entityDescriptionBreadcrumbs(data.letterDescription);
-        } else {
-            return [];
-        }
+        return data.letterDescription
+            ? entityDescriptionBreadcrumbs(data.letterDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }

@@ -54,15 +54,7 @@ export class EpisodeViewComponent implements OnInit {
     }
 
     makeBreadcrumbs(episode: QueriedEpisode): Breadcrumb[] {
-        if (episode) {
-            return entityDescriptionBreadcrumbs(episode);
-        } else {
-            return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data', label: 'Data' },
-                { link: '.', label: 'Not found' }
-            ];
-        }
+        return entityDescriptionBreadcrumbs(episode);
     }
 
     episodeObjects(episode: ViewEpisodeQuery["episode"]): EpisodeObject[] {

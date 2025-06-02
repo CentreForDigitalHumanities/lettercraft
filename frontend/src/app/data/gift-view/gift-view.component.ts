@@ -31,10 +31,12 @@ export class GiftViewComponent {
     }
 
     makeBreadcrumbs(data: ViewGiftQuery): Breadcrumb[] {
-        if (data.giftDescription) {
-            return entityDescriptionBreadcrumbs(data.giftDescription);
-        } else {
-            return [];
-        }
+        return data.giftDescription
+            ? entityDescriptionBreadcrumbs(data.giftDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }
