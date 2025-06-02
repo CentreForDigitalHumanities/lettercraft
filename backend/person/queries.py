@@ -5,11 +5,18 @@ from typing import Optional
 from person.models import AgentDescription, HistoricalPerson
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.AgentDescriptionType import AgentDescriptionType
+from user.models import User
 from user.permissions import editable_sources
 
 
 class PersonQueries(ObjectType):
-    agent_description = Field(AgentDescriptionType, id=ID(required=True))
+    agent_description = Field(
+        AgentDescriptionType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select agent descriptions that are editable by the user."
+        ),
+    )
     agent_descriptions = List(
         NonNull(AgentDescriptionType),
         required=True,
@@ -21,14 +28,30 @@ class PersonQueries(ObjectType):
 
     @staticmethod
     def resolve_agent_description(
-        parent: None, info: ResolveInfo, id: str
+        parent: None, info: ResolveInfo, id: str, editable = False
     ) -> Optional[AgentDescription]:
         try:
-            return AgentDescriptionType.get_queryset(
+            agent_description = AgentDescriptionType.get_queryset(
                 AgentDescription.objects, info
             ).get(id=id)
         except AgentDescription.DoesNotExist:
             return None
+
+        user: User = info.context.user
+
+        if user.is_anonymous:
+            return None
+
+        if user.is_superuser or user.can_edit_source(agent_description.source):
+            return agent_description
+
+        # The user cannot edit the agent description
+        # and the query only asks for editable ones.
+        if editable:
+            return None
+
+        return agent_description if agent_description.source.is_public else None
+
 
     @staticmethod
     def resolve_agent_descriptions(

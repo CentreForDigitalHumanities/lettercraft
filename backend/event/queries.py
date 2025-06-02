@@ -13,7 +13,13 @@ from user.permissions import editable_sources
 
 
 class EventQueries(ObjectType):
-    episode = Field(EpisodeType, id=ID(required=True))
+    episode = Field(
+        EpisodeType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select episodes from sources that are editable by the user."
+        ),
+    )
     episodes = FilterableListField(
         NonNull(EpisodeType),
         required=True,
@@ -30,7 +36,9 @@ class EventQueries(ObjectType):
     )
 
     @staticmethod
-    def resolve_episode(parent: None, info: ResolveInfo, id: str) -> Optional[Episode]:
+    def resolve_episode(
+        parent: None, info: ResolveInfo, id: str, editable=False
+    ) -> Optional[Episode]:
         try:
             episode = EpisodeType.get_queryset(Episode.objects, info).get(id=id)
         except Episode.DoesNotExist:
@@ -38,15 +46,20 @@ class EventQueries(ObjectType):
 
         user: User = info.context.user
 
-        if user.is_superuser or episode.source.is_public:
-            return episode
-
-        if user.is_anonymous or not user.can_edit_source(episode.source):
+        if user.is_anonymous:
             return None
 
-        return episode
+        # Always return the requested object if the user can edit it.
+        if user.is_superuser or user.can_edit_source(episode.source):
+            return episode
 
+        # The user cannot edit this object
+        # and the query only asks for editable objects.
+        if editable:
+            return None
 
+        # Return non-editable objects iff their source is public.
+        return episode if episode.source.is_public else None
 
     @staticmethod
     def resolve_episodes(

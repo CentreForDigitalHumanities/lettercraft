@@ -1,3 +1,4 @@
+from click import edit
 from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean
 from typing import Optional
 from django.db.models import QuerySet
@@ -10,16 +11,26 @@ from user.permissions import editable_sources
 
 
 class SourceQueries(ObjectType):
-    source = Field(SourceType, id=ID(required=True))
+    source = Field(
+        SourceType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select sources that are editable by the user."
+        ),
+    )
     sources = FilterableListField(
         NonNull(SourceType),
-        editable=Boolean(),
+        editable=Boolean(
+            description="Only select sources that are editable by the user."
+        ),
         required=True,
         public_only=Boolean()
     )
 
     @staticmethod
-    def resolve_source(root: None, info: ResolveInfo, id: str) -> Optional[Source]:
+    def resolve_source(
+        root: None, info: ResolveInfo, id: str, editable=False
+    ) -> Optional[Source]:
         try:
             source = SourceType.get_queryset(Source.objects, info).get(pk=id)
         except Source.DoesNotExist:
@@ -27,16 +38,20 @@ class SourceQueries(ObjectType):
 
         user: User = info.context.user
 
-        # Public sources are visible to everyone.
-        if user.is_superuser or source.is_public:
-            return source
-
-        # Non-public sources are visible to contributing users.
-        if user.is_anonymous or not user.can_edit_source(source):
+        if user.is_anonymous:
             return None
 
-        return source
+        # Always return the source if the user can edit it.
+        if user.is_superuser or user.can_edit_source(source):
+            return source
 
+        # The user cannot edit the source
+        # and the query only asks for editable sources.
+        if editable:
+            return None
+
+        # Return non-editable sources iff they are public.
+        return source if source.is_public else None
 
     @staticmethod
     def resolve_sources(

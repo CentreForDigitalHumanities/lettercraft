@@ -12,11 +12,18 @@ from letter.types.GiftCategoryType import GiftCategoryType
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
+from user.models import User
 from user.permissions import editable_sources
 
 
 class LetterQueries(ObjectType):
-    letter_description = Field(LetterDescriptionType, id=ID(required=True))
+    letter_description = Field(
+        LetterDescriptionType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select letter descriptions from sources that are editable by the user."
+        ),
+    )
 
     letter_descriptions = List(
         NonNull(LetterDescriptionType),
@@ -31,7 +38,13 @@ class LetterQueries(ObjectType):
         required=True,
     )
 
-    gift_description = Field(GiftDescriptionType, id=ID(required=True))
+    gift_description = Field(
+        GiftDescriptionType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select gift descriptions from sources that are editable by the user."
+        ),
+    )
 
     gift_descriptions = List(
         NonNull(GiftDescriptionType),
@@ -48,14 +61,31 @@ class LetterQueries(ObjectType):
 
     @staticmethod
     def resolve_letter_description(
-        parent: None, info: ResolveInfo, id: str
+        parent: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[LetterDescription]:
         try:
-            return LetterDescriptionType.get_queryset(
+            letter_description = LetterDescriptionType.get_queryset(
                 LetterDescription.objects, info
             ).get(id=id)
         except LetterDescription.DoesNotExist:
             return None
+
+        user: User = info.context.user
+
+        if user.is_anonymous:
+            return None
+
+        # Always return the requested object if the user can edit it.
+        if user.is_superuser or user.can_edit_source(letter_description.source):
+            return letter_description
+
+        # The user cannot edit this object
+        # and the query only asks for editable objects.
+        if editable:
+            return None
+
+        # Return non-editable objects iff their source is public.
+        return letter_description if letter_description.source.is_public else None
 
     @staticmethod
     def resolve_letter_descriptions(
@@ -86,14 +116,31 @@ class LetterQueries(ObjectType):
 
     @staticmethod
     def resolve_gift_description(
-        parent: None, info: ResolveInfo, id: str
+        parent: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[GiftDescription]:
         try:
-            return GiftDescriptionType.get_queryset(GiftDescription.objects, info).get(
-                id=id
-            )
+            gift_description = GiftDescriptionType.get_queryset(
+                GiftDescription.objects, info
+            ).get(id=id)
         except GiftDescription.DoesNotExist:
             return None
+
+        user: User = info.context.user
+
+        if user.is_anonymous:
+            return None
+
+        # Always return the requested object if the user can edit it.
+        if user.is_superuser or user.can_edit_source(gift_description.source):
+            return gift_description
+
+        # The user cannot edit this object
+        # and the query only asks for editable objects.
+        if editable:
+            return None
+
+        # Return non-editable objects iff their source is public.
+        return gift_description if gift_description.source.is_public else None
 
     @staticmethod
     def resolve_gift_descriptions(
