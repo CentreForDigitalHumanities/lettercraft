@@ -183,7 +183,7 @@ def test_delete_agent_mutations(
 
 
 @pytest.fixture()
-def person_reference(graphql_client, agent_description):
+def person_reference(graphql_client, agent_description, user_request, contributor_group):
     query_result = graphql_client.execute(
         f"""
         query AgentQuery {{
@@ -193,7 +193,8 @@ def person_reference(graphql_client, agent_description):
                 }}
             }}
         }}
-        """
+        """,
+        context=user_request,
     )
     reference = PersonReference.objects.get(
         id=query_result["data"]["agentDescription"]["personReferences"][0]["id"]
