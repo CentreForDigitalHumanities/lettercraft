@@ -1,16 +1,9 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { ViewSourcesGQL, ViewSourcesQuery } from "generated/graphql";
-import {
-    map,
-    Observable,
-    debounceTime,
-    distinctUntilChanged,
-    merge,
-    startWith,
-    switchMap,
-} from "rxjs";
+import { map, distinctUntilChanged, startWith, filter } from "rxjs";
 
 @Component({
     selector: "lc-source-list",
@@ -28,24 +21,24 @@ export class SourceListComponent {
         nonNullable: true,
     });
 
-    private searchInput$ = this.searchControl.valueChanges.pipe(
+    private search$ = this.searchService.createSearch<ViewSourcesQuery>(
+        this.searchControl.valueChanges,
+        this.query
+    );
+
+    public data$ = this.search$.pipe(
+        filter((state) => !state.loading),
+        map((state) => state.data)
+    );
+
+    public loading$ = this.search$.pipe(
+        map((state) => state.loading),
         distinctUntilChanged(),
-        debounceTime(300)
+        startWith(false)
     );
 
-    public data$: Observable<ViewSourcesQuery> = this.searchInput$.pipe(
-        startWith(""),
-        switchMap((search) =>
-            this.query
-                .watch({ search })
-                .valueChanges.pipe(map((result) => result.data))
-        )
-    );
-
-    public loading$ = merge(
-        this.searchInput$.pipe(map(() => true)),
-        this.data$.pipe(map(() => false))
-    );
-
-    constructor(private query: ViewSourcesGQL) {}
+    constructor(
+        private query: ViewSourcesGQL,
+        private searchService: SearchService
+    ) {}
 }
