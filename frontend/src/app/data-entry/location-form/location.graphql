@@ -1,13 +1,14 @@
-query DataEntryLocation($id: ID!) {
-  spaceDescription(id: $id) {
-    id
-    name
-    description
-    source {
-      id
-      name
+query DataEntrySpaceDescription($id: ID!) {
+    spaceDescription(id: $id, editable: true) {
+        id
+        name
+        description
+        hasIdentifiableFeatures
+        source {
+            id
+            name
+        }
     }
-  }
 }
 
 mutation DataEntryUpdateLocation($spaceData: UpdateSpaceInput!) {
