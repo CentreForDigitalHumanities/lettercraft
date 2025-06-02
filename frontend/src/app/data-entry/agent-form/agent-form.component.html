@@ -10,15 +10,15 @@
     <ng-container *ngIf="data.agentDescription as agentDescription">
         <h1 class="mb-4">
             <lc-icon [icon]="agentIcon(agentDescription)" />
-            {{agentDescription.name}}
+            {{ agentDescription.name }}
             <span class="text-secondary">
-            ({{agentDescription.source.name}})
+                ({{ agentDescription.source.name }})
             </span>
         </h1>
 
         <p class="lead mb-4">
             <span *ngIf="agentDescription.description; else noDescription">
-                {{agentDescription.description}}
+                {{ agentDescription.description }}
             </span>
             <ng-template #noDescription>
                 <i>(No description)</i>
