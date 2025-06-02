@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { DataEntryAgentGQL, DataEntryAgentQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { FormService } from '../shared/form.service';
 import { agentIcon } from '@shared/icons-utils';
+import { ApiService } from '@services/api.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'lc-agent-form',
@@ -12,7 +14,7 @@ import { agentIcon } from '@shared/icons-utils';
     styleUrls: ['./agent-form.component.scss'],
     providers: [FormService],
 })
-export class AgentFormComponent {
+export class AgentFormComponent implements OnInit {
     id$: Observable<string> = this.formService.id$;
     data$: Observable<DataEntryAgentQuery>;
 
@@ -23,6 +25,8 @@ export class AgentFormComponent {
     status$ = this.formService.status$;
 
     constructor(
+        private destroyRef: DestroyRef,
+        private apiService: ApiService,
         private agentQuery: DataEntryAgentGQL,
         private formService: FormService,
     ) {
@@ -30,6 +34,18 @@ export class AgentFormComponent {
             switchMap(id => this.agentQuery.watch({ id }).valueChanges),
             map(result => result.data),
         );
+    }
+
+    ngOnInit(): void {
+        this.data$.pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe(data => {
+            this.apiService.rerouteIfEmpty({
+                data: data.agentDescription,
+                targetRoute: ["/data-entry"],
+                message: "Agent not found",
+            });
+        });
     }
 
     sourceLink(data: DataEntryAgentQuery): string[] | undefined {

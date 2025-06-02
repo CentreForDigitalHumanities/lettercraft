@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from "@angular/core";
+import { Component, DestroyRef, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
@@ -12,9 +12,9 @@ import {
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
+import { ApiService } from "@services/api.service";
 
 type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
-
 
 @Component({
     selector: "lc-gift-form",
@@ -22,7 +22,7 @@ type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
     styleUrls: ["./gift-form.component.scss"],
     providers: [FormService],
 })
-export class GiftFormComponent {
+export class GiftFormComponent implements OnInit {
     private id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
@@ -68,12 +68,25 @@ export class GiftFormComponent {
     constructor(
         private destroyRef: DestroyRef,
         private router: Router,
+        private apiService: ApiService,
         private formService: FormService,
         private toastService: ToastService,
         private modalService: ModalService,
         private giftQuery: DataEntryGiftFormGQL,
         private deleteGift: DataEntryDeleteGiftGQL
     ) {}
+
+    ngOnInit(): void {
+        this.gift$
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe((gift) => {
+                this.apiService.rerouteIfEmpty({
+                    data: gift,
+                    targetRoute: ["/data-entry"],
+                    message: "Gift not found",
+                });
+            });
+    }
 
     public onClickDelete(gift: QueriedGift): void {
         this.modalService

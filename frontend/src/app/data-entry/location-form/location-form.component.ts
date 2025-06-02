@@ -1,11 +1,11 @@
-import { Component, DestroyRef } from "@angular/core";
+import { Component, DestroyRef, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteLocationGQL,
     DataEntryDeleteLocationMutation,
-    DataEntryLocationQuery,
     DataEntrySpaceDescriptionGQL,
+    DataEntrySpaceDescriptionQuery,
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
@@ -14,8 +14,9 @@ import { ToastService } from "@services/toast.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ApolloCache } from "@apollo/client/core";
 import { MutationResult } from "apollo-angular";
+import { ApiService } from "@services/api.service";
 
-type QueriedLocation = NonNullable<DataEntryLocationQuery["spaceDescription"]>
+type QueriedLocation = NonNullable<DataEntrySpaceDescriptionQuery["spaceDescription"]>
 
 @Component({
     selector: 'lc-location-form',
@@ -23,7 +24,7 @@ type QueriedLocation = NonNullable<DataEntryLocationQuery["spaceDescription"]>
     styleUrls: ['./location-form.component.scss'],
     providers: [FormService],
 })
-export class LocationFormComponent {
+export class LocationFormComponent implements OnInit {
     private id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
@@ -67,12 +68,25 @@ export class LocationFormComponent {
     constructor(
         private destroyRef: DestroyRef,
         private router: Router,
+        private apiService: ApiService,
         private modalService: ModalService,
         private toastService: ToastService,
         private formService: FormService,
         private locationQuery: DataEntrySpaceDescriptionGQL,
         private deleteLocation: DataEntryDeleteLocationGQL
     ) { }
+
+    ngOnInit(): void {
+        this.location$.pipe(
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(location => {
+            this.apiService.rerouteIfEmpty({
+                data: location,
+                targetRoute: ["/data-entry"],
+                message: "Location not found",
+            })
+        });
+    }
 
     public onClickDelete(location: QueriedLocation): void {
         this.modalService
