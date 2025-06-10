@@ -1,3 +1,4 @@
+from typing import Union
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AnonymousUser
@@ -178,7 +179,7 @@ class EntityDescription(Named, models.Model):
         return f"{self.name} ({self.source})"
 
     def is_accessible_to_user(
-        self, user: User | AnonymousUser, editable: bool = False
+        self, user: Union[User, AnonymousUser], editable: bool = False
     ) -> bool:
         """
         Check if the user can access this entity description.

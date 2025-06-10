@@ -1,9 +1,8 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet, Q
-from core.models import EntityDescription
 from event.models import Episode, EpisodeCategory, EpisodeEntity
-from typing import Optional
+from typing import Optional, Union
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
@@ -46,7 +45,7 @@ class EventQueries(ObjectType):
         except Episode.DoesNotExist:
             return None
 
-        user: User | AnonymousUser = info.context.user
+        user: Union[User, AnonymousUser] = info.context.user
 
         return episode if episode.is_accessible_to_user(user, editable) else None
 
