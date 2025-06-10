@@ -1,19 +1,17 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { ViewGiftGQL, ViewGiftQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
-import { ApiService } from '@services/api.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lc-gift-view',
   templateUrl: './gift-view.component.html',
   styleUrls: ['./gift-view.component.scss']
 })
-export class GiftViewComponent implements OnInit {
+export class GiftViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
@@ -26,23 +24,9 @@ export class GiftViewComponent implements OnInit {
     actionIcons = actionIcons;
 
     constructor(
-        private destroyRef: DestroyRef,
-        private apiService: ApiService,
         private route: ActivatedRoute,
         private query: ViewGiftGQL
     ) {}
-
-    ngOnInit(): void {
-        this.data$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((data) => {
-                this.apiService.rerouteIfEmpty({
-                    data: data.giftDescription,
-                    targetRoute: ["/data"],
-                    message: "Gift not found",
-                });
-            });
-    }
 
     makeBreadcrumbs(data: ViewGiftQuery): Breadcrumb[] {
         return data.giftDescription

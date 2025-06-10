@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
@@ -12,7 +12,6 @@ import {
 } from "generated/graphql";
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
-import { ApiService } from "@services/api.service";
 
 type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
 
@@ -22,7 +21,7 @@ type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
     styleUrls: ["./letter-form.component.scss"],
     providers: [FormService],
 })
-export class LetterFormComponent implements OnInit {
+export class LetterFormComponent {
     private id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
@@ -67,25 +66,12 @@ export class LetterFormComponent implements OnInit {
     constructor(
         private destroyRef: DestroyRef,
         private router: Router,
-        private apiService: ApiService,
         private formService: FormService,
         private toastService: ToastService,
         private modalService: ModalService,
         private letterQuery: DataEntryLetterFormGQL,
         private deleteLetter: DataEntryDeleteLetterGQL
     ) {}
-
-    ngOnInit(): void {
-        this.letter$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((letter) => {
-                this.apiService.rerouteIfEmpty({
-                    data: letter,
-                    targetRoute: ["/data-entry"],
-                    message: "Letter not found",
-                });
-            });
-    }
 
     public onClickDelete(letter: QueriedLetter): void {
         this.modalService

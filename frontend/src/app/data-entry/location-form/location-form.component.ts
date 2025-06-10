@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { Router } from "@angular/router";
 import { actionIcons, dataIcons } from "@shared/icons";
 import {
@@ -14,7 +14,6 @@ import { ToastService } from "@services/toast.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ApolloCache } from "@apollo/client/core";
 import { MutationResult } from "apollo-angular";
-import { ApiService } from "@services/api.service";
 
 type QueriedLocation = NonNullable<DataEntrySpaceDescriptionQuery["spaceDescription"]>
 
@@ -24,7 +23,7 @@ type QueriedLocation = NonNullable<DataEntrySpaceDescriptionQuery["spaceDescript
     styleUrls: ['./location-form.component.scss'],
     providers: [FormService],
 })
-export class LocationFormComponent implements OnInit {
+export class LocationFormComponent {
     private id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
@@ -68,25 +67,12 @@ export class LocationFormComponent implements OnInit {
     constructor(
         private destroyRef: DestroyRef,
         private router: Router,
-        private apiService: ApiService,
         private modalService: ModalService,
         private toastService: ToastService,
         private formService: FormService,
         private locationQuery: DataEntrySpaceDescriptionGQL,
         private deleteLocation: DataEntryDeleteLocationGQL
     ) { }
-
-    ngOnInit(): void {
-        this.location$.pipe(
-            takeUntilDestroyed(this.destroyRef),
-        ).subscribe(location => {
-            this.apiService.rerouteIfEmpty({
-                data: location,
-                targetRoute: ["/data-entry"],
-                message: "Location not found",
-            })
-        });
-    }
 
     public onClickDelete(location: QueriedLocation): void {
         this.modalService

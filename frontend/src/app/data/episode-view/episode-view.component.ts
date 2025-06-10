@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
@@ -6,8 +6,6 @@ import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
-import { ApiService } from '@services/api.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
 
@@ -18,7 +16,7 @@ type EpisodeObject = QueriedEpisode["letters"][number] | QueriedEpisode["gifts"]
   templateUrl: './episode-view.component.html',
   styleUrls: ['./episode-view.component.scss']
 })
-export class EpisodeViewComponent implements OnInit {
+export class EpisodeViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map((params) => params['id'])
     );
@@ -33,25 +31,9 @@ export class EpisodeViewComponent implements OnInit {
     locationIcon = locationIcon;
 
     constructor(
-        private destroyRef: DestroyRef,
-        private apiService: ApiService,
         private route: ActivatedRoute,
         private query: ViewEpisodeGQL
     ) {}
-
-    ngOnInit(): void {
-        this.episode$
-            .pipe(
-                takeUntilDestroyed(this.destroyRef)
-            )
-            .subscribe((episode) =>
-                this.apiService.rerouteIfEmpty({
-                    data: episode,
-                    targetRoute: ["/data"],
-                    message: "Episode not found",
-                })
-            );
-    }
 
     makeBreadcrumbs(episode: QueriedEpisode): Breadcrumb[] {
         return entityDescriptionBreadcrumbs(episode);

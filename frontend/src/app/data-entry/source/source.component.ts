@@ -1,10 +1,4 @@
-import {
-    Component,
-    computed,
-    DestroyRef,
-    OnInit,
-    TemplateRef,
-} from "@angular/core";
+import { Component, computed, DestroyRef, TemplateRef } from "@angular/core";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
@@ -21,7 +15,6 @@ import { map, shareReplay, switchMap } from "rxjs";
 import { MutationResult } from "apollo-angular";
 import { moveItemInArray } from "@shared/utils";
 import { OrderChange } from "@shared/order-button-group/order-button-group.component";
-import { ApiService } from "@services/api.service";
 
 type QueriedEpisode = NonNullable<
     DataEntrySourceDetailQuery["source"]
@@ -32,7 +25,7 @@ type QueriedEpisode = NonNullable<
     templateUrl: "./source.component.html",
     styleUrls: ["./source.component.scss"],
 })
-export class SourceComponent implements OnInit {
+export class SourceComponent {
     public breadcrumbs = computed(() => [
         {
             label: "Lettercraft",
@@ -68,7 +61,6 @@ export class SourceComponent implements OnInit {
 
     constructor(
         private destroyRef: DestroyRef,
-        private apiService: ApiService,
         private route: ActivatedRoute,
         private router: Router,
         private modalService: NgbModal,
@@ -76,18 +68,6 @@ export class SourceComponent implements OnInit {
         private sourceDetailQuery: DataEntrySourceDetailGQL,
         private updateEpisodeOrder: DataEntryUpdateEpisodeOrderGQL
     ) {}
-
-    ngOnInit(): void {
-        this.source$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((result) =>
-                this.apiService.rerouteIfEmpty({
-                    data: result,
-                    targetRoute: ["/", "data-entry", "sources"],
-                    message: "Source not found.",
-                })
-            );
-    }
 
     public openNewEpisodeModal(newEpisodeModal: TemplateRef<unknown>): void {
         this.modal = this.modalService.open(newEpisodeModal);

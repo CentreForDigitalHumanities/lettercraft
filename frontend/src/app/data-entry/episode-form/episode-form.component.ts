@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Router } from "@angular/router";
 import { ApolloCache } from "@apollo/client/core";
@@ -15,7 +15,6 @@ import {
 import { filter, map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
 import { MutationResult } from "apollo-angular";
-import { ApiService } from "@services/api.service";
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 
@@ -25,7 +24,7 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
     styleUrls: ["./episode-form.component.scss"],
     providers: [FormService],
 })
-export class EpisodeFormComponent implements OnInit {
+export class EpisodeFormComponent {
     Entity = Entity;
 
     private id$ = this.formService.id$;
@@ -72,7 +71,6 @@ export class EpisodeFormComponent implements OnInit {
 
     constructor(
         private destroyRef: DestroyRef,
-        private apiService: ApiService,
         private formService: FormService,
         private router: Router,
         private toastService: ToastService,
@@ -80,18 +78,6 @@ export class EpisodeFormComponent implements OnInit {
         private episodeQuery: DataEntryEpisodeFormGQL,
         private deleteEpisode: DataEntryDeleteEpisodeGQL
     ) {}
-
-    ngOnInit(): void {
-        this.episode$
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((episode) => {
-                this.apiService.rerouteIfEmpty({
-                    data: episode,
-                    targetRoute: ["/", "data-entry"],
-                    message: "Episode not found",
-                });
-            });
-    }
 
     public onClickDelete(episode: QueriedEpisode): void {
         this.modalService
