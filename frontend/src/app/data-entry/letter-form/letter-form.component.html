@@ -1,42 +1,52 @@
-<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-<ng-container *ngIf="letter$ | async as letter; else loading">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/letters', letter.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
+    <ng-container
+        *ngIf="data.letterDescription as letterDescription; else noLetter"
+    >
+        <a
+            class="float-end btn btn-light"
+            [routerLink]="['/data/letters', letterDescription.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
 
-    <h1 class="mb-4">
-        <lc-icon [icon]="dataIcons.letter" />
-        <span class="ms-2">{{ letter.name }}</span>
-        <span class="text-secondary">
-            ({{ letter.source.name }})
-        </span>
-    </h1>
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.letter" />
+            <span class="ms-2">{{ letterDescription.name }}</span>
+            <span class="text-secondary">
+                ({{ letterDescription.source.name }})
+            </span>
+        </h1>
 
-    <lc-entity-description-lead [entity]="letter" />
+        <lc-entity-description-lead [entity]="letterDescription" />
 
-    <lc-form-status [status$]="status$" />
+        <lc-form-status [status$]="status$" />
 
-    <lc-delete-entity-button
-        (clickDelete)="onClickDelete(letter)"
-        [deletingInProgress]="deletingInProgress"
-        entityName="letter"
-    />
+        <lc-delete-entity-button
+            (clickDelete)="onClickDelete(letterDescription)"
+            [deletingInProgress]="deletingInProgress"
+            entityName="letter"
+        />
+
+        <h2 class="subform-header">Identification</h2>
+        <lc-letter-identification-form />
+
+        <h2 class="subform-header">Source text</h2>
+        <lc-letter-source-text-form />
+
+        <h2 class="subform-header">Categories</h2>
+        <lc-letter-categories-form />
+
+        <h2 class="subform-header">Episodes</h2>
+        <lc-letter-episodes-form />
+    </ng-container>
+    
+    <ng-template #noLetter>
+        <lc-not-found entity="letter" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
-
-<h2 class="subform-header">Identification</h2>
-<lc-letter-identification-form />
-
-<h2 class="subform-header">Source text</h2>
-<lc-letter-source-text-form />
-
-<h2 class="subform-header">Categories</h2>
-<lc-letter-categories-form />
-
-<h2 class="subform-header">Episodes</h2>
-<lc-letter-episodes-form />
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

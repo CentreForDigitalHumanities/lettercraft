@@ -1,0 +1,15 @@
+<div class="container text-center my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <lc-icon
+                [icon]="statusIcons.notFound"
+                class="display-3 text-muted"
+            ></lc-icon>
+            <h1 class="h1 fw-bold text-muted mt-3">Sorry!</h1>
+            <p class="lead text-muted">
+                The <span class="fw-bold">{{ entity }}</span> with ID
+                <span class="fw-bold">{{ id }}</span> could not be found.
+            </p>
+        </div>
+    </div>
+</div>

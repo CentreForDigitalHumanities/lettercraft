@@ -10,8 +10,9 @@ import {
     DataEntryLetterFormGQL,
     DataEntryLetterFormQuery,
 } from "generated/graphql";
-import { filter, map, share, switchMap } from "rxjs";
+import { map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 
 type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
 
@@ -22,41 +23,14 @@ type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
     providers: [FormService],
 })
 export class LetterFormComponent {
-    private id$ = this.formService.id$;
+    public id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
 
-    public letter$ = this.id$.pipe(
+    public data$ = this.id$.pipe(
         switchMap((id) => this.letterQuery.watch({ id }).valueChanges),
-        map((result) => result.data.letterDescription),
+        map((result) => result.data),
         share()
-    );
-
-    public breadcrumbs$ = this.letter$.pipe(
-        filter((letter) => !!letter),
-        map((letter) => {
-            if (!letter) {
-                return [];
-            }
-            return [
-                {
-                    label: "Lettercraft",
-                    link: "/",
-                },
-                {
-                    label: "Data entry",
-                    link: "/data-entry",
-                },
-                {
-                    label: letter.source.name,
-                    link: `/data-entry/sources/${letter.source.id}`,
-                },
-                {
-                    label: letter.name,
-                    link: `/data-entry/letters/${letter.id}`,
-                },
-            ];
-        })
     );
 
     public dataIcons = dataIcons;
@@ -72,6 +46,30 @@ export class LetterFormComponent {
         private letterQuery: DataEntryLetterFormGQL,
         private deleteLetter: DataEntryDeleteLetterGQL
     ) {}
+
+    public getBreadcrumbs(data: DataEntryLetterFormQuery): Breadcrumb[] {
+        if (!data.letterDescription) {
+            return [];
+        }
+        return [
+            {
+                label: "Lettercraft",
+                link: "/",
+            },
+            {
+                label: "Data entry",
+                link: "/data-entry",
+            },
+            {
+                label: data.letterDescription.source.name,
+                link: `/data-entry/sources/${data.letterDescription.source.id}`,
+            },
+            {
+                label: data.letterDescription.name,
+                link: `/data-entry/letters/${data.letterDescription.id}`,
+            },
+        ];
+    }
 
     public onClickDelete(letter: QueriedLetter): void {
         this.modalService

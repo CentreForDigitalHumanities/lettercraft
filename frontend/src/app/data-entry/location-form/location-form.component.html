@@ -1,56 +1,59 @@
-<ng-container *ngIf="location$ | async as location">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/locations', location.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
-</ng-container>
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
+    <ng-container *ngIf="data.spaceDescription as spaceDescription; else noLocation">
+        <a
+            class="float-end btn btn-light"
+            [routerLink]="['/data/locations', spaceDescription.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.location" />
+            {{ spaceDescription.name }}
+            <span class="text-secondary"> ({{ spaceDescription.source.name }}) </span>
+        </h1>
 
-<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
+        <p class="lead mb-4">
+            <span *ngIf="spaceDescription.description; else noDescription">
+                {{ spaceDescription.description }}
+            </span>
+            <ng-template #noDescription>
+                <i>(No description)</i>
+            </ng-template>
+        </p>
 
-<ng-container *ngIf="location$ | async as location; else loading">
-    <h1 class="mb-4">
-        <lc-icon [icon]="dataIcons.location" />
-        {{ location.name }}
-        <span class="text-secondary"> ({{ location.source.name }}) </span>
-    </h1>
+        <lc-form-status [status$]="status$" />
 
-    <p class="lead mb-4">
-        <span *ngIf="location.description; else noDescription">
-            {{location.description}}
-        </span>
-        <ng-template #noDescription>
-            <i>(No description)</i>
-        </ng-template>
-    </p>
-
-    <lc-form-status [status$]="status$" />
-
-    <lc-delete-entity-button
-            (clickDelete)="onClickDelete(location)"
+        <lc-delete-entity-button
+            (clickDelete)="onClickDelete(spaceDescription)"
             [deletingInProgress]="deletingInProgress"
             entityName="location"
         />
+        <h2 class="subform-header">Identification</h2>
+        <lc-location-identification-form />
+
+        <h2 class="subform-header">Source text</h2>
+        <lc-location-source-text-form />
+
+        <h2 class="subform-header">Regions</h2>
+        <lc-location-regions-form />
+
+        <h2 class="subform-header">Settlements</h2>
+        <lc-location-settlements-form />
+
+        <h2 class="subform-header">Structures</h2>
+        <lc-location-structures-form />
+
+        <h2 class="subform-header">Episodes</h2>
+        <lc-location-episodes-form />
+    </ng-container>
+
+    <ng-template #noLocation>
+        <lc-not-found entity="location" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
-
-<h2 class="subform-header">Identification</h2>
-<lc-location-identification-form />
-
-<h2 class="subform-header">Source text</h2>
-<lc-location-source-text-form />
-
-<h2 class="subform-header">Regions</h2>
-<lc-location-regions-form />
-
-<h2 class="subform-header">Settlements</h2>
-<lc-location-settlements-form />
-
-<h2 class="subform-header">Structures</h2>
-<lc-location-structures-form />
-
-<h2 class="subform-header">Episodes</h2>
-<lc-location-episodes-form />
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

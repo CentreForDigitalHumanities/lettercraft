@@ -1,13 +1,16 @@
 <ng-container *ngIf="data$ | async as data; else loading">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/agents', data.agentDescription?.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
-
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
 
-    <ng-container *ngIf="data.agentDescription as agentDescription">
+    <ng-container
+        *ngIf="data.agentDescription as agentDescription; else noAgent"
+    >
+        <a
+            class="float-end btn btn-light"
+            [routerLink]="['/data/agents', agentDescription.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
         <h1 class="mb-4">
             <lc-icon [icon]="agentIcon(agentDescription)" />
             {{ agentDescription.name }}
@@ -28,7 +31,10 @@
         <lc-form-status [status$]="status$" />
 
         <div class="hstack">
-            <lc-delete-agent class="ms-auto" [navigateOnDelete]="sourceLink(data)" />
+            <lc-delete-agent
+                class="ms-auto"
+                [navigateOnDelete]="sourceLink(data)"
+            />
         </div>
 
         <h2>Identification</h2>
@@ -45,6 +51,10 @@
 
         <lc-agent-historical-person-form />
     </ng-container>
+
+    <ng-template #noAgent>
+        <lc-not-found entity="agent" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
 
 <ng-template #loading>

@@ -12,9 +12,10 @@ import {
     DataEntryEpisodeFormQuery,
     Entity,
 } from "generated/graphql";
-import { filter, map, share, switchMap } from "rxjs";
+import { map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
 import { MutationResult } from "apollo-angular";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 
 type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 
@@ -27,42 +28,15 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
 export class EpisodeFormComponent {
     Entity = Entity;
 
-    private id$ = this.formService.id$;
+    public id$ = this.formService.id$;
 
-    public episode$ = this.id$.pipe(
+    public data$ = this.id$.pipe(
         switchMap((id) => this.episodeQuery.watch({ id }).valueChanges),
-        map((result) => result.data.episode),
+        map((result) => result.data),
         share()
     );
 
     public status$ = this.formService.status$;
-
-    public breadcrumbs$ = this.episode$.pipe(
-        filter((episode) => !!episode),
-        map((episode) => {
-            if (!episode) {
-                return [];
-            }
-            return [
-                {
-                    label: "Lettercraft",
-                    link: "/",
-                },
-                {
-                    label: "Data entry",
-                    link: "/data-entry",
-                },
-                {
-                    label: episode.source.name,
-                    link: `/data-entry/sources/${episode.source.id}`,
-                },
-                {
-                    label: episode.name,
-                    link: `/data-entry/episodes/${episode.id}`,
-                },
-            ];
-        })
-    );
 
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
@@ -78,6 +52,24 @@ export class EpisodeFormComponent {
         private episodeQuery: DataEntryEpisodeFormGQL,
         private deleteEpisode: DataEntryDeleteEpisodeGQL
     ) {}
+
+    public getBreadcrumbs(data: DataEntryEpisodeFormQuery): Breadcrumb[] {
+        if (!data.episode) {
+            return [];
+        }
+        return [
+            { link: "/", label: "Lettercraft" },
+            { link: "/data-entry", label: "Data entry" },
+            {
+                link: `/data-entry/sources/${data.episode.source.id}`,
+                label: data.episode.source.name,
+            },
+            {
+                link: `/data-entry/episodes/${data.episode.id}`,
+                label: data.episode.name,
+            },
+        ];
+    }
 
     public onClickDelete(episode: QueriedEpisode): void {
         this.modalService

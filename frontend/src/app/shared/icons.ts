@@ -46,7 +46,5 @@ export const statusIcons = {
     loading: 'hourglass',
     saved: 'check-lg',
     error: 'exclamation-circle',
+    notFound: 'question-diamond',
 }
-
-
-

@@ -1,50 +1,56 @@
-<ng-container *ngIf="episode$ | async as episode">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/episodes', episode.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
+
+    <ng-container *ngIf="data.episode as episode; else noEpisode">
+        <a
+            class="float-end btn btn-light"
+            [routerLink]="['/data/episodes', episode.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.episode" />
+            <span class="ms-2">{{ episode.name }}</span>
+            <span class="text-body-secondary">
+                ({{ episode.source.name }})
+            </span>
+        </h1>
+
+        <lc-form-status [status$]="status$" />
+
+        <lc-delete-entity-button
+            (clickDelete)="onClickDelete(episode)"
+            [deletingInProgress]="deletingInProgress"
+            entityName="episode"
+        />
+
+        <h2 class="subform-header">Identification</h2>
+        <lc-episode-identification-form />
+
+        <h2 class="subform-header">Source text</h2>
+        <lc-episode-source-text-form />
+
+        <h2 class="subform-header">Contents</h2>
+        <lc-episode-contents-form />
+
+        <h2 class="subform-header">Agents</h2>
+        <lc-episode-entities-form [entityType]="Entity.Agent" />
+
+        <h2 class="subform-header">Locations</h2>
+        <lc-episode-entities-form [entityType]="Entity.Space" />
+
+        <h2 class="subform-header">Letters</h2>
+        <lc-episode-entities-form [entityType]="Entity.Letter" />
+
+        <h2 class="subform-header">Gifts</h2>
+        <lc-episode-entities-form [entityType]="Entity.Gift" />
+    </ng-container>
+
+    <ng-template #noEpisode>
+        <lc-not-found entity="episode" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
-
-<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
-
-<ng-container *ngIf="episode$ | async as episode; else loading">
-    <h1 class="mb-4">
-        <lc-icon [icon]="dataIcons.episode" />
-        <span class="ms-2">{{ episode.name }}</span>
-        <span class="text-body-secondary"> ({{ episode.source.name }}) </span>
-    </h1>
-
-    <lc-form-status [status$]="status$" />
-
-    <lc-delete-entity-button
-        (clickDelete)="onClickDelete(episode)"
-        [deletingInProgress]="deletingInProgress"
-        entityName="episode"
-    />
-</ng-container>
-
-<h2 class="subform-header">Identification</h2>
-<lc-episode-identification-form />
-
-<h2 class="subform-header">Source text</h2>
-<lc-episode-source-text-form />
-
-<h2 class="subform-header">Contents</h2>
-<lc-episode-contents-form />
-
-<h2 class="subform-header">Agents</h2>
-<lc-episode-entities-form [entityType]="Entity.Agent" />
-
-<h2 class="subform-header">Locations</h2>
-<lc-episode-entities-form [entityType]="Entity.Space" />
-
-<h2 class="subform-header">Letters</h2>
-<lc-episode-entities-form [entityType]="Entity.Letter" />
-
-<h2 class="subform-header">Gifts</h2>
-<lc-episode-entities-form [entityType]="Entity.Gift" />
-
 
 <ng-template #loading>
     <div class="spinner-border" role="status">
