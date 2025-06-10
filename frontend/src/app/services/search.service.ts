@@ -54,31 +54,12 @@ export class SearchService {
                         search: searchTerm,
                     })
                     .valueChanges.pipe(
-                        map((result) => {
-                            const errorMessage = this.handleApolloError(result);
-                            if (errorMessage) {
-                                return {
-                                    loading: false,
-                                    data: null,
-                                    error: errorMessage,
-                                };
-                            }
-                            return {
-                                loading: false,
-                                data: result.data || null,
-                                error: null,
-                            };
-                        }),
-                        catchError((error) => {
-                            return of({
-                                loading: false,
-                                data: null,
-                                error:
-                                    error.message ||
-                                    "An error occurred while fetching data.",
-                                searchTerm: searchTerm,
-                            });
-                        })
+                        map((result) =>
+                            this.handleApolloResult<TQuery>(result)
+                        ),
+                        catchError((error) =>
+                            this.handleFetchError<TQuery>(error, searchTerm)
+                        )
                     );
 
                 const loadingState: SearchState<TQuery> = {
@@ -87,21 +68,47 @@ export class SearchService {
                     error: null,
                 };
 
-                // First emit loading state, then a query result to
-                // ensure the loading state is always terminated.
                 return concat(of(loadingState), query$);
             })
         );
     }
 
-    private handleApolloError(
-        result: ApolloQueryResult<unknown>
-    ): string | null {
+    private handleApolloResult<T>(
+        result: ApolloQueryResult<T>
+    ): SearchState<T> {
+        const errorMessage = this.handleApolloError(result);
+        if (errorMessage) {
+            return {
+                loading: false,
+                data: null,
+                error: errorMessage,
+            };
+        }
+        return {
+            loading: false,
+            data: result.data || null,
+            error: null,
+        };
+    }
+
+    private handleApolloError<T>(result: ApolloQueryResult<T>): string | null {
         if (result.errors && result.errors.length > 0) {
             return result.errors.map((e) => e.message).join(", ");
         } else if (result.error) {
             return result.error.message;
         }
         return null;
+    }
+
+    private handleFetchError<T>(
+        error: { message?: string },
+        searchTerm: string
+    ): Observable<SearchState<T>> {
+        return of({
+            loading: false,
+            data: null,
+            error: error.message || "An error occurred while fetching data.",
+            searchTerm: searchTerm,
+        });
     }
 }
