@@ -1,5 +1,5 @@
 query DataEntryAgentDescription($id: ID!) {
-  agentDescription(id: $id) {
+  agentDescription(id: $id, editable: true) {
     id
     isGroup
     gender {

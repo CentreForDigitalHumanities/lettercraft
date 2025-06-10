@@ -1,5 +1,5 @@
 query DataEntryAgentHistoricalPerson($id: ID!) {
-    agentDescription(id: $id) {
+    agentDescription(id: $id, editable: true) {
         id
         isGroup
         describes {

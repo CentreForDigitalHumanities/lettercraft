@@ -1,5 +1,5 @@
 query DataEntryAgentIdentification($id: ID!) {
-  agentDescription(id: $id) {
+  agentDescription(id: $id, editable: true) {
     id
     name
     description

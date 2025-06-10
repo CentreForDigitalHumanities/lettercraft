@@ -1,5 +1,5 @@
 query DataEntryLetterSourceText($id: ID!) {
-    letterDescription(id: $id) {
+    letterDescription(id: $id, editable: true) {
         id
         book
         chapter

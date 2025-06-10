@@ -1,5 +1,5 @@
 query DataEntryAgentEpisodes($id: ID!) {
-    agentDescription(id: $id) {
+    agentDescription(id: $id, editable: true) {
         id
         source {
             id

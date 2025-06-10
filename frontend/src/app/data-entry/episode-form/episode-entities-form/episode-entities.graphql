@@ -1,5 +1,5 @@
 query DataEntryEpisodeEntities($id: ID!) {
-  episode(id: $id) {
+  episode(id: $id, editable: true) {
     id
     source {
       id

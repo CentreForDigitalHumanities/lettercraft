@@ -1,5 +1,5 @@
 query DataEntryGiftIdentification($id: ID!) {
-    giftDescription(id: $id) {
+    giftDescription(id: $id, editable: true) {
         id
         name
         description

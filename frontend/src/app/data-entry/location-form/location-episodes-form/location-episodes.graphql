@@ -1,5 +1,5 @@
 query DataEntryLocationEpisodes($id: ID!) {
-    spaceDescription(id: $id) {
+    spaceDescription(id: $id, editable: true) {
         id
         source {
             id

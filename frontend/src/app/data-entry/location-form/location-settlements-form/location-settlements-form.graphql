@@ -1,5 +1,5 @@
 query DataEntryLocationSettlements($id: ID!) {
-    spaceDescription(id: $id) {
+    spaceDescription(id: $id, editable: true) {
         id
         settlements {
             id

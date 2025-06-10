@@ -1,5 +1,5 @@
 query DataEntryLocationStructures($id: ID!) {
-    spaceDescription(id: $id) {
+    spaceDescription(id: $id, editable: true) {
         id
         structures {
             id
