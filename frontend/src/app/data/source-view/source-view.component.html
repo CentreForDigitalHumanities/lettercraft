@@ -1,7 +1,7 @@
 <ng-container *ngIf="source$ | async as source">
     <a
-        class="float-end btn btn-light"
         *ngIf="source.editable"
+        class="float-end btn btn-light"
         [routerLink]="['/data-entry/sources', source.id]"
     >
         <lc-icon [icon]="actionIcons.edit" />

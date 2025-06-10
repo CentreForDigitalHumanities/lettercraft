@@ -5,6 +5,7 @@ query DataEntryEpisodeForm($id: ID!) {
         source {
             id
             name
+            isPublic
         }
     }
 }

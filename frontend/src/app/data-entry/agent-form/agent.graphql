@@ -8,6 +8,7 @@ query DataEntryAgent($id: ID!) {
     source {
       id
       name
+      isPublic
     }
   }
 }

@@ -1,15 +1,20 @@
-<ng-container *ngIf="data$ | async as data">
-    <a class="float-end btn btn-light" *ngIf="data.agentDescription?.editable"
-        [routerLink]="['/data-entry/agents', data.agentDescription?.id]">
-        <lc-icon [icon]="actionIcons.edit" />
-        Edit this agent
-    </a>
-
+<ng-container *ngIf="data$ | async as data; else loading">
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.agentDescription as agent">
-        <lc-object-page-header [object]="data.agentDescription"
-            [icon]="agentIcon(data.agentDescription)" />
+    <ng-container *ngIf="data.agentDescription as agent; else noAgent">
+        <a
+            *ngIf="agent.editable"
+            class="float-end btn btn-light"
+            [routerLink]="['/data-entry/agents', agent.id]"
+        >
+            <lc-icon [icon]="actionIcons.edit" />
+            Edit this agent
+        </a>
+
+        <lc-object-page-header
+            [object]="data.agentDescription"
+            [icon]="agentIcon(data.agentDescription)"
+        />
 
         <lc-contributors [contributors]="agent.contributors" />
 
@@ -99,4 +104,14 @@
             </ng-template>
         </section>
     </ng-container>
+
+    <ng-template #noAgent>
+        <lc-not-found entity="agent" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

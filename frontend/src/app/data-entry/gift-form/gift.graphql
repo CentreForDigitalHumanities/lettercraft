@@ -6,6 +6,7 @@ query DataEntryGiftForm($id: ID!) {
         source {
             id
             name
+            isPublic
         }
     }
 }

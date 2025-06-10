@@ -3,6 +3,7 @@
 
     <ng-container *ngIf="data.episode as episode; else noEpisode">
         <a
+            *ngIf="episode.source.isPublic"
             class="float-end btn btn-light"
             [routerLink]="['/data/episodes', episode.id]"
         >

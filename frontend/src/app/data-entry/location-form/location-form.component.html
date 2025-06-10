@@ -1,23 +1,24 @@
 <ng-container *ngIf="data$ | async as data; else loading">
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.spaceDescription as spaceDescription; else noLocation">
+    <ng-container *ngIf="data.spaceDescription as location; else noLocation">
         <a
+            *ngIf="location.source.isPublic"
             class="float-end btn btn-light"
-            [routerLink]="['/data/locations', spaceDescription.id]"
+            [routerLink]="['/data/locations', location.id]"
         >
             <lc-icon [icon]="actionIcons.view" />
             View on public interface
         </a>
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.location" />
-            {{ spaceDescription.name }}
-            <span class="text-secondary"> ({{ spaceDescription.source.name }}) </span>
+            {{ location.name }}
+            <span class="text-secondary"> ({{ location.source.name }}) </span>
         </h1>
 
         <p class="lead mb-4">
-            <span *ngIf="spaceDescription.description; else noDescription">
-                {{ spaceDescription.description }}
+            <span *ngIf="location.description; else noDescription">
+                {{ location.description }}
             </span>
             <ng-template #noDescription>
                 <i>(No description)</i>
@@ -27,7 +28,7 @@
         <lc-form-status [status$]="status$" />
 
         <lc-delete-entity-button
-            (clickDelete)="onClickDelete(spaceDescription)"
+            (clickDelete)="onClickDelete(location)"
             [deletingInProgress]="deletingInProgress"
             entityName="location"
         />

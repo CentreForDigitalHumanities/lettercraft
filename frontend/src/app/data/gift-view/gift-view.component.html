@@ -1,13 +1,15 @@
-<ng-container *ngIf="data$ | async as data">
-    <a class="float-end btn btn-light" *ngIf="data.giftDescription?.editable"
-        [routerLink]="['/data-entry/gifts', data.giftDescription?.id]">
-        <lc-icon [icon]="actionIcons.edit" />
-        Edit this gift
-    </a>
-
+<ng-container *ngIf="data$ | async as data; else loading">
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.giftDescription as gift">
+    <ng-container *ngIf="data.giftDescription as gift; else noGift">
+        <a
+            *ngIf="gift.editable"
+            class="float-end btn btn-light"
+            [routerLink]="['/data-entry/gifts', gift.id]"
+        >
+            <lc-icon [icon]="actionIcons.edit" />
+            Edit this gift
+        </a>
         <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
 
         <lc-contributors [contributors]="gift.contributors" />
@@ -29,4 +31,14 @@
             <lc-episode-links [data]="gift.episodes" />
         </section>
     </ng-container>
+
+    <ng-template #noGift>
+        <lc-not-found entity="gift" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

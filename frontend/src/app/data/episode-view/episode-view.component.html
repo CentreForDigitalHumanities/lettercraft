@@ -1,114 +1,127 @@
-<ng-container *ngIf="episode$ | async as episode">
-    <a
-        class="float-end btn btn-light"
-        *ngIf="episode.editable"
-        [routerLink]="['/data-entry/episodes', episode.id]"
-    >
-        <lc-icon [icon]="actionIcons.edit" />
-        Edit this episode
-    </a>
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(episode)" />
-
-    <lc-object-page-header [object]="episode" [icon]="dataIcons.episode" />
-
-    <p>
-        "{{ episode.name }}" is an epistolary episode in
+    <ng-container *ngIf="data.episode as episode; else noEpisode">
         <a
-            [routerLink]="['/data/sources', episode.source.id]"
-            class="icon-link"
+            *ngIf="episode.editable"
+            class="float-end btn btn-light"
+            [routerLink]="['/data-entry/episodes', episode.id]"
         >
-            <lc-icon [icon]="dataIcons.source" />
-            {{ episode.source.name }}</a
-        >.
-    </p>
+            <lc-icon [icon]="actionIcons.edit" />
+            Edit this episode
+        </a>
 
-    <lc-contributors [contributors]="episode.contributors" />
 
-    <h2 class="mt-5">Source text</h2>
+        <lc-object-page-header [object]="episode" [icon]="dataIcons.episode" />
 
-    <dl>
-        <dt>Source text</dt>
-        <dd class="ms-4">
+        <p>
+            "{{ episode.name }}" is an epistolary episode in
             <a
                 [routerLink]="['/data/sources', episode.source.id]"
                 class="icon-link"
             >
                 <lc-icon [icon]="dataIcons.source" />
                 {{ episode.source.name }}</a
-            >
-        </dd>
-        <dt>Location in text</dt>
-        <dd class="ms-4">
-            <span class="inline-list">
-                <span *ngIf="episode.book" class="inline-list-item"
-                    >book {{ episode.book }}</span
+            >.
+        </p>
+
+        <lc-contributors [contributors]="episode.contributors" />
+
+        <h2 class="mt-5">Source text</h2>
+
+        <dl>
+            <dt>Source text</dt>
+            <dd class="ms-4">
+                <a
+                    [routerLink]="['/data/sources', episode.source.id]"
+                    class="icon-link"
                 >
-                <span *ngIf="episode.chapter" class="inline-list-item"
-                    >chapter {{ episode.chapter }}</span
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{ episode.source.name }}</a
                 >
-                <span *ngIf="episode.page" class="inline-list-item"
-                    >page {{ episode.page }}</span
+            </dd>
+            <dt>Location in text</dt>
+            <dd class="ms-4">
+                <span class="inline-list">
+                    <span *ngIf="episode.book" class="inline-list-item"
+                        >book {{ episode.book }}</span
+                    >
+                    <span *ngIf="episode.chapter" class="inline-list-item"
+                        >chapter {{ episode.chapter }}</span
+                    >
+                    <span *ngIf="episode.page" class="inline-list-item"
+                        >page {{ episode.page }}</span
+                    >
+                </span>
+                <i *ngIf="!(episode.book || episode.chapter || episode.page)">
+                    Location not specified.
+                </i>
+            </dd>
+        </dl>
+
+        <h2 class="mt-5">Content</h2>
+
+        <dl>
+            <dt>Summary</dt>
+            <dd style="white-space: pre-line" class="ms-4">
+                {{ episode.summary }}
+            </dd>
+
+            <dt>Designators</dt>
+            <dd class="ms-4">
+                <ul
+                    class="inline-list"
+                    *ngIf="episode.designators.length; else noDesignators"
                 >
-            </span>
-            <i *ngIf="!(episode.book || episode.chapter || episode.page)">
-                Location not specified.
-            </i>
-        </dd>
-    </dl>
+                    <li
+                        *ngFor="let designator of episode.designators"
+                        class="inline-list-item"
+                    >
+                        {{ designator }}
+                    </li>
+                </ul>
+                <ng-template #noDesignators>None.</ng-template>
+            </dd>
 
-    <h2 class="mt-5">Content</h2>
+            <dt>Labels</dt>
+            <dd class="ms-4">
+                <ul class="inline-list no-delimiter">
+                    <li
+                        *ngFor="let category of episode.categories"
+                        class="inline-list-item"
+                    >
+                        <span class="badge rounded-pill text-bg-secondary">
+                            {{ category.name }}
+                        </span>
+                    </li>
+                </ul>
+            </dd>
+        </dl>
 
-    <dl>
-        <dt>Summary</dt>
-        <dd style="white-space: pre-line" class="ms-4">
-            {{ episode.summary }}
-        </dd>
+        <h2 class="mt-5">Agents</h2>
 
-        <dt>Designators</dt>
-        <dd class="ms-4">
-            <ul
-                class="inline-list"
-                *ngIf="episode.designators.length; else noDesignators"
-            >
-                <li
-                    *ngFor="let designator of episode.designators"
-                    class="inline-list-item"
-                >
-                    {{ designator }}
-                </li>
-            </ul>
-            <ng-template #noDesignators>None.</ng-template>
-        </dd>
+        <p>This episode involves the following agents:</p>
+        <lc-episode-links [data]="episode.agents" />
 
-        <dt>Labels</dt>
-        <dd class="ms-4">
-            <ul class="inline-list no-delimiter">
-                <li
-                    *ngFor="let category of episode.categories"
-                    class="inline-list-item"
-                >
-                    <span class="badge rounded-pill text-bg-secondary">
-                        {{ category.name }}
-                    </span>
-                </li>
-            </ul>
-        </dd>
-    </dl>
+        <h2 class="mt-5">Objects</h2>
 
-    <h2 class="mt-5">Agents</h2>
+        <p>This episode involves the following epistolary objects:</p>
 
-    <p>This episode involves the following agents:</p>
-    <lc-episode-links [data]="episode.agents" />
+        <lc-episode-links [data]="episodeObjects(episode)" />
 
-    <h2 class="mt-5">Objects</h2>
+        <h2 class="mt-5">Locations</h2>
 
-    <p>This episode involves the following epistolary objects:</p>
+        <p>This episode involves the following locations:</p>
+        <lc-episode-links [data]="episode.spaces" />
+    </ng-container>
 
-    <lc-episode-links [data]="episodeObjects(episode)" />
-
-    <h2 class="mt-5">Locations</h2>
-
-    <p>This episode involves the following locations:</p>
-    <lc-episode-links [data]="episode.spaces" />
+    <ng-template #noEpisode>
+        <lc-not-found entity="episode" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

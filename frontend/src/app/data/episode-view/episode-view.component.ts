@@ -20,9 +20,9 @@ export class EpisodeViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map((params) => params['id'])
     );
-    episode$ = this.id$.pipe(
+    data$ = this.id$.pipe(
         switchMap((id) => this.query.watch({ id }).valueChanges),
-        map((result) => result.data.episode ?? null)
+        map((result) => result.data)
     );
 
     dataIcons = dataIcons;
@@ -35,8 +35,11 @@ export class EpisodeViewComponent {
         private query: ViewEpisodeGQL
     ) {}
 
-    makeBreadcrumbs(episode: QueriedEpisode): Breadcrumb[] {
-        return entityDescriptionBreadcrumbs(episode);
+    makeBreadcrumbs(data: ViewEpisodeQuery): Breadcrumb[] {
+        if (!data.episode) {
+            return [];
+        }
+        return entityDescriptionBreadcrumbs(data.episode);
     }
 
     episodeObjects(episode: ViewEpisodeQuery["episode"]): EpisodeObject[] {
