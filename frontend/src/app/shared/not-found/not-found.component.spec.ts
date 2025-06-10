@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { NotFoundComponent } from "./not-found.component";
+import { SharedTestingModule } from "@shared/shared-testing.module";
 
 describe("NotFoundComponent", () => {
     let component: NotFoundComponent;
@@ -9,6 +10,7 @@ describe("NotFoundComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [NotFoundComponent],
+            imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(NotFoundComponent);
         component = fixture.componentInstance;
