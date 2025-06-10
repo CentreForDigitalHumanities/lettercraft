@@ -77,24 +77,10 @@ def test_resolve_non_existent_source(
 
 
 @pytest.mark.django_db
-def test_resolve_public_source_browsing(
-    graphql_client: GrapheneClient, user_request: WSGIRequest, source: Source
-) -> None:
-    """Test access to a public source in browsing interface."""
-    source.is_public = True
-    source.save()
-
-    variables = {"id": str(source.pk)}
-    result = execute_as_user(graphql_client, variables, user_request)
-    assert result["data"]["source"] is not None
-    assert result["data"]["source"]["id"] == str(source.pk)
-
-
-@pytest.mark.django_db
 def test_resolve_public_source_browsing_anonymous(
     graphql_client: GrapheneClient, anonymous_request: WSGIRequest, source: Source
 ) -> None:
-    """Test access to a public source in browsing interface for anonymous users."""
+    """Test access to a public source in browsing interface for anonymous users / visitors."""
     source.is_public = True
     source.save()
 
@@ -102,45 +88,13 @@ def test_resolve_public_source_browsing_anonymous(
     result = execute_as_user(graphql_client, variables, anonymous_request)
     assert result["data"]["source"] is not None
     assert result["data"]["source"]["id"] == str(source.pk)
-
-
-@pytest.mark.django_db
-def test_resolve_public_source_editing(
-    graphql_client: GrapheneClient, user_request: WSGIRequest, source: Source
-) -> None:
-    """Test access to a public source in editing interface."""
-    source.is_public = True
-    source.save()
-
-    variables = {"id": str(source.pk), "editable": True}
-    result = execute_as_user(graphql_client, variables, user_request)
-
-    assert (
-        result["data"]["source"] is None
-    ), "Public sources should not be accessible in editing interface without contributor access"
-
-
-@pytest.mark.django_db
-def test_resolve_public_source_editing_anonymous(
-    graphql_client: GrapheneClient, anonymous_request: WSGIRequest, source: Source
-) -> None:
-    """Test access to a public source in editing interface for anonymous users."""
-    source.is_public = True
-    source.save()
-
-    variables = {"id": str(source.pk), "editable": True}
-    result = execute_as_user(graphql_client, variables, anonymous_request)
-
-    assert (
-        result["data"]["source"] is None
-    ), "Public sources should not be accessible in editing interface without contributor access"
 
 
 @pytest.mark.django_db
 def test_resolve_non_public_source_non_contributors(
     graphql_client: GrapheneClient, user_request: WSGIRequest, source: Source
 ) -> None:
-    """Test public access to a non-public source for non-contributors."""
+    """Test public access to a non-public source in browsing interface for non-contributing users."""
     source.is_public = False
     source.save()
 
@@ -156,7 +110,7 @@ def test_resolve_non_public_source_superusers(
     user_request: WSGIRequest,
     user: User,
 ):
-    """Test authenticated access to a non-public source for superusers."""
+    """Test authenticated access to a non-public source in browsing interface for superusers."""
     source.is_public = False
     source.save()
 
@@ -180,7 +134,7 @@ def test_resolve_non_public_source_contributor(
     source: Source,
     user: User,
 ) -> None:
-    """Test authenticated access to a non-public source for contributors."""
+    """Test authenticated access to a non-public source in browsing interface for contributing users."""
     source.is_public = False
     source.save()
 
@@ -194,5 +148,61 @@ def test_resolve_non_public_source_contributor(
         variables,
         user_request,
     )
-    assert result["data"]["source"] is not None
-    assert result["data"]["source"]["id"] == str(source.pk)
+    assert (
+        result["data"]["source"] is None
+    ), "Contributors should not be able to access non-public sources in browsing interface."
+
+
+@pytest.mark.django_db
+def test_resolve_public_source_editing_non_contributor(
+    graphql_client: GrapheneClient, user_request: WSGIRequest, source: Source
+) -> None:
+    """Test access to a public source in editing interface for non-contributors."""
+    source.is_public = True
+    source.save()
+
+    variables = {"id": str(source.pk), "editable": True}
+    result = execute_as_user(graphql_client, variables, user_request)
+
+    assert (
+        result["data"]["source"] is None
+    ), "Public sources should not be accessible to non-contributing users in editing interface."
+
+
+@pytest.mark.django_db
+def test_resolve_public_source_editing_contributor(
+    graphql_client: GrapheneClient,
+    user_request: WSGIRequest,
+    source: Source,
+    user: User,
+) -> None:
+    """Test access to a public source in editing interface for contributors."""
+    source.is_public = True
+    source.save()
+
+    group = ContributorGroup.objects.create(name="Test Source contributors")
+    group.users.add(user)
+    group.sources.add(source)
+
+    variables = {"id": str(source.pk), "editable": True}
+    result = execute_as_user(graphql_client, variables, user_request)
+
+    assert result["data"]["source"]["id"] == str(
+        source.pk
+    ), "Public sources should be accessible to contributors in editing interface."
+
+
+@pytest.mark.django_db
+def test_resolve_public_source_editing_anonymous(
+    graphql_client: GrapheneClient, anonymous_request: WSGIRequest, source: Source
+) -> None:
+    """Test access to a public source in editing interface for anonymous users."""
+    source.is_public = True
+    source.save()
+
+    variables = {"id": str(source.pk), "editable": True}
+    result = execute_as_user(graphql_client, variables, anonymous_request)
+
+    assert (
+        result["data"]["source"] is None
+    ), "Public sources should not be accessible in editing interface without contributor access"
