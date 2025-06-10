@@ -38,7 +38,7 @@ class PersonQueries(ObjectType):
         except AgentDescription.DoesNotExist:
             return None
 
-        user: User | AnonymousUser = info.context.user
+        user: Union[User, AnonymousUser] = info.context.user
 
         return (
             agent_description

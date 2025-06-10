@@ -1,7 +1,7 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import Q, QuerySet
 from django.contrib.auth.models import AnonymousUser
-from typing import Optional
+from typing import Optional, Union
 
 from space.models import Region, Settlement, SpaceDescription, Structure
 from space.types.RegionType import RegionType
@@ -41,7 +41,7 @@ class SpaceQueries(ObjectType):
         except SpaceDescription.DoesNotExist:
             return None
 
-        user: User | AnonymousUser = info.context.user
+        user: Union[User, AnonymousUser] = info.context.user
 
         return (
             space_description

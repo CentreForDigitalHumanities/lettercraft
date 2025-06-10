@@ -36,7 +36,7 @@ class SourceQueries(ObjectType):
         except Source.DoesNotExist:
             return None
 
-        user: User | AnonymousUser = info.context.user
+        user: Union[User, AnonymousUser] = info.context.user
 
         if user.is_superuser:
             return source
