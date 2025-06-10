@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client/core";
 import { Query as ApolloAngularQuery } from "apollo-angular/query";
-import { Exact, InputMaybe } from "generated/graphql";
 import {
     Observable,
     of,
