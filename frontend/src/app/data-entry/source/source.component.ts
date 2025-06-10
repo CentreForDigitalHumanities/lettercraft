@@ -1,5 +1,5 @@
-import { Component, computed, DestroyRef, TemplateRef } from "@angular/core";
-import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { Component, DestroyRef, TemplateRef } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ToastService } from "@services/toast.service";
@@ -15,6 +15,7 @@ import { map, shareReplay, switchMap } from "rxjs";
 import { MutationResult } from "apollo-angular";
 import { moveItemInArray } from "@shared/utils";
 import { OrderChange } from "@shared/order-button-group/order-button-group.component";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 
 type QueriedEpisode = NonNullable<
     DataEntrySourceDetailQuery["source"]
@@ -26,31 +27,14 @@ type QueriedEpisode = NonNullable<
     styleUrls: ["./source.component.scss"],
 })
 export class SourceComponent {
-    public breadcrumbs = computed(() => [
-        {
-            label: "Lettercraft",
-            link: "/",
-        },
-        {
-            label: "Data entry",
-            link: "/data-entry",
-        },
-        {
-            label: this.sourceTitle(),
-            link: "/data-entry/sources/" + this.route.snapshot.params["id"],
-        },
-    ]);
-
-    public source$ = this.route.params.pipe(
-        map((params) => params["id"]),
-        switchMap((id) => this.sourceDetailQuery.watch({ id }).valueChanges),
-        map((result) => result.data.source),
-        shareReplay(1)
+    public id$ = this.route.params.pipe(
+        map((params) => params["id"])
     );
 
-    public sourceTitle = toSignal(
-        this.source$.pipe(map((source) => source?.name ?? "Unknown source")),
-        { initialValue: "" }
+    public data$ = this.id$.pipe(
+        switchMap((id) => this.sourceDetailQuery.watch({ id }).valueChanges),
+        map((result) => result.data),
+        shareReplay(1)
     );
 
     public dataIcons = dataIcons;
@@ -68,6 +52,40 @@ export class SourceComponent {
         private sourceDetailQuery: DataEntrySourceDetailGQL,
         private updateEpisodeOrder: DataEntryUpdateEpisodeOrderGQL
     ) {}
+
+    public getBreadcrumbs(data: DataEntrySourceDetailQuery): Breadcrumb[] {
+        if (data.source) {
+            return [
+                {
+                    label: "Lettercraft",
+                    link: "/",
+                },
+                {
+                    label: "Data entry",
+                    link: "/data-entry",
+                },
+                {
+                    label: data.source.name,
+                    link: `/data-entry/sources/${data.source.id}`,
+                },
+            ];
+        } else {
+            return [
+                {
+                    label: "Lettercraft",
+                    link: "/",
+                },
+                {
+                    label: "Data entry",
+                    link: "/data-entry",
+                },
+                {
+                    label: "Source not found",
+                    link: "",
+                },
+            ];
+        }
+    }
 
     public openNewEpisodeModal(newEpisodeModal: TemplateRef<unknown>): void {
         this.modal = this.modalService.open(newEpisodeModal);
