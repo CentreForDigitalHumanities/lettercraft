@@ -10,6 +10,7 @@
         <input
             type="text"
             id="username"
+            autocomplete="username"
             class="form-control"
             [class.is-invalid]="
                 form.controls.username.touched && form.controls.username.invalid
@@ -29,6 +30,7 @@
             type="email"
             id="email"
             class="form-control"
+            autocomplete="email"
             [class.is-invalid]="
                 form.controls.email.touched && form.controls.email.invalid
             "
@@ -44,6 +46,7 @@
             type="password"
             id="password1"
             class="form-control"
+            autocomplete="new-password"
             [class.is-invalid]="
                 form.controls.password1.touched &&
                 form.controls.password1.invalid
@@ -61,8 +64,9 @@
         <label for="password2" class="form-label">Confirm Password</label>
         <input
             type="password"
-            class="form-control"
             id="password2"
+            class="form-control"
+            autocomplete="new-password"
             [class.is-invalid]="
                 form.controls.password2.touched &&
                 form.controls.password2.invalid
