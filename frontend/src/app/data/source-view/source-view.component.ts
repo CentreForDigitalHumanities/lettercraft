@@ -15,9 +15,9 @@ export class SourceViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
-    source$ = this.id$.pipe(
+    data$ = this.id$.pipe(
         switchMap((id) => this.query.watch({ id }).valueChanges),
-        map((result) => result.data.source ?? null)
+        map((result) => result.data)
     );
 
     dataIcons = dataIcons;
