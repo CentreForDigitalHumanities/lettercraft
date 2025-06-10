@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import AnonymousUser
 
 from user.models import User
 
@@ -175,6 +176,23 @@ class EntityDescription(Named, models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.source})"
+
+    def is_accessible_to_user(
+        self, user: User | AnonymousUser, editable: bool = False
+    ) -> bool:
+        """
+        Check if the user can access this entity description.
+        Superusers can access any entity description.
+        Regular users can access public descriptions (in the browsing interface)
+        or descriptions from sources they can edit (in the data-entry interface).
+        """
+        if user.is_superuser:
+            return True
+
+        if editable is False:
+            return self.source.is_public
+
+        return user.is_anonymous is False and user.can_edit_source(self.source)
 
 
 class DescriptionField(Field, models.Model):

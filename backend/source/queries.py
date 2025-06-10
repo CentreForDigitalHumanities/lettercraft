@@ -24,7 +24,7 @@ class SourceQueries(ObjectType):
             description="Only select sources that are editable by the user."
         ),
         required=True,
-        public_only=Boolean()
+        public_only=Boolean(),
     )
 
     @staticmethod
@@ -38,25 +38,19 @@ class SourceQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            source
-        )
-
-        # Always return the source if the user can edit it.
-        if user.is_superuser or user_can_edit_source:
+        if user.is_superuser:
             return source
 
-        # The user cannot edit the source
-        # and the query only asks for editable sources.
-        if editable:
-            return None
+        if editable is False:
+            return source if source.is_public else None
 
-        # Return non-editable sources iff they are public.
-        return source if source.is_public else None
+        user_can_edit = user.is_anonymous is False and user.can_edit_source(source)
+
+        return source if user_can_edit else None
 
     @staticmethod
     def resolve_sources(
-        root: None, info: ResolveInfo, editable = False, public_only = False, **kwargs: dict
+        root: None, info: ResolveInfo, editable=False, public_only=False, **kwargs: dict
     ) -> QuerySet[Source]:
         queryset = SourceType.get_queryset(Source.objects, info)
         user: User = info.context.user

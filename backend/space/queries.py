@@ -43,20 +43,11 @@ class SpaceQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            space_description.source
+        return (
+            space_description
+            if space_description.is_accessible_to_user(user, editable)
+            else None
         )
-        # Always return the requested object if the user can edit it.
-        if user.is_superuser or user_can_edit_source:
-            return space_description
-
-        # The user cannot edit this object
-        # and the query only asks for editable objects.
-        if editable:
-            return None
-
-        # Return non-editable objects iff their source is public.
-        return space_description if space_description.source.is_public else None
 
     @staticmethod
     def resolve_space_descriptions(

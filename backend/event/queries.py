@@ -1,6 +1,7 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet, Q
+from core.models import EntityDescription
 from event.models import Episode, EpisodeCategory, EpisodeEntity
 from typing import Optional
 from event.types.EpisodeCategoryType import EpisodeCategoryType
@@ -47,21 +48,7 @@ class EventQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            episode.source
-        )
-
-        # Always return the requested object if the user can edit it.
-        if user.is_superuser or user_can_edit_source:
-            return episode
-
-        # The user cannot edit this object
-        # and the query only asks for editable objects.
-        if editable:
-            return None
-
-        # Return non-editable objects iff their source is public.
-        return episode if episode.source.is_public else None
+        return episode if episode.is_accessible_to_user(user, editable) else None
 
     @staticmethod
     def resolve_episodes(

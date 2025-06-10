@@ -29,7 +29,7 @@ class PersonQueries(ObjectType):
 
     @staticmethod
     def resolve_agent_description(
-        parent: None, info: ResolveInfo, id: str, editable = False
+        parent: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[AgentDescription]:
         try:
             agent_description = AgentDescriptionType.get_queryset(
@@ -40,20 +40,11 @@ class PersonQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            agent_description.source
+        return (
+            agent_description
+            if agent_description.is_accessible_to_user(user, editable)
+            else None
         )
-
-        if user.is_superuser or user_can_edit_source:
-            return agent_description
-
-        # The user cannot edit the agent description
-        # and the query only asks for editable ones.
-        if editable:
-            return None
-
-        return agent_description if agent_description.source.is_public else None
-
 
     @staticmethod
     def resolve_agent_descriptions(

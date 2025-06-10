@@ -73,21 +73,11 @@ class LetterQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            letter_description.source
+        return (
+            letter_description
+            if letter_description.is_accessible_to_user(user, editable)
+            else None
         )
-
-        # Always return the requested object if the user can edit it.
-        if user.is_superuser or user_can_edit_source:
-            return letter_description
-
-        # The user cannot edit this object
-        # and the query only asks for editable objects.
-        if editable:
-            return None
-
-        # Return non-editable objects iff their source is public.
-        return letter_description if letter_description.source.is_public else None
 
     @staticmethod
     def resolve_letter_descriptions(
@@ -129,21 +119,11 @@ class LetterQueries(ObjectType):
 
         user: User | AnonymousUser = info.context.user
 
-        user_can_edit_source = user.is_anonymous is False and user.can_edit_source(
-            gift_description.source
+        return (
+            gift_description
+            if gift_description.is_accessible_to_user(user, editable)
+            else None
         )
-
-        # Always return the requested object if the user can edit it.
-        if user.is_superuser or user_can_edit_source:
-            return gift_description
-
-        # The user cannot edit this object
-        # and the query only asks for editable objects.
-        if editable:
-            return None
-
-        # Return non-editable objects iff their source is public.
-        return gift_description if gift_description.source.is_public else None
 
     @staticmethod
     def resolve_gift_descriptions(
