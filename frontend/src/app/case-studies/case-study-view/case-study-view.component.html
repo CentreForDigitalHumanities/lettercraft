@@ -2,5 +2,6 @@
     <ng-container *ngIf="data.caseStudy as caseStudy">
         <h1>{{caseStudy.name}}</h1>
 
+        <div [innerHTML]="sanitizedContent(caseStudy)"></div>
     </ng-container>
 </ng-container>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ViewCaseStudyGQL } from 'generated/graphql';
+import {  ViewCaseStudyGQL, ViewCaseStudyQuery } from 'generated/graphql';
 import { map, switchMap } from 'rxjs';
 
 @Component({
@@ -18,6 +19,11 @@ export class CaseStudyViewComponent {
     constructor(
         private query: ViewCaseStudyGQL,
         private route: ActivatedRoute,
+        private sanitizer: DomSanitizer,
     ) {
+    }
+
+    sanitizedContent(caseStudy: NonNullable<ViewCaseStudyQuery['caseStudy']>) {
+        return this.sanitizer.sanitize(SecurityContext.HTML, caseStudy.content);
     }
 }
