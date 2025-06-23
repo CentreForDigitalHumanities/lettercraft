@@ -21,3 +21,9 @@ export const entityDescriptionBreadcrumbs = (obj: {
             link: '.',
         }
     ]);
+
+export const NOT_FOUND_BREADCRUMBS = [
+    { label: 'Lettercraft', link: '/' },
+    { label: 'Data', link: '/data' },
+    { label: 'Not found', link: '.' },
+];

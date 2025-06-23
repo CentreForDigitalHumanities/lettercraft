@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
-import { ViewLetterGQL, ViewLetterQuery } from 'generated/graphql';
+import { ViewLetterGQL } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { entityDescriptionBreadcrumbs, NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-letter-view',
@@ -23,18 +22,11 @@ export class LetterViewComponent {
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
+    makeBreadcrumbs = entityDescriptionBreadcrumbs;
+    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
+
     constructor(
         private route: ActivatedRoute,
-        private query: ViewLetterGQL
+        private query: ViewLetterGQL,
     ) {}
-
-    makeBreadcrumbs(data: ViewLetterQuery): Breadcrumb[] {
-        return data.letterDescription
-            ? entityDescriptionBreadcrumbs(data.letterDescription)
-            : [
-                  { link: "/", label: "Lettercraft" },
-                  { link: "/data", label: "Data" },
-                  { link: ".", label: "Not found" },
-              ];
-    }
 }

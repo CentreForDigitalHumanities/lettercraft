@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { entityDescriptionBreadcrumbs, NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
 
 type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
 
@@ -30,17 +29,13 @@ export class EpisodeViewComponent {
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 
+    makeBreadcrumbs = entityDescriptionBreadcrumbs;
+    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
+
     constructor(
         private route: ActivatedRoute,
         private query: ViewEpisodeGQL
     ) {}
-
-    makeBreadcrumbs(data: ViewEpisodeQuery): Breadcrumb[] {
-        if (!data.episode) {
-            return [];
-        }
-        return entityDescriptionBreadcrumbs(data.episode);
-    }
 
     episodeObjects(episode: ViewEpisodeQuery["episode"]): EpisodeObject[] {
         return episode ? [...episode.letters, ...episode.gifts] : [];
