@@ -29,6 +29,7 @@ import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 import { SourceListComponent } from '../data/source-list/source-list.component';
 import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
+import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
 
 
 const routes: Routes = [
@@ -67,6 +68,10 @@ const routes: Routes = [
         title: pageTitle('Settings'),
         canActivate: [LoggedOnGuard],
         component: UserSettingsComponent
+    },
+    {
+        path: 'case-studies',
+        component: CaseStudiesListComponent,
     },
     {
         path: 'data',

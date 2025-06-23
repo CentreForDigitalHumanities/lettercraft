@@ -1,0 +1,5 @@
+<h1>Case studies</h1>
+
+<ng-container *ngIf="data$ | async as data">
+<pre>{{data | json}}</pre>
+</ng-container>

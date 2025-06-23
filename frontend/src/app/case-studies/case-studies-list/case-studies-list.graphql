@@ -1,0 +1,8 @@
+query ViewCaseStudies {
+    caseStudies {
+        id
+        name
+        authors { fullName }
+        date
+    }
+}
