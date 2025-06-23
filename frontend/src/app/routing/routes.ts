@@ -30,6 +30,7 @@ import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 import { SourceListComponent } from '../data/source-list/source-list.component';
 import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
 import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
+import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 
 
 const routes: Routes = [
@@ -71,7 +72,18 @@ const routes: Routes = [
     },
     {
         path: 'case-studies',
-        component: CaseStudiesListComponent,
+        children: [
+            {
+                path: ':id',
+                component: CaseStudyViewComponent,
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                title: pageTitle('Case studies'),
+                component: CaseStudiesListComponent,
+            }
+        ],
     },
     {
         path: 'data',

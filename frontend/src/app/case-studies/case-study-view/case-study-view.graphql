@@ -1,0 +1,9 @@
+query ViewCaseStudy($id: ID!) {
+    caseStudy(id: $id) {
+        id
+        name
+        authors { fullName }
+        date
+        content
+    }
+}

@@ -1,0 +1,6 @@
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.caseStudy as caseStudy">
+        <h1>{{caseStudy.name}}</h1>
+
+    </ng-container>
+</ng-container>
