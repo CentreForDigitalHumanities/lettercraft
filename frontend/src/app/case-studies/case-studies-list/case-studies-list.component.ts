@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ViewCaseStudiesGQL } from 'generated/graphql';
+import { ViewCaseStudiesGQL, ViewCaseStudiesQuery } from 'generated/graphql';
 import { map } from 'rxjs';
 
 @Component({
@@ -15,6 +15,11 @@ export class CaseStudiesListComponent {
     constructor(
         private query: ViewCaseStudiesGQL
     ) {
+    }
 
+    authorNames(item: ViewCaseStudiesQuery['caseStudies'][number]) {
+        const names = item.authors.map(author => author.fullName);
+        const formatter = new Intl.ListFormat('en', {style: 'long', type: 'conjunction'});
+        return formatter.format(names);
     }
 }
