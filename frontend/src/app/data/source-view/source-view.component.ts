@@ -4,7 +4,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewSourceGQL } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { sourceBreadcrumbs } from '../utils/breadcrumbs';
+import { NOT_FOUND_BREADCRUMBS, sourceBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-source-view',
@@ -26,6 +26,7 @@ export class SourceViewComponent {
     locationIcon = locationIcon;
 
     makeBreadcrumbs = sourceBreadcrumbs;
+    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
 
     constructor(
         private route: ActivatedRoute,
