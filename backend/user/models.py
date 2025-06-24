@@ -25,6 +25,18 @@ class User(django_auth_models.AbstractUser):
 
         return self.is_superuser or self.contributor_groups.exists()
 
+    def can_edit_source(self, source) -> bool:
+        """
+        Check if the user can edit the given source.
+
+        Superusers can edit any source, while other users can only edit sources
+        in their contributor groups.
+        """
+        from user.permissions import editable_sources
+
+        editable_source_ids = [source.pk for source in editable_sources(self)]
+        return self.is_superuser or source.pk in editable_source_ids
+
 
 class ContributorGroup(models.Model):
     name = models.CharField(

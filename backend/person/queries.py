@@ -1,15 +1,23 @@
 from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
 from django.db.models import QuerySet, Q
+from django.contrib.auth.models import AnonymousUser
 from typing import Optional
 
 from person.models import AgentDescription, HistoricalPerson
 from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.AgentDescriptionType import AgentDescriptionType
+from user.models import User
 from user.permissions import editable_sources
 
 
 class PersonQueries(ObjectType):
-    agent_description = Field(AgentDescriptionType, id=ID(required=True))
+    agent_description = Field(
+        AgentDescriptionType,
+        id=ID(required=True),
+        editable=Boolean(
+            description="Only select agent descriptions that are editable by the user."
+        ),
+    )
     agent_descriptions = List(
         NonNull(AgentDescriptionType),
         required=True,
@@ -21,14 +29,22 @@ class PersonQueries(ObjectType):
 
     @staticmethod
     def resolve_agent_description(
-        parent: None, info: ResolveInfo, id: str
+        parent: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[AgentDescription]:
         try:
-            return AgentDescriptionType.get_queryset(
+            agent_description = AgentDescriptionType.get_queryset(
                 AgentDescription.objects, info
             ).get(id=id)
         except AgentDescription.DoesNotExist:
             return None
+
+        user: Union[User, AnonymousUser] = info.context.user
+
+        return (
+            agent_description
+            if agent_description.is_accessible_to_user(user, editable)
+            else None
+        )
 
     @staticmethod
     def resolve_agent_descriptions(

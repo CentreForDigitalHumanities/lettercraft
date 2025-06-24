@@ -16,6 +16,7 @@ import { CollapsibleCardComponent } from './collapsible-card/collapsible-card.co
 import { OrderButtonGroupComponent } from './order-button-group/order-button-group.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SentenceCasePipe } from './sentence-case.pipe';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
 
@@ -30,6 +31,7 @@ import { SentenceCasePipe } from './sentence-case.pipe';
         CollapsibleCardComponent,
         OrderButtonGroupComponent,
         SentenceCasePipe,
+        NotFoundComponent,
     ],
     imports: [
         CommonModule,
@@ -54,6 +56,7 @@ import { SentenceCasePipe } from './sentence-case.pipe';
         ContributorsComponent,
         CollapsibleCardComponent,
         OrderButtonGroupComponent,
+        NotFoundComponent,
         SentenceCasePipe,
         CommonModule,
         BrowserModule,

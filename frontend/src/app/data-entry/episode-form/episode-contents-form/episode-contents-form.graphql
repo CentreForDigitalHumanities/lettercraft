@@ -1,5 +1,5 @@
 query DataEntryEpisodeContents($id: ID!) {
-    episode(id: $id) {
+    episode(id: $id, editable: true) {
         id
         summary
         designators

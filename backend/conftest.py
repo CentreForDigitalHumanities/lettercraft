@@ -51,7 +51,7 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
 
 @pytest.fixture()
 def source(db):
-    return Source.objects.create(name="Sesame Street")
+    return Source.objects.create(name="Sesame Street", is_public=True)
 
 
 @pytest.fixture()
@@ -155,7 +155,7 @@ def case_study(db):
 
 
 @pytest.fixture()
-def graphql_client():
+def graphql_client() -> GrapheneClient:
     client = GrapheneClient(schema)
     return client
 

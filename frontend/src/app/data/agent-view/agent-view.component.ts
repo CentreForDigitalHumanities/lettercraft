@@ -3,7 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
-import { Certainty, Gender, SourceMention, ViewAgentGQL, ViewAgentQuery } from 'generated/graphql';
+import {
+    Certainty,
+    Gender,
+    SourceMention,
+    ViewAgentGQL,
+    ViewAgentQuery,
+} from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
@@ -16,7 +22,10 @@ export class AgentViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
-    data$: Observable<ViewAgentQuery>;
+    data$ = this.id$.pipe(
+        switchMap((id) => this.query.watch({ id }).valueChanges),
+        map((result) => result.data)
+    );
 
     agentIcon = agentIcon;
     dataIcons = dataIcons;
@@ -28,19 +37,16 @@ export class AgentViewComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private query: ViewAgentGQL,
-    ) {
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.query.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
+        private query: ViewAgentGQL
+    ) {}
 
     makeBreadcrumbs(data: ViewAgentQuery): Breadcrumb[] {
-        if (data.agentDescription) {
-            return entityDescriptionBreadcrumbs(data.agentDescription);
-        } else {
-            return [];
-        }
+        return data.agentDescription
+            ? entityDescriptionBreadcrumbs(data.agentDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }

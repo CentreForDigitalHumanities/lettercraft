@@ -1,42 +1,51 @@
-<lc-breadcrumb [breadcrumbs]="(breadcrumbs$ | async) ?? []" />
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-<ng-container *ngIf="gift$ | async as gift; else loading">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/gifts', gift.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
+    <ng-container *ngIf="data.giftDescription as gift; else noGift">
+        <a
+            *ngIf="gift.source.isPublic"
+            class="float-end btn btn-light"
+            [routerLink]="['/data/gifts', gift.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
 
-    <h1 class="mb-4">
-        <lc-icon [icon]="dataIcons.gift" />
-        <span class="ms-2">{{ gift.name }}</span>
-        <span class="text-secondary">
-            ({{ gift.source.name }})
-        </span>
-    </h1>
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.gift" />
+            <span class="ms-2">{{ gift.name }}</span>
+            <span class="text-secondary">
+                ({{ gift.source.name }})
+            </span>
+        </h1>
 
-    <lc-entity-description-lead [entity]="gift" />
+        <lc-entity-description-lead [entity]="gift" />
 
-    <lc-form-status [status$]="status$" />
+        <lc-form-status [status$]="status$" />
 
-    <lc-delete-entity-button
-        (clickDelete)="onClickDelete(gift)"
-        [deletingInProgress]="deletingInProgress"
-        entityName="gift"
-    />
+        <lc-delete-entity-button
+            (clickDelete)="onClickDelete(gift)"
+            [deletingInProgress]="deletingInProgress"
+            entityName="gift"
+        />
+
+        <h2 class="subform-header">Identification</h2>
+        <lc-gift-identification-form />
+
+        <h2 class="subform-header">Source text</h2>
+        <lc-gift-source-text-form />
+
+        <h2 class="subform-header">Categories</h2>
+        <lc-gift-categories-form />
+
+        <h2 class="subform-header">Episodes</h2>
+        <lc-gift-episodes-form />
+    </ng-container>
+
+    <ng-template #noGift>
+        <lc-not-found entity="gift" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
-
-<h2 class="subform-header">Identification</h2>
-<lc-gift-identification-form />
-
-<h2 class="subform-header">Source text</h2>
-<lc-gift-source-text-form />
-
-<h2 class="subform-header">Categories</h2>
-<lc-gift-categories-form />
-
-<h2 class="subform-header">Episodes</h2>
-<lc-gift-episodes-form />
 
 <ng-template #loading>
     <div class="spinner-border" role="status">

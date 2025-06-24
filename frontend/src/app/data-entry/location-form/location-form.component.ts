@@ -4,61 +4,38 @@ import { actionIcons, dataIcons } from "@shared/icons";
 import {
     DataEntryDeleteLocationGQL,
     DataEntryDeleteLocationMutation,
-    DataEntryLocationQuery,
     DataEntrySpaceDescriptionGQL,
+    DataEntrySpaceDescriptionQuery,
 } from "generated/graphql";
-import { filter, map, share, switchMap } from "rxjs";
+import { map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
 import { ModalService } from "@services/modal.service";
 import { ToastService } from "@services/toast.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ApolloCache } from "@apollo/client/core";
 import { MutationResult } from "apollo-angular";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 
-type QueriedLocation = NonNullable<DataEntryLocationQuery["spaceDescription"]>
+type QueriedLocation = NonNullable<
+    DataEntrySpaceDescriptionQuery["spaceDescription"]
+>;
 
 @Component({
-    selector: 'lc-location-form',
-    templateUrl: './location-form.component.html',
-    styleUrls: ['./location-form.component.scss'],
+    selector: "lc-location-form",
+    templateUrl: "./location-form.component.html",
+    styleUrls: ["./location-form.component.scss"],
     providers: [FormService],
 })
 export class LocationFormComponent {
-    private id$ = this.formService.id$;
+    public id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
 
-    public location$ = this.id$.pipe(
+    public data$ = this.id$.pipe(
         switchMap((id) => this.locationQuery.watch({ id }).valueChanges),
-        map((result) => result.data.spaceDescription),
+        map((result) => result.data),
         share()
     );
-
-    public breadcrumbs$ = this.location$.pipe(
-        filter(location => !!location),
-        map(location => {
-            if (!location) {
-                return [
-                    { link: "/", label: "Lettercraft" },
-                    { link: "/data-entry", label: "Data entry" },
-                    { link: "", label: "Location not found" },
-                ];
-            }
-            return [
-                { link: "/", label: "Lettercraft" },
-                { link: "/data-entry", label: "Data entry" },
-                {
-                    link: `/data-entry/sources/${location.source.id}`,
-                    label: location.source.name,
-                },
-                {
-                    link: `/location-entry/locations/${location.id}`,
-                    label: location.name,
-                },
-            ]
-        })
-    )
-
 
     public dataIcons = dataIcons;
     public actionIcons = actionIcons;
@@ -72,7 +49,29 @@ export class LocationFormComponent {
         private formService: FormService,
         private locationQuery: DataEntrySpaceDescriptionGQL,
         private deleteLocation: DataEntryDeleteLocationGQL
-    ) { }
+    ) {}
+
+    public getBreadcrumbs(data: DataEntrySpaceDescriptionQuery): Breadcrumb[] {
+        if (!data.spaceDescription) {
+            return [
+                { link: "/", label: "Lettercraft" },
+                { link: "/data-entry", label: "Data entry" },
+                { link: "", label: "Location not found" },
+            ];
+        }
+        return [
+            { link: "/", label: "Lettercraft" },
+            { link: "/data-entry", label: "Data entry" },
+            {
+                link: `/data-entry/sources/${data.spaceDescription.source.id}`,
+                label: data.spaceDescription.source.name,
+            },
+            {
+                link: `/location-entry/locations/${data.spaceDescription.id}`,
+                label: data.spaceDescription.name,
+            },
+        ];
+    }
 
     public onClickDelete(location: QueriedLocation): void {
         this.modalService
@@ -101,7 +100,10 @@ export class LocationFormComponent {
             .subscribe((result) => this.onMutationResult(result, sourceId));
     }
 
-    private onMutationResult(result: MutationResult<DataEntryDeleteLocationMutation>, sourceId: string): void {
+    private onMutationResult(
+        result: MutationResult<DataEntryDeleteLocationMutation>,
+        sourceId: string
+    ): void {
         this.deletingInProgress = false;
         const errors = result.data?.deleteSpace?.errors;
         if (errors && errors.length > 0) {

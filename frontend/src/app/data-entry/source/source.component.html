@@ -1,54 +1,71 @@
-<a class="float-end btn btn-light" *ngIf="source$ | async as source"
-    [routerLink]="['/data/sources', source.id]">
-    <lc-icon [icon]="actionIcons.view" />
-    View on public interface
-</a>
+<ng-container *ngIf="data$ | async as data; else loading">
+    <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-<lc-breadcrumb [breadcrumbs]="breadcrumbs()" />
+    <ng-container *ngIf="data.source as source; else noSource">
+        <a
+            *ngIf="source.isPublic"
+            class="float-end btn btn-light"
+            [routerLink]="['/data/sources', source.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
 
-<h1 class="mb-4">
-    <lc-icon [icon]="dataIcons.source" />
-    <span *ngIf="source$ | async as source" class="ms-2">
-        {{ source.name }}
-    </span>
-</h1>
+        <h1 class="mb-4">
+            <lc-icon [icon]="dataIcons.source" />
+            <span class="ms-2">
+                {{ source.name }}
+            </span>
+        </h1>
 
-<h2 class="mb-4">Episodes</h2>
+        <h2 class="mb-4">Episodes</h2>
 
-<p>
-    Identify <i>episodes</i> in the narrative that relate to epistolary
-    communication. For each episode, fill in what happens and what agents,
-    objects, and locations are involved.
-</p>
+        <p>
+            Identify <i>episodes</i> in the narrative that relate to epistolary
+            communication. For each episode, fill in what happens and what
+            agents, objects, and locations are involved.
+        </p>
 
-<div class="mb-4" *ngIf="source$ | async as source">
-    <lc-episode-preview
-        *ngFor="
-            let episode of source.episodes;
-            trackBy: identify;
-            first as isFirst;
-            last as isLast
-        "
-        [episode]="episode"
-        [isFirst]="isFirst"
-        [isLast]="isLast"
-        (changeEpisodeOrder)="
-            reorderEpisodes(source.episodes, episode.id, $event)
-        "
-    />
-</div>
-<div class="btn-group mb-4" *ngIf="source$ | async as source">
-    <button
-        class="btn btn-primary"
-        (click)="openNewEpisodeModal(newEpisodeModal)"
-    >
-        <lc-icon [icon]="actionIcons.create" />
-        Add a new episode
-    </button>
-</div>
+        <div class="mb-4">
+            <lc-episode-preview
+                *ngFor="
+                    let episode of source.episodes;
+                    trackBy: identify;
+                    first as isFirst;
+                    last as isLast
+                "
+                [episode]="episode"
+                [isFirst]="isFirst"
+                [isLast]="isLast"
+                (changeEpisodeOrder)="
+                    reorderEpisodes(source.episodes, episode.id, $event)
+                "
+            />
+        </div>
+        <div class="btn-group mb-4">
+            <button
+                class="btn btn-primary"
+                (click)="openNewEpisodeModal(newEpisodeModal)"
+            >
+                <lc-icon [icon]="actionIcons.create" />
+                Add a new episode
+            </button>
+        </div>
+    </ng-container>
+
+    <ng-template #noSource>
+        <lc-not-found entity="source" [id]="id$ | async" />
+    </ng-template>
+</ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>
 
 <ng-template #newEpisodeModal>
-    <lc-base-modal (dismiss)="closeModal()" *ngIf="source$ | async as source">
+    <lc-base-modal (dismiss)="closeModal()" *ngIf="(data$ | async)?.source as source">
         <ng-container modal-header>
             <h4 ngbAutofocus>Create new episode</h4>
         </ng-container>

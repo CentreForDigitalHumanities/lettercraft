@@ -15,26 +15,26 @@ export class LetterViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
-    data$: Observable<ViewLetterQuery>;
+    data$ = this.id$.pipe(
+        switchMap(id => this.query.watch({ id }).valueChanges),
+        map(result => result.data),
+    );
 
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
     constructor(
         private route: ActivatedRoute,
-        private query: ViewLetterGQL,
-    ) {
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.query.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
+        private query: ViewLetterGQL
+    ) {}
 
     makeBreadcrumbs(data: ViewLetterQuery): Breadcrumb[] {
-        if (data.letterDescription) {
-            return entityDescriptionBreadcrumbs(data.letterDescription);
-        } else {
-            return [];
-        }
+        return data.letterDescription
+            ? entityDescriptionBreadcrumbs(data.letterDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }

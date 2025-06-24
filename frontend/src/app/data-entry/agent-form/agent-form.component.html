@@ -1,24 +1,24 @@
 <ng-container *ngIf="data$ | async as data; else loading">
-    <a class="float-end btn btn-light"
-        [routerLink]="['/data/agents', data.agentDescription?.id]">
-        <lc-icon [icon]="actionIcons.view" />
-        View on public interface
-    </a>
-
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
 
-    <ng-container *ngIf="data.agentDescription as agentDescription; else noAgent">
+    <ng-container *ngIf="data.agentDescription as agent; else noAgent">
+        <a
+            *ngIf="agent.source.isPublic"
+            class="float-end btn btn-light"
+            [routerLink]="['/data/agents', agent.id]"
+        >
+            <lc-icon [icon]="actionIcons.view" />
+            View on public interface
+        </a>
         <h1 class="mb-4">
-            <lc-icon [icon]="agentIcon(agentDescription)" />
-            {{agentDescription.name}}
-            <span class="text-secondary">
-                ({{agentDescription.source.name}})
-            </span>
+            <lc-icon [icon]="agentIcon(agent)" />
+            {{ agent.name }}
+            <span class="text-secondary"> ({{ agent.source.name }}) </span>
         </h1>
 
         <p class="lead mb-4">
-            <span *ngIf="agentDescription.description; else noDescription">
-                {{agentDescription.description}}
+            <span *ngIf="agent.description; else noDescription">
+                {{ agent.description }}
             </span>
             <ng-template #noDescription>
                 <i>(No description)</i>
@@ -28,7 +28,10 @@
         <lc-form-status [status$]="status$" />
 
         <div class="hstack">
-            <lc-delete-agent class="ms-auto" [navigateOnDelete]="sourceLink(data)" />
+            <lc-delete-agent
+                class="ms-auto"
+                [navigateOnDelete]="sourceLink(data)"
+            />
         </div>
 
         <h2>Identification</h2>
@@ -46,13 +49,9 @@
         <lc-agent-historical-person-form />
     </ng-container>
 
-
     <ng-template #noAgent>
-        <div class="alert alert-danger" role="alert">
-            Cannot find agent with ID {{id$ | async}}.
-        </div>
+        <lc-not-found entity="agent" [id]="id$ | async" />
     </ng-template>
-
 </ng-container>
 
 <ng-template #loading>

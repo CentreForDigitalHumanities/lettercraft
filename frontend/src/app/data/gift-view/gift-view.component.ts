@@ -15,26 +15,26 @@ export class GiftViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
-    data$: Observable<ViewGiftQuery>;
+    data$ = this.id$.pipe(
+        switchMap(id => this.query.watch({ id }).valueChanges),
+        map(result => result.data),
+    );
 
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
     constructor(
         private route: ActivatedRoute,
-        private query: ViewGiftGQL,
-    ) {
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.query.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
+        private query: ViewGiftGQL
+    ) {}
 
     makeBreadcrumbs(data: ViewGiftQuery): Breadcrumb[] {
-        if (data.giftDescription) {
-            return entityDescriptionBreadcrumbs(data.giftDescription);
-        } else {
-            return [];
-        }
+        return data.giftDescription
+            ? entityDescriptionBreadcrumbs(data.giftDescription)
+            : [
+                  { link: "/", label: "Lettercraft" },
+                  { link: "/data", label: "Data" },
+                  { link: ".", label: "Not found" },
+              ];
     }
 }

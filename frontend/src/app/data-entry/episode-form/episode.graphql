@@ -1,10 +1,11 @@
 query DataEntryEpisodeForm($id: ID!) {
-    episode(id: $id) {
+    episode(id: $id, editable: true) {
         id
         name
         source {
             id
             name
+            isPublic
         }
     }
 }

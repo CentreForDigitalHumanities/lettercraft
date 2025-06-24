@@ -10,11 +10,11 @@ import {
     DataEntryGiftFormGQL,
     DataEntryGiftFormQuery,
 } from "generated/graphql";
-import { filter, map, share, switchMap } from "rxjs";
+import { map, share, switchMap } from "rxjs";
 import { FormService } from "../shared/form.service";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 
 type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
-
 
 @Component({
     selector: "lc-gift-form",
@@ -23,41 +23,14 @@ type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
     providers: [FormService],
 })
 export class GiftFormComponent {
-    private id$ = this.formService.id$;
+    public id$ = this.formService.id$;
 
     public status$ = this.formService.status$;
 
-    public gift$ = this.id$.pipe(
+    public data$ = this.id$.pipe(
         switchMap((id) => this.giftQuery.watch({ id }).valueChanges),
-        map((result) => result.data.giftDescription),
+        map((result) => result.data),
         share()
-    );
-
-    public breadcrumbs$ = this.gift$.pipe(
-        filter((gift) => !!gift),
-        map((gift) => {
-            if (!gift) {
-                return [];
-            }
-            return [
-                {
-                    label: "Lettercraft",
-                    link: "/",
-                },
-                {
-                    label: "Data entry",
-                    link: "/data-entry",
-                },
-                {
-                    label: gift.source.name,
-                    link: `/data-entry/sources/${gift.source.id}`,
-                },
-                {
-                    label: gift.name,
-                    link: `/data-entry/gifts/${gift.id}`,
-                },
-            ];
-        })
     );
 
     public dataIcons = dataIcons;
@@ -73,7 +46,31 @@ export class GiftFormComponent {
         private modalService: ModalService,
         private giftQuery: DataEntryGiftFormGQL,
         private deleteGift: DataEntryDeleteGiftGQL
-    ) {}
+    ) { }
+
+    public getBreadcrumbs(data: DataEntryGiftFormQuery): Breadcrumb[] {
+        if (!data.giftDescription) {
+                return [];
+            }
+            return [
+                {
+                    label: "Lettercraft",
+                    link: "/",
+                },
+                {
+                    label: "Data entry",
+                    link: "/data-entry",
+                },
+                {
+                    label: data.giftDescription.source.name,
+                    link: `/data-entry/sources/${data.giftDescription.source.id}`,
+                },
+                {
+                    label: data.giftDescription.name,
+                    link: `/data-entry/gifts/${data.giftDescription.id}`,
+                },
+            ];
+    }
 
     public onClickDelete(gift: QueriedGift): void {
         this.modalService

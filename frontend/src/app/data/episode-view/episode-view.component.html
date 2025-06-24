@@ -1,20 +1,28 @@
-<ng-container *ngIf="data$ | async as data">
-    <a class="float-end btn btn-light" *ngIf="data.episode?.editable"
-        [routerLink]="['/data-entry/episodes', data.episode?.id]">
-        <lc-icon [icon]="actionIcons.edit" />
-        Edit this episode
-    </a>
-
+<ng-container *ngIf="data$ | async as data; else loading">
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.episode as episode">
+    <ng-container *ngIf="data.episode as episode; else noEpisode">
+        <a
+            *ngIf="episode.editable"
+            class="float-end btn btn-light"
+            [routerLink]="['/data-entry/episodes', episode.id]"
+        >
+            <lc-icon [icon]="actionIcons.edit" />
+            Edit this episode
+        </a>
+
+
         <lc-object-page-header [object]="episode" [icon]="dataIcons.episode" />
 
         <p>
             "{{ episode.name }}" is an epistolary episode in
-            <a [routerLink]="['/data/sources', episode.source.id]" class="icon-link">
+            <a
+                [routerLink]="['/data/sources', episode.source.id]"
+                class="icon-link"
+            >
                 <lc-icon [icon]="dataIcons.source" />
-                {{episode.source.name}}</a>.
+                {{ episode.source.name }}</a
+            >.
         </p>
 
         <lc-contributors [contributors]="episode.contributors" />
@@ -24,16 +32,26 @@
         <dl>
             <dt>Source text</dt>
             <dd class="ms-4">
-                <a [routerLink]="['/data/sources', episode.source.id]" class="icon-link">
+                <a
+                    [routerLink]="['/data/sources', episode.source.id]"
+                    class="icon-link"
+                >
                     <lc-icon [icon]="dataIcons.source" />
-                    {{episode.source.name}}</a>
+                    {{ episode.source.name }}</a
+                >
             </dd>
             <dt>Location in text</dt>
             <dd class="ms-4">
                 <span class="inline-list">
-                    <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
-                    <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
-                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
+                    <span *ngIf="episode.book" class="inline-list-item"
+                        >book {{ episode.book }}</span
+                    >
+                    <span *ngIf="episode.chapter" class="inline-list-item"
+                        >chapter {{ episode.chapter }}</span
+                    >
+                    <span *ngIf="episode.page" class="inline-list-item"
+                        >page {{ episode.page }}</span
+                    >
                 </span>
                 <i *ngIf="!(episode.book || episode.chapter || episode.page)">
                     Location not specified.
@@ -45,13 +63,21 @@
 
         <dl>
             <dt>Summary</dt>
-            <dd style="white-space: pre-line;" class="ms-4">{{ episode.summary }}</dd>
+            <dd style="white-space: pre-line" class="ms-4">
+                {{ episode.summary }}
+            </dd>
 
             <dt>Designators</dt>
             <dd class="ms-4">
-                <ul class="inline-list" *ngIf="episode.designators.length; else noDesignators">
-                    <li *ngFor="let designator of episode.designators" class="inline-list-item">
-                        {{designator}}
+                <ul
+                    class="inline-list"
+                    *ngIf="episode.designators.length; else noDesignators"
+                >
+                    <li
+                        *ngFor="let designator of episode.designators"
+                        class="inline-list-item"
+                    >
+                        {{ designator }}
                     </li>
                 </ul>
                 <ng-template #noDesignators>None.</ng-template>
@@ -60,10 +86,12 @@
             <dt>Labels</dt>
             <dd class="ms-4">
                 <ul class="inline-list no-delimiter">
-                    <li *ngFor="let category of episode.categories"
-                        class="inline-list-item">
+                    <li
+                        *ngFor="let category of episode.categories"
+                        class="inline-list-item"
+                    >
                         <span class="badge rounded-pill text-bg-secondary">
-                            {{category.name}}
+                            {{ category.name }}
                         </span>
                     </li>
                 </ul>
@@ -85,6 +113,15 @@
 
         <p>This episode involves the following locations:</p>
         <lc-episode-links [data]="episode.spaces" />
-
     </ng-container>
+
+    <ng-template #noEpisode>
+        <lc-not-found entity="episode" [id]="id$ | async" />
+    </ng-template>
 </ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

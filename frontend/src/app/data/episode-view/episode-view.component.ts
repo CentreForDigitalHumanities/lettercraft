@@ -7,6 +7,10 @@ import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
+type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
+
+type EpisodeObject = QueriedEpisode["letters"][number] | QueriedEpisode["gifts"][number];
+
 @Component({
   selector: 'lc-episode-view',
   templateUrl: './episode-view.component.html',
@@ -14,9 +18,12 @@ import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 })
 export class EpisodeViewComponent {
     id$: Observable<string> = this.route.params.pipe(
-        map(params => params['id']),
+        map((params) => params['id'])
     );
-    data$: Observable<ViewEpisodeQuery>;
+    data$ = this.id$.pipe(
+        switchMap((id) => this.query.watch({ id }).valueChanges),
+        map((result) => result.data)
+    );
 
     dataIcons = dataIcons;
     actionIcons = actionIcons;
@@ -25,33 +32,17 @@ export class EpisodeViewComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private query: ViewEpisodeGQL,
-    ) {
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.query.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
+        private query: ViewEpisodeGQL
+    ) {}
 
     makeBreadcrumbs(data: ViewEpisodeQuery): Breadcrumb[] {
-        if (data.episode) {
-            return entityDescriptionBreadcrumbs(data.episode);
-        } else {
-            return [
-                { link: '/', label: 'Lettercraft' },
-                { link: '/data', label: 'Data' },
-                { link: '.', label: 'Not found' }
-
-            ];
-        }
-    }
-
-    episodeObjects(episode: ViewEpisodeQuery['episode']): any[] {
-        if (episode) {
-            return [...episode.letters, ...episode.gifts];
-        } else {
+        if (!data.episode) {
             return [];
         }
+        return entityDescriptionBreadcrumbs(data.episode);
+    }
 
+    episodeObjects(episode: ViewEpisodeQuery["episode"]): EpisodeObject[] {
+        return episode ? [...episode.letters, ...episode.gifts] : [];
     }
 }

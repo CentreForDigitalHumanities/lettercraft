@@ -16,7 +16,10 @@ export class LocationViewComponent {
     id$: Observable<string> = this.route.params.pipe(
         map(params => params['id']),
     );
-    data$: Observable<ViewLocationQuery>;
+    data$ = this.id$.pipe(
+        switchMap(id => this.query.watch({ id }).valueChanges),
+        map(result => result.data),
+    );
 
     dataIcons = dataIcons;
     actionIcons = actionIcons;
@@ -24,13 +27,8 @@ export class LocationViewComponent {
 
     constructor(
         private route: ActivatedRoute,
-        private query: ViewLocationGQL,
-    ) {
-        this.data$ = this.id$.pipe(
-            switchMap(id => this.query.watch({ id }).valueChanges),
-            map(result => result.data),
-        );
-    }
+        private query: ViewLocationGQL
+    ) { }
 
     makeBreadcrumbs(data: ViewLocationQuery): Breadcrumb[] {
         if (data.spaceDescription) {

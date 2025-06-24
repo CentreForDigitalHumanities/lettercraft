@@ -1,5 +1,5 @@
 query ViewSources($search: String) {
-    sources(isPublic: true, search: $search) {
+    sources(search: $search, publicOnly: true) {
         id
         name
         editionAuthor

@@ -1,5 +1,5 @@
 query DataEntryAgent($id: ID!) {
-  agentDescription(id: $id) {
+  agentDescription(id: $id, editable: true) {
     id
     name
     description
@@ -8,6 +8,7 @@ query DataEntryAgent($id: ID!) {
     source {
       id
       name
+      isPublic
     }
   }
 }
