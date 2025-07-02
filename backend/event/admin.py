@@ -98,7 +98,8 @@ class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
     def download_designators(self, request, queryset):
         stream = io.StringIO()
         export_designators(queryset, stream)
-        bytes_stream = io.BytesIO(stream.getvalue().encode())
+        # convert to binary stream; use utf-16 encoding for MS Excel
+        bytes_stream = io.BytesIO(stream.getvalue().encode(encoding='utf-16'))
         return FileResponse(
             bytes_stream,
             filename='designators.csv',
