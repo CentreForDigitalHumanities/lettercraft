@@ -55,6 +55,8 @@ class SourceType(DjangoObjectType):
             "id",
             "name",
             "medieval_title",
+            "reference",
+            "description",
             "is_public",
         ]
         filterset_class = SourceFilter

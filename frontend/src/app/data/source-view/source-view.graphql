@@ -4,6 +4,8 @@ query ViewSource($id: ID!) {
         name
         editable
         medievalTitle
+        reference
+        description
         episodes {
             id
             name

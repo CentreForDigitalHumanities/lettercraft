@@ -19,13 +19,19 @@
 
         <lc-contributors [contributors]="source.contributors" />
 
-        <div class="card mb-4 mt-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Bibliographical information</h2>
+        <section class="mt-4 mb-4">
+            <h2 class="h3">About this source</h2>
 
+            <div [innerHTML]="source.description"></div>
 
+            <div class="card mb-4 mt-4">
+                <div class="card-body">
+                    <h3 class="h5 card-title mb-4">Bibliographical information</h3>
+
+                    <div [innerHTML]="source.reference"></div>
+                </div>
             </div>
-        </div>
+        </section>
 
         <h2 class="mb-4">Epistolary episodes</h2>
 
