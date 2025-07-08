@@ -1,11 +1,11 @@
-from typing import Type
+from typing import Type, Optional
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
 from django.db.models import QuerySet, Model, Q
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, CharFilter, BooleanFilter
 
 from event.models import Episode
-from source.models import Source
+from source.models import Source, SourceImage
 from event.types.EpisodeType import EpisodeType
 from source.types.SourceContentsDateType import SourceContentsDateType
 from source.types.SourceWrittenDateType import SourceWrittenDateType
@@ -20,6 +20,7 @@ from space.types.SpaceDescriptionType import SpaceDescriptionType
 from user.permissions import can_edit_source
 from user.types.UserType import UserType
 from user.models import User
+from source.types.SourceImageType import SourceImageType
 
 
 class SourceFilter(FilterSet):
@@ -31,9 +32,6 @@ class SourceFilter(FilterSet):
         return queryset.filter(
             Q(name__icontains=value)
             | Q(medieval_title__icontains=value)
-            | Q(edition_title__icontains=value)
-            | Q(medieval_author__icontains=value)
-            | Q(edition_author__icontains=value)
         )
 
 
@@ -41,6 +39,7 @@ class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
     written_date = Field(SourceWrittenDateType)
+    image = Field(SourceImageType)
     contents_date = Field(SourceContentsDateType)
     agents = List(NonNull(AgentDescriptionType), required=True)
     gifts = List(NonNull(GiftDescriptionType), required=True)
@@ -49,15 +48,13 @@ class SourceType(DjangoObjectType):
     editable = Boolean(required=True)
     contributors = List(NonNull(UserType), required=True)
 
+
     class Meta:
         model = Source
         fields = [
             "id",
             "name",
             "medieval_title",
-            "medieval_author",
-            "edition_title",
-            "edition_author",
             "is_public",
         ]
         filterset_class = SourceFilter
@@ -106,3 +103,8 @@ class SourceType(DjangoObjectType):
             Q(contributed_giftdescriptions__source=parent) | \
             Q(contributed_spacedescriptions__source=parent)
         return User.objects.filter(filters).distinct()
+
+    @staticmethod
+    def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:
+        if parent.images.exists():
+            return parent.images.first()
