@@ -9,7 +9,7 @@ class SourceImageView(APIView):
         pk = self.kwargs.get('pk')
 
         try:
-            instance = SourceImage.objects.get(source__pk=pk, source__is_public=True)
+            instance = SourceImage.objects.get(pk=pk, source__is_public=True)
         except SourceImage.DoesNotExist:
             raise NotFound('Image not found')
 

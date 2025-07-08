@@ -13,4 +13,4 @@ class SourceImageType(DjangoObjectType):
 
     @staticmethod
     def resolve_url(parent: SourceImage, info: ResolveInfo):
-        return reverse('source-image', args=(parent.source.pk,))
+        return reverse('source-image', args=(parent.pk,))
