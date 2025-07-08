@@ -6,6 +6,12 @@ query ViewSource($id: ID!) {
         medievalTitle
         reference
         descriptionText
+        image {
+            id
+            url
+            altText
+            caption
+        }
         episodes {
             id
             name
