@@ -12,3 +12,4 @@ django-allauth
 graphene
 graphene-django
 django-filter
+Pillow

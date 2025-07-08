@@ -16,23 +16,18 @@ class Source(models.Model):
     )
 
     medieval_title = models.CharField(
-        max_length=255, blank=True, help_text="The original title of the work, if known"
+        max_length=255, blank=True, help_text="The original (Latin) title of the work",
     )
 
-    medieval_author = models.CharField(
-        max_length=255,
+    reference = models.TextField(
+        verbose_name='bibliographical reference',
         blank=True,
-        help_text="The name of the original author of the work, if known",
+        help_text="Bibliographical reference to the text",
     )
 
-    edition_title = models.CharField(
-        max_length=255,
+    description = models.TextField(
         blank=True,
-        help_text="The title of the edition used for this source",
-    )
-
-    edition_author = models.CharField(
-        max_length=255, blank=True, help_text="The name of the author of the edition"
+        help_text="Background information about the text",
     )
 
     is_public = models.BooleanField(
@@ -40,8 +35,36 @@ class Source(models.Model):
         help_text="Whether this source is available in the browsing interface or not.",
     )
 
+
     def __str__(self):
         return self.name
+
+
+class SourceImage(models.Model):
+    '''
+    Image to be shown on a source page
+    '''
+
+    source = models.ForeignKey(
+        to=Source,
+        related_name='images',
+        on_delete=models.CASCADE,
+    )
+
+    image = models.ImageField(
+        help_text="Image to be displayed on the source page",
+    )
+
+    image_alt = models.CharField(
+        max_length=256,
+        verbose_name="Text alternative for image",
+        help_text="Brief description of the image contents; shown when the image cannot be displayed",
+    )
+
+    image_caption = models.CharField(
+        max_length=256,
+        help_text="Image caption; shown below the image",
+    )
 
 
 class SourceWrittenDate(LettercraftDate):
