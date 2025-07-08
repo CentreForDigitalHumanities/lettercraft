@@ -23,25 +23,7 @@
             <div class="card-body">
                 <h2 class="h5 card-title">Bibliographical information</h2>
 
-                <ng-container
-                    *ngIf="source.medievalAuthor || source.medievalTitle"
-                >
-                    {{ source.medievalAuthor
-                    }}<ng-container
-                        *ngIf="source.medievalAuthor && source.medievalTitle"
-                        >, </ng-container
-                    ><em>{{ source.medievalTitle }}</em
-                    >.
-                </ng-container>
-                <ng-container
-                    *ngIf="source.editionAuthor || source.editionTitle"
-                >
-                    (Ed. {{ source.editionAuthor
-                    }}<ng-container
-                        *ngIf="source.editionAuthor && source.editionTitle"
-                        >, </ng-container
-                    >{{ source.editionTitle }}.)
-                </ng-container>
+
             </div>
         </div>
 

@@ -2,9 +2,6 @@ query ViewSources($search: String) {
     sources(search: $search, publicOnly: true) {
         id
         name
-        editionAuthor
-        editionTitle
-        medievalAuthor
         medievalTitle
         numOfEpisodes
     }

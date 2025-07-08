@@ -14,12 +14,7 @@
             </small>
         </div>
         <p class="mb-1">
-            <ng-container *ngIf="source.medievalAuthor || source.medievalTitle">
-                {{ source.medievalAuthor }}<ng-container *ngIf="source.medievalAuthor && source.medievalTitle">, </ng-container><em>{{ source.medievalTitle }}</em>.
-            </ng-container>
-            <ng-container *ngIf="source.editionAuthor || source.editionTitle">
-                (Ed. {{ source.editionAuthor }}<ng-container *ngIf="source.editionAuthor && source.editionTitle">, </ng-container><em>{{ source.editionTitle }}</em>.)
-            </ng-container>
+            <em>{{ source.medievalTitle }}</em>.
         </p>
     </li>
 </ul>
