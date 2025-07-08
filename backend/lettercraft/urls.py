@@ -22,6 +22,7 @@ from rest_framework import routers
 
 from .index import index
 from .proxy_frontend import proxy_frontend
+from source.views import SourceImageView
 
 
 api_router = routers.DefaultRouter()  # register viewsets with this router
@@ -38,6 +39,7 @@ urlpatterns = [
     path("api-auth", RedirectView.as_view(url="/api-auth/", permanent=True)),
     path("admin/", admin.site.urls),
     path("api/", include("graphql_app.urls")),
+    path('api/source-images/<str:pk>', SourceImageView.as_view()),
     path(
         "api-auth/",
         include(
