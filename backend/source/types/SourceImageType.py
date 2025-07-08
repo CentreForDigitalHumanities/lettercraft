@@ -1,5 +1,6 @@
 from graphene_django import DjangoObjectType
 from graphene import NonNull, ResolveInfo, String
+from django.urls import reverse
 
 from source.models import SourceImage
 
@@ -12,4 +13,4 @@ class SourceImageType(DjangoObjectType):
 
     @staticmethod
     def resolve_url(parent: SourceImage, info: ResolveInfo):
-        return ""
+        return reverse('source-image', args=(parent.source.pk,))

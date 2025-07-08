@@ -39,7 +39,7 @@ urlpatterns = [
     path("api-auth", RedirectView.as_view(url="/api-auth/", permanent=True)),
     path("admin/", admin.site.urls),
     path("api/", include("graphql_app.urls")),
-    path('api/source-images/<str:pk>', SourceImageView.as_view()),
+    path('api/source-images/<str:pk>', SourceImageView.as_view(), name='source-image'),
     path(
         "api-auth/",
         include(
