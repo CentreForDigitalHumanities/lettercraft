@@ -37,7 +37,7 @@ class SourceAdmin(admin.ModelAdmin):
                 'fields': [
                     'medieval_title',
                     'reference',
-                    'description',
+                    'description_text',
                 ],
             }
         )

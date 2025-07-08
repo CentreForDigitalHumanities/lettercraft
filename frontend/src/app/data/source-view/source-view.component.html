@@ -12,19 +12,14 @@
 
         <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
 
-        <p>
-            {{ source.name }} is one of the source texts that have been analysed
-            in the Lettercraft project.
-        </p>
-
         <lc-contributors [contributors]="source.contributors" />
 
         <section class="mt-4 mb-4">
             <h2 class="h3">About this source</h2>
 
-            <div [innerHTML]="source.description"></div>
+            <div [innerHTML]="source.descriptionText"></div>
 
-            <div class="card mb-4 mt-4">
+            <div class="card mb-4 mt-4 text-bg-light">
                 <div class="card-body">
                     <h3 class="h5 card-title mb-4">Bibliographical information</h3>
 

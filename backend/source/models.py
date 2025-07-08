@@ -31,7 +31,7 @@ class Source(models.Model):
         help_text="Bibliographical reference to the text",
     )
 
-    description = ProseEditorField(
+    description_text = ProseEditorField(
         extensions={
             "Bold": True, "Italic": True, "Underline": True,
             "BulletList": True, "OrderedList": True, "Blockquote": True,
