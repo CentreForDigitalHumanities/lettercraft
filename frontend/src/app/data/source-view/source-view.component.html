@@ -14,8 +14,8 @@
 
         <lc-contributors [contributors]="source.contributors" />
 
-        <section class="mt-4 mb-4">
-            <h2 class="h3">About this source</h2>
+        <section class="mt-5 mb-5" *ngIf="source.descriptionText || source.image || source.reference">
+            <h2 class="mb-4">About this source</h2>
 
             <div class="clearfix">
                 <figure *ngIf="source.image" class="figure float-md-end ms-4 mb-4">
@@ -28,7 +28,7 @@
                 <div [innerHTML]="source.descriptionText"></div>
             </div>
 
-            <div class="card mb-4 mt-4 text-bg-light">
+            <div class="card mb-4 mt-4 text-bg-light" *ngIf="source.reference">
                 <div class="card-body">
                     <h3 class="h5 card-title mb-4">Bibliographical information</h3>
 
@@ -37,12 +37,14 @@
             </div>
         </section>
 
-        <h2 class="mb-4">Epistolary episodes</h2>
+        <section class="mt-5 mb-5">
+            <h2 class="mb-4">Epistolary episodes</h2>
 
-        <lc-episode-preview
-            *ngFor="let episode of source.episodes"
-            [episode]="episode"
-        />
+            <lc-episode-preview
+                *ngFor="let episode of source.episodes"
+                [episode]="episode"
+            />
+        </section>
     </ng-container>
 
     <ng-template #noEpisode>
