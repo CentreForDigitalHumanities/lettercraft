@@ -56,13 +56,13 @@ class SourceImage(models.Model):
         help_text="Image to be displayed on the source page",
     )
 
-    image_alt = models.CharField(
+    alt_text = models.CharField(
         max_length=256,
-        verbose_name="Text alternative for image",
+        verbose_name="Text alternative",
         help_text="Brief description of the image contents; shown when the image cannot be displayed",
     )
 
-    image_caption = models.CharField(
+    caption = models.CharField(
         max_length=256,
         help_text="Image caption; shown below the image",
     )
