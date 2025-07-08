@@ -1,4 +1,5 @@
 from django.db import models
+from django_prose_editor.fields import ProseEditorField
 
 from core.models import LettercraftDate
 
@@ -19,13 +20,24 @@ class Source(models.Model):
         max_length=255, blank=True, help_text="The original (Latin) title of the work",
     )
 
-    reference = models.TextField(
-        verbose_name='bibliographical reference',
+    reference = ProseEditorField(
+        verbose_name="bibliographical reference",
         blank=True,
+        extensions={
+            "Italic": True,
+            "Link": True,
+        },
+        sanitize=True,
         help_text="Bibliographical reference to the text",
     )
 
-    description = models.TextField(
+    description = ProseEditorField(
+        extensions={
+            "Bold": True, "Italic": True, "Underline": True,
+            "BulletList": True, "OrderedList": True, "Blockquote": True,
+            "Link": True,
+        },
+        sanitize=True,
         blank=True,
         help_text="Background information about the text",
     )
@@ -62,9 +74,13 @@ class SourceImage(models.Model):
         help_text="Brief description of the image contents; shown when the image cannot be displayed",
     )
 
-    caption = models.CharField(
+    caption = ProseEditorField(
         max_length=256,
         help_text="Image caption; shown below the image",
+        extensions={
+            "Italic": True, "Link": True,
+        },
+        sanitize=True,
     )
 
 
