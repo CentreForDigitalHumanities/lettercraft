@@ -16,6 +16,13 @@ from user.models import User, ContributorGroup
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
+@pytest.fixture(autouse=True)
+def tmp_media_root(settings, tmp_path):
+    directory = tmp_path / 'data'
+    directory.mkdir()
+    settings.MEDIA_ROOT = directory
+
+
 @pytest.fixture()
 def user_data():
     return {

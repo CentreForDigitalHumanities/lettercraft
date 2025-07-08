@@ -52,6 +52,7 @@ class SourceImage(models.Model):
     )
 
     image = models.ImageField(
+        upload_to='source_images/',
         help_text="Image to be displayed on the source page",
     )
 
