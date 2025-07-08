@@ -13,3 +13,4 @@ graphene
 graphene-django
 django-filter
 Pillow
+django-prose-editor[sanitize]

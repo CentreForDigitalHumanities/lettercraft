@@ -30,7 +30,9 @@ django==4.2.7
     #   dj-rest-auth
     #   django-allauth
     #   django-filter
+    #   django-js-asset
     #   django-livereload-server
+    #   django-prose-editor
     #   django-revproxy
     #   djangorestframework
     #   graphene-django
@@ -38,7 +40,11 @@ django-allauth==0.61.1
     # via -r requirements.in
 django-filter==25.1
     # via -r requirements.in
+django-js-asset==3.1.2
+    # via django-prose-editor
 django-livereload-server==0.4
+    # via -r requirements.in
+django-prose-editor[sanitize]==0.15.2
     # via -r requirements.in
 django-revproxy==0.12.0
     # via -r requirements.in
@@ -69,6 +75,8 @@ idna==3.7
     # via requests
 iniconfig==2.0.0
     # via pytest
+nh3==0.2.21
+    # via django-prose-editor
 oauthlib==3.2.2
     # via requests-oauthlib
 packaging==23.2
