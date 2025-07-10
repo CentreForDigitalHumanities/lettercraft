@@ -144,7 +144,7 @@ case_study_names = [
     "The Saga of Aveline's Destiny",
 ]
 
-epistolary_event_names = [
+episode_names = [
     "Epistolary Gathering of the Franks",
     "Correspondence Banquet at Carolingian Court",
     "The Scriptorium Symposium",

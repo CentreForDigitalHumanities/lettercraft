@@ -1,11 +1,13 @@
+from typing import Type
 from django.db import transaction
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Source
+from requests import get
+from source.models import Source, SourceWrittenDate
 
 from case_study.models import CaseStudy
-from event.models import Episode, Series
+from event.models import Episode, EpisodeAgent, EpisodeGift, EpisodeLetter, EpisodeSpace, Series
 from person.models import (
     HistoricalPerson,
     AgentDescription,
@@ -15,14 +17,16 @@ from letter.models import (
     LetterCategory,
     GiftDescription,
     LetterDescription,
-    LetterDescriptionCategory,
 )
 import random
+from django.db.models import Model
+
+from space.models import SpaceDescription
 
 from .fixtures import (
     case_study_names,
     gift_names,
-    epistolary_event_names,
+    episode_names,
     letter_category_names,
     source_names,
     group_names,
@@ -111,47 +115,76 @@ class Command(BaseCommand):
             self._create_gift_descriptions(
                 fake, options, total=50, model=GiftDescription
             )
-            self._create_event_descriptions(fake, options, total=50, model=Episode)
-            self._create_episodes(fake, options, total=20, model=Episode)
-            self._create_case_studies(fake, options, total=10, model=CaseStudy)
+            self._create_space_descriptions(
+                fake, options, total=50, model=SpaceDescription
+            )
+            self._create_episodes(fake, options, total=50, model=Episode)
 
             print("-" * 80)
             print("Development dataset created successfully.")
 
     @track_progress
-    def _create_episodes(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, Series)
-        events = get_random_model_objects(Episode, min_amount=1, max_amount=5)
-        Series.objects.create(
-            name=unique_name,
-            description=fake.text(),
-            events=events,
-        )
-
-    @track_progress
-    def _create_case_studies(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(case_study_names, CaseStudy)
-        episodes = get_random_model_objects(Series, min_amount=1, max_amount=5)
-        CaseStudy.objects.create(
-            name=unique_name,
-            episodes=episodes,
-        )
-
-    @track_progress
-    def _create_event_descriptions(self, fake: Faker, options, total, model):
-        unique_name = get_unique_name(epistolary_event_names, Episode)
+    def _create_episodes(self, fake: Faker, options: dict, total: int, model: Type[Model]):
+        unique_name = get_unique_name(episode_names, Episode)
         source = get_random_model_object(Source)
 
-        event = Episode.objects.create(
-            source=source, name=unique_name, description=fake.text()
+        episode = Episode.objects.create(
+            source=source,
+            name=unique_name,
+            summary=fake.text(),
+            designators=fake.words(nb=3, unique=True),
         )
 
+        episode_agents = get_random_model_objects(
+            AgentDescription, min_amount=0, max_amount=5
+        )
+        for agent in episode_agents:
+            EpisodeAgent.objects.create(
+                episode=episode,
+                agent=agent,
+                designators=fake.words(nb=3, unique=True),
+            )
+
+        episode_gifts = get_random_model_objects(
+            GiftDescription, min_amount=0, max_amount=5
+        )
+        for gift in episode_gifts:
+            EpisodeGift.objects.create(
+                episode=episode,
+                gift=gift,
+                designators=fake.words(nb=3, unique=True),
+            )
+
+        episode_letters = get_random_model_objects(
+            LetterDescription, min_amount=0, max_amount=5
+        )
+        for letter in episode_letters:
+            EpisodeLetter.objects.create(
+                episode=episode,
+                letter=letter,
+                designators=fake.words(nb=3, unique=True),
+            )
+
+        episode_spaces = get_random_model_objects(
+            SpaceDescription, min_amount=0, max_amount=5
+        )
+        for space in episode_spaces:
+            EpisodeSpace.objects.create(
+                episode=episode,
+                space=space,
+                designators=fake.words(nb=3, unique=True),
+            )
+
     @track_progress
-    def _create_historical_person(self, fake: Faker, options, total, model):
+    def _create_historical_persons(
+        self, fake: Faker, options, total: int, model: Type[Model]
+    ):
         HistoricalPerson.objects.create(name=fake.name())
 
     @track_progress
-    def _create_agent_descriptions(self, fake: Faker, options, total, model):
+    def _create_agent_descriptions(
+        self, fake: Faker, options, total: int, model: Type[Model]
+    ):
         source = get_random_model_object(Source)
 
         is_group = random.choice([True, False])
@@ -173,8 +206,8 @@ class Command(BaseCommand):
         AgentDescription.objects.create(
             name=name,
             source=source,
-            is_group=is_group,
             describes=describes,
+            is_group=is_group,
         )
 
     @track_progress
@@ -190,18 +223,16 @@ class Command(BaseCommand):
     def _create_letter_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
-        subject = ", ".join(fake.words(nb=3, unique=True))
-        letter = LetterDescription.objects.create(
-            source=source,
-            name=f"Letter about {subject}",
+        categories = get_random_model_objects(
+            LetterCategory, min_amount=0, max_amount=3
         )
 
-        if random.choice([True, False]):
-            LetterDescriptionCategory.objects.create(
-                letter=letter,
-                category=get_random_model_object(LetterCategory),
-                **self.fake_field_value(fake),
-            )
+        subject = ", ".join(fake.words(nb=3, unique=True))
+        LetterDescription.objects.create(
+            source=source,
+            name=f"Letter about {subject}",
+            categories=categories,
+        )
 
     @track_progress
     def _create_gift_descriptions(self, fake, options, total, model):
@@ -215,6 +246,30 @@ class Command(BaseCommand):
         )
 
     @track_progress
+    def _create_space_descriptions(self, fake, options, total, model):
+        source = get_random_model_object(Source)
+        unique_name = get_unique_name(group_names, SpaceDescription)
+
+        SpaceDescription.objects.create(
+            source=source,
+            name=unique_name,
+            description=fake.text(),
+        )
+
+    @track_progress
     def _create_sources(self, fake, options, total, model):
         unique_name = get_unique_name(source_names, Source)
-        Source.objects.create(name=unique_name, bibliographical_info=fake.text())
+        source = Source.objects.create(
+            name=unique_name,
+            medieval_title=fake.sentence(),
+            medieval_author=fake.name(),
+            edition_title=fake.sentence(),
+            edition_author=fake.name(),
+            is_public=random.choice([True, False]),
+        )
+
+        if random.choice([True, False]):
+            SourceWrittenDate.objects.create(
+                source=source,
+                **self.fake_date_value(fake),
+            )

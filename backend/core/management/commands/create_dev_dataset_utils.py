@@ -1,6 +1,6 @@
 import random
 from functools import wraps
-from typing import List, Optional
+from typing import List, Optional, Type
 from django.db.models import Model
 
 
@@ -54,7 +54,7 @@ def progress(iteration, total, width=80, start="\r", newline_on_complete=True):
 
 
 def get_unique_name(
-    list_of_names: List[str], model: Model, name_field="name", retries=1000
+    list_of_names: List[str], model: Type[Model], name_field="name", retries=1000
 ):
     """
     Returns a unique name from a given list of names.
@@ -72,7 +72,7 @@ def get_unique_name(
     raise ValueError("Could not find a unique name")
 
 
-def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
+def get_random_model_object(model: Type[Model], allow_null=False) -> Optional[Model]:
     """
     Returns a random object from the given model.
 
@@ -83,15 +83,17 @@ def get_random_model_object(model: Model, allow_null=False) -> Optional[Model]:
     if allow_null and random.choice([True, False]):
         return None
 
-    if model.objects.exists():
-        return model.objects.order_by("?").first()
-    raise ValueError(
-        f"No objects of type {model._meta.verbose_name_plural} found. Please create at least one."
-    )
+    random_found = model.objects.order_by("?").first()
+    if random_found:
+        return random_found
+    else:
+        raise ValueError(
+            f"No objects of type {model._meta.verbose_name_plural} found. Please create at least one."
+        )
 
 
 def get_random_model_objects(
-    model: Model, min_amount=0, max_amount=10, exact=False
+    model: Type[Model], min_amount=0, max_amount=10, exact=False
 ) -> List[Model]:
     """
     Get a list of random model objects from the specified model.
