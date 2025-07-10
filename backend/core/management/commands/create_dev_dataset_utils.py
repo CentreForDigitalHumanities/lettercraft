@@ -53,25 +53,6 @@ def progress(iteration, total, width=80, start="\r", newline_on_complete=True):
         print()
 
 
-def get_unique_name(
-    list_of_names: List[str], model: Type[Model], name_field="name", retries=1000
-):
-    """
-    Returns a unique name from a given list of names.
-    Checks that there are currently no other instances of `model` where the specified field (`name` by default) has that value.
-
-    If no unique name can be found after `retries` attempts,
-    a `ValueError` is raised to avoid an endless loop.
-    """
-    for _ in range(retries):
-        unique_name = random.choice(list_of_names)
-
-        filter = {f"{name_field}": unique_name}
-        if not model.objects.filter(**filter).exists():
-            return unique_name
-    raise ValueError("Could not find a unique name")
-
-
 def get_random_model_object(model: Type[Model], allow_null=False) -> Optional[Model]:
     """
     Returns a random object from the given model.
