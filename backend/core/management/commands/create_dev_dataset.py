@@ -20,6 +20,7 @@ import random
 from django.db.models import Model
 
 from space.models import SpaceDescription
+from user.models import ContributorGroup, User
 
 from .create_dev_dataset_utils import (
     get_random_model_object,
@@ -108,6 +109,10 @@ class Command(BaseCommand):
                 fake, options, total=50, model=SpaceDescription
             )
             self._create_episodes(fake, options, total=500, model=Episode)
+
+            self._create_contributor_groups(fake, options, total=5, model=ContributorGroup)
+
+            self._create_users(fake, options, total=50, model=User)
 
             print("-" * 80)
             print("Development dataset created successfully.")
@@ -255,3 +260,32 @@ class Command(BaseCommand):
                 source=source,
                 **self.fake_date_value(fake),
             )
+
+    @track_progress
+    def _create_contributor_groups(self, fake, options, total, model):
+        sources = get_random_model_objects(
+            Source, min_amount=0, max_amount=5
+        )
+        group = ContributorGroup.objects.create(
+            name=fake.word().capitalize(),
+        )
+        group.sources.set(sources)
+
+
+    @track_progress
+    def _create_users(self, fake: Faker, options, total, model):
+        user = User.objects.create(
+            username=fake.user_name(),
+            email=fake.email(),
+            first_name=fake.first_name(),
+            last_name=fake.last_name(),
+            is_active=True,
+            is_staff=False,
+        )
+
+        # Assign the user to a random contributor group
+        contributor_groups = get_random_model_objects(
+            ContributorGroup, min_amount=0, max_amount=3
+        )
+
+        user.contributor_groups.set(contributor_groups)
