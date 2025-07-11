@@ -5,13 +5,21 @@ from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
 from source.models import Source, SourceWrittenDate
 
-from event.models import Episode, EpisodeAgent, EpisodeGift, EpisodeLetter, EpisodeSpace
+from event.models import (
+    Episode,
+    EpisodeAgent,
+    EpisodeCategory,
+    EpisodeGift,
+    EpisodeLetter,
+    EpisodeSpace,
+)
 from person.models import (
     HistoricalPerson,
     AgentDescription,
     HistoricalPerson,
 )
 from letter.models import (
+    GiftCategory,
     LetterCategory,
     GiftDescription,
     LetterDescription,
@@ -109,6 +117,7 @@ class Command(BaseCommand):
             self._create_letter_descriptions(
                 fake, options, total=200, model=LetterDescription
             )
+            self._create_gift_categories(fake, options, total=10, model=GiftCategory)
             self._create_gift_descriptions(
                 fake, options, total=150, model=GiftDescription
             )
@@ -116,10 +125,21 @@ class Command(BaseCommand):
                 fake, options, total=50, model=SpaceDescription
             )
 
+            self._create_episode_categories(
+                fake, options, total=25, model=EpisodeCategory
+            )
             self._create_episodes(fake, options, total=500, model=Episode)
 
             print("-" * 80)
             print("Development dataset created successfully.")
+
+    @track_progress
+    def _create_episode_categories(self, fake: Faker, *args, **kwargs):
+        fake.unique.clear()
+        EpisodeCategory.objects.create(
+            name=fake.unique.word(),
+            description=fake.text(),
+        )
 
     @track_progress
     def _create_episodes(self, fake: Faker, options, total, model):
@@ -209,7 +229,13 @@ class Command(BaseCommand):
         agent_description.contributors.set(contributors)
 
     @track_progress
+    def _create_gift_categories(self, fake: Faker, *args, **kwargs):
+        fake.unique.clear()
+        GiftCategory.objects.create(label=fake.unique.word(), description=fake.text())
+
+    @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
+        fake.unique.clear()
         LetterCategory.objects.create(label=fake.unique.word(), description=fake.text())
 
     @track_progress
@@ -235,11 +261,14 @@ class Command(BaseCommand):
     def _create_gift_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
+        categories = get_random_model_objects(GiftCategory, min_amount=0, max_amount=3)
+
         gift_description = GiftDescription.objects.create(
             source=source,
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             description=fake.text(),
         )
+        gift_description.categories.set(categories)
 
         contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
 
@@ -287,7 +316,7 @@ class Command(BaseCommand):
     @track_progress
     def _create_users(self, fake: Faker, *args, **kwargs):
         user = User.objects.create(
-            username=fake.user_name(),
+            username=fake.unique.user_name(),
             email=fake.email(),
             first_name=fake.first_name(),
             last_name=fake.last_name(),
