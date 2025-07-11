@@ -88,7 +88,14 @@ class Command(BaseCommand):
             # Comment out the function calls below as needed.
             # Adjust the `total` parameter to create more or less data.
             # NB: the order of these function calls is important.
+
             self._create_sources(fake, options, total=50, model=Source)
+
+            self._create_contributor_groups(
+                fake, options, total=5, model=ContributorGroup
+            )
+
+            self._create_users(fake, options, total=50, model=User)
 
             self._create_historical_persons(
                 fake, options, total=50, model=HistoricalPerson
@@ -108,17 +115,14 @@ class Command(BaseCommand):
             self._create_space_descriptions(
                 fake, options, total=50, model=SpaceDescription
             )
+
             self._create_episodes(fake, options, total=500, model=Episode)
-
-            self._create_contributor_groups(fake, options, total=5, model=ContributorGroup)
-
-            self._create_users(fake, options, total=50, model=User)
 
             print("-" * 80)
             print("Development dataset created successfully.")
 
     @track_progress
-    def _create_episodes(self, fake: Faker, options: dict, total: int, model: Type[Model]):
+    def _create_episodes(self, fake: Faker, options, total, model):
         source = get_random_model_object(Source)
 
         episode = Episode.objects.create(
@@ -169,15 +173,11 @@ class Command(BaseCommand):
             )
 
     @track_progress
-    def _create_historical_persons(
-        self, fake: Faker, options, total: int, model: Type[Model]
-    ):
+    def _create_historical_persons(self, fake: Faker, *args, **kwargs):
         HistoricalPerson.objects.create(name=fake.name())
 
     @track_progress
-    def _create_agent_descriptions(
-        self, fake: Faker, options, total: int, model: Type[Model]
-    ):
+    def _create_agent_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
         is_group = random.choice([True, False])
@@ -204,6 +204,9 @@ class Command(BaseCommand):
 
         agent_description.describes.set(describes)
 
+        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+
+        agent_description.contributors.set(contributors)
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
@@ -224,28 +227,40 @@ class Command(BaseCommand):
         )
         letter_description.categories.set(categories)
 
+        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+
+        letter_description.contributors.set(contributors)
+
     @track_progress
-    def _create_gift_descriptions(self, fake, options, total, model):
+    def _create_gift_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
-        GiftDescription.objects.create(
+        gift_description = GiftDescription.objects.create(
             source=source,
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             description=fake.text(),
         )
 
+        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+
+        gift_description.contributors.set(contributors)
+
     @track_progress
-    def _create_space_descriptions(self, fake, options, total, model):
+    def _create_space_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
-        SpaceDescription.objects.create(
+        space_description = SpaceDescription.objects.create(
             source=source,
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             description=fake.text(),
         )
 
+        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+
+        space_description.contributors.set(contributors)
+
     @track_progress
-    def _create_sources(self, fake, options, total, model):
+    def _create_sources(self, fake: Faker, *args, **kwargs):
         source = Source.objects.create(
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             medieval_title=fake.sentence(),
@@ -262,18 +277,15 @@ class Command(BaseCommand):
             )
 
     @track_progress
-    def _create_contributor_groups(self, fake, options, total, model):
-        sources = get_random_model_objects(
-            Source, min_amount=0, max_amount=5
-        )
+    def _create_contributor_groups(self, fake: Faker, *args, **kwargs):
+        sources = get_random_model_objects(Source, min_amount=0, max_amount=5)
         group = ContributorGroup.objects.create(
             name=fake.word().capitalize(),
         )
         group.sources.set(sources)
 
-
     @track_progress
-    def _create_users(self, fake: Faker, options, total, model):
+    def _create_users(self, fake: Faker, *args, **kwargs):
         user = User.objects.create(
             username=fake.user_name(),
             email=fake.email(),
