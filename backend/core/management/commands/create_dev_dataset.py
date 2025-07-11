@@ -133,7 +133,7 @@ class Command(BaseCommand):
         )
 
         episode_agents = get_random_model_objects(
-            AgentDescription, min_amount=0, max_amount=5
+            AgentDescription, min_amount=0, max_amount=20
         )
         for agent in episode_agents:
             EpisodeAgent.objects.create(
@@ -143,7 +143,7 @@ class Command(BaseCommand):
             )
 
         episode_gifts = get_random_model_objects(
-            GiftDescription, min_amount=0, max_amount=5
+            GiftDescription, min_amount=0, max_amount=20
         )
         for gift in episode_gifts:
             EpisodeGift.objects.create(
@@ -153,7 +153,7 @@ class Command(BaseCommand):
             )
 
         episode_letters = get_random_model_objects(
-            LetterDescription, min_amount=0, max_amount=5
+            LetterDescription, min_amount=0, max_amount=20
         )
         for letter in episode_letters:
             EpisodeLetter.objects.create(
@@ -163,7 +163,7 @@ class Command(BaseCommand):
             )
 
         episode_spaces = get_random_model_objects(
-            SpaceDescription, min_amount=0, max_amount=5
+            SpaceDescription, min_amount=0, max_amount=20
         )
         for space in episode_spaces:
             EpisodeSpace.objects.create(
@@ -210,7 +210,7 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, **kwargs):
-        LetterCategory.objects.create(label=fake.word(), description=fake.text())
+        LetterCategory.objects.create(label=fake.unique.word(), description=fake.text())
 
     @track_progress
     def _create_letter_descriptions(self, fake: Faker, *args, **kwargs):
