@@ -100,18 +100,19 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
-        contributors = set(
-            episode.contributors for episode in Episode.objects.filter(source=parent)
-        ).union(set(
-            agent_description.contributors for agent_description in AgentDescription.objects.filter(source=parent)
-        )).union(set(
-            letter_description.contributors for letter_description in LetterDescription.objects.filter(source=parent)
-        )).union(set(
-            gift_description.contributors for gift_description in GiftDescription.objects.filter(source=parent)
-        )).union(set(
-            space_description.contributors for space_description in SpaceDescription.objects.filter(source=parent)
-        ))
+        def contributors_from(Model: Type[Model]):
+            return set(
+                contributor.id
+                for episode in Model.objects.filter(source=parent)
+                for contributor in episode.contributors.all()
+            )
 
-        ids = set(c.id for c in contributors)
+        user_ids = set.union(
+            contributors_from(Episode),
+            contributors_from(AgentDescription),
+            contributors_from(LetterDescription),
+            contributors_from(GiftDescription),
+            contributors_from(SpaceDescription),
+        )
 
-        return User.objects.filter(id__in=ids)
+        return User.objects.filter(id__in=user_ids)
