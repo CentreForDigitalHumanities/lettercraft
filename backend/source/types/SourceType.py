@@ -100,9 +100,18 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
-        filters = Q(contributed_episodes__source=parent) | \
-            Q(contributed_agentdescriptions__source=parent) | \
-            Q(contributed_letterdescriptions__source=parent) | \
-            Q(contributed_giftdescriptions__source=parent) | \
-            Q(contributed_spacedescriptions__source=parent)
-        return User.objects.filter(filters).distinct()
+        contributors = set(
+            episode.contributors for episode in parent.episodes
+        ).union(set(
+            agent_description.contributors for agent_description in parent.agent_descriptions
+        )).union(set(
+            letter_description.contributors for letter_description in parent.letter_descriptions
+        )).union(set(
+            gift_description.contributors for gift_description in parent.gift_descriptions
+        )).union(set(
+            space_description.contributors for space_description in parent.space_descriptions
+        ))
+
+        ids = set(c.id for c in contributors)
+
+        return User.objects.filter(id__in=ids)
