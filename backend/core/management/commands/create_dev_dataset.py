@@ -192,6 +192,25 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
+        for space in episode_spaces:
+            EpisodeSpace.objects.create(
+                episode=episode,
+                space=space,
+                designators=fake.words(nb=3, unique=True),
+            )
+
+        # Collect all contributors from related descriptions
+        all_contributors = [
+            contributor
+            for description_list in [episode_agents, episode_gifts, episode_letters, episode_spaces]
+            for description in description_list
+            for contributor in description.contributors.all()
+        ]
+
+        # Remove duplicates and set contributors
+        unique_contributors = list(set(all_contributors))
+        episode.contributors.set(unique_contributors)
+
     @track_progress
     def _create_historical_persons(self, fake: Faker, *args, **kwargs):
         HistoricalPerson.objects.create(name=fake.name())
@@ -224,7 +243,7 @@ class Command(BaseCommand):
 
         agent_description.describes.set(describes)
 
-        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+        contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 
         agent_description.contributors.set(contributors)
 
@@ -253,7 +272,7 @@ class Command(BaseCommand):
         )
         letter_description.categories.set(categories)
 
-        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+        contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 
         letter_description.contributors.set(contributors)
 
@@ -270,7 +289,7 @@ class Command(BaseCommand):
         )
         gift_description.categories.set(categories)
 
-        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+        contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 
         gift_description.contributors.set(contributors)
 
@@ -284,7 +303,7 @@ class Command(BaseCommand):
             description=fake.text(),
         )
 
-        contributors = get_random_model_objects(User, min_amount=0, max_amount=3)
+        contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 
         space_description.contributors.set(contributors)
 
