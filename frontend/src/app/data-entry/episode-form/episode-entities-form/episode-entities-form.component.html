@@ -30,7 +30,11 @@
                     Add {{entityName}}
                 </button>
                 <div ngbDropdownMenu [attr.aria-labelledby]="dropdownToggleID">
-                    <button ngbDropdownItem (click)="createEntity$.next()">
+                    <input type="text" class="form-control search-bar"
+                        placeholder="Search for {{entityName}}s"
+                        [formControl]="searchControl"
+                        [attr.aria-label]="'Search for ' + entityName + 's'" />
+                    <button *ngIf="!searchControl.value" ngbDropdownItem (click)="createEntity$.next()">
                         <lc-icon [icon]="actionIcons.create" />
                         Create new {{entityName}}
                     </button>
@@ -38,6 +42,9 @@
                         ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
                         {{entity.name}}
                     </button>
+                    <ng-container *ngIf="searchControl.value && (availableEntities$ | async)?.length === 0">
+                        <button ngbDropdownItem disabled>No results found.</button>
+                    </ng-container>
                 </div>
             </div>
         </div>

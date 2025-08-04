@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
-import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
+import { combineLatest, map, Observable, Observer, startWith, Subject, switchMap, tap, withLatestFrom } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
 import { ToastService } from "@services/toast.service";
 import { ApolloCache } from "@apollo/client/core";
+import { FormControl } from "@angular/forms";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
@@ -41,6 +42,13 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     linkedEntities$: Observable<EntityItem[]>;
     availableEntities$: Observable<EntityItem[]>;
+
+    searchControl = new FormControl<string>("", {
+        nonNullable: true
+    });
+    entitySearch$ = this.searchControl.valueChanges.pipe(
+        startWith(""),
+    );
 
     addEntity$ = new Subject<string>();
     removeEntity$ = new Subject<string>();
@@ -67,8 +75,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             map(result => result.data),
             takeUntilDestroyed(),
         );
-        this.availableEntities$ = this.data$.pipe(
-            map(this.availableEntities.bind(this))
+        this.availableEntities$ = combineLatest([this.data$, this.entitySearch$]).pipe(
+            map(([data, search]) => this.availableEntities(data, search))
         );
         this.linkedEntities$ = this.data$.pipe(
             map(this.linkedEntities.bind(this))
@@ -174,11 +182,19 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         return data.episode?.[this.entityListPath].map(link => link.entity) || [];
     }
 
-    private availableEntities(data: DataEntryEpisodeEntitiesQuery): EntityItem[] {
+    private availableEntities(
+        data: DataEntryEpisodeEntitiesQuery,
+        searchValue = ""
+    ): EntityItem[] {
         const allEntities: EntityItem[] = data.episode?.source[this.entityListPath] || [];
         const linkedEntities = this.linkedEntities(data);
+        const unlinkedEntities = differenceBy(allEntities, linkedEntities, 'id');
 
-        return differenceBy(allEntities, linkedEntities, 'id').sort((a, b) => a.name.localeCompare(b.name));
+        const foundEntities = searchValue
+            ? unlinkedEntities.filter(entity => entity.name.toLowerCase().includes(searchValue.toLowerCase()))
+            : unlinkedEntities;
+
+        return foundEntities.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: ApolloCache<unknown>) {
