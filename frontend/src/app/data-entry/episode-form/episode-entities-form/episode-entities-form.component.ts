@@ -23,6 +23,12 @@ type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDe
 
 let nextID = 0;
 
+interface EntityItem {
+    __typename?: string;
+    id: string;
+    name: string;
+}
+
 @Component({
     selector: "lc-episode-entities-form",
     templateUrl: "./episode-entities-form.component.html",
@@ -33,8 +39,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
 
-    linkedEntities$: Observable<{ id: string, name: string }[]>;
-    availableEntities$: Observable<{ name: string, id: string }[]>;
+    linkedEntities$: Observable<EntityItem[]>;
+    availableEntities$: Observable<EntityItem[]>;
 
     addEntity$ = new Subject<string>();
     removeEntity$ = new Subject<string>();
@@ -154,7 +160,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.status$.next('saved');
     }
 
-    onError(error: any) {
+    onError(error: unknown) {
         console.error(error);
         this.toastService.show({
             header: `Adding ${this.entityName} failed`,
@@ -164,20 +170,15 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.status$.next('error');
     }
 
-    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string, name: string }[] {
+    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): EntityItem[] {
         return data.episode?.[this.entityListPath].map(link => link.entity) || [];
     }
 
-    private availableEntities(
-        data: DataEntryEpisodeEntitiesQuery
-    ): { name: string, id: string }[] {
-        const allEntities: {
-            __typename?: string,
-            name: string,
-            id: string
-        }[] = data.episode?.source[this.entityListPath] || [];
+    private availableEntities(data: DataEntryEpisodeEntitiesQuery): EntityItem[] {
+        const allEntities: EntityItem[] = data.episode?.source[this.entityListPath] || [];
         const linkedEntities = this.linkedEntities(data);
-        return differenceBy(allEntities, linkedEntities, 'id');
+
+        return differenceBy(allEntities, linkedEntities, 'id').sort((a, b) => a.name.localeCompare(b.name));
     }
 
     private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: ApolloCache<unknown>) {
