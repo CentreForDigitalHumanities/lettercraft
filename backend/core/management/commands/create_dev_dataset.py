@@ -1,4 +1,3 @@
-from typing import Type
 from django.db import transaction
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
@@ -25,7 +24,6 @@ from letter.models import (
     LetterDescription,
 )
 import random
-from django.db.models import Model
 
 from space.models import SpaceDescription
 from user.models import ContributorGroup, User
@@ -197,7 +195,12 @@ class Command(BaseCommand):
         # Collect all contributors from related descriptions
         all_contributors = [
             contributor
-            for description_list in [episode_agents, episode_gifts, episode_letters, episode_spaces]
+            for description_list in [
+                episode_agents,
+                episode_gifts,
+                episode_letters,
+                episode_spaces,
+            ]
             for description in description_list
             for contributor in description.contributors.all()
         ]
