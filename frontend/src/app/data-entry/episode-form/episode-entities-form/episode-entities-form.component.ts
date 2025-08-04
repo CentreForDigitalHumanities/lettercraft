@@ -44,11 +44,6 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     status$ = formStatusSubject();
     id = `episode-entities-${nextID++}`;
 
-    private mutationRequestObserver: Partial<Observer<MutationResult>> = {
-        next: this.onSuccess.bind(this),
-        error: this.onError.bind(this),
-    };
-
     constructor(
         private formService: FormService,
         private query: DataEntryEpisodeEntitiesGQL,
@@ -132,9 +127,10 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         };
         this.addMutation.mutate({ input }, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache),
-        }).pipe(
-            tap(() => this.status$.next('loading'))
-        ).subscribe(this.mutationRequestObserver);
+        }).subscribe({
+            next: () => this.onSuccess(),
+            error: (error) => this.onError(error, 'addEntity'),
+        });
     }
 
     removeEntity(entityID: string, episodeID: string): void {
@@ -147,18 +143,21 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.removeMutation.mutate(data, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
         }).pipe(
-        ).subscribe(this.mutationRequestObserver)
+        ).subscribe({
+            next: () => this.onSuccess(),
+            error: (error) => this.onError(error, 'removeEntity'),
+        })
     }
 
     onSuccess() {
         this.status$.next('saved');
     }
 
-    onError(error: any) {
+    onError(error: unknown, operation: 'removeEntity' | 'addEntity') {
         console.error(error);
         this.toastService.show({
-            header: `Adding ${this.entityName} failed`,
-            body: `Could not add ${this.entityName}`,
+            header: `${operation === 'addEntity' ? 'Adding' : 'Removing'} ${this.entityName} failed`,
+            body: `Could not ${operation === 'addEntity' ? 'add' : 'remove'} ${this.entityName}`,
             type: 'danger',
         })
         this.status$.next('error');
