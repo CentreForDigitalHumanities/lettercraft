@@ -130,6 +130,8 @@ class Command(BaseCommand):
             )
             self._create_episodes(fake, options, total=500, model=Episode)
 
+            self._create_admin(fake, options)
+
             print("-" * 80)
             print("Development dataset created successfully.")
 
@@ -342,3 +344,16 @@ class Command(BaseCommand):
         )
 
         user.contributor_groups.set(contributor_groups)
+
+    def _create_admin(self, fake: Faker, *args, **kwargs):
+        """
+        Creates an admin user with all permissions.
+        """
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@lettercraft.nl",
+            password="admin",
+            first_name="Ad",
+            last_name="Min",
+            is_active=True,
+        )
