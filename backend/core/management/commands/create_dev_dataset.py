@@ -192,13 +192,6 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
-        for space in episode_spaces:
-            EpisodeSpace.objects.create(
-                episode=episode,
-                space=space,
-                designators=fake.words(nb=3, unique=True),
-            )
-
         # Collect all contributors from related descriptions
         all_contributors = [
             contributor
