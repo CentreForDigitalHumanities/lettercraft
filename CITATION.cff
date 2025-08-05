@@ -29,5 +29,5 @@ authors:
     website: 'https://cdh.uu.nl/rsl/'
 repository-code: 'https://github.com/CentreForDigitalHumanities/lettercraft'
 license: BSD-3-Clause
-version: 0.8.1
-date-released: '2025-06-24'
+version: 0.8.2
+date-released: '2025-07-23'
