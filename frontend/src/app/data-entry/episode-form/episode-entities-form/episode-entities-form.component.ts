@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
-import { combineLatest, map, Observable, Observer, startWith, Subject, switchMap, tap, withLatestFrom } from "rxjs";
+import { combineLatest, map, Observable, Observer, startWith, Subject, switchMap, tap, withLatestFrom, shareReplay } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
 import { MutationResult } from "apollo-angular";
@@ -48,6 +48,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     });
     entitySearch$ = this.searchControl.valueChanges.pipe(
         startWith(""),
+        shareReplay(1),
     );
 
     addEntity$ = new Subject<string>();
@@ -109,8 +110,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Gift]: 'gifts',
             [Entity.Letter]: 'letters',
             [Entity.Space]: 'spaces',
-        }
-        return keys[this.entityType]
+        };
+        return keys[this.entityType];
     }
 
     get entityTypeName(): EntityTypeName {
@@ -119,7 +120,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Gift]: 'GiftDescriptionType',
             [Entity.Letter]: 'LetterDescriptionType',
             [Entity.Space]: 'SpaceDescriptionType',
-        }
+        };
         return types[this.entityType];
     }
 
@@ -161,7 +162,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.removeMutation.mutate(data, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
         }).pipe(
-        ).subscribe(this.mutationRequestObserver)
+        ).subscribe(this.mutationRequestObserver);
     }
 
     onSuccess() {
@@ -174,7 +175,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             header: `Adding ${this.entityName} failed`,
             body: `Could not add ${this.entityName}`,
             type: 'danger',
-        })
+        });
         this.status$.next('error');
     }
 
