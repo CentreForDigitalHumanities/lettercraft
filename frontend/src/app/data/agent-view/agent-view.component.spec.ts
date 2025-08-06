@@ -4,6 +4,7 @@ import { AgentViewComponent } from './agent-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
 import { EpisodeLinksComponent } from '../shared/episode-links/episode-links.component';
+import { DataPageWrapperDirective } from '../shared/page-wrapper.directive';
 
 describe('AgentViewComponent', () => {
     let component: AgentViewComponent;
@@ -15,6 +16,7 @@ describe('AgentViewComponent', () => {
                 AgentViewComponent,
                 ObjectPageHeaderComponent,
                 EpisodeLinksComponent,
+                DataPageWrapperDirective,
             ],
             imports: [SharedTestingModule],
         });
