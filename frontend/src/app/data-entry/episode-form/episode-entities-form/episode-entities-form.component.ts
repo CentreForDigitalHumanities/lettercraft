@@ -1,8 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
-import { combineLatest, map, Observable, Observer, startWith, Subject, switchMap, tap, withLatestFrom, shareReplay } from "rxjs";
+import { combineLatest, map, Observable, startWith, Subject, switchMap, withLatestFrom, shareReplay } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
-import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
 import {
     CreateEpisodeEntityLinkInput,
@@ -161,7 +160,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         ).subscribe({
             next: () => this.onSuccess(),
             error: (error) => this.onError(error, 'removeEntity'),
-        })
+        });
     }
 
     onSuccess() {
