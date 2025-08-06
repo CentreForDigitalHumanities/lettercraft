@@ -4,7 +4,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { entityDescriptionBreadcrumbs, NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
 
@@ -30,7 +30,6 @@ export class EpisodeViewComponent {
     locationIcon = locationIcon;
 
     makeBreadcrumbs = entityDescriptionBreadcrumbs;
-    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
 
     constructor(
         private route: ActivatedRoute,

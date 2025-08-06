@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { ViewLetterGQL } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
-import { entityDescriptionBreadcrumbs, NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-letter-view',
@@ -23,7 +23,6 @@ export class LetterViewComponent {
     actionIcons = actionIcons;
 
     makeBreadcrumbs = entityDescriptionBreadcrumbs;
-    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
 
     constructor(
         private route: ActivatedRoute,
