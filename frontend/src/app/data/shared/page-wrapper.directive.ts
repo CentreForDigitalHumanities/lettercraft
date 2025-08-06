@@ -5,7 +5,6 @@ import _ from 'underscore';
 import { NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
 
 @Component({
-    selector: 'lc-loading',
     template: `
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -15,7 +14,6 @@ import { NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
 export class DataLoadingComponent {}
 
 @Component({
-    selector: 'lc-loading',
     template: `
     <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
     <lc-not-found />
@@ -29,8 +27,8 @@ export class DataNotFoundComponent {
 @Directive({
     selector: '[lcDataPageWrapper]',
 })
-export class DataPageWrapperDirective implements OnInit {
-    @Input({ required: true }) lcDataPageWrapperFrom!: Observable<any>;
+export class DataPageWrapperDirective<Data extends object> implements OnInit {
+    @Input({ required: true }) lcDataPageWrapperFrom!: Observable<Data>;
     @Input({ required: true }) lcDataPageWrapperGet!: string;
 
     constructor(
@@ -42,9 +40,10 @@ export class DataPageWrapperDirective implements OnInit {
         this.viewContainerRef.createComponent(DataLoadingComponent);
         this.lcDataPageWrapperFrom.subscribe(data => {
             this.viewContainerRef.clear();
-            if (_.get(data, this.lcDataPageWrapperGet)) {
+            const instance =  _.get(data, this.lcDataPageWrapperGet);
+            if (instance) {
                 this.viewContainerRef.createEmbeddedView(this.templateRef, {
-                    $implicit: data[this.lcDataPageWrapperGet]
+                    $implicit: instance
                 } as any);
             } else {
                 this.viewContainerRef.createComponent(DataNotFoundComponent);
