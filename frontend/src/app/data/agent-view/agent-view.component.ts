@@ -9,7 +9,7 @@ import {
     ViewAgentGQL,
 } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
-import { entityDescriptionBreadcrumbs, NOT_FOUND_BREADCRUMBS } from '../utils/breadcrumbs';
+import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
   selector: 'lc-agent-view',
@@ -34,7 +34,6 @@ export class AgentViewComponent {
     Gender = Gender;
 
     makeBreadcrumbs = entityDescriptionBreadcrumbs;
-    notFoundBreadcrumbs = NOT_FOUND_BREADCRUMBS;
 
     constructor(
         private route: ActivatedRoute,
