@@ -51,9 +51,7 @@ class FilterableListField(DjangoListField):
 
     @property
     def args(self):
-        return to_arguments(
-            self._base_args or OrderedDict(), self.filtering_args
-        )
+        return to_arguments(self._base_args or OrderedDict(), self.filtering_args)
 
     @args.setter
     def args(self, args):
@@ -96,13 +94,7 @@ class FilterableListField(DjangoListField):
 
     @classmethod
     def resolve_queryset(
-        cls,
-        django_object_type,
-        queryset,
-        info,
-        args,
-        filtering_args,
-        filterset_class
+        cls, django_object_type, queryset, info, args, filtering_args, filterset_class
     ):
         def filter_kwargs():
             kwargs = {}
@@ -140,8 +132,10 @@ class FilterableListField(DjangoListField):
         queryset = queryset_resolver(django_object_type, queryset, info, kwargs)
 
         if ordering := kwargs.get("ordering"):
-            ordering = to_snake_case(ordering)
-            queryset = queryset.order_by(ordering)
+            ordering_fields = [
+                to_snake_case(field.strip()) for field in ordering.split(",")
+            ]
+            queryset = queryset.order_by(*ordering_fields)
         else:
             queryset = queryset.order_by("id")
 
