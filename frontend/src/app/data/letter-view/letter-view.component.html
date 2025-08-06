@@ -1,43 +1,30 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.letterDescription as letter">
-        <a class="float-end btn btn-light" *ngIf="letter.editable"
-            [routerLink]="['/data-entry/letters', letter.id]">
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this letter
-        </a>
+<div *lcDataPageWrapper="let letter from data$ get 'letterDescription'">
+    <a class="float-end btn btn-light" *ngIf="letter.editable"
+        [routerLink]="['/data-entry/letters', letter.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this letter
+    </a>
 
-        <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(letter)" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(letter)" />
 
-        <lc-object-page-header [object]="letter" [icon]="dataIcons.letter" />
+    <lc-object-page-header [object]="letter" [icon]="dataIcons.letter" />
 
-        <lc-contributors [contributors]="letter.contributors" />
+    <lc-contributors [contributors]="letter.contributors" />
 
-        <section class="mb-5">
-            <h2>Source text</h2>
+    <section class="mb-5">
+        <h2>Source text</h2>
 
-            <p>
-                {{letter.name}} is a letter in
-                <a [routerLink]="['/data/sources', letter.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{letter.source.name}}
-                </a>.
-                <ng-container *ngIf="letter.episodes.length">
-                    It appears in the following epistolary episodes:
-                </ng-container>
-            </p>
+        <p>
+            {{letter.name}} is a letter in
+            <a [routerLink]="['/data/sources', letter.source.id]" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{letter.source.name}}
+            </a>.
+            <ng-container *ngIf="letter.episodes.length">
+                It appears in the following epistolary episodes:
+            </ng-container>
+        </p>
 
-            <lc-episode-links [data]="letter.episodes" />
-        </section>
-    </ng-container>
-</ng-container>
-
-<ng-template #loading>
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</ng-template>
-
-<ng-template #notFound>
-    <lc-breadcrumb [breadcrumbs]="notFoundBreadcrumbs" />
-    <lc-not-found />
-</ng-template>
+        <lc-episode-links [data]="letter.episodes" />
+    </section>
+</div>

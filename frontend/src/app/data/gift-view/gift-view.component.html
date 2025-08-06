@@ -1,43 +1,30 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.giftDescription as gift; else notFound">
-        <a class="float-end btn btn-light" *ngIf="gift.editable"
-            [routerLink]="['/data-entry/gifts', gift.id]">
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this gift
-        </a>
+<div *lcDataPageWrapper="let gift from data$ get 'giftDescription'">
+    <a class="float-end btn btn-light" *ngIf="gift.editable"
+        [routerLink]="['/data-entry/gifts', gift.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this gift
+    </a>
 
-        <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(gift)" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(gift)" />
 
-        <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
+    <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
 
-        <lc-contributors [contributors]="gift.contributors" />
+    <lc-contributors [contributors]="gift.contributors" />
 
-        <section class="mb-5">
-            <h2>Source text</h2>
+    <section class="mb-5">
+        <h2>Source text</h2>
 
-            <p>
-                {{gift.name}} is a gift described in
-                <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{gift.source.name}}
-                </a>.
-                <ng-container *ngIf="gift.episodes.length">
-                    It appears in the following epistolary episodes:
-                </ng-container>
-            </p>
+        <p>
+            {{gift.name}} is a gift described in
+            <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{gift.source.name}}
+            </a>.
+            <ng-container *ngIf="gift.episodes.length">
+                It appears in the following epistolary episodes:
+            </ng-container>
+        </p>
 
-            <lc-episode-links [data]="gift.episodes" />
-        </section>
-    </ng-container>
-</ng-container>
-
-<ng-template #loading>
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</ng-template>
-
-<ng-template #notFound>
-    <lc-breadcrumb [breadcrumbs]="notFoundBreadcrumbs" />
-    <lc-not-found />
-</ng-template>
+        <lc-episode-links [data]="gift.episodes" />
+    </section>
+</div>

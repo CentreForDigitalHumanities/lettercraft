@@ -1,79 +1,66 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.spaceDescription as location; else notFound">
-        <a class="float-end btn btn-light" *ngIf="location.editable"
-            [routerLink]="['/data-entry/locations', location.id]">
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this location
-        </a>
+<div *lcDataPageWrapper="let location from data$ get 'spaceDescription'">
+    <a class="float-end btn btn-light" *ngIf="location.editable"
+        [routerLink]="['/data-entry/locations', location.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this location
+    </a>
 
-        <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(location)" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(location)" />
 
-        <lc-object-page-header [object]="location" [icon]="locationIcon(location)" />
+    <lc-object-page-header [object]="location" [icon]="locationIcon(location)" />
 
-        <lc-contributors [contributors]="location.contributors" />
+    <lc-contributors [contributors]="location.contributors" />
 
-        <section class="mt-4 mb-5">
-            <h2>Source text</h2>
+    <section class="mt-4 mb-5">
+        <h2>Source text</h2>
 
-            <p>
-                {{location.name}} is a location in
-                <a [routerLink]="['/data/sources', location.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{ location.source.name }}
-                </a>. It features in the following episodes:
-            </p>
+        <p>
+            {{location.name}} is a location in
+            <a [routerLink]="['/data/sources', location.source.id]" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{ location.source.name }}
+            </a>. It features in the following episodes:
+        </p>
 
-            <lc-episode-links [data]="location.episodes" />
-        </section>
+        <lc-episode-links [data]="location.episodes" />
+    </section>
 
-        <section class="mb-5">
-            <h2>Historical context</h2>
+    <section class="mb-5">
+        <h2>Historical context</h2>
 
-            <p>This location is identified in the text through the following references.</p>
+        <p>This location is identified in the text through the following references.</p>
 
-            <dl>
-                <dt>Regions</dt>
-                <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.regionFields.length; else noItems">
-                        <li *ngFor="let region of location.regionFields" class="inline-list-item">
-                            {{region.region.name}}
-                        </li>
-                    </ul>
-                </dd>
+        <dl>
+            <dt>Regions</dt>
+            <dd class="ms-4">
+                <ul class="inline-list" *ngIf="location.regionFields.length; else noItems">
+                    <li *ngFor="let region of location.regionFields" class="inline-list-item">
+                        {{region.region.name}}
+                    </li>
+                </ul>
+            </dd>
 
-                <dt>Settlements</dt>
-                <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.settlementFields.length; else noItems">
-                        <li *ngFor="let settlement of location.settlementFields" class="inline-list-item">
-                            {{settlement.settlement.name}}
-                        </li>
-                    </ul>
-                </dd>
+            <dt>Settlements</dt>
+            <dd class="ms-4">
+                <ul class="inline-list" *ngIf="location.settlementFields.length; else noItems">
+                    <li *ngFor="let settlement of location.settlementFields" class="inline-list-item">
+                        {{settlement.settlement.name}}
+                    </li>
+                </ul>
+            </dd>
 
-                <dt>Structures</dt>
-                <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.structureFields.length; else noItems">
-                        <li *ngFor="let structure of location.structureFields" class="inline-list-item">
-                            {{structure.structure.name}}
-                        </li>
-                    </ul>
-                </dd>
+            <dt>Structures</dt>
+            <dd class="ms-4">
+                <ul class="inline-list" *ngIf="location.structureFields.length; else noItems">
+                    <li *ngFor="let structure of location.structureFields" class="inline-list-item">
+                        {{structure.structure.name}}
+                    </li>
+                </ul>
+            </dd>
 
-                <ng-template #noItems>
-                    <i>None</i>
-                </ng-template>
-            </dl>
-        </section>
-    </ng-container>
-</ng-container>
-
-<ng-template #loading>
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</ng-template>
-
-<ng-template #notFound>
-    <lc-breadcrumb [breadcrumbs]="notFoundBreadcrumbs" />
-    <lc-not-found />
-</ng-template>
+            <ng-template #noItems>
+                <i>None</i>
+            </ng-template>
+        </dl>
+    </section>
+</div>
