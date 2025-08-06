@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
 import {
@@ -8,7 +7,6 @@ import {
     Gender,
     SourceMention,
     ViewAgentGQL,
-    ViewAgentQuery,
 } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
@@ -35,18 +33,10 @@ export class AgentViewComponent {
     SourceMention = SourceMention;
     Gender = Gender;
 
+    makeBreadcrumbs = entityDescriptionBreadcrumbs;
+
     constructor(
         private route: ActivatedRoute,
-        private query: ViewAgentGQL
+        private query: ViewAgentGQL,
     ) {}
-
-    makeBreadcrumbs(data: ViewAgentQuery): Breadcrumb[] {
-        return data.agentDescription
-            ? entityDescriptionBreadcrumbs(data.agentDescription)
-            : [
-                  { link: "/", label: "Lettercraft" },
-                  { link: "/data", label: "Data" },
-                  { link: ".", label: "Not found" },
-              ];
-    }
 }

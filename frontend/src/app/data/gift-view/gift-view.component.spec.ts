@@ -4,6 +4,7 @@ import { GiftViewComponent } from './gift-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
 import { EpisodeLinksComponent } from '../shared/episode-links/episode-links.component';
+import { DataPageWrapperDirective } from '../shared/page-wrapper.directive';
 
 describe('GiftViewComponent', () => {
     let component: GiftViewComponent;
@@ -15,6 +16,7 @@ describe('GiftViewComponent', () => {
                 GiftViewComponent,
                 ObjectPageHeaderComponent,
                 EpisodeLinksComponent,
+                DataPageWrapperDirective,
             ],
             imports: [SharedTestingModule],
         });

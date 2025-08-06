@@ -148,35 +148,41 @@ export const spaceFormTitleResolver = queryTitleResolver(
     spaceTitleQuery, entityDescriptionFormTitle, true
 );
 
+const entityViewTitle = (data: any, property: string) =>
+    data[property] ?
+        `${data[property].name} (${data[property].source.name})` :
+        'Not found';
+
 const agentViewTitle = (data: AgentTitleQueryData): string =>
-    `${data.agentDescription?.name} (${data.agentDescription?.source.name})`;
+    entityViewTitle(data, 'agentDescription');
 
 export const agentViewTitleResolver = queryTitleResolver(
     agentTitleQuery, agentViewTitle
 );
 
 const locationViewTitle = (data: SpaceTitleQueryData): string =>
-    `${data.spaceDescription?.name} (${data.spaceDescription?.source.name})`;
+    entityViewTitle(data, 'spaceDescription');
 
 export const locationViewTitleResolver = queryTitleResolver(
     spaceTitleQuery, locationViewTitle
 );
 
 const letterViewTitle = (data: LetterTitleQueryData): string =>
-    `${data.letterDescription?.name} (${data.letterDescription?.source.name})`;
+    entityViewTitle(data, 'letterDescription');
 
 export const letterViewTitleResolver = queryTitleResolver(
     letterTitleQuery, letterViewTitle
 );
 
 const giftViewTitle = (data: GiftTitleQueryData): string =>
-    `${data.giftDescription?.name} (${data.giftDescription?.source.name})`;
+    entityViewTitle(data, 'giftDescription');
 
 export const giftViewTitleResolver = queryTitleResolver(
     giftTitleQuery, giftViewTitle
 );
 
-const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
+const sourceViewTitle = (data: SourceTitleQueryQuery) =>
+    data.source ? `${data.source?.name}` : 'Not found';
 
 export const sourceViewTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceViewTitle
@@ -184,7 +190,7 @@ export const sourceViewTitleResolver = queryTitleResolver(
 
 
 const episodeViewTitle = (data: EpisodeTitleQueryQuery) =>
-    `${data.episode?.name} (${data.episode?.source.name})`;
+    entityViewTitle(data, 'episode');
 
 export const episodeViewTitleResolver = queryTitleResolver(
     episodeTitleQuery, episodeViewTitle

@@ -1,65 +1,51 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.source as source; else noEpisode">
-        <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(source)" />
-        <a
-            *ngIf="source.editable"
-            class="float-end btn btn-light"
-            [routerLink]="['/data-entry/sources', source.id]"
-        >
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this source
-        </a>
+<div *lcDataPageWrapper="let source from data$ get 'source'">
+    <a class="float-end btn btn-light" *ngIf="source.editable"
+        [routerLink]="['/data-entry/sources', source.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this source
+    </a>
 
-        <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(source)" />
 
-        <p>
-            {{ source.name }} is one of the source texts that have been analysed
-            in the Lettercraft project.
-        </p>
+    <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
 
-        <lc-contributors [contributors]="source.contributors" />
+    <p>
+        {{ source.name }} is one of the source texts that have been analysed
+        in the Lettercraft project.
+    </p>
 
-        <div class="card mb-4 mt-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Bibliographical information</h2>
+    <lc-contributors [contributors]="source.contributors" />
 
-                <ng-container
-                    *ngIf="source.medievalAuthor || source.medievalTitle"
-                >
-                    {{ source.medievalAuthor
-                    }}<ng-container
-                        *ngIf="source.medievalAuthor && source.medievalTitle"
-                        >, </ng-container
-                    ><em>{{ source.medievalTitle }}</em
-                    >.
-                </ng-container>
-                <ng-container
-                    *ngIf="source.editionAuthor || source.editionTitle"
-                >
-                    (Ed. {{ source.editionAuthor
-                    }}<ng-container
-                        *ngIf="source.editionAuthor && source.editionTitle"
-                        >, </ng-container
-                    >{{ source.editionTitle }}.)
-                </ng-container>
-            </div>
+    <div class="card mb-4 mt-4">
+        <div class="card-body">
+            <h2 class="h5 card-title">Bibliographical information</h2>
+
+            <ng-container
+                *ngIf="source.medievalAuthor || source.medievalTitle"
+            >
+                {{ source.medievalAuthor
+                }}<ng-container
+                    *ngIf="source.medievalAuthor && source.medievalTitle"
+                    >, </ng-container
+                ><em>{{ source.medievalTitle }}</em
+                >.
+            </ng-container>
+            <ng-container
+                *ngIf="source.editionAuthor || source.editionTitle"
+            >
+                (Ed. {{ source.editionAuthor
+                }}<ng-container
+                    *ngIf="source.editionAuthor && source.editionTitle"
+                    >, </ng-container
+                >{{ source.editionTitle }}.)
+            </ng-container>
         </div>
-
-        <h2 class="mb-4">Epistolary episodes</h2>
-
-        <lc-episode-preview
-            *ngFor="let episode of source.episodes"
-            [episode]="episode"
-        />
-    </ng-container>
-
-    <ng-template #noEpisode>
-        <lc-not-found entity="episode" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+
+    <h2 class="mb-4">Epistolary episodes</h2>
+
+    <lc-episode-preview
+        *ngFor="let episode of source.episodes"
+        [episode]="episode"
+    />
+</div>

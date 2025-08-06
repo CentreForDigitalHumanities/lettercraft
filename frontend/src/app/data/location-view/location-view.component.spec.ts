@@ -4,6 +4,7 @@ import { LocationViewComponent } from './location-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
 import { EpisodeLinksComponent } from '../shared/episode-links/episode-links.component';
+import { DataPageWrapperDirective } from '../shared/page-wrapper.directive';
 
 describe('LocationViewComponent', () => {
     let component: LocationViewComponent;
@@ -15,6 +16,7 @@ describe('LocationViewComponent', () => {
                 LocationViewComponent,
                 ObjectPageHeaderComponent,
                 EpisodeLinksComponent,
+                DataPageWrapperDirective,
             ],
             imports: [SharedTestingModule],
         });

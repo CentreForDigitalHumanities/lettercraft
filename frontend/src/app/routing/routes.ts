@@ -29,6 +29,7 @@ import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 import { SourceListComponent } from '../data/source-list/source-list.component';
 import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
+import { NotFoundComponent } from '@shared/not-found/not-found.component';
 
 
 const routes: Routes = [
@@ -169,6 +170,10 @@ const routes: Routes = [
         path: '',
         redirectTo: '/home',
         pathMatch: 'full'
+    },
+    {
+        path: '**',
+        component: NotFoundComponent,
     }
 ];
 

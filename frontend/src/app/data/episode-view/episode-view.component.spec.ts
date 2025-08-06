@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EpisodeViewComponent } from './episode-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
+import { DataPageWrapperDirective } from '../shared/page-wrapper.directive';
 
 describe('EpisodeViewComponent', () => {
     let component: EpisodeViewComponent;
@@ -13,6 +14,7 @@ describe('EpisodeViewComponent', () => {
             declarations: [
                 EpisodeViewComponent,
                 ObjectPageHeaderComponent,
+                DataPageWrapperDirective,
             ],
             imports: [SharedTestingModule],
         });

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SourceViewComponent } from './source-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
+import { DataPageWrapperDirective } from '../shared/page-wrapper.directive';
 
 describe('SourceViewComponent', () => {
     let component: SourceViewComponent;
@@ -13,6 +14,7 @@ describe('SourceViewComponent', () => {
             declarations: [
                 SourceViewComponent,
                 ObjectPageHeaderComponent,
+                DataPageWrapperDirective,
             ],
             imports: [SharedTestingModule],
         });

@@ -1,44 +1,30 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
+<div *lcDataPageWrapper="let gift from data$ get 'giftDescription'">
+    <a class="float-end btn btn-light" *ngIf="gift.editable"
+        [routerLink]="['/data-entry/gifts', gift.id]">
+        <lc-icon [icon]="actionIcons.edit" />
+        Edit this gift
+    </a>
 
-    <ng-container *ngIf="data.giftDescription as gift; else noGift">
-        <a
-            *ngIf="gift.editable"
-            class="float-end btn btn-light"
-            [routerLink]="['/data-entry/gifts', gift.id]"
-        >
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this gift
-        </a>
-        <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
+    <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(gift)" />
 
-        <lc-contributors [contributors]="gift.contributors" />
+    <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
 
-        <section class="mb-5">
-            <h2>Source text</h2>
+    <lc-contributors [contributors]="gift.contributors" />
 
-            <p>
-                {{gift.name}} is a gift described in
-                <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{gift.source.name}}
-                </a>.
-                <ng-container *ngIf="gift.episodes.length">
-                    It appears in the following epistolary episodes:
-                </ng-container>
-            </p>
+    <section class="mb-5">
+        <h2>Source text</h2>
 
-            <lc-episode-links [data]="gift.episodes" />
-        </section>
-    </ng-container>
+        <p>
+            {{gift.name}} is a gift described in
+            <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
+                <lc-icon [icon]="dataIcons.source" />
+                {{gift.source.name}}
+            </a>.
+            <ng-container *ngIf="gift.episodes.length">
+                It appears in the following epistolary episodes:
+            </ng-container>
+        </p>
 
-    <ng-template #noGift>
-        <lc-not-found entity="gift" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
-    <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
-</ng-template>
+        <lc-episode-links [data]="gift.episodes" />
+    </section>
+</div>
