@@ -1,16 +1,26 @@
 <ng-container *ngIf="data$ | async as data">
     <ng-container *ngIf="data.episode">
-        <ng-container *ngIf="(linkedEntities$ | async)?.length; else noEntities">
-            <p>The following {{entityName}}s are involved in this episode:</p>
+        <ng-container
+            *ngIf="(linkedEntities$ | async)?.length; else noEntities"
+        >
+            <p>The following {{ entityName }}s are involved in this episode:</p>
             <ul class="list-unstyled vstack gap-4">
                 <li *ngFor="let entity of linkedEntities$ | async">
-                    <lc-episode-link-form [entityType]="entityType" linkTo="entity"
-                            [entityID]="entity.id"
-                            [episodeID]="data.episode.id">
-                        <button removeControl class="btn btn-danger"
-                            [attr.aria-label]="'remove ' + entityName + ': ' + entity.name"
+                    <lc-episode-link-form
+                        [entityType]="entityType"
+                        linkTo="entity"
+                        [entityID]="entity.id"
+                        [episodeID]="data.episode.id"
+                    >
+                        <button
+                            removeControl
+                            class="btn btn-danger"
+                            [attr.aria-label]="
+                                'remove ' + entityName + ': ' + entity.name
+                            "
                             [ngbTooltip]="'remove this ' + entityName"
-                            (click)="removeEntity$.next(entity.id)">
+                            (click)="removeEntity$.next(entity.id)"
+                        >
                             <lc-icon [icon]="actionIcons.remove" />
                         </button>
                     </lc-episode-link-form>
@@ -18,32 +28,78 @@
             </ul>
         </ng-container>
         <ng-template #noEntities>
-            <p>
-                No {{entityName}}s have been added to this episode.
-            </p>
+            <p>No {{ entityName }}s have been added to this episode.</p>
         </ng-template>
 
         <div class="mt-4 mb-4">
             <div ngbDropdown>
-                <button type="button" class="btn btn-primary" #dropdownToggle
-                    [attr.id]="dropdownToggleID" ngbDropdownToggle>
-                    Add {{entityName}}
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    #dropdownToggle
+                    [attr.id]="dropdownToggleID"
+                    ngbDropdownToggle
+                >
+                    Add {{ entityName }}
                 </button>
                 <div ngbDropdownMenu [attr.aria-labelledby]="dropdownToggleID">
-                    <button *ngFor="let entity of (availableEntities$ | async)"
-                        ngbDropdownItem (click)="addEntity$.next(entity.id); dropdownToggle.focus()">
-                        {{entity.name}}
-                    </button>
                     <button ngbDropdownItem (click)="createEntity$.next()">
                         <lc-icon [icon]="actionIcons.create" />
-                        Create new {{entityName}}
+                        Create new {{ entityName }}
                     </button>
+                    <hr class="dropdown-divider mb-3" />
+                    <input
+                        type="search"
+                        class="form-control search-bar"
+                        placeholder="Search for {{ entityName }}s"
+                        [formControl]="searchControl"
+                        [attr.aria-describedby]="
+                            'search-info-{{dropdownToggleID}}'
+                        "
+                        [attr.aria-label]="'Search for ' + entityName + 's'"
+                    />
+                    <small
+                        ngbDropdownItem
+                        [id]="'search-info-{{dropdownToggleID}}'"
+                        class="fst-italic text"
+                        disabled
+                        >Results will be updated as you type.</small
+                    >
+                    <button
+                        *ngFor="let entity of availableEntities$ | async"
+                        ngbDropdownItem
+                        (click)="
+                            addEntity$.next(entity.id); dropdownToggle.focus()
+                        "
+                    >
+                        {{ entity.name }}
+                    </button>
+                    <div
+                        ngbDropdownItem
+                        class="text-body-secondary"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                        disabled
+                    >
+                        <p
+                            *ngIf="
+                                searchControl.value &&
+                                (availableEntities$ | async)?.length === 0
+                            "
+                            class="text mb-2"
+                        >
+                            No results found.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <lc-create-entity [entityType]="entityType" [create]="createEntity$"
+        <lc-create-entity
+            [entityType]="entityType"
+            [create]="createEntity$"
             [sourceID]="data.episode.source.id"
-            [episodeID]="data.episode.id" />
+            [episodeID]="data.episode.id"
+        />
     </ng-container>
 </ng-container>
