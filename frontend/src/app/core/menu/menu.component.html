@@ -1,31 +1,31 @@
-<nav class="navbar navbar-expand-lg bg-dark" aria-label="main navigation"
+<nav class="navbar navbar-expand-lg bg-blue border-bottom-gold" aria-label="main navigation"
     data-bs-theme="dark">
-    <div class="container-fluid">
-        <div class="navbar-brand">
-            Lettercraft & Epistolary Performance in Medieval Europe
+    <div class="container-fluid d-flex px-3 w-100">
+        <div class="navbar-brand lc-title text-gold fs-5">
+            Lettercraft
         </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+        <button class="navbar-toggler border-gold" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
             aria-controls="navbarLink"
             [attr.aria-expanded]="burgerActive" aria-label="Toggle navigation"
             (click)="toggleBurger()">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div id="navbarLinks" class="navbar-collapse" [ngbCollapse]="!burgerActive">
-            <ul class="navbar-nav me-auto">
+        <div id="navbarLinks" class="navbar-collapse d-flex justify-content-between" [ngbCollapse]="!burgerActive">
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link">
+                    <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link lc-body">
                         Home
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLink]="['/data']" routerLinkActive="active" class="nav-link">
+                    <a [routerLink]="['/data']" routerLinkActive="active" class="nav-link lc-body">
                         Browse
                     </a>
                 </li>
                 <li *ngIf="isContributor$ | async" class="nav-item">
-                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
+                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link lc-body">
                         Data entry
                     </a>
                 </li>

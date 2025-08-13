@@ -27,13 +27,13 @@
                 [routerLink]="['/login']"
                 routerLinkActive="active"
                 [queryParams]="linkActive.isActive ? null : { next: currentPath$ | async }"
-                class="nav-link"
+                class="nav-link lc-body"
             >
                 Sign in
             </a>
         </li>
         <li class="nav-item">
-            <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link">
+            <a [routerLink]="['/register']" routerLinkActive="active" class="nav-link lc-body">
                 Register
             </a>
         </li>
