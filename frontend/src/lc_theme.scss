@@ -1,0 +1,115 @@
+// Variables
+$lc_goldenrod: #b89000;
+$lc_deep_blue: #003d66;
+$lc_parchment: #f1e9d2;
+$lc_ink: #2c2416;
+$lc_burgundy: #722f37;
+$lc_accent_blue: #4a7ba7; // Currently unused
+
+
+// Typography
+.lc-title {
+    font-family: "Cinzel", serif;
+    font-weight: 500;
+}
+
+.lc-body {
+    font-family: "Crimson Text", serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.illuminated-initial {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    color: $lc_goldenrod;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.text-gold {
+    color: $lc_goldenrod;
+}
+
+.text-blue {
+    color: $lc_deep_blue;
+}
+
+.text-ink {
+    color: $lc_ink;
+}
+
+.text-burgundy {
+    color: $lc_burgundy;
+}
+
+// Backgrounds
+.bg-blue {
+    background-color: $lc_deep_blue;
+    color: $lc_goldenrod;
+}
+
+// Layout
+.lc-card {
+    padding: 3rem;
+    background: linear-gradient(
+        135deg,
+        $lc_parchment 0%,
+        lighten($lc_parchment, 15%) 100%
+    );
+    border: 1px solid $lc_goldenrod;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+
+    a {
+        width: 100%;
+        padding: 1rem 2rem;
+        border: 1px solid $lc_goldenrod;
+        border-radius: 4px;
+        background-color: $lc_deep_blue;
+        color: white;
+        font-weight: 500;
+
+        &:hover {
+            background-color: darken($lc_deep_blue, 5%);
+            color: $lc_goldenrod;
+        }
+    }
+}
+
+.border-gold {
+    border: 2px solid $lc_goldenrod;
+}
+
+.border-y-gold {
+    border-top: 2px solid $lc_goldenrod;
+    border-bottom: 2px solid $lc_goldenrod;
+}
+
+.border-top-gold {
+    border-top: 2px solid $lc_goldenrod;
+}
+
+.border-bottom-gold {
+    border-bottom: 2px solid $lc_goldenrod;
+}
+
+// Navigation
+.nav-link {
+    font-family: "Crimson Text", serif !important;
+    font-weight: 500;
+    color: $lc_parchment;
+    transition: all 0.3s ease;
+
+    &:hover {
+        color: $lc_goldenrod;
+        text-shadow: 0 0 5px $lc_goldenrod;
+    }
+
+    &.active {
+        color: $lc_goldenrod;
+    }
+}
+
+
+
