@@ -231,6 +231,7 @@ def test_resolve_source_image(
     result = graphql_client.execute(
         query, variables=variables, context=anonymous_request,
     )
+    assert result is not None
     assert result['data']['source']['image']['altText'] == source_image.alt_text
 
     image_url = result['data']['source']['image']['url']
