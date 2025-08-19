@@ -11,18 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='source',
-            name='edition_author',
-        ),
-        migrations.RemoveField(
-            model_name='source',
-            name='edition_title',
-        ),
-        migrations.RemoveField(
-            model_name='source',
-            name='medieval_author',
-        ),
         migrations.AddField(
             model_name='source',
             name='description_text',
@@ -32,11 +20,6 @@ class Migration(migrations.Migration):
             model_name='source',
             name='reference',
             field=models.TextField(blank=True, help_text='Bibliographical reference to the text', verbose_name='bibliographical reference'),
-        ),
-        migrations.AlterField(
-            model_name='source',
-            name='medieval_title',
-            field=models.CharField(blank=True, help_text='The original (Latin) title of the work', max_length=255),
         ),
         migrations.CreateModel(
             name='SourceImage',
