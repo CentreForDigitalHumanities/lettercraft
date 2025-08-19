@@ -55,9 +55,6 @@ class SourceQueries(ObjectType):
         queryset = SourceType.get_queryset(Source.objects, info)
         user: User = info.context.user
 
-        if user.is_superuser:
-            return queryset
-
         if editable:
             queryset = editable_sources(user)
 

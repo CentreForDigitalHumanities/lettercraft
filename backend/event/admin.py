@@ -1,13 +1,15 @@
 from django.contrib import admin
 from . import models
 from core import admin as core_admin
+from django.http.response import FileResponse
+import io
+from event.export_designators import export_designators
 
 
 @admin.register(models.EpisodeCategory)
 class EpisodeCategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
     search_fields = ["name", "description"]
-
 
 class EpisodeAgentAdmin(admin.StackedInline):
     model = models.EpisodeAgent
@@ -89,6 +91,20 @@ class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
         EpisodeLetterAdmin,
         EpisodeSpaceAdmin,
     ]
+
+    actions = ['download_designators']
+
+    @admin.action(description='Download designators from selected episodes')
+    def download_designators(self, request, queryset):
+        stream = io.StringIO()
+        export_designators(queryset, stream)
+        # convert to binary stream; use utf-16 encoding for MS Excel
+        bytes_stream = io.BytesIO(stream.getvalue().encode(encoding='utf-16'))
+        return FileResponse(
+            bytes_stream,
+            filename='designators.csv',
+            as_attachment=True
+        )
 
 
 @admin.register(models.Series)

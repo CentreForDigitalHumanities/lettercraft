@@ -1,8 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
-import { map, Observable, Observer, Subject, switchMap, tap, withLatestFrom } from "rxjs";
+import { combineLatest, map, Observable, startWith, Subject, switchMap, withLatestFrom, shareReplay } from "rxjs";
 import { entityTypeNames, formStatusSubject } from "../../shared/utils";
 import { actionIcons } from "@shared/icons";
-import { MutationResult } from "apollo-angular";
 import { FormService } from "../../shared/form.service";
 import {
     CreateEpisodeEntityLinkInput,
@@ -17,11 +16,18 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { splat, differenceBy } from "@shared/utils";
 import { ToastService } from "@services/toast.service";
 import { ApolloCache } from "@apollo/client/core";
+import { FormControl } from "@angular/forms";
 
 type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
 type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
 
 let nextID = 0;
+
+interface EntityItem {
+    __typename?: string;
+    id: string;
+    name: string;
+}
 
 @Component({
     selector: "lc-episode-entities-form",
@@ -33,8 +39,16 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
 
     data$: Observable<DataEntryEpisodeEntitiesQuery>;
 
-    linkedEntities$: Observable<{ id: string, name: string }[]>;
-    availableEntities$: Observable<{ name: string, id: string }[]>;
+    linkedEntities$: Observable<EntityItem[]>;
+    availableEntities$: Observable<EntityItem[]>;
+
+    searchControl = new FormControl<string>("", {
+        nonNullable: true
+    });
+    entitySearch$ = this.searchControl.valueChanges.pipe(
+        startWith(""),
+        shareReplay(1),
+    );
 
     addEntity$ = new Subject<string>();
     removeEntity$ = new Subject<string>();
@@ -43,11 +57,6 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     actionIcons = actionIcons;
     status$ = formStatusSubject();
     id = `episode-entities-${nextID++}`;
-
-    private mutationRequestObserver: Partial<Observer<MutationResult>> = {
-        next: this.onSuccess.bind(this),
-        error: this.onError.bind(this),
-    };
 
     constructor(
         private formService: FormService,
@@ -61,8 +70,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             map(result => result.data),
             takeUntilDestroyed(),
         );
-        this.availableEntities$ = this.data$.pipe(
-            map(this.availableEntities.bind(this))
+        this.availableEntities$ = combineLatest([this.data$, this.entitySearch$]).pipe(
+            map(([data, search]) => this.availableEntities(data, search))
         );
         this.linkedEntities$ = this.data$.pipe(
             map(this.linkedEntities.bind(this))
@@ -95,8 +104,8 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Gift]: 'gifts',
             [Entity.Letter]: 'letters',
             [Entity.Space]: 'spaces',
-        }
-        return keys[this.entityType]
+        };
+        return keys[this.entityType];
     }
 
     get entityTypeName(): EntityTypeName {
@@ -105,7 +114,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Gift]: 'GiftDescriptionType',
             [Entity.Letter]: 'LetterDescriptionType',
             [Entity.Space]: 'SpaceDescriptionType',
-        }
+        };
         return types[this.entityType];
     }
 
@@ -132,9 +141,10 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         };
         this.addMutation.mutate({ input }, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache),
-        }).pipe(
-            tap(() => this.status$.next('loading'))
-        ).subscribe(this.mutationRequestObserver);
+        }).subscribe({
+            next: () => this.onSuccess(),
+            error: (error) => this.onError(error, 'addEntity'),
+        });
     }
 
     removeEntity(entityID: string, episodeID: string): void {
@@ -147,37 +157,43 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
         this.removeMutation.mutate(data, {
             update: cache => this.updateCacheOnAddRemove(episodeID, entityID, cache)
         }).pipe(
-        ).subscribe(this.mutationRequestObserver)
+        ).subscribe({
+            next: () => this.onSuccess(),
+            error: (error) => this.onError(error, 'removeEntity'),
+        });
     }
 
     onSuccess() {
         this.status$.next('saved');
     }
 
-    onError(error: any) {
+    onError(error: unknown, operation: 'removeEntity' | 'addEntity') {
         console.error(error);
         this.toastService.show({
-            header: `Adding ${this.entityName} failed`,
-            body: `Could not add ${this.entityName}`,
+            header: `${operation === 'addEntity' ? 'Adding' : 'Removing'} ${this.entityName} failed`,
+            body: `Could not ${operation === 'addEntity' ? 'add' : 'remove'} ${this.entityName}`,
             type: 'danger',
-        })
+        });
         this.status$.next('error');
     }
 
-    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): { id: string, name: string }[] {
+    private linkedEntities(data: DataEntryEpisodeEntitiesQuery): EntityItem[] {
         return data.episode?.[this.entityListPath].map(link => link.entity) || [];
     }
 
     private availableEntities(
-        data: DataEntryEpisodeEntitiesQuery
-    ): { name: string, id: string }[] {
-        const allEntities: {
-            __typename?: string,
-            name: string,
-            id: string
-        }[] = data.episode?.source[this.entityListPath] || [];
+        data: DataEntryEpisodeEntitiesQuery,
+        searchValue = ""
+    ): EntityItem[] {
+        const allEntities: EntityItem[] = data.episode?.source[this.entityListPath] || [];
         const linkedEntities = this.linkedEntities(data);
-        return differenceBy(allEntities, linkedEntities, 'id');
+        const unlinkedEntities = differenceBy(allEntities, linkedEntities, 'id');
+
+        const foundEntities = searchValue
+            ? unlinkedEntities.filter(entity => entity.name.toLowerCase().includes(searchValue.toLowerCase()))
+            : unlinkedEntities;
+
+        return foundEntities.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     private updateCacheOnAddRemove(episodeID: string, entityID: string, cache: ApolloCache<unknown>) {

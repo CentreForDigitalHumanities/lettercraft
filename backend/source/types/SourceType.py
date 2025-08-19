@@ -101,12 +101,22 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
-        filters = Q(contributed_episodes__source=parent) | \
-            Q(contributed_agentdescriptions__source=parent) | \
-            Q(contributed_letterdescriptions__source=parent) | \
-            Q(contributed_giftdescriptions__source=parent) | \
-            Q(contributed_spacedescriptions__source=parent)
-        return User.objects.filter(filters).distinct()
+        def contributors_from(Model: Type[Model]):
+            return set(
+                contributor.id
+                for episode in Model.objects.filter(source=parent)
+                for contributor in episode.contributors.all()
+            )
+
+        user_ids = set.union(
+            contributors_from(Episode),
+            contributors_from(AgentDescription),
+            contributors_from(LetterDescription),
+            contributors_from(GiftDescription),
+            contributors_from(SpaceDescription),
+        )
+
+        return User.objects.filter(id__in=user_ids)
 
     @staticmethod
     def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:
