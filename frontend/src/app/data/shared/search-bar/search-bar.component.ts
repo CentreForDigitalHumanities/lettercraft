@@ -26,4 +26,8 @@ export class SearchBarComponent {
     public clearSearch(): void {
         this.searchControl.setValue("");
     }
+
+    public onSubmit(event: Event): void {
+        event.preventDefault();
+    }
 }
