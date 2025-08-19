@@ -1,8 +1,10 @@
 import pytest
 from django.core.handlers.wsgi import WSGIRequest
 from graphene.test import Client as GrapheneClient
+from django.test import Client
+from rest_framework import status
 
-from source.models import Source
+from source.models import Source, SourceImage
 from user.models import ContributorGroup, User
 
 
@@ -206,3 +208,33 @@ def test_resolve_public_source_editing_anonymous(
     assert (
         result["data"]["source"] is None
     ), "Public sources should not be accessible in editing interface without contributor access"
+
+
+def test_resolve_source_image(
+        client: Client,
+        graphql_client: GrapheneClient, anonymous_request: WSGIRequest,
+        source: Source, source_image: SourceImage,
+):
+    query = """
+        query Source($id: ID!) {
+            source(id: $id) {
+                id
+                image {
+                    url
+                    altText
+                    caption
+                }
+            }
+        }
+    """
+    variables = {"id": str(source.pk)}
+    result = graphql_client.execute(
+        query, variables=variables, context=anonymous_request,
+    )
+    assert result is not None
+    assert result['data']['source']['image']['altText'] == source_image.alt_text
+
+    image_url = result['data']['source']['image']['url']
+    response = client.get(image_url)
+    assert response.status_code == status.HTTP_200_OK
+

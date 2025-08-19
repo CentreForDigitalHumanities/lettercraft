@@ -16,20 +16,34 @@ class SourceContentsDateAdmin(admin.StackedInline):
     verbose_name = "Date (range) of described events"
     extra = 0
 
+class SourceImageAdmin(admin.StackedInline):
+    model = models.SourceImage
+    extra = 0
+    max_num = 1
 
 @admin.register(models.Source)
 class SourceAdmin(admin.ModelAdmin):
     list_filter = ["contributor_groups"]
-    list_display = ["name", "medieval_title", "edition_title", "is_public"]
-    fields = [
-        "name",
-        "medieval_title",
-        "medieval_author",
-        "edition_title",
-        "edition_author",
-        "is_public",
+    list_display = ["name", "is_public"]
+    fieldsets = [
+        (
+            None,
+            {
+                'fields': ['name', 'is_public'],
+            }
+        ), (
+            'Information for visitors',
+            {
+                'fields': [
+                    'medieval_title',
+                    'reference',
+                    'description_text',
+                ],
+            }
+        )
     ]
     inlines = [
+        SourceImageAdmin,
         SourceWrittenDateAdmin,
         SourceContentsDateAdmin,
     ]

@@ -12,45 +12,39 @@
 
         <lc-object-page-header [object]="source" [icon]="dataIcons.source" />
 
-        <p>
-            {{ source.name }} is one of the source texts that have been analysed
-            in the Lettercraft project.
-        </p>
-
         <lc-contributors [contributors]="source.contributors" />
 
-        <div class="card mb-4 mt-4">
-            <div class="card-body">
-                <h2 class="h5 card-title">Bibliographical information</h2>
+        <section class="mt-5 mb-5" *ngIf="source.descriptionText || source.image || source.reference">
+            <h2 class="mb-4">About this source</h2>
 
-                <ng-container
-                    *ngIf="source.medievalAuthor || source.medievalTitle"
-                >
-                    {{ source.medievalAuthor
-                    }}<ng-container
-                        *ngIf="source.medievalAuthor && source.medievalTitle"
-                        >, </ng-container
-                    ><em>{{ source.medievalTitle }}</em
-                    >.
-                </ng-container>
-                <ng-container
-                    *ngIf="source.editionAuthor || source.editionTitle"
-                >
-                    (Ed. {{ source.editionAuthor
-                    }}<ng-container
-                        *ngIf="source.editionAuthor && source.editionTitle"
-                        >, </ng-container
-                    >{{ source.editionTitle }}.)
-                </ng-container>
+            <div class="clearfix">
+                <figure *ngIf="source.image" class="figure float-md-end ms-4 mb-4">
+                    <img [src]="source.image.url" [alt]="source.image.altText"
+                        class="figure-img img-fluid">
+                    <figcaption class="figure-caption" [innerHTML]="source.image.caption">
+                    </figcaption>
+                </figure>
+
+                <div class="source-description" [innerHTML]="source.descriptionText"></div>
             </div>
-        </div>
 
-        <h2 class="mb-4">Epistolary episodes</h2>
+            <div class="card mb-4 mt-4 text-bg-light" *ngIf="source.reference">
+                <div class="card-body">
+                    <h3 class="h5 card-title mb-4">Bibliographical information</h3>
 
-        <lc-episode-preview
-            *ngFor="let episode of source.episodes"
-            [episode]="episode"
-        />
+                    <div [innerHTML]="source.reference"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-5 mb-5">
+            <h2 class="mb-4">Epistolary episodes</h2>
+
+            <lc-episode-preview
+                *ngFor="let episode of source.episodes"
+                [episode]="episode"
+            />
+        </section>
     </ng-container>
 
     <ng-template #noEpisode>
