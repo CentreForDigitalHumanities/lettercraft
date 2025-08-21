@@ -36,6 +36,7 @@ const routes: Routes = [
         path: 'home',
         title: SITE_NAME,
         component: HomeComponent,
+        data: { fullWidth: true }
     },
     {
         path: 'login',

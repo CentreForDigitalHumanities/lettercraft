@@ -2,7 +2,12 @@
     <lc-menu role="banner"></lc-menu>
     <lc-toast-container aria-live="polite" aria-atomic="true" />
     <main class="main-content">
-        <router-outlet></router-outlet>
+        <div [class]="(fullWidth$ | async) ? '' : 'container my-5'">
+            <router-outlet></router-outlet>
+        </div>
     </main>
-    <lc-footer role="contentinfo" class="is-hidden-print bg-blue p-5 border-top-gold" />
+    <lc-footer
+        role="contentinfo"
+        class="is-hidden-print bg-blue p-5 border-top-gold"
+    />
 </div>
