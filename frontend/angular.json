@@ -37,8 +37,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/lc_theme.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },
