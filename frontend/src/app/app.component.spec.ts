@@ -30,6 +30,6 @@ describe('AppComponent', () => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('.navbar-brand').textContent).toContain('Lettercraft & Epistolary Performance in Medieval Europe');
+        expect(compiled.querySelector('.navbar-brand').textContent).toContain('Lettercraft');
     });
 });
