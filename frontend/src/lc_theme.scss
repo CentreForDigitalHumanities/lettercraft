@@ -1,32 +1,40 @@
 // Variables
-$lc_joinquil: #FFCE1F;
+$lc_joinquil: #ffce1f;
 $lc_indigo: #003d66;
 $lc_parchment: #f1e9d2;
+$lc_floral_white: #faf8ef;
 $lc_ink: #2c2416;
 $lc_burgundy: #722f37;
-$lc_accent_blue: #4a7ba7; // Currently unused
-
-
 
 // Override Bootstrap defaults
 $primary: $lc_indigo;
 $secondary: $lc_joinquil;
-$link-color: $lc_parchment;
-$body-bg: $lc_parchment;
+$link-color: $lc_burgundy;
+$light: $lc_floral_white;
 
-
-
+$body-bg: $lc_floral_white;
+$body-color: $lc_ink;
 
 // Typography
-.lc-title {
-    font-family: "Cinzel", serif;
-    font-weight: 500;
-}
+$font-family-base: "Crimson Text", serif;
+$font-size-base: 1.2rem;
+$font-weight-normal: 500;
+$headings-font-family: "Cinzel", serif;
+$headings-font-weight: 500;
+$display-font-family: $headings-font-family;
+$display-font-weight: $headings-font-weight;
 
-.lc-body {
-    font-family: "Crimson Text", serif;
-    font-weight: 500;
-    font-size: 1.2rem;
+// Layout
+$card-border-color: $lc_burgundy;
+$card-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+$card-bg: $lc_parchment;
+
+$navbar-light-active-color: $lc_joinquil;
+$navbar-dark-active-color: $lc_joinquil;
+
+// Special classes
+.text-burgundy {
+    color: $lc_burgundy;
 }
 
 .illuminated-initial {
@@ -35,56 +43,6 @@ $body-bg: $lc_parchment;
     line-height: 1.5rem;
     color: $lc_burgundy;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.text-gold {
-    color: $lc_joinquil;
-}
-
-.text-blue {
-    color: $lc_indigo;
-}
-
-.text-ink {
-    color: $lc_ink;
-}
-
-.text-burgundy {
-    color: $lc_burgundy;
-}
-
-// Backgrounds
-.bg-blue {
-    background-color: $lc_indigo;
-    color: $lc_joinquil;
-}
-
-// Layout
-.lc-card {
-    padding: 3rem;
-    background: linear-gradient(
-        135deg,
-        $lc_parchment 0%,
-        lighten($lc_parchment, 15%) 100%
-    );
-    border: 1px solid $lc_joinquil;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
-    border-radius: 8px;
-
-    a {
-        width: 100%;
-        padding: 1rem 2rem;
-        border: 1px solid $lc_joinquil;
-        border-radius: 4px;
-        background-color: $lc_indigo;
-        color: white;
-        font-weight: 500;
-
-        &:hover {
-            background-color: darken($lc_indigo, 5%);
-            color: $lc_joinquil;
-        }
-    }
 }
 
 .border-gold {
@@ -106,20 +64,9 @@ $body-bg: $lc_parchment;
 
 // Navigation
 .nav-link {
-    font-family: "Crimson Text", serif !important;
-    font-weight: 500;
-    color: $lc_parchment;
     transition: all 0.3s ease;
 
     &:hover {
-        color: $lc_joinquil;
         text-shadow: 0 0 5px $lc_joinquil;
     }
-
-    &.active {
-        color: $lc_joinquil;
-    }
 }
-
-
-
