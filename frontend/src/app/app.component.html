@@ -2,7 +2,7 @@
     <lc-menu role="banner"></lc-menu>
     <lc-toast-container aria-live="polite" aria-atomic="true" />
     <main class="main-content">
-        <div [class]="(fullWidth$ | async) ? '' : 'container my-5'">
+        <div [class]="(fullSize$ | async) ? '' : 'container my-5'">
             <router-outlet></router-outlet>
         </div>
     </main>

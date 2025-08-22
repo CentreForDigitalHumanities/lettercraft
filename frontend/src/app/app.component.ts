@@ -13,8 +13,8 @@ export class AppComponent {
 
     public title = 'lettercraft';
 
-    public fullWidth$ = this.router.events.pipe(
+    public fullSize$ = this.router.events.pipe(
         filter(event => event instanceof NavigationEnd),
-        map(() => this.activatedRoute.firstChild?.snapshot.data['fullWidth'] === true)
+        map(() => this.activatedRoute.firstChild?.snapshot.data['fullSize'] === true)
     );
 }

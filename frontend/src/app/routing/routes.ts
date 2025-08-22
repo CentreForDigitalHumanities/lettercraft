@@ -36,7 +36,8 @@ const routes: Routes = [
         path: 'home',
         title: SITE_NAME,
         component: HomeComponent,
-        data: { fullWidth: true }
+        // Do not apply standard padding/margin for main content on the landing page.
+        data: { fullSize: true }
     },
     {
         path: 'login',
