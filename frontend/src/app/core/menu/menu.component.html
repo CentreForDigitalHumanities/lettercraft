@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg bg-blue border-bottom-gold" aria-label="main navigation"
+<nav class="navbar navbar-expand-lg bg-primary border-bottom-gold" aria-label="main navigation"
     data-bs-theme="dark">
     <div class="container-fluid d-flex px-3 w-100">
-        <div class="navbar-brand lc-title text-gold fs-5">
+        <div class="navbar-brand h4 pb-0 text-secondary">
             Lettercraft
         </div>
 
@@ -15,17 +15,17 @@
         <div id="navbarLinks" class="navbar-collapse d-flex justify-content-between" [ngbCollapse]="!burgerActive">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link lc-body">
+                    <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link">
                         Home
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a [routerLink]="['/data']" routerLinkActive="active" class="nav-link lc-body">
+                    <a [routerLink]="['/data']" routerLinkActive="active" class="nav-link">
                         Browse
                     </a>
                 </li>
                 <li *ngIf="isContributor$ | async" class="nav-item">
-                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link lc-body">
+                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
                         Data entry
                     </a>
                 </li>
