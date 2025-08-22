@@ -1,5 +1,5 @@
 from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean
-from typing import Optional
+from typing import Optional, Union
 from django.db.models import QuerySet
 from django.contrib.auth.models import AnonymousUser
 
