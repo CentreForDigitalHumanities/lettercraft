@@ -6,7 +6,7 @@ import re
 def move_data_to_description(apps, schema_editor):
     Source = apps.get_model('source', 'Source')
     for source in Source.objects.all():
-        source.description =  \
+        source.description_text =  \
             f'Source: {source.medieval_title}, {source.medieval_author}\n' \
             f'Edition: {source.edition_title}, {source.edition_author}'
         source.save()
@@ -15,7 +15,7 @@ def move_data_to_fields(apps, schema_editor):
     Source = apps.get_model('source', 'Source')
     pattern = re.compile(r'Source: (.+), (.+)\nEdition: (.+), (.+)')
     for source in Source.objects.all():
-        if match := re.search(pattern, source.description or ''):
+        if match := re.search(pattern, source.description_text or ''):
             medieval_title, medieval_author, edition_title, edition_author = match.groups()
             source.medieval_title = medieval_title
             source.medieval_author = medieval_author
