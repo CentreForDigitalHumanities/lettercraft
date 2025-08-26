@@ -18,7 +18,7 @@ def test_editable_sources_anonymous(source):
 
 
 def test_visible_sources(user, contributor_group, source):
-    assert source in visible_sources(user)
+    assert list(visible_sources(user)) == [source]
 
     contributor_group.sources.remove(source)
     assert source in visible_sources(user)

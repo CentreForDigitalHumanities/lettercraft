@@ -19,7 +19,8 @@ def editable_sources(
     if user.is_superuser:
         return sources.all()
 
-    return sources.filter(contributor_groups__users=user).distinct()
+    groups = user.contributor_groups.all()
+    return sources.filter(contributor_groups__in=groups).distinct()
 
 
 def can_edit_source(user: Union[User, AnonymousUser, None], source: Source) -> bool:
