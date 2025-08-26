@@ -8,7 +8,7 @@ from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from user.permissions import can_edit_source
+from user.permissions import can_edit_source, visible_sources
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
@@ -50,7 +50,8 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         queryset: QuerySet[Episode],
         info: ResolveInfo,
     ) -> QuerySet[Episode]:
-        return queryset.all()
+        sources = visible_sources(info.context.user)
+        return queryset.filter(source__in=sources)
 
     @staticmethod
     def resolve_agents(
