@@ -3,8 +3,8 @@ import { FormControl } from "@angular/forms";
 import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { ViewSourcesGQL, ViewSourcesPageGQL, ViewSourcesQuery } from "generated/graphql";
-import { map, distinctUntilChanged, startWith, filter, switchMap, shareReplay, BehaviorSubject, combineLatest } from "rxjs";
-
+import { map, distinctUntilChanged, startWith, filter, shareReplay } from "rxjs";
+import { PageResult } from "../utils/pagination";
 
 
 @Component({
@@ -30,11 +30,11 @@ export class SourceListComponent {
         this.query
     );
 
-    private ids$ = this.allSources$.pipe(
+    ids$ = this.allSources$.pipe(
         filter((state) => !state.loading),
         map((state) => state.data),
         filter(data => !!data),
-        map(data => data?.sources.map(src => src.id)),
+        map(data => data?.sources || []),
         shareReplay(),
     );
 
@@ -44,35 +44,14 @@ export class SourceListComponent {
         startWith(false)
     );
 
-    totalSize$ = this.ids$.pipe(
-        map(ids => ids?.length),
+    public pageResult = new PageResult(
+        this.ids$,
+        ids => this.pageQuery.watch({ ids }).valueChanges,
     );
-
-    private page$ = new BehaviorSubject<number>(0);
-
-    private pageResult$ = combineLatest([this.ids$, this.page$]).pipe(
-        map(([ids, page]) => ids ? this.slicePage(ids, page) : []),
-        switchMap(ids => this.pageQuery.watch({ ids }).result()),
-    )
-
-    public data$ = this.pageResult$.pipe(
-        filter((state) => !state.loading),
-        map((state) => state.data)
-    );
-
 
     constructor(
         private query: ViewSourcesGQL,
         private searchService: SearchService,
         private pageQuery: ViewSourcesPageGQL,
     ) {}
-
-    get page(): number { return this.page$.value }
-    set page(value: number) { this.page$.next(value) }
-
-    slicePage<T>(values: T[], page: number): T[] {
-        const start = this.pageSize * (page - 1);
-        const end = this.pageSize * page;
-        return values .slice(start, end);
-    }
 }
