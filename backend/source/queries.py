@@ -1,5 +1,5 @@
-from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean
-from typing import Optional, Union
+from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean, List, String
+from typing import Optional, Union, List as TList
 from django.db.models import QuerySet
 from django.contrib.auth.models import AnonymousUser
 
@@ -25,6 +25,7 @@ class SourceQueries(ObjectType):
         ),
         required=True,
         public_only=Boolean(),
+        ids=List(NonNull(String)),
     )
 
     @staticmethod
@@ -51,7 +52,12 @@ class SourceQueries(ObjectType):
 
     @staticmethod
     def resolve_sources(
-        root: None, info: ResolveInfo, editable=False, public_only=False, **kwargs: dict
+        root: None,
+        info: ResolveInfo,
+        editable=False,
+        public_only=False,
+        ids: Optional[TList[str]] = None,
+        **kwargs: dict
     ) -> QuerySet[Source]:
         queryset = SourceType.get_queryset(Source.objects.all(), info)
         user: User = info.context.user
@@ -61,5 +67,8 @@ class SourceQueries(ObjectType):
 
         if public_only:
             queryset = queryset.filter(is_public=True)
+
+        if ids:
+            queryset = queryset.filter(id__in=ids)
 
         return queryset
