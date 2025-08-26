@@ -7,7 +7,6 @@ from letter.models import GiftCategory, GiftDescription
 from letter.types.GiftCategoryType import GiftCategoryType
 from event.types.EpisodeGiftType import EpisodeGiftType
 from event.models import EpisodeGift
-from user.permissions import can_edit_source
 
 
 class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
@@ -25,12 +24,6 @@ class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
 
-    @classmethod
-    def get_queryset(
-        cls, queryset: QuerySet[GiftDescription], info: ResolveInfo
-    ) -> QuerySet[GiftDescription]:
-        return queryset.all()
-
     @staticmethod
     def resolve_categories(
         parent: GiftDescription, info: ResolveInfo
@@ -42,7 +35,3 @@ class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
         parent: GiftDescription, info: ResolveInfo
     ) -> QuerySet[EpisodeGift]:
         return EpisodeGift.objects.filter(gift=parent)
-
-    @staticmethod
-    def resolve_editable(parent: GiftDescription, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)

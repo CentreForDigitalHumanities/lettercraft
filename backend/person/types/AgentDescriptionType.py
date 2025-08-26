@@ -35,12 +35,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
 
-    @classmethod
-    def get_queryset(
-        cls, queryset: QuerySet[AgentDescription], info: ResolveInfo
-    ) -> QuerySet[AgentDescription]:
-        return queryset.all()
-
     @staticmethod
     def resolve_describes(
         parent: AgentDescription, info: ResolveInfo
@@ -62,7 +56,3 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     @staticmethod
     def resolve_identified(parent: AgentDescription, info: ResolveInfo) -> bool:
         return parent.identified()
-
-    @staticmethod
-    def resolve_editable(parent: AgentDescription, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)
