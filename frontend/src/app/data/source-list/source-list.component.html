@@ -12,10 +12,14 @@
 <ng-container *ngIf="data$ | async as data">
     <lc-search-bar
         [searchControl]="searchControl"
-        [loading$]="loading$"
+        [loading$]="allLoading$"
         labelText="Search sources by name, bibliographical reference or description"
         searchText="Searching sources"
     />
+
+    <ng-container *ngIf="totalSize$ | async as total">
+        <ngb-pagination [(page)]="page" [pageSize]="10" [collectionSize]="total" />
+    </ng-container>
 
     <ul class="list-group mt-2">
         <li
