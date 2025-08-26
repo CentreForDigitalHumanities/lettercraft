@@ -28,3 +28,10 @@ def can_edit_source(user: Union[User, AnonymousUser, None], source: Source) -> b
     """
 
     return source in editable_sources(user)
+
+
+def visible_sources(user: Union[User, AnonymousUser]) -> QuerySet[Source]:
+    if user.is_anonymous:
+        return Source.objects.filter(is_public=True)
+    else:
+        return Source.objects.filter(is_public=True).union(editable_sources(user))
