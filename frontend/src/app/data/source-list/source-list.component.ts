@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
@@ -13,8 +13,6 @@ import { PageResult } from "../utils/pagination";
     styleUrls: ["./source-list.component.scss"],
 })
 export class SourceListComponent {
-    pageSize = 10;
-
     breadcrumbs: Breadcrumb[] = [
         { link: "/", label: "Lettercraft" },
         { link: "/data", label: "Data" },
@@ -30,7 +28,7 @@ export class SourceListComponent {
         this.query
     );
 
-    ids$ = this.allSources$.pipe(
+    collection$ = this.allSources$.pipe(
         filter((state) => !state.loading),
         map((state) => state.data),
         filter(data => !!data),
@@ -38,20 +36,18 @@ export class SourceListComponent {
         shareReplay(),
     );
 
-    public allLoading$ = this.allSources$.pipe(
+    public collectionLoading$ = this.allSources$.pipe(
         map((state) => state.loading),
         distinctUntilChanged(),
         startWith(false)
     );
 
-    public pageResult = new PageResult(
-        this.ids$,
-        ids => this.pageQuery.watch({ ids }).valueChanges,
-    );
+    public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
 
     constructor(
         private query: ViewSourcesGQL,
         private searchService: SearchService,
         private pageQuery: ViewSourcesPageGQL,
+        private destroyRef: DestroyRef,
     ) {}
 }

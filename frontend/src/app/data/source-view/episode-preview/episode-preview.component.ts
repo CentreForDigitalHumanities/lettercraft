@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
-import { ViewEpisodesPageQuery, ViewSourceQuery } from 'generated/graphql';
+import { ViewEpisodesPageQuery, ViewSourceEpisodesPageQuery } from 'generated/graphql';
 
-type EpisodeWithEntities = NonNullable<ViewSourceQuery['source']>['episodes'][number];
+type EpisodeWithEntities = NonNullable<ViewSourceEpisodesPageQuery>['episodes'][number];
 type EpisodeWithSource = ViewEpisodesPageQuery['episodes'][number];
 
 type Episode = EpisodeWithEntities | EpisodeWithSource;

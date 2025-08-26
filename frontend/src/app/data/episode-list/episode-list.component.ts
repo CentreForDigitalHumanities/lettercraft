@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
@@ -44,14 +44,12 @@ export class EpisodeListComponent {
         map(data => data?.episodes || []),
     );
 
-    public pageResult = new PageResult(
-        this.collection$,
-        ids => this.pageQuery.watch({ids}).valueChanges,
-    );
+    public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
 
     constructor(
         private query: ViewEpisodesGQL,
         private pageQuery: ViewEpisodesPageGQL,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private destroyRef: DestroyRef,
     ) {}
 }

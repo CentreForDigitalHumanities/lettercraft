@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
@@ -34,13 +34,13 @@ export class SourceViewComponent {
     );
 
     episodesPageResult = new PageResult(
-        this.episodesCollection$,
-        ids => this.episodesPageQuery.watch({ids}).valueChanges,
+        this.episodesCollection$, this.episodesPageQuery, this.destroyRef,
     );
 
     constructor(
         private route: ActivatedRoute,
         private query: ViewSourceGQL,
         private episodesPageQuery: ViewSourceEpisodesPageGQL,
+        private destroyRef: DestroyRef,
     ) { }
 }

@@ -9,10 +9,10 @@
 </p>
 
 
-<ng-container *ngIf="ids$ | async as collection">
+<ng-container *ngIf="collection$ | async as collection">
     <lc-search-bar
         [searchControl]="searchControl"
-        [loading$]="allLoading$"
+        [loading$]="collectionLoading$"
         labelText="Search sources by name, bibliographical reference or description"
         searchText="Searching sources"
     />
