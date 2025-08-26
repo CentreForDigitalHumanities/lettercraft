@@ -63,9 +63,6 @@ class EventQueries(ObjectType):
         queryset = EpisodeType.get_queryset(Episode.objects, info)
         user: User = info.context.user
 
-        if user.is_superuser:
-            return queryset
-
         filters = Q()
         if source_id is not None:
             filters &= Q(source_id=source_id)
