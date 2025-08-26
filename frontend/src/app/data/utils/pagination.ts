@@ -6,7 +6,7 @@ interface HasID { id: string }
 export class PageResult<PageQuery> {
 
     pageSize = 10;
-    page$ = new BehaviorSubject<number>(0);
+    page$ = new BehaviorSubject<number>(1);
 
     totalSize$ = this.collection$.pipe(
         map(collection => collection?.length),
@@ -17,7 +17,6 @@ export class PageResult<PageQuery> {
     );
 
     public pageData$: Observable<PageQuery> = combineLatest([this.ids$, this.page$]).pipe(
-        filter(ids => !!ids),
         map(([ids, page]) => this.slicePage(ids, page)),
         filter(ids => !!ids.length),
         switchMap(ids => this.getPage(ids)),

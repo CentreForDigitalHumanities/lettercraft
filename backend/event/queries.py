@@ -1,8 +1,8 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean, String
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet, Q
 from event.models import Episode, EpisodeCategory, EpisodeEntity
-from typing import Optional, Union
+from typing import Optional, Union, List as TList
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
@@ -27,6 +27,7 @@ class EventQueries(ObjectType):
         source_id=ID(),
         editable=Boolean(),
         public_only=Boolean(),
+        ids=List(String),
     )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
@@ -56,6 +57,7 @@ class EventQueries(ObjectType):
         source_id: Optional[str] = None,
         editable=False,
         public_only=False,
+        ids: Optional[TList[str]] = [],
         **kwargs: dict,
     ) -> QuerySet[Episode]:
         queryset = EpisodeType.get_queryset(Episode.objects, info)
@@ -71,6 +73,8 @@ class EventQueries(ObjectType):
             filters &= Q(source__in=editable_sources(user))
         if public_only:
             filters &= Q(source__is_public=True)
+        if ids:
+            filters &= Q(id__in=ids)
 
         return queryset.filter(filters)
 
