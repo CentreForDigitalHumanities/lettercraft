@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AnonymousUser
-from user.permissions import editable_sources, visible_sources
+import pytest
+
+from user.permissions import editable_sources, visible_sources, can_edit_source
+from user.models import ContributorGroup
 
 
 def test_editable_sources(user, contributor_group, source):
@@ -34,3 +37,25 @@ def test_visible_sources_anonymous(source):
     source.is_public = False
     source.save()
     assert visible_sources(AnonymousUser()).exists() is False
+
+
+@pytest.mark.parametrize(
+    "is_superuser,in_group,has_access",
+    [
+        (True, True, True),
+        (True, False, True),
+        (False, True, True),
+        (False, False, False),
+    ],
+)
+def test_source_edit_permission(user, source, is_superuser, in_group, has_access):
+    if is_superuser:
+        user.is_superuser = True
+        user.save()
+
+    if in_group:
+        group = ContributorGroup.objects.create(name="test users")
+        group.users.add(user)
+        group.sources.add(source)
+
+    assert can_edit_source(user, source) == has_access
