@@ -17,9 +17,7 @@
         searchText="Searching sources"
     />
 
-    <ng-container *ngIf="pageResult.totalSize$ | async as total">
-        <ngb-pagination [(page)]="pageResult.page" [pageSize]="10" [collectionSize]="total" />
-    </ng-container>
+    <lc-paginator [pageResult]="pageResult" />
 
     <ul class="list-group mt-2" *ngIf="pageResult.pageData$ | async as pageData">
         <li
