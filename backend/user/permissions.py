@@ -12,7 +12,9 @@ MATCH_NONE = Q(pk__in=[])
 MATCH_ALL  = Q(pk__isnull=False)
 
 
-def editable_condition(user: Union[User, AnonymousUser, None]):
+type MaybeUser = Union[User, AnonymousUser, None]
+
+def editable_condition(user: MaybeUser):
     if not user or user.is_anonymous:
         return MATCH_NONE
     if user.is_superuser:
@@ -23,12 +25,12 @@ def editable_condition(user: Union[User, AnonymousUser, None]):
 
 
 def editable_sources(
-    user: Union[User, AnonymousUser, None], sources: QuerySet[Source] = Source.objects
+    user: MaybeUser, sources: QuerySet[Source] = Source.objects
 ) -> QuerySet[Source]:
     return sources.filter(editable_condition(user))
 
 
-def can_edit_source(user: Union[User, AnonymousUser, None], source: Source) -> bool:
+def can_edit_source(user: MaybeUser, source: Source) -> bool:
     """
     Whether a user is allowed to edit a source
     """
@@ -36,7 +38,7 @@ def can_edit_source(user: Union[User, AnonymousUser, None], source: Source) -> b
     return editable_sources(user).contains(source)
 
 
-def visible_condition(user: Union[User, AnonymousUser, None]):
+def visible_condition(user: MaybeUser):
     is_public = Q(is_public=True)
 
     if not user or user.is_anonymous:
@@ -47,3 +49,7 @@ def visible_condition(user: Union[User, AnonymousUser, None]):
 
 def visible_sources(user: Union[User, AnonymousUser]) -> QuerySet[Source]:
     return Source.objects.filter(visible_condition(user))
+
+
+def can_view_source(user: MaybeUser, source: Source) -> bool:
+    return visible_sources(user).contains(source)
