@@ -7,7 +7,7 @@ from graphql_app.types.FilterableListField import FilterableListField
 from source.models import Source
 from source.types.SourceType import SourceType
 from user.models import User
-from user.permissions import editable_sources
+from user.permissions import editable_sources, visible_sources
 
 
 class SourceQueries(ObjectType):
@@ -31,12 +31,14 @@ class SourceQueries(ObjectType):
     def resolve_source(
         root: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[Source]:
+        user: Union[User, AnonymousUser] = info.context.user
+
         try:
-            source = SourceType.get_queryset(Source.objects, info).get(pk=id)
+            sources = visible_sources(user)
+            source = SourceType.get_queryset(sources, info).get(pk=id)
         except Source.DoesNotExist:
             return None
 
-        user: Union[User, AnonymousUser] = info.context.user
 
         if user.is_superuser:
             return source
@@ -52,8 +54,8 @@ class SourceQueries(ObjectType):
     def resolve_sources(
         root: None, info: ResolveInfo, editable=False, public_only=False, **kwargs: dict
     ) -> QuerySet[Source]:
-        queryset = SourceType.get_queryset(Source.objects, info)
         user: User = info.context.user
+        queryset = SourceType.get_queryset(visible_sources(user), info)
 
         if editable:
             queryset = editable_sources(user)
