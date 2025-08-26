@@ -10,7 +10,7 @@ from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from graphql_app.types.FilterableListField import FilterableListField
 from user.models import User
-from user.permissions import editable_sources
+from user.permissions import editable_sources, can_view_source
 
 
 class EventQueries(ObjectType):
@@ -87,8 +87,9 @@ class EventQueries(ObjectType):
         entity: str,
         episode: str,
         entity_type: Entity,
-    ) -> EpisodeEntityLink:
+    ) -> Optional[EpisodeEntityLink]:
         Model = ENTITY_MODELS[entity_type]
         query = {Model.entity_field: entity, "episode": episode}
         obj: EpisodeEntity = Model.objects.get(**query)
-        return obj
+        if can_view_source(info.context.user, obj.episode.source):
+            return obj

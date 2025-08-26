@@ -1,4 +1,4 @@
-def test_episode_entity_link_query(graphql_client, episode, agent_description):
+def test_episode_entity_link_query(graphql_client, episode, agent_description, anonymous_request):
     result = graphql_client.execute(
         f"""
         query TestQuery {{
@@ -12,7 +12,8 @@ def test_episode_entity_link_query(graphql_client, episode, agent_description):
                 entity {{ name }}
             }}
         }}
-        """
+        """,
+        context=anonymous_request,
     )
     assert result["data"]["episodeEntityLink"]["episode"]["name"] == episode.name
     assert (
@@ -20,7 +21,7 @@ def test_episode_entity_link_query(graphql_client, episode, agent_description):
     )
 
 
-def test_episode_entity_link_query_letter(graphql_client, episode, letter_description):
+def test_episode_entity_link_query_letter(graphql_client, episode, letter_description, anonymous_request):
     result = graphql_client.execute(
         f"""
         query TestQuery {{
@@ -34,7 +35,8 @@ def test_episode_entity_link_query_letter(graphql_client, episode, letter_descri
                 entity {{ name }}
             }}
         }}
-        """
+        """,
+        context=anonymous_request,
     )
     assert result["data"]["episodeEntityLink"]["episode"]["name"] == episode.name
     assert (
