@@ -17,7 +17,7 @@ from letter.models import GiftDescription, LetterDescription
 from core.models import EntityDescription
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
-from user.permissions import can_edit_source
+from user.permissions import can_edit_source, visible_condition
 from user.types.UserType import UserType
 from user.models import User
 from source.types.SourceImageType import SourceImageType
@@ -67,7 +67,8 @@ class SourceType(DjangoObjectType):
     def get_queryset(
         cls, queryset: QuerySet[Source], info: ResolveInfo
     ) -> QuerySet[Source]:
-        return queryset
+        user = info.context.user
+        return queryset.filter(visible_condition(user))
 
     # It would be proper to decorate _entity_resolver() with @staticmethod,
     # but we are running Python 3.9 on the server, which does not support
