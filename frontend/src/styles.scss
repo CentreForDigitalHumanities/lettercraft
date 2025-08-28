@@ -40,3 +40,9 @@
 .subform-header {
     margin-top: 1.5rem;
 }
+
+.source-description blockquote {
+    @extend .blockquote;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
