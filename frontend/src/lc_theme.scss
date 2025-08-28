@@ -1,3 +1,7 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
 // Variables
 $lc_jonquil: #ffce1f;
 $lc_royal_blue: #003d66;
@@ -5,13 +9,27 @@ $lc_parchment: #f1e9d2;
 $lc_floral_white: #faf8ef;
 $lc_ink: #2c2416;
 $lc_burgundy: #722f37;
+$lc_jet: #3e3b3f;
+
+$lc-colors: (
+    "accent": $lc_jonquil,
+    "primary": $lc_royal_blue,
+    "secondary": $lc_jet,
+    "parchment": $lc_parchment,
+    "floral-white": $lc_floral_white,
+    "ink": $lc_ink,
+    "burgundy": $lc_burgundy,
+);
+
+$theme-colors: map-merge($theme-colors, $lc-colors);
+
+// The order of these imports matters!
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
 
 // Override Bootstrap defaults
-$primary: $lc_royal_blue;
-$secondary: $lc_jonquil;
 $link-color: $lc_burgundy;
-$light: $lc_floral_white;
-
 $body-bg: $lc_floral_white;
 $body-color: $lc_ink;
 
@@ -70,10 +88,6 @@ $navbar-light-active-color: $lc_jonquil;
 $navbar-dark-active-color: $lc_jonquil;
 
 // Special classes
-.text-burgundy {
-    color: $lc_burgundy;
-}
-
 .illuminated-initial {
     font-size: 5rem;
     font-weight: 700;
