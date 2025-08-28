@@ -1,14 +1,14 @@
 // Variables
-$lc_joinquil: #ffce1f;
-$lc_indigo: #003d66;
+$lc_jonquil: #ffce1f;
+$lc_royal_blue: #003d66;
 $lc_parchment: #f1e9d2;
 $lc_floral_white: #faf8ef;
 $lc_ink: #2c2416;
 $lc_burgundy: #722f37;
 
 // Override Bootstrap defaults
-$primary: $lc_indigo;
-$secondary: $lc_joinquil;
+$primary: $lc_royal_blue;
+$secondary: $lc_jonquil;
 $link-color: $lc_burgundy;
 $light: $lc_floral_white;
 
@@ -66,8 +66,8 @@ $card-border-color: $lc_burgundy;
 $card-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
 $card-bg: $lc_parchment;
 
-$navbar-light-active-color: $lc_joinquil;
-$navbar-dark-active-color: $lc_joinquil;
+$navbar-light-active-color: $lc_jonquil;
+$navbar-dark-active-color: $lc_jonquil;
 
 // Special classes
 .text-burgundy {
@@ -104,6 +104,6 @@ $navbar-dark-active-color: $lc_joinquil;
     transition: all 0.3s ease;
 
     &:hover {
-        text-shadow: 0 0 5px $lc_joinquil;
+        text-shadow: 0 0 5px $lc_jonquil;
     }
 }
