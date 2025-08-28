@@ -82,23 +82,6 @@ $navbar-dark-active-color: $lc_jonquil;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.border-gold {
-    border: 2px solid $lc_joinquil;
-}
-
-.border-y-gold {
-    border-top: 2px solid $lc_joinquil;
-    border-bottom: 2px solid $lc_joinquil;
-}
-
-.border-top-gold {
-    border-top: 2px solid $lc_joinquil;
-}
-
-.border-bottom-gold {
-    border-bottom: 2px solid $lc_joinquil;
-}
-
 // Navigation
 .nav-link {
     transition: all 0.3s ease;
