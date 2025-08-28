@@ -16,7 +16,44 @@ $body-bg: $lc_floral_white;
 $body-color: $lc_ink;
 
 // Typography
-$font-family-base: "Crimson Text", serif;
+@font-face {
+    font-family: "Cinzel";
+    src: url(assets/fonts/cinzel/Cinzel-Variable.ttf) format("truetype");
+    font-weight: 400 500 600 700 800 900;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Regular.ttf)
+        format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Bold.ttf) format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Italic.ttf)
+        format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-BoldItalic.ttf)
+        format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+$font-family-base: "Crimson Text";
 $font-size-base: 1.2rem;
 $font-weight-normal: 500;
 $headings-font-family: "Cinzel", serif;
