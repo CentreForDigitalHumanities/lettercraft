@@ -1,5 +1,3 @@
-@use "../../lc_theme" as *;
-
 .home-background {
     background-image: url("/assets/lc-bg.jpg");
     min-height: 75vh;
@@ -11,8 +9,4 @@
 .banner-content {
     max-width: 800px;
     margin: 0 auto;
-
-    p {
-        color: $lc-parchment;
-    }
 }
