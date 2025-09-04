@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     "user",
     "graphene_django",
     "graphql_app",
-    "django_filters"
+    "django_filters",
+    "django_prose_editor",
 ]
 
 MIDDLEWARE = [
@@ -185,3 +186,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = []
 PROXY_FRONTEND = None
+
+# File storage
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'data')

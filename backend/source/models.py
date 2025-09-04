@@ -1,4 +1,5 @@
 from django.db import models
+from django_prose_editor.fields import ProseEditorField
 
 from core.models import LettercraftDate
 
@@ -16,23 +17,29 @@ class Source(models.Model):
     )
 
     medieval_title = models.CharField(
-        max_length=255, blank=True, help_text="The original title of the work, if known"
+        max_length=255, blank=True, help_text="The original (Latin) title of the work",
     )
 
-    medieval_author = models.CharField(
-        max_length=255,
+    reference = ProseEditorField(
+        verbose_name="bibliographical reference",
         blank=True,
-        help_text="The name of the original author of the work, if known",
+        extensions={
+            "Italic": True,
+            "Link": True,
+        },
+        sanitize=True,
+        help_text="Bibliographical reference to the text",
     )
 
-    edition_title = models.CharField(
-        max_length=255,
+    description_text = ProseEditorField(
+        extensions={
+            "Bold": True, "Italic": True, "Underline": True,
+            "BulletList": True, "OrderedList": True, "Blockquote": True,
+            "Link": True,
+        },
+        sanitize=True,
         blank=True,
-        help_text="The title of the edition used for this source",
-    )
-
-    edition_author = models.CharField(
-        max_length=255, blank=True, help_text="The name of the author of the edition"
+        help_text="Background information about the text",
     )
 
     is_public = models.BooleanField(
@@ -40,8 +47,41 @@ class Source(models.Model):
         help_text="Whether this source is available in the browsing interface or not.",
     )
 
+
     def __str__(self):
         return self.name
+
+
+class SourceImage(models.Model):
+    '''
+    Image to be shown on a source page
+    '''
+
+    source = models.ForeignKey(
+        to=Source,
+        related_name='images',
+        on_delete=models.CASCADE,
+    )
+
+    image = models.ImageField(
+        upload_to='source_images/',
+        help_text="Image to be displayed on the source page",
+    )
+
+    alt_text = models.CharField(
+        max_length=256,
+        verbose_name="Text alternative",
+        help_text="Brief description of the image contents; shown when the image cannot be displayed",
+    )
+
+    caption = ProseEditorField(
+        max_length=256,
+        help_text="Image caption; shown below the image",
+        extensions={
+            "Italic": True, "Link": True,
+        },
+        sanitize=True,
+    )
 
 
 class SourceWrittenDate(LettercraftDate):

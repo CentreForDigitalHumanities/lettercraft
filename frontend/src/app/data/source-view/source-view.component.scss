@@ -1,0 +1,7 @@
+@import "bootstrap";
+
+@include media-breakpoint-up(md) {
+    figure {
+        max-width: 30%;
+    }
+}
