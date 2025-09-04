@@ -310,9 +310,8 @@ class Command(BaseCommand):
         source = Source.objects.create(
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             medieval_title=fake.sentence(),
-            medieval_author=fake.name(),
-            edition_title=fake.sentence(),
-            edition_author=fake.name(),
+            reference=fake.sentence(),
+            description_text=fake.text(),
             is_public=random.choice([True, False]),
         )
 
