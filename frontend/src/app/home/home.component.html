@@ -1,11 +1,11 @@
-<div class="home-background pt-5">
+<div class="home-background py-5">
     <header>
         <div class="container vh-100">
             <div class="row d-flex justify-content-end h-75 align-items-end">
                 <div class="col-lg-6 card">
                     <div class="card-body py-5 px-3 text-center">
                         <h1 class="display-4 text-primary mb-3">
-                            <span class="illuminated-initial">L</span>ettercraft
+                            Lettercraft
                         </h1>
                         <p class="lead">
                             'Lettercraft and Epistolary Performance in Early
@@ -22,7 +22,7 @@
     <section class="banner bg-primary p-5 mb-5 lh-lg border-accent border-2 border-top border-bottom">
         <h2 class="text-center text-accent mb-4">Welcome!</h2>
 
-        <div class="banner-content">
+        <div class="banner-content fs-5">
             <p class="text-parchment">
                 <b>
                     ‘Lettercraft and Epistolary Performance in Early Medieval
@@ -70,12 +70,12 @@
             <div class="row justify-content-center">
                 <div class="card col-lg-10">
                     <div class="card-body py-5 px-4">
-                        <h2 class="text-burgundy text-center mb-4">
+                        <h2 class="text-burgundy text-center mb-5">
                             Explore the Database
                         </h2>
                         <div class="row g-3 justify-content-center">
                             <div class="col-md-6 col-lg-4" *ngFor="let link of links">
-                                <a class="btn btn-primary w-100 py-3" [href]="link.href">
+                                <a class="btn btn-primary btn-lg w-100 py-3" [href]="link.href">
                                     <lc-icon [icon]="link.icon" class="me-2" />
                                     {{ link.label }}
                                 </a>
