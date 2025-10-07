@@ -1,7 +1,15 @@
 <ng-container *ngIf="data$ | async as data">
     <ng-container *ngIf="data.caseStudy as caseStudy">
-        <h1>{{caseStudy.name}}</h1>
+        <lc-breadcrumb [breadcrumbs]="breadCrumbs(caseStudy)" />
 
-        <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"></div>
+        <h1 class="mt-4">{{caseStudy.name}}</h1>
+
+        <p class="lead">
+            By {{authorNames(caseStudy)}}
+        </p>
+
+        <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
+            class="mt-5"
+        ></div>
     </ng-container>
 </ng-container>

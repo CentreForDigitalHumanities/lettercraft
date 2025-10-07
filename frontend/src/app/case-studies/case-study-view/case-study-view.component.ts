@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import {  ViewCaseStudyGQL, ViewCaseStudyQuery } from 'generated/graphql';
 import { map, switchMap } from 'rxjs';
+
+type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
 
 @Component({
   selector: 'lc-case-study-view',
@@ -23,7 +26,30 @@ export class CaseStudyViewComponent {
     ) {
     }
 
-    sanitizedContent(caseStudy: NonNullable<ViewCaseStudyQuery['caseStudy']>) {
+    authorNames(caseStudy: CaseStudy): string {
+        const names = caseStudy.authors.map(author => author.fullName);
+        const formatter = new Intl.ListFormat('en');
+        return formatter.format(names);
+    }
+
+    sanitizedContent(caseStudy: CaseStudy) {
         return this.sanitizer.bypassSecurityTrustHtml(caseStudy.content);
+    }
+
+    breadCrumbs(caseStudy: CaseStudy): Breadcrumb[] {
+        return [
+            {
+                'label': 'Lettercraft',
+                link: '/'
+            },
+            {
+                'label': 'Case studies',
+                link: '/case-studies',
+            },
+            {
+                'label': caseStudy.name,
+                link: '.',
+            }
+        ]
     }
 }
