@@ -22,18 +22,18 @@ export class EpisodeListComponent {
         nonNullable: true,
     });
 
-    private search$ = this.searchService.createSearch<ViewEpisodesQuery>(
+    private searchResult$ = this.searchService.createSearch<ViewEpisodesQuery>(
         this.searchControl.valueChanges,
         this.query
     );
 
-    public collectionData$ = this.search$.pipe(
+    public collectionData$ = this.searchResult$.pipe(
         filter((state) => !state.loading),
         map((state) => state.data),
-        shareReplay(),
+        shareReplay(1),
     );
 
-    public loading$ = this.search$.pipe(
+    public loading$ = this.searchResult$.pipe(
         map((state) => state.loading),
         distinctUntilChanged(),
         startWith(false)

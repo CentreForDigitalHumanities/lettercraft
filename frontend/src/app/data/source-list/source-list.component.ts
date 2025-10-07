@@ -23,20 +23,20 @@ export class SourceListComponent {
         nonNullable: true,
     });
 
-    private allSources$ = this.searchService.createSearch<ViewSourcesQuery>(
+    private searchResult$ = this.searchService.createSearch<ViewSourcesQuery>(
         this.searchControl.valueChanges,
         this.query
     );
 
-    collection$ = this.allSources$.pipe(
+    collection$ = this.searchResult$.pipe(
         filter((state) => !state.loading),
         map((state) => state.data),
         filter(data => !!data),
         map(data => data?.sources || []),
-        shareReplay(),
+        shareReplay(1),
     );
 
-    public collectionLoading$ = this.allSources$.pipe(
+    public collectionLoading$ = this.searchResult$.pipe(
         map((state) => state.loading),
         distinctUntilChanged(),
         startWith(false)

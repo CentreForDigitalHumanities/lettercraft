@@ -27,7 +27,7 @@ class EventQueries(ObjectType):
         source_id=ID(),
         editable=Boolean(),
         public_only=Boolean(),
-        ids=List(String),
+        ids=List(NonNull(String)),
     )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
