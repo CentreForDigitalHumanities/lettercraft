@@ -12,8 +12,6 @@ from event.models import EpisodeGift
 class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(GiftCategoryType), required=True)
     episodes = List(NonNull(EpisodeGiftType), required=True)
-    # Computed
-    editable = Boolean(required=True)
 
     class Meta:
         model = GiftDescription

@@ -2,7 +2,7 @@ import graphene
 from core.models import EntityDescription
 from core.types.AbstractDjangoObjectType import AbstractDjangoObjectType
 from core.types.NamedType import NamedType
-from graphene import List, ResolveInfo, NonNull
+from graphene import List, ResolveInfo, NonNull, Boolean
 from django.db.models import QuerySet
 
 from user.models import User
@@ -17,6 +17,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     """
 
     contributors = List(NonNull(UserType), required=True)
+    editable = Boolean(required=True)
 
     class Meta:
         model = EntityDescription

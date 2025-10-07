@@ -28,7 +28,6 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
     spaces = List(NonNull("event.types.EpisodeSpaceType.EpisodeSpaceType"), required=True)
     letters = List(NonNull("event.types.EpisodeLetterType.EpisodeLetterType"), required=True)
     gifts = List(NonNull("event.types.EpisodeGiftType.EpisodeGiftType"), required=True)
-    editable = Boolean(required=True)
 
     class Meta:
         model = Episode
@@ -43,15 +42,6 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
         filterset_class = EpisodeFilter
-
-    @classmethod
-    def get_queryset(
-        cls,
-        queryset: QuerySet[Episode],
-        info: ResolveInfo,
-    ) -> QuerySet[Episode]:
-        sources = visible_sources(info.context.user)
-        return queryset.filter(source__in=sources)
 
     @staticmethod
     def resolve_agents(
@@ -83,7 +73,3 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         parent: Episode, info: ResolveInfo
     ) -> QuerySet[EpisodeCategory]:
         return parent.categories.all()
-
-    @staticmethod
-    def resolve_editable(parent: Episode, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)

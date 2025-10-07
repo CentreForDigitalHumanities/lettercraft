@@ -20,7 +20,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     location = Field(AgentDescriptionLocationType)
     episodes = List(NonNull(EpisodeAgentType), required=True)
     identified = Boolean(required=True)
-    editable = Boolean(required=True)
 
     class Meta:
         model = AgentDescription

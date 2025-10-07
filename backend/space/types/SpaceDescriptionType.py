@@ -34,8 +34,6 @@ class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):
 
     episodes = List(NonNull(EpisodeSpaceType), required=True)
 
-    editable = Boolean(required=True)
-
     class Meta:
         model = SpaceDescription
         fields = [

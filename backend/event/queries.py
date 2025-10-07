@@ -88,7 +88,7 @@ class EventQueries(ObjectType):
         entity: str,
         episode: str,
         entity_type: Entity,
-    ) -> Optional[EpisodeEntityLink]:
+    ) -> Optional[EpisodeEntity]:
         Model = ENTITY_MODELS[entity_type]
         query = {Model.entity_field: entity, "episode": episode}
         obj: EpisodeEntity = Model.objects.get(**query)

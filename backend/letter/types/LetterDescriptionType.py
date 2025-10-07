@@ -11,8 +11,6 @@ from event.types.EpisodeLetterType import EpisodeLetterType
 class LetterDescriptionType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(LetterCategoryType), required=True)
     episodes = List(NonNull(EpisodeLetterType), required=True)
-    # Computed
-    editable = Boolean(required=True)
 
     class Meta:
         model = LetterDescription
