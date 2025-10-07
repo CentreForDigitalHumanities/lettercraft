@@ -1,4 +1,4 @@
-import { Component, SecurityContext } from '@angular/core';
+import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {  ViewCaseStudyGQL, ViewCaseStudyQuery } from 'generated/graphql';
@@ -24,6 +24,6 @@ export class CaseStudyViewComponent {
     }
 
     sanitizedContent(caseStudy: NonNullable<ViewCaseStudyQuery['caseStudy']>) {
-        return this.sanitizer.sanitize(SecurityContext.HTML, caseStudy.content);
+        return this.sanitizer.bypassSecurityTrustHtml(caseStudy.content);
     }
 }
