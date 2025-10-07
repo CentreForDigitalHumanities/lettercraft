@@ -5,5 +5,9 @@ query ViewCaseStudy($id: ID!) {
         authors { fullName }
         date
         content
+        sources {
+            id
+            name
+        }
     }
 }

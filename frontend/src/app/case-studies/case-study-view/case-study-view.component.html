@@ -8,6 +8,21 @@
             By {{authorNames(caseStudy)}}
         </p>
 
+        <p>
+            {{caseStudy.date | date}}
+        </p>
+
+        <p *ngIf="caseStudy.sources?.length">
+            This is a case study based on
+            <span *ngFor="let source of caseStudy.sources">
+                <a [routerLink]="['/data/sources', source.id]" class="icon-link">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{source.name}}
+                </a>
+            </span>.
+        </p>
+
+
         <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
             class="mt-5 text-justify"
         ></div>
