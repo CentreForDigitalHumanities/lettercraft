@@ -73,56 +73,11 @@
                         <h2 class="text-burgundy text-center mb-4">
                             Explore the Database
                         </h2>
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon icon="book" class="me-2" />
-                                    Principles
-                                </a>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon icon="search" class="me-2" />
-                                    Browse episodes
-                                </a>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon
-                                        icon="file-text"
-                                        class="me-2"
-                                    />Browse sources
-                                </a>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon
-                                        icon="alphabet"
-                                        class="me-2"
-                                    />Terminology
-                                </a>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon
-                                        icon="journal-text"
-                                        class="me-2"
-                                    />Lettercraft stories
-                                </a>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon icon="people" class="me-2" />Team
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row mt-3 justify-content-center">
-                            <div class="col-md-6 col-lg-4">
-                                <a class="btn btn-primary w-100 py-3" href="#">
-                                    <lc-icon
-                                        icon="envelope"
-                                        class="me-2"
-                                    />Contact
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-md-6 col-lg-4" *ngFor="let link of links">
+                                <a class="btn btn-primary w-100 py-3" [href]="link.href">
+                                    <lc-icon [icon]="link.icon" class="me-2" />
+                                    {{ link.label }}
                                 </a>
                             </div>
                         </div>
