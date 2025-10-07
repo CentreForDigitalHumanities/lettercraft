@@ -9,17 +9,19 @@
 </p>
 
 
-<ng-container *ngIf="data$ | async as data">
+<ng-container *ngIf="collection$ | async as collection">
     <lc-search-bar
         [searchControl]="searchControl"
-        [loading$]="loading$"
+        [loading$]="collectionLoading$"
         labelText="Search sources by name, bibliographical reference or description"
         searchText="Searching sources"
     />
 
-    <ul class="list-group mt-2">
+    <lc-paginator [pageResult]="pageResult" />
+
+    <ul class="list-group mt-2" *ngIf="pageResult.pageData$ | async as pageData">
         <li
-            *ngFor="let source of data.sources"
+            *ngFor="let source of pageData.sources"
             class="list-group-item list-group-item-action"
         >
             <div class="d-flex align-items-center">
@@ -36,7 +38,7 @@
         </li>
     </ul>
 
-    <div *ngIf="data.sources.length === 0" class="mt-3 text-center">
+    <div *ngIf="collection.length === 0" class="mt-3 text-center">
         <p class="text-muted">No sources found matching "{{ searchControl.value }}."</p>
     </div>
 </ng-container>

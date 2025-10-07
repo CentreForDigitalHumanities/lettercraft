@@ -40,10 +40,14 @@
         <section class="mt-5 mb-5">
             <h2 class="mb-4">Epistolary episodes</h2>
 
-            <lc-episode-preview
-                *ngFor="let episode of source.episodes"
-                [episode]="episode"
-            />
+            <lc-paginator [pageResult]="episodesPageResult" />
+
+            <ng-container *ngIf="episodesPageResult.pageData$ | async as pageData">
+                <lc-episode-preview
+                    *ngFor="let episode of pageData.episodes"
+                    [episode]="episode"
+                />
+            </ng-container>
         </section>
     </ng-container>
 

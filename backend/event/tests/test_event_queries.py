@@ -59,3 +59,21 @@ def test_episodes_query(graphql_client, episode, anonymous_request):
 
     result = graphql_client.execute(query, context=anonymous_request)
     assert result["data"]["episodes"] == []
+
+
+def test_episodes_ids_filter(graphql_client, episode, episode_2, anonymous_request):
+    query = f"""
+    query Test {{
+        episodes(ids: ["{episode.id}", "{episode_2.id}"]) {{ id }}
+    }}
+    """
+    result = graphql_client.execute(query, context=anonymous_request)
+    assert len(result["data"]["episodes"]) == 2
+
+    query_2 = f"""
+    query Test {{
+        episodes(ids: ["{episode.id}"]) {{ id }}
+    }}
+    """
+    result = graphql_client.execute(query_2, context=anonymous_request)
+    assert len(result["data"]["episodes"]) == 1

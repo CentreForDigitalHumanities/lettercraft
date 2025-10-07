@@ -1,6 +1,12 @@
 query ViewEpisodes($search: String) {
   episodes(search: $search, publicOnly: true, ordering: "source__name, _order") {
     id
+  }
+}
+
+query ViewEpisodesPage($ids: [String!]) {
+  episodes(ids: $ids) {
+    id
     name
     summary
     categories {

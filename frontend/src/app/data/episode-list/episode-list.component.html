@@ -8,7 +8,7 @@
     it.
 </p>
 
-<ng-container *ngIf="data$ | async as data">
+<ng-container *ngIf="collectionData$ | async as data">
     <lc-search-bar
         [searchControl]="searchControl"
         [loading$]="loading$"
@@ -16,10 +16,14 @@
         searchText="Searching episodes"
     />
 
-    <lc-episode-preview
-        *ngFor="let episode of data.episodes"
-        [episode]="episode"
-    />
+    <lc-paginator [pageResult]="pageResult" />
+
+    <ng-container *ngIf="pageResult.pageData$ | async as pageData">
+        <lc-episode-preview
+            *ngFor="let episode of pageData.episodes"
+            [episode]="episode"
+        />
+    </ng-container>
 
     <div *ngIf="data.episodes.length === 0" class="mt-3 text-center">
         <p class="text-muted">

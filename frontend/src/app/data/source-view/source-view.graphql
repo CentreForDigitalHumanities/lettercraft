@@ -14,54 +14,60 @@ query ViewSource($id: ID!) {
         }
         episodes {
             id
-            name
-            summary
-            categories {
-                id
-                name
-            }
-            book
-            chapter
-            contributors {
-                id
-                fullName
-            }
-            page
-            agents {
-                id
-                agent {
-                    id
-                    name
-                    isGroup
-                    identified
-                }
-            }
-            gifts {
-                id
-                gift {
-                    id
-                    name
-                }
-            }
-            letters {
-                id
-                letter {
-                    id
-                    name
-                }
-            }
-            spaces {
-                id
-                space {
-                    id
-                    name
-                    hasIdentifiableFeatures
-                }
-            }
         }
         contributors {
             id
             fullName
+        }
+    }
+}
+
+query ViewSourceEpisodesPage($ids: [String!]) {
+    episodes(ids: $ids) {
+        id
+        name
+        summary
+        categories {
+            id
+            name
+        }
+        book
+        chapter
+        contributors {
+            id
+            fullName
+        }
+        page
+        agents {
+            id
+            agent {
+                id
+                name
+                isGroup
+                identified
+            }
+        }
+        gifts {
+            id
+            gift {
+                id
+                name
+            }
+        }
+        letters {
+            id
+            letter {
+                id
+                name
+            }
+        }
+        spaces {
+            id
+            space {
+                id
+                name
+                hasIdentifiableFeatures
+            }
         }
     }
 }
