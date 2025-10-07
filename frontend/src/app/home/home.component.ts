@@ -12,8 +12,8 @@ export class HomeComponent {
     links = [
         {
             label: 'Principles',
-            icon: 'book',
-            href: 'file-text',
+            icon: 'file-text',
+            href: undefined,
         },
         {
             label: 'Browse episodes',
