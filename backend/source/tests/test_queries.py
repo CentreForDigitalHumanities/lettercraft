@@ -36,7 +36,7 @@ def test_sources_query(
     graphql_client, user, source, user_request, anonymous_request, contributor_group
 ):
 
-    other_source = Source.objects.create(name="Pat & Mat")
+    other_source = Source.objects.create(name="Pat & Mat", is_public=True)
 
     result_all = graphql_client.execute(
         "query AllSources { sources { id } }", context=user_request

@@ -1,8 +1,8 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean, String
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import QuerySet, Q
 from event.models import Episode, EpisodeCategory, EpisodeEntity
-from typing import Optional, Union
+from typing import Optional, Union, List as TList
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 from event.types.EpisodeType import EpisodeType
 from event.types.EpisodeEntityLink import EpisodeEntityLink
@@ -10,7 +10,7 @@ from core.types.entity import Entity
 from core.entity_models import ENTITY_MODELS
 from graphql_app.types.FilterableListField import FilterableListField
 from user.models import User
-from user.permissions import editable_sources
+from user.permissions import editable_sources, can_view_source
 
 
 class EventQueries(ObjectType):
@@ -27,6 +27,7 @@ class EventQueries(ObjectType):
         source_id=ID(),
         editable=Boolean(),
         public_only=Boolean(),
+        ids=List(NonNull(String)),
     )
     episode_categories = List(NonNull(EpisodeCategoryType), required=True)
     episode_entity_link = Field(
@@ -56,13 +57,11 @@ class EventQueries(ObjectType):
         source_id: Optional[str] = None,
         editable=False,
         public_only=False,
+        ids: Optional[TList[str]] = [],
         **kwargs: dict,
     ) -> QuerySet[Episode]:
         queryset = EpisodeType.get_queryset(Episode.objects, info)
         user: User = info.context.user
-
-        if user.is_superuser:
-            return queryset
 
         filters = Q()
         if source_id is not None:
@@ -71,6 +70,8 @@ class EventQueries(ObjectType):
             filters &= Q(source__in=editable_sources(user))
         if public_only:
             filters &= Q(source__is_public=True)
+        if ids:
+            filters &= Q(id__in=ids)
 
         return queryset.filter(filters)
 
@@ -87,8 +88,9 @@ class EventQueries(ObjectType):
         entity: str,
         episode: str,
         entity_type: Entity,
-    ) -> EpisodeEntityLink:
+    ) -> Optional[EpisodeEntity]:
         Model = ENTITY_MODELS[entity_type]
         query = {Model.entity_field: entity, "episode": episode}
         obj: EpisodeEntity = Model.objects.get(**query)
-        return obj
+        if can_view_source(info.context.user, obj.episode.source):
+            return obj

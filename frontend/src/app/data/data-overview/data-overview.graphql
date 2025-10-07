@@ -1,6 +1,12 @@
 query ViewSources($search: String) {
     sources(search: $search, publicOnly: true) {
         id
+    }
+}
+
+query ViewSourcesPage($ids: [String!]) {
+    sources(ids: $ids) {
+        id
         name
         medievalTitle
         numOfEpisodes

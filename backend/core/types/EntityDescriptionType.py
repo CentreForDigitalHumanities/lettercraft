@@ -2,13 +2,13 @@ import graphene
 from core.models import EntityDescription
 from core.types.AbstractDjangoObjectType import AbstractDjangoObjectType
 from core.types.NamedType import NamedType
-from graphene import List, ResolveInfo, NonNull
+from graphene import List, ResolveInfo, NonNull, Boolean
 from django.db.models import QuerySet
 
 from user.models import User
 from user.types.UserType import UserType
 from core.types.entity import EntityDescription as EntityDescriptionInterface
-
+from user.permissions import visible_sources, can_edit_source
 
 class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     """
@@ -17,6 +17,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     """
 
     contributors = List(NonNull(UserType), required=True)
+    editable = Boolean(required=True)
 
     class Meta:
         model = EntityDescription
@@ -30,11 +31,25 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
         ] + NamedType.fields()
         interfaces = (EntityDescriptionInterface,)
 
+    @classmethod
+    def get_queryset(
+        cls, queryset: QuerySet[EntityDescription], info: ResolveInfo
+    ) -> QuerySet[EntityDescription]:
+        sources = visible_sources(info.context.user)
+        return queryset.filter(source__in=sources)
+
+
     @staticmethod
     def resolve_contributors(
         parent: EntityDescription, info: ResolveInfo
     ) -> QuerySet[User]:
         return parent.contributors.all()
+
+
+    @staticmethod
+    def resolve_editable(parent: EntityDescription, info: ResolveInfo) -> bool:
+        return can_edit_source(info.context.user, parent.source)
+
 
 
 class CreateEntityDescriptionInput(graphene.InputObjectType):
