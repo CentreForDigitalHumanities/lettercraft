@@ -3,60 +3,71 @@ query ViewSource($id: ID!) {
         id
         name
         editable
-        editionAuthor
-        editionTitle
-        medievalAuthor
         medievalTitle
+        reference
+        descriptionText
+        image {
+            id
+            url
+            altText
+            caption
+        }
         episodes {
             id
-            name
-            summary
-            categories {
-                id
-                name
-            }
-            book
-            chapter
-            contributors {
-                id
-                fullName
-            }
-            page
-            agents {
-                id
-                agent {
-                    id
-                    name
-                    isGroup
-                    identified
-                }
-            }
-            gifts {
-                id
-                gift {
-                    id
-                    name
-                }
-            }
-            letters {
-                id
-                letter {
-                    id
-                    name
-                }
-            }
-            spaces {
-                id
-                space {
-                    id
-                    name
-                    hasIdentifiableFeatures
-                }
-            }
         }
         contributors {
             id
             fullName
+        }
+    }
+}
+
+query ViewSourceEpisodesPage($ids: [String!]) {
+    episodes(ids: $ids) {
+        id
+        name
+        summary
+        categories {
+            id
+            name
+        }
+        book
+        chapter
+        contributors {
+            id
+            fullName
+        }
+        page
+        agents {
+            id
+            agent {
+                id
+                name
+                isGroup
+                identified
+            }
+        }
+        gifts {
+            id
+            gift {
+                id
+                name
+            }
+        }
+        letters {
+            id
+            letter {
+                id
+                name
+            }
+        }
+        spaces {
+            id
+            space {
+                id
+                name
+                hasIdentifiableFeatures
+            }
         }
     }
 }

@@ -1,9 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { ViewSourcesGQL, ViewSourcesQuery } from "generated/graphql";
-import { map, distinctUntilChanged, startWith, filter } from "rxjs";
+import { ViewSourcesGQL, ViewSourcesPageGQL, ViewSourcesQuery } from "generated/graphql";
+import { map, distinctUntilChanged, startWith, filter, shareReplay } from "rxjs";
+import { PageResult } from "../utils/pagination";
+
 
 @Component({
     selector: "lc-source-list",
@@ -21,24 +23,31 @@ export class SourceListComponent {
         nonNullable: true,
     });
 
-    private search$ = this.searchService.createSearch<ViewSourcesQuery>(
+    private searchResult$ = this.searchService.createSearch<ViewSourcesQuery>(
         this.searchControl.valueChanges,
         this.query
     );
 
-    public data$ = this.search$.pipe(
+    collection$ = this.searchResult$.pipe(
         filter((state) => !state.loading),
-        map((state) => state.data)
+        map((state) => state.data),
+        filter(data => !!data),
+        map(data => data?.sources || []),
+        shareReplay(1),
     );
 
-    public loading$ = this.search$.pipe(
+    public collectionLoading$ = this.searchResult$.pipe(
         map((state) => state.loading),
         distinctUntilChanged(),
         startWith(false)
     );
 
+    public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
+
     constructor(
         private query: ViewSourcesGQL,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private pageQuery: ViewSourcesPageGQL,
+        private destroyRef: DestroyRef,
     ) {}
 }

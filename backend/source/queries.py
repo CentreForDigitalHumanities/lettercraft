@@ -1,5 +1,5 @@
-from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean
-from typing import Optional
+from graphene import ID, Field, NonNull, ObjectType, ResolveInfo, Boolean, List, String
+from typing import Optional, Union, List as TList
 from django.db.models import QuerySet
 from django.contrib.auth.models import AnonymousUser
 
@@ -25,18 +25,20 @@ class SourceQueries(ObjectType):
         ),
         required=True,
         public_only=Boolean(),
+        ids=List(NonNull(String)),
     )
 
     @staticmethod
     def resolve_source(
         root: None, info: ResolveInfo, id: str, editable=False
     ) -> Optional[Source]:
+        user: Union[User, AnonymousUser] = info.context.user
+
         try:
-            source = SourceType.get_queryset(Source.objects, info).get(pk=id)
+            source = SourceType.get_queryset(Source.objects.all(), info).get(pk=id)
         except Source.DoesNotExist:
             return None
 
-        user: Union[User, AnonymousUser] = info.context.user
 
         if user.is_superuser:
             return source
@@ -50,9 +52,14 @@ class SourceQueries(ObjectType):
 
     @staticmethod
     def resolve_sources(
-        root: None, info: ResolveInfo, editable=False, public_only=False, **kwargs: dict
+        root: None,
+        info: ResolveInfo,
+        editable=False,
+        public_only=False,
+        ids: Optional[TList[str]] = None,
+        **kwargs: dict
     ) -> QuerySet[Source]:
-        queryset = SourceType.get_queryset(Source.objects, info)
+        queryset = SourceType.get_queryset(Source.objects.all(), info)
         user: User = info.context.user
 
         if editable:
@@ -60,5 +67,8 @@ class SourceQueries(ObjectType):
 
         if public_only:
             queryset = queryset.filter(is_public=True)
+
+        if ids:
+            queryset = queryset.filter(id__in=ids)
 
         return queryset
