@@ -1,0 +1,6 @@
+query ViewContributor($id: ID!) {
+    userDescription(id: $id) {
+        id
+        fullName
+    }
+}

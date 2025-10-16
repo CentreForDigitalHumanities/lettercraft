@@ -13,6 +13,7 @@ import { DataEntryModule } from './data-entry/data-entry.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
+import { ContributorsModule } from './contributors/contributors.module';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { CaseStudiesModule } from './case-studies/case-studies.module';
         FontAwesomeModule,
         DataModule,
         CaseStudiesModule,
+        ContributorsModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
