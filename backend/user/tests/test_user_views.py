@@ -13,6 +13,7 @@ def test_user_details(user_client, user_data):
         "is_staff": False,
         "is_contributor": False,
         "description": "",
+        "public_role": None,
     }
 
 

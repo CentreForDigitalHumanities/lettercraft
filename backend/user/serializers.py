@@ -7,6 +7,7 @@ from user.models import User
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     description = serializers.CharField(source="profile.description")
+    public_role = serializers.CharField(source="profile.role", read_only=True)
 
     class Meta(UserDetailsSerializer.Meta):
         is_staff = serializers.BooleanField(read_only=True)
@@ -19,10 +20,11 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             "is_staff",
             "is_contributor",
             "description",
+            "public_role",
         )
         read_only_fields = ["is_staff", "id", "email", "is_contributor"]
 
-    def update(self, instance: User, validated_data: Dict):
+    def update(self, instance: User, validated_data: Dict)´
         if 'profile' in validated_data:
             value = validated_data.pop('profile').get('description')
             instance.profile.description = value
