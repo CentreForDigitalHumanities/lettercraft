@@ -56,10 +56,15 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
     client.logout()
 
 @pytest.fixture
-def contributor_role(db) -> ContributorRole:
+def contributor_role(db, user) -> ContributorRole:
     return ContributorRole.objects.create(
         name='tester'
     )
+
+@pytest.fixture
+def user_has_contributor_role(db, user, contributor_role) -> ContributorRole:
+    user.profile.role = contributor_role
+    user.profile.save()
 
 @pytest.fixture()
 def source(db):
