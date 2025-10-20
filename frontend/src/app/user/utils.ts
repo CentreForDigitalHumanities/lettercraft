@@ -22,6 +22,7 @@ export const parseUserData = (result: UserResponse | null): User | null => {
         result.last_name,
         result.is_staff,
         result.is_contributor,
+        result.description,
     );
 };
 
@@ -40,6 +41,7 @@ export const encodeUserData = (data: Partial<User>): Partial<UserResponse> => {
         email: data.email,
         first_name: data.firstName,
         last_name: data.lastName,
+        description: data.description,
     };
     return _.omit(encoded, _.isUndefined);
 };

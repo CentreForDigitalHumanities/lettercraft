@@ -2,8 +2,8 @@
 
 <p>Use the form below to change your name or password.</p>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-    <div *ngIf="form.controls.username as control">
+<form [formGroup]="form" (ngSubmit)="submit()" class="my-4">
+    <div *ngIf="form.controls.username as control" class="my-3">
         <label for="username" class="form-label"> Username </label>
         <input
             type="text"
@@ -20,32 +20,35 @@
             {{ error }}
         </p>
     </div>
-    <div>
-        <label for="first-name" class="form-label">First name</label>
-        <input
-            type="text"
-            id="first-name"
-            autocomplete="given-name"
-            class="form-control"
-            [class.is-invalid]="
-                form.controls.firstName.touched &&
-                form.controls.firstName.invalid
-            "
-            [formControl]="form.controls.firstName"
-        />
-    </div>
-    <div>
-        <label for="last-name" class="form-label"> Last name </label>
-        <input
-            type="text"
-            id="last-name"
-            autocomplete="family-name"
-            class="form-control"
-            [class.is-invalid]="
-                form.controls.lastName.touched && form.controls.lastName.invalid
-            "
-            [formControl]="form.controls.lastName"
-        />
+
+    <div class="my-3 row">
+        <div class="col">
+            <label for="first-name" class="form-label">First name</label>
+            <input
+                type="text"
+                id="first-name"
+                autocomplete="given-name"
+                class="form-control"
+                [class.is-invalid]="
+                    form.controls.firstName.touched &&
+                    form.controls.firstName.invalid
+                "
+                [formControl]="form.controls.firstName"
+            />
+        </div>
+        <div class="col">
+            <label for="last-name" class="form-label"> Last name </label>
+            <input
+                type="text"
+                id="last-name"
+                autocomplete="family-name"
+                class="form-control"
+                [class.is-invalid]="
+                    form.controls.lastName.touched && form.controls.lastName.invalid
+                "
+                [formControl]="form.controls.lastName"
+            />
+        </div>
     </div>
     <p
         *ngFor="let error of formErrors$ | async"
@@ -54,9 +57,18 @@
         {{ error }}
     </p>
 
-    <div
-        class="d-flex flex-wrap justify-content-start align-items-center button-row mt-3"
-    >
+    <div class="my-3" *ngIf="form.controls.description">
+        <label for="input-description" class="form-label">Description</label>
+        <textarea id="input-description" class="form-control" rows="4"
+            aria-describedby="helptext-description"
+            [formControl]="form.controls.description"></textarea>
+        <p style="font-size: smaller;" id="helptext-description">
+            Describe your background and involvement with the project. This text will
+            appear on your public profile page.
+        </p>
+    </div>
+
+    <div class="my-3">
         <button type="submit" class="btn btn-primary">
             Save changes
             <div
@@ -69,31 +81,35 @@
                 >
             </div>
         </button>
-        <button
-            class="btn btn-primary"
-            type="button"
-            (click)="requestPasswordReset()"
-        >
-            Request new password
-            <div
-                *ngIf="requestResetLoading$ | async"
-                class="spinner-border spinner-border-sm"
-                role="status"
-            >
-                <span class="visually-hidden">
-                    Requesting password reset link...
-                </span>
-            </div>
-        </button>
-        <button class="btn btn-danger" type="button" (click)="deleteAccount()">
-            Delete account
-            <div
-                *ngIf="deleteUserLoading$ | async"
-                class="spinner-border spinner-border-sm"
-                role="status"
-            >
-                <span class="visually-hidden">Deleting account...</span>
-            </div>
-        </button>
     </div>
+
 </form>
+
+<div class="hstack gap-3 my-4">
+    <button
+        class="btn btn-primary"
+        type="button"
+        (click)="requestPasswordReset()"
+    >
+        Request new password
+        <div
+            *ngIf="requestResetLoading$ | async"
+            class="spinner-border spinner-border-sm"
+            role="status"
+        >
+            <span class="visually-hidden">
+                Requesting password reset link...
+            </span>
+        </div>
+    </button>
+    <button class="btn btn-danger" type="button" (click)="deleteAccount()">
+        Delete account
+        <div
+            *ngIf="deleteUserLoading$ | async"
+            class="spinner-border spinner-border-sm"
+            role="status"
+        >
+            <span class="visually-hidden">Deleting account...</span>
+        </div>
+    </button>
+</div>

@@ -6,6 +6,7 @@ export interface UserResponse {
     last_name: string;
     is_staff: boolean;
     is_contributor: boolean;
+    description: string;
 }
 
 export class User {
@@ -17,6 +18,7 @@ export class User {
         public lastName: string,
         public isStaff: boolean,
         public isContributor: boolean,
+        public description: string,
     ) { }
 }
 
@@ -58,4 +60,5 @@ export type UserSettings = Pick<
     "id" | "email" | "firstName" | "lastName"
 > & {
     username?: string;
+    description?: string;
 };

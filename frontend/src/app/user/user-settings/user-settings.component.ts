@@ -45,6 +45,7 @@ export class UserSettingsComponent implements OnInit {
         lastName: new FormControl<string>("", {
             nonNullable: true,
         }),
+        description: new FormControl<string>("", { nonNullable: true}),
     });
 
     public usernameErrors$ = controlErrorMessages$(this.form, "username");
