@@ -20,7 +20,7 @@ class UserType(DjangoObjectType):
     def get_queryset(
         cls, queryset: QuerySet[User], info: ResolveInfo
     ) -> QuerySet[User]:
-        return queryset.all()
+        return queryset.filter(profile__role__isnull=False)
 
     @staticmethod
     def resolve_full_name(parent: User, info: ResolveInfo) -> str:

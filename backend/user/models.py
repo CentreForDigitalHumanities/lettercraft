@@ -58,8 +58,17 @@ class ContributorRole(models.Model):
         return self.name
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    user = models.OneToOneField(to=User, related_name='profile', on_delete=models.CASCADE)
 
+    role = models.ForeignKey(
+        to=ContributorRole,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        help_text='Role in which this user should be credited (e.g. project leader, ' \
+            'research assistant). Users without a contributor role are not visible to' \
+            'visitors.'
+    )
     description = models.TextField(
         blank=True,
     )
@@ -67,12 +76,6 @@ class UserProfile(models.Model):
         upload_to='profile_pictures/',
         null=True,
         blank=True
-    )
-    role = models.ForeignKey(
-        to=ContributorRole,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
     )
 
     def __str__(self):

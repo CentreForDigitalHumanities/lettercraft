@@ -12,7 +12,7 @@ from letter.models import LetterDescription
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
-from user.models import User, ContributorGroup
+from user.models import User, ContributorGroup, ContributorRole
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
@@ -55,6 +55,11 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
     yield client
     client.logout()
 
+@pytest.fixture
+def contributor_role(db) -> ContributorRole:
+    return ContributorRole.objects.create(
+        name='tester'
+    )
 
 @pytest.fixture()
 def source(db):

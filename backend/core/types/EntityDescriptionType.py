@@ -43,7 +43,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     def resolve_contributors(
         parent: EntityDescription, info: ResolveInfo
     ) -> QuerySet[User]:
-        return parent.contributors.all()
+        return parent.contributors.filter(profile__role__isnull=False)
 
 
     @staticmethod
