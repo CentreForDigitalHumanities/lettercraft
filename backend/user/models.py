@@ -37,6 +37,19 @@ class User(django_auth_models.AbstractUser):
         editable_source_ids = [source.pk for source in editable_sources(self)]
         return self.is_superuser or source.pk in editable_source_ids
 
+    @property
+    def full_name(self) -> str:
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        elif self.first_name or self.last_name:
+            return self.first_name or self.last_name
+        else:
+            return "nameless contributor"
+
+    @property
+    def public_role(self) -> 'ContributorRole':
+        return self.profile.role
+
 class ContributorRole(models.Model):
     '''
     Roles for contributors in the project. Purely for presentation; does not affect

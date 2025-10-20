@@ -9,6 +9,7 @@ class UserProfileInline(admin.StackedInline):
 
 @admin.register(models.User)
 class UserAdmin(auth_admin.UserAdmin):
+    list_display = ['username', 'full_name', 'is_staff', 'public_role']
     inlines = [UserProfileInline]
 
 
