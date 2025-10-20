@@ -54,6 +54,8 @@ class ContributorRole(models.Model):
     class Meta:
         ordering = [models.F('position').asc(nulls_last=True)]
 
+    def __str__(self):
+        return self.name
 
 class UserProfile(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
@@ -73,6 +75,8 @@ class UserProfile(models.Model):
         blank=True,
     )
 
+    def __str__(self):
+        return self.user.username
 
 class ContributorGroup(models.Model):
     name = models.CharField(
