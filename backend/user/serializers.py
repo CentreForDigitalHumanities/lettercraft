@@ -24,7 +24,14 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
         )
         read_only_fields = ["is_staff", "id", "email", "is_contributor"]
 
-    def update(self, instance: User, validated_data: Dict)´
+    def validate_username(self, value):
+        # pass validation if user submits their current name
+        if self.instance and self.instance.username == value:
+            return value
+        return super().validate_username(value)
+
+
+    def update(self, instance: User, validated_data: Dict):
         if 'profile' in validated_data:
             value = validated_data.pop('profile').get('description')
             instance.profile.description = value
