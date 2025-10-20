@@ -94,12 +94,6 @@ export class AuthService {
             .subscribe(() => this.logout.subject.next());
     }
 
-    // Keeping track of the latest version of the username
-    private currentUserName = toSignal<string | null>(
-        this.currentUser$.pipe(
-            map(user => user?.username ?? null)
-        )
-    );
 
     /**
      * Encodes the user settings and sends them to the server to be updated.
@@ -111,9 +105,6 @@ export class AuthService {
      * @returns void
      */
     public newUserSettings(userSettings: UserSettings): void {
-        if (userSettings.username === this.currentUserName()) {
-            delete userSettings.username;
-        }
         const encoded = encodeUserData(userSettings);
         this.updateSettings.subject.next(encoded);
     }

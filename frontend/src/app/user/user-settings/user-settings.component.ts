@@ -15,6 +15,7 @@ import { usernameValidators } from "../validation";
 import { Apollo } from "apollo-angular";
 import { Router } from "@angular/router";
 import { ModalService } from "@services/modal.service";
+import { actionIcons } from "@shared/icons";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -46,6 +47,7 @@ export class UserSettingsComponent implements OnInit {
             nonNullable: true,
         }),
         description: new FormControl<string>("", { nonNullable: true}),
+        publicRole: new FormControl<string | null>(""),
     });
 
     public usernameErrors$ = controlErrorMessages$(this.form, "username");
@@ -54,6 +56,8 @@ export class UserSettingsComponent implements OnInit {
     public updateSettingsLoading$ = this.authService.updateSettings.loading$;
     public requestResetLoading$ = this.authService.passwordForgotten.loading$;
     public deleteUserLoading$ = this.authService.deleteUser.loading$;
+
+    actionIcons = actionIcons;
 
     constructor(
         private router: Router,

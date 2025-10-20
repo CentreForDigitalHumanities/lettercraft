@@ -1,6 +1,6 @@
 <h1>User settings</h1>
 
-<p>Use the form below to change your name or password.</p>
+<p>Use the form below to change your account information.</p>
 
 <form [formGroup]="form" (ngSubmit)="submit()" class="my-4">
     <div *ngIf="form.controls.username as control" class="my-3">
@@ -21,7 +21,7 @@
         </p>
     </div>
 
-    <div class="my-3 row">
+    <div class="my-3 row"  *ngIf="form.controls.publicRole.value">
         <div class="col">
             <label for="first-name" class="form-label">First name</label>
             <input
@@ -57,7 +57,7 @@
         {{ error }}
     </p>
 
-    <div class="my-3" *ngIf="form.controls.description">
+    <div class="my-3" *ngIf="form.controls.description && form.controls.publicRole.value">
         <label for="input-description" class="form-label">Description</label>
         <textarea id="input-description" class="form-control" rows="4"
             aria-describedby="helptext-description"
@@ -82,10 +82,12 @@
             </div>
         </button>
     </div>
-
 </form>
 
+<p>Other actions:</p>
+
 <div class="hstack gap-3 my-4">
+
     <button
         class="btn btn-primary"
         type="button"
@@ -113,3 +115,24 @@
         </div>
     </button>
 </div>
+
+<section class="my-4">
+    <h2>Public profile</h2>
+    <div *ngIf="form.controls.publicRole.value as publicRole; else notAContributor">
+        <p>
+            You are registered as a contributor to the project (role:
+            <em>{{publicRole}}</em>). This means that your profile page is publicly
+            visible. Please contact an administrator if this needs to be changed.
+        </p>
+        <a [routerLink]="['contributors', form.controls.id]" class="btn btn-light">
+            <lc-icon [icon]="actionIcons.view" />
+            View your profile page
+        </a>
+    </div>
+
+    <ng-template #notAContributor>
+        <p>You are not registered as a contributor to the project, so your profile
+            is not publicly visible. Contact an administrator if this needs to be changed.
+        </p>
+    </ng-template>
+</section>

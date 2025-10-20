@@ -23,6 +23,7 @@ export const parseUserData = (result: UserResponse | null): User | null => {
         result.is_staff,
         result.is_contributor,
         result.description,
+        result.public_role,
     );
 };
 
