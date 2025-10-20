@@ -8,8 +8,8 @@ class User(django_auth_models.AbstractUser):
     """
 
     # Only extend this model with information that is relevant for
-    # authentication; for things like settings and preferences, add
-    # a UserProfile model
+    # authentication; for things like settings, public profile, and preferences, use
+    # the UserProfile model
 
     class Meta:
         db_table = "auth_user"
@@ -36,6 +36,42 @@ class User(django_auth_models.AbstractUser):
 
         editable_source_ids = [source.pk for source in editable_sources(self)]
         return self.is_superuser or source.pk in editable_source_ids
+
+class ContributorRole(models.Model):
+    '''
+    Roles for contributors in the project. Purely for presentation; does not affect
+    permissions.
+    '''
+
+    name = models.CharField(
+        max_length=128,
+    )
+    description  = models.TextField(
+        blank=True,
+    )
+    position = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering = [models.F('position').asc(nulls_last=True)]
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+
+    description = models.TextField(
+        blank=True,
+    )
+    picture = models.ImageField(
+        upload_to='profile_pictures/',
+        null=True,
+        blank=True
+    )
+    role = models.ForeignKey(
+        to=ContributorRole,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
 
 class ContributorGroup(models.Model):
