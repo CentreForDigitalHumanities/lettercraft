@@ -76,7 +76,7 @@ class UserProfile(models.Model):
     def image_upload_path(self, filename):
         id = self.user.pk
         _, ext = os.path.splitext(filename)
-        return os.path.join('profile_pictures', id + ext)
+        return os.path.join('profile_pictures', str(id) + ext)
 
     user = models.OneToOneField(to=User, related_name='profile', on_delete=models.CASCADE)
 
