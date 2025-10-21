@@ -8,6 +8,11 @@
             <p class="lead">{{user.publicRole | sentenceCase }}</p>
         </div>
 
+        <ng-container *ngIf="user.picture">
+            <img [src]="user.picture" alt="profile picture of {{user.fullName}}"
+                class="float-end ms-5 me-4 mb-4 profile-picture">
+        </ng-container>
+
         <div *ngIf="user.description" class="preserve-white-space mb-4"
             >{{user.description}}</div>
 

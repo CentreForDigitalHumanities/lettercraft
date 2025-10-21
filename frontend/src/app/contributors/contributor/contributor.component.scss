@@ -1,3 +1,10 @@
 .preserve-white-space {
     white-space: pre-wrap;
 }
+
+.profile-picture {
+    width: 250px;
+    height: 250px;
+    border-radius: 125px;
+    object-fit: cover;
+}

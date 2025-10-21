@@ -4,6 +4,7 @@ query ViewContributor($id: ID!) {
         fullName
         publicRole
         description
+        picture
         caseStudies {
             id
             name
