@@ -1,3 +1,5 @@
+from user.models import ContributorRole
+
 def test_user_query(graphql_client, user, contributor_role, anonymous_request):
     user.profile.role = contributor_role
     user.profile.save()
@@ -39,3 +41,23 @@ def test_user_contributions_query(
 
     result = graphql_client.execute(query, context=anonymous_request)
     assert len(result["data"]["userDescription"]["contributedSources"]) == 1
+
+
+def test_roles_query(
+    graphql_client, user, user_has_contributor_role, anonymous_request
+):
+    # create unused group which should not be returned
+    dummy_role = ContributorRole.objects.create(name='unused role')
+
+    query = f"""
+    query Test {{
+        contributorRoles {{
+            id
+            users {{ id }}
+        }}
+    }}
+    """
+
+    result = graphql_client.execute(query, context=anonymous_request)
+    assert len(result["data"]["contributorRoles"]) == 1
+    assert len(result["data"]["contributorRoles"][0]["users"]) == 1

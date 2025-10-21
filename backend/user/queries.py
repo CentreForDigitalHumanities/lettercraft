@@ -5,12 +5,14 @@ from django.db.models import QuerySet
 from typing import Optional
 
 from user.types.UserType import UserType
-from user.models import User
+from user.types.ContributorRoleType import ContributorRoleType
+from user.models import User, ContributorRole
 
 
 class UserQueries(ObjectType):
     user_description = Field(UserType, id=ID(required=True))
     user_descriptions = List(NonNull(UserType), required=True)
+    contributor_roles = List(NonNull(ContributorRoleType), required=True)
 
     @staticmethod
     def resolve_user_description(
@@ -27,3 +29,11 @@ class UserQueries(ObjectType):
         info: ResolveInfo,
     ) -> QuerySet[User]:
         return UserType.get_queryset(User.objects, info)
+
+    @staticmethod
+    def resolve_contributor_roles(
+        parent: None,
+        info: ResolveInfo,
+    ) -> QuerySet[User]:
+        return ContributorRoleType.get_queryset(ContributorRole.objects.all(), info)
+

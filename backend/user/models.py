@@ -83,6 +83,7 @@ class UserProfile(models.Model):
     role = models.ForeignKey(
         to=ContributorRole,
         on_delete=models.SET_NULL,
+        related_name='user_profiles',
         null=True,
         blank=True,
         help_text='Role in which this user should be credited (e.g. project leader, ' \
