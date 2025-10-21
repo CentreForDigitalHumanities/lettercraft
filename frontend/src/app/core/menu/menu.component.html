@@ -24,15 +24,23 @@
                         Browse
                     </a>
                 </li>
+                <li *ngIf="isContributor$ | async" class="nav-item">
+                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
+                        Data entry
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a [routerLink]="['/case-studies']" routerLinkActive="active" class="nav-link">
                         Case studies
                     </a>
                 </li>
-                <li *ngIf="isContributor$ | async" class="nav-item">
-                    <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
-                        Data entry
-                    </a>
+                <li class="nav-item" ngbDropdown>
+                    <button class="nav-link" ngbDropdownToggle id="aboutDropdown">
+                        About
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="aboutDropdown" class="dropdown-menu">
+                        <a ngbDropdownItem [routerLink]="['/contributors']">Contributors</a>
+                    </div>
                 </li>
             </ul>
             <lc-user-menu></lc-user-menu>
