@@ -4,3 +4,33 @@
     <h1>Contributors</h1>
 </div>
 
+<ng-container *ngIf="data$ | async as data">
+    <section *ngFor="let role of data" class="my-5">
+        <h2>{{role.name | sentenceCase}}</h2>
+
+        <p *ngIf="role.description">{{role.description}}</p>
+
+        <div class="vstack gap-3 my-4">
+            <div class="card" *ngFor="let user of role.users">
+                <div class="card-body">
+                    <div class="row align-items-center profile-row">
+                        <div class="col profile-content-col">
+                            <h3 class="card-title h4">
+                                <a [routerLink]="['/contributors', user.id]"
+                                    class="stretched-link card-title">
+                                    {{user.fullName}}
+                                </a>
+                            </h3>
+                            <p class="card-text profile-snippet">{{user.description }}</p>
+                        </div>
+                        <div class="col-md-auto" *ngIf="user.picture">
+                            <img [src]="user.picture"
+                                alt="profile picture of {{user.fullName}}"
+                                class="profile-picture mx-2" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</ng-container>

@@ -20,7 +20,7 @@ class ContributorRoleType(DjangoObjectType):
     def get_queryset(
         cls, queryset: QuerySet[ContributorRole], info: ResolveInfo
     ) -> QuerySet[ContributorRole]:
-        return queryset.filter(user_profiles__isnull=False)
+        return queryset.filter(user_profiles__isnull=False).distinct()
 
     @staticmethod
     def resolve_users(
