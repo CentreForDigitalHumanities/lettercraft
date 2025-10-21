@@ -1,5 +1,6 @@
 import django.contrib.auth.models as django_auth_models
 from django.db import models
+import os
 
 
 class User(django_auth_models.AbstractUser):
@@ -70,7 +71,13 @@ class ContributorRole(models.Model):
     def __str__(self):
         return self.name
 
+
 class UserProfile(models.Model):
+    def image_upload_path(self, filename):
+        id = self.user.pk
+        _, ext = os.path.splitext(filename)
+        return os.path.join('profile_pictures', id + ext)
+
     user = models.OneToOneField(to=User, related_name='profile', on_delete=models.CASCADE)
 
     role = models.ForeignKey(
@@ -86,13 +93,14 @@ class UserProfile(models.Model):
         blank=True,
     )
     picture = models.ImageField(
-        upload_to='profile_pictures/',
+        upload_to=image_upload_path,
         null=True,
         blank=True
     )
 
     def __str__(self):
         return self.user.username
+
 
 class ContributorGroup(models.Model):
     name = models.CharField(
