@@ -24,7 +24,7 @@ export class ContributorComponent {
     breadcrumbs(user: NonNullable<ViewContributorQuery['userDescription']>): Breadcrumb[] {
         return [
             { link: '/', label: 'Lettercraft' },
-            { link: '/about/contributors', label: 'Contributors', },
+            { link: '/contributors', label: 'Contributors', },
             { link: '.', label: user.fullName },
         ];
     }
