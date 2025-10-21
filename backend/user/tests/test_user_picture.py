@@ -1,14 +1,7 @@
-import os
-from django.core.files import File
 from rest_framework.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 
-here = os.path.dirname(os.path.abspath(__file__))
-img_path = os.path.join(here, 'picture.jpg')
 
-def test_user_get_picture(db, user, contributor_role, client):
-    user.profile.picture = File(open(img_path, 'rb'))
-    user.profile.save()
-
+def test_user_get_picture(db, user, user_profile_picture, contributor_role, client):
     # user is not a contributor so their profile should be private
     response = client.get(f'/users/pictures/{user.pk}/')
     assert response.status_code == HTTP_404_NOT_FOUND

@@ -14,7 +14,13 @@ def test_user_details(user_client, user_data):
         "is_contributor": False,
         "description": "",
         "public_role": None,
+        "picture": None,
     }
+
+
+def test_user_details_picture(user, user_client, user_profile_picture):
+    details = user_client.get("/users/user/")
+    assert details.data['picture'] == f"/users/pictures/{user.pk}/"
 
 
 def test_user_updates(user_client, user_data):

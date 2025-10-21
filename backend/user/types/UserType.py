@@ -10,12 +10,14 @@ from person.models import AgentDescription
 from letter.models import LetterDescription, GiftDescription
 from space.models import SpaceDescription
 from case_study.models import CaseStudy
+from user.serializers import picture_url
 
 
 class UserType(DjangoObjectType):
     full_name = String(required=True)
     public_role = String(required=True)
     description = String(required=True)
+    picture = String()
     contributed_sources = List(NonNull('source.types.SourceType.SourceType'), required=True)
     case_studies = List(NonNull('case_study.types.CaseStudyType.CaseStudyType'), required=True)
 
@@ -54,6 +56,11 @@ class UserType(DjangoObjectType):
     @staticmethod
     def resolve_description(parent: User, info: ResolveInfo) -> str:
         return parent.profile.description
+
+    @staticmethod
+    def resolve_picture(parent: User, info: ResolveInfo) -> str:
+        if parent.profile.picture:
+            return picture_url(parent)
 
     @staticmethod
     def resolve_case_studies(parent: User, info: ResolveInfo) -> QuerySet[CaseStudy]:
