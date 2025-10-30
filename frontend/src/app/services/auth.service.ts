@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
-import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings, KeyInfoResult } from '../user/models/user';
+import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay, take, Observable, filter, tap } from 'rxjs';
+import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings, KeyInfoResult, User } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 import { HttpVerb, Request } from '../user/Request';
+
 
 export interface AuthAPIResult {
     detail: string;
@@ -107,6 +108,27 @@ export class AuthService {
     public newUserSettings(userSettings: UserSettings): void {
         const encoded = encodeUserData(userSettings);
         this.updateSettings.subject.next(encoded);
+    }
+
+    uploadPicture(data: FormData): Observable<any> {
+        return this.pictureRoute$().pipe(
+            tap(console.log),
+            switchMap(route => this.http.put(route, data)),
+        );
+    }
+
+    deletePicture(): Observable<any> {
+        return this.pictureRoute$().pipe(
+            switchMap(route => this.http.delete(route)),
+        );
+    }
+
+    private pictureRoute$(): Observable<string> {
+        return this.currentUser$.pipe(
+            take(1),
+            filter(user => !!user),
+            map(user => user ? this.authRoute(`pictures/${user.id}/`) : ''), // this condition is trivially true
+        );
     }
 
     private authRoute(route: string): string {

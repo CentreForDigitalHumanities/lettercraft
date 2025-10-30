@@ -1,7 +1,9 @@
+import os
+
 from allauth.account.models import EmailConfirmationHMAC
 from django.http import HttpRequest, HttpResponseRedirect, FileResponse
 from django.contrib.auth import logout
-from rest_framework.exceptions import APIException, NotFound
+from rest_framework.exceptions import APIException, NotFound, PermissionDenied
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_401_UNAUTHORIZED
@@ -74,10 +76,47 @@ class UserPictureView(APIView):
         try:
             profile = self.get_object()
             assert profile.role or profile.user.pk == request.user.pk
-            assert profile.picture
         except:
             raise NotFound('User not found')
 
+        if not profile.picture:
+            raise NotFound('User has no picture')
+
         path = profile.picture.path
         return FileResponse(open(path, 'rb'))
+
+    def put(self, request, *args, **kwargs):
+        try:
+            profile = self.get_object()
+            assert profile.role or profile.user.pk == request.user.pk
+        except:
+            raise NotFound('User not found')
+
+        if not profile.user.pk == request.user.pk:
+            raise PermissionDenied()
+
+        file = request.FILES['file']
+        profile.picture = file
+        profile.save()
+
+        return Response('Image saved', HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            profile = self.get_object()
+            assert profile.role or profile.user.pk == request.user.pk
+        except:
+            raise NotFound('User not found')
+
+        if not profile.user.pk == request.user.pk:
+            raise PermissionDenied()
+
+        if not profile.picture:
+            raise NotFound('User has no picture')
+
+        profile.picture = None
+        profile.save()
+
+        return Response('Image deleted', HTTP_200_OK)
+
 

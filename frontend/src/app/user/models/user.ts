@@ -8,6 +8,7 @@ export interface UserResponse {
     is_contributor: boolean;
     description: string;
     public_role: string | null;
+    picture: string | null;
 }
 
 export class User {
@@ -21,6 +22,7 @@ export class User {
         public isContributor: boolean,
         public description: string,
         public publicRole: string | null,
+        public picture: string | null,
     ) { }
 }
 
