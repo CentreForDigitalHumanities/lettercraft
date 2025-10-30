@@ -21,6 +21,7 @@ def tmp_media_root(settings, tmp_path):
     directory = tmp_path / 'data'
     directory.mkdir()
     settings.MEDIA_ROOT = directory
+    return directory
 
 
 @pytest.fixture()
