@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
 import { UserResponse, UserSettings } from "../models/user";
@@ -17,6 +17,7 @@ import { Router } from "@angular/router";
 import { ModalService } from "@services/modal.service";
 import { actionIcons } from "@shared/icons";
 import _ from "underscore";
+import { ProfilePictureFieldComponent } from "../profile-picture-field/profile-picture-field.component";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -28,6 +29,8 @@ type UserSettingsForm = {
     styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
+    @ViewChild(ProfilePictureFieldComponent) profilePictureField?: ProfilePictureFieldComponent;
+
     public form = new FormGroup<UserSettingsForm>({
         id: new FormControl<number>(-1, {
             nonNullable: true,
@@ -57,19 +60,6 @@ export class UserSettingsComponent implements OnInit {
     public updateSettingsLoading$ = this.authService.updateSettings.loading$;
     public requestResetLoading$ = this.authService.passwordForgotten.loading$;
     public deleteUserLoading$ = this.authService.deleteUser.loading$;
-
-    pictureFile$ = new BehaviorSubject<File | undefined>(undefined);
-    clearPicture$ = new BehaviorSubject<boolean>(false);
-    pictureSaved$ = new Subject<void>();
-
-    pictureUrl$ = combineLatest([
-        this.authService.currentUser$,
-        this.pictureSaved$.pipe(startWith(undefined))]
-    ).pipe(
-        map(([user, _]) => user?.picture),
-        timestamp(),
-        map(({value, timestamp}) => value ? `${value}?t=${timestamp}` : undefined),
-    );
 
     actionIcons = actionIcons;
 
@@ -154,12 +144,6 @@ export class UserSettingsComponent implements OnInit {
             });
     }
 
-    onPictureInput(event: Event) {
-        const files: File[] = (event.target as any)['files'];
-        const file = files ? _.first(files) : undefined;
-        this.pictureFile$.next(file);
-    }
-
     public submit(): void {
         this.form.markAllAsTouched();
         updateFormValidity(this.form);
@@ -168,30 +152,7 @@ export class UserSettingsComponent implements OnInit {
         }
         const userSettings = this.form.getRawValue();
         this.authService.newUserSettings(userSettings);
-
-        this.savePictureInput().subscribe({
-            next: () => {
-                this.pictureSaved$.next();
-                this.pictureFile$.next(undefined);
-                this.clearPicture$.next(false);
-            }
-        })
-    }
-
-    private savePictureInput(): Observable<any> {
-        if (this.clearPicture$.value) {
-            return this.authService.deletePicture();
-        } else if (this.pictureFile$.value) {
-            return this.uploadPicture(this.pictureFile$.value);
-        } else {
-            return of(undefined);
-        }
-    }
-
-    private uploadPicture(file: File): Observable<any> {
-        const formData: FormData = new FormData();
-        formData.append('file', file, file.name);
-        return this.authService.uploadPicture(formData);
+        this.profilePictureField?.submit();
     }
 
 

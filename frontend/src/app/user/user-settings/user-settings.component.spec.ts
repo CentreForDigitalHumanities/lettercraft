@@ -9,6 +9,7 @@ import { User } from "../models/user";
 import { Observable, of } from "rxjs";
 import { Injectable } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
+import { ProfilePictureFieldComponent } from "../profile-picture-field/profile-picture-field.component";
 
 const fakeUser: User = {
     id: 1,
@@ -18,6 +19,9 @@ const fakeUser: User = {
     username: 'frodo',
     isStaff: false,
     isContributor: true,
+    description: '',
+    publicRole: null,
+    picture: null,
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,7 +37,7 @@ describe("UserSettingsComponent", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [UserSettingsComponent],
+            declarations: [UserSettingsComponent, ProfilePictureFieldComponent],
             providers: [{
                 provide: AuthService,
                 useClass: AuthServiceMock
