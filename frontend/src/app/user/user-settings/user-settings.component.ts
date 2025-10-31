@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
 import { UserResponse, UserSettings } from "../models/user";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { BehaviorSubject, combineLatest, filter, map, Observable, of, startWith, Subject, timestamp } from "rxjs";
+import { filter } from "rxjs";
 import {
     controlErrorMessages$,
     formErrorMessages$,
@@ -16,7 +16,6 @@ import { Apollo } from "apollo-angular";
 import { Router } from "@angular/router";
 import { ModalService } from "@services/modal.service";
 import { actionIcons } from "@shared/icons";
-import _ from "underscore";
 import { ProfilePictureFieldComponent } from "../profile-picture-field/profile-picture-field.component";
 
 type UserSettingsForm = {
@@ -29,7 +28,7 @@ type UserSettingsForm = {
     styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
-    @ViewChild(ProfilePictureFieldComponent) profilePictureField?: ProfilePictureFieldComponent;
+    @ViewChild(ProfilePictureFieldComponent) profilePictureField!: ProfilePictureFieldComponent;
 
     public form = new FormGroup<UserSettingsForm>({
         id: new FormControl<number>(-1, {
@@ -152,7 +151,7 @@ export class UserSettingsComponent implements OnInit {
         }
         const userSettings = this.form.getRawValue();
         this.authService.newUserSettings(userSettings);
-        this.profilePictureField?.submit();
+        this.profilePictureField.submit();
     }
 
 
@@ -171,6 +170,7 @@ export class UserSettingsComponent implements OnInit {
         cache.evict({ id: identified, fieldName: 'firstName' });
         cache.evict({ id: identified, fieldName: 'lastName' });
         cache.evict({ id: identified, fieldName: 'fullName' });
+        cache.evict({ id: identified, fieldName: 'description' });
         cache.gc();
     }
 }

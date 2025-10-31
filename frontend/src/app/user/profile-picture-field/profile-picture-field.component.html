@@ -1,27 +1,45 @@
 <fieldset class="my-3">
     <legend>Profile picture</legend>
-    <ng-container *ngIf="pictureUrl$ | async as url; else noPicture">
-        <img [src]="url" alt="profile picture">
-    </ng-container>
-    <ng-template #noPicture>
-        No profile picture set.
-    </ng-template>
 
-    <div >
-        <label for="input-picture-upload" class="form-label">
-            Upload a picture
-        </label>
-        <input type="file" id="input-picture-upload" class="form-control"
-            (input)="onPictureInput($event)" accept="image/png, image/jpeg">
+    <div class="row">
+        <div class="col-lg-auto p-4">
+            <ng-container *ngIf="url$ | async as url; else noPicture">
+                <img [src]="url" alt="profile picture" class="profile-picture">
+            </ng-container>
+            <ng-template #noPicture>
+                <div class="profile-picture bg-body-secondary text-dark
+                    d-flex justify-content-center align-items-center">
+                    <p>No picture</p>
+                </div>
+            </ng-template>
+        </div>
+        <div class="col">
+            <div class="my-3">
+                <label for="input-picture-upload" class="form-label">
+                    <ng-container *ngIf="url$ | async; else newPictureLabel">
+                        Replace picture
+                    </ng-container>
+                    <ng-template #newPictureLabel>
+                        Upload a picture
+                    </ng-template>
+                </label>
+                <input type="file" id="input-picture-upload" class="form-control"
+                    [formControl]="this.form.controls.file"
+                    (change)="onFileChange($event)" accept="image/png, image/jpeg">
+            </div>
+
+            <div *ngIf="url$ | async">
+                <p class="text-secondary">OR</p>
+                <div class="my-3">
+                    <input type="checkbox" class="btn-check" id="input-remove-picture"
+                        [formControl]="this.form.controls.clear">
+                    <label class="btn btn-outline-danger" for="input-remove-picture">
+                        Remove picture
+                    </label>
+                </div>
+            </div>
+        </div>
     </div>
-    <div *ngIf="pictureUrl$ | async">
-        <button type="button" [attr.aria-pressed]="clearPicture$ | async"
-            class="btn"
-            [class.btn-light]="(clearPicture$ | async) === false"
-            [class.btn-danger]="clearPicture$ | async"
-            (click)="clearPicture$.next(!clearPicture$.value)">
-            Remove picture
-        </button>
-    </div>
+
 </fieldset>
 

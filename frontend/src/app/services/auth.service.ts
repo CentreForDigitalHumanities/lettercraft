@@ -110,19 +110,22 @@ export class AuthService {
         this.updateSettings.subject.next(encoded);
     }
 
-    uploadPicture(data: FormData): Observable<any> {
+    uploadPicture(data: FormData): Observable<string> {
         return this.pictureRoute$().pipe(
-            tap(console.log),
-            switchMap(route => this.http.put(route, data)),
+            switchMap(route => this.http.put<string>(route, data).pipe(
+                map(_.constant(route)),
+            )),
         );
     }
 
-    deletePicture(): Observable<any> {
+    deletePicture(): Observable<null> {
         return this.pictureRoute$().pipe(
-            switchMap(route => this.http.delete(route)),
+            switchMap(route => this.http.delete<string>(route)),
+            map(_.constant(null)),
         );
     }
 
+    /** Picture route for PUT/DELETE requests. Assumes the user is already authenticated. */
     private pictureRoute$(): Observable<string> {
         return this.currentUser$.pipe(
             take(1),

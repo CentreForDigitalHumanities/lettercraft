@@ -1,8 +1,22 @@
 import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '@services/auth.service';
-import { Observable, BehaviorSubject, combineLatest, map, startWith, Subject, timestamp, of } from 'rxjs';
+import { Observable, BehaviorSubject, map, startWith, Subject, timestamp, withLatestFrom, switchMap, shareReplay, take } from 'rxjs';
 import _ from 'underscore';
 
+/** Adds a timestamp to a url observable
+ *
+ * This can be used to refresh an `<img>` element, when the image for a given path has
+ * changed in the backend. Images are only refetched when `src` changes. This adds a query
+ * parameter with a timestamp, which is ignored by the API but does trigger a refresh.
+ */
+const withTimestamp = () =>
+    (url$: Observable<string | null | undefined>): Observable<string | null> =>
+        url$.pipe(
+            timestamp(),
+            map(({value, timestamp}) => value ? `${value}?t=${timestamp}` : null),
+        );
 
 @Component({
     selector: 'lc-profile-picture-field',
@@ -10,37 +24,58 @@ import _ from 'underscore';
     styleUrls: ['./profile-picture-field.component.scss']
 })
 export class ProfilePictureFieldComponent {
+    form = new FormGroup({
+        file: new FormControl(''),
+        fileData: new FormControl<File | null>(null),
+        clear: new FormControl<boolean>(false, { nonNullable: true}),
+    });
 
-    pictureFile$ = new BehaviorSubject<File | undefined>(undefined);
-    clearPicture$ = new BehaviorSubject<boolean>(false);
-    pictureSaved$ = new Subject<void>();
+    submit$ = new Subject<typeof this.form.value>();
 
-    pictureUrl$ = combineLatest([
-        this.authService.currentUser$,
-        this.pictureSaved$.pipe(startWith(undefined))]
-    ).pipe(
-        map(([user, _]) => user?.picture),
-        timestamp(),
-        map(({value, timestamp}) => value ? `${value}?t=${timestamp}` : undefined),
-    );
+    saved$: Observable<string | null>;
+    url$: Observable<string | null>;
 
     constructor(
-        private authService: AuthService
-    ) {}
+        private authService: AuthService,
+    ) {
+        this.saved$ = this.submit$.pipe(
+            switchMap(({fileData, clear}) => this.submitData(fileData, clear)),
+            takeUntilDestroyed(),
+            shareReplay(1),
+        );
 
-    onPictureInput(event: Event) {
-        const files: File[] = (event.target as any)['files'];
-        const file = files ? _.first(files) : undefined;
-        this.pictureFile$.next(file);
+        this.url$ = this.saved$.pipe(
+            startWith(undefined),
+            withLatestFrom(this.authService.currentUser$),
+            map(([newUrl, user]) => newUrl === undefined ? user?.picture : newUrl),
+            withTimestamp(),
+        );
+
+        this.saved$.subscribe({
+            next: () => this.resetForm(),
+        })
     }
 
-    submit(): Observable<any> {
-        if (this.clearPicture$.value) {
+    onFileChange(event: Event) {
+        const files: File[] = (event.target as any)['files'];
+        const fileData = files ? _.first(files) : null;
+        this.form.patchValue({ fileData });
+    }
+
+    submit(): void {
+        this.submit$.next(this.form.value);
+    }
+
+    private submitData(file?: File | null, clear?: boolean): Observable<string | null> {
+        if (clear) {
             return this.authService.deletePicture();
-        } else if (this.pictureFile$.value) {
-            return this.uploadPicture(this.pictureFile$.value);
+        } else if (file) {
+            return this.uploadPicture(file);
         } else {
-            return of(undefined);
+            return this.authService.currentUser$.pipe(
+                take(1),
+                map(user => user?.picture || null),
+            );
         }
     }
 
@@ -48,5 +83,9 @@ export class ProfilePictureFieldComponent {
         const formData: FormData = new FormData();
         formData.append('file', file, file.name);
         return this.authService.uploadPicture(formData);
+    }
+
+    private resetForm() {
+        this.form.reset();
     }
 }
