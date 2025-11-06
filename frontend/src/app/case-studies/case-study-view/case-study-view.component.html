@@ -1,0 +1,36 @@
+<ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.caseStudy as caseStudy">
+        <lc-breadcrumb [breadcrumbs]="breadCrumbs(caseStudy)" />
+
+        <h1 class="mt-4">{{caseStudy.name}}</h1>
+
+        <p class="lead">
+            By {{authorNames(caseStudy)}}
+        </p>
+
+        <p class="text-secondary">
+            {{caseStudy.date | date}}
+        </p>
+
+        <div class="card bg-light">
+            <div class="card-body">
+                <p class="card-text">
+                    This is a case study based on
+                    <span *ngFor="let source of caseStudy.sources; last as last">
+                        <a [routerLink]="['/data/sources', source.id]"
+                            class="icon-link ms-1">
+                            <lc-icon [icon]="dataIcons.source" />
+                            {{source.name}}
+                        </a>
+                        <span *ngIf="!last">, </span>
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
+            class="mt-5 text-justify col-md-8 mx-auto"
+        ></div>
+
+    </ng-container>
+</ng-container>
