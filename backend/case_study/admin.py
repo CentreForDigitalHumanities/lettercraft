@@ -5,4 +5,4 @@ from . import models
 @admin.register(models.CaseStudy)
 class CaseStudyAdmin(admin.ModelAdmin):
     list_display = ["name", "description"]
-    filter_horizontal = ["authors", "sources", "episodes", "key_persons", "key_sites"]
+    filter_horizontal = ["authors", "sources"]
