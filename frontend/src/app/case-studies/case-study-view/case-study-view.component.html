@@ -16,12 +16,13 @@
             <div class="card-body">
                 <p class="card-text">
                     This is a case study based on
-                    <span *ngFor="let source of caseStudy.sources">
+                    <span *ngFor="let source of caseStudy.sources; last as last">
                         <a [routerLink]="['/data/sources', source.id]"
                             class="icon-link ms-1">
                             <lc-icon [icon]="dataIcons.source" />
                             {{source.name}}
                         </a>
+                        <span *ngIf="!last">, </span>
                     </span>
                 </p>
             </div>
