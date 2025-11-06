@@ -9,7 +9,7 @@ import { Directive, ElementRef, HostListener } from "@angular/core";
 })
 export class FootnotesDirective {
     constructor(
-        private el: ElementRef,
+        private el: ElementRef<HTMLElement>,
     ) {}
 
     @HostListener('click', ['$event'])
@@ -31,9 +31,8 @@ export class FootnotesDirective {
         }
     }
 
-    private findElement(hash: string): HTMLAnchorElement | undefined {
+    private findElement(hash: string): HTMLAnchorElement | null {
         const name = hash.replace('#', '');
-        return this.el.nativeElement.querySelector(hash) ||
-            this.el.nativeElement.querySelector(`[name="${name}"]`)
+        return this.el.nativeElement.querySelector(`${hash}, [name="${name}"]`)
     }
 }
