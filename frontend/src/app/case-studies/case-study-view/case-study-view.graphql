@@ -2,7 +2,10 @@ query ViewCaseStudy($id: ID!) {
     caseStudy(id: $id) {
         id
         name
-        authors { fullName }
+        authors {
+            id
+            fullName
+        }
         date
         content
         sources {

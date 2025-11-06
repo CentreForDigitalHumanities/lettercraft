@@ -2,7 +2,10 @@ query ViewCaseStudies {
     caseStudies {
         id
         name
-        authors { fullName }
+        authors {
+            id
+            fullName
+        }
         date
     }
 }
