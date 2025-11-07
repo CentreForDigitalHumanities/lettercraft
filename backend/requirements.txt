@@ -12,19 +12,19 @@ asgiref==3.7.2
     # via django
 beautifulsoup4==4.12.2
     # via django-livereload-server
-certifi==2024.2.2
+certifi==2025.10.5
     # via requests
 cffi==1.16.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
-cryptography==42.0.5
+cryptography==46.0.0
     # via pyjwt
 defusedxml==0.7.1
     # via python3-openid
 dj-rest-auth==6.0.0
     # via -r requirements.in
-django==4.2.7
+django==4.2.26
     # via
     #   -r requirements.in
     #   dj-rest-auth
@@ -48,7 +48,7 @@ django-prose-editor[sanitize]==0.15.2
     # via -r requirements.in
 django-revproxy==0.12.0
     # via -r requirements.in
-djangorestframework==3.14.0
+djangorestframework==3.16.1
     # via
     #   -r requirements.in
     #   dj-rest-auth
@@ -106,9 +106,7 @@ python-dateutil==2.8.2
     # via faker
 python3-openid==3.2.0
     # via django-allauth
-pytz==2023.3.post1
-    # via djangorestframework
-requests==2.31.0
+requests==2.32.5
     # via
     #   django-allauth
     #   requests-oauthlib
@@ -121,13 +119,13 @@ six==1.16.0
     #   python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
-sqlparse==0.4.4
+sqlparse==0.5.3
     # via django
 text-unidecode==1.3
     # via graphene-django
-tornado==6.3.3
+tornado==6.5.2
     # via django-livereload-server
-urllib3==2.0.7
+urllib3==2.5.0
     # via
     #   django-revproxy
     #   requests
