@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "lettercraft:build:production"
+              "buildTarget": "lettercraft:build:production"
             },
             "development": {
-              "browserTarget": "lettercraft:build:development"
+              "buildTarget": "lettercraft:build:development"
             }
           },
           "defaultConfiguration": "development"
