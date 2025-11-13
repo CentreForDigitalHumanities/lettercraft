@@ -12,7 +12,7 @@
             {{caseStudy.date | date}}
         </p>
 
-        <div class="card bg-light">
+        <div class="card bg-light" *ngIf="caseStudy.sources.length">
             <div class="card-body">
                 <p class="card-text">
                     This is a case study based on
