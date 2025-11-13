@@ -12,6 +12,7 @@ class CaseStudy(Named, models.Model):
     class Meta:
         verbose_name = "case study"
         verbose_name_plural = "case studies"
+        ordering = ['-date']
 
 
     authors = models.ManyToManyField(
@@ -22,7 +23,6 @@ class CaseStudy(Named, models.Model):
     )
 
     date = models.DateField(
-        auto_created=True,
         help_text='Date of writing',
     )
 
