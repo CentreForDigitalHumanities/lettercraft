@@ -1,11 +1,11 @@
-from typing import Type
+from typing import Type, Optional
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
 from django.db.models import QuerySet, Model, Q
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, CharFilter, BooleanFilter
 
 from event.models import Episode
-from source.models import Source
+from source.models import Source, SourceImage
 from event.types.EpisodeType import EpisodeType
 from source.types.SourceContentsDateType import SourceContentsDateType
 from source.types.SourceWrittenDateType import SourceWrittenDateType
@@ -17,9 +17,10 @@ from letter.models import GiftDescription, LetterDescription
 from core.models import EntityDescription
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
-from user.permissions import can_edit_source
+from user.permissions import can_edit_source, visible_condition
 from user.types.UserType import UserType
 from user.models import User
+from source.types.SourceImageType import SourceImageType
 
 
 class SourceFilter(FilterSet):
@@ -27,13 +28,12 @@ class SourceFilter(FilterSet):
     is_public = BooleanFilter(field_name="is_public")
 
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
-        """Filter sources by name, title or author name."""
+        """Filter sources by by searching through the name, reference, or description."""
         return queryset.filter(
             Q(name__icontains=value)
             | Q(medieval_title__icontains=value)
-            | Q(edition_title__icontains=value)
-            | Q(medieval_author__icontains=value)
-            | Q(edition_author__icontains=value)
+            | Q(reference__icontains=value)
+            | Q(description_text__icontains=value)
         )
 
 
@@ -41,6 +41,7 @@ class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
     written_date = Field(SourceWrittenDateType)
+    image = Field(SourceImageType)
     contents_date = Field(SourceContentsDateType)
     agents = List(NonNull(AgentDescriptionType), required=True)
     gifts = List(NonNull(GiftDescriptionType), required=True)
@@ -49,15 +50,15 @@ class SourceType(DjangoObjectType):
     editable = Boolean(required=True)
     contributors = List(NonNull(UserType), required=True)
 
+
     class Meta:
         model = Source
         fields = [
             "id",
             "name",
             "medieval_title",
-            "medieval_author",
-            "edition_title",
-            "edition_author",
+            "reference",
+            "description_text",
             "is_public",
         ]
         filterset_class = SourceFilter
@@ -66,7 +67,8 @@ class SourceType(DjangoObjectType):
     def get_queryset(
         cls, queryset: QuerySet[Source], info: ResolveInfo
     ) -> QuerySet[Source]:
-        return queryset
+        user = info.context.user
+        return queryset.filter(visible_condition(user))
 
     # It would be proper to decorate _entity_resolver() with @staticmethod,
     # but we are running Python 3.9 on the server, which does not support
@@ -116,3 +118,8 @@ class SourceType(DjangoObjectType):
         )
 
         return User.objects.filter(id__in=user_ids)
+
+    @staticmethod
+    def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:
+        if parent.images.exists():
+            return parent.images.first()

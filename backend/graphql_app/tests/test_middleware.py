@@ -1,5 +1,6 @@
 from rest_framework.status import is_success
 import json
+import pytest
 
 QUERY_EXAMPLE = """
     query TestQuery {
@@ -9,13 +10,16 @@ QUERY_EXAMPLE = """
     }
 """
 
-MUTATION_EXAMPLE = """
-    mutation TestMutation {
-        createAgent(agentData: {name: "test", source: "1"}) {
-            ok
-        }
-    }
-"""
+
+@pytest.fixture()
+def mutation_example(source):
+    return f"""
+        mutation TestMutation {{
+            createAgent(agentData: {{name: "test", source: "{source.pk}"}}) {{
+                ok
+            }}
+        }}
+    """
 
 
 def test_middleware_passes_queries(client, db):
@@ -32,12 +36,12 @@ def test_middleware_passes_queries(client, db):
     assert not "errors" in data
 
 
-def test_middleware_blocks_mutation_from_unauthorised_user(user_client, source):
+def test_middleware_blocks_mutation_from_unauthorised_user(user_client, source, mutation_example):
     response = user_client.post(
         "/api/graphql",
         {
             "operationName": "TestMutation",
-            "query": MUTATION_EXAMPLE,
+            "query": mutation_example,
         },
     )
 
@@ -47,13 +51,13 @@ def test_middleware_blocks_mutation_from_unauthorised_user(user_client, source):
 
 
 def test_middleware_passes_mutation_from_authorised_user(
-    user, user_client, source, contributor_group
+    user, user_client, source, contributor_group, mutation_example
 ):
     response = user_client.post(
         "/api/graphql",
         {
             "operationName": "TestMutation",
-            "query": MUTATION_EXAMPLE,
+            "query": mutation_example,
         },
     )
 

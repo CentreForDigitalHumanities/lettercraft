@@ -20,7 +20,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     location = Field(AgentDescriptionLocationType)
     episodes = List(NonNull(EpisodeAgentType), required=True)
     identified = Boolean(required=True)
-    editable = Boolean(required=True)
 
     class Meta:
         model = AgentDescription
@@ -34,12 +33,6 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
             "episodes",
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
-
-    @classmethod
-    def get_queryset(
-        cls, queryset: QuerySet[AgentDescription], info: ResolveInfo
-    ) -> QuerySet[AgentDescription]:
-        return queryset.all()
 
     @staticmethod
     def resolve_describes(
@@ -62,7 +55,3 @@ class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
     @staticmethod
     def resolve_identified(parent: AgentDescription, info: ResolveInfo) -> bool:
         return parent.identified()
-
-    @staticmethod
-    def resolve_editable(parent: AgentDescription, info: ResolveInfo) -> bool:
-        return can_edit_source(info.context.user, parent.source)

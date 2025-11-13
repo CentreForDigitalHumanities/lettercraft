@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataEntryModule } from './data-entry/data-entry.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
+import { CaseStudiesModule } from './case-studies/case-studies.module';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { DataModule } from './data/data.module';
         DataEntryModule,
         FontAwesomeModule,
         DataModule,
+        CaseStudiesModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
