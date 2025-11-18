@@ -31,7 +31,7 @@ export class EpisodeLinksComponent {
         if ('episode' in link) {
             return {
                 ...link.episode,
-                urlSegment: '/data/episodes',
+                urlSegment: 'episodes',
                 icon: dataIcons.episode,
             };
         } else if ('agent' in link) {
