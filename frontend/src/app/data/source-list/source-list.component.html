@@ -22,10 +22,10 @@
     <ul class="list-group mt-2" *ngIf="pageResult.pageData$ | async as pageData">
         <li
             *ngFor="let source of pageData.sources"
-            class="list-group-item list-group-item-action"
+            class="list-group-item list-group-item-action text-reset"
         >
             <div class="d-flex align-items-center">
-                <a [routerLink]="[source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
+                <a [routerLink]="[source.id]" class="mb-1 fs-5 font-serif fw-medium stretched-link">{{ source.name }}</a>
                 <small class="text-body-secondary ms-2">
                     ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other {{{ source.numOfEpisodes}} episodes}})
                 </small>
