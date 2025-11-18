@@ -19,7 +19,6 @@ class CaseStudy(Named, models.Model):
         to=User,
         related_name='case_studies',
         blank=True,
-        related_name='case_studies',
         help_text='Author(s) of the case study',
     )
 
