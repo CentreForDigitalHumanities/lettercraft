@@ -1,11 +1,11 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Params, ResolveFn } from "@angular/router";
 import { Apollo, gql, TypedDocumentNode } from "apollo-angular";
-import { EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables, SourceTitleQueryQuery, SourceTitleQueryQueryVariables } from "generated/graphql";
+import { CaseStudyTitleQueryQuery, EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables, SourceTitleQueryQuery, SourceTitleQueryQueryVariables } from "generated/graphql";
 import { map } from "rxjs";
 import _ from "underscore";
 
-export const SITE_NAME = 'Lettercraft & Epistolary Performance in Medieval Europe';
+export const SITE_NAME = 'Lettercraft';
 export const pageTitle = (name: string) => `${name} - ${SITE_NAME}`;
 
 /**
@@ -189,3 +189,19 @@ const episodeViewTitle = (data: EpisodeTitleQueryQuery) =>
 export const episodeViewTitleResolver = queryTitleResolver(
     episodeTitleQuery, episodeViewTitle
 );
+
+const caseStudyTitleQuery = (params: Params) => gql<CaseStudyTitleQueryQuery, unknown>(`
+    query CaseStudyTitleQuery {
+        caseStudy(id: "${params['id']}") {
+            id
+            name
+        }
+    }`
+);
+
+const caseStudyViewTitle = (data: CaseStudyTitleQueryQuery) =>
+    data.caseStudy?.name || '';
+
+export const caseStudyViewTitleResolver = queryTitleResolver(
+    caseStudyTitleQuery, caseStudyViewTitle,
+)

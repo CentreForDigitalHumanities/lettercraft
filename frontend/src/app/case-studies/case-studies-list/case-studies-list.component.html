@@ -1,0 +1,24 @@
+<h1>Case studies</h1>
+
+<div *ngIf="data$ | async as data" class="my-4">
+    <div *ngFor="let item of data.caseStudies">
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="row">
+                    <h2 class="col card-title h5">
+                        <a [routerLink]="[item.id]" class="stretched-link">{{item.name}}</a>
+                        <br>
+                    </h2>
+                    <p class="col-auto card-text text-secondary">
+                        {{item.date | date}}
+                    </p>
+                </div>
+                <p class="card-text">{{authorNames(item)}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!data.caseStudies.length">
+        <p>No case studies have been published yet.</p>
+    </div>
+</div>

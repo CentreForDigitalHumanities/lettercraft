@@ -46,3 +46,27 @@
     padding-left: 2rem;
     padding-right: 2rem;
 }
+
+figure {
+    padding: 3rem;
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.lh-medium {
+    line-height: 1.75;
+}
+
+.font-serif {
+    font-family: serif;
+}
+
+.extra-header-spacing {
+    h1,h2,h3,h4,h5,h6 {
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+    }
+}

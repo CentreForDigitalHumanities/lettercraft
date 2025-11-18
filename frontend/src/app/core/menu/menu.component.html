@@ -24,6 +24,11 @@
                         Browse
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a [routerLink]="['/case-studies']" routerLinkActive="active" class="nav-link">
+                        Case studies
+                    </a>
+                </li>
                 <li *ngIf="isContributor$ | async" class="nav-item">
                     <a [routerLink]="['/data-entry']" routerLinkActive="active" class="nav-link">
                         Data entry

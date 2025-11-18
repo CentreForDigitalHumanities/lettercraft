@@ -15,7 +15,7 @@ import { LetterFormComponent } from '../data-entry/letter-form/letter-form.compo
 import { AgentFormComponent } from '../data-entry/agent-form/agent-form.component';
 import { SourceComponent } from '../data-entry/source/source.component';
 import {
-    agentFormTitleResolver, agentViewTitleResolver, episodeFormTitleResolver, episodeViewTitleResolver, giftFormTitleResolver, giftViewTitleResolver, letterFormTitleResolver, letterViewTitleResolver, locationViewTitleResolver, pageTitle,
+    agentFormTitleResolver, agentViewTitleResolver, caseStudyViewTitleResolver, episodeFormTitleResolver, episodeViewTitleResolver, giftFormTitleResolver, giftViewTitleResolver, letterFormTitleResolver, letterViewTitleResolver, locationViewTitleResolver, pageTitle,
     SITE_NAME, sourceFormTitleResolver, sourceViewTitleResolver, spaceFormTitleResolver
 } from '../titles';
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
@@ -29,6 +29,8 @@ import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
 import { SourceListComponent } from '../data/source-list/source-list.component';
 import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
+import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
+import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 
 
 const routes: Routes = [
@@ -69,6 +71,22 @@ const routes: Routes = [
         title: pageTitle('Settings'),
         canActivate: [LoggedOnGuard],
         component: UserSettingsComponent
+    },
+    {
+        path: 'case-studies',
+        children: [
+            {
+                path: ':id',
+                title: caseStudyViewTitleResolver,
+                component: CaseStudyViewComponent,
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                title: pageTitle('Case studies'),
+                component: CaseStudiesListComponent,
+            }
+        ],
     },
     {
         path: 'data',
