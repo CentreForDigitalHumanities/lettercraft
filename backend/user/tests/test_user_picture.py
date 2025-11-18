@@ -33,7 +33,7 @@ def test_profile_picture_file_cleanup(db, user, image_path, tmp_media_root):
         assert os.listdir(dir) == [f'{user.profile.pk}.jpg']
 
     def assert_no_file():
-        assert os.listdir(dir) == [f'{user.profile.pk}.jpg']
+        assert os.listdir(dir) == []
 
     user.profile.picture = File(open(image_path, 'rb'))
     user.profile.save()
