@@ -1,6 +1,9 @@
 <ng-container *ngIf="pageResult.totalSize$ | async as totalSize">
     <ngb-pagination *ngIf="totalSize > pageResult.pageSize"
         [(page)]="pageResult.page"
-        [pageSize]="pageResult.pageSize" [collectionSize]="totalSize"
+        [pageSize]="pageResult.pageSize"
+        [collectionSize]="totalSize"
+        [ellipses]="true"
+        [maxSize]="3"
     />
 </ng-container>
