@@ -2,14 +2,14 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { UserSettingsComponent } from "./user-settings.component";
 import { ToastService } from "@services/toast.service";
-import { AuthService } from "@services/auth.service";
 import { HttpTestingController } from "@angular/common/http/testing";
 import { SharedTestingModule } from "@shared/shared-testing.module";
 import { User } from "../models/user";
-import { Observable, of } from "rxjs";
-import { Injectable } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { ProfilePictureFieldComponent } from "../profile-picture-field/profile-picture-field.component";
+import { AuthService } from "@services/auth.service";
+import { Observable, of } from "rxjs";
+import { Injectable } from "@angular/core";
 
 const fakeUser: User = {
     id: 1,
@@ -24,7 +24,7 @@ const fakeUser: User = {
     picture: null,
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 class AuthServiceMock extends AuthService {
     public override currentUser$: Observable<User | null | undefined> = of(fakeUser);
 }
@@ -38,11 +38,8 @@ describe("UserSettingsComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [UserSettingsComponent, ProfilePictureFieldComponent],
-            providers: [{
-                provide: AuthService,
-                useClass: AuthServiceMock
-            }],
-            imports: [SharedTestingModule]
+            providers: [{ provide: AuthService, useClass: AuthServiceMock }],
+            imports: [SharedTestingModule],
         });
         toastService = TestBed.inject(ToastService);
         httpTestingController = TestBed.inject(HttpTestingController);
@@ -50,8 +47,6 @@ describe("UserSettingsComponent", () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
 
-        // Initial request to get the user data in AuthService
-        httpTestingController.expectOne("/users/user/").flush(fakeUser);
     });
 
     it("should create", () => {
@@ -64,7 +59,9 @@ describe("UserSettingsComponent", () => {
             email: 'frodo@shire.me',
             username: 'frodo',
             firstName: 'Frodo',
-            lastName: 'Baggins'
+            lastName: 'Baggins',
+            description: '',
+            publicRole: null,
         });
     });
 

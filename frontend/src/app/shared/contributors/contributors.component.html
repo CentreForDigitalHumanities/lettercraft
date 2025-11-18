@@ -1,16 +1,15 @@
 <small class="contributors text-secondary">
-    <ng-container *ngIf="contributors.length === 0"
-        >No contributors</ng-container
-    >
-
-    <ng-container [ngPlural]="contributors.length">
-        <ng-template ngPluralCase="1">Contributor</ng-template>
-        <ng-template ngPluralCase="2">Contributors</ng-template>
-    </ng-container>:
-    <ng-container *ngFor="let contributor of contributors; last as last">
-        <a [routerLink]="['/contributors', contributor.id]"
-            class="link-secondary">
-            {{contributor.fullName}}
-        </a><ng-container *ngIf="!last">, </ng-container>
+    <ng-container *ngIf="contributors.length > 0; else noContributors">
+        <ng-container [ngPlural]="contributors.length">
+            <ng-template ngPluralCase="1">Contributor</ng-template>
+            <ng-template ngPluralCase="other">Contributors</ng-template>
+        </ng-container>:
+        <ng-container *ngFor="let contributor of contributors; last as last">
+            <a [routerLink]="['/contributors', contributor.id]"
+                class="link-secondary"
+            >{{contributor.fullName}}</a><ng-container *ngIf="!last"
+            >, </ng-container>
+        </ng-container>
     </ng-container>
+    <ng-template #noContributors>No contributors</ng-template>
 </small>

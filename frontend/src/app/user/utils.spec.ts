@@ -40,6 +40,9 @@ describe("User utils", () => {
                 last_name: "User",
                 is_staff: true,
                 is_contributor: true,
+                description: '',
+                public_role: null,
+                picture: null,
             };
             const user = parseUserData(result);
             expect(user).toBeInstanceOf(User);
