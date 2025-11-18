@@ -5,14 +5,15 @@
             Lettercraft
         </div>
 
-        <button class="navbar-toggler border-accent border-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
-            aria-controls="navbarLink"
+        <button class="navbar-toggler" type="button"
+            aria-controls="navbar-links"
             [attr.aria-expanded]="burgerActive" aria-label="Toggle navigation"
-            (click)="toggleBurger()">
+            (click)="burgerActive = !burgerActive">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div id="navbarLinks" class="navbar-collapse d-flex justify-content-between" [ngbCollapse]="!burgerActive">
+        <div id="navbar-links" class="collapse navbar-collapse"
+            [ngbCollapse]="!burgerActive">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a [routerLink]="['/home']" routerLinkActive="active" class="nav-link">
@@ -35,7 +36,7 @@
                     </a>
                 </li>
             </ul>
-            <lc-user-menu></lc-user-menu>
+            <lc-user-menu class="ms-auto"></lc-user-menu>
         </div>
     </div>
 </nav>
