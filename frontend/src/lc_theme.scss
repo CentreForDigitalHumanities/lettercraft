@@ -1,0 +1,68 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+// Variables
+$lc_jonquil: #ffce1f;
+$lc_royal_blue: #003d66;
+$lc_parchment: #eeeae4;
+$lc_ink: #2c2416;
+$lc_burgundy: #722f37;
+
+$lc-colors: (
+    "accent": $lc_jonquil,
+    "primary": $lc_royal_blue,
+    "parchment": $lc_parchment,
+    "ink": $lc_ink,
+    "burgundy": $lc_burgundy,
+);
+
+$theme-colors: map-merge($theme-colors, $lc-colors);
+
+@font-face {
+    font-family: "Merriweather";
+    src: url('/assets/fonts/Merriweather/Merriweather-VariableFont_opsz,wdth,wght.ttf');
+}
+
+@font-face {
+    font-family: "Merriweather";
+    src: url('/assets/fonts/Open_Sans/Merriweather-Italic-VariableFont_opsz,wdth,wght.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url('/assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf');
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url('/assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf');
+    font-style: italic;
+}
+
+
+
+// The order of these imports matters!
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+$royal_blue_lighter: #1071b1;
+
+// Override Bootstrap defaults
+$link-color: $royal_blue_lighter;
+$link-hover-color: $lc_royal_blue;
+
+$font-family-sans-serif: 'Open Sans', system-ui, sans-serif;
+$font-family-serif: 'Merriweather', serif;
+
+$headings-font-family: $font-family-serif;
+$display-font-family: $font-family-serif;
+
+// Layout
+
+$navbar-light-active-color: $lc_jonquil;
+$navbar-dark-active-color: $lc_jonquil;
+$pagination-active-bg: $royal_blue_lighter;
+$pagination-active-border-color: $royal_blue_lighter;

@@ -15,7 +15,4 @@ export class MenuComponent {
 
     constructor(private authService: AuthService) {}
 
-    toggleBurger(): void {
-        this.burgerActive = !this.burgerActive;
-    }
 }
