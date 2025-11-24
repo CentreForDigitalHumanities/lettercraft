@@ -63,7 +63,7 @@ def contributor_role(db, user) -> ContributorRole:
     )
 
 @pytest.fixture
-def user_has_contributor_role(db, user, contributor_role) -> ContributorRole:
+def user_has_contributor_role(db, user, contributor_role):
     user.profile.role = contributor_role
     user.profile.save()
 

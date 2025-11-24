@@ -29,12 +29,6 @@ export class CaseStudyViewComponent {
     ) {
     }
 
-    authorNames(caseStudy: CaseStudy): string {
-        const names = caseStudy.authors.map(author => author.fullName);
-        const formatter = new Intl.ListFormat('en');
-        return formatter.format(names);
-    }
-
     sanitizedContent(caseStudy: CaseStudy) {
         return this.sanitizer.bypassSecurityTrustHtml(caseStudy.content);
     }

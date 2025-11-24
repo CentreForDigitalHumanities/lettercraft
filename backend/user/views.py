@@ -1,5 +1,3 @@
-import os
-
 from allauth.account.models import EmailConfirmationHMAC
 from django.http import HttpRequest, HttpResponseRedirect, FileResponse
 from django.contrib.auth import logout

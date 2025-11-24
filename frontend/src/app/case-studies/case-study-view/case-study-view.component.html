@@ -4,7 +4,7 @@
 
         <h1 class="mt-4">{{caseStudy.name}}</h1>
 
-        <p class="lead">
+        <p class="lead" *ngIf="caseStudy.authors.length">
             By
             <ng-container *ngFor="let author of caseStudy.authors; last as last">
                 <a [routerLink]="['/contributors', author.id]" class="link-dark"
