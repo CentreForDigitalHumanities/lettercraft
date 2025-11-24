@@ -34,6 +34,6 @@ class UserQueries(ObjectType):
     def resolve_contributor_roles(
         parent: None,
         info: ResolveInfo,
-    ) -> QuerySet[User]:
+    ) -> QuerySet[ContributorRole]:
         return ContributorRoleType.get_queryset(ContributorRole.objects.all(), info)
 
