@@ -126,7 +126,7 @@
             <em>{{publicRole}}</em>). This means that your profile page is publicly
             visible. Please contact an administrator if this needs to be changed.
         </p>
-        <a [routerLink]="['contributors', form.controls.id]" class="btn btn-light">
+        <a [routerLink]="['/contributors', form.controls.id.value]" class="btn btn-light">
             <lc-icon [icon]="actionIcons.view" />
             View your profile page
         </a>
