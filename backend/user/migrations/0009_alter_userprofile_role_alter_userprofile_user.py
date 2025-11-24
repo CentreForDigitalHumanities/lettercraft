@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='userprofile',
             name='role',
-            field=models.ForeignKey(blank=True, help_text='Role in which this user should be credited (e.g. project leader, research assistant). Users without a contributor role are not visible tovisitors.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='user.contributorrole'),
+            field=models.ForeignKey(blank=True, help_text='Role in which this user should be credited (e.g. project leader, research assistant). Users without a contributor role are not visible to visitors.', null=True, on_delete=django.db.models.deletion.SET_NULL, to='user.contributorrole'),
         ),
         migrations.AlterField(
             model_name='userprofile',
