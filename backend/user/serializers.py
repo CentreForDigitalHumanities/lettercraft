@@ -15,7 +15,7 @@ class ProfilePictureField(serializers.URLField):
 
 
 class CustomUserDetailsSerializer(UserDetailsSerializer):
-    description = serializers.CharField(source="profile.description")
+    description = serializers.CharField(source="profile.description", allow_blank=True)
     public_role = serializers.CharField(source="profile.role", read_only=True)
     picture = ProfilePictureField(source="profile.picture", read_only=True)
 

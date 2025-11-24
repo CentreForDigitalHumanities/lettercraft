@@ -68,7 +68,7 @@
         </p>
     </div>
 
-    <lc-profile-picture-field />
+    <lc-profile-picture-field *ngIf="form.controls.publicRole.value" />
 
     <div class="my-3">
         <button type="submit" class="btn btn-primary">

@@ -28,7 +28,7 @@ type UserSettingsForm = {
     styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
-    @ViewChild(ProfilePictureFieldComponent) profilePictureField!: ProfilePictureFieldComponent;
+    @ViewChild(ProfilePictureFieldComponent) profilePictureField?: ProfilePictureFieldComponent;
 
     public form = new FormGroup<UserSettingsForm>({
         id: new FormControl<number>(-1, {
@@ -151,7 +151,7 @@ export class UserSettingsComponent implements OnInit {
         }
         const userSettings = this.form.getRawValue();
         this.authService.newUserSettings(userSettings);
-        this.profilePictureField.submit();
+        this.profilePictureField?.submit();
     }
 
 
