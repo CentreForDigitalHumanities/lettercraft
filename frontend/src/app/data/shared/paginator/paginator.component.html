@@ -1,8 +1,7 @@
 <div class="hstack" *ngIf="pageResult.totalSize$ | async as totalSize">
-    <div class="ms-auto" [ngbCollapse]="totalSize <= pageResult.pageSize">
-        <p class="text-center" [id]="labelID">Page</p>
+    <div class="mx-auto" [ngbCollapse]="totalSize <= pageResult.pageSize">
         <ngb-pagination
-            [attr.aria-labelledby]="labelID"
+            aria-label="page"
             [(page)]="pageResult.page"
             [pageSize]="pageResult.pageSize"
             [collectionSize]="totalSize"
