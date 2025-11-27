@@ -20,7 +20,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         IconComponent,
         BreadcrumbComponent,
         ActionButtonGroupComponent,
@@ -46,13 +47,15 @@ import { NotFoundComponent } from './not-found/not-found.component';
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
-        HttpClientModule,
-        HttpClientXsrfModule,
+//        HttpClientModule,
+//        HttpClientXsrfModule,
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
         FontAwesomeModule,
-    ], imports: [CommonModule,
+    ],
+    imports: [
+        CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
         NgbModule,
@@ -61,5 +64,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
         FontAwesomeModule], providers: [provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
             cookieName: "csrftoken",
             headerName: "X-CSRFToken",
-        }))] })
-export class SharedModule {}
+        }))]
+})
+export class SharedModule { }
