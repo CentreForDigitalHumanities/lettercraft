@@ -51,6 +51,15 @@
                 "
             />
         </div>
+        <div *ngIf="source.episodes.length >= 5" class="btn-group">
+            <button
+                class="btn btn-primary"
+                (click)="openNewEpisodeModal(newEpisodeModal)"
+            >
+                <lc-icon [icon]="actionIcons.create" />
+                Add a new episode
+            </button>
+        </div>
     </ng-container>
 
     <ng-template #noSource>
