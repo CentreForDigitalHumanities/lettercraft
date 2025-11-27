@@ -8,30 +8,23 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { UserModule } from './user/user.module';
 import { GraphQLModule } from './graphql.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { DataEntryModule } from './data-entry/data-entry.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         HomeComponent,
     ],
-    imports: [
-        AppRoutingModule,
+    bootstrap: [AppComponent], imports: [AppRoutingModule,
         SharedModule,
         CoreModule,
         UserModule,
         GraphQLModule,
-        HttpClientModule,
         DataEntryModule,
         FontAwesomeModule,
         DataModule,
-        CaseStudiesModule,
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
-})
+        CaseStudiesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

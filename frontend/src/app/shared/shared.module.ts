@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,8 +20,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         IconComponent,
         BreadcrumbComponent,
         ActionButtonGroupComponent,
@@ -32,20 +31,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
         OrderButtonGroupComponent,
         SentenceCasePipe,
         NotFoundComponent,
-    ],
-    imports: [
-        CommonModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        HttpClientXsrfModule.withOptions({
-            cookieName: "csrftoken",
-            headerName: "X-CSRFToken",
-        }),
-        NgbModule,
-        RouterModule,
-        ReactiveFormsModule,
-        FontAwesomeModule,
     ],
     exports: [
         IconComponent,
@@ -67,6 +52,14 @@ import { NotFoundComponent } from './not-found/not-found.component';
         RouterModule,
         ReactiveFormsModule,
         FontAwesomeModule,
-    ],
-})
+    ], imports: [CommonModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        NgbModule,
+        RouterModule,
+        ReactiveFormsModule,
+        FontAwesomeModule], providers: [provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
+            cookieName: "csrftoken",
+            headerName: "X-CSRFToken",
+        }))] })
 export class SharedModule {}
