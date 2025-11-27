@@ -27,6 +27,15 @@
         </p>
 
         <div class="mb-4">
+            <div class="btn-group mb-4">
+                <button
+                    class="btn btn-primary"
+                    (click)="openNewEpisodeModal(newEpisodeModal)"
+                >
+                    <lc-icon [icon]="actionIcons.create" />
+                    Add a new episode
+                </button>
+            </div>
             <lc-episode-preview
                 *ngFor="
                     let episode of source.episodes;
@@ -41,15 +50,6 @@
                     reorderEpisodes(source.episodes, episode.id, $event)
                 "
             />
-        </div>
-        <div class="btn-group mb-4">
-            <button
-                class="btn btn-primary"
-                (click)="openNewEpisodeModal(newEpisodeModal)"
-            >
-                <lc-icon [icon]="actionIcons.create" />
-                Add a new episode
-            </button>
         </div>
     </ng-container>
 
