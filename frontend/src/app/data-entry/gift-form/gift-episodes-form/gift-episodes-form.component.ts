@@ -10,9 +10,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { differenceBy, splat } from '@shared/utils';
 
 @Component({
-  selector: 'lc-gift-episodes-form',
-  templateUrl: './gift-episodes-form.component.html',
-  styleUrls: ['./gift-episodes-form.component.scss']
+    selector: 'lc-gift-episodes-form',
+    templateUrl: './gift-episodes-form.component.html',
+    styleUrls: ['./gift-episodes-form.component.scss'],
+    standalone: false
 })
 export class GiftEpisodesFormComponent implements OnDestroy {
     data$: Observable<DataEntryGiftEpisodesQuery>;

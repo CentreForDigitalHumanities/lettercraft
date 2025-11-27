@@ -24,6 +24,7 @@ import { MutationResult } from "apollo-angular";
     selector: "lc-episode-source-text-form",
     templateUrl: "./episode-source-text-form.component.html",
     styleUrls: ["./episode-source-text-form.component.scss"],
+    standalone: false
 })
 export class EpisodeSourceTextFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

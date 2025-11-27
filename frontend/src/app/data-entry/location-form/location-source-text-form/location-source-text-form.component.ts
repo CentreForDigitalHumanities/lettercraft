@@ -37,6 +37,7 @@ type LocationSourceTextForm = {
     selector: "lc-location-source-text-form",
     templateUrl: "./location-source-text-form.component.html",
     styleUrls: ["./location-source-text-form.component.scss"],
+    standalone: false
 })
 export class LocationSourceTextFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

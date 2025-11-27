@@ -24,6 +24,7 @@ type UserSettingsForm = {
     selector: "lc-user-settings",
     templateUrl: "./user-settings.component.html",
     styleUrls: ["./user-settings.component.scss"],
+    standalone: false
 })
 export class UserSettingsComponent implements OnInit {
     public form = new FormGroup<UserSettingsForm>({

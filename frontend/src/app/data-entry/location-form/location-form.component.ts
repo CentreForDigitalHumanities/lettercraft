@@ -25,6 +25,7 @@ type QueriedLocation = NonNullable<
     templateUrl: "./location-form.component.html",
     styleUrls: ["./location-form.component.scss"],
     providers: [FormService],
+    standalone: false
 })
 export class LocationFormComponent {
     public id$ = this.formService.id$;

@@ -35,6 +35,7 @@ type LetterCategoriesForm = {
     selector: "lc-letter-categories-form",
     templateUrl: "./letter-categories-form.component.html",
     styleUrls: ["./letter-categories-form.component.scss"],
+    standalone: false
 })
 export class LetterCategoriesFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

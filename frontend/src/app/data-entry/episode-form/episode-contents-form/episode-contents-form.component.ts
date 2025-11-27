@@ -29,6 +29,7 @@ import { isEqual } from "underscore";
     selector: "lc-episode-contents-form",
     templateUrl: "./episode-contents-form.component.html",
     styleUrls: ["./episode-contents-form.component.scss"],
+    standalone: false
 })
 export class EpisodeContentsFormComponent implements OnInit, OnDestroy {
     private id$: Observable<string> = this.formService.id$;

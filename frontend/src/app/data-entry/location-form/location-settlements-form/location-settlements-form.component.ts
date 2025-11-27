@@ -43,6 +43,7 @@ type QueriedSettlement = NonNullable<
     selector: "lc-location-settlements-form",
     templateUrl: "./location-settlements-form.component.html",
     styleUrls: ["./location-settlements-form.component.scss"],
+    standalone: false
 })
 export class LocationSettlementsFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

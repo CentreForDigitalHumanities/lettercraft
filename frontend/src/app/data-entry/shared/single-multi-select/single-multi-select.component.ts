@@ -26,6 +26,7 @@ import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
             multi: true,
         },
     ],
+    standalone: false
 })
 export class SingleMultiSelectComponent
     implements ControlValueAccessor, OnInit

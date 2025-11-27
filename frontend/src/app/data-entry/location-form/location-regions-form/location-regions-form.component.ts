@@ -45,6 +45,7 @@ const regionTypeIconMapping: Record<SpaceRegionTypeChoices, IconDefinition> = {
     selector: "lc-location-regions-form",
     templateUrl: "./location-regions-form.component.html",
     styleUrls: ["./location-regions-form.component.scss"],
+    standalone: false
 })
 export class LocationRegionsFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

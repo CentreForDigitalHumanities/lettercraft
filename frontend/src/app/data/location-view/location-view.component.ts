@@ -8,9 +8,10 @@ import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
-  selector: 'lc-location-view',
-  templateUrl: './location-view.component.html',
-  styleUrls: ['./location-view.component.scss']
+    selector: 'lc-location-view',
+    templateUrl: './location-view.component.html',
+    styleUrls: ['./location-view.component.scss'],
+    standalone: false
 })
 export class LocationViewComponent {
     id$: Observable<string> = this.route.params.pipe(

@@ -24,6 +24,7 @@ type QueriedEpisode = NonNullable<DataEntryEpisodeFormQuery["episode"]>;
     templateUrl: "./episode-form.component.html",
     styleUrls: ["./episode-form.component.scss"],
     providers: [FormService],
+    standalone: false
 })
 export class EpisodeFormComponent {
     Entity = Entity;

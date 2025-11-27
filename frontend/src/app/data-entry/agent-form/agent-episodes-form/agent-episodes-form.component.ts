@@ -18,9 +18,10 @@ import { ApolloCache } from '@apollo/client/core';
 
 
 @Component({
-  selector: 'lc-agent-episodes-form',
-  templateUrl: './agent-episodes-form.component.html',
-  styleUrls: ['./agent-episodes-form.component.scss']
+    selector: 'lc-agent-episodes-form',
+    templateUrl: './agent-episodes-form.component.html',
+    styleUrls: ['./agent-episodes-form.component.scss'],
+    standalone: false
 })
 export class AgentEpisodesFormComponent implements OnDestroy {
     data$: Observable<DataEntryAgentEpisodesQuery>;

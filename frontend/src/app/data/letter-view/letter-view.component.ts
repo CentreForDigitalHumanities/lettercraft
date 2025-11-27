@@ -7,9 +7,10 @@ import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
-  selector: 'lc-letter-view',
-  templateUrl: './letter-view.component.html',
-  styleUrls: ['./letter-view.component.scss']
+    selector: 'lc-letter-view',
+    templateUrl: './letter-view.component.html',
+    styleUrls: ['./letter-view.component.scss'],
+    standalone: false
 })
 export class LetterViewComponent {
     id$: Observable<string> = this.route.params.pipe(

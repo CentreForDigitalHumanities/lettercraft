@@ -10,6 +10,7 @@ import { PageResult } from "../utils/pagination";
     selector: "lc-episode-list",
     templateUrl: "./episode-list.component.html",
     styleUrls: ["./episode-list.component.scss"],
+    standalone: false
 })
 export class EpisodeListComponent {
     breadcrumbs: Breadcrumb[] = [

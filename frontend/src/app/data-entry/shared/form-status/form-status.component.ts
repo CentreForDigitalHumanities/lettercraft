@@ -6,7 +6,8 @@ import { statusIcons } from '@shared/icons';
 @Component({
     selector: 'lc-form-status',
     templateUrl: './form-status.component.html',
-    styleUrls: ['./form-status.component.scss']
+    styleUrls: ['./form-status.component.scss'],
+    standalone: false
 })
 export class FormStatusComponent {
     @Input({ required: true }) status$!: Observable<FormStatus>;

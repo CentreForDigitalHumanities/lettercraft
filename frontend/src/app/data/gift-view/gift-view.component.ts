@@ -7,9 +7,10 @@ import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
-  selector: 'lc-gift-view',
-  templateUrl: './gift-view.component.html',
-  styleUrls: ['./gift-view.component.scss']
+    selector: 'lc-gift-view',
+    templateUrl: './gift-view.component.html',
+    styleUrls: ['./gift-view.component.scss'],
+    standalone: false
 })
 export class GiftViewComponent {
     id$: Observable<string> = this.route.params.pipe(
