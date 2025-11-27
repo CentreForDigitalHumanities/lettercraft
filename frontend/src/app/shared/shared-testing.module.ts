@@ -8,15 +8,23 @@ import { DataEntrySharedModule } from '../data-entry/shared/data-entry-shared.mo
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
-@NgModule({ exports: [
+
+@NgModule({
+    exports: [
         SharedModule,
-        HttpClientTestingModule,
         NoopAnimationsModule,
         RouterTestingModule,
         ApolloTestingModule,
         DataEntrySharedModule,
-    ], imports: [SharedModule,
+    ],
+    imports: [
+        SharedModule,
         NoopAnimationsModule,
         RouterTestingModule,
-        DataEntrySharedModule], providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()] })
+        DataEntrySharedModule
+    ],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()
+    ]
+})
 export class SharedTestingModule { }
