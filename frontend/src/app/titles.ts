@@ -52,8 +52,7 @@ export const sourceFormTitleResolver = queryTitleResolver(
     sourceTitleQuery, sourceFormTitle, false, { editable: true }
 );
 
-function episodeTitleQuery() {
-    return (params: Params) => gql<EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables>(`
+const episodeTitleQuery = (params: Params) => gql<EpisodeTitleQueryQuery, EpisodeTitleQueryQueryVariables>(`
     query EpisodeTitleQuery($editable: Boolean!) {
         episode(id: "${params['id']}", editable: $editable) {
             id
@@ -61,13 +60,12 @@ function episodeTitleQuery() {
             source { id, name }
         }
     }`);
-}
 
 const episodeFormTitle = (data: EpisodeTitleQueryQuery) =>
     `Edit ${data.episode?.name} (${data.episode?.source.name})`;
 
 export const episodeFormTitleResolver = queryTitleResolver(
-    episodeTitleQuery(), episodeFormTitle, false, { editable: true }
+    episodeTitleQuery, episodeFormTitle, false, { editable: true }
 );
 
 type EntityDescriptionTitleQueryData<Key extends string> =
@@ -76,8 +74,8 @@ type EntityDescriptionTitleQueryData<Key extends string> =
 type AgentTitleQueryData = EntityDescriptionTitleQueryData<'agentDescription'>;
 
 const agentTitleQuery = (params: Params) => gql<AgentTitleQueryData, unknown>(`
-    query AgentTitleQuery {
-        agentDescription(id: "${params['id']}") {
+    query AgentTitleQuery($editable: Boolean!) {
+        agentDescription(id: "${params['id']}", editable: $editable) {
             id
             name
             source { id, name }
@@ -98,14 +96,14 @@ const entityDescriptionFormTitle = <Key extends string>(
 };
 
 export const agentFormTitleResolver = queryTitleResolver(
-    agentTitleQuery, entityDescriptionFormTitle, true
+    agentTitleQuery, entityDescriptionFormTitle, true, { editable: true }
 );
 
 type LetterTitleQueryData = EntityDescriptionTitleQueryData<'letterDescription'>;
 
 const letterTitleQuery = (params: Params) => gql<LetterTitleQueryData, unknown>(`
-    query LetterTitleQuery {
-        letterDescription(id: "${params['id']}") {
+    query LetterTitleQuery($editable: Boolean!) {
+        letterDescription(id: "${params['id']}", editable: $editable) {
             id
             name
             source { id, name }
@@ -113,17 +111,16 @@ const letterTitleQuery = (params: Params) => gql<LetterTitleQueryData, unknown>(
     }`
 );
 
-
 export const letterFormTitleResolver = queryTitleResolver(
-    letterTitleQuery, entityDescriptionFormTitle, true
+    letterTitleQuery, entityDescriptionFormTitle, true, { editable: true }
 );
 
 
 type GiftTitleQueryData = EntityDescriptionTitleQueryData<'giftDescription'>;
 
 const giftTitleQuery = (params: Params) => gql<GiftTitleQueryData, unknown>(`
-    query GiftTitleQuery {
-        giftDescription(id: "${params['id']}") {
+    query GiftTitleQuery($editable: Boolean!) {
+        giftDescription(id: "${params['id']}", editable: $editable) {
             id
             name
             source { id, name }
@@ -133,14 +130,14 @@ const giftTitleQuery = (params: Params) => gql<GiftTitleQueryData, unknown>(`
 
 
 export const giftFormTitleResolver = queryTitleResolver(
-    giftTitleQuery, entityDescriptionFormTitle, true
+    giftTitleQuery, entityDescriptionFormTitle, true, { editable: true }
 );
 
 type SpaceTitleQueryData = EntityDescriptionTitleQueryData<'spaceDescription'>;
 
 const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
-    query SpaceTitleQuery {
-        spaceDescription(id: "${params['id']}") {
+    query SpaceTitleQuery($editable: Boolean!) {
+        spaceDescription(id: "${params['id']}", editable: $editable) {
             id
             name
             source { id, name }
@@ -149,7 +146,7 @@ const spaceTitleQuery = (params: Params) => gql<SpaceTitleQueryData, unknown>(`
 );
 
 export const spaceFormTitleResolver = queryTitleResolver(
-    spaceTitleQuery, entityDescriptionFormTitle, true
+    spaceTitleQuery, entityDescriptionFormTitle, true, { editable: true }
 );
 
 const agentViewTitle = (data: AgentTitleQueryData): string =>
@@ -183,15 +180,14 @@ export const giftViewTitleResolver = queryTitleResolver(
 const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
 
 export const sourceViewTitleResolver = queryTitleResolver(
-    sourceTitleQuery, sourceViewTitle, false, { editable: false }
+    sourceTitleQuery, sourceViewTitle, false
 );
-
 
 const episodeViewTitle = (data: EpisodeTitleQueryQuery) =>
     `${data.episode?.name} (${data.episode?.source.name})`;
 
 export const episodeViewTitleResolver = queryTitleResolver(
-    episodeTitleQuery(), episodeViewTitle, false, { editable: false }
+    episodeTitleQuery, episodeViewTitle, false
 );
 
 const caseStudyTitleQuery = (params: Params) => gql<CaseStudyTitleQueryQuery, unknown>(`
