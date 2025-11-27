@@ -152,8 +152,10 @@ class Command(BaseCommand):
             designators=fake.words(nb=3, unique=True),
         )
 
-        episode_agents = get_random_model_objects(
-            AgentDescription, min_amount=0, max_amount=20
+        episode_agents = list(
+            AgentDescription.objects.filter(source=source).order_by("?")[
+                : random.randint(0, 20)
+            ]
         )
         for agent in episode_agents:
             EpisodeAgent.objects.create(
@@ -162,8 +164,10 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
-        episode_gifts = get_random_model_objects(
-            GiftDescription, min_amount=0, max_amount=20
+        episode_gifts = list(
+            GiftDescription.objects.filter(source=source).order_by("?")[
+                : random.randint(0, 20)
+            ]
         )
         for gift in episode_gifts:
             EpisodeGift.objects.create(
@@ -172,8 +176,10 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
-        episode_letters = get_random_model_objects(
-            LetterDescription, min_amount=0, max_amount=20
+        episode_letters = list(
+            LetterDescription.objects.filter(source=source).order_by("?")[
+                : random.randint(0, 20)
+            ]
         )
         for letter in episode_letters:
             EpisodeLetter.objects.create(
@@ -182,8 +188,10 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
-        episode_spaces = get_random_model_objects(
-            SpaceDescription, min_amount=0, max_amount=20
+        episode_spaces = list(
+            SpaceDescription.objects.filter(source=source).order_by("?")[
+                : random.randint(0, 20)
+            ]
         )
         for space in episode_spaces:
             EpisodeSpace.objects.create(

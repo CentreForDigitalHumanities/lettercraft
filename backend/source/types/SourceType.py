@@ -68,7 +68,7 @@ class SourceType(DjangoObjectType):
         cls, queryset: QuerySet[Source], info: ResolveInfo
     ) -> QuerySet[Source]:
         user = info.context.user
-        return queryset.filter(visible_condition(user))
+        return queryset.filter(visible_condition(user)).distinct()
 
     # It would be proper to decorate _entity_resolver() with @staticmethod,
     # but we are running Python 3.9 on the server, which does not support

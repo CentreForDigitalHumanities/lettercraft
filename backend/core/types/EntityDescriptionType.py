@@ -10,6 +10,7 @@ from user.types.UserType import UserType
 from core.types.entity import EntityDescription as EntityDescriptionInterface
 from user.permissions import visible_sources, can_edit_source
 
+
 class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     """
     Type for models that extend the EntityDescription model.
@@ -38,18 +39,15 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
         sources = visible_sources(info.context.user)
         return queryset.filter(source__in=sources)
 
-
     @staticmethod
     def resolve_contributors(
         parent: EntityDescription, info: ResolveInfo
     ) -> QuerySet[User]:
         return parent.contributors.all()
 
-
     @staticmethod
     def resolve_editable(parent: EntityDescription, info: ResolveInfo) -> bool:
         return can_edit_source(info.context.user, parent.source)
-
 
 
 class CreateEntityDescriptionInput(graphene.InputObjectType):
