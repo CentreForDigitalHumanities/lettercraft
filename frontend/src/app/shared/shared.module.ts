@@ -47,8 +47,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
         CommonModule,
         BrowserModule,
         BrowserAnimationsModule,
-//        HttpClientModule,
-//        HttpClientXsrfModule,
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
@@ -61,9 +59,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
         NgbModule,
         RouterModule,
         ReactiveFormsModule,
-        FontAwesomeModule], providers: [provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
+        FontAwesomeModule
+    ],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration({
             cookieName: "csrftoken",
             headerName: "X-CSRFToken",
-        }))]
+        })),
+    ]
 })
 export class SharedModule { }
