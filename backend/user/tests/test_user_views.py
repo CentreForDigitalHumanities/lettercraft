@@ -12,7 +12,15 @@ def test_user_details(user_client, user_data):
         "last_name": user_data["last_name"],
         "is_staff": False,
         "is_contributor": False,
+        "description": "",
+        "public_role": None,
+        "picture": None,
     }
+
+
+def test_user_details_picture(user, user_client, user_profile_picture):
+    details = user_client.get("/users/user/")
+    assert details.data['picture'] == f"/users/pictures/{user.pk}/"
 
 
 def test_user_updates(user_client, user_data):
@@ -37,3 +45,17 @@ def test_user_updates(user_client, user_data):
     )
     assert not details()["is_staff"]
     assert not details()["is_contributor"]
+
+def test_save_description(user_client, user_data):
+    route = "/users/user/"
+    details = lambda: user_client.get(route).data
+    assert details()["username"] == user_data["username"]
+
+    # update username should succeed
+    response = user_client.patch(
+        route,
+        {"description": "Bla bla bla"},
+        content_type="application/json",
+    )
+    assert response.status_code == 200
+    assert details()["description"] == "Bla bla bla"

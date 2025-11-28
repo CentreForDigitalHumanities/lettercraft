@@ -1,0 +1,49 @@
+<ng-container *ngIf="data$ | async as data; else loading">
+    <ng-container *ngIf="data.userDescription as user">
+        <lc-breadcrumb [breadcrumbs]="breadcrumbs(user)" />
+
+        <div class="mb-4">
+            <h1>{{user.fullName}}</h1>
+
+            <p class="lead">{{user.publicRole | sentenceCase }}</p>
+        </div>
+
+        <div class="clearfix">
+            <ng-container *ngIf="user.picture">
+                <img [src]="user.picture" alt="profile picture of {{user.fullName}}"
+                    class="float-end ms-5 me-4 mb-4 profile-picture">
+            </ng-container>
+
+            <div *ngIf="user.description" class="preserve-white-space mb-4"
+                >{{user.description}}</div>
+        </div>
+
+        <section *ngIf="user.caseStudies.length" class="mb-4">
+            <h2>Case studies</h2>
+
+            <ul>
+                <li *ngFor="let caseStudy of user.caseStudies">
+                    <a [routerLink]="['case-studies', caseStudy.id]">{{caseStudy.name}}</a>
+                </li>
+            </ul>
+        </section>
+
+        <section *ngIf="user.contributedSources.length" class="mb-4">
+            <h2>Database contributions</h2>
+
+            <p>{{user.fullName}} has worked on the following source texts:</p>
+
+            <ul>
+                <li *ngFor="let source of user.contributedSources">
+                    <a [routerLink]="['/data/sources', source.id]">{{source.name}}</a>
+                </li>
+            </ul>
+        </section>
+    </ng-container>
+</ng-container>
+
+<ng-template #loading>
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</ng-template>

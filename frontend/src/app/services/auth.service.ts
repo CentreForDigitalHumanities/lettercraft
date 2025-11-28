@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SessionService } from './session.service';
-import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay } from 'rxjs';
+import { catchError, map, of, switchMap, merge, share, startWith, withLatestFrom, shareReplay, take, Observable, filter } from 'rxjs';
 import { UserRegistration, UserResponse, UserLogin, PasswordForgotten, ResetPassword, KeyInfo, UserSettings, KeyInfoResult } from '../user/models/user';
 import { encodeUserData, parseUserData } from '../user/utils';
 import _ from 'underscore';
 import { HttpClient } from '@angular/common/http';
 import { HttpVerb, Request } from '../user/Request';
+
 
 export interface AuthAPIResult {
     detail: string;
@@ -94,12 +95,6 @@ export class AuthService {
             .subscribe(() => this.logout.subject.next());
     }
 
-    // Keeping track of the latest version of the username
-    private currentUserName = toSignal<string | null>(
-        this.currentUser$.pipe(
-            map(user => user?.username ?? null)
-        )
-    );
 
     /**
      * Encodes the user settings and sends them to the server to be updated.
@@ -111,11 +106,32 @@ export class AuthService {
      * @returns void
      */
     public newUserSettings(userSettings: UserSettings): void {
-        if (userSettings.username === this.currentUserName()) {
-            delete userSettings.username;
-        }
         const encoded = encodeUserData(userSettings);
         this.updateSettings.subject.next(encoded);
+    }
+
+    uploadPicture(data: FormData): Observable<string> {
+        return this.pictureRoute$().pipe(
+            switchMap(route => this.http.put<string>(route, data).pipe(
+                map(_.constant(route)),
+            )),
+        );
+    }
+
+    deletePicture(): Observable<null> {
+        return this.pictureRoute$().pipe(
+            switchMap(route => this.http.delete<string>(route)),
+            map(_.constant(null)),
+        );
+    }
+
+    /** Picture route for PUT/DELETE requests. Assumes the user is already authenticated. */
+    private pictureRoute$(): Observable<string> {
+        return this.currentUser$.pipe(
+            take(1),
+            filter(user => !!user),
+            map(user => user ? this.authRoute(`pictures/${user.id}/`) : ''), // this condition is trivially true
+        );
     }
 
     private authRoute(route: string): string {

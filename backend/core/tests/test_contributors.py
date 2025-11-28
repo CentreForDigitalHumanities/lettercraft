@@ -139,3 +139,25 @@ class ContributorTestCase(GraphQLTestCase):
 
         self.assertEqual(first_contributor.username, "Yoda")
         self.assertEqual(second_contributor.username, "Obi-Wan")
+
+
+def test_contributor_visibility(
+    graphql_client, user, contributor_role, agent_description, anonymous_request
+):
+    agent_description.contributors.add(user)
+
+    query = f"""
+    query Test {{
+        agentDescription(id: "{agent_description.id}") {{ contributors {{ id }} }}
+    }}
+    """
+
+    result = graphql_client.execute(query, context=anonymous_request)
+    assert len(result["data"]["agentDescription"]["contributors"]) == 0
+
+    user.profile.role = contributor_role
+    user.profile.save()
+
+    result = graphql_client.execute(query, context=anonymous_request)
+    assert len(result["data"]["agentDescription"]["contributors"]) == 1
+

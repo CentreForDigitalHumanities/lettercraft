@@ -12,7 +12,7 @@ from letter.models import LetterDescription
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
-from user.models import User, ContributorGroup
+from user.models import User, ContributorGroup, ContributorRole
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
@@ -21,6 +21,7 @@ def tmp_media_root(settings, tmp_path):
     directory = tmp_path / 'data'
     directory.mkdir()
     settings.MEDIA_ROOT = directory
+    return directory
 
 
 @pytest.fixture()
@@ -55,6 +56,16 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
     yield client
     client.logout()
 
+@pytest.fixture
+def contributor_role(db, user) -> ContributorRole:
+    return ContributorRole.objects.create(
+        name='tester'
+    )
+
+@pytest.fixture
+def user_has_contributor_role(db, user, contributor_role):
+    user.profile.role = contributor_role
+    user.profile.save()
 
 @pytest.fixture()
 def source(db):

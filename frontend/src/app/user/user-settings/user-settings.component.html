@@ -1,9 +1,9 @@
 <h1>User settings</h1>
 
-<p>Use the form below to change your name or password.</p>
+<p>Use the form below to change your account information.</p>
 
-<form [formGroup]="form" (ngSubmit)="submit()">
-    <div *ngIf="form.controls.username as control">
+<form [formGroup]="form" (ngSubmit)="submit()" class="my-4">
+    <div *ngIf="form.controls.username as control" class="my-3">
         <label for="username" class="form-label"> Username </label>
         <input
             type="text"
@@ -20,32 +20,35 @@
             {{ error }}
         </p>
     </div>
-    <div>
-        <label for="first-name" class="form-label">First name</label>
-        <input
-            type="text"
-            id="first-name"
-            autocomplete="given-name"
-            class="form-control"
-            [class.is-invalid]="
-                form.controls.firstName.touched &&
-                form.controls.firstName.invalid
-            "
-            [formControl]="form.controls.firstName"
-        />
-    </div>
-    <div>
-        <label for="last-name" class="form-label"> Last name </label>
-        <input
-            type="text"
-            id="last-name"
-            autocomplete="family-name"
-            class="form-control"
-            [class.is-invalid]="
-                form.controls.lastName.touched && form.controls.lastName.invalid
-            "
-            [formControl]="form.controls.lastName"
-        />
+
+    <div class="my-3 row"  *ngIf="form.controls.publicRole.value">
+        <div class="col">
+            <label for="first-name" class="form-label">First name</label>
+            <input
+                type="text"
+                id="first-name"
+                autocomplete="given-name"
+                class="form-control"
+                [class.is-invalid]="
+                    form.controls.firstName.touched &&
+                    form.controls.firstName.invalid
+                "
+                [formControl]="form.controls.firstName"
+            />
+        </div>
+        <div class="col">
+            <label for="last-name" class="form-label"> Last name </label>
+            <input
+                type="text"
+                id="last-name"
+                autocomplete="family-name"
+                class="form-control"
+                [class.is-invalid]="
+                    form.controls.lastName.touched && form.controls.lastName.invalid
+                "
+                [formControl]="form.controls.lastName"
+            />
+        </div>
     </div>
     <p
         *ngFor="let error of formErrors$ | async"
@@ -54,9 +57,20 @@
         {{ error }}
     </p>
 
-    <div
-        class="d-flex flex-wrap justify-content-start align-items-center button-row mt-3"
-    >
+    <div class="my-3" *ngIf="form.controls.description && form.controls.publicRole.value">
+        <label for="input-description" class="form-label">Description</label>
+        <textarea id="input-description" class="form-control" rows="4"
+            aria-describedby="helptext-description"
+            [formControl]="form.controls.description"></textarea>
+        <p style="font-size: smaller;" id="helptext-description">
+            Describe your background and involvement with the project. This text will
+            appear on your public profile page.
+        </p>
+    </div>
+
+    <lc-profile-picture-field *ngIf="form.controls.publicRole.value" />
+
+    <div class="my-3">
         <button type="submit" class="btn btn-primary">
             Save changes
             <div
@@ -69,31 +83,58 @@
                 >
             </div>
         </button>
-        <button
-            class="btn btn-primary"
-            type="button"
-            (click)="requestPasswordReset()"
-        >
-            Request new password
-            <div
-                *ngIf="requestResetLoading$ | async"
-                class="spinner-border spinner-border-sm"
-                role="status"
-            >
-                <span class="visually-hidden">
-                    Requesting password reset link...
-                </span>
-            </div>
-        </button>
-        <button class="btn btn-danger" type="button" (click)="deleteAccount()">
-            Delete account
-            <div
-                *ngIf="deleteUserLoading$ | async"
-                class="spinner-border spinner-border-sm"
-                role="status"
-            >
-                <span class="visually-hidden">Deleting account...</span>
-            </div>
-        </button>
     </div>
 </form>
+
+<p>Other actions:</p>
+
+<div class="hstack gap-3 my-4">
+
+    <button
+        class="btn btn-primary"
+        type="button"
+        (click)="requestPasswordReset()"
+    >
+        Request new password
+        <div
+            *ngIf="requestResetLoading$ | async"
+            class="spinner-border spinner-border-sm"
+            role="status"
+        >
+            <span class="visually-hidden">
+                Requesting password reset link...
+            </span>
+        </div>
+    </button>
+    <button class="btn btn-danger" type="button" (click)="deleteAccount()">
+        Delete account
+        <div
+            *ngIf="deleteUserLoading$ | async"
+            class="spinner-border spinner-border-sm"
+            role="status"
+        >
+            <span class="visually-hidden">Deleting account...</span>
+        </div>
+    </button>
+</div>
+
+<section class="my-4">
+    <h2>Public profile</h2>
+    <div *ngIf="form.controls.publicRole.value as publicRole; else notAContributor">
+        <p>
+            You are registered as a contributor to the project (role:
+            <em>{{publicRole}}</em>). This means that your profile page is publicly
+            visible. Please contact an administrator if this needs to be changed.
+        </p>
+        <a [routerLink]="['/contributors', form.controls.id.value]" class="btn btn-light">
+            <lc-icon [icon]="actionIcons.view" />
+            View your profile page
+        </a>
+    </div>
+
+    <ng-template #notAContributor>
+        <p>You are not registered as a contributor to the project, so your profile
+            is not publicly visible. Contact an administrator if this needs to be changed.
+        </p>
+    </ng-template>
+</section>

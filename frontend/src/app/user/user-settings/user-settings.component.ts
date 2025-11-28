@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit } from "@angular/core";
+import { Component, DestroyRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "@services/auth.service";
 import { UserResponse, UserSettings } from "../models/user";
@@ -15,6 +15,8 @@ import { usernameValidators } from "../validation";
 import { Apollo } from "apollo-angular";
 import { Router } from "@angular/router";
 import { ModalService } from "@services/modal.service";
+import { actionIcons } from "@shared/icons";
+import { ProfilePictureFieldComponent } from "../profile-picture-field/profile-picture-field.component";
 
 type UserSettingsForm = {
     [key in keyof UserSettings]: FormControl<UserSettings[key]>;
@@ -26,6 +28,8 @@ type UserSettingsForm = {
     styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
+    @ViewChild(ProfilePictureFieldComponent) profilePictureField?: ProfilePictureFieldComponent;
+
     public form = new FormGroup<UserSettingsForm>({
         id: new FormControl<number>(-1, {
             nonNullable: true,
@@ -45,6 +49,8 @@ export class UserSettingsComponent implements OnInit {
         lastName: new FormControl<string>("", {
             nonNullable: true,
         }),
+        description: new FormControl<string>("", { nonNullable: true }),
+        publicRole: new FormControl<string | null>(""),
     });
 
     public usernameErrors$ = controlErrorMessages$(this.form, "username");
@@ -54,6 +60,8 @@ export class UserSettingsComponent implements OnInit {
     public requestResetLoading$ = this.authService.passwordForgotten.loading$;
     public deleteUserLoading$ = this.authService.deleteUser.loading$;
 
+    actionIcons = actionIcons;
+
     constructor(
         private router: Router,
         private authService: AuthService,
@@ -61,7 +69,7 @@ export class UserSettingsComponent implements OnInit {
         private modalService: ModalService,
         private destroyRef: DestroyRef,
         private apollo: Apollo
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.authService.currentUser$
@@ -143,7 +151,9 @@ export class UserSettingsComponent implements OnInit {
         }
         const userSettings = this.form.getRawValue();
         this.authService.newUserSettings(userSettings);
+        this.profilePictureField?.submit();
     }
+
 
     private onSuccess(user: UserResponse) {
         this.toastService.show({
@@ -160,6 +170,7 @@ export class UserSettingsComponent implements OnInit {
         cache.evict({ id: identified, fieldName: 'firstName' });
         cache.evict({ id: identified, fieldName: 'lastName' });
         cache.evict({ id: identified, fieldName: 'fullName' });
+        cache.evict({ id: identified, fieldName: 'description' });
         cache.gc();
     }
 }

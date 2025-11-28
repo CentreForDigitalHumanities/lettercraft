@@ -1,15 +1,16 @@
 from allauth.account.models import EmailConfirmationHMAC
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, FileResponse
 from django.contrib.auth import logout
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, NotFound, PermissionDenied
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_401_UNAUTHORIZED
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from .serializers import CustomUserDetailsSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+from .serializers import CustomUserDetailsSerializer
+from .models import UserProfile
 
 def redirect_confirm(request, key):
     """Redirects email-confirmation to the frontend"""
@@ -60,3 +61,60 @@ class DeleteUser(APIView):
 class UserViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = CustomUserDetailsSerializer
+
+
+class UserPictureView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self):
+        pk = self.kwargs.get('id')
+        return UserProfile.objects.get(user__pk=pk)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            profile = self.get_object()
+            assert profile.role or profile.user.pk == request.user.pk
+        except:
+            raise NotFound('User not found')
+
+        if not profile.picture:
+            raise NotFound('User has no picture')
+
+        path = profile.picture.path
+        return FileResponse(open(path, 'rb'))
+
+    def put(self, request, *args, **kwargs):
+        try:
+            profile = self.get_object()
+            assert profile.role or profile.user.pk == request.user.pk
+        except:
+            raise NotFound('User not found')
+
+        if not profile.user.pk == request.user.pk:
+            raise PermissionDenied()
+
+        file = request.FILES['file']
+        profile.picture = file
+        profile.save()
+
+        return Response('Image saved', HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            profile = self.get_object()
+            assert profile.role or profile.user.pk == request.user.pk
+        except:
+            raise NotFound('User not found')
+
+        if not profile.user.pk == request.user.pk:
+            raise PermissionDenied()
+
+        if not profile.picture:
+            raise NotFound('User has no picture')
+
+        profile.picture = None
+        profile.save()
+
+        return Response('Image deleted', HTTP_200_OK)
+
+

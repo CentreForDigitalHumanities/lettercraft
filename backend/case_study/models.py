@@ -17,8 +17,8 @@ class CaseStudy(Named, models.Model):
 
     authors = models.ManyToManyField(
         to=User,
-        blank=True,
         related_name='case_studies',
+        blank=True,
         help_text='Author(s) of the case study',
     )
 

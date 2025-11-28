@@ -4,8 +4,12 @@
 
         <h1 class="mt-4">{{caseStudy.name}}</h1>
 
-        <p class="lead">
-            By {{authorNames(caseStudy)}}
+        <p class="lead" *ngIf="caseStudy.authors.length">
+            By
+            <ng-container *ngFor="let author of caseStudy.authors; last as last">
+                <a [routerLink]="['/contributors', author.id]" class="link-dark"
+                    >{{author.fullName}}</a><ng-container *ngIf="!last">, </ng-container>
+            </ng-container>
         </p>
 
         <p class="text-secondary">

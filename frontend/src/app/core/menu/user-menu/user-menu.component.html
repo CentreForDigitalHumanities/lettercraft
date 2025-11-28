@@ -13,6 +13,8 @@
             </button>
             <div ngbDropdownMenu aria-labelledby="userDropdown" class="dropdown-menu dropdown-menu-end">
                 <a ngbDropdownItem [routerLink]="['/user-settings']">Settings</a>
+                <a ngbDropdownItem *ngIf="user.publicRole"
+                    [routerLink]="['/contributors', user.id]">Profile</a>
                 <a *ngIf="user.isStaff" ngbDropdownItem href="/admin/">Administration</a>
                 <button ngbDropdownItem (click)="logout()">
                     Sign out

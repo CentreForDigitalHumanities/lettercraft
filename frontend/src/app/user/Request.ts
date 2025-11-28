@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, OperatorFunction, Subject, catchError, filter, map, merge, of, share, startWith, switchMap, throttleTime } from "rxjs";
 
 
-export type HttpVerb = 'get' | 'post' | 'patch' | 'delete';
+export type HttpVerb = 'get' | 'put' | 'post' | 'patch' | 'delete';
 export type RequestError = { error: Record<string, string | string[]>; };
 
 
@@ -53,6 +53,8 @@ export class Request<Input, Result extends object | never> {
                         return this.http.patch<Result>(this.route, input).pipe(catchToError);
                     case "delete":
                         return this.http.delete<Result>(this.route).pipe(catchToError);
+                    case 'put':
+                        return this.http.put<Result>(this.route, input).pipe(catchToError);
                 }
             }),
             share()

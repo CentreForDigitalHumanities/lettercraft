@@ -31,6 +31,8 @@ import { SourceListComponent } from '../data/source-list/source-list.component';
 import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
 import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
 import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
+import { ContributorComponent } from '../contributors/contributor/contributor.component';
+import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
 
 
 const routes: Routes = [
@@ -85,6 +87,22 @@ const routes: Routes = [
                 component: CaseStudiesListComponent,
             }
         ],
+    },
+    {
+        path: 'contributors',
+        children: [
+            {
+                path:  ':id',
+                title: pageTitle('Contributor'),
+                component: ContributorComponent,
+            },
+            {
+                path: '',
+                pathMatch: 'full',
+                title: pageTitle('Contributors'),
+                component: ContributorsListComponent,
+            }
+        ]
     },
     {
         path: 'data',
