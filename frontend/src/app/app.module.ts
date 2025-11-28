@@ -14,11 +14,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
 
-@NgModule({ declarations: [
+@NgModule({
+    declarations: [
         AppComponent,
         HomeComponent,
     ],
-    bootstrap: [AppComponent], imports: [AppRoutingModule,
+    bootstrap: [AppComponent],
+    imports: [
+        AppRoutingModule,
         SharedModule,
         CoreModule,
         UserModule,
@@ -26,5 +29,8 @@ import { CaseStudiesModule } from './case-studies/case-studies.module';
         DataEntryModule,
         FontAwesomeModule,
         DataModule,
-        CaseStudiesModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        CaseStudiesModule
+    ],
+    providers: [provideHttpClient(withInterceptorsFromDi())]
+})
 export class AppModule { }
