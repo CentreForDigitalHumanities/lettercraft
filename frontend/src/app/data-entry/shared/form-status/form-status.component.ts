@@ -22,9 +22,9 @@ export class FormStatusComponent {
     };
 
     public classes: Record<FormStatus, string> = {
-        idle: 'text-secondary',
+        idle: 'text-primary',
         invalid: 'text-danger',
-        loading: 'text-secondary',
+        loading: 'text-primary',
         saved: 'text-success',
         error: 'text-danger',
     };

@@ -1,10 +1,13 @@
 <div class="app">
     <lc-menu role="banner"></lc-menu>
     <lc-toast-container aria-live="polite" aria-atomic="true" />
-    <main class="main-content mt-5 mb-5">
-        <div class="container">
+    <main class="main-content">
+        <div [class]="(fullSize$ | async) ? '' : 'container my-5'">
             <router-outlet></router-outlet>
         </div>
     </main>
-    <lc-footer role="contentinfo" class="is-hidden-print text-bg-light p-5" />
+    <lc-footer
+        role="contentinfo"
+        class="is-hidden-print bg-primary text-accent p-5 border-accent border-2 border-top"
+    />
 </div>

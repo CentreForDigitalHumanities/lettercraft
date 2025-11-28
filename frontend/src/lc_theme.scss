@@ -1,0 +1,106 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
+
+// Variables
+$lc_jonquil: #ffce1f;
+$lc_royal_blue: #003d66;
+$lc_parchment: #f1e9d2;
+$lc_floral_white: #faf8ef;
+$lc_ink: #2c2416;
+$lc_burgundy: #722f37;
+$lc_jet: #3e3b3f;
+
+$lc-colors: (
+    "accent": $lc_jonquil,
+    "primary": $lc_royal_blue,
+    "secondary": $lc_jet,
+    "parchment": $lc_parchment,
+    "floral-white": $lc_floral_white,
+    "ink": $lc_ink,
+    "burgundy": $lc_burgundy,
+);
+
+$theme-colors: map-merge($theme-colors, $lc-colors);
+
+// The order of these imports matters!
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+// Override Bootstrap defaults
+$link-color: $lc_burgundy;
+$body-bg: $lc_floral_white;
+$body-color: $lc_ink;
+
+// Typography
+@font-face {
+    font-family: "Cinzel";
+    src: url(assets/fonts/cinzel/Cinzel-Variable.ttf) format("truetype");
+    font-weight: 400 500 600 700 800 900;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Regular.ttf)
+        format("truetype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Bold.ttf) format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-Italic.ttf)
+        format("truetype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Crimson Text";
+    src: url(assets/fonts/crimson-text/CrimsonText-BoldItalic.ttf)
+        format("truetype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+$font-family-base: "Crimson Text";
+$font-size-base: 1.2rem;
+$font-weight-normal: 500;
+$headings-font-family: "Cinzel", serif;
+$headings-font-weight: 500;
+$display-font-family: $headings-font-family;
+$display-font-weight: $headings-font-weight;
+
+// Layout
+$card-border-color: $lc_burgundy;
+$card-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
+$card-bg: $lc_parchment;
+
+$navbar-light-active-color: $lc_jonquil;
+$navbar-dark-active-color: $lc_jonquil;
+
+// Special classes
+.illuminated-initial {
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+    color: $lc_burgundy;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+// Navigation
+.nav-link {
+    transition: all 0.3s ease;
+
+    &:hover {
+        text-shadow: 0 0 5px $lc_jonquil;
+    }
+}
