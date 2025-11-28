@@ -27,6 +27,7 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'lc-icon',
     templateUrl: './icon.component.html',
+    standalone: false
 })
 export class IconComponent {
     @Input({ required: true }) icon!: string;

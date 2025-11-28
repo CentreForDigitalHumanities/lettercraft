@@ -15,6 +15,7 @@ import _ from 'underscore';
             multi: true,
         }
     ],
+    standalone: false
 })
 export class DesignatorsControlComponent implements ControlValueAccessor, OnDestroy {
     @Input({ required: true }) formControl!: FormControl<string[]>;

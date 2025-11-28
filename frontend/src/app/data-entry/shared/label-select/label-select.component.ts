@@ -13,6 +13,7 @@ import { MultiselectOption } from '../multiselect/multiselect.component';
             multi: true,
         },
     ],
+    standalone: false
 })
 export class LabelSelectComponent implements ControlValueAccessor {
     @Input({ required: true }) labels!: MultiselectOption[];

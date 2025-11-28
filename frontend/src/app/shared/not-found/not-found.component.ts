@@ -5,6 +5,7 @@ import { statusIcons } from "../icons";
     selector: "lc-not-found",
     templateUrl: "./not-found.component.html",
     styleUrls: ["./not-found.component.scss"],
+    standalone: false
 })
 export class NotFoundComponent {
     @Input() entity = "entity";

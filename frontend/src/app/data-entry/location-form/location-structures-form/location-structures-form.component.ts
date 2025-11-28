@@ -53,6 +53,7 @@ const structureTypeIconMapping: Record<SpaceStructureLevelChoices, IconDefinitio
     selector: "lc-location-structures-form",
     templateUrl: "./location-structures-form.component.html",
     styleUrls: ["./location-structures-form.component.scss"],
+    standalone: false
 })
 export class LocationStructuresFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

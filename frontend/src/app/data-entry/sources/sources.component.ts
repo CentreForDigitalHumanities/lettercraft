@@ -7,6 +7,7 @@ import { map } from "rxjs";
     selector: "lc-sources",
     templateUrl: "./sources.component.html",
     styleUrls: ["./sources.component.scss"],
+    standalone: false
 })
 export class SourcesComponent {
     public breadcrumbs: Breadcrumb[] = [

@@ -6,7 +6,8 @@ let nextID = 0;
 @Component({
     selector: 'lc-collapsible-card',
     templateUrl: './collapsible-card.component.html',
-    styleUrls: ['./collapsible-card.component.scss']
+    styleUrls: ['./collapsible-card.component.scss'],
+    standalone: false
 })
 export class CollapsibleCardComponent {
     /** text description of the content; used to render label for the collapse button */

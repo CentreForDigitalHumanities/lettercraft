@@ -22,6 +22,7 @@ type NewEpisodeForm = {
     selector: "lc-new-episode-form",
     templateUrl: "./new-episode-form.component.html",
     styleUrls: ["./new-episode-form.component.scss"],
+    standalone: false
 })
 export class NewEpisodeFormComponent implements OnInit {
     @Input({ required: true }) sourceId: string | null = null;

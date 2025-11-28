@@ -9,9 +9,10 @@ import { map, switchMap } from 'rxjs';
 type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
 
 @Component({
-  selector: 'lc-case-study-view',
-  templateUrl: './case-study-view.component.html',
-  styleUrls: ['./case-study-view.component.scss']
+    selector: 'lc-case-study-view',
+    templateUrl: './case-study-view.component.html',
+    styleUrls: ['./case-study-view.component.scss'],
+    standalone: false
 })
 export class CaseStudyViewComponent {
     dataIcons = dataIcons;

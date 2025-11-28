@@ -37,6 +37,7 @@ type LocationIdentificationForm = {
     selector: "lc-location-identification-form",
     templateUrl: "./location-identification-form.component.html",
     styleUrls: ["./location-identification-form.component.scss"],
+    standalone: false
 })
 export class LocationIdentificationFormComponent implements OnInit, OnDestroy {
     public id$ = this.formService.id$;

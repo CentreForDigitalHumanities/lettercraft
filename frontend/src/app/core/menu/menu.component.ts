@@ -5,7 +5,8 @@ import { map } from 'rxjs';
 @Component({
     selector: 'lc-menu',
     templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.scss']
+    styleUrls: ['./menu.component.scss'],
+    standalone: false
 })
 export class MenuComponent {
     public burgerActive = false;

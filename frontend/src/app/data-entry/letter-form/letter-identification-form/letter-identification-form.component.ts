@@ -33,6 +33,7 @@ import { listWithQuotes, nameExamples } from "../../shared/utils";
     selector: "lc-letter-identification-form",
     templateUrl: "./letter-identification-form.component.html",
     styleUrls: ["./letter-identification-form.component.scss"],
+    standalone: false
 })
 export class LetterIdentificationFormComponent implements OnInit, OnDestroy {
     public id$ = this.formService.id$;

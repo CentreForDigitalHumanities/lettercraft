@@ -38,6 +38,7 @@ type GiftIdentificationForm = {
     selector: "lc-gift-identification-form",
     templateUrl: "./gift-identification-form.component.html",
     styleUrls: ["./gift-identification-form.component.scss"],
+    standalone: false
 })
 export class GiftIdentificationFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

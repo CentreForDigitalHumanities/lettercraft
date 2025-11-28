@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
     selector: "lc-search-bar",
     templateUrl: "./search-bar.component.html",
     styleUrls: ["./search-bar.component.scss"],
+    standalone: false
 })
 export class SearchBarComponent {
     @Input({ required: true })

@@ -26,7 +26,8 @@ let nextID = 0;
 @Component({
     selector: 'lc-episode-link-form',
     templateUrl: './episode-link-form.component.html',
-    styleUrls: ['./episode-link-form.component.scss']
+    styleUrls: ['./episode-link-form.component.scss'],
+    standalone: false
 })
 export class EpisodeLinkFormComponent implements OnChanges, OnDestroy {
     /** ID of the connection object (e.g. EpisodeAgent) */

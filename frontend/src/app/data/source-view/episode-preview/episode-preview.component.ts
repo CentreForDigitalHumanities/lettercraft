@@ -9,9 +9,10 @@ type EpisodeWithSource = ViewEpisodesPageQuery['episodes'][number];
 type Episode = EpisodeWithEntities | EpisodeWithSource;
 
 @Component({
-  selector: 'lc-episode-preview',
-  templateUrl: './episode-preview.component.html',
-  styleUrls: ['./episode-preview.component.scss']
+    selector: 'lc-episode-preview',
+    templateUrl: './episode-preview.component.html',
+    styleUrls: ['./episode-preview.component.scss'],
+    standalone: false
 })
 export class EpisodePreviewComponent {
     @Input({required: true}) episode!: Episode;

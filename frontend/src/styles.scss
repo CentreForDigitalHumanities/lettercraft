@@ -1,6 +1,6 @@
-@import "variables";
-@import "bootstrap";
-@import "bootstrap-icons";
+@use "variables";
+@use "bootstrap";
+@use "bootstrap-icons";
 
 @media print {
     .is-hidden-print,

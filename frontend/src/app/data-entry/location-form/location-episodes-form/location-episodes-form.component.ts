@@ -10,9 +10,10 @@ import { differenceBy, splat } from '@shared/utils';
 import { ApolloCache } from '@apollo/client/core';
 
 @Component({
-  selector: 'lc-location-episodes-form',
-  templateUrl: './location-episodes-form.component.html',
-  styleUrls: ['./location-episodes-form.component.scss']
+    selector: 'lc-location-episodes-form',
+    templateUrl: './location-episodes-form.component.html',
+    styleUrls: ['./location-episodes-form.component.scss'],
+    standalone: false
 })
 export class LocationEpisodesFormComponent implements OnDestroy {
     data$: Observable<DataEntryLocationEpisodesQuery>;

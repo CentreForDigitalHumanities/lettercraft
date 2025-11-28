@@ -28,7 +28,7 @@ export abstract class CreateEntityDescriptionAbstract<
     abstract relatedName: string;
 
     constructor(
-        protected createMutation: Mutation<CreateEntityMutation, unknown>,
+        protected createMutation: Mutation<CreateEntityMutation, any>,
         protected destroyRef: DestroyRef
     ) { }
 
@@ -44,7 +44,7 @@ export abstract class CreateEntityDescriptionAbstract<
             shareReplay(1),
             takeUntilDestroyed(this.destroyRef),
         );
-        return this.getOutcome(result$);
+        return this.getOutcome(result$ as Observable<MutationResult<CreateEntityMutation>>);
     }
 
     /** Wraps the mutation result in an object containing loading$, error$, and

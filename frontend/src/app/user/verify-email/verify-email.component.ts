@@ -10,6 +10,7 @@ import { KeyInfo } from "../models/user";
     selector: "lc-verify-email",
     templateUrl: "./verify-email.component.html",
     styleUrls: ["./verify-email.component.scss"],
+    standalone: false
 })
 export class VerifyEmailComponent implements OnInit, AfterViewInit {
     private key: KeyInfo = { key: this.activatedRoute.snapshot.params["key"] };

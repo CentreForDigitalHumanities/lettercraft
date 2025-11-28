@@ -11,7 +11,8 @@ import { ModalService } from '@services/modal.service';
 @Component({
     selector: 'lc-delete-agent',
     templateUrl: './delete-agent.component.html',
-    styleUrls: ['./delete-agent.component.scss']
+    styleUrls: ['./delete-agent.component.scss'],
+    standalone: false
 })
 export class DeleteAgentComponent implements OnDestroy {
     @Input() navigateOnDelete?: any[];

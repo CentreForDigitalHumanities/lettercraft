@@ -23,6 +23,7 @@ import { sourceMentionSelectOptions } from '../../shared/utils';
     selector: 'lc-agent-description-form',
     templateUrl: './agent-description-form.component.html',
     styleUrls: ['./agent-description-form.component.scss'],
+    standalone: false
 })
 export class AgentDescriptionFormComponent implements OnDestroy {
     genderOptions: { value: Gender, label: string }[] = [
