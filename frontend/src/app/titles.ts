@@ -153,41 +153,41 @@ const agentViewTitle = (data: AgentTitleQueryData): string =>
     `${data.agentDescription?.name} (${data.agentDescription?.source.name})`;
 
 export const agentViewTitleResolver = queryTitleResolver(
-    agentTitleQuery, agentViewTitle
+    agentTitleQuery, agentViewTitle, false, { editable: false }
 );
 
 const locationViewTitle = (data: SpaceTitleQueryData): string =>
     `${data.spaceDescription?.name} (${data.spaceDescription?.source.name})`;
 
 export const locationViewTitleResolver = queryTitleResolver(
-    spaceTitleQuery, locationViewTitle
+    spaceTitleQuery, locationViewTitle, false, { editable: false }
 );
 
 const letterViewTitle = (data: LetterTitleQueryData): string =>
     `${data.letterDescription?.name} (${data.letterDescription?.source.name})`;
 
 export const letterViewTitleResolver = queryTitleResolver(
-    letterTitleQuery, letterViewTitle
+    letterTitleQuery, letterViewTitle, false, { editable: false }
 );
 
 const giftViewTitle = (data: GiftTitleQueryData): string =>
     `${data.giftDescription?.name} (${data.giftDescription?.source.name})`;
 
 export const giftViewTitleResolver = queryTitleResolver(
-    giftTitleQuery, giftViewTitle
+    giftTitleQuery, giftViewTitle, false, { editable: false }
 );
 
 const sourceViewTitle = (data: SourceTitleQueryQuery) => `${data.source?.name}`;
 
 export const sourceViewTitleResolver = queryTitleResolver(
-    sourceTitleQuery, sourceViewTitle, false
+    sourceTitleQuery, sourceViewTitle, false, { editable: false }
 );
 
 const episodeViewTitle = (data: EpisodeTitleQueryQuery) =>
     `${data.episode?.name} (${data.episode?.source.name})`;
 
 export const episodeViewTitleResolver = queryTitleResolver(
-    episodeTitleQuery, episodeViewTitle, false
+    episodeTitleQuery, episodeViewTitle, false, { editable: false }
 );
 
 const caseStudyTitleQuery = (params: Params) => gql<CaseStudyTitleQueryQuery, unknown>(`
