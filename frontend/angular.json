@@ -25,7 +25,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist"
+              "base": "dist",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [
@@ -58,10 +59,7 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all",
-              "outputPath": {
-                "base": "dist"
-              }
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
