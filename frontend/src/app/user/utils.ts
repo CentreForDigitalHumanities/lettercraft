@@ -5,7 +5,7 @@ import { Observable, map } from "rxjs";
 import { RequestError } from "./Request";
 
 /**
- * Transforms backend user response to User object
+ * Transforms backend user response to User object.
  *
  * @param result User response data
  * @returns User object
@@ -28,7 +28,7 @@ export const parseUserData = (result: UserResponse | null): User | null => {
 /**
  * Transfroms User data to backend UserResponse object
  *
- * Because this is used for patching, the data can be partial
+ * Because this is used for patching, the data can be partial.
  *
  * @param data (partial) User object
  * @returns UserResponse object
@@ -73,6 +73,7 @@ export const ERROR_MAP: Record<string, Record<string, string>> = {
         required: "Username is required.",
         minlength: "Username must be at least 3 characters long.",
         maxlength: "Username must be at most 150 characters long.",
+        pattern: "Username may only contain letters, numbers, and the characters @/+/-/_ .",
     },
     email: {
         required: "Email is required.",
