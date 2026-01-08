@@ -11,6 +11,7 @@ import { PageResult } from "../utils/pagination";
     selector: "lc-source-list",
     templateUrl: "./source-list.component.html",
     styleUrls: ["./source-list.component.scss"],
+    standalone: false
 })
 export class SourceListComponent {
     breadcrumbs: Breadcrumb[] = [

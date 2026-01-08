@@ -33,6 +33,7 @@ interface EntityItem {
     selector: "lc-episode-entities-form",
     templateUrl: "./episode-entities-form.component.html",
     styleUrls: ["./episode-entities-form.component.scss"],
+    standalone: false
 })
 export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
     @Input() entityType!: Entity;

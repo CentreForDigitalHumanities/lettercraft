@@ -35,6 +35,7 @@ type GiftCategoriesForm = {
     selector: "lc-gift-categories-form",
     templateUrl: "./gift-categories-form.component.html",
     styleUrls: ["./gift-categories-form.component.scss"],
+    standalone: false
 })
 export class GiftCategoriesFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

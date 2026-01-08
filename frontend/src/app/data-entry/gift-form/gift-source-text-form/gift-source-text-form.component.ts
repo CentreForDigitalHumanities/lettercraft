@@ -25,6 +25,7 @@ import { MutationResult } from "apollo-angular";
     selector: "lc-gift-source-text-form",
     templateUrl: "./gift-source-text-form.component.html",
     styleUrls: ["./gift-source-text-form.component.scss"],
+    standalone: false
 })
 export class GiftSourceTextFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

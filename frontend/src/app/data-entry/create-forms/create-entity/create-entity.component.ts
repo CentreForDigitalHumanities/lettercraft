@@ -20,6 +20,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     selector: 'lc-create-entity',
     templateUrl: './create-entity.component.html',
     styleUrls: ['./create-entity.component.scss'],
+    standalone: false
 })
 export class CreateEntityComponent implements AfterViewInit {
     @Input({ required: true }) create!: Observable<void>;

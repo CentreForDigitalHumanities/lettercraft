@@ -25,6 +25,7 @@ type RegisterForm = {
     selector: "lc-register",
     templateUrl: "./register.component.html",
     styleUrls: ["./register.component.scss"],
+    standalone: false
 })
 export class RegisterComponent implements OnInit {
     public form = new FormGroup<RegisterForm>(

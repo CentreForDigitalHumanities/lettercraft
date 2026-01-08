@@ -21,6 +21,7 @@ type QueriedGift = NonNullable<DataEntryGiftFormQuery["giftDescription"]>;
     templateUrl: "./gift-form.component.html",
     styleUrls: ["./gift-form.component.scss"],
     providers: [FormService],
+    standalone: false
 })
 export class GiftFormComponent {
     public id$ = this.formService.id$;

@@ -5,6 +5,7 @@ import { UserType } from "generated/graphql";
     selector: "lc-contributors",
     templateUrl: "./contributors.component.html",
     styleUrls: ["./contributors.component.scss"],
+    standalone: false
 })
 export class ContributorsComponent {
     @Input({ required: true })

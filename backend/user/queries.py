@@ -36,4 +36,3 @@ class UserQueries(ObjectType):
         info: ResolveInfo,
     ) -> QuerySet[ContributorRole]:
         return ContributorRoleType.get_queryset(ContributorRole.objects.all(), info)
-

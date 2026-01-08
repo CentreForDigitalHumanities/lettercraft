@@ -14,6 +14,7 @@ type PasswordForgottenForm = {
     selector: "lc-password-forgotten",
     templateUrl: "./password-forgotten.component.html",
     styleUrls: ["./password-forgotten.component.scss"],
+    standalone: false
 })
 export class PasswordForgottenComponent implements OnInit {
     form = new FormGroup<PasswordForgottenForm>({

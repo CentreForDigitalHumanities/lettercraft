@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { PageResult } from "../../utils/pagination";
 
+
 @Component({
     templateUrl: './paginator.component.html',
     selector: 'lc-paginator',

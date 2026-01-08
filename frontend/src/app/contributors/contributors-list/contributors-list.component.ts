@@ -6,7 +6,8 @@ import { map } from 'rxjs';
 @Component({
   selector: 'lc-contributors-list',
   templateUrl: './contributors-list.component.html',
-  styleUrls: ['./contributors-list.component.scss']
+  styleUrls: ['./contributors-list.component.scss'],
+  standalone: false,
 })
 export class ContributorsListComponent {
     breadcrumbs: Breadcrumb[] = [

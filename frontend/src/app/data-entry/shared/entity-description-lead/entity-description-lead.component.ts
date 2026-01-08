@@ -8,6 +8,7 @@ interface Entity {
     selector: "lc-entity-description-lead",
     templateUrl: "./entity-description-lead.component.html",
     styleUrls: ["./entity-description-lead.component.scss"],
+    standalone: false
 })
 export class EntityDescriptionLeadComponent {
     @Input({ required: true }) entity!: Entity;

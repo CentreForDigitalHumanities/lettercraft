@@ -30,6 +30,7 @@ export interface MultiselectOption {
             multi: true,
         },
     ],
+    standalone: false
 })
 export class MultiselectComponent implements ControlValueAccessor {
     // All available options to choose from.

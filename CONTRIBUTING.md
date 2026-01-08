@@ -7,11 +7,11 @@ This document contains basic information for developing the Lettercraft applicat
 You need to install the following software:
 
  - PostgreSQL >= 10, client, server and C libraries
- - Python >= 3.8, <= 3.10
+ - Python >= 3.12
  - virtualenv
  - WSGI-compatible webserver (deployment only)
  - [Visual C++ for Python][1] (Windows only)
- - Node.js >= 16, <= 18
+ - Node.js >= 20
  - Yarn
 
 [1]: https://wiki.python.org/moin/WindowsCompilers

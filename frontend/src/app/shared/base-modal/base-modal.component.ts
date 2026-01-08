@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     selector: "lc-base-modal",
     templateUrl: "./base-modal.component.html",
     styleUrls: ["./base-modal.component.scss"],
+    standalone: false
 })
 export class BaseModalComponent {
     @Input() title = "Lettercraft";

@@ -6,6 +6,7 @@ from event.models import EpisodeAgent
 from core.types.entity import EntityDescription
 from event.types.EpisodeEntityLink import EpisodeEntityLink
 
+
 class EpisodeAgentType(DescriptionFieldType, DjangoObjectType):
     entity = NonNull(EntityDescription)
 

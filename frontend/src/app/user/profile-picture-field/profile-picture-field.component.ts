@@ -21,7 +21,8 @@ const withTimestamp = () =>
 @Component({
     selector: 'lc-profile-picture-field',
     templateUrl: './profile-picture-field.component.html',
-    styleUrls: ['./profile-picture-field.component.scss']
+    styleUrls: ['./profile-picture-field.component.scss'],
+    standalone: false,
 })
 export class ProfilePictureFieldComponent {
     form = new FormGroup({

@@ -12,9 +12,10 @@ type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
 type EpisodeObject = QueriedEpisode["letters"][number] | QueriedEpisode["gifts"][number];
 
 @Component({
-  selector: 'lc-episode-view',
-  templateUrl: './episode-view.component.html',
-  styleUrls: ['./episode-view.component.scss']
+    selector: 'lc-episode-view',
+    templateUrl: './episode-view.component.html',
+    styleUrls: ['./episode-view.component.scss'],
+    standalone: false
 })
 export class EpisodeViewComponent {
     id$: Observable<string> = this.route.params.pipe(

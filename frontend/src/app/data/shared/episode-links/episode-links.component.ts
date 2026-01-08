@@ -14,9 +14,10 @@ type QueriedEpisodeLink =
 type LinkedObject = { id: string, name: string, urlSegment: string, icon: string };
 
 @Component({
-  selector: 'lc-episode-links',
-  templateUrl: './episode-links.component.html',
-  styleUrls: ['./episode-links.component.scss']
+    selector: 'lc-episode-links',
+    templateUrl: './episode-links.component.html',
+    styleUrls: ['./episode-links.component.scss'],
+    standalone: false
 })
 export class EpisodeLinksComponent {
     @Input({required: true})
@@ -31,7 +32,7 @@ export class EpisodeLinksComponent {
         if ('episode' in link) {
             return {
                 ...link.episode,
-                urlSegment: '/data/episodes',
+                urlSegment: 'episodes',
                 icon: dataIcons.episode,
             };
         } else if ('agent' in link) {

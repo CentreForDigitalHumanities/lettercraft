@@ -27,7 +27,7 @@ def editable_condition(user: MaybeUser) -> Q:
 def editable_sources(
     user: MaybeUser, sources: QuerySet[Source] = Source.objects
 ) -> QuerySet[Source]:
-    return sources.filter(editable_condition(user))
+    return sources.filter(editable_condition(user)).distinct()
 
 
 def can_edit_source(user: MaybeUser, source: Source) -> bool:
@@ -48,7 +48,7 @@ def visible_condition(user: MaybeUser) -> Q:
 
 
 def visible_sources(user: Union[User, AnonymousUser]) -> QuerySet[Source]:
-    return Source.objects.filter(visible_condition(user))
+    return Source.objects.filter(visible_condition(user)).distinct()
 
 
 def can_view_source(user: MaybeUser, source: Source) -> bool:

@@ -7,7 +7,8 @@ import { map, switchMap } from 'rxjs';
 @Component({
     selector: 'lc-contributor',
     templateUrl: './contributor.component.html',
-    styleUrls: ['./contributor.component.scss']
+    styleUrls: ['./contributor.component.scss'],
+    standalone: false,
 })
 export class ContributorComponent {
     data$ = this.route.params.pipe(
