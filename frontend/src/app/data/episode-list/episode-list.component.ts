@@ -40,7 +40,7 @@ export class EpisodeListComponent {
         startWith(false)
     );
 
-    private collection$ = this.collectionData$.pipe(
+    collection$ = this.collectionData$.pipe(
         filter(data => !!data),
         map(data => data?.episodes || []),
     );
