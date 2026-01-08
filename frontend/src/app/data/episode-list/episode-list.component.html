@@ -16,7 +16,14 @@
         searchText="Searching episodes"
     />
 
-    @if (collection.length) {
+    @if (searchError$ | async; as error) {
+        <p class="alert alert-danger">
+            Something went wrong while fetching results.
+            @if (error) {
+                (Error message: <span class="font-monospace">"{{error}}"</span>)
+            }
+        </p>
+    } @else if (collection.length) {
         <lc-paginator [pageResult]="pageResult" />
         <ng-container *ngIf="pageResult.pageData$ | async as pageData">
             <lc-episode-preview
@@ -28,7 +35,7 @@
     } @else {
         <div class="mt-3 text-center">
             <p class="text-muted">
-                No episodes found matching "{{ searchControl.value }}."
+                No episodes found matching "{{ searchTerm$ | async }}."
             </p>
         </div>
     }
