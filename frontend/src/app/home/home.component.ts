@@ -17,14 +17,14 @@ export class HomeComponent {
             href: undefined,
         },
         {
-            label: 'Browse episodes',
-            icon: dataIcons.episode,
-            href: '/data/episodes',
-        },
-        {
-            label: 'Browse sources',
+            label: 'Source texts',
             icon: dataIcons.source,
             href: '/data/sources',
+        },
+        {
+            label: 'Epistolary episodes',
+            icon: dataIcons.episode,
+            href: '/data/episodes',
         },
         {
             label: 'Terminology',
@@ -32,14 +32,14 @@ export class HomeComponent {
             href: undefined,
         },
         {
-            label: 'Lettercraft stories',
+            label: 'Case studies',
             icon: 'journal-text',
             href: 'https://lettercraft.sites.uu.nl/category/blog/'
         },
         {
-            label: 'Team',
+            label: 'Contributors',
             icon: 'people',
-            href: 'https://lettercraft.sites.uu.nl/participants/',
+            href: '/contributors',
         },
         {
             label: 'Contact',
