@@ -6,6 +6,7 @@ import { actionIcons } from "@shared/icons";
     selector: "lc-action-button-group",
     templateUrl: "./action-button-group.component.html",
     styleUrls: ["./action-button-group.component.scss"],
+    standalone: false
 })
 export class ActionButtonGroupComponent {
     @Input({ required: true }) public editLink!: RouterLink["routerLink"];

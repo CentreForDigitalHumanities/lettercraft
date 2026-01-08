@@ -14,6 +14,9 @@ const fakeUserResponse: UserResponse = {
     last_name: "Baggins",
     is_staff: false,
     is_contributor: true,
+    description: '',
+    public_role: 'Ringbearer',
+    picture: null,
 }
 
 const fakeAdminResponse: UserResponse = {
@@ -24,6 +27,9 @@ const fakeAdminResponse: UserResponse = {
     last_name: "The Grey",
     is_staff: true,
     is_contributor: false,
+    description: '',
+    public_role: 'Wizard',
+    picture: null,
 }
 
 

@@ -1,7 +1,8 @@
-@import "lc_theme";
 @import "variables";
 @import "bootstrap";
 @import "bootstrap-icons";
+@import "lc_theme";
+
 
 @media print {
     .is-hidden-print,
@@ -69,4 +70,11 @@ figure {
         margin-top: 3rem;
         margin-bottom: 2rem;
     }
+}
+
+.profile-picture {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 6rem;
+    object-fit: cover;
 }

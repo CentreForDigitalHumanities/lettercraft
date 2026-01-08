@@ -25,6 +25,7 @@ type QueriedEpisode = NonNullable<
     selector: "lc-source",
     templateUrl: "./source.component.html",
     styleUrls: ["./source.component.scss"],
+    standalone: false
 })
 export class SourceComponent {
     public id$ = this.route.params.pipe(

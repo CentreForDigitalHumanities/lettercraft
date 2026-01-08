@@ -21,6 +21,7 @@ type QueriedLetter = NonNullable<DataEntryLetterFormQuery["letterDescription"]>;
     templateUrl: "./letter-form.component.html",
     styleUrls: ["./letter-form.component.scss"],
     providers: [FormService],
+    standalone: false
 })
 export class LetterFormComponent {
     public id$ = this.formService.id$;

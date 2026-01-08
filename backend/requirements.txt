@@ -24,7 +24,7 @@ defusedxml==0.7.1
     # via python3-openid
 dj-rest-auth==6.0.0
     # via -r requirements.in
-django==4.2.26
+django==4.2.27
     # via
     #   -r requirements.in
     #   dj-rest-auth
@@ -125,7 +125,7 @@ text-unidecode==1.3
     # via graphene-django
 tornado==6.5.2
     # via django-livereload-server
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   django-revproxy
     #   requests

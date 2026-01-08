@@ -8,9 +8,10 @@ import { sourceBreadcrumbs } from '../utils/breadcrumbs';
 import { PageResult } from '../utils/pagination';
 
 @Component({
-  selector: 'lc-source-view',
-  templateUrl: './source-view.component.html',
-  styleUrls: ['./source-view.component.scss']
+    selector: 'lc-source-view',
+    templateUrl: './source-view.component.html',
+    styleUrls: ['./source-view.component.scss'],
+    standalone: false
 })
 export class SourceViewComponent {
     id$: Observable<string> = this.route.params.pipe(

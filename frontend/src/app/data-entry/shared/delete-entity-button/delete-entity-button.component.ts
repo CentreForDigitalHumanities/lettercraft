@@ -5,6 +5,7 @@ import { actionIcons } from "@shared/icons";
     selector: "lc-delete-entity-button",
     templateUrl: "./delete-entity-button.component.html",
     styleUrls: ["./delete-entity-button.component.scss"],
+    standalone: false
 })
 export class DeleteEntityButtonComponent {
     @Input({ required: true }) public entityName!: string;

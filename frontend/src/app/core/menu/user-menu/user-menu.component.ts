@@ -8,9 +8,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { authIcons } from '@shared/icons';
 
 @Component({
-  selector: 'lc-user-menu',
-  templateUrl: './user-menu.component.html',
-  styleUrls: ['./user-menu.component.scss']
+    selector: 'lc-user-menu',
+    templateUrl: './user-menu.component.html',
+    styleUrls: ['./user-menu.component.scss'],
+    standalone: false
 })
 export class UserMenuComponent implements OnInit {
     public authLoading$ = this.authService.currentUser$.pipe(

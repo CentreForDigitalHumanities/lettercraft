@@ -9,9 +9,10 @@ import { map, switchMap } from 'rxjs';
 type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
 
 @Component({
-  selector: 'lc-case-study-view',
-  templateUrl: './case-study-view.component.html',
-  styleUrls: ['./case-study-view.component.scss']
+    selector: 'lc-case-study-view',
+    templateUrl: './case-study-view.component.html',
+    styleUrls: ['./case-study-view.component.scss'],
+    standalone: false
 })
 export class CaseStudyViewComponent {
     dataIcons = dataIcons;
@@ -27,12 +28,6 @@ export class CaseStudyViewComponent {
         private route: ActivatedRoute,
         private sanitizer: DomSanitizer,
     ) {
-    }
-
-    authorNames(caseStudy: CaseStudy): string {
-        const names = caseStudy.authors.map(author => author.fullName);
-        const formatter = new Intl.ListFormat('en');
-        return formatter.format(names);
     }
 
     sanitizedContent(caseStudy: CaseStudy) {

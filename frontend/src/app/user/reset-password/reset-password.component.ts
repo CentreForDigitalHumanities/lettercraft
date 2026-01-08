@@ -23,6 +23,7 @@ type ResetPasswordForm = {
     selector: "lc-reset-password",
     templateUrl: "./reset-password.component.html",
     styleUrls: ["./reset-password.component.scss"],
+    standalone: false
 })
 export class ResetPasswordComponent implements OnInit {
     private uid = this.activatedRoute.snapshot.params["uid"];

@@ -1,7 +1,8 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HomeComponent } from './home.component';
 import { SharedModule } from '@shared/shared.module';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HomeComponent', () => {
     let component: HomeComponent;
@@ -10,7 +11,8 @@ describe('HomeComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [HomeComponent],
-            imports: [HttpClientTestingModule, SharedModule]
+            imports: [SharedModule],
+            providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
         })
             .compileComponents();
     }));

@@ -34,6 +34,7 @@ type HistoricalPersonForm = {
     selector: "lc-agent-historical-person-form",
     templateUrl: "./agent-historical-person-form.component.html",
     styleUrls: ["./agent-historical-person-form.component.scss"],
+    standalone: false
 })
 export class AgentHistoricalPersonFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

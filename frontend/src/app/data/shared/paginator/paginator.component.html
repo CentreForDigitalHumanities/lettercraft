@@ -1,6 +1,13 @@
-<ng-container *ngIf="pageResult.totalSize$ | async as totalSize">
-    <ngb-pagination *ngIf="totalSize > pageResult.pageSize"
-        [(page)]="pageResult.page"
-        [pageSize]="pageResult.pageSize" [collectionSize]="totalSize"
-    />
-</ng-container>
+<div class="hstack" *ngIf="pageResult.totalSize$ | async as totalSize">
+    <div class="mx-auto" [ngbCollapse]="totalSize <= pageResult.pageSize">
+        <ngb-pagination
+            aria-label="page"
+            [(page)]="pageResult.page"
+            [pageSize]="pageResult.pageSize"
+            [collectionSize]="totalSize"
+            [ellipses]="true"
+            [maxSize]="3"
+            [rotate]="true"
+        />
+    </div>
+</div>

@@ -6,6 +6,7 @@ import { RegisterComponent } from './register/register.component';
 import { PasswordForgottenComponent } from './password-forgotten/password-forgotten.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { ProfilePictureFieldComponent } from './profile-picture-field/profile-picture-field.component';
 
 @NgModule({
     declarations: [
@@ -15,6 +16,7 @@ import { UserSettingsComponent } from './user-settings/user-settings.component';
         PasswordForgottenComponent,
         ResetPasswordComponent,
         UserSettingsComponent,
+        ProfilePictureFieldComponent,
     ],
     imports: [
         SharedModule

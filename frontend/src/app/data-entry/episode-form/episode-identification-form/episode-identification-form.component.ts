@@ -38,6 +38,7 @@ type EpisodeIdentificationForm = {
     selector: "lc-episode-identification-form",
     templateUrl: "./episode-identification-form.component.html",
     styleUrls: ["./episode-identification-form.component.scss"],
+    standalone: false
 })
 export class EpisodeIdentificationFormComponent implements OnInit, OnDestroy {
     private id$ = this.formService.id$;

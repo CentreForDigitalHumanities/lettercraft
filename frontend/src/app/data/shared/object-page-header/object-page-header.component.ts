@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'lc-object-page-header',
-  templateUrl: './object-page-header.component.html',
-  styleUrls: ['./object-page-header.component.scss']
+    selector: 'lc-object-page-header',
+    templateUrl: './object-page-header.component.html',
+    styleUrls: ['./object-page-header.component.scss'],
+    standalone: false
 })
 export class ObjectPageHeaderComponent {
     @Input({required: true}) object!: {

@@ -7,6 +7,7 @@ export type OrderChange = "up" | "down";
     selector: "lc-order-button-group",
     templateUrl: "./order-button-group.component.html",
     styleUrls: ["./order-button-group.component.scss"],
+    standalone: false
 })
 export class OrderButtonGroupComponent {
     @Output() changeOrder = new EventEmitter<OrderChange>();

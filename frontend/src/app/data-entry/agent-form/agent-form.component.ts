@@ -11,6 +11,7 @@ import { agentIcon } from '@shared/icons-utils';
     templateUrl: './agent-form.component.html',
     styleUrls: ['./agent-form.component.scss'],
     providers: [FormService],
+    standalone: false
 })
 export class AgentFormComponent {
     id$: Observable<string> = this.formService.id$;

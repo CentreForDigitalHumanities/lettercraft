@@ -1,5 +1,5 @@
 from django.urls import include, path, re_path
-from .views import DeleteUser, redirect_confirm, KeyInfoView
+from .views import DeleteUser, redirect_confirm, KeyInfoView, UserPictureView
 from dj_rest_auth.registration.views import VerifyEmailView
 
 from .views import KeyInfoView, redirect_confirm, redirect_reset
@@ -28,6 +28,11 @@ urlpatterns = [
         "delete/",
         DeleteUser.as_view(),
         name="delete user"
+    ),
+    path(
+        'pictures/<str:id>/',
+        UserPictureView.as_view(),
+        name="user picture",
     ),
     # generic routes (login, logout, pw reset etc.)
     path("", include("dj_rest_auth.urls")),

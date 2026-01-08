@@ -9,6 +9,7 @@ export interface Breadcrumb {
     selector: "lc-breadcrumb",
     templateUrl: "./breadcrumb.component.html",
     styleUrls: ["./breadcrumb.component.scss"],
+    standalone: false
 })
 export class BreadcrumbComponent {
     @Input() breadcrumbs: Breadcrumb[] = [];

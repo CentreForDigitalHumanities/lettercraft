@@ -14,9 +14,10 @@ import { Observable, map, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
 
 @Component({
-  selector: 'lc-agent-view',
-  templateUrl: './agent-view.component.html',
-  styleUrls: ['./agent-view.component.scss']
+    selector: 'lc-agent-view',
+    templateUrl: './agent-view.component.html',
+    styleUrls: ['./agent-view.component.scss'],
+    standalone: false
 })
 export class AgentViewComponent {
     id$: Observable<string> = this.route.params.pipe(

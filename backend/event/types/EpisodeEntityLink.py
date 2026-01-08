@@ -1,7 +1,7 @@
 from graphene import ID, NonNull, String, Interface, List
 from core.types.DescriptionFieldType import SourceMentionEnum
 from event.types.EpisodeType import EpisodeType
-from core.types.entity import Entity, EntityDescription
+from core.types.entity import EntityDescription
 
 
 class EpisodeEntityLink(Interface):
