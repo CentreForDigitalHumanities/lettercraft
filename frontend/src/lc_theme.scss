@@ -1,68 +1,79 @@
+@use "./variables" as v;
+@use "./fonts";
+
+@forward "./fonts";
+
+// based on https://getbootstrap.com/docs/5.3/customize/sass/#importing
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+
+$link-color: v.$lc_royal_blue_lighter;
+$link-hover-color: v.$lc_royal_blue;
+
+$font-family-sans-serif: fonts.$lc_sans_serif;
+
+$headings-font-family: fonts.$lc_serif;
+$display-font-family: fonts.$lc_serif;
+
+$navbar-light-active-color: v.$lc_jonquil;
+$navbar-dark-active-color: v.$lc_jonquil;
+
+$pagination-active-bg: v.$lc_royal_blue_lighter;
+$pagination-active-border-color: v.$lc_royal_blue_lighter;
+
+// 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/variables-dark";
 
-// Variables
-$lc_jonquil: #ffce1f;
-$lc_royal_blue: #003d66;
-$lc_parchment: #eeeae4;
-$lc_ink: #2c2416;
-$lc_burgundy: #722f37;
-
+// 4. Include any default map overrides here
 $lc-colors: (
-    "accent": $lc_jonquil,
-    "primary": $lc_royal_blue,
-    "parchment": $lc_parchment,
-    "ink": $lc_ink,
-    "burgundy": $lc_burgundy,
+    "accent": v.$lc_jonquil,
+    "primary": v.$lc_royal_blue,
+    "parchment": v.$lc_parchment,
+    "ink": v.$lc_ink,
+    "burgundy": v.$lc_burgundy,
 );
 
 $theme-colors: map-merge($theme-colors, $lc-colors);
 
-@font-face {
-    font-family: "Merriweather";
-    src: url('/assets/fonts/Merriweather/Merriweather-VariableFont_opsz,wdth,wght.ttf');
-}
-
-@font-face {
-    font-family: "Merriweather";
-    src: url('/assets/fonts/Open_Sans/Merriweather-Italic-VariableFont_opsz,wdth,wght.ttf');
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "Open Sans";
-    src: url('/assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf');
-}
-
-@font-face {
-    font-family: "Open Sans";
-    src: url('/assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf');
-    font-style: italic;
-}
-
-
-
-// The order of these imports matters!
+// 5. Include remainder of required parts
 @import "../node_modules/bootstrap/scss/maps";
 @import "../node_modules/bootstrap/scss/mixins";
 @import "../node_modules/bootstrap/scss/root";
 
-$royal_blue_lighter: #1071b1;
+// 6. Include any other optional stylesheet partials as desired; list below is not inclusive of all available stylesheets
+@import "../node_modules/bootstrap/scss/utilities";
+@import "../node_modules/bootstrap/scss/reboot";
+@import "../node_modules/bootstrap/scss/type";
+@import "../node_modules/bootstrap/scss/images";
+@import "../node_modules/bootstrap/scss/containers";
+@import "../node_modules/bootstrap/scss/grid";
+@import "../node_modules/bootstrap/scss/helpers";
+@import "../node_modules/bootstrap/scss/accordion";
+@import "../node_modules/bootstrap/scss/alert";
+@import "../node_modules/bootstrap/scss/badge";
+@import "../node_modules/bootstrap/scss/breadcrumb";
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/button-group";
+@import "../node_modules/bootstrap/scss/card";
+@import "../node_modules/bootstrap/scss/close";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/forms";
+@import "../node_modules/bootstrap/scss/list-group";
+@import "../node_modules/bootstrap/scss/modal";
+@import "../node_modules/bootstrap/scss/nav";
+@import "../node_modules/bootstrap/scss/navbar";
+@import "../node_modules/bootstrap/scss/pagination";
+@import "../node_modules/bootstrap/scss/popover";
+@import "../node_modules/bootstrap/scss/progress";
+@import "../node_modules/bootstrap/scss/spinners";
+@import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/toasts";
+@import "../node_modules/bootstrap/scss/tooltip";
+@import "../node_modules/bootstrap/scss/transitions";
 
-// Override Bootstrap defaults
-$link-color: $royal_blue_lighter;
-$link-hover-color: $lc_royal_blue;
-
-$font-family-sans-serif: 'Open Sans', system-ui, sans-serif;
-$font-family-serif: 'Merriweather', serif;
-
-$headings-font-family: $font-family-serif;
-$display-font-family: $font-family-serif;
-
-// Layout
-
-$navbar-light-active-color: $lc_jonquil;
-$navbar-dark-active-color: $lc_jonquil;
-$pagination-active-bg: $royal_blue_lighter;
-$pagination-active-border-color: $royal_blue_lighter;
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "../node_modules/bootstrap/scss/utilities/api";

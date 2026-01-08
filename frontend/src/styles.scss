@@ -1,8 +1,6 @@
-@import "variables";
-@import "bootstrap";
-@import "bootstrap-icons";
-@import "lc_theme";
-
+@use "./variables" as v;
+@use "./lc_theme";
+@use "bootstrap-icons";
 
 @media print {
     .is-hidden-print,
