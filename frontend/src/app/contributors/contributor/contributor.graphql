@@ -1,0 +1,17 @@
+query ViewContributor($id: ID!) {
+    userDescription(id: $id) {
+        id
+        fullName
+        publicRole
+        description
+        picture
+        caseStudies {
+            id
+            name
+        }
+        contributedSources {
+            id
+            name
+        }
+    }
+}

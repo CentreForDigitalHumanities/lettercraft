@@ -1,0 +1,21 @@
+.profile-row {
+    min-height: 5rem; // set min height for profiles without a picture
+}
+
+.profile-content-col {
+    min-width: 0; // needed to handle overflow correctly
+}
+
+.profile-snippet {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.profile-picture {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 2.5rem;
+    object-fit: cover;
+}
+

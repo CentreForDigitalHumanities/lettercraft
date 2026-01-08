@@ -69,3 +69,10 @@ figure {
         margin-bottom: 2rem;
     }
 }
+
+.profile-picture {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 6rem;
+    object-fit: cover;
+}

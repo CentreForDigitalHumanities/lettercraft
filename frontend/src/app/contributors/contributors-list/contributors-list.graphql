@@ -1,0 +1,13 @@
+query ViewContributors {
+    contributorRoles {
+        id
+        name
+        description
+        users {
+            id
+            fullName
+            description
+            picture
+        }
+    }
+}

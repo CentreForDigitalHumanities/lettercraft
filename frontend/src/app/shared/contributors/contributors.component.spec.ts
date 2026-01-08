@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ContributorsComponent } from "./contributors.component";
 import { UserType } from "generated/graphql";
+import { SharedTestingModule } from "@shared/shared-testing.module";
 
 describe("ContributorsComponent", () => {
     let component: ContributorsComponent;
@@ -9,6 +10,7 @@ describe("ContributorsComponent", () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [ContributorsComponent],
+            imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(ContributorsComponent);
         component = fixture.componentInstance;
@@ -69,6 +71,6 @@ describe("ContributorsComponent", () => {
         const compiled = fixture.nativeElement;
         const element: HTMLElement = compiled.querySelector(".contributors");
         self.expect(element).toBeDefined();
-        self.expect(element.textContent).toBe("Contributors: Anakin Skywalker et al.");
+        self.expect(element.textContent).toBe("Contributors: Anakin Skywalker, Jabba the Hutt, Queen Amidala");
     });
 });
