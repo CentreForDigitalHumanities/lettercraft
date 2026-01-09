@@ -20,6 +20,7 @@ def source_2(db):
         ('clumsy', ['Pat & Mat']),
         ('street sesame', ['Sesame Street']),
         ('pat clumsy', ['Pat & Mat']),
+        ('pat street', []),
         ('nonsense', []),
 ])
 def test_source_search(source, source_2, no_missing_source, query, expected):
