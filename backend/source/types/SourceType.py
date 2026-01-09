@@ -27,8 +27,13 @@ class SourceFilter(FilterSet):
     search = CharFilter(method="search_sources")
     is_public = BooleanFilter(field_name="is_public")
 
+    class Meta:
+        model = Source
+        fields = ['is_public']
+
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
         """Filter sources by by searching through the name, reference, or description."""
+        print(value)
         return queryset.filter(
             Q(name__icontains=value)
             | Q(medieval_title__icontains=value)
