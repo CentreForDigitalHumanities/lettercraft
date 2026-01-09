@@ -21,11 +21,15 @@ from user.permissions import can_edit_source, visible_condition
 from user.types.UserType import UserType
 from user.models import User
 from source.types.SourceImageType import SourceImageType
+from functools import reduce
+from operator import or_
 
 
 class SourceFilter(FilterSet):
     search = CharFilter(method="search_sources")
     is_public = BooleanFilter(field_name="is_public")
+
+    _search_fields = ['name', 'medieval_title', 'reference', 'description_text']
 
     class Meta:
         model = Source
@@ -33,13 +37,16 @@ class SourceFilter(FilterSet):
 
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
         """Filter sources by by searching through the name, reference, or description."""
-        print(value)
-        return queryset.filter(
-            Q(name__icontains=value)
-            | Q(medieval_title__icontains=value)
-            | Q(reference__icontains=value)
-            | Q(description_text__icontains=value)
-        )
+        return queryset.filter(self._search_filter(value))
+
+    def _search_filter(self, query: str) -> Q:
+        terms = query.split()
+        qs = [
+            Q(**{f'{field}__icontains': term})
+            for field in self._search_fields
+            for term in terms
+        ]
+        return reduce(or_, qs) if len(qs) else Q()
 
 
 class SourceType(DjangoObjectType):
