@@ -1,6 +1,6 @@
 from typing import Type, Optional
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
-from django.db.models import QuerySet, Model, Q
+from django.db.models import QuerySet, Model
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, CharFilter, BooleanFilter
 
@@ -21,9 +21,7 @@ from user.permissions import can_edit_source, visible_condition
 from user.types.UserType import UserType
 from user.models import User
 from source.types.SourceImageType import SourceImageType
-from functools import reduce
-from operator import or_
-
+from graphql_app.utils import search_filter
 
 class SourceFilter(FilterSet):
     search = CharFilter(method="search_sources")
@@ -37,16 +35,7 @@ class SourceFilter(FilterSet):
 
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
         """Filter sources by by searching through the name, reference, or description."""
-        return queryset.filter(self._search_filter(value))
-
-    def _search_filter(self, query: str) -> Q:
-        terms = query.split()
-        qs = [
-            Q(**{f'{field}__icontains': term})
-            for field in self._search_fields
-            for term in terms
-        ]
-        return reduce(or_, qs) if len(qs) else Q()
+        return queryset.filter(search_filter(value, self._search_fields))
 
 
 class SourceType(DjangoObjectType):
