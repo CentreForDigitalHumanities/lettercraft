@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "Merriweather";
+    src: url('/assets/fonts/Merriweather/Merriweather-VariableFont_opsz,wdth,wght.ttf');
+}
+
+@font-face {
+    font-family: "Merriweather";
+    src: url('/assets/fonts/Open_Sans/Merriweather-Italic-VariableFont_opsz,wdth,wght.ttf');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url('/assets/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf');
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: url('/assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf');
+    font-style: italic;
+}
+
+
+$lc_sans_serif: 'Open Sans', system-ui, sans-serif;
+$lc_serif: 'Merriweather', serif;

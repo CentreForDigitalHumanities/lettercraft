@@ -1,0 +1,20 @@
+.home-background {
+    background-image: url("/assets/lc-bg.jpg");
+    min-height: 75vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.banner-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (max-width: 576px) {
+    .card-fluid-xs {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
