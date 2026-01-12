@@ -1,5 +1,5 @@
-@use "variables";
-@use "bootstrap";
+@use "./variables" as v;
+@use "./lc_theme";
 @use "bootstrap-icons";
 
 @media print {

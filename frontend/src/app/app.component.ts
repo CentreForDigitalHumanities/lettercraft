@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
     selector: 'lc-root',
@@ -7,5 +9,13 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class AppComponent {
-    title = 'lettercraft';
+    private router = inject(Router);
+    private activatedRoute = inject(ActivatedRoute);
+
+    public title = 'lettercraft';
+
+    public fullSize$ = this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.activatedRoute.firstChild?.snapshot.data['fullSize'] === true)
+    );
 }
