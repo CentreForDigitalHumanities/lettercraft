@@ -26,6 +26,16 @@ export class EpisodeListComponent {
     private searchResult$ = this.searchService.createSearch<ViewEpisodesQuery>(
         this.searchControl.valueChanges,
         this.query
+    ).pipe(
+        shareReplay(1),
+    );
+
+    searchTerm$ = this.searchResult$.pipe(
+        map(result => result.searchTerm)
+    );
+
+    searchError$ = this.searchResult$.pipe(
+        map(result => result.error)
     );
 
     public collectionData$ = this.searchResult$.pipe(
@@ -40,7 +50,7 @@ export class EpisodeListComponent {
         startWith(false)
     );
 
-    private collection$ = this.collectionData$.pipe(
+    collection$ = this.collectionData$.pipe(
         filter(data => !!data),
         map(data => data?.episodes || []),
     );

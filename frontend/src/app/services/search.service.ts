@@ -17,7 +17,7 @@ export interface SearchState<T> {
     loading: boolean;
     data: T | null;
     error: string | null;
-    searchTerm?: string;
+    searchTerm: string;
 }
 
 type SearchQueryVariable = {
@@ -55,7 +55,7 @@ export class SearchService {
                     })
                     .valueChanges.pipe(
                         map((result) =>
-                            this.handleApolloResult<TQuery>(result)
+                            this.handleApolloResult<TQuery>(result, searchTerm)
                         ),
                         catchError((error) =>
                             this.handleFetchError<TQuery>(error, searchTerm)
@@ -66,6 +66,7 @@ export class SearchService {
                     loading: true,
                     data: null,
                     error: null,
+                    searchTerm,
                 };
 
                 return concat(of(loadingState), query$);
@@ -74,7 +75,8 @@ export class SearchService {
     }
 
     private handleApolloResult<T>(
-        result: ApolloQueryResult<T>
+        result: ApolloQueryResult<T>,
+        searchTerm: string,
     ): SearchState<T> {
         const errorMessage = this.handleApolloError(result);
         if (errorMessage) {
@@ -82,12 +84,14 @@ export class SearchService {
                 loading: false,
                 data: null,
                 error: errorMessage,
+                searchTerm,
             };
         }
         return {
             loading: false,
             data: result.data || null,
             error: null,
+            searchTerm,
         };
     }
 

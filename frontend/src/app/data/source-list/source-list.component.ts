@@ -27,6 +27,16 @@ export class SourceListComponent {
     private searchResult$ = this.searchService.createSearch<ViewSourcesQuery>(
         this.searchControl.valueChanges,
         this.query
+    ).pipe(
+        shareReplay(1),
+    );
+
+    searchTerm$ = this.searchResult$.pipe(
+        map(result => result.searchTerm)
+    );
+
+    searchError$ = this.searchResult$.pipe(
+        map(result => result.error)
     );
 
     collection$ = this.searchResult$.pipe(
