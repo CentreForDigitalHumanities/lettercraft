@@ -34,7 +34,7 @@ class SourceFilter(FilterSet):
         fields = ['is_public']
 
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
-        """Filter sources by by searching through the name, reference, or description."""
+        """Filter sources by searching through the name, medieval title, reference, or description."""
         return queryset.filter(search_filter(value, self._search_fields))
 
 
