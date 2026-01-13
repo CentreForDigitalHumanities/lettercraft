@@ -1,0 +1,226 @@
+@use "../../../../src/lc_theme" as theme;
+
+.omnibrowse-container {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s ease;
+
+    &.searched {
+        background-color: theme.$gray-100;
+    }
+}
+
+.search-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding: 3rem 1rem;
+    transition: all 0.5s ease-in;
+
+    &.moved-to-top {
+        flex-grow: 0;
+        padding: 2rem 1rem 1.5rem;
+        background-color: theme.$white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.search-title {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: 300;
+    color: map-get(theme.$lc-colors, primary);
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.search-form {
+    max-width: 700px;
+    margin: 0 auto;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.search-input-wrapper {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+
+    &:focus-within {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .moved-to-top & {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.search-input {
+    border: none;
+    font-size: 1.1rem;
+    padding: 1rem 1.5rem;
+    transition: all 0.3s ease;
+
+    // Remove default focus style.
+    &:focus {
+        box-shadow: none;
+        border-color: transparent;
+    }
+
+    .moved-to-top & {
+        padding: 0.75rem 1rem;
+    }
+}
+
+.search-button {
+    border: none;
+    padding: 0.875rem 2rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+
+    .moved-to-top & {
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+.results-section {
+    flex-grow: 1;
+    padding: 2rem 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+
+    .nav-link {
+        border: none;
+        border-bottom: 3px solid transparent;
+        color: theme.$gray-600;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+            border-bottom-color: theme.$gray-400;
+            color: theme.$gray-700;
+        }
+
+        &.active {
+            color: map-get(theme.$lc-colors, primary);
+            border-bottom-color: map-get(theme.$lc-colors, primary);
+            background-color: transparent;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+}
+
+.results-content {
+    padding: 1.5rem 0;
+}
+
+.list-group-item {
+    // border-left: 3px solid transparent;
+    border-left: none;
+    border-right: none;
+    transition: all 0.2s ease;
+    padding: 1rem 1.5rem;
+
+    &:first-child {
+        border-top: none;
+    }
+
+    &:hover {
+        border-left: 3px solid map-get(theme.$lc-colors, primary);
+        background-color: theme.$gray-100;
+    }
+
+    h5 {
+        color: map-get(theme.$lc-colors, primary);
+        font-weight: 500;
+        // Straight h5 feels too big here.
+        font-size: 1.1rem;
+    }
+
+    p {
+        color: theme.$gray-700;
+        line-height: 1.6;
+    }
+}
+
+.no-results {
+    fa-icon {
+        opacity: 0.3;
+    }
+
+    p {
+        font-size: 1.1rem;
+    }
+}
+
+// Animations
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .search-title {
+        font-size: 2rem;
+    }
+
+    .search-input {
+        font-size: 1rem;
+    }
+
+    .search-button {
+        padding: 0.75rem 1rem;
+
+        fa-icon {
+            display: none;
+        }
+    }
+
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+
+        .nav-link {
+            padding: 0.75rem 1rem;
+            white-space: nowrap;
+        }
+    }
+}

@@ -33,6 +33,7 @@ import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case
 import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 import { ContributorComponent } from '../contributors/contributor/contributor.component';
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
+import { OmnibrowseComponent } from '../data/omnibrowse/omnibrowse.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,10 @@ const routes: Routes = [
         component: HomeComponent,
         // Do not apply standard padding/margin for main content on the landing page.
         data: { fullSize: true }
+    },
+    {
+        path: 'browse-test',
+        component: OmnibrowseComponent
     },
     {
         path: 'login',
@@ -94,7 +99,7 @@ const routes: Routes = [
         path: 'contributors',
         children: [
             {
-                path:  ':id',
+                path: ':id',
                 title: pageTitle('Contributor'),
                 component: ContributorComponent,
             },
