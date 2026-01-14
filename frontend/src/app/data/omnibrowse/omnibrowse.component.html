@@ -25,9 +25,26 @@
                             class="btn btn-outline-secondary dropdown-toggle label-dropdown-button"
                             id="labelDropdown"
                             ngbDropdownToggle>
-                            <span class="me-2">{{ getSelectedLabelsDisplay() }}</span>
+                            @if (selectedLabels.length === 0) {
+                                <span class="placeholder-text">Select labels...</span>
+                            } @else {
+                                <div class="selected-labels-display">
+                                    @for (labelId of selectedLabels; track labelId) {
+                                        <span class="btn btn-tag btn-secondary me-1 mb-1">
+                                            <lc-icon
+                                                [icon]="actionIcons.remove"
+                                                class="remove-label-icon me-1"
+                                                (click)="removeLabel($event, labelId)" />
+                                            {{ getLabelName(labelId) }}
+                                        </span>
+                                    }
+                                </div>
+                            }
                         </button>
                         <div ngbDropdownMenu aria-labelledby="labelDropdown" class="label-dropdown-menu">
+                            <div class="dropdown-header-text">
+                                Select one or more labels from the list below...
+                            </div>
                             @for (label of mockLabels; track label.id) {
                                 <button
                                     ngbDropdownItem

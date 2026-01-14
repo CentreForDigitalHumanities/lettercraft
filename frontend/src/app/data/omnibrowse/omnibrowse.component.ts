@@ -20,7 +20,6 @@ interface SearchResult {
 export class OmnibrowseComponent {
     activeTab = 1;
     searchQuery = 'Radegund';
-    hasSearched = false;
 
     // Icons
     dataIcons = dataIcons;
@@ -29,18 +28,16 @@ export class OmnibrowseComponent {
     search = new FormControl('');
 
     // Label selection
-    selectedLabels: string[] = [];
+    selectedLabels: number[] = [];
     mockLabels = [
-        { id: 'personal', label: 'Personal Correspondence' },
-        { id: 'official', label: 'Official Business' },
-        { id: 'diplomatic', label: 'Diplomatic Exchange' },
-        { id: 'religious', label: 'Religious Matters' },
-        { id: 'literary', label: 'Literary Composition' },
-        { id: 'petition', label: 'Petition or Request' },
-        { id: 'recommendation', label: 'Letter of Recommendation' },
-        { id: 'condolence', label: 'Condolence' },
-        { id: 'congratulation', label: 'Congratulation' },
-        { id: 'instruction', label: 'Instruction or Guidance' }
+        { id: 1, label: 'Female agent' },
+        { id: 2, label: 'Letter (implied)' },
+        { id: 3, label: 'Materiality' },
+        { id: 4, label: 'Oral message' },
+        { id: 5, label: 'Episcopal succession' },
+        { id: 6, label: 'Relics' },
+        { id: 7, label: 'Trickery' },
+        { id: 8, label: 'Secret communication' },
     ];
 
     tabs = [
@@ -170,9 +167,6 @@ export class OmnibrowseComponent {
 
     onSearch(event: Event): void {
         event.preventDefault();
-        if (this.searchQuery.trim()) {
-            this.hasSearched = true;
-        }
     }
 
     public getResults(tabId: number): SearchResult[] {
@@ -183,7 +177,7 @@ export class OmnibrowseComponent {
         return this.getResults(tabId).length;
     }
 
-    public toggleLabel(labelId: string): void {
+    public toggleLabel(labelId: number): void {
         const index = this.selectedLabels.indexOf(labelId);
         if (index > -1) {
             this.selectedLabels.splice(index, 1);
@@ -192,7 +186,7 @@ export class OmnibrowseComponent {
         }
     }
 
-    public isLabelSelected(labelId: string): boolean {
+    public isLabelSelected(labelId: number): boolean {
         return this.selectedLabels.includes(labelId);
     }
 
@@ -203,11 +197,23 @@ export class OmnibrowseComponent {
     public getSelectedLabelsDisplay(): string {
         if (this.selectedLabels.length === 0) {
             return 'Select labels...';
-        } else if (this.selectedLabels.length === 1) {
-            const label = this.mockLabels.find(l => l.id === this.selectedLabels[0]);
-            return label ? label.label : 'Select labels...';
         } else {
-            return `${this.selectedLabels.length} items selected`;
+            const labelNames = this.selectedLabels
+                .map(id => this.mockLabels.find(l => l.id === id)?.label)
+                .filter(label => label !== undefined);
+            return labelNames.join(', ');
+        }
+    }
+
+    public getLabelName(labelId: number): string {
+        return this.mockLabels.find(l => l.id === labelId)?.label || '';
+    }
+
+    public removeLabel(event: Event, labelId: number): void {
+        event.stopPropagation();
+        const index = this.selectedLabels.indexOf(labelId);
+        if (index > -1) {
+            this.selectedLabels.splice(index, 1);
         }
     }
 }
