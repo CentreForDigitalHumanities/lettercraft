@@ -28,6 +28,21 @@ export class OmnibrowseComponent {
 
     search = new FormControl('');
 
+    // Label selection
+    selectedLabels: string[] = [];
+    mockLabels = [
+        { id: 'personal', label: 'Personal Correspondence' },
+        { id: 'official', label: 'Official Business' },
+        { id: 'diplomatic', label: 'Diplomatic Exchange' },
+        { id: 'religious', label: 'Religious Matters' },
+        { id: 'literary', label: 'Literary Composition' },
+        { id: 'petition', label: 'Petition or Request' },
+        { id: 'recommendation', label: 'Letter of Recommendation' },
+        { id: 'condolence', label: 'Condolence' },
+        { id: 'congratulation', label: 'Congratulation' },
+        { id: 'instruction', label: 'Instruction or Guidance' }
+    ];
+
     tabs = [
         {
             id: 1,
@@ -166,5 +181,33 @@ export class OmnibrowseComponent {
 
     public getResultCount(tabId: number): number {
         return this.getResults(tabId).length;
+    }
+
+    public toggleLabel(labelId: string): void {
+        const index = this.selectedLabels.indexOf(labelId);
+        if (index > -1) {
+            this.selectedLabels.splice(index, 1);
+        } else {
+            this.selectedLabels.push(labelId);
+        }
+    }
+
+    public isLabelSelected(labelId: string): boolean {
+        return this.selectedLabels.includes(labelId);
+    }
+
+    public clearLabels(): void {
+        this.selectedLabels = [];
+    }
+
+    public getSelectedLabelsDisplay(): string {
+        if (this.selectedLabels.length === 0) {
+            return 'Select labels...';
+        } else if (this.selectedLabels.length === 1) {
+            const label = this.mockLabels.find(l => l.id === this.selectedLabels[0]);
+            return label ? label.label : 'Select labels...';
+        } else {
+            return `${this.selectedLabels.length} items selected`;
+        }
     }
 }

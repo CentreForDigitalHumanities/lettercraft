@@ -16,6 +16,43 @@
                         Search
                     </button>
                 </div>
+
+                <!-- Label Selection Dropdown -->
+                <div class="label-filter-wrapper mt-3">
+                    <div ngbDropdown class="dropdown-flex-container" autoClose="outside">
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary dropdown-toggle label-dropdown-button"
+                            id="labelDropdown"
+                            ngbDropdownToggle>
+                            <span class="me-2">{{ getSelectedLabelsDisplay() }}</span>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="labelDropdown" class="label-dropdown-menu">
+                            @for (label of mockLabels; track label.id) {
+                                <button
+                                    ngbDropdownItem
+                                    type="button"
+                                    class="label-dropdown-item"
+                                    (click)="toggleLabel(label.id)">
+                                    <span class="btn btn-tag me-2"
+                                        [class]="isLabelSelected(label.id) ? 'btn-secondary' : 'btn-light'">
+                                        <lc-icon [icon]="isLabelSelected(label.id) ? 'check-square' : 'square'" class="me-1" />
+                                        {{ label.label }}
+                                    </span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    @if (selectedLabels.length > 0) {
+                        <button
+                            type="button"
+                            class="btn clear-labels-button"
+                            (click)="clearLabels()"
+                            title="Clear all labels">
+                            <lc-icon [icon]="actionIcons.delete" />
+                        </button>
+                    }
+                </div>
             </form>
         </div>
     </div>
