@@ -16,14 +16,6 @@ interface SearchResult {
     templateUrl: './omnibrowse.component.html',
     styleUrl: './omnibrowse.component.scss',
     standalone: false,
-    animations: [
-        trigger('fadeIn', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'translateY(20px)' }),
-                animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-            ])
-        ])
-    ]
 })
 export class OmnibrowseComponent {
     activeTab = 1;
@@ -34,7 +26,7 @@ export class OmnibrowseComponent {
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
-    search = new FormControl('Radegund');
+    search = new FormControl('');
 
     tabs = [
         {
@@ -71,19 +63,19 @@ export class OmnibrowseComponent {
                 id: 1,
                 name: 'Radegund arrives at Poitiers',
                 description: 'After a long journey, Radegund finally reaches the city of Poitiers.',
-                subtext: 'Gregory of Tours, <i>Decem libri historiarum</i>, Book VIII, Chapter 6, Section 5'
+                subtext: 'Gregory of Tours, <i>Decem libri historiarum</i>, book VIII, chapter 6, section 5, page 168'
             },
             {
                 id: 2,
                 name: 'Medard ordains Radegund',
                 description: 'Bishop Medard of Noyon ordains Radegund as a deaconess.',
-                subtext: 'Venantius Fortunatus, <i>Vita Radegundis</i>, Book I, Chapter 12'
+                subtext: 'Venantius Fortunatus, <i>Vita Radegundis</i>, book I, chapter 12, page 45'
             },
             {
                 id: 3,
                 name: 'Foundation of Holy Cross Monastery',
                 description: 'Radegund establishes the monastery of the Holy Cross',
-                subtext: 'Baudovinia, <i>Vita Radegundis</i>, Book I, Chapter 5'
+                subtext: 'Baudovinia, <i>Vita Radegundis</i>, book I, chapter 5, page 30'
             }
         ],
         // Sources

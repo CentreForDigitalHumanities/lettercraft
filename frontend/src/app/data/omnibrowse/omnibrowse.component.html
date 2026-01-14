@@ -1,10 +1,6 @@
-<div class="omnibrowse-container" [class.searched]="hasSearched">
-
-    <div class="search-section" [class.moved-to-top]="hasSearched">
+<div class="omnibrowse-container">
+    <div class="search-section">
         <div class="container">
-            @if (!hasSearched) {
-                <h1 class="search-title mb-4 font-serif">Browse Lettercraft</h1>
-            }
             <form (submit)="onSearch($event)" class="search-form">
                 <div class="input-group search-input-wrapper">
                     <input
@@ -24,46 +20,44 @@
         </div>
     </div>
 
-    @if (hasSearched) {
-        <div class="results-section" [@fadeIn]>
-            <div class="container-fluid">
-                <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-4">
-                    @for (tab of tabs; track tab.id) {
-                        <li [ngbNavItem]="tab.id" class="nav-item">
-                            <button ngbNavLink class="nav-link">
-                                <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
-                                <span>{{ tab.title }}</span>
-                                <span class="badge bg-secondary ms-2">{{ getResultCount(tab.id) }}</span>
-                            </button>
-                            <ng-template ngbNavContent>
-                                <div class="results-content">
-                                    <div class="list-group">
-                                        @for (item of getResults(tab.id); track item.id) {
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <h5 class="mb-1" [innerHTML]="item.name"></h5>
-                                                    <small class="text-muted">
-                                                        <lc-icon [icon]="item.icon ?? tab.icon" class="me-1"  />
-                                                    </small>
-                                                </div>
-                                                <p class="mb-1" [innerHTML]="item.description"></p>
-                                                <small class="text-muted" [innerHTML]="item.subtext"></small>
-                                            </a>
-                                        }
-                                    </div>
-                                    @if (getResultCount(tab.id) === 0) {
-                                        <div class="no-results text-center py-5">
-                                            <lc-icon [icon]="actionIcons.search" class="text-muted mb-3" size="3x" />
-                                            <p class="text-muted">No results found in this category</p>
-                                        </div>
+    <div class="results-section">
+        <div class="container-fluid">
+            <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs mb-4">
+                @for (tab of tabs; track tab.id) {
+                    <li [ngbNavItem]="tab.id" class="nav-item">
+                        <button ngbNavLink class="nav-link">
+                            <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
+                            <span>{{ tab.title }}</span>
+                            <span class="badge bg-secondary ms-2">{{ getResultCount(tab.id) }}</span>
+                        </button>
+                        <ng-template ngbNavContent>
+                            <div class="results-content">
+                                <div class="list-group">
+                                    @for (item of getResults(tab.id); track item.id) {
+                                        <a href="#" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1" [innerHTML]="item.name"></h5>
+                                                <small class="text-muted">
+                                                    <lc-icon [icon]="item.icon ?? tab.icon" class="me-1"  />
+                                                </small>
+                                            </div>
+                                            <p class="mb-1" [innerHTML]="item.description"></p>
+                                            <small class="text-muted" [innerHTML]="item.subtext"></small>
+                                        </a>
                                     }
                                 </div>
-                            </ng-template>
-                        </li>
-                    }
-                </ul>
-                <div [ngbNavOutlet]="nav"></div>
-            </div>
+                                @if (getResultCount(tab.id) === 0) {
+                                    <div class="no-results text-center py-5">
+                                        <lc-icon [icon]="actionIcons.search" class="text-muted mb-3" size="3x" />
+                                        <p class="text-muted">No results found in this category</p>
+                                    </div>
+                                }
+                            </div>
+                        </ng-template>
+                    </li>
+                }
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
         </div>
-    }
+    </div>
 </div>
