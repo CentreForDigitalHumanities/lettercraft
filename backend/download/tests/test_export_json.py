@@ -15,10 +15,15 @@ def test_export_json(tmp_path, source: Source, episode, episode_2):
     assert len(data['sources']) == 1
     source_data = data['sources'][0]
     assert source_data['name'] == source.name
+    assert source_data['description'] is None
     assert len(source_data['episodes']) == 2
+
+    episode_data = source_data['episodes'][0]
+    assert len(episode_data['agents']) == 2
+    assert episode_data['agents'][0] == 'agents/1'
 
     assert len(source_data['agents'])  == 2
     assert len(source_data['letters']) == 1
-    assert source_data['letters'][0]['_id'] == 'letters/1'
+    assert source_data['letters'][0]['id'] == 'letters/1'
     assert source_data['letters'][0]['name'] == 'Bert\'s letter'
 
