@@ -4,7 +4,7 @@ import json
 import re
 
 from django.db.models import QuerySet, Value, CharField
-from django.db.models.functions import Concat, JSONObject
+from django.db.models.functions import Concat, JSONObject, NullIf
 from django.contrib.postgres.aggregates import ArrayAgg
 
 from source.models import Source
@@ -120,9 +120,15 @@ def _id_expression(model_name: str, field: str = 'pk'):
     '''
     Expression to create ID annotation for queryset that includes the model name
 
-    Creates IDs like "agent/1" for an AgentDescription record
+    Creates IDs like "agent/1" for an AgentDescription record.
+
+    Includes a check to return null if there is no PK value, which happens in ArrayAgg
+    when the list is empty.
     '''
-    return Concat(Value(model_name), Value('/'), field, output_field=CharField())
+    return NullIf(
+        Concat(Value(model_name), Value('/'), field, output_field=CharField()),
+        Concat(Value(model_name), Value('/')),
+    )
 
 
 def _clean_serialised_data(data: Any) -> Any:
