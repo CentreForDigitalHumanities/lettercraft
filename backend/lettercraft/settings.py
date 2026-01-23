@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "source",
     "space",
     "user",
+    "download",
     "graphene_django",
     "graphql_app",
     "django_filters",
