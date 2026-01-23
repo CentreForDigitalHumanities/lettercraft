@@ -5,7 +5,7 @@ from source.models import Source
 from download.export_json import save_json
 
 
-def test_export_json(tmp_path, source: Source, episode, episode_2):
+def test_export_json(tmp_path, source: Source, episode, episode_2, episode_attribution):
     path = tmp_path / 'data.json'
     qs = Source.objects.filter(pk=source.pk)
     with open(path, 'w') as f:
@@ -19,6 +19,7 @@ def test_export_json(tmp_path, source: Source, episode, episode_2):
     assert source_data['name'] == source.name
     assert source_data['description'] is None
     assert len(source_data['episodes']) == 2
+    assert source_data['contributors'] == ['John Doe']
 
     episode_data = source_data['episodes'][0]
     assert len(episode_data['agents']) == 2
