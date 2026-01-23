@@ -7,7 +7,8 @@ from download.export_json import save_json
 def test_export_json(tmp_path, source: Source, episode, episode_2):
     path = tmp_path / 'data.json'
     qs = Source.objects.filter(pk=source.pk)
-    save_json(qs, path)
+    with open(path, 'w') as f:
+        save_json(qs, f)
 
     with open(path) as f:
         data = json.load(f)

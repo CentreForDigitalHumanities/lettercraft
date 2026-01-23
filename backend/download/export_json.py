@@ -1,7 +1,7 @@
 from typing import Dict, List, Any
-from pathlib import Path
 import json
 import re
+from io import TextIOWrapper
 
 from django.db.models import QuerySet, Value, CharField
 from django.db.models.functions import Concat, JSONObject, NullIf
@@ -15,12 +15,10 @@ from space.models import SpaceDescription
 from user.models import User
 from source.utils import source_contributor_ids
 
-def save_json(sources: QuerySet[Source], path: str | Path) -> None:
+def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
     data = _serialize(sources)
     cleaned = _clean_serialised_data(data)
-
-    with open(path, 'w') as f:
-        json.dump(cleaned, f)
+    json.dump(cleaned, f, indent=2)
 
 
 def _serialize(sources: QuerySet[Source]) -> Dict:
