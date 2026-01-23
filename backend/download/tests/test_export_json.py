@@ -19,5 +19,6 @@ def test_export_json(tmp_path, source: Source, episode, episode_2):
 
     assert len(source_data['agents'])  == 2
     assert len(source_data['letters']) == 1
+    assert source_data['letters'][0]['_id'] == 'letters/1'
     assert source_data['letters'][0]['name'] == 'Bert\'s letter'
 
