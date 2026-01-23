@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import re
 
-from django.db.models import QuerySet, Value, CharField, F
+from django.db.models import QuerySet, Value, CharField
 from django.db.models.functions import Concat, JSONObject
 from django.contrib.postgres.aggregates import ArrayAgg
 
@@ -12,6 +12,8 @@ from person.models import AgentDescription
 from event.models import Episode
 from letter.models import LetterDescription, GiftDescription
 from space.models import SpaceDescription
+from user.models import User
+from source.utils import source_contributor_ids
 
 def save_json(sources: QuerySet[Source], path: str | Path) -> None:
     data = _serialize(sources)
@@ -33,12 +35,16 @@ def _serialize_source(source: Source) -> Dict:
     locations = _serialize_locations(SpaceDescription.objects.filter(source=source))
     episodes = _serialize_episodes(Episode.objects.filter(source=source))
 
+    contributor_ids = source_contributor_ids(source)
+    contributors = _serialize_contributors(User.objects.filter(pk__in=contributor_ids))
+
     return {
         'id': f'sources/{source.pk}',
         'name': source.name,
         'medieval_title': source.medieval_title,
         'reference': source.reference,
         'description': source.description_text,
+        'contributors': contributors,
         'episodes': episodes,
         'agents': agents,
         'letters': letters,
@@ -65,6 +71,14 @@ def _serialize_episodes(episodes: QuerySet[Episode]) -> List[Dict]:
         'labels', '_agents', '_letters', '_gifts', 'locations',
     )
     return list(values)
+
+
+def _serialize_contributors(users: QuerySet[User]) -> List[Dict]:
+    values = users.annotate(
+        name=Concat('first_name', Value(' '), 'last_name')
+    ).values('name')
+    return [value['name'] for value in values]
+
 
 def _serialize_agents(agents: QuerySet[AgentDescription]) -> List[Dict]:
     values = agents.annotate(
