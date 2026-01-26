@@ -1,0 +1,76 @@
+query BrowseSearch($selectedType: SelectedSearch!, $searchTerm: String! $labelIds: [ID!]!) {
+    search(selectedType: $selectedType, searchTerm: $searchTerm, labelIds: $labelIds) {
+        sourceCount
+        episodeCount
+        agentCount
+        letterCount
+        giftCount
+        locationCount
+        sources {
+            id
+            name
+            descriptionText
+            reference
+        }
+        episodes {
+            id
+            name
+            summary
+            source {
+                id
+                reference
+            }
+            book
+            chapter
+            page
+        }
+        agents {
+            id
+            name
+            isGroup
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        letters {
+            id
+            name
+            description
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        gifts {
+            id
+            name
+            description
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        locations {
+            id
+            name
+            description
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+    }
+}
