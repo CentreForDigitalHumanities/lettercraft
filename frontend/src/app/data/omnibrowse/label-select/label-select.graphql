@@ -1,0 +1,7 @@
+query BrowseEpisodeCategories {
+    episodeCategories {
+        id
+        name
+        description
+    }
+}

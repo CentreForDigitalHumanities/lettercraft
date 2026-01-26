@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { trigger, style, transition, animate } from '@angular/animations';
 import { actionIcons, dataIcons } from '@shared/icons';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 interface SearchResult {
     id: number;
@@ -21,35 +20,34 @@ export class OmnibrowseComponent {
     activeTab = 1;
     searchQuery = 'Radegund';
 
-    // Icons
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
-    search = new FormControl('');
+    form = new FormGroup({
+        search: new FormControl('', {
+            nonNullable: true
+        }),
+        selectedLabelIds: new FormControl<string[]>([], {
+            nonNullable: true
+        }),
+    })
 
-    // Label selection
-    selectedLabels: number[] = [];
-    mockLabels = [
-        { id: 1, label: 'Female agent' },
-        { id: 2, label: 'Letter (implied)' },
-        { id: 3, label: 'Materiality' },
-        { id: 4, label: 'Oral message' },
-        { id: 5, label: 'Episcopal succession' },
-        { id: 6, label: 'Relics' },
-        { id: 7, label: 'Trickery' },
-        { id: 8, label: 'Secret communication' },
-    ];
+    constructor() {
+        this.form.valueChanges.subscribe(form => {
+            console.log('Form changed:', form);
+        });
+    }
 
     tabs = [
         {
             id: 1,
-            title: 'Episodes',
-            icon: dataIcons.episode
+            title: 'Sources',
+            icon: dataIcons.source
         },
         {
             id: 2,
-            title: 'Sources',
-            icon: dataIcons.source
+            title: 'Episodes',
+            icon: dataIcons.episode
         },
         {
             id: 3,
@@ -175,45 +173,5 @@ export class OmnibrowseComponent {
 
     public getResultCount(tabId: number): number {
         return this.getResults(tabId).length;
-    }
-
-    public toggleLabel(labelId: number): void {
-        const index = this.selectedLabels.indexOf(labelId);
-        if (index > -1) {
-            this.selectedLabels.splice(index, 1);
-        } else {
-            this.selectedLabels.push(labelId);
-        }
-    }
-
-    public isLabelSelected(labelId: number): boolean {
-        return this.selectedLabels.includes(labelId);
-    }
-
-    public clearLabels(): void {
-        this.selectedLabels = [];
-    }
-
-    public getSelectedLabelsDisplay(): string {
-        if (this.selectedLabels.length === 0) {
-            return 'Select labels...';
-        } else {
-            const labelNames = this.selectedLabels
-                .map(id => this.mockLabels.find(l => l.id === id)?.label)
-                .filter(label => label !== undefined);
-            return labelNames.join(', ');
-        }
-    }
-
-    public getLabelName(labelId: number): string {
-        return this.mockLabels.find(l => l.id === labelId)?.label || '';
-    }
-
-    public removeLabel(event: Event, labelId: number): void {
-        event.stopPropagation();
-        const index = this.selectedLabels.indexOf(labelId);
-        if (index > -1) {
-            this.selectedLabels.splice(index, 1);
-        }
     }
 }

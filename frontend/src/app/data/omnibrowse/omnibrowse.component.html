@@ -2,74 +2,8 @@
     <div class="search-section">
         <div class="container">
             <form (submit)="onSearch($event)" class="search-form">
-                <div class="input-group search-input-wrapper">
-                    <input
-                        type="text"
-                        class="form-control search-input"
-                        [formControl]="search"
-                        name="searchQuery"
-                        placeholder="Search across all entities..."
-                        aria-label="Search"
-                    />
-                    <button class="btn btn-primary search-button" type="submit">
-                        <lc-icon [icon]="actionIcons.search" class="me-2" aria-hidden="true" />
-                        Search
-                    </button>
-                </div>
-
-                <!-- Label Selection Dropdown -->
-                <div class="label-filter-wrapper mt-3">
-                    <div ngbDropdown class="dropdown-flex-container" autoClose="outside">
-                        <button
-                            type="button"
-                            class="btn btn-outline-secondary dropdown-toggle label-dropdown-button"
-                            id="labelDropdown"
-                            ngbDropdownToggle>
-                            @if (selectedLabels.length === 0) {
-                                <span class="placeholder-text">Select labels...</span>
-                            } @else {
-                                <div class="selected-labels-display">
-                                    @for (labelId of selectedLabels; track labelId) {
-                                        <span class="btn btn-tag btn-secondary me-1 mb-1">
-                                            <lc-icon
-                                                [icon]="actionIcons.remove"
-                                                class="remove-label-icon me-1"
-                                                (click)="removeLabel($event, labelId)" />
-                                            {{ getLabelName(labelId) }}
-                                        </span>
-                                    }
-                                </div>
-                            }
-                        </button>
-                        <div ngbDropdownMenu aria-labelledby="labelDropdown" class="label-dropdown-menu">
-                            <div class="dropdown-header-text">
-                                Select one or more labels from the list below...
-                            </div>
-                            @for (label of mockLabels; track label.id) {
-                                <button
-                                    ngbDropdownItem
-                                    type="button"
-                                    class="label-dropdown-item"
-                                    (click)="toggleLabel(label.id)">
-                                    <span class="btn btn-tag me-2"
-                                        [class]="isLabelSelected(label.id) ? 'btn-secondary' : 'btn-light'">
-                                        <lc-icon [icon]="isLabelSelected(label.id) ? 'check-square' : 'square'" class="me-1" />
-                                        {{ label.label }}
-                                    </span>
-                                </button>
-                            }
-                        </div>
-                    </div>
-                    @if (selectedLabels.length > 0) {
-                        <button
-                            type="button"
-                            class="btn clear-labels-button"
-                            (click)="clearLabels()"
-                            title="Clear all labels">
-                            <lc-icon [icon]="actionIcons.delete" />
-                        </button>
-                    }
-                </div>
+                <lc-search-bar [formControl]="form.controls.search" />
+                <lc-label-select [formControl]="form.controls.selectedLabelIds" />
             </form>
         </div>
     </div>
