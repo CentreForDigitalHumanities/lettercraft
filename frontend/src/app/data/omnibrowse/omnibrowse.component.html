@@ -1,4 +1,5 @@
-@let collection = collection$ | async;
+@let counts = counts$ | async;
+@let items = itemsByType$ | async;
 @let loading = searchLoading$ | async;
 <div class="omnibrowse-container">
     <div class="search-section">
@@ -12,44 +13,81 @@
 
     <div class="results-section">
         <div class="container-fluid">
-            <ul ngbNav #nav="ngbNav" [(activeId)]="form.controls.selectedType.value" (activeIdChange)="changeTabs($event)" class="nav-tabs mb-4">
-                @for (result of collection; track result.type) {
-                    <li [ngbNavItem]="result.type" class="nav-item">
-                        <button ngbNavLink class="nav-link">
-                            <lc-icon class="me-2" [icon]="result.icon"></lc-icon>
-                            <span>{{ result.title }}</span>
-                            <span class="badge bg-secondary ms-2">{{ result.count }}</span>
-                        </button>
-                        <ng-template ngbNavContent>
-                            <div class="results-content">
-                                @if (loading) {
-                                    <div class="loading-spinner text-center py-5">
-                                        <p class="text-muted mt-3">Loading results...</p>
+            <ul
+                ngbNav
+                #nav="ngbNav"
+                [(activeId)]="form.controls.selectedType.value"
+                (activeIdChange)="changeTabs($event)"
+                class="nav-tabs mb-4"
+            >
+                @for (tab of tabMetadata; track tab.type) {
+                <li [ngbNavItem]="tab.type" class="nav-item">
+                    <button ngbNavLink class="nav-link">
+                        <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
+                        <span>{{ tab.title }}</span>
+                        @if (counts) {
+                        <span class="badge bg-secondary ms-2">{{
+                            counts.get(tab.type)
+                        }}</span>
+                        }
+                    </button>
+                    <ng-template ngbNavContent>
+                        <div class="results-content">
+                            @if (loading) {
+                            <div class="loading-spinner text-center py-5">
+                                <p class="text-muted mt-3">
+                                    Loading results...
+                                </p>
+                            </div>
+                            } @else {
+                            @let tabItems = items?.get(tab.type);
+                            @if (!tabItems || tabItems.length === 0) {
+                            <div class="no-results text-center py-5">
+                                <lc-icon
+                                    [icon]="actionIcons.search"
+                                    class="text-muted mb-3"
+                                    size="3x"
+                                />
+                                <p class="text-muted">
+                                    No results found in this category
+                                </p>
+                            </div>
+                            } @else {
+                            <div class="list-group">
+                                @for (item of tabItems; track item.id) {
+                                <a
+                                    href="#"
+                                    class="list-group-item list-group-item-action"
+                                >
+                                    <div
+                                        class="d-flex w-100 justify-content-between"
+                                    >
+                                        <h5
+                                            class="mb-1"
+                                            [innerHTML]="item.name"
+                                        ></h5>
+                                        <small class="text-muted">
+                                            <lc-icon
+                                                [icon]="item.icon"
+                                                class="me-1"
+                                            />
+                                        </small>
                                     </div>
-                                } @else if (result.items.length === 0) {
-                                    <div class="no-results text-center py-5">
-                                        <lc-icon [icon]="actionIcons.search" class="text-muted mb-3" size="3x" />
-                                        <p class="text-muted">No results found in this category</p>
-                                    </div>
-                                } @else {
-                                    <div class="list-group">
-                                        @for (item of result.items; track item.id) {
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <h5 class="mb-1" [innerHTML]="item.name"></h5>
-                                                    <small class="text-muted">
-                                                        <lc-icon [icon]="item.icon" class="me-1"  />
-                                                    </small>
-                                                </div>
-                                                <p class="mb-1" [innerHTML]="item.description"></p>
-                                                <small class="text-muted" [innerHTML]="item.subtext"></small>
-                                            </a>
-                                        }
-                                    </div>
+                                    <p
+                                        class="mb-1"
+                                        [innerHTML]="item.description"
+                                    ></p>
+                                    <small
+                                        class="text-muted"
+                                        [innerHTML]="item.subtext"
+                                    ></small>
+                                </a>
                                 }
                             </div>
-                        </ng-template>
-                    </li>
+                            } }
+                        </div>
+                    </ng-template>
+                </li>
                 }
             </ul>
             <div [ngbNavOutlet]="nav"></div>

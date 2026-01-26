@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from 'generated/graphql';
-import { map, startWith, Subject } from 'rxjs';
+import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
 import { SearchService } from '@services/search.service';
 
 interface SearchItem {
@@ -23,6 +23,20 @@ interface SearchResult {
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
 
+interface TabMetadata {
+    type: SelectedSearch;
+    title: string;
+    icon: string;
+}
+
+const TAB_METADATA: TabMetadata[] = [
+    { type: SelectedSearch.Sources, title: 'Sources', icon: dataIcons.source },
+    { type: SelectedSearch.Episodes, title: 'Episodes', icon: dataIcons.episode },
+    { type: SelectedSearch.Agents, title: 'Agents', icon: dataIcons.person },
+    { type: SelectedSearch.Items, title: 'Letters/Gifts', icon: dataIcons.letter },
+    { type: SelectedSearch.Locations, title: 'Locations', icon: dataIcons.location }
+];
+
 @Component({
     selector: 'lc-omnibrowse',
     templateUrl: './omnibrowse.component.html',
@@ -30,6 +44,7 @@ type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
     standalone: false,
 })
 export class OmnibrowseComponent {
+    public readonly tabMetadata = TAB_METADATA;
     public readonly dataIcons = dataIcons;
     public readonly actionIcons = actionIcons;
 
@@ -71,14 +86,36 @@ export class OmnibrowseComponent {
         map(result => result.loading)
     );
 
-    public collection$ = this.searchResult$.pipe(
+    // Keep counts stable with shareReplay
+    public counts$ = this.searchResult$.pipe(
+        filter(results => !!results.data?.search),
         map(results => {
-            const data = results.data?.search;
-            if (!data) {
-                return null;
-            }
-            return this.transformResultsToDisplay(data);
-        })
+            const data = results.data!.search!;
+            return new Map<SelectedSearch, number>([
+                [SelectedSearch.Sources, data.sourceCount],
+                [SelectedSearch.Episodes, data.episodeCount],
+                [SelectedSearch.Agents, data.agentCount],
+                [SelectedSearch.Items, data.letterCount + data.giftCount],
+                [SelectedSearch.Locations, data.locationCount]
+            ]);
+        }),
+        shareReplay(1)
+    );
+
+    // Items by type
+    public itemsByType$ = this.searchResult$.pipe(
+        filter(results => !!results.data?.search),
+        map(results => {
+            const data = results.data!.search!;
+            return new Map<SelectedSearch, SearchItem[]>([
+                [SelectedSearch.Sources, this.transformSources(data)],
+                [SelectedSearch.Episodes, this.transformEpisodes(data)],
+                [SelectedSearch.Agents, this.transformAgents(data)],
+                [SelectedSearch.Items, this.transformItems(data)],
+                [SelectedSearch.Locations, this.transformLocations(data)]
+            ]);
+        }),
+        shareReplay(1)
     );
 
     public changeTabs(newNavId: SelectedSearch): void {
@@ -92,67 +129,37 @@ export class OmnibrowseComponent {
         this.startSearch$.next(formValue);
     }
 
-    private transformResultsToDisplay(results: QueriedResults): SearchResult[] {
-        const displayResults: SearchResult[] = [];
-
-        displayResults.push(this.transformSourceData(results));
-        displayResults.push(this.transformEpisodeData(results));
-        displayResults.push(this.transformAgentData(results));
-        displayResults.push(this.transformItemData(results));
-        displayResults.push(this.transformLocationData(results));
-
-        return displayResults;
+    private transformSources(results: QueriedResults): SearchItem[] {
+        return results.sources.map(source => ({
+            id: source.id,
+            name: source.name,
+            description: source.descriptionText,
+            subtext: source.reference,
+            icon: dataIcons.source
+        }));
     }
 
-    private transformSourceData(results: QueriedResults): SearchResult {
-        return {
-            type: SelectedSearch.Sources,
-            count: results.sourceCount,
-            title: 'Sources',
-            icon: dataIcons.source,
-            items: results.sources.map(source => ({
-                id: source.id,
-                name: source.name,
-                description: source.descriptionText,
-                subtext: source.reference,
-                icon: dataIcons.source
-            }))
-        };
+    private transformEpisodes(results: QueriedResults): SearchItem[] {
+        return results.episodes.map(episode => ({
+            id: episode.id,
+            name: episode.name,
+            description: episode.summary,
+            subtext: `${episode.source.reference}, book ${episode.book}, chapter ${episode.chapter}, page ${episode.page}`,
+            icon: dataIcons.episode
+        }));
     }
 
-    private transformEpisodeData(results: QueriedResults): SearchResult {
-        return {
-            type: SelectedSearch.Episodes,
-            count: results.episodeCount,
-            title: 'Episodes',
-            icon: dataIcons.episode,
-            items: results.episodes.map(episode => ({
-                id: episode.id,
-                name: episode.name,
-                description: episode.summary,
-                subtext: `${episode.source.reference}, book ${episode.book}, chapter ${episode.chapter}, page ${episode.page}`,
-                icon: dataIcons.episode
-            }))
-        };
+    private transformAgents(results: QueriedResults): SearchItem[] {
+        return results.agents.map(agent => ({
+            id: agent.id,
+            name: agent.name,
+            description: this.occurrenceData(agent),
+            subtext: agent.isGroup ? 'Group' : 'Individual',
+            icon: agent.isGroup ? dataIcons.group : dataIcons.person
+        }));
     }
 
-    private transformAgentData(results: QueriedResults): SearchResult {
-        return {
-            type: SelectedSearch.Agents,
-            count: results.agentCount,
-            title: 'Agents',
-            icon: dataIcons.person,
-            items: results.agents.map(agent => ({
-                id: agent.id,
-                name: agent.name,
-                description: this.occurrenceData(agent),
-                subtext: agent.isGroup ? 'Group' : 'Individual',
-                icon: agent.isGroup ? dataIcons.group : dataIcons.person
-            }))
-        };
-    }
-
-    private transformItemData(results: QueriedResults): SearchResult {
+    private transformItems(results: QueriedResults): SearchItem[] {
         const letterItems: SearchItem[] = results.letters.map(letter => ({
             id: letter.id,
             name: letter.name,
@@ -169,29 +176,17 @@ export class OmnibrowseComponent {
             icon: dataIcons.gift
         }));
 
-        return {
-            type: SelectedSearch.Items,
-            count: results.letterCount + results.giftCount,
-            title: 'Letters/Gifts',
-            icon: dataIcons.letter,
-            items: letterItems.concat(giftItems)
-        };
+        return letterItems.concat(giftItems);
     }
 
-    private transformLocationData(results: QueriedResults): SearchResult {
-        return {
-            type: SelectedSearch.Locations,
-            count: results.locationCount,
-            title: 'Locations',
-            icon: dataIcons.location,
-            items: results.locations.map(location => ({
-                id: location.id,
-                name: location.name,
-                description: this.occurrenceData(location),
-                subtext: location.description,
-                icon: dataIcons.location
-            }))
-        };
+    private transformLocations(results: QueriedResults): SearchItem[] {
+        return results.locations.map(location => ({
+            id: location.id,
+            name: location.name,
+            description: this.occurrenceData(location),
+            subtext: location.description,
+            icon: dataIcons.location
+        }));
     }
 
     private occurrenceData(result: { episodes: unknown[]; source: { reference: string; }; }): string {
