@@ -45,10 +45,6 @@ const routes: Routes = [
         data: { fullSize: true }
     },
     {
-        path: 'browse-test',
-        component: OmnibrowseComponent
-    },
-    {
         path: 'login',
         title: pageTitle('Sign in'),
         component: LoginComponent,
@@ -145,20 +141,10 @@ const routes: Routes = [
                 component: GiftViewComponent,
             },
             {
-                path: 'sources',
-                title: pageTitle('Browse sources'),
-                component: SourceListComponent,
-            },
-            {
-                path: 'episodes',
-                title: pageTitle('Browse episodes'),
-                component: EpisodeListComponent,
-            },
-            {
                 path: '',
                 pathMatch: 'full',
                 title: pageTitle('Browse data'),
-                component: DataOverviewComponent,
+                component: OmnibrowseComponent,
             }
         ],
     },
