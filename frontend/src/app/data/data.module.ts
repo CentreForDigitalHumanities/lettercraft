@@ -12,8 +12,10 @@ import { ObjectPageHeaderComponent } from './shared/object-page-header/object-pa
 import { EpisodePreviewComponent } from './source-view/episode-preview/episode-preview.component';
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { SourceListComponent } from './source-list/source-list.component';
-import { SearchBarComponent } from './shared/search-bar/search-bar.component';
 import { PaginatorComponent } from './shared/paginator/paginator.component';
+import { LabelSelectComponent } from './omnibrowse/label-select/label-select.component';
+import { OmnibrowseComponent } from './omnibrowse/omnibrowse.component';
+import { SearchBarComponent } from './omnibrowse/search-bar/search-bar.component';
 
 
 
@@ -33,6 +35,8 @@ import { PaginatorComponent } from './shared/paginator/paginator.component';
         EpisodeListComponent,
         SearchBarComponent,
         PaginatorComponent,
+        OmnibrowseComponent,
+        LabelSelectComponent,
     ],
     imports: [
         SharedModule,
@@ -42,6 +46,6 @@ import { PaginatorComponent } from './shared/paginator/paginator.component';
         DataOverviewComponent,
         SourceViewComponent,
         EpisodeViewComponent,
-    ]
+    ],
 })
 export class DataModule { }

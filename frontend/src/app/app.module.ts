@@ -14,13 +14,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
 import { ContributorsModule } from './contributors/contributors.module';
-import { OmnibrowseComponent } from './data/omnibrowse/omnibrowse.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
-        OmnibrowseComponent,
     ],
     bootstrap: [AppComponent],
     imports: [
