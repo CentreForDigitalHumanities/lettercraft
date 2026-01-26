@@ -1,4 +1,4 @@
-from graphene import List, NonNull, ResolveInfo, Boolean
+from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
 from django.db.models import QuerySet, Q
@@ -8,7 +8,6 @@ from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from user.permissions import can_edit_source, visible_sources
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")

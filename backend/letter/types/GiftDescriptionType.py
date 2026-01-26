@@ -1,6 +1,7 @@
-from graphene import List, NonNull, ResolveInfo, Boolean
+from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
+from django_filters import CharFilter, FilterSet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
 from letter.models import GiftCategory, GiftDescription
@@ -8,6 +9,16 @@ from letter.types.GiftCategoryType import GiftCategoryType
 from event.types.EpisodeGiftType import EpisodeGiftType
 from event.models import EpisodeGift
 
+class GiftDescriptionFilter(FilterSet):
+    search = CharFilter(method="search_gift_descriptions")
+
+    def search_gift_descriptions(
+        self, queryset: QuerySet[GiftDescription], name: str, value: str
+    ) -> QuerySet[GiftDescription]:
+        """Filter gift descriptions by name or description."""
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value)
+        )
 
 class GiftDescriptionType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(GiftCategoryType), required=True)

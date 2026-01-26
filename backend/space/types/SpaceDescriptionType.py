@@ -1,6 +1,7 @@
 from graphene import List, NonNull, ResolveInfo, Boolean
 from graphene_django.types import DjangoObjectType
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
+from django_filters import CharFilter, FilterSet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
 from space.models import (
@@ -20,6 +21,18 @@ from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
 from event.types.EpisodeSpaceType import EpisodeSpaceType
 from event.models import EpisodeSpace
+
+
+class SpaceDescriptionFilter(FilterSet):
+    search = CharFilter(method="search_space_descriptions")
+
+    def search_space_descriptions(
+        self, queryset: QuerySet[SpaceDescription], name: str, value: str
+    ) -> QuerySet[SpaceDescription]:
+        """Filter space descriptions by name or description."""
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value)
+        )
 
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):

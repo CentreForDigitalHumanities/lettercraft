@@ -1,7 +1,8 @@
-from graphene import Field, List, ResolveInfo, NonNull, Boolean
+from graphene import Field, Int, List, ResolveInfo, NonNull, Boolean
 from graphene_django import DjangoObjectType
+from django_filters import CharFilter, FilterSet
+from django.db.models import QuerySet, Q
 
-from django.db.models import QuerySet
 from core.types.EntityDescriptionType import EntityDescriptionType
 from person.models import AgentDescription, HistoricalPerson, PersonReference
 from person.types.AgentDescriptionGenderType import AgentDescriptionGenderType
@@ -10,6 +11,18 @@ from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.models import EpisodeAgent
+
+
+class AgentDescriptionFilter(FilterSet):
+    search = CharFilter(method="search_agent_descriptions")
+
+    def search_agent_descriptions(
+        self, queryset: QuerySet[AgentDescription], name: str, value: str
+    ) -> QuerySet[AgentDescription]:
+        """Filter agent descriptions by name or description."""
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value)
+        )
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
