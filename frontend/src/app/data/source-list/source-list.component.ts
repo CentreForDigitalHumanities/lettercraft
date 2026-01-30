@@ -20,40 +20,40 @@ export class SourceListComponent {
         { link: ".", label: "Sources" },
     ];
 
-    public searchControl = new FormControl<string>("", {
-        nonNullable: true,
-    });
+    // public searchControl = new FormControl<string>("", {
+    //     nonNullable: true,
+    // });
 
-    private searchResult$ = this.searchService.createSearch<ViewSourcesQuery>(
-        this.searchControl.valueChanges,
-        this.query
-    ).pipe(
-        shareReplay(1),
-    );
+    // private searchResult$ = this.searchService.createSearch<ViewSourcesQuery>(
+    //     this.searchControl.valueChanges,
+    //     this.query
+    // ).pipe(
+    //     shareReplay(1),
+    // );
 
-    searchTerm$ = this.searchResult$.pipe(
-        map(result => result.searchTerm)
-    );
+    // searchTerm$ = this.searchResult$.pipe(
+    //     map(result => result.searchTerm)
+    // );
 
-    searchError$ = this.searchResult$.pipe(
-        map(result => result.error)
-    );
+    // searchError$ = this.searchResult$.pipe(
+    //     map(result => result.error)
+    // );
 
-    collection$ = this.searchResult$.pipe(
-        filter((state) => !state.loading),
-        map((state) => state.data),
-        filter(data => !!data),
-        map(data => data?.sources || []),
-        shareReplay(1),
-    );
+    // collection$ = this.searchResult$.pipe(
+    //     filter((state) => !state.loading),
+    //     map((state) => state.data),
+    //     filter(data => !!data),
+    //     map(data => data?.sources || []),
+    //     shareReplay(1),
+    // );
 
-    public collectionLoading$ = this.searchResult$.pipe(
-        map((state) => state.loading),
-        distinctUntilChanged(),
-        startWith(false)
-    );
+    // public collectionLoading$ = this.searchResult$.pipe(
+    //     map((state) => state.loading),
+    //     distinctUntilChanged(),
+    //     startWith(false)
+    // );
 
-    public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
+    // public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
 
     constructor(
         private query: ViewSourcesGQL,

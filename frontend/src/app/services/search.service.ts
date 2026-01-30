@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client/core";
 import { Query as ApolloAngularQuery } from "apollo-angular/query";
-import { BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from "generated/graphql";
+import { BrowseSearchQuery, BrowseSearchQueryVariables } from "generated/graphql";
 import {
     Observable,
     of,
@@ -9,9 +9,6 @@ import {
     map,
     switchMap,
     catchError,
-    distinctUntilChanged,
-    startWith,
-    debounceTime,
 } from "rxjs";
 
 export interface SearchState<T> {
@@ -28,8 +25,7 @@ export class SearchService {
     /**
      * Creates a reactive search observable that performs a GraphQL query.
      * The query must accept a `search` variable of type `string | null`.
-     * The search term is debounced by 300ms and emits a loading state
-     * before the query is executed.
+     * The search emits a loading state before the query is executed.
      *
      * This guarantees that a loading state of true is always emitted first,
      * and that it is terminated by the query result (either success or error).
@@ -38,17 +34,7 @@ export class SearchService {
         newSearch$: Observable<BrowseSearchQueryVariables>,
         query: ApolloAngularQuery<BrowseSearchQuery, BrowseSearchQueryVariables>
     ): Observable<SearchState<BrowseSearchQuery>> {
-        const debouncedInput$: Observable<BrowseSearchQueryVariables> = newSearch$.pipe(
-            startWith({
-                searchTerm: "",
-                labelIds: [],
-                selectedType: SelectedSearch.Sources,
-            }),
-            debounceTime(300),
-            distinctUntilChanged()
-        );
-
-        return debouncedInput$.pipe(
+        return newSearch$.pipe(
             switchMap((input) => {
                 const query$ = query
                     .watch(input)
@@ -104,7 +90,7 @@ export class SearchService {
     }
 
     private handleFetchError<T>(
-        error: { message?: string },
+        error: { message?: string; },
         searchInput: BrowseSearchQueryVariables,
     ): Observable<SearchState<T>> {
         return of({

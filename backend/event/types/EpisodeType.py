@@ -2,15 +2,19 @@ from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
 from django.db.models import QuerySet, Q
-from django_filters import FilterSet, CharFilter
+from django_filters import FilterSet, CharFilter, BaseInFilter
 
 from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
 
+class CharInFilter(BaseInFilter, CharFilter):
+    pass
+
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
+    label_ids = CharInFilter(method="filter_by_labels")
 
     def search_episodes(self, queryset: QuerySet[Episode], name: str, value: str) -> QuerySet[Episode]:
         """Filter episodes by name, description or summary."""
@@ -19,6 +23,13 @@ class EpisodeFilter(FilterSet):
             | Q(description__icontains=value)
             | Q(summary__icontains=value)
         )
+
+    def filter_by_labels(self, queryset: QuerySet[Episode], name: str, value: list[str]) -> QuerySet[Episode]:
+        """Filter episodes by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(categories__id__in=value).distinct()
+
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(EpisodeCategoryType), required=True)
     agents = List(
@@ -65,7 +76,6 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         parent: Episode, info: ResolveInfo
     ) -> QuerySet[EpisodeLetter]:
         return EpisodeLetter.objects.filter(episode=parent)
-
 
     @staticmethod
     def resolve_categories(

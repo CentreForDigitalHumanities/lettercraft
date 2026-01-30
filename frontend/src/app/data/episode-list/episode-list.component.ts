@@ -19,48 +19,48 @@ export class EpisodeListComponent {
         { link: ".", label: "Episodes" },
     ];
 
-    public searchControl = new FormControl<string>("", {
-        nonNullable: true,
-    });
+    // public searchControl = new FormControl<string>("", {
+    //     nonNullable: true,
+    // });
 
-    private searchResult$ = this.searchService.createSearch<ViewEpisodesQuery>(
-        this.searchControl.valueChanges,
-        this.query
-    ).pipe(
-        shareReplay(1),
-    );
+    // private searchResult$ = this.searchService.createSearch<ViewEpisodesQuery>(
+    //     this.searchControl.valueChanges,
+    //     this.query
+    // ).pipe(
+    //     shareReplay(1),
+    // );
 
-    searchTerm$ = this.searchResult$.pipe(
-        map(result => result.searchTerm)
-    );
+    // searchTerm$ = this.searchResult$.pipe(
+    //     map(result => result.searchTerm)
+    // );
 
-    searchError$ = this.searchResult$.pipe(
-        map(result => result.error)
-    );
+    // searchError$ = this.searchResult$.pipe(
+    //     map(result => result.error)
+    // );
 
-    public collectionData$ = this.searchResult$.pipe(
-        filter((state) => !state.loading),
-        map((state) => state.data),
-        shareReplay(1),
-    );
+    // public collectionData$ = this.searchResult$.pipe(
+    //     filter((state) => !state.loading),
+    //     map((state) => state.data),
+    //     shareReplay(1),
+    // );
 
-    public loading$ = this.searchResult$.pipe(
-        map((state) => state.loading),
-        distinctUntilChanged(),
-        startWith(false)
-    );
+    // public loading$ = this.searchResult$.pipe(
+    //     map((state) => state.loading),
+    //     distinctUntilChanged(),
+    //     startWith(false)
+    // );
 
-    collection$ = this.collectionData$.pipe(
-        filter(data => !!data),
-        map(data => data?.episodes || []),
-    );
+    // collection$ = this.collectionData$.pipe(
+    //     filter(data => !!data),
+    //     map(data => data?.episodes || []),
+    // );
 
-    public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
+    // public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
 
-    constructor(
-        private query: ViewEpisodesGQL,
-        private pageQuery: ViewEpisodesPageGQL,
-        private searchService: SearchService,
-        private destroyRef: DestroyRef,
-    ) {}
+    // constructor(
+    //     private query: ViewEpisodesGQL,
+    //     private pageQuery: ViewEpisodesPageGQL,
+    //     private searchService: SearchService,
+    //     private destroyRef: DestroyRef,
+    // ) {}
 }

@@ -60,12 +60,10 @@ class CoreQueries(ObjectType):
         self, info, selected_type: SelectedSearch, search_term: str, label_ids: list[str]
     ) -> SearchResultsType:
         def apply_filter(queryset: QuerySet, filter_class: type[FilterSet]) -> QuerySet:
-            """Apply search filter using the filter class if search_term is provided."""
-            return (
-                filter_class(data={"search": search_term}, queryset=queryset).qs
-                if search_term
-                else queryset
-            )
+            """Apply search filter using the filter class if search_term or label_ids are provided."""
+            if search_term or label_ids:
+                return filter_class(data={"search": search_term, "label_ids": label_ids}, queryset=queryset).qs
+            return queryset
 
         source_qs = apply_filter(
             SourceQueries.resolve_sources(None, info, public_only=True, editable=False),

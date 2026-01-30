@@ -20,6 +20,10 @@ query BrowseSearch($selectedType: SelectedSearch!, $searchTerm: String! $labelId
                 id
                 reference
             }
+            categories {
+                id
+                name
+            }
             book
             chapter
             page
