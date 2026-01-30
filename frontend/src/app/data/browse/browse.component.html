@@ -8,8 +8,13 @@
     <div class="search-section">
         <div class="container">
             <form (submit)="submitSearch($event)" class="search-form">
-                <lc-search-bar [formControl]="form.controls.searchTerm" />
-                <lc-browse-label-select [formControl]="form.controls.labelIds" />
+                <lc-search-bar
+                    [formControl]="form.controls.searchTerm"
+                    [loading]="loading ?? false"
+                />
+                <lc-browse-label-select
+                    [formControl]="form.controls.labelIds"
+                />
             </form>
         </div>
     </div>
