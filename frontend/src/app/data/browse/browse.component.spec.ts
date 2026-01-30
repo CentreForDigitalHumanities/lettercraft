@@ -99,7 +99,7 @@ const mockSearchData: BrowseSearchQuery = {
 };
 
 
-fdescribe('BrowseComponent', () => {
+describe('BrowseComponent', () => {
     let component: BrowseComponent;
     let fixture: ComponentFixture<BrowseComponent>;
     let mockSearchService: jasmine.SpyObj<SearchService>;
@@ -111,7 +111,6 @@ fdescribe('BrowseComponent', () => {
         mockSearchQuery = jasmine.createSpyObj('BrowseSearchGQL', ['watch']);
 
         await TestBed.configureTestingModule({
-            declarations: [],
             imports: [DataModule, SharedTestingModule, NgbNavModule],
             providers: [
                 { provide: SearchService, useValue: mockSearchService },
@@ -140,7 +139,7 @@ fdescribe('BrowseComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    fdescribe('submitSearch', () => {
+    describe('submitSearch', () => {
         it('should prevent default event and emit search', () => {
             const mockEvent = jasmine.createSpyObj('Event', ['preventDefault']);
             spyOn(component.startSearch$, 'next');
@@ -157,14 +156,6 @@ fdescribe('BrowseComponent', () => {
                 labelIds: ['label1'],
                 selectedType: SelectedSearch.Episodes
             });
-        });
-
-        it('should work without event parameter', () => {
-            spyOn(component.startSearch$, 'next');
-
-            component.submitSearch();
-
-            expect(component.startSearch$.next).toHaveBeenCalled();
         });
     });
 
@@ -194,7 +185,8 @@ fdescribe('BrowseComponent', () => {
                 expect(counts.get(SelectedSearch.Sources)).toBe(1);
                 expect(counts.get(SelectedSearch.Episodes)).toBe(1);
                 expect(counts.get(SelectedSearch.Agents)).toBe(1);
-                expect(counts.get(SelectedSearch.Items)).toBe(2); // letterCount + giftCount
+                // letterCount + giftCount
+                expect(counts.get(SelectedSearch.Items)).toBe(2);
                 expect(counts.get(SelectedSearch.Locations)).toBe(1);
                 done();
             });

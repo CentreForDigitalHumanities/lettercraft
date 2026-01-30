@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchBarComponent } from './search-bar.component';
+import { SharedTestingModule } from '@shared/shared-testing.module';
 
 describe('SearchBarComponent', () => {
     let component: SearchBarComponent;
@@ -8,7 +9,7 @@ describe('SearchBarComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SearchBarComponent]
+            imports: [SharedTestingModule]
         })
             .compileComponents();
 
