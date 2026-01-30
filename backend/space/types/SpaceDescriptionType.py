@@ -4,6 +4,7 @@ from django.db.models import QuerySet, Q
 from django_filters import CharFilter, FilterSet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
+from graphql_app.filters import CharInFilter
 from space.models import (
     Region,
     RegionField,
@@ -25,6 +26,7 @@ from event.models import EpisodeSpace
 
 class SpaceDescriptionFilter(FilterSet):
     search = CharFilter(method="search_space_descriptions")
+    label_ids = CharInFilter(method="filter_by_labels")
 
     def search_space_descriptions(
         self, queryset: QuerySet[SpaceDescription], name: str, value: str
@@ -33,6 +35,14 @@ class SpaceDescriptionFilter(FilterSet):
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value)
         )
+
+    def filter_by_labels(
+        self, queryset: QuerySet[SpaceDescription], name: str, value: list[str]
+    ) -> QuerySet[SpaceDescription]:
+        """Filter space descriptions by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(episodes__categories__id__in=value).distinct()
 
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):

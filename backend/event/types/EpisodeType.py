@@ -8,15 +8,16 @@ from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
+from graphql_app.filters import CharInFilter
 
-class CharInFilter(BaseInFilter, CharFilter):
-    pass
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
     label_ids = CharInFilter(method="filter_by_labels")
 
-    def search_episodes(self, queryset: QuerySet[Episode], name: str, value: str) -> QuerySet[Episode]:
+    def search_episodes(
+        self, queryset: QuerySet[Episode], name: str, value: str
+    ) -> QuerySet[Episode]:
         """Filter episodes by name, description or summary."""
         return queryset.filter(
             Q(name__icontains=value)
@@ -24,11 +25,14 @@ class EpisodeFilter(FilterSet):
             | Q(summary__icontains=value)
         )
 
-    def filter_by_labels(self, queryset: QuerySet[Episode], name: str, value: list[str]) -> QuerySet[Episode]:
+    def filter_by_labels(
+        self, queryset: QuerySet[Episode], name: str, value: list[str]
+    ) -> QuerySet[Episode]:
         """Filter episodes by categories (labels)."""
         if not value:
             return queryset
         return queryset.filter(categories__id__in=value).distinct()
+
 
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(EpisodeCategoryType), required=True)

@@ -4,6 +4,7 @@ from django_filters import CharFilter, FilterSet
 from django.db.models import QuerySet, Q
 
 from core.types.EntityDescriptionType import EntityDescriptionType
+from graphql_app.filters import CharInFilter
 from person.models import AgentDescription, HistoricalPerson, PersonReference
 from person.types.AgentDescriptionGenderType import AgentDescriptionGenderType
 from person.types.AgentDescriptionLocationType import AgentDescriptionLocationType
@@ -15,6 +16,7 @@ from event.models import EpisodeAgent
 
 class AgentDescriptionFilter(FilterSet):
     search = CharFilter(method="search_agent_descriptions")
+    label_ids = CharInFilter(method="filter_by_labels")
 
     def search_agent_descriptions(
         self, queryset: QuerySet[AgentDescription], name: str, value: str
@@ -23,6 +25,14 @@ class AgentDescriptionFilter(FilterSet):
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value)
         )
+
+    def filter_by_labels(
+        self, queryset: QuerySet[AgentDescription], name: str, value: list[str]
+    ) -> QuerySet[AgentDescription]:
+        """Filter agent descriptions by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(episodes__categories__id__in=value).distinct()
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):
