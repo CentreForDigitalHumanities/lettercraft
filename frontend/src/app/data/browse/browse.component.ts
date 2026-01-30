@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from 'generated/graphql';
+import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SearchFocus } from 'generated/graphql';
 import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
 import { SearchService } from '@services/search.service';
 import { BrowseListItem } from './search-item/browse-list-item.component';
@@ -11,17 +11,17 @@ import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
 
 interface TabMetadata {
-    type: SelectedSearch;
+    type: SearchFocus;
     title: string;
     icon: string;
 }
 
 const TAB_METADATA: TabMetadata[] = [
-    { type: SelectedSearch.Sources, title: 'Sources', icon: dataIcons.source },
-    { type: SelectedSearch.Episodes, title: 'Episodes', icon: dataIcons.episode },
-    { type: SelectedSearch.Agents, title: 'Agents', icon: dataIcons.person },
-    { type: SelectedSearch.Items, title: 'Letters/Gifts', icon: dataIcons.letter },
-    { type: SelectedSearch.Locations, title: 'Locations', icon: dataIcons.location }
+    { type: SearchFocus.Sources, title: 'Sources', icon: dataIcons.source },
+    { type: SearchFocus.Episodes, title: 'Episodes', icon: dataIcons.episode },
+    { type: SearchFocus.Agents, title: 'Agents', icon: dataIcons.person },
+    { type: SearchFocus.Items, title: 'Letters/Gifts', icon: dataIcons.letter },
+    { type: SearchFocus.Locations, title: 'Locations', icon: dataIcons.location }
 ];
 
 @Component({
@@ -48,7 +48,7 @@ export class BrowseComponent {
         labelIds: new FormControl<string[]>([], {
             nonNullable: true
         }),
-        selectedType: new FormControl<SelectedSearch>(SelectedSearch.Sources, {
+        searchFocus: new FormControl<SearchFocus>(SearchFocus.Sources, {
             nonNullable: true
         })
     });
@@ -65,7 +65,7 @@ export class BrowseComponent {
             startWith({
                 searchTerm: "",
                 labelIds: [],
-                selectedType: SelectedSearch.Sources,
+                searchFocus: SearchFocus.Sources,
             })
         ),
         this.searchQuery
@@ -84,12 +84,12 @@ export class BrowseComponent {
         filter(results => !!results.data?.search),
         map(results => {
             const data = results.data!.search!;
-            return new Map<SelectedSearch, number>([
-                [SelectedSearch.Sources, data.sourceCount],
-                [SelectedSearch.Episodes, data.episodeCount],
-                [SelectedSearch.Agents, data.agentCount],
-                [SelectedSearch.Items, data.letterCount + data.giftCount],
-                [SelectedSearch.Locations, data.locationCount]
+            return new Map<SearchFocus, number>([
+                [SearchFocus.Sources, data.sourceCount],
+                [SearchFocus.Episodes, data.episodeCount],
+                [SearchFocus.Agents, data.agentCount],
+                [SearchFocus.Items, data.letterCount + data.giftCount],
+                [SearchFocus.Locations, data.locationCount]
             ]);
         }),
         shareReplay(1)
@@ -100,19 +100,19 @@ export class BrowseComponent {
         filter(results => !!results.data?.search),
         map(results => {
             const data = results.data!.search!;
-            return new Map<SelectedSearch, BrowseListItem[]>([
-                [SelectedSearch.Sources, this.transformSources(data)],
-                [SelectedSearch.Episodes, this.transformEpisodes(data)],
-                [SelectedSearch.Agents, this.transformAgents(data)],
-                [SelectedSearch.Items, this.transformItems(data)],
-                [SelectedSearch.Locations, this.transformLocations(data)]
+            return new Map<SearchFocus, BrowseListItem[]>([
+                [SearchFocus.Sources, this.transformSources(data)],
+                [SearchFocus.Episodes, this.transformEpisodes(data)],
+                [SearchFocus.Agents, this.transformAgents(data)],
+                [SearchFocus.Items, this.transformItems(data)],
+                [SearchFocus.Locations, this.transformLocations(data)]
             ]);
         }),
         shareReplay(1)
     );
 
-    public changeTabs(newNavId: SelectedSearch): void {
-        this.form.controls.selectedType.setValue(newNavId);
+    public changeTabs(newNavId: SearchFocus): void {
+        this.form.controls.searchFocus.setValue(newNavId);
         this.submitSearch();
     }
 

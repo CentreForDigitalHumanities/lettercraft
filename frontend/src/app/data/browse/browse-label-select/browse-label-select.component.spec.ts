@@ -23,7 +23,7 @@ class MockQuery extends BrowseEpisodeCategoriesGQL {
     }
 }
 
-fdescribe('BrowseLabelSelectComponent', () => {
+describe('BrowseLabelSelectComponent', () => {
     let component: BrowseLabelSelectComponent;
     let fixture: ComponentFixture<BrowseLabelSelectComponent>;
 

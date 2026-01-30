@@ -1,5 +1,5 @@
-query BrowseSearch($selectedType: SelectedSearch!, $searchTerm: String! $labelIds: [ID!]!) {
-    search(selectedType: $selectedType, searchTerm: $searchTerm, labelIds: $labelIds) {
+query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [ID!]!) {
+    search(searchFocus: $searchFocus, searchTerm: $searchTerm, labelIds: $labelIds) {
         sourceCount
         episodeCount
         agentCount

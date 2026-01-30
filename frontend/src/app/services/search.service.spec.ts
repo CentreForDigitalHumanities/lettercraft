@@ -1,9 +1,9 @@
 import { TestBed } from "@angular/core/testing";
 import { SearchService, SearchState } from "./search.service";
-import { of, Subject, throwError } from "rxjs";
+import { Subject, throwError } from "rxjs";
 import { ApolloQueryResult } from "@apollo/client/core";
 import { Query as ApolloAngularQuery } from "apollo-angular/query";
-import { BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from "generated/graphql";
+import { BrowseSearchQuery, BrowseSearchQueryVariables, SearchFocus } from "generated/graphql";
 import { QueryRef } from "apollo-angular";
 
 describe("SearchService", () => {
@@ -34,7 +34,7 @@ describe("SearchService", () => {
             const searchInput: BrowseSearchQueryVariables = {
                 searchTerm: 'test',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const mockData: BrowseSearchQuery = {
@@ -92,7 +92,7 @@ describe("SearchService", () => {
             const searchInput: BrowseSearchQueryVariables = {
                 searchTerm: 'test',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const result: ApolloQueryResult<BrowseSearchQuery> = {
@@ -128,7 +128,7 @@ describe("SearchService", () => {
             const searchInput: BrowseSearchQueryVariables = {
                 searchTerm: 'test',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const result: ApolloQueryResult<BrowseSearchQuery> = {
@@ -163,7 +163,7 @@ describe("SearchService", () => {
             const searchInput: BrowseSearchQueryVariables = {
                 searchTerm: 'test',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const mockQueryRefWithError = jasmine.createSpyObj('QueryRef', [], {
@@ -196,7 +196,7 @@ describe("SearchService", () => {
             const searchInput: BrowseSearchQueryVariables = {
                 searchTerm: 'test',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const mockQueryRefWithError = jasmine.createSpyObj('QueryRef', [], {
@@ -229,13 +229,13 @@ describe("SearchService", () => {
             const searchInput1: BrowseSearchQueryVariables = {
                 searchTerm: 'first',
                 labelIds: [],
-                selectedType: SelectedSearch.Sources
+                searchFocus: SearchFocus.Sources
             };
 
             const searchInput2: BrowseSearchQueryVariables = {
                 searchTerm: 'second',
                 labelIds: [],
-                selectedType: SelectedSearch.Episodes
+                searchFocus: SearchFocus.Episodes
             };
 
             const mockData: BrowseSearchQuery = {

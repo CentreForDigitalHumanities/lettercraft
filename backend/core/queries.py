@@ -40,7 +40,7 @@ class SearchResultsType(ObjectType):
     locations = List(NonNull(SpaceDescriptionType), required=True)
 
 
-class SelectedSearch(Enum):
+class SearchFocus(Enum):
     SOURCES = "SOURCES"
     EPISODES = "EPISODES"
     AGENTS = "AGENTS"
@@ -51,13 +51,13 @@ class SelectedSearch(Enum):
 class CoreQueries(ObjectType):
     search = Field(
         SearchResultsType,
-        selected_type=SelectedSearch(required=True),
+        search_focus=SearchFocus(required=True),
         search_term=String(required=True),
         label_ids=List(NonNull(ID), required=True),
     )
 
     def resolve_search(
-        self, info, selected_type: SelectedSearch, search_term: str, label_ids: list[str]
+        self, info, search_focus: SearchFocus, search_term: str, label_ids: list[str]
     ) -> SearchResultsType:
         def apply_filter(queryset: QuerySet, filter_class: type[FilterSet]) -> QuerySet:
             """Apply search filter using the filter class if search_term or label_ids are provided."""
@@ -105,17 +105,17 @@ class CoreQueries(ObjectType):
         gifts = []
         locations = []
 
-        match selected_type:
-            case SelectedSearch.SOURCES:
+        match search_focus:
+            case SearchFocus.SOURCES:
                 sources = source_qs
-            case SelectedSearch.EPISODES:
+            case SearchFocus.EPISODES:
                 episodes = episode_qs
-            case SelectedSearch.AGENTS:
+            case SearchFocus.AGENTS:
                 agents = agent_qs
-            case SelectedSearch.ITEMS:
+            case SearchFocus.ITEMS:
                 letters = letter_qs
                 gifts = gift_qs
-            case SelectedSearch.LOCATIONS:
+            case SearchFocus.LOCATIONS:
                 locations = location_qs
 
         return SearchResultsType(
