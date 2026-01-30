@@ -32,7 +32,7 @@
 
 .inline-list.no-delimiter {
     & > .inline-list-item:not(:last-child)::after {
-        content: "\00A0";
+        content: " ";
     }
 }
 
