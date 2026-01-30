@@ -165,6 +165,10 @@ def episode_2(db, source, agent_description, agent_description_2, letter_descrip
     episode.letters.add(letter_description)
     return episode
 
+@pytest.fixture()
+def episode_attribution(episode, user):
+    episode.contributors.add(user)
+
 
 @pytest.fixture()
 def case_study(db):

@@ -21,7 +21,7 @@ from user.permissions import can_edit_source, visible_condition
 from user.types.UserType import UserType
 from user.models import User
 from source.types.SourceImageType import SourceImageType
-
+from source.utils import source_contributor_ids
 
 class SourceFilter(FilterSet):
     search = CharFilter(method="search_sources")
@@ -102,21 +102,7 @@ class SourceType(DjangoObjectType):
 
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
-        def contributors_from(Model: Type[Model]):
-            return set(
-                contributor.id
-                for episode in Model.objects.filter(source=parent)
-                for contributor in episode.contributors.all()
-            )
-
-        user_ids = set.union(
-            contributors_from(Episode),
-            contributors_from(AgentDescription),
-            contributors_from(LetterDescription),
-            contributors_from(GiftDescription),
-            contributors_from(SpaceDescription),
-        )
-
+        user_ids = source_contributor_ids(parent)
         return User.objects.filter(id__in=user_ids)
 
     @staticmethod
