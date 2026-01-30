@@ -1,12 +1,15 @@
 @let counts = counts$ | async;
 @let items = itemsByType$ | async;
 @let loading = searchLoading$ | async;
+
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
 <div class="omnibrowse-container">
     <div class="search-section">
         <div class="container">
             <form (submit)="submitSearch($event)" class="search-form">
                 <lc-search-bar [formControl]="form.controls.searchTerm" />
-                <lc-label-select [formControl]="form.controls.labelIds" />
+                <lc-browse-label-select [formControl]="form.controls.labelIds" />
             </form>
         </div>
     </div>

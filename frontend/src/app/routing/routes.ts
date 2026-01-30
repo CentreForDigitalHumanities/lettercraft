@@ -27,13 +27,11 @@ import { EpisodeViewComponent } from '../data/episode-view/episode-view.componen
 import { LocationViewComponent } from '../data/location-view/location-view.component';
 import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
-import { SourceListComponent } from '../data/source-list/source-list.component';
-import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
 import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
 import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 import { ContributorComponent } from '../contributors/contributor/contributor.component';
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
-import { OmnibrowseComponent } from '../data/omnibrowse/omnibrowse.component';
+import { BrowseComponent } from '../data/browse/browse.component';
 
 
 const routes: Routes = [
@@ -144,7 +142,7 @@ const routes: Routes = [
                 path: '',
                 pathMatch: 'full',
                 title: pageTitle('Browse data'),
-                component: OmnibrowseComponent,
+                component: BrowseComponent,
             }
         ],
     },

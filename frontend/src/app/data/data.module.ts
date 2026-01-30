@@ -13,10 +13,10 @@ import { EpisodePreviewComponent } from './source-view/episode-preview/episode-p
 import { EpisodeListComponent } from './episode-list/episode-list.component';
 import { SourceListComponent } from './source-list/source-list.component';
 import { PaginatorComponent } from './shared/paginator/paginator.component';
-import { LabelSelectComponent } from './omnibrowse/label-select/label-select.component';
-import { OmnibrowseComponent } from './omnibrowse/omnibrowse.component';
-import { SearchBarComponent } from './omnibrowse/search-bar/search-bar.component';
-import { BrowseListItemComponent } from './omnibrowse/search-item/browse-list-item.component';
+import { BrowseComponent } from './browse/browse.component';
+import { SearchBarComponent } from './browse/search-bar/search-bar.component';
+import { BrowseListItemComponent } from './browse/search-item/browse-list-item.component';
+import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-label-select.component';
 
 
 
@@ -36,8 +36,8 @@ import { BrowseListItemComponent } from './omnibrowse/search-item/browse-list-it
         EpisodeListComponent,
         SearchBarComponent,
         PaginatorComponent,
-        OmnibrowseComponent,
-        LabelSelectComponent,
+        BrowseComponent,
+        BrowseLabelSelectComponent,
         BrowseListItemComponent,
     ],
     imports: [
@@ -48,6 +48,6 @@ import { BrowseListItemComponent } from './omnibrowse/search-item/browse-list-it
         DataOverviewComponent,
         SourceViewComponent,
         EpisodeViewComponent,
-    ],
+    ]
 })
 export class DataModule { }

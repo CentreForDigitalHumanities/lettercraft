@@ -5,6 +5,7 @@ import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, Selecte
 import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
 import { SearchService } from '@services/search.service';
 import { BrowseListItem } from './search-item/browse-list-item.component';
+import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
@@ -24,16 +25,21 @@ const TAB_METADATA: TabMetadata[] = [
 ];
 
 @Component({
-    selector: 'lc-omnibrowse',
-    templateUrl: './omnibrowse.component.html',
-    styleUrl: './omnibrowse.component.scss',
+    selector: 'lc-browse',
+    templateUrl: './browse.component.html',
+    styleUrl: './browse.component.scss',
     standalone: false,
 })
-export class OmnibrowseComponent {
+export class BrowseComponent {
     public readonly tabMetadata = TAB_METADATA;
     public readonly dataIcons = dataIcons;
     public readonly actionIcons = actionIcons;
     public readonly statusIcons = statusIcons;
+
+    public breadcrumbs: Breadcrumb[] = [
+        { link: "/", label: "Lettercraft" },
+        { link: ".", label: "Data" },
+    ];
 
     public form = new FormGroup({
         searchTerm: new FormControl('', {

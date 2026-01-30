@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LabelSelectComponent } from './label-select.component';
+import { BrowseLabelSelectComponent } from './browse-label-select.component';
 
-describe('LabelSelectComponent', () => {
-    let component: LabelSelectComponent;
-    let fixture: ComponentFixture<LabelSelectComponent>;
+describe('BrowseLabelSelectComponent', () => {
+    let component: BrowseLabelSelectComponent;
+    let fixture: ComponentFixture<BrowseLabelSelectComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [LabelSelectComponent]
+            imports: [BrowseLabelSelectComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(LabelSelectComponent);
+        fixture = TestBed.createComponent(BrowseLabelSelectComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

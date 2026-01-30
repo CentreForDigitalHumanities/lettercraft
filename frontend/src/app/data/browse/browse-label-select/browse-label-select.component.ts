@@ -6,19 +6,19 @@ import { BrowseEpisodeCategoriesGQL } from 'generated/graphql';
 import { map } from 'rxjs';
 
 @Component({
-    selector: 'lc-label-select',
-    templateUrl: './label-select.component.html',
-    styleUrl: './label-select.component.scss',
+    selector: 'lc-browse-label-select',
+    templateUrl: './browse-label-select.component.html',
+    styleUrl: './browse-label-select.component.scss',
     standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: LabelSelectComponent,
+            useExisting: BrowseLabelSelectComponent,
             multi: true
         }
     ]
 })
-export class LabelSelectComponent implements ControlValueAccessor {
+export class BrowseLabelSelectComponent implements ControlValueAccessor {
     public readonly actionIcons = actionIcons;
 
     public selectedLabelIds = signal<string[]>([]);
@@ -27,8 +27,8 @@ export class LabelSelectComponent implements ControlValueAccessor {
         map(result => result.data.episodeCategories)
     ), { initialValue: [] });
 
-    private onChange: (value: string[]) => void = () => {};
-    private onTouched: () => void = () => {};
+    private onChange: (value: string[]) => void = () => { };
+    private onTouched: () => void = () => { };
 
     constructor(private labelsQuery: BrowseEpisodeCategoriesGQL) { }
 
