@@ -1,0 +1,18 @@
+@let item = listItem();
+<a [routerLink]="item.link" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+        <h2 class="mb-1 h5" [innerHTML]="item.name"></h2>
+        <small class="text-muted">
+            <lc-icon [icon]="item.icon" class="me-1" />
+        </small>
+    </div>
+    <p class="mb-1" [innerHTML]="item.description"></p>
+    @if (item.labels && item.labels.length > 0) {
+    <ul class="inline-list no-delimiter mb-1 ps-0">
+        <li *ngFor="let label of item.labels" class="inline-list-item ">
+            <span class="badge rounded-pill text-bg-secondary">{{ label }}</span>
+        </li>
+    </ul>
+    }
+    <small class="text-muted" [innerHTML]="item.subtext"></small>
+</a>

@@ -16,6 +16,7 @@ import { PaginatorComponent } from './shared/paginator/paginator.component';
 import { LabelSelectComponent } from './omnibrowse/label-select/label-select.component';
 import { OmnibrowseComponent } from './omnibrowse/omnibrowse.component';
 import { SearchBarComponent } from './omnibrowse/search-bar/search-bar.component';
+import { BrowseListItemComponent } from './omnibrowse/search-item/browse-list-item.component';
 
 
 
@@ -37,6 +38,7 @@ import { SearchBarComponent } from './omnibrowse/search-bar/search-bar.component
         PaginatorComponent,
         OmnibrowseComponent,
         LabelSelectComponent,
+        BrowseListItemComponent,
     ],
     imports: [
         SharedModule,

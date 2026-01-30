@@ -1,0 +1,28 @@
+@use "../../../../../src/lc_theme" as theme;
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+    transition: all 0.2s ease;
+    padding: 1rem 1.5rem;
+
+    &:first-child {
+        border-top: none;
+    }
+
+    &:hover {
+        border-left: 3px solid map-get(theme.$lc-colors, primary);
+        background-color: theme.$gray-100;
+    }
+
+    h2 {
+        color: map-get(theme.$lc-colors, primary);
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+
+    p {
+        color: theme.$gray-700;
+        line-height: 1.6;
+    }
+}

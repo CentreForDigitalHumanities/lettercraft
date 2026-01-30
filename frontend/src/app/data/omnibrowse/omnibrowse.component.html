@@ -55,33 +55,7 @@
                             } @else {
                             <div class="list-group">
                                 @for (item of tabItems; track item.id) {
-                                <a
-                                    href="#"
-                                    class="list-group-item list-group-item-action"
-                                >
-                                    <div
-                                        class="d-flex w-100 justify-content-between"
-                                    >
-                                        <h5
-                                            class="mb-1"
-                                            [innerHTML]="item.name"
-                                        ></h5>
-                                        <small class="text-muted">
-                                            <lc-icon
-                                                [icon]="item.icon"
-                                                class="me-1"
-                                            />
-                                        </small>
-                                    </div>
-                                    <p
-                                        class="mb-1"
-                                        [innerHTML]="item.description"
-                                    ></p>
-                                    <small
-                                        class="text-muted"
-                                        [innerHTML]="item.subtext"
-                                    ></small>
-                                </a>
+                                <lc-browse-list-item [listItem]="item" />
                                 }
                             </div>
                             } }

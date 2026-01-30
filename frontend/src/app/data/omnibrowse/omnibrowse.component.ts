@@ -4,22 +4,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from 'generated/graphql';
 import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
 import { SearchService } from '@services/search.service';
+import { BrowseListItem } from './search-item/browse-list-item.component';
 
-interface SearchItem {
-    id: string;
-    name: string;
-    description: string;
-    subtext: string;
-    icon: string;
-}
-
-interface SearchResult {
-    type: SelectedSearch;
-    count: number;
-    icon: string;
-    title: string;
-    items: SearchItem[];
-}
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
 
@@ -107,7 +93,7 @@ export class OmnibrowseComponent {
         filter(results => !!results.data?.search),
         map(results => {
             const data = results.data!.search!;
-            return new Map<SelectedSearch, SearchItem[]>([
+            return new Map<SelectedSearch, BrowseListItem[]>([
                 [SelectedSearch.Sources, this.transformSources(data)],
                 [SelectedSearch.Episodes, this.transformEpisodes(data)],
                 [SelectedSearch.Agents, this.transformAgents(data)],
@@ -129,63 +115,70 @@ export class OmnibrowseComponent {
         this.startSearch$.next(formValue);
     }
 
-    private transformSources(results: QueriedResults): SearchItem[] {
+    private transformSources(results: QueriedResults): BrowseListItem[] {
         return results.sources.map(source => ({
             id: source.id,
             name: source.name,
             description: source.descriptionText,
             subtext: source.reference,
-            icon: dataIcons.source
+            icon: dataIcons.source,
+            link: `sources/${source.id}`
         }));
     }
 
-    private transformEpisodes(results: QueriedResults): SearchItem[] {
+    private transformEpisodes(results: QueriedResults): BrowseListItem[] {
         return results.episodes.map(episode => ({
             id: episode.id,
             name: episode.name,
             description: episode.summary,
             subtext: `${episode.source.reference}, book ${episode.book}, chapter ${episode.chapter}, page ${episode.page}`,
-            icon: dataIcons.episode
+            icon: dataIcons.episode,
+            link: `episodes/${episode.id}`,
+            labels: episode.categories?.map(cat => cat.name) ?? []
         }));
     }
 
-    private transformAgents(results: QueriedResults): SearchItem[] {
+    private transformAgents(results: QueriedResults): BrowseListItem[] {
         return results.agents.map(agent => ({
             id: agent.id,
             name: agent.name,
             description: this.occurrenceData(agent),
             subtext: agent.isGroup ? 'Group' : 'Individual',
-            icon: agent.isGroup ? dataIcons.group : dataIcons.person
+            icon: agent.isGroup ? dataIcons.group : dataIcons.person,
+            link: `agents/${agent.id}`
         }));
     }
 
-    private transformItems(results: QueriedResults): SearchItem[] {
-        const letterItems: SearchItem[] = results.letters.map(letter => ({
+    private transformItems(results: QueriedResults): BrowseListItem[] {
+        const letterItems: BrowseListItem[] = results.letters.map(letter => ({
             id: letter.id,
             name: letter.name,
             description: 'Occurs in ' + letter.episodes.length + ' episodes in ' + letter.source.reference,
             subtext: 'Letter',
-            icon: dataIcons.letter
+            icon: dataIcons.letter,
+            link: `items/${letter.id}`
         }));
 
-        const giftItems: SearchItem[] = results.gifts.map(gift => ({
+        const giftItems: BrowseListItem[] = results.gifts.map(gift => ({
             id: gift.id,
             name: gift.name,
             description: 'Occurs in ' + gift.episodes.length + ' episodes in ' + gift.source.reference,
             subtext: 'Gift',
-            icon: dataIcons.gift
+            icon: dataIcons.gift,
+            link: `items/${gift.id}`
         }));
 
         return letterItems.concat(giftItems);
     }
 
-    private transformLocations(results: QueriedResults): SearchItem[] {
+    private transformLocations(results: QueriedResults): BrowseListItem[] {
         return results.locations.map(location => ({
             id: location.id,
             name: location.name,
             description: this.occurrenceData(location),
             subtext: location.description,
-            icon: dataIcons.location
+            icon: dataIcons.location,
+            link: `locations/${location.id}`
         }));
     }
 
