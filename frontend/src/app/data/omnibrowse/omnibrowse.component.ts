@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { actionIcons, dataIcons } from '@shared/icons';
+import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SelectedSearch } from 'generated/graphql';
 import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
@@ -33,6 +33,7 @@ export class OmnibrowseComponent {
     public readonly tabMetadata = TAB_METADATA;
     public readonly dataIcons = dataIcons;
     public readonly actionIcons = actionIcons;
+    public readonly statusIcons = statusIcons;
 
     public form = new FormGroup({
         searchTerm: new FormControl('', {
