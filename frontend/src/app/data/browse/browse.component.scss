@@ -1,6 +1,6 @@
 @use "../../../../src/lc_theme" as theme;
 
-.omnibrowse-container {
+.browse-container {
     display: flex;
     flex-direction: column;
     background-color: theme.$gray-100;
