@@ -1,12 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
-import { ViewEpisodesPageQuery, ViewSourceEpisodesPageQuery } from 'generated/graphql';
+import { ViewSourceEpisodesPageQuery } from 'generated/graphql';
 
 type EpisodeWithEntities = NonNullable<ViewSourceEpisodesPageQuery>['episodes'][number];
-type EpisodeWithSource = ViewEpisodesPageQuery['episodes'][number];
-
-type Episode = EpisodeWithEntities | EpisodeWithSource;
 
 @Component({
     selector: 'lc-episode-preview',
@@ -15,21 +12,13 @@ type Episode = EpisodeWithEntities | EpisodeWithSource;
     standalone: false
 })
 export class EpisodePreviewComponent {
-    @Input({required: true}) episode!: Episode;
+    @Input({ required: true }) episode!: EpisodeWithEntities;
 
     dataIcons = dataIcons;
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 
-    hasSource(episode: Episode): episode is EpisodeWithSource {
-        return 'source' in episode;
-    }
-
-    hasEntities(episode: Episode): episode is EpisodeWithEntities {
-        return 'agents' in episode;
-    }
-
-    hasSourceLocation(episode: Episode): boolean {
+    hasSourceLocation(episode: EpisodeWithEntities): boolean {
         return !!(episode.book || episode.chapter || episode.page);
     }
 }

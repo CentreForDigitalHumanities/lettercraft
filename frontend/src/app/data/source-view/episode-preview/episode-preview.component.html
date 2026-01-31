@@ -1,38 +1,41 @@
 <div class="card mb-4">
     <div class="card-header position-relative">
-        <a class="icon-link stretched-link mb-1 "
-            [routerLink]="['/data/episodes', episode.id]">
+        <a
+            class="icon-link stretched-link mb-1"
+            [routerLink]="['/data/episodes', episode.id]"
+        >
             <lc-icon [icon]="dataIcons.episode" />
-            {{episode.name}}
+            {{ episode.name }}
         </a>
     </div>
     <div class="card-body">
         <p class="block">
             <span *ngIf="episode.summary; else noSummary">
-                {{episode.summary}}
+                {{ episode.summary }}
             </span>
             <ng-template #noSummary>
                 <i>No summary.</i>
             </ng-template>
         </p>
 
-        <ul class="block inline-list no-delimiter" *ngIf="episode.categories.length">
-            <li *ngFor="let category of episode.categories"
-                class="inline-list-item">
+        @if (episode.categories.length) {
+        <ul class="block inline-list no-delimiter">
+            @for (category of episode.categories; track category.id) {
+            <li class="inline-list-item">
                 <span class="badge rounded-pill text-bg-secondary">
-                    {{category.name}}
+                    {{ category.name }}
                 </span>
             </li>
+            }
         </ul>
-
-        <dl class="block" *ngIf="hasEntities(episode)">
+        }
+        <dl class="block">
             <dt>Agents</dt>
-            <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
+            @if (episode.agents.length > 0) {
+            <dd class="ms-4">
                 <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.agents"
-                        class="inline-list-item"
-                    >
+                    @for (link of episode.agents; track link.agent.id) {
+                    <li class="inline-list-item">
                         <a
                             [routerLink]="['/data', 'agents', link.agent.id]"
                             class="icon-link"
@@ -41,19 +44,19 @@
                             {{ link.agent.name }}
                         </a>
                     </li>
+                    }
                 </ul>
             </dd>
-            <ng-template #noAgents>
-                <dd class="ms-4">None.</dd>
-            </ng-template>
+            } @else {
+            <dd class="ms-4">None.</dd>
+            }
 
             <dt>Locations</dt>
-            <dd *ngIf="episode.spaces.length > 0; else noSpaces" class="ms-4">
+            @if (episode.spaces.length > 0) {
+            <dd class="ms-4">
                 <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.spaces"
-                        class="inline-list-item"
-                    >
+                    @for (link of episode.spaces; track link.space.id) {
+                    <li class="inline-list-item">
                         <a
                             [routerLink]="['/data', 'locations', link.space.id]"
                             class="icon-link"
@@ -62,25 +65,19 @@
                             {{ link.space.name }}
                         </a>
                     </li>
+                    }
                 </ul>
             </dd>
-            <ng-template #noSpaces>
-                <dd class="ms-4">None.</dd>
-            </ng-template>
+            } @else {
+            <dd class="ms-4">None.</dd>
+            }
 
             <dt>Objects</dt>
-            <dd
-                *ngIf="
-                    episode.gifts.length > 0 || episode.letters.length > 0;
-                    else noObjects
-                "
-                class="ms-4"
-            >
+            @if (episode.gifts.length > 0 || episode.letters.length > 0) {
+            <dd class="ms-4">
                 <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.gifts"
-                        class="inline-list-item"
-                    >
+                    @for (link of episode.gifts; track link.gift.id) {
+                    <li class="inline-list-item">
                         <a
                             [routerLink]="['/data', 'gifts', link.gift.id]"
                             class="icon-link"
@@ -89,10 +86,9 @@
                             {{ link.gift.name }}
                         </a>
                     </li>
-                    <li
-                        *ngFor="let link of episode.letters"
-                        class="inline-list-item"
-                    >
+                    }
+                    @for (link of episode.letters; track link.letter.id) {
+                    <li class="inline-list-item">
                         <a
                             [routerLink]="['/data', 'letters', link.letter.id]"
                             class="icon-link"
@@ -101,29 +97,35 @@
                             {{ link.letter.name }}
                         </a>
                     </li>
+                    }
                 </ul>
             </dd>
-            <ng-template #noObjects>
-                <dd class="ms-4">None.</dd>
-            </ng-template>
+            } @else {
+            <dd class="ms-4">None.</dd>
+            }
         </dl>
     </div>
-    <div class="card-footer bg-body text-body-secondary position-relative"
-        *ngIf="hasSource(episode) || hasSourceLocation(episode)">
-        <a *ngIf="hasSource(episode)" [routerLink]="['/data/sources', episode.source.id]"
-            class="text-reset icon-link stretched-link">
-            <lc-icon [icon]="dataIcons.source"/>
-            {{episode.source.name}}
-        </a>
-        <small *ngIf="hasSourceLocation(episode)">
-            <span *ngIf="hasSource(episode)" class="ms-1">(</span>
+    @if (hasSourceLocation(episode)) {
+    <div class="card-footer bg-body text-body-secondary position-relative">
+        <small>
             <span class="inline-list">
-                <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
-                <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
-                <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
+                @if (episode.book) {
+                <span class="inline-list-item"
+                    >book {{ episode.book }}</span
+                >
+                }
+                @if (episode.chapter) {
+                <span class="inline-list-item"
+                    >chapter {{ episode.chapter }}</span
+                >
+                }
+                @if (episode.page) {
+                <span class="inline-list-item"
+                    >page {{ episode.page }}</span
+                >
+                }
             </span>
-            <span *ngIf="hasSource(episode)">)</span>
         </small>
-
     </div>
+    }
 </div>
