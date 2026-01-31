@@ -68,13 +68,13 @@ describe("SearchService", () => {
                 states.push(state);
 
                 if (states.length === 2) {
-                    // First emission should be loading
+                    // First emission: loading state.
                     expect(states[0].loading).toBe(true);
                     expect(states[0].data).toBe(null);
                     expect(states[0].error).toBe(null);
                     expect(states[0].searchInput).toEqual(searchInput);
 
-                    // Second emission should be success
+                    // Second emission: success state.
                     expect(states[1].loading).toBe(false);
                     expect(states[1].data).toEqual(mockData);
                     expect(states[1].error).toBe(null);
@@ -110,7 +110,7 @@ describe("SearchService", () => {
                 states.push(state);
 
                 if (states.length === 2) {
-                    // Second emission should be error
+                    // Second emission: error state.
                     expect(states[1].loading).toBe(false);
                     expect(states[1].data).toBe(null);
                     expect(states[1].error).toBe('GraphQL Error 1, GraphQL Error 2');

@@ -10,7 +10,6 @@ export interface BrowseListItem {
     labels?: string[];
 }
 
-
 @Component({
     selector: 'lc-browse-list-item',
     templateUrl: './browse-list-item.component.html',

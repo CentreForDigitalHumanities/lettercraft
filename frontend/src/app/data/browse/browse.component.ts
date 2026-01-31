@@ -134,15 +134,27 @@ export class BrowseComponent {
     }
 
     private transformEpisodes(results: QueriedResults): BrowseListItem[] {
-        return results.episodes.map(episode => ({
-            id: episode.id,
-            name: episode.name,
-            description: episode.summary,
-            subtext: `${episode.source.reference}, book ${episode.book}, chapter ${episode.chapter}, page ${episode.page}`,
-            icon: dataIcons.episode,
-            link: `episodes/${episode.id}`,
-            labels: episode.categories?.map(cat => cat.name) ?? []
-        }));
+        return results.episodes.map(episode => {
+            const subText = [episode.source.reference];
+            if (episode.book) {
+                subText.push(`book ${episode.book}`);
+            }
+            if (episode.chapter) {
+                subText.push(`chapter ${episode.chapter}`);
+            }
+            if (episode.page) {
+                subText.push(`page ${episode.page}`);
+            }
+            return {
+                id: episode.id,
+                name: episode.name,
+                description: episode.summary,
+                subtext: subText.join(', '),
+                icon: dataIcons.episode,
+                link: `episodes/${episode.id}`,
+                labels: episode.categories?.map(cat => cat.name) ?? []
+            };
+        });
     }
 
     private transformAgents(results: QueriedResults): BrowseListItem[] {

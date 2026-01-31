@@ -32,7 +32,6 @@ export class BrowseLabelSelectComponent implements ControlValueAccessor {
 
     constructor(private labelsQuery: BrowseEpisodeCategoriesGQL) { }
 
-    // ControlValueAccessor implementation
     writeValue(value: string[]): void {
         if (value !== null && value !== undefined) {
             this.selectedLabelIds.set(value);
@@ -86,5 +85,4 @@ export class BrowseLabelSelectComponent implements ControlValueAccessor {
         this.onChange(this.selectedLabelIds());
         this.onTouched();
     }
-
 }

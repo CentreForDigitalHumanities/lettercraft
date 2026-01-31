@@ -7,19 +7,19 @@
             id="labelDropdown"
             ngbDropdownToggle>
             @if (labelIds.length === 0) {
-                <span class="placeholder-text">Select labels...</span>
+            <span class="placeholder-text">Select labels...</span>
             } @else {
-                <div class="selected-labels-display">
-                    @for (labelId of labelIds; track labelId) {
-                        <span class="btn btn-tag btn-secondary me-1 mb-1">
-                            <lc-icon
-                                [icon]="actionIcons.remove"
-                                class="remove-label-icon me-1"
-                                (click)="removeLabel($event, labelId)" />
-                            {{ getLabelName(labelId) }}
-                        </span>
-                    }
-                </div>
+            <div class="selected-labels-display">
+                @for (labelId of labelIds; track labelId) {
+                    <span class="btn btn-tag btn-secondary me-1 mb-1">
+                        <lc-icon
+                            [icon]="actionIcons.remove"
+                            class="remove-label-icon me-1"
+                            (click)="removeLabel($event, labelId)" />
+                        {{ getLabelName(labelId) }}
+                    </span>
+                }
+            </div>
             }
         </button>
         <div ngbDropdownMenu aria-labelledby="labelDropdown" class="label-dropdown-menu">
@@ -27,27 +27,27 @@
                 Select one or more labels from the list below...
             </div>
             @for (label of allLabels(); track label.id) {
-                <button
-                    ngbDropdownItem
-                    type="button"
-                    class="label-dropdown-item"
-                    (click)="toggleLabel(label.id)">
-                    <span class="btn btn-tag me-2"
-                        [class]="isLabelSelected(label.id) ? 'btn-secondary' : 'btn-light'">
-                        <lc-icon [icon]="isLabelSelected(label.id) ? 'check-square' : 'square'" class="me-1" />
-                        {{ label.name }}
-                    </span>
-                </button>
+            <button
+                ngbDropdownItem
+                type="button"
+                class="label-dropdown-item"
+                (click)="toggleLabel(label.id)">
+                <span class="btn btn-tag me-2"
+                    [class]="isLabelSelected(label.id) ? 'btn-secondary' : 'btn-light'">
+                    <lc-icon [icon]="isLabelSelected(label.id) ? 'check-square' : 'square'" class="me-1" />
+                    {{ label.name }}
+                </span>
+            </button>
             }
         </div>
     </div>
     @if (labelIds.length > 0) {
-        <button
-            type="button"
-            class="btn clear-labels-button"
-            (click)="clearLabels()"
-            title="Clear all labels">
-            <lc-icon [icon]="actionIcons.delete" />
-        </button>
+    <button
+        type="button"
+        class="btn clear-labels-button"
+        (click)="clearLabels()"
+        title="Clear all labels">
+        <lc-icon [icon]="actionIcons.delete" />
+    </button>
     }
 </div>

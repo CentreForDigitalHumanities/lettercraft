@@ -59,6 +59,15 @@ class CoreQueries(ObjectType):
     def resolve_search(
         self, info, search_focus: SearchFocus, search_term: str, label_ids: list[str]
     ) -> SearchResultsType:
+        """
+        Resolve search query based on provided search_term and label_ids.
+
+        Counts for each entity type are always calculated, but results are only returned
+        for the type corresponding to the specified search_focus.
+
+        Multiple label IDs are combined using OR logic.
+        Labels and search term are combined using AND logic.
+        """
         def apply_filter(queryset: QuerySet, filter_class: type[FilterSet]) -> QuerySet:
             """Apply search filter using the filter class if search_term or label_ids are provided."""
             if search_term or label_ids:
