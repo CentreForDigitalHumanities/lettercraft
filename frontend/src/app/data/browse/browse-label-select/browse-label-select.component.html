@@ -11,7 +11,7 @@
             } @else {
             <div class="selected-labels-display">
                 @for (labelId of labelIds; track labelId) {
-                    <span class="btn btn-tag btn-secondary me-1 mb-1">
+                    <span class="btn btn-tag btn-burntorange me-1 mb-1">
                         <lc-icon
                             [icon]="actionIcons.remove"
                             class="remove-label-icon me-1"
@@ -33,7 +33,7 @@
                 class="label-dropdown-item"
                 (click)="toggleLabel(label.id)">
                 <span class="btn btn-tag me-2"
-                    [class]="isLabelSelected(label.id) ? 'btn-secondary' : 'btn-light'">
+                    [class]="isLabelSelected(label.id) ? 'btn-burntorange' : 'btn-light'">
                     <lc-icon [icon]="isLabelSelected(label.id) ? 'check-square' : 'square'" class="me-1" />
                     {{ label.name }}
                 </span>

@@ -35,6 +35,7 @@ $lc-colors: (
     "parchment": v.$lc_parchment,
     "ink": v.$lc_ink,
     "burgundy": v.$lc_burgundy,
+    "burntorange": v.$lc_burnt_orange,
 );
 
 $theme-colors: map-merge($theme-colors, $lc-colors);
