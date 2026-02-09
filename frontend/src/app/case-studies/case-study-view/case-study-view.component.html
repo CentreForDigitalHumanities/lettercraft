@@ -1,7 +1,11 @@
 @let caseStudy = data();
 
 @if (caseStudy) {
-    <h1 class="mt-4">{{caseStudy.name}}</h1>
+    <h2>{{caseStudy.name}}</h2>
+
+    <p style="float: right">
+        {{caseStudy.date | date:'longDate'}}
+    </p>
 
     <p class="lead" *ngIf="caseStudy.authors.length">
         By
@@ -11,9 +15,6 @@
         </ng-container>
     </p>
 
-    <p class="text-secondary">
-        {{caseStudy.date | date}}
-    </p>
 
     <div class="card bg-light" *ngIf="caseStudy.sources.length">
         <div class="card-body">

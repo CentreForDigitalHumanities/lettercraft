@@ -5,14 +5,23 @@
     <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
 }
 
-<div class="row">
+<h1 class="mt-5">Case studies</h1>
+
+<p class="my-3">
+    Case studies are written by researchers and apprentices in the Lettercraft
+    project. Focusing on a specific source, these case studies highlight the bla bla
+    epistolary bla bla
+    bla. Bla bla bla letters bla bla.
+</p>
+
+<div class="row my-5 gap-4">
+    <aside class="col-md-3">
+        <h2 class="h4">Select case study</h2>
+        @if (listData?.caseStudies; as caseStudies) {
+            <lc-case-studies-list [data]="caseStudies" [activeID]="activeID$ | async" />
+        }
+    </aside>
     <div class="col-md">
         <lc-case-study-view [data]="viewData" />
     </div>
-    <aside class="col-md-3">
-        <h2>Case studies</h2>
-        @if (listData?.caseStudies; as caseStudies) {
-            <lc-case-studies-list [data]="caseStudies"/>
-        }
-    </aside>
 </div>

@@ -11,6 +11,7 @@ type CaseStudy = ViewCaseStudiesQuery['caseStudies'][number];
 })
 export class CaseStudiesListComponent {
     data = input.required<CaseStudy[]>()
+    activeID = input<string | null | undefined>();
 
     authorNames(item: CaseStudy): string {
         const names = item.authors.map(author => author.fullName);
