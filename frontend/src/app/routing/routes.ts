@@ -21,6 +21,7 @@ import {
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
 import { AgentViewComponent } from '../data/agent-view/agent-view.component';
+import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
 import { SourceViewComponent } from '../data/source-view/source-view.component';
 import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
 import { LocationViewComponent } from '../data/location-view/location-view.component';
