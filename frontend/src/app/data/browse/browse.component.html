@@ -82,7 +82,9 @@
                                         }
                                     }
                                     @case (SearchFocus.Episodes) {
-                                        episodes
+                                        @if (results?.data?.search?.episodes; as episodes) {
+                                            <lc-episode-list [data]="episodes" />
+                                        }
                                     }
                                     @default {
                                         <div class="list-group">

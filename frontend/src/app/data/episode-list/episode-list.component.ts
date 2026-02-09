@@ -1,10 +1,7 @@
-import { Component, DestroyRef } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { SearchService } from "@services/search.service";
-import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { ViewEpisodesGQL, ViewEpisodesPageGQL, ViewEpisodesQuery } from "generated/graphql";
-import { distinctUntilChanged, filter, map, shareReplay, startWith, tap } from "rxjs";
-import { PageResult } from "../utils/pagination";
+import { Component, DestroyRef, input } from "@angular/core";
+import { ViewEpisodesPageGQL } from "generated/graphql";
+import { HasID, PageResult } from "../utils/pagination";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 @Component({
     selector: "lc-episode-list",
@@ -13,54 +10,12 @@ import { PageResult } from "../utils/pagination";
     standalone: false
 })
 export class EpisodeListComponent {
-    breadcrumbs: Breadcrumb[] = [
-        { link: "/", label: "Lettercraft" },
-        { link: "/data", label: "Data" },
-        { link: ".", label: "Episodes" },
-    ];
+    data = input.required<HasID[]>();
 
-    // public searchControl = new FormControl<string>("", {
-    //     nonNullable: true,
-    // });
+    public pageResult = new PageResult(toObservable(this.data), this.pageQuery, this.destroyRef);
 
-    // private searchResult$ = this.searchService.createSearch<ViewEpisodesQuery>(
-    //     this.searchControl.valueChanges,
-    //     this.query
-    // ).pipe(
-    //     shareReplay(1),
-    // );
-
-    // searchTerm$ = this.searchResult$.pipe(
-    //     map(result => result.searchTerm)
-    // );
-
-    // searchError$ = this.searchResult$.pipe(
-    //     map(result => result.error)
-    // );
-
-    // public collectionData$ = this.searchResult$.pipe(
-    //     filter((state) => !state.loading),
-    //     map((state) => state.data),
-    //     shareReplay(1),
-    // );
-
-    // public loading$ = this.searchResult$.pipe(
-    //     map((state) => state.loading),
-    //     distinctUntilChanged(),
-    //     startWith(false)
-    // );
-
-    // collection$ = this.collectionData$.pipe(
-    //     filter(data => !!data),
-    //     map(data => data?.episodes || []),
-    // );
-
-    // public pageResult = new PageResult(this.collection$, this.pageQuery, this.destroyRef);
-
-    // constructor(
-    //     private query: ViewEpisodesGQL,
-    //     private pageQuery: ViewEpisodesPageGQL,
-    //     private searchService: SearchService,
-    //     private destroyRef: DestroyRef,
-    // ) {}
+    constructor(
+        private pageQuery: ViewEpisodesPageGQL,
+        private destroyRef: DestroyRef,
+    ) {}
 }
