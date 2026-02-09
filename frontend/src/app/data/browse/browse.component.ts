@@ -39,7 +39,7 @@ export class BrowseComponent {
 
     public breadcrumbs: Breadcrumb[] = [
         { link: "/", label: "Lettercraft" },
-        { link: ".", label: "Data" },
+        { link: ".", label: "Browse" },
     ];
 
     public form = new FormGroup({
