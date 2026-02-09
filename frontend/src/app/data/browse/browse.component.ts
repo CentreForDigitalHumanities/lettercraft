@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SearchFocus } from 'generated/graphql';
-import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
+import { map, startWith, Subject, shareReplay, filter, throttleTime, mergeWith, distinct, distinctUntilChanged, tap, asyncScheduler } from 'rxjs';
 import { SearchService } from '@services/search.service';
 import { BrowseListItem } from './search-item/browse-list-item.component';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
+import _ from 'underscore';
 
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
@@ -53,21 +54,24 @@ export class BrowseComponent {
         })
     });
 
+    public formSubmit$ = new Subject<void>();
+
+    public searchValue$ = this.form.valueChanges.pipe(
+        startWith(null),
+        mergeWith(this.formSubmit$),
+        throttleTime(500, asyncScheduler, {leading: true, trailing: true}),
+        map(() => this.form.getRawValue()),
+        distinctUntilChanged(_.isEqual),
+        shareReplay(1),
+    );
+
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService
     ) { }
 
-    public startSearch$ = new Subject<BrowseSearchQueryVariables>();
-
     public searchResult$ = this.searchService.createSearch(
-        this.startSearch$.pipe(
-            startWith({
-                searchTerm: "",
-                labelIds: [],
-                searchFocus: SearchFocus.Sources,
-            })
-        ),
+        this.searchValue$,
         this.searchQuery
     );
 
@@ -113,13 +117,6 @@ export class BrowseComponent {
 
     public changeTabs(newNavId: SearchFocus): void {
         this.form.controls.searchFocus.setValue(newNavId);
-        this.submitSearch();
-    }
-
-    public submitSearch(event?: Event): void {
-        event?.preventDefault();
-        const formValue = this.form.getRawValue();
-        this.startSearch$.next(formValue);
     }
 
     private transformSources(results: QueriedResults): BrowseListItem[] {
