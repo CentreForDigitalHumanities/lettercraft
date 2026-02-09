@@ -65,6 +65,8 @@ export class BrowseComponent {
         shareReplay(1),
     );
 
+    SearchFocus = SearchFocus;
+
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService

@@ -1,4 +1,5 @@
 @let counts = counts$ | async;
+@let results = searchResult$ | async;
 @let items = itemsByType$ | async;
 @let loading = searchLoading$ | async;
 
@@ -74,11 +75,23 @@
                                 </p>
                             </div>
                             } @else {
-                            <div class="list-group">
-                                @for (item of tabItems; track item.id) {
-                                <lc-browse-list-item [listItem]="item" />
+                                @switch (tab.type) {
+                                    @case (SearchFocus.Sources) {
+                                        @if (results?.data?.search?.sources; as sources) {
+                                            <lc-source-list [data]="sources" />
+                                        }
+                                    }
+                                    @case (SearchFocus.Episodes) {
+                                        episodes
+                                    }
+                                    @default {
+                                        <div class="list-group">
+                                            @for (item of tabItems; track item.id) {
+                                            <lc-browse-list-item [listItem]="item" />
+                                            }
+                                        </div>
+                                    }
                                 }
-                            </div>
                             } }
                         </div>
                     </ng-template>
