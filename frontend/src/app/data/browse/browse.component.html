@@ -7,7 +7,7 @@
 <div class="browse-container">
     <div class="search-section">
         <div class="container">
-            <form (submit)="formSubmit$.next()" class="search-form">
+            <form (submit)="$event.preventDefault(); formSubmit$.next()" class="search-form">
                 <div class="my-3">
                     <label class="form-label">Keywords</label>
                     <input type="text" [formControl]="form.controls.searchTerm"
