@@ -1,1 +1,11 @@
-<lc-case-studies-list/>
+@let data = data$ | async;
+
+<div class="row">
+    <div class="col-md-8"></div>
+    <aside class="col-md-4">
+        <h2>Case studies</h2>
+        @if (data?.caseStudies; as caseStudies) {
+            <lc-case-studies-list [data]="caseStudies"/>
+        }
+    </aside>
+</div>
