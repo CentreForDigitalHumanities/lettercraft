@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
@@ -17,15 +17,9 @@ type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
 export class CaseStudyViewComponent {
     dataIcons = dataIcons;
 
-    data$ = this.route.params.pipe(
-        map(params => params['id']),
-        switchMap(id => this.query.watch({id}).valueChanges),
-        map(result => result.data),
-    );
+    data = input.required<ViewCaseStudyQuery['caseStudy']>();
 
     constructor(
-        private query: ViewCaseStudyGQL,
-        private route: ActivatedRoute,
         private sanitizer: DomSanitizer,
     ) {
     }
@@ -34,20 +28,4 @@ export class CaseStudyViewComponent {
         return this.sanitizer.bypassSecurityTrustHtml(caseStudy.content);
     }
 
-    breadCrumbs(caseStudy: CaseStudy): Breadcrumb[] {
-        return [
-            {
-                'label': 'Lettercraft',
-                link: '/'
-            },
-            {
-                'label': 'Case studies',
-                link: '/case-studies',
-            },
-            {
-                'label': caseStudy.name,
-                link: '.',
-            }
-        ]
-    }
 }
