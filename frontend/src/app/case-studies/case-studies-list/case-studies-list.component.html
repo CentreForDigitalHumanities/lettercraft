@@ -6,13 +6,10 @@
             <div class="card-body">
                 <h3 class="col card-title h5">
                     <a [routerLink]="['/case-studies', item.id]"
-                        class="stretched-link"
+                        class="stretched-link link-underline link-underline-opacity-0"
                         [attr.aria-current]="active ? 'page' : 'false'">{{item.name}}</a>
                     <br>
                 </h3>
-                <p class="card-text mb-1" style="font-size: smaller; float: right">
-                    {{item.date | date:'shortDate'}}
-                </p>
                 <p class="card-text fw-light">{{authorNames(item)}}</p>
             </div>
         </div>
