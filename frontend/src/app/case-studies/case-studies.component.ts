@@ -56,10 +56,11 @@ export class CaseStudiesComponent {
     private makeBreadcrumbs(
         caseStudy: ViewCaseStudyQuery['caseStudy'] | undefined
     ): Breadcrumb[] {
+        const tail = caseStudy ? [ { label: caseStudy.name, link: '.' }] : [];
         return [
             { label: 'Lettercraft', link: '/' },
             { label: 'Case studies', link: '/case-studies' },
-            { label: caseStudy?.name || '...', link: '.' },
+            ...tail,
         ];
     }
 }

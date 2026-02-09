@@ -1,7 +1,7 @@
 @let caseStudy = data();
 
 @if (caseStudy) {
-    <h2>{{caseStudy.name}}</h2>
+    <h2 id="case-study-title" tabindex="-1">{{caseStudy.name}}</h2>
 
     <p style="float: right">
         {{caseStudy.date | date:'longDate'}}
@@ -16,21 +16,19 @@
     </p>
 
 
-    <div class="card bg-light" *ngIf="caseStudy.sources.length">
-        <div class="card-body">
-            <p class="card-text">
-                This is a case study based on
-                <span *ngFor="let source of caseStudy.sources; last as last">
-                    <a [routerLink]="['/data/sources', source.id]"
-                        class="icon-link ms-1">
-                        <lc-icon [icon]="dataIcons.source" />
-                        {{source.name}}
-                    </a>
-                    <span *ngIf="!last">, </span>
-                </span>
-            </p>
-        </div>
-    </div>
+    @if (caseStudy.sources.length) {
+        <p class="fst-italic">Browse in the database:
+            <span *ngFor="let source of caseStudy.sources; last as last"
+                class="fst-normal">
+                <a [routerLink]="['/data/sources', source.id]"
+                    class="icon-link ms-1">
+                    <lc-icon [icon]="dataIcons.source" />
+                    {{source.name}}
+                </a>
+                <span *ngIf="!last">, </span>
+            </span>
+        </p>
+    }
 
     <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
         class="mt-4 mx-auto font-serif lh-medium extra-header-spacing"

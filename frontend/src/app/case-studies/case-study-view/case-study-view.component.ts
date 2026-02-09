@@ -1,10 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { dataIcons } from '@shared/icons';
-import {  ViewCaseStudyGQL, ViewCaseStudyQuery } from 'generated/graphql';
-import { map, switchMap } from 'rxjs';
+import { ViewCaseStudyQuery } from 'generated/graphql';
 
 type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
 
@@ -14,18 +11,30 @@ type CaseStudy = NonNullable<ViewCaseStudyQuery['caseStudy']>;
     styleUrls: ['./case-study-view.component.scss'],
     standalone: false
 })
-export class CaseStudyViewComponent {
+export class CaseStudyViewComponent implements OnChanges {
     dataIcons = dataIcons;
 
     data = input.required<ViewCaseStudyQuery['caseStudy']>();
 
     constructor(
         private sanitizer: DomSanitizer,
-    ) {
+    ) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['data'] && changes['data'].previousValue &&
+            changes['data'].currentValue.id !== changes['data'].previousValue.id
+        ) {
+            this.focusOnTitle();
+        }
     }
 
     sanitizedContent(caseStudy: CaseStudy) {
         return this.sanitizer.bypassSecurityTrustHtml(caseStudy.content);
     }
 
+    private focusOnTitle() {
+        setTimeout(() => {
+            document.getElementById('case-study-title')?.focus();
+        });
+    }
 }
