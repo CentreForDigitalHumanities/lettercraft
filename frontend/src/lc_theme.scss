@@ -21,8 +21,8 @@ $display-font-family: fonts.$lc_serif;
 $navbar-light-active-color: v.$lc_jonquil;
 $navbar-dark-active-color: v.$lc_jonquil;
 
-$pagination-active-bg: v.$lc_royal_blue_lighter;
-$pagination-active-border-color: v.$lc_royal_blue_lighter;
+$pagination-active-bg: v.$lc_royal_blue;
+$pagination-active-border-color: v.$lc_royal_blue;
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import "../node_modules/bootstrap/scss/variables";
