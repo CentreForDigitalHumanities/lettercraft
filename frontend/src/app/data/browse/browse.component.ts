@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BrowseSearchGQL, BrowseSearchQuery, BrowseSearchQueryVariables, SearchFocus } from 'generated/graphql';
-import { map, startWith, Subject, shareReplay, filter } from 'rxjs';
+import { BrowseSearchGQL, BrowseSearchQuery, SearchFocus } from 'generated/graphql';
+import { map, startWith, shareReplay, filter, debounceTime } from 'rxjs';
 import { SearchService } from '@services/search.service';
 import { BrowseListItem } from './search-item/browse-list-item.component';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
@@ -58,10 +58,13 @@ export class BrowseComponent {
         private searchService: SearchService
     ) { }
 
-    public startSearch$ = new Subject<BrowseSearchQueryVariables>();
+    private debouncedSearch$ = this.form.valueChanges.pipe(
+        map(() => this.form.getRawValue()),
+        debounceTime(300) // Optional: add debounce to limit search frequency
+    );
 
     public searchResult$ = this.searchService.createSearch(
-        this.startSearch$.pipe(
+        this.debouncedSearch$.pipe(
             startWith({
                 searchTerm: "",
                 labelIds: [],
@@ -113,13 +116,6 @@ export class BrowseComponent {
 
     public changeTabs(newNavId: SearchFocus): void {
         this.form.controls.searchFocus.setValue(newNavId);
-        this.submitSearch();
-    }
-
-    public submitSearch(event?: Event): void {
-        event?.preventDefault();
-        const formValue = this.form.getRawValue();
-        this.startSearch$.next(formValue);
     }
 
     private transformSources(results: QueriedResults): BrowseListItem[] {

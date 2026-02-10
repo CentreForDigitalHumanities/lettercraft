@@ -7,10 +7,14 @@
 <div class="d-flex flex-column bg-light">
     <div class="search-section d-flex align-items-center justify-content-center bg-white shadow-sm p-4">
         <div class="container">
-            <form (submit)="submitSearch($event)" class="search-form">
-                <lc-search-bar
+            <form class="search-form my-0 mx-auto">
+                <input
+                    type="search"
+                    class="form-control p-2"
+                    name="search"
                     [formControl]="form.controls.searchTerm"
-                    [loading]="loading ?? false"
+                    placeholder="Search across all entities..."
+                    aria-label="Search"
                 />
                 <lc-browse-label-select
                     [formControl]="form.controls.labelIds"
