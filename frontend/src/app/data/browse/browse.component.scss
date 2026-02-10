@@ -1,84 +1,20 @@
 @use "../../../../src/lc_theme" as theme;
 
-.browse-container {
-    display: flex;
-    flex-direction: column;
-    background-color: theme.$gray-100;
-}
-
-.search-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 0;
-    padding: 2rem 1rem 1.5rem;
-    background-color: theme.$white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .search-form {
     max-width: 700px;
-    margin: 0 auto;
 }
 
-.results-section {
-    flex-grow: 1;
-    padding: 2rem 0;
-}
+.nav-link {
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
 
-.nav-tabs {
-    border-bottom: 2px solid #dee2e6;
-
-    .nav-link {
-        border: none;
-        border-bottom: 3px solid transparent;
-        color: theme.$gray-600;
-        font-weight: 500;
-        padding: 0.75rem 1.5rem;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-            border-bottom-color: theme.$gray-400;
-            color: theme.$gray-700;
-        }
-
-        &.active {
-            color: map-get(theme.$lc-colors, primary);
-            border-bottom-color: map-get(theme.$lc-colors, primary);
-            background-color: transparent;
-        }
-
-        .badge {
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-        }
-    }
-}
-
-.results-content {
-    padding: 1.5rem 0;
-}
-
-.no-results {
-    fa-icon {
-        opacity: 0.3;
+    &:hover {
+        border-bottom-color: theme.$gray-400;
+        color: theme.$gray-700;
     }
 
-    p {
-        font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .nav-tabs {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-
-        .nav-link {
-            padding: 0.75rem 1rem;
-            white-space: nowrap;
-        }
+    &.active {
+        color: map-get(theme.$lc-colors, primary);
+        border-bottom-color: map-get(theme.$lc-colors, primary);
     }
 }
