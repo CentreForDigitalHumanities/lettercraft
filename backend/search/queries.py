@@ -1,6 +1,6 @@
 from django_filters import FilterSet
 from graphene import ID, Enum, Int, List, NonNull, ObjectType, Field, String
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 
 from event.queries import EventQueries
 from letter.queries import LetterQueries
@@ -48,7 +48,7 @@ class SearchFocus(Enum):
     LOCATIONS = "LOCATIONS"
 
 
-class CoreQueries(ObjectType):
+class SearchQueries(ObjectType):
     search = Field(
         SearchResultsType,
         search_focus=SearchFocus(required=True),
@@ -68,10 +68,14 @@ class CoreQueries(ObjectType):
         Multiple label IDs are combined using OR logic.
         Labels and search term are combined using AND logic.
         """
+
         def apply_filter(queryset: QuerySet, filter_class: type[FilterSet]) -> QuerySet:
             """Apply search filter using the filter class if search_term or label_ids are provided."""
             if search_term or label_ids:
-                return filter_class(data={"search": search_term, "label_ids": label_ids}, queryset=queryset).qs
+                return filter_class(
+                    data={"search": search_term, "label_ids": label_ids},
+                    queryset=queryset,
+                ).qs
             return queryset
 
         source_qs = apply_filter(

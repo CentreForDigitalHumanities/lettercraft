@@ -10,7 +10,7 @@ from source.queries import SourceQueries
 from space.queries import SpaceQueries
 from user.queries import UserQueries
 from case_study.queries import CaseStudyQueries
-from core.queries import CoreQueries
+from search.queries import SearchQueries
 
 from source.mutations.UpdateSourceMutation import UpdateSourceMutation
 from event.mutations.UpdateEpisodeMutation import UpdateEpisodeMutation
@@ -40,6 +40,7 @@ from person.mutations.UpdatePersonReferenceMutation import UpdatePersonReference
 from person.mutations.DeletePersonReferenceMutation import DeletePersonReferenceMutation
 from space.mutations.CreateSpaceMutation import CreateSpaceMutation
 
+
 class Query(
     SourceQueries,
     PersonQueries,
@@ -48,7 +49,7 @@ class Query(
     EventQueries,
     UserQueries,
     CaseStudyQueries,
-    CoreQueries,
+    SearchQueries,
     ObjectType,
 ):
     pass
