@@ -1,25 +1,26 @@
-from graphene import List, NonNull, ResolveInfo, Boolean
+from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
 from core.types.EntityDescriptionType import EntityDescriptionType
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 from django_filters import FilterSet, CharFilter
 
 from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from user.permissions import can_edit_source, visible_sources
+from graphql_app.utils import search_filter
+
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
 
+    _search_fields = ['name', 'description', 'summary']
+
     def search_episodes(self, queryset: QuerySet[Episode], name: str, value: str) -> QuerySet[Episode]:
         """Filter episodes by name, description or summary."""
-        return queryset.filter(
-            Q(name__icontains=value)
-            | Q(description__icontains=value)
-            | Q(summary__icontains=value)
-        )
+        return queryset.filter(search_filter(value, self._search_fields))
+
+
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
     categories = List(NonNull(EpisodeCategoryType), required=True)
     agents = List(
