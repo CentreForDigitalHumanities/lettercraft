@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "source",
     "space",
     "user",
+    "download",
     "graphene_django",
     "graphql_app",
     "django_filters",
@@ -77,7 +78,9 @@ ROOT_URLCONF = 'lettercraft.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'user', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
