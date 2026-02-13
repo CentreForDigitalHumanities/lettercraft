@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
 import { BrowseComponent } from './browse.component';
 import { SearchService } from '@services/search.service';
 import { BrowseSearchGQL, BrowseSearchQuery, SearchFocus } from 'generated/graphql';
@@ -99,7 +99,7 @@ describe('BrowseComponent', () => {
     let fixture: ComponentFixture<BrowseComponent>;
     let mockSearchService: jasmine.SpyObj<SearchService>;
     let mockSearchQuery: jasmine.SpyObj<BrowseSearchGQL>;
-
+    let element: HTMLElement;
 
     beforeEach(async () => {
         mockSearchService = jasmine.createSpyObj('SearchService', ['createSearch']);
@@ -128,40 +128,45 @@ describe('BrowseComponent', () => {
         fixture = TestBed.createComponent(BrowseComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        element = fixture.debugElement.nativeElement as HTMLElement;
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
     });
 
-    describe('submitSearch', () => {
+    describe('search form', () => {
+        let form: HTMLElement;
+
+        beforeEach(() => {
+            form = element.getElementsByClassName('search-form').item(0) as HTMLElement;
+        });
+
         it('should prevent default event and emit search', () => {
-            const mockEvent = jasmine.createSpyObj('Event', ['preventDefault']);
-            spyOn(component.startSearch$, 'next');
+            const event = new Event('submit');
+            spyOn(event, 'preventDefault');
 
-            component.form.controls.searchTerm.setValue('test query');
-            component.form.controls.labelIds.setValue(['label1']);
-            component.form.controls.searchFocus.setValue(SearchFocus.Episodes);
+            spyOn(component.formSubmit$, 'next');
 
-            component.submitSearch(mockEvent);
+            form.dispatchEvent(event);
 
-            expect(mockEvent.preventDefault).toHaveBeenCalled();
-            expect(component.startSearch$.next).toHaveBeenCalledWith({
-                searchTerm: 'test query',
-                labelIds: ['label1'],
-                searchFocus: SearchFocus.Episodes
-            });
+            expect(event.preventDefault).toHaveBeenCalled();
+            expect(component.formSubmit$.next).toHaveBeenCalled();
+        });
+
+        it('should bind to form values', () => () => {
+            const input = form.getElementsByTagName('input').item(0) as HTMLInputElement;
+            input.value = 'test';
+            input.dispatchEvent(new Event('input'));
+
+            expect(component.form.value.searchTerm).toBe('test');
         });
     });
 
     describe('changeTabs', () => {
-        it('should update selected type and submit search', () => {
-            spyOn(component, 'submitSearch');
-
+        it('should update selected type', () => {
             component.changeTabs(SearchFocus.Agents);
-
             expect(component.form.controls.searchFocus.value).toBe(SearchFocus.Agents);
-            expect(component.submitSearch).toHaveBeenCalled();
         });
     });
 

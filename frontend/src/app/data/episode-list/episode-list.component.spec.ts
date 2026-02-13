@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EpisodeListComponent } from './episode-list.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
+import { PaginatorComponent } from '../shared/paginator/paginator.component';
 
 describe('EpisodeListComponent', () => {
     let component: EpisodeListComponent;
@@ -9,7 +10,7 @@ describe('EpisodeListComponent', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [EpisodeListComponent],
+            declarations: [EpisodeListComponent, PaginatorComponent],
             imports: [SharedTestingModule],
         });
         fixture = TestBed.createComponent(EpisodeListComponent);
