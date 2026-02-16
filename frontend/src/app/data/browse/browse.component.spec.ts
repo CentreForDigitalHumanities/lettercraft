@@ -7,6 +7,7 @@ import { dataIcons } from '@shared/icons';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { DataModule } from '../data.module';
+import { EntityListItem } from './search-item/browse-list-item.component';
 
 const mockSearchData: BrowseSearchQuery = {
     search: {
@@ -15,7 +16,8 @@ const mockSearchData: BrowseSearchQuery = {
                 id: '1',
                 name: 'Test Source',
                 descriptionText: 'Test description',
-                reference: 'REF-1'
+                reference: 'REF-1',
+                episodes: [{ id: '2' }],
             }
         ],
         episodes: [
@@ -33,14 +35,20 @@ const mockSearchData: BrowseSearchQuery = {
                 categories: [{
                     id: 'cat1',
                     name: 'Category1'
-                }]
+                }],
+                agents: [{ id: 'ea1', agent: { id: '3', name: 'Agent 1', isGroup: false, identified: true } }],
+                letters: [{ id: 'el1', letter: { id: '4', name: 'Letter 1' } }],
+                gifts: [{ id: 'eg1', gift: { id: '5', name: 'Gift 1' } }],
+                spaces: [{ id: 'es1', space: { id: '6', name: 'Location 1', hasIdentifiableFeatures: false } }],
             }
         ],
         agents: [
             {
                 id: '3',
                 name: 'Test Agent',
+                description: 'Agent description',
                 isGroup: false,
+                identified: true,
                 episodes: [{ id: '2' }],
                 source: {
                     id: '1',
@@ -77,6 +85,7 @@ const mockSearchData: BrowseSearchQuery = {
                 id: '6',
                 name: 'Test Location',
                 description: 'Location description',
+                hasIdentifiableFeatures: false,
                 episodes: [{ id: '2' }],
                 source: {
                     id: '1',
@@ -134,37 +143,6 @@ describe('BrowseComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    describe('submitSearch', () => {
-        it('should prevent default event and emit search', () => {
-            const mockEvent = jasmine.createSpyObj('Event', ['preventDefault']);
-            spyOn(component.startSearch$, 'next');
-
-            component.form.controls.searchTerm.setValue('test query');
-            component.form.controls.labelIds.setValue(['label1']);
-            component.form.controls.searchFocus.setValue(SearchFocus.Episodes);
-
-            component.submitSearch(mockEvent);
-
-            expect(mockEvent.preventDefault).toHaveBeenCalled();
-            expect(component.startSearch$.next).toHaveBeenCalledWith({
-                searchTerm: 'test query',
-                labelIds: ['label1'],
-                searchFocus: SearchFocus.Episodes
-            });
-        });
-    });
-
-    describe('changeTabs', () => {
-        it('should update selected type and submit search', () => {
-            spyOn(component, 'submitSearch');
-
-            component.changeTabs(SearchFocus.Agents);
-
-            expect(component.form.controls.searchFocus.value).toBe(SearchFocus.Agents);
-            expect(component.submitSearch).toHaveBeenCalled();
-        });
-    });
-
     describe('searchResult$ observable', () => {
         it('should call createSearch with correct parameters', () => {
             expect(mockSearchService.createSearch).toHaveBeenCalledWith(
@@ -197,9 +175,10 @@ describe('BrowseComponent', () => {
                     id: '1',
                     name: 'Test Source',
                     description: 'Test description',
-                    subtext: 'REF-1',
+                    type: 'source',
                     icon: dataIcons.source,
-                    link: 'sources/1'
+                    link: 'sources/1',
+                    numOfEpisodes: 1,
                 });
                 done();
             });
@@ -213,10 +192,39 @@ describe('BrowseComponent', () => {
                     id: '2',
                     name: 'Test Episode',
                     description: 'Test summary',
-                    subtext: 'REF-1, book 1, chapter 2, page 10',
+                    type: 'episode',
                     icon: dataIcons.episode,
                     link: 'episodes/2',
-                    labels: ['Category1']
+                    labels: ['Category1'],
+                    agents: [{
+                        id: '3',
+                        name: 'Agent 1',
+                        icon: dataIcons.personIdentified,
+                        link: 'agents/3'
+                    }],
+                    letters: [{
+                        id: '4',
+                        name: 'Letter 1',
+                        icon: dataIcons.letter,
+                        link: 'items/4'
+                    }],
+                    gifts: [{
+                        id: '5',
+                        name: 'Gift 1',
+                        icon: dataIcons.gift,
+                        link: 'items/5'
+                    }],
+                    spaces: [{
+                        id: '6',
+                        name: 'Location 1',
+                        icon: dataIcons.location,
+                        link: 'locations/6'
+                    }],
+                    sourceLocation: {
+                        book: "1",
+                        chapter: "2",
+                        page: "10"
+                    }
                 });
                 done();
             });
@@ -229,10 +237,15 @@ describe('BrowseComponent', () => {
                 expect(agents[0]).toEqual({
                     id: '3',
                     name: 'Test Agent',
-                    description: 'Occurs in 1 episode in REF-1',
-                    subtext: 'Individual',
-                    icon: dataIcons.person,
-                    link: 'agents/3'
+                    description: 'Agent description',
+                    type: 'entity',
+                    icon: dataIcons.personIdentified,
+                    link: 'agents/3',
+                    occurrence: {
+                        numOfEpisodes: 1,
+                        sourceName: 'REF-1',
+                        sourceLink: 'sources/1'
+                    }
                 });
                 done();
             });
@@ -245,16 +258,26 @@ describe('BrowseComponent', () => {
                 expect(allItems[0]).toEqual({
                     id: '4',
                     name: 'Test Letter',
-                    description: 'Occurs in 1 episodes in REF-1',
-                    subtext: 'Letter',
+                    description: 'Letter description',
+                    type: 'entity',
+                    occurrence: {
+                        numOfEpisodes: 1,
+                        sourceName: 'REF-1',
+                        sourceLink: 'sources/1'
+                    },
                     icon: dataIcons.letter,
                     link: 'items/4'
                 });
                 expect(allItems[1]).toEqual({
                     id: '5',
                     name: 'Test Gift',
-                    description: 'Occurs in 1 episodes in REF-1',
-                    subtext: 'Gift',
+                    description: 'Gift description',
+                    type: 'entity',
+                    occurrence: {
+                        numOfEpisodes: 1,
+                        sourceName: 'REF-1',
+                        sourceLink: 'sources/1'
+                    },
                     icon: dataIcons.gift,
                     link: 'items/5'
                 });
@@ -269,8 +292,13 @@ describe('BrowseComponent', () => {
                 expect(locations[0]).toEqual({
                     id: '6',
                     name: 'Test Location',
-                    description: 'Occurs in 1 episode in REF-1',
-                    subtext: 'Location description',
+                    description: 'Location description',
+                    type: 'entity',
+                    occurrence: {
+                        numOfEpisodes: 1,
+                        sourceName: 'REF-1',
+                        sourceLink: 'sources/1'
+                    },
                     icon: dataIcons.location,
                     link: 'locations/6'
                 });
@@ -279,15 +307,17 @@ describe('BrowseComponent', () => {
         });
     });
 
-    describe('occurrence data formatting', () => {
-        it('should use plural "episodes" for multiple episodes', (done) => {
+    describe('occurrence data', () => {
+        it('should create occurrence data for entities with multiple episodes', (done) => {
             const multiEpisodeData: BrowseSearchQuery = {
                 search: {
                     ...mockSearchData.search!,
                     agents: [{
                         id: '3',
                         name: 'Test Agent',
+                        description: 'Agent description',
                         isGroup: false,
+                        identified: true,
                         episodes: [{ id: '1' }, { id: '2' }],
                         source: { id: '1', reference: 'REF-1' }
                     }]
@@ -310,16 +340,20 @@ describe('BrowseComponent', () => {
             component = fixture.componentInstance;
 
             component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)!;
-                expect(agents[0].description).toBe('Occurs in 2 episodes in REF-1');
+                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
+                expect(agents[0].occurrence.numOfEpisodes).toBe(2);
+                expect(agents[0].occurrence.sourceName).toBe('REF-1');
+                expect(agents[0].occurrence.sourceLink).toBe('sources/1');
                 done();
             });
         });
 
-        it('should use singular "episode" for one episode', (done) => {
+        it('should create occurrence data for entities with one episode', (done) => {
             component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)!;
-                expect(agents[0].description).toBe('Occurs in 1 episode in REF-1');
+                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
+                expect(agents[0].occurrence.numOfEpisodes).toBe(1);
+                expect(agents[0].occurrence.sourceName).toBe('REF-1');
+                expect(agents[0].occurrence.sourceLink).toBe('sources/1');
                 done();
             });
         });
@@ -333,9 +367,11 @@ describe('BrowseComponent', () => {
                     agents: [{
                         id: '3',
                         name: 'Test Group',
+                        description: 'Group description',
                         isGroup: true,
+                        identified: false,
                         episodes: [{ id: '2' }],
-                        source: { id: '1', reference: 'REF-1' }
+                        source: { id: '1', reference: 'REF-1' },
                     }]
                 }
             };
@@ -353,11 +389,14 @@ describe('BrowseComponent', () => {
 
             fixture = TestBed.createComponent(BrowseComponent);
             component = fixture.componentInstance;
-
             component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)!;
+                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
                 expect(agents[0].icon).toBe(dataIcons.group);
-                expect(agents[0].subtext).toBe('Group');
+                expect(agents[0].occurrence).toEqual({
+                    numOfEpisodes: 1,
+                    sourceName: 'REF-1',
+                    sourceLink: 'sources/1'
+                });
                 done();
             });
         });

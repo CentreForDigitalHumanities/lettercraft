@@ -130,15 +130,11 @@ export class BrowseComponent {
     }
 
     private transformEpisodes(results: QueriedResults): BrowseListItem[] {
-        return results.episodes.map(episode => {
-            const subText = [episode.source.reference];
-
-            return {
+        return results.episodes.map(episode => ({
                 id: episode.id,
                 name: episode.name,
                 type: 'episode',
                 description: episode.summary,
-                subtext: subText.join(', '),
                 icon: dataIcons.episode,
                 link: `episodes/${episode.id}`,
                 labels: episode.categories?.map(cat => cat.name) ?? [],
@@ -171,8 +167,7 @@ export class BrowseComponent {
                     chapter: episode.chapter,
                     page: episode.page
                 },
-            };
-        });
+        }));
     }
 
     private transformAgents(results: QueriedResults): BrowseListItem[] {
