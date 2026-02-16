@@ -1,6 +1,6 @@
 from typing import Type, Optional
 from graphene import Field, Int, List, NonNull, ResolveInfo, Boolean
-from django.db.models import QuerySet, Model, Q
+from django.db.models import QuerySet, Model
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, CharFilter, BooleanFilter
 
@@ -24,6 +24,7 @@ from user.permissions import can_edit_source, visible_condition
 from graphql_app.filters import CharInFilter
 
 from source.types.SourceImageType import SourceImageType
+from graphql_app.utils import search_filter
 from source.utils import source_contributor_ids
 
 class SourceFilter(FilterSet):
@@ -31,14 +32,15 @@ class SourceFilter(FilterSet):
     label_ids = CharInFilter(method="filter_by_labels")
     is_public = BooleanFilter(field_name="is_public")
 
+    _search_fields = ['name', 'medieval_title', 'reference', 'description_text']
+
+    class Meta:
+        model = Source
+        fields = ['is_public']
+
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
-        """Filter sources by by searching through the name, reference, or description."""
-        return queryset.filter(
-            Q(name__icontains=value)
-            | Q(medieval_title__icontains=value)
-            | Q(reference__icontains=value)
-            | Q(description_text__icontains=value)
-        )
+        """Filter sources by searching through the name, medieval title, reference, or description."""
+        return queryset.filter(search_filter(value, self._search_fields))
 
     def filter_by_labels(self, queryset: QuerySet[Source], name: str, value: list[str]) -> QuerySet[Source]:
         """Filter sources by categories (labels)."""
