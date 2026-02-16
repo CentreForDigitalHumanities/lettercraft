@@ -131,42 +131,42 @@ export class BrowseComponent {
 
     private transformEpisodes(results: QueriedResults): BrowseListItem[] {
         return results.episodes.map(episode => ({
-                id: episode.id,
-                name: episode.name,
-                type: 'episode',
-                description: episode.summary,
-                icon: dataIcons.episode,
-                link: `episodes/${episode.id}`,
-                labels: episode.categories?.map(cat => cat.name) ?? [],
-                agents: episode.agents.map(({ agent }) => ({
-                    id: agent.id,
-                    name: agent.name,
-                    icon: agentIcon(agent),
-                    link: `agents/${agent.id}`
-                })),
-                letters: episode.letters.map(({ letter }) => ({
-                    id: letter.id,
-                    name: letter.name,
-                    icon: dataIcons.letter,
-                    link: `items/${letter.id}`
-                })),
-                gifts: episode.gifts.map(({ gift }) => ({
-                    id: gift.id,
-                    name: gift.name,
-                    icon: dataIcons.gift,
-                    link: `items/${gift.id}`
-                })),
-                spaces: episode.spaces.map(({ space }) => ({
-                    id: space.id,
-                    name: space.name,
-                    icon: locationIcon(space),
-                    link: `locations/${space.id}`
-                })),
-                sourceLocation: {
-                    book: episode.book,
-                    chapter: episode.chapter,
-                    page: episode.page
-                },
+            id: episode.id,
+            name: episode.name,
+            type: 'episode',
+            description: episode.summary,
+            icon: dataIcons.episode,
+            link: `episodes/${episode.id}`,
+            labels: episode.categories?.map(cat => cat.name) ?? [],
+            agents: episode.agents.map(({ agent }) => ({
+                id: agent.id,
+                name: agent.name,
+                icon: agentIcon(agent),
+                link: `agents/${agent.id}`
+            })),
+            letters: episode.letters.map(({ letter }) => ({
+                id: letter.id,
+                name: letter.name,
+                icon: dataIcons.letter,
+                link: `items/${letter.id}`
+            })),
+            gifts: episode.gifts.map(({ gift }) => ({
+                id: gift.id,
+                name: gift.name,
+                icon: dataIcons.gift,
+                link: `items/${gift.id}`
+            })),
+            spaces: episode.spaces.map(({ space }) => ({
+                id: space.id,
+                name: space.name,
+                icon: locationIcon(space),
+                link: `locations/${space.id}`
+            })),
+            sourceLocation: {
+                book: episode.book,
+                chapter: episode.chapter,
+                page: episode.page
+            },
         }));
     }
 
