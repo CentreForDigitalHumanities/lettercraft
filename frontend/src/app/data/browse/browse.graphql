@@ -11,11 +11,17 @@ query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [
             name
             descriptionText
             reference
+            episodes {
+                id
+            }
         }
         episodes {
             id
             name
             summary
+            book
+            chapter
+            page
             source {
                 id
                 reference
@@ -24,14 +30,44 @@ query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [
                 id
                 name
             }
-            book
-            chapter
-            page
+            agents {
+                id
+                agent {
+                    id
+                    name
+                    isGroup
+                    identified
+                }
+            }
+            gifts {
+                id
+                gift {
+                    id
+                    name
+                }
+            }
+            letters {
+                id
+                letter {
+                    id
+                    name
+                }
+            }
+            spaces {
+                id
+                space {
+                    id
+                    name
+                    hasIdentifiableFeatures
+                }
+            }
         }
         agents {
             id
             name
+            description
             isGroup
+            identified
             episodes {
                 id
             }
@@ -68,6 +104,7 @@ query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [
             id
             name
             description
+            hasIdentifiableFeatures
             episodes {
                 id
             }

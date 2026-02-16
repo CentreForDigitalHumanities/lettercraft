@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BrowseSearchGQL, BrowseSearchQuery, SearchFocus } from 'generated/graphql';
+import { BrowseSearchGQL, BrowseSearchQuery, EpisodeType, SearchFocus, SourceType } from 'generated/graphql';
 import { map, startWith, shareReplay, filter, debounceTime } from 'rxjs';
 import { SearchService } from '@services/search.service';
-import { BrowseListItem } from './search-item/browse-list-item.component';
+import { BrowseListItem, EntityListItem } from './search-item/browse-list-item.component';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
+import { agentIcon, locationIcon } from '@shared/icons-utils';
 
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
@@ -60,7 +61,7 @@ export class BrowseComponent {
 
     private debouncedSearch$ = this.form.valueChanges.pipe(
         map(() => this.form.getRawValue()),
-        debounceTime(300) // Optional: add debounce to limit search frequency
+        debounceTime(300)
     );
 
     public searchResult$ = this.searchService.createSearch(
@@ -82,7 +83,6 @@ export class BrowseComponent {
         map(result => result.loading)
     );
 
-    // Keep counts stable with shareReplay
     public counts$ = this.searchResult$.pipe(
         filter(results => !!results.data?.search),
         map(results => {
@@ -98,7 +98,6 @@ export class BrowseComponent {
         shareReplay(1)
     );
 
-    // Items by type
     public itemsByType$ = this.searchResult$.pipe(
         filter(results => !!results.data?.search),
         map(results => {
@@ -122,33 +121,56 @@ export class BrowseComponent {
         return results.sources.map(source => ({
             id: source.id,
             name: source.name,
+            type: 'source',
             description: source.descriptionText,
-            subtext: source.reference,
+            numOfEpisodes: source.episodes.length,
             icon: dataIcons.source,
-            link: `sources/${source.id}`
+            link: `sources/${source.id}`,
         }));
     }
 
     private transformEpisodes(results: QueriedResults): BrowseListItem[] {
         return results.episodes.map(episode => {
             const subText = [episode.source.reference];
-            if (episode.book) {
-                subText.push(`book ${episode.book}`);
-            }
-            if (episode.chapter) {
-                subText.push(`chapter ${episode.chapter}`);
-            }
-            if (episode.page) {
-                subText.push(`page ${episode.page}`);
-            }
+
             return {
                 id: episode.id,
                 name: episode.name,
+                type: 'episode',
                 description: episode.summary,
                 subtext: subText.join(', '),
                 icon: dataIcons.episode,
                 link: `episodes/${episode.id}`,
-                labels: episode.categories?.map(cat => cat.name) ?? []
+                labels: episode.categories?.map(cat => cat.name) ?? [],
+                agents: episode.agents.map(({ agent }) => ({
+                    id: agent.id,
+                    name: agent.name,
+                    icon: agentIcon(agent),
+                    link: `agents/${agent.id}`
+                })),
+                letters: episode.letters.map(({ letter }) => ({
+                    id: letter.id,
+                    name: letter.name,
+                    icon: dataIcons.letter,
+                    link: `items/${letter.id}`
+                })),
+                gifts: episode.gifts.map(({ gift }) => ({
+                    id: gift.id,
+                    name: gift.name,
+                    icon: dataIcons.gift,
+                    link: `items/${gift.id}`
+                })),
+                spaces: episode.spaces.map(({ space }) => ({
+                    id: space.id,
+                    name: space.name,
+                    icon: locationIcon(space),
+                    link: `locations/${space.id}`
+                })),
+                sourceLocation: {
+                    book: episode.book,
+                    chapter: episode.chapter,
+                    page: episode.page
+                },
             };
         });
     }
@@ -157,10 +179,11 @@ export class BrowseComponent {
         return results.agents.map(agent => ({
             id: agent.id,
             name: agent.name,
-            description: this.occurrenceData(agent),
-            subtext: agent.isGroup ? 'Group' : 'Individual',
-            icon: agent.isGroup ? dataIcons.group : dataIcons.person,
-            link: `agents/${agent.id}`
+            type: 'entity',
+            description: agent.description,
+            icon: agentIcon(agent),
+            link: `agents/${agent.id}`,
+            occurrence: this.occurrenceData(agent),
         }));
     }
 
@@ -168,19 +191,21 @@ export class BrowseComponent {
         const letterItems: BrowseListItem[] = results.letters.map(letter => ({
             id: letter.id,
             name: letter.name,
-            description: 'Occurs in ' + letter.episodes.length + ' episodes in ' + letter.source.reference,
-            subtext: 'Letter',
+            type: 'entity',
+            description: letter.description,
             icon: dataIcons.letter,
-            link: `items/${letter.id}`
+            link: `items/${letter.id}`,
+            occurrence: this.occurrenceData(letter),
         }));
 
         const giftItems: BrowseListItem[] = results.gifts.map(gift => ({
             id: gift.id,
             name: gift.name,
-            description: 'Occurs in ' + gift.episodes.length + ' episodes in ' + gift.source.reference,
-            subtext: 'Gift',
+            type: 'entity',
+            description: gift.description,
             icon: dataIcons.gift,
-            link: `items/${gift.id}`
+            link: `items/${gift.id}`,
+            occurrence: this.occurrenceData(gift)
         }));
 
         return letterItems.concat(giftItems);
@@ -190,14 +215,19 @@ export class BrowseComponent {
         return results.locations.map(location => ({
             id: location.id,
             name: location.name,
-            description: this.occurrenceData(location),
-            subtext: location.description,
-            icon: dataIcons.location,
-            link: `locations/${location.id}`
+            type: 'entity',
+            description: location.description,
+            icon: locationIcon(location),
+            link: `locations/${location.id}`,
+            occurrence: this.occurrenceData(location)
         }));
     }
 
-    private occurrenceData(result: { episodes: unknown[]; source: { reference: string; }; }): string {
-        return `Occurs in ${result.episodes.length} episode${result.episodes.length !== 1 ? 's' : ''} in ${result.source.reference}`;
+    private occurrenceData(result: { episodes: Pick<EpisodeType, 'id'>[]; source: Pick<SourceType, 'reference' | 'id'>; }): EntityListItem['occurrence'] {
+        return {
+            numOfEpisodes: result.episodes.length,
+            sourceName: result.source.reference,
+            sourceLink: `sources/${result.source.id}`
+        };
     }
 }
