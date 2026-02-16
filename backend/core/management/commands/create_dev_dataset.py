@@ -245,6 +245,7 @@ class Command(BaseCommand):
 
         agent_description = AgentDescription.objects.create(
             name=name,
+            description=fake.text(),
             source=source,
             is_group=is_group,
         )
@@ -297,6 +298,7 @@ class Command(BaseCommand):
         letter_description = LetterDescription.objects.create(
             source=source,
             name=f"Letter about {subject}",
+            description=fake.text(),
         )
         letter_description.categories.set(categories)
 
