@@ -3,7 +3,7 @@ import { dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewSourceEpisodesPageQuery } from 'generated/graphql';
 
-type EpisodeWithEntities = NonNullable<ViewSourceEpisodesPageQuery>['episodes'][number];
+type Episode = NonNullable<ViewSourceEpisodesPageQuery>['episodes'][number];
 
 @Component({
     selector: 'lc-episode-preview',
@@ -12,13 +12,13 @@ type EpisodeWithEntities = NonNullable<ViewSourceEpisodesPageQuery>['episodes'][
     standalone: false
 })
 export class EpisodePreviewComponent {
-    @Input({ required: true }) episode!: EpisodeWithEntities;
+    @Input({required: true}) episode!: Episode;
 
     dataIcons = dataIcons;
     agentIcon = agentIcon;
     locationIcon = locationIcon;
 
-    hasSourceLocation(episode: EpisodeWithEntities): boolean {
+    hasSourceLocation(episode: Episode): boolean {
         return !!(episode.book || episode.chapter || episode.page);
     }
 }

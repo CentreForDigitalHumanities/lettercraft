@@ -7,13 +7,17 @@
 <div class="d-flex flex-column bg-light">
     <div class="search-section d-flex align-items-center justify-content-center bg-white shadow-sm p-4">
         <div class="container">
-            <form class="search-form my-0 mx-auto">
+            <form
+                class="search-form my-0 mx-auto"
+                (submit)="$event.preventDefault(); formSubmit$.next()"
+            >
+                <label class="form-label">Keywords</label>
                 <input
                     type="search"
                     class="form-control p-2"
                     name="search"
                     [formControl]="form.controls.searchTerm"
-                    placeholder="Search across all entities..."
+                    placeholder="Search for keywords..."
                     aria-label="Search"
                 />
                 <lc-browse-label-select

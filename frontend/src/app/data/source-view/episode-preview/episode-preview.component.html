@@ -1,13 +1,12 @@
-<div class="card mb-4">
-    <div class="card-header position-relative">
-        <a
-            class="icon-link stretched-link mb-1"
+<section class="card mb-4">
+    <h3 class="card-header position-relative h5 py-3">
+        <a class="stretched-link text-decoration-none"
             [routerLink]="['/data/episodes', episode.id]"
         >
             <lc-icon [icon]="dataIcons.episode" />
             {{ episode.name }}
         </a>
-    </div>
+    </h3>
     <div class="card-body">
         <p class="block">
             <span *ngIf="episode.summary; else noSummary">
@@ -22,7 +21,7 @@
         <ul class="block inline-list no-delimiter">
             @for (category of episode.categories; track category.id) {
             <li class="inline-list-item">
-                <span class="badge rounded-pill text-bg-secondary">
+                <span class="badge rounded-pill text-bg-burntorange">
                     {{ category.name }}
                 </span>
             </li>
@@ -128,4 +127,4 @@
         </small>
     </div>
     }
-</div>
+</section>

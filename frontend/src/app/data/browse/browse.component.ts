@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { actionIcons, dataIcons, statusIcons } from '@shared/icons';
-import { FormControl, FormGroup } from '@angular/forms';
-import { BrowseSearchGQL, BrowseSearchQuery, EpisodeType, SearchFocus, SourceType } from 'generated/graphql';
-import { map, startWith, shareReplay, filter, debounceTime } from 'rxjs';
-import { SearchService } from '@services/search.service';
-import { BrowseListItem, EntityListItem } from './search-item/browse-list-item.component';
-import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { agentIcon, locationIcon } from '@shared/icons-utils';
+import { Component } from "@angular/core";
+import { dataIcons, actionIcons, statusIcons } from "@shared/icons";
+import { FormGroup, FormControl } from "@angular/forms";
+import { BrowseSearchQuery, SearchFocus, BrowseSearchGQL, EpisodeType, SourceType } from "generated/graphql";
+import { Subject, startWith, mergeWith, throttleTime, asyncScheduler, map, distinctUntilChanged, shareReplay, filter } from "rxjs";
+import { SearchService } from "@services/search.service";
+import { BrowseListItem, EntityListItem } from "./search-item/browse-list-item.component";
+import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
+import { agentIcon, locationIcon } from "@shared/icons-utils";
+import _ from "underscore";
 
 
 type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
@@ -39,7 +40,7 @@ export class BrowseComponent {
 
     public breadcrumbs: Breadcrumb[] = [
         { link: "/", label: "Lettercraft" },
-        { link: ".", label: "Data" },
+        { link: ".", label: "Browse" },
     ];
 
     public form = new FormGroup({
@@ -54,24 +55,24 @@ export class BrowseComponent {
         })
     });
 
+    public formSubmit$ = new Subject<void>();
+
+    public searchValue$ = this.form.valueChanges.pipe(
+        startWith(null),
+        mergeWith(this.formSubmit$),
+        throttleTime(500, asyncScheduler, {leading: true, trailing: true}),
+        map(() => this.form.getRawValue()),
+        distinctUntilChanged(_.isEqual),
+        shareReplay(1),
+    );
+
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService
     ) { }
 
-    private debouncedSearch$ = this.form.valueChanges.pipe(
-        map(() => this.form.getRawValue()),
-        debounceTime(300)
-    );
-
     public searchResult$ = this.searchService.createSearch(
-        this.debouncedSearch$.pipe(
-            startWith({
-                searchTerm: "",
-                labelIds: [],
-                searchFocus: SearchFocus.Sources,
-            })
-        ),
+        this.searchValue$,
         this.searchQuery
     );
 
