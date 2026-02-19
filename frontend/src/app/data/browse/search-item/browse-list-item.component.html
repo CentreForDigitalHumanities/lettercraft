@@ -1,11 +1,11 @@
 @let item = listItem();
-<div class="card mb-4">
-    <div class="card-header position-relative">
-        <a class="icon-link stretched-link mb-1" [routerLink]="[item.link]">
+<section class="card mb-4">
+    <h3 class="card-header position-relative h5 py-3">
+        <a class="icon-link stretched-link text-decoration-none" [routerLink]="[item.link]">
             <lc-icon [icon]="item.icon" />
             {{ item.name }}
         </a>
-    </div>
+    </h3>
     <div class="card-body">
         <p class="block">
             @if (item.description) {
@@ -19,7 +19,7 @@
         <ul class="block inline-list no-delimiter">
             @for (label of item.labels; track label) {
             <li class="inline-list-item">
-                <span class="badge rounded-pill text-bg-secondary">
+                <span class="badge rounded-pill text-bg-burntorange">
                     {{ label }}
                 </span>
             </li>
@@ -142,4 +142,4 @@
         </small>
     </div>
     }
-</div>
+</section>
