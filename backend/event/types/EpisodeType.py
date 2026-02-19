@@ -8,14 +8,12 @@ from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from graphql_app.filters import CharInFilter
-from graphql_app.utils import search_filter
+from graphql_app.utils import search_filter, CharInFilter
 
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
     label_ids = CharInFilter(method="filter_by_labels")
-
 
     _search_fields = ['name', 'description', 'summary']
 

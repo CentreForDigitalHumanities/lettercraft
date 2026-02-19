@@ -21,10 +21,9 @@ from space.types.SpaceDescriptionType import SpaceDescriptionType
 from user.models import User
 from user.types.UserType import UserType
 from user.permissions import can_edit_source, visible_condition
-from graphql_app.filters import CharInFilter
 
 from source.types.SourceImageType import SourceImageType
-from graphql_app.utils import search_filter
+from graphql_app.utils import CharInFilter, search_filter
 from source.utils import source_contributor_ids
 
 class SourceFilter(FilterSet):

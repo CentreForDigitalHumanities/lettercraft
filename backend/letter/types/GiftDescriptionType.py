@@ -1,10 +1,10 @@
 from graphene import List, NonNull, ResolveInfo
 from graphene_django import DjangoObjectType
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet
 from django_filters import CharFilter, FilterSet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
-from graphql_app.filters import CharInFilter
+from graphql_app.utils import CharInFilter, search_filter
 from letter.models import GiftCategory, GiftDescription
 from letter.types.GiftCategoryType import GiftCategoryType
 from event.types.EpisodeGiftType import EpisodeGiftType
@@ -15,13 +15,13 @@ class GiftDescriptionFilter(FilterSet):
     search = CharFilter(method="search_gift_descriptions")
     label_ids = CharInFilter(method="filter_by_labels")
 
+    _search_fields = ['name', 'description']
+
     def search_gift_descriptions(
         self, queryset: QuerySet[GiftDescription], name: str, value: str
     ) -> QuerySet[GiftDescription]:
         """Filter gift descriptions by name or description."""
-        return queryset.filter(
-            Q(name__icontains=value) | Q(description__icontains=value)
-        )
+        return queryset.filter(search_filter(value, self._search_fields))
 
     def filter_by_labels(
         self, queryset: QuerySet[GiftDescription], name: str, value: list[str]
