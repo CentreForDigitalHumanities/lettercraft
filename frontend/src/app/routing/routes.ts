@@ -33,6 +33,7 @@ import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case
 import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 import { ContributorComponent } from '../contributors/contributor/contributor.component';
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
+import { CaseStudiesComponent } from '../case-studies/case-studies.component';
 
 
 const routes: Routes = [
@@ -76,17 +77,18 @@ const routes: Routes = [
     },
     {
         path: 'case-studies',
+        title: pageTitle('Case studies'),
         children: [
             {
                 path: ':id',
                 title: caseStudyViewTitleResolver,
-                component: CaseStudyViewComponent,
+                component: CaseStudiesComponent,
             },
             {
                 path: '',
                 pathMatch: 'full',
                 title: pageTitle('Case studies'),
-                component: CaseStudiesListComponent,
+                component: CaseStudiesComponent,
             }
         ],
     },

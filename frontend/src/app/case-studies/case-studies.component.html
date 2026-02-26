@@ -1,0 +1,26 @@
+@let listData = listData$ | async;
+@let viewData = viewData$ | async;
+
+@if (breadcrumbs$ | async; as breadcrumbs) {
+    <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+}
+
+<h1 class="mt-5">Case studies</h1>
+
+<p class="my-3">
+    Case studies are written by researchers and apprentices in the Lettercraft
+    project. By focusing on a specific source, case studies highlight the complex role
+    of letters in texts.
+</p>
+
+<div class="row my-5 gap-4">
+    <aside class="col-lg is-hidden-print">
+        <h2 class="h4">Select case study</h2>
+        @if (listData?.caseStudies; as caseStudies) {
+            <lc-case-studies-list [data]="caseStudies" [activeID]="activeID$ | async" />
+        }
+    </aside>
+    <div class="col-lg-8">
+        <lc-case-study-view [data]="viewData" />
+    </div>
+</div>
