@@ -1,7 +1,12 @@
+import io
 from django.core.management import call_command
 
-def test_agents_import_export(db, agent_description, agent_description_2, historical_person, tmp_path):
+def test_agents_import_export(
+    db, agent_description, agent_description_2, historical_person, tmp_path, monkeypatch
+):
     filepath = tmp_path / 'agents.csv'
+
+    monkeypatch.setattr('sys.stdin', io.StringIO('y'))
     call_command('export_agents', filepath)
 
     with open(filepath, 'r') as f:
