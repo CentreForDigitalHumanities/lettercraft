@@ -3,30 +3,31 @@
 @if (caseStudy) {
     <h2 id="case-study-title" tabindex="-1">{{caseStudy.name}}</h2>
 
-    <p style="float: right">
+    <p class="float-end">
         {{caseStudy.date | date:'longDate'}}
     </p>
 
     <p class="lead" *ngIf="caseStudy.authors.length">
         By
-        <ng-container *ngFor="let author of caseStudy.authors; last as last">
+        <ng-container *ngFor="let author of caseStudy.authors" class="inline-list">
             <a [routerLink]="['/contributors', author.id]"
-                class="link-dark link-offset-1"
-                >{{author.fullName}}</a><ng-container *ngIf="!last">, </ng-container>
+                class="inline-list-item link-dark link-offset-1"
+                >{{author.fullName}}</a>
         </ng-container>
     </p>
 
 
     @if (caseStudy.sources.length) {
-        <p class="fst-italic"><span class="fs-4">☞</span> Browse in the database:
-            <span *ngFor="let source of caseStudy.sources; last as last"
-                class="fst-normal">
-                <a [routerLink]="['/data/sources', source.id]"
-                    class="icon-link ms-1">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{source.name}}
-                </a>
-                <span *ngIf="!last">, </span>
+        <p class="fst-italic"><span class="fs-4 fst-normal">☞</span> Browse in the database:
+            <span *ngFor="let source of caseStudy.sources"
+                class="fst-normal inline-list">
+                <span class="inline-list-item">
+                    <a [routerLink]="['/data/sources', source.id]"
+                        class="icon-link ms-1">
+                        <lc-icon [icon]="dataIcons.source" />
+                        {{source.name}}
+                    </a>
+                </span>
             </span>
         </p>
     }
