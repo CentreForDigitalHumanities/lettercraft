@@ -4,28 +4,31 @@ from django.db.models import QuerySet, Model
 from graphene_django import DjangoObjectType
 from django_filters import FilterSet, CharFilter, BooleanFilter
 
+from core.models import EntityDescription
 from event.models import Episode
-from source.models import Source, SourceImage
 from event.types.EpisodeType import EpisodeType
-from source.types.SourceContentsDateType import SourceContentsDateType
-from source.types.SourceWrittenDateType import SourceWrittenDateType
+from letter.models import GiftDescription, LetterDescription
+from letter.types.LetterDescriptionType import LetterDescriptionType
+from letter.types.GiftDescriptionType import GiftDescriptionType
 from person.models import AgentDescription
 from person.types.AgentDescriptionType import AgentDescriptionType
-from letter.types.GiftDescriptionType import GiftDescriptionType
-from letter.types.LetterDescriptionType import LetterDescriptionType
-from letter.models import GiftDescription, LetterDescription
-from core.models import EntityDescription
+from source.models import Source, SourceImage
+from source.types.SourceContentsDateType import SourceContentsDateType
+from source.types.SourceWrittenDateType import SourceWrittenDateType
+from source.types.SourceImageType import SourceImageType
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
-from user.permissions import can_edit_source, visible_condition
-from user.types.UserType import UserType
 from user.models import User
+from user.types.UserType import UserType
+from user.permissions import can_edit_source, visible_condition
+
 from source.types.SourceImageType import SourceImageType
-from graphql_app.utils import search_filter
+from graphql_app.utils import CharInFilter, search_filter
 from source.utils import source_contributor_ids
 
 class SourceFilter(FilterSet):
     search = CharFilter(method="search_sources")
+    label_ids = CharInFilter(method="filter_by_labels")
     is_public = BooleanFilter(field_name="is_public")
 
     _search_fields = ['name', 'medieval_title', 'reference', 'description_text']
@@ -37,6 +40,12 @@ class SourceFilter(FilterSet):
     def search_sources(self, queryset: QuerySet[Source], name: str, value: str) -> QuerySet[Source]:
         """Filter sources by searching through the name, medieval title, reference, or description."""
         return queryset.filter(search_filter(value, self._search_fields))
+
+    def filter_by_labels(self, queryset: QuerySet[Source], name: str, value: list[str]) -> QuerySet[Source]:
+        """Filter sources by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(episode__categories__id__in=value).distinct()
 
 
 class SourceType(DjangoObjectType):

@@ -21,18 +21,16 @@ import {
 import { EpisodeFormComponent } from '../data-entry/episode-form/episode-form.component';
 import { ContributorGuard } from './contributor.guard';
 import { AgentViewComponent } from '../data/agent-view/agent-view.component';
-import { DataOverviewComponent } from '../data/data-overview/data-overview.component';
 import { SourceViewComponent } from '../data/source-view/source-view.component';
 import { EpisodeViewComponent } from '../data/episode-view/episode-view.component';
 import { LocationViewComponent } from '../data/location-view/location-view.component';
 import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
-import { SourceListComponent } from '../data/source-list/source-list.component';
-import { EpisodeListComponent } from '../data/episode-list/episode-list.component';
 import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
 import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 import { ContributorComponent } from '../contributors/contributor/contributor.component';
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
+import { BrowseComponent } from '../data/browse/browse.component';
 import { CaseStudiesComponent } from '../case-studies/case-studies.component';
 
 
@@ -96,7 +94,7 @@ const routes: Routes = [
         path: 'contributors',
         children: [
             {
-                path:  ':id',
+                path: ':id',
                 title: pageTitle('Contributor'),
                 component: ContributorComponent,
             },
@@ -142,20 +140,10 @@ const routes: Routes = [
                 component: GiftViewComponent,
             },
             {
-                path: 'sources',
-                title: pageTitle('Browse sources'),
-                component: SourceListComponent,
-            },
-            {
-                path: 'episodes',
-                title: pageTitle('Browse episodes'),
-                component: EpisodeListComponent,
-            },
-            {
                 path: '',
                 pathMatch: 'full',
                 title: pageTitle('Browse data'),
-                component: DataOverviewComponent,
+                component: BrowseComponent,
             }
         ],
     },

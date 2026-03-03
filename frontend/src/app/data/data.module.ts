@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { AgentViewComponent } from './agent-view/agent-view.component';
-import { DataOverviewComponent } from './data-overview/data-overview.component';
 import { SourceViewComponent } from './source-view/source-view.component';
 import { EpisodeViewComponent } from './episode-view/episode-view.component';
 import { LocationViewComponent } from './location-view/location-view.component';
@@ -10,17 +9,14 @@ import { GiftViewComponent } from './gift-view/gift-view.component';
 import { EpisodeLinksComponent } from './shared/episode-links/episode-links.component';
 import { ObjectPageHeaderComponent } from './shared/object-page-header/object-page-header.component';
 import { EpisodePreviewComponent } from './source-view/episode-preview/episode-preview.component';
-import { EpisodeListComponent } from './episode-list/episode-list.component';
-import { SourceListComponent } from './source-list/source-list.component';
-import { SearchBarComponent } from './shared/search-bar/search-bar.component';
 import { PaginatorComponent } from './shared/paginator/paginator.component';
-
-
+import { BrowseComponent } from './browse/browse.component';
+import { BrowseListItemComponent } from './browse/search-item/browse-list-item.component';
+import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-label-select.component';
 
 @NgModule({
     declarations: [
         AgentViewComponent,
-        DataOverviewComponent,
         SourceViewComponent,
         EpisodeViewComponent,
         LocationViewComponent,
@@ -29,17 +25,16 @@ import { PaginatorComponent } from './shared/paginator/paginator.component';
         EpisodeLinksComponent,
         ObjectPageHeaderComponent,
         EpisodePreviewComponent,
-        SourceListComponent,
-        EpisodeListComponent,
-        SearchBarComponent,
         PaginatorComponent,
+        BrowseComponent,
+        BrowseLabelSelectComponent,
+        BrowseListItemComponent,
     ],
     imports: [
         SharedModule,
     ],
     exports: [
         AgentViewComponent,
-        DataOverviewComponent,
         SourceViewComponent,
         EpisodeViewComponent,
     ]

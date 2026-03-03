@@ -1,8 +1,10 @@
 from graphene import Field, List, ResolveInfo, NonNull, Boolean
 from graphene_django import DjangoObjectType
-
+from django_filters import CharFilter, FilterSet
 from django.db.models import QuerySet
+
 from core.types.EntityDescriptionType import EntityDescriptionType
+from graphql_app.utils import CharInFilter, search_filter
 from person.models import AgentDescription, HistoricalPerson, PersonReference
 from person.types.AgentDescriptionGenderType import AgentDescriptionGenderType
 from person.types.AgentDescriptionLocationType import AgentDescriptionLocationType
@@ -10,6 +12,27 @@ from person.types.HistoricalPersonType import HistoricalPersonType
 from person.types.PersonReferenceType import PersonReferenceType
 from event.types.EpisodeAgentType import EpisodeAgentType
 from event.models import EpisodeAgent
+
+
+class AgentDescriptionFilter(FilterSet):
+    search = CharFilter(method="search_agent_descriptions")
+    label_ids = CharInFilter(method="filter_by_labels")
+
+    _search_fields = ['name', 'description']
+
+    def search_agent_descriptions(
+        self, queryset: QuerySet[AgentDescription], name: str, value: str
+    ) -> QuerySet[AgentDescription]:
+        """Filter agent descriptions by name or description."""
+        return queryset.filter(search_filter(value, self._search_fields))
+
+    def filter_by_labels(
+        self, queryset: QuerySet[AgentDescription], name: str, value: list[str]
+    ) -> QuerySet[AgentDescription]:
+        """Filter agent descriptions by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(episodes__categories__id__in=value).distinct()
 
 
 class AgentDescriptionType(EntityDescriptionType, DjangoObjectType):

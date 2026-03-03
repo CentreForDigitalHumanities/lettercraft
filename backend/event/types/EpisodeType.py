@@ -8,17 +8,26 @@ from event.models import (
     Episode, EpisodeCategory, EpisodeAgent, EpisodeSpace, EpisodeLetter, EpisodeGift,
 )
 from event.types.EpisodeCategoryType import EpisodeCategoryType
-from graphql_app.utils import search_filter
+from graphql_app.utils import search_filter, CharInFilter
 
 
 class EpisodeFilter(FilterSet):
     search = CharFilter(method="search_episodes")
+    label_ids = CharInFilter(method="filter_by_labels")
 
     _search_fields = ['name', 'description', 'summary']
 
     def search_episodes(self, queryset: QuerySet[Episode], name: str, value: str) -> QuerySet[Episode]:
         """Filter episodes by name, description or summary."""
         return queryset.filter(search_filter(value, self._search_fields))
+
+    def filter_by_labels(
+    self, queryset: QuerySet[Episode], name: str, value: list[str]
+    ) -> QuerySet[Episode]:
+        """Filter episodes by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(categories__id__in=value).distinct()
 
 
 class EpisodeType(EntityDescriptionType, DjangoObjectType):
@@ -67,7 +76,6 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         parent: Episode, info: ResolveInfo
     ) -> QuerySet[EpisodeLetter]:
         return EpisodeLetter.objects.filter(episode=parent)
-
 
     @staticmethod
     def resolve_categories(

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "graphql_app",
     "django_filters",
     "django_prose_editor",
+    "search",
 ]
 
 MIDDLEWARE = [

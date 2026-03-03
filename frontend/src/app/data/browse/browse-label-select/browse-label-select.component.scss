@@ -1,0 +1,95 @@
+@use "../../../../../src/lc_theme" as theme;
+
+.label-filter-wrapper {
+    max-width: 700px;
+}
+
+.label-dropdown-button {
+    min-height: 2.5rem;
+
+    .placeholder-text,
+    .clear-labels-button {
+        color: theme.$gray-600;
+        transition: color 0.2s ease;
+    }
+
+    &:hover,
+    &.show {
+        .placeholder-text,
+        .clear-labels-button {
+            color: theme.$white;
+        }
+    }
+}
+
+.clear-labels-button {
+    right: 2rem;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    &:hover {
+        color: theme.$danger !important;
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(theme.$danger, 0.75);
+    }
+}
+
+.btn-tag {
+    border-radius: 1.5em;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid theme.$gray-400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    .remove-label-button {
+        opacity: 0.75;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        opacity: 0.75;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 1 !important;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(theme.$white, 0.75);
+        }
+    }
+}
+
+.label-dropdown-menu {
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .dropdown-header-text {
+        font-size: 0.9rem;
+        font-style: italic;
+        border-bottom: 1px solid theme.$gray-300;
+        cursor: default;
+        user-select: none;
+    }
+}
+
+.label-dropdown-item {
+    padding: 0.375rem 0.5rem;
+    border: none;
+    background: none;
+    width: 100%;
+
+    &:hover {
+        background-color: theme.$gray-100;
+    }
+
+    .btn-tag {
+        pointer-events: none;
+    }
+}

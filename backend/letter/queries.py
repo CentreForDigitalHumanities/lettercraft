@@ -32,6 +32,7 @@ class LetterQueries(ObjectType):
         episode_id=ID(),
         source_id=ID(),
         editable=Boolean(),
+        public_only=Boolean(),
     )
 
     letter_categories = List(
@@ -53,6 +54,7 @@ class LetterQueries(ObjectType):
         episode_id=ID(),
         source_id=ID(),
         editable=Boolean(),
+        public_only=Boolean(),
     )
 
     gift_categories = List(
@@ -85,7 +87,8 @@ class LetterQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable: bool = False,
+        editable = False,
+        public_only = False,
     ) -> QuerySet[LetterDescription]:
         filters = Q()
         if episode_id:
@@ -95,6 +98,8 @@ class LetterQueries(ObjectType):
         if editable:
             user = info.context.user
             filters &= Q(source__in=editable_sources(user))
+        if public_only:
+            filters &= Q(source__is_public=True)
 
         return LetterDescriptionType.get_queryset(
             LetterDescription.objects, info
@@ -131,7 +136,8 @@ class LetterQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable: bool = False,
+        editable = False,
+        public_only = False,
     ) -> QuerySet[GiftDescription]:
         filters = Q()
         if episode_id:
@@ -141,7 +147,8 @@ class LetterQueries(ObjectType):
         if editable:
             user = info.context.user
             filters &= Q(source__in=editable_sources(user))
-
+        if public_only:
+            filters &= Q(source__is_public=True)
         return GiftDescriptionType.get_queryset(GiftDescription.objects, info).filter(
             filters
         )

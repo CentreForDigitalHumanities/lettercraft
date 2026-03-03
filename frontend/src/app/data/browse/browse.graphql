@@ -1,0 +1,117 @@
+query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [ID!]!) {
+    search(searchFocus: $searchFocus, searchTerm: $searchTerm, labelIds: $labelIds) {
+        sourceCount
+        episodeCount
+        agentCount
+        letterCount
+        giftCount
+        locationCount
+        sources {
+            id
+            name
+            descriptionText
+            reference
+            episodes {
+                id
+            }
+        }
+        episodes {
+            id
+            name
+            summary
+            book
+            chapter
+            page
+            source {
+                id
+                reference
+            }
+            categories {
+                id
+                name
+            }
+            agents {
+                id
+                agent {
+                    id
+                    name
+                    isGroup
+                    identified
+                }
+            }
+            gifts {
+                id
+                gift {
+                    id
+                    name
+                }
+            }
+            letters {
+                id
+                letter {
+                    id
+                    name
+                }
+            }
+            spaces {
+                id
+                space {
+                    id
+                    name
+                    hasIdentifiableFeatures
+                }
+            }
+        }
+        agents {
+            id
+            name
+            description
+            isGroup
+            identified
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        letters {
+            id
+            name
+            description
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        gifts {
+            id
+            name
+            description
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+        locations {
+            id
+            name
+            description
+            hasIdentifiableFeatures
+            episodes {
+                id
+            }
+            source {
+                id
+                reference
+            }
+        }
+    }
+}

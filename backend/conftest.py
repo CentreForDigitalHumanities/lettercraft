@@ -8,7 +8,7 @@ from django.core.handlers.wsgi import WSGIRequest
 
 from case_study.models import CaseStudy
 from letter.models import LetterDescription
-
+from event.models import EpisodeCategory
 from person.models import HistoricalPerson, AgentDescription
 from source.models import Source
 from event.models import Episode
@@ -16,9 +16,10 @@ from user.models import User, ContributorGroup, ContributorRole
 from space.models import SpaceDescription
 from graphql_app.schema import schema
 
+
 @pytest.fixture(autouse=True)
 def tmp_media_root(settings, tmp_path):
-    directory = tmp_path / 'data'
+    directory = tmp_path / "data"
     directory.mkdir()
     settings.MEDIA_ROOT = directory
     return directory
@@ -56,20 +57,26 @@ def user_client(client, user) -> Generator[APIClient, None, None]:
     yield client
     client.logout()
 
+
 @pytest.fixture
 def contributor_role(db, user) -> ContributorRole:
-    return ContributorRole.objects.create(
-        name='tester'
-    )
+    return ContributorRole.objects.create(name="tester")
+
 
 @pytest.fixture
 def user_has_contributor_role(db, user, contributor_role):
     user.profile.role = contributor_role
     user.profile.save()
 
+
 @pytest.fixture()
 def source(db):
     return Source.objects.create(name="Sesame Street", is_public=True)
+
+
+@pytest.fixture()
+def source_2(db):
+    return Source.objects.create(name="Muppet Show", is_public=True)
 
 
 @pytest.fixture()
@@ -168,6 +175,16 @@ def episode_2(db, source, agent_description, agent_description_2, letter_descrip
 @pytest.fixture()
 def episode_attribution(episode, user):
     episode.contributors.add(user)
+
+
+@pytest.fixture()
+def episode_category_a(db):
+    return EpisodeCategory.objects.create(name="Label A")
+
+
+@pytest.fixture()
+def episode_category_b(db):
+    return EpisodeCategory.objects.create(name="Label B")
 
 
 @pytest.fixture()

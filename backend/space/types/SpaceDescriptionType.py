@@ -1,8 +1,10 @@
 from graphene import List, NonNull, ResolveInfo, Boolean
 from graphene_django.types import DjangoObjectType
 from django.db.models import QuerySet
+from django_filters import CharFilter, FilterSet
 
 from core.types.EntityDescriptionType import EntityDescriptionType
+from graphql_app.utils import CharInFilter, search_filter
 from space.models import (
     Region,
     RegionField,
@@ -20,6 +22,27 @@ from space.types.SettlementFieldType import SettlementFieldType
 from space.types.StructureFieldType import StructureFieldType
 from event.types.EpisodeSpaceType import EpisodeSpaceType
 from event.models import EpisodeSpace
+
+
+class SpaceDescriptionFilter(FilterSet):
+    search = CharFilter(method="search_space_descriptions")
+    label_ids = CharInFilter(method="filter_by_labels")
+
+    _search_fields = ['name', 'description']
+
+    def search_space_descriptions(
+        self, queryset: QuerySet[SpaceDescription], name: str, value: str
+    ) -> QuerySet[SpaceDescription]:
+        """Filter space descriptions by name or description."""
+        return queryset.filter(search_filter(value, self._search_fields))
+
+    def filter_by_labels(
+        self, queryset: QuerySet[SpaceDescription], name: str, value: list[str]
+    ) -> QuerySet[SpaceDescription]:
+        """Filter space descriptions by categories (labels)."""
+        if not value:
+            return queryset
+        return queryset.filter(episodes__categories__id__in=value).distinct()
 
 
 class SpaceDescriptionType(EntityDescriptionType, DjangoObjectType):

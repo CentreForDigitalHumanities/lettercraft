@@ -24,6 +24,7 @@ class PersonQueries(ObjectType):
         episode_id=ID(),
         source_id=ID(),
         editable=Boolean(),
+        public_only=Boolean(),
     )
     historical_persons = List(NonNull(HistoricalPersonType), required=True)
 
@@ -53,6 +54,7 @@ class PersonQueries(ObjectType):
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
         editable: bool = False,
+        public_only = False,
     ) -> QuerySet[AgentDescription]:
         filters = Q()
         if episode_id:
@@ -62,6 +64,8 @@ class PersonQueries(ObjectType):
         if editable:
             user = info.context.user
             filters &= Q(source__in=editable_sources(user))
+        if public_only:
+            filters &= Q(source__is_public=True)
 
         return AgentDescriptionType.get_queryset(AgentDescription.objects, info).filter(
             filters

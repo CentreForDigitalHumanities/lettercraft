@@ -1,0 +1,20 @@
+@use "../../../../src/lc_theme" as theme;
+
+.search-form {
+    max-width: 700px;
+}
+
+.nav-link {
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-bottom-color: theme.$gray-400;
+        color: theme.$gray-700;
+    }
+
+    &.active {
+        color: map-get(theme.$lc-colors, primary);
+        border-bottom-color: map-get(theme.$lc-colors, primary);
+    }
+}

@@ -1,0 +1,101 @@
+@let counts = counts$ | async;
+@let items = itemsByType$ | async;
+@let loading = searchLoading$ | async;
+
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<div class="d-flex flex-column bg-light-subtle">
+    <div class="search-section d-flex align-items-center justify-content-center bg-white shadow-sm p-4">
+        <div class="container">
+            <form
+                class="search-form my-0 mx-auto"
+                (submit)="$event.preventDefault(); formSubmit$.next()"
+            >
+                <label class="form-label">Keywords</label>
+                <input
+                    type="search"
+                    class="form-control p-2"
+                    name="search"
+                    [formControl]="form.controls.searchTerm"
+                    placeholder="Search for keywords..."
+                    aria-label="Search"
+                />
+                <lc-browse-label-select
+                    [formControl]="form.controls.labelIds"
+                />
+            </form>
+        </div>
+    </div>
+
+    <div class="py-4">
+        <div class="container-fluid">
+            <ul
+                ngbNav
+                #nav="ngbNav"
+                [(activeId)]="form.controls.searchFocus.value"
+                (activeIdChange)="changeTabs($event)"
+                class="mb-4 d-flex align-items-center"
+            >
+                @for (tab of tabMetadata; track tab.type) {
+                <li [ngbNavItem]="tab.type">
+                    <button
+                        ngbNavLink
+                        class="nav-link py-2 px-4 text-secondary"
+                    >
+                        <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
+                        <span>{{ tab.title }}</span>
+                        @if (counts) {
+                        <span class="badge text-bg-secondary ms-2">{{
+                            counts.get(tab.type)
+                        }}</span>
+                        }
+                    </button>
+                    <ng-template ngbNavContent>
+                        <div class="py-2">
+                            @if (loading) {
+                            <div class="loading-spinner text-center py-5">
+                                <p class="text-muted mt-3">
+                                    Loading results...
+                                </p>
+                            </div>
+                            } @else if (searchError$ | async) {
+                            <div class="error-message text-center py-5">
+                                <lc-icon
+                                    [icon]="statusIcons.error"
+                                    class="text-danger mb-3"
+                                    size="3x"
+                                />
+                                <p class="text-danger">
+                                    An error occurred while fetching results.
+                                    Please try again.
+                                </p>
+                            </div>
+                            } @else {
+                            @let tabItems = items?.get(tab.type);
+                            @if (!tabItems || tabItems.length === 0) {
+                            <div class="no-results text-center py-5">
+                                <lc-icon
+                                    [icon]="actionIcons.search"
+                                    class="text-muted mb-3"
+                                    size="3x"
+                                />
+                                <p class="text-muted">
+                                    No results found in this category
+                                </p>
+                            </div>
+                            } @else {
+                            <div class="list-group">
+                                @for (item of tabItems; track item.id) {
+                                <lc-browse-list-item [listItem]="item" />
+                                }
+                            </div>
+                            } }
+                        </div>
+                    </ng-template>
+                </li>
+                }
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
+        </div>
+    </div>
+</div>
