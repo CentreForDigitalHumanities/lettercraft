@@ -17,6 +17,9 @@
           "style": "scss"
         }
       },
+      "i18n": {
+        "sourceLocale": "en-GB"
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "lc",

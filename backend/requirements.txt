@@ -81,7 +81,7 @@ oauthlib==3.2.2
     # via requests-oauthlib
 packaging==23.2
     # via pytest
-pillow==11.3.0
+pillow==12.1.1
     # via -r requirements.in
 pluggy==1.3.0
     # via pytest
@@ -119,7 +119,7 @@ six==1.16.0
     #   python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
-sqlparse==0.5.3
+sqlparse==0.5.4
     # via django
 text-unidecode==1.3
     # via graphene-django
