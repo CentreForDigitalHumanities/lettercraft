@@ -39,7 +39,7 @@
     "graphql": "^16",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "underscore": "^1.13.6",
+    "underscore": "^1.13.8",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
