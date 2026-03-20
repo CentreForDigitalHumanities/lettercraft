@@ -1,7 +1,7 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean, String
 from django.db.models import Q, QuerySet
 from django.contrib.auth.models import AnonymousUser
-from typing import Optional, Union
+from typing import Optional, Union, List as TList
 
 from space.models import Region, Settlement, SpaceDescription, Structure
 from space.types.RegionType import RegionType
@@ -26,6 +26,7 @@ class SpaceQueries(ObjectType):
         source_id=ID(),
         editable=Boolean(),
         public_only=Boolean(),
+        ids=List(NonNull(String)),
     )
     regions = List(NonNull(RegionType), required=True)
     settlements = List(NonNull(SettlementType), required=True)
@@ -55,8 +56,9 @@ class SpaceQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
-        editable = False,
-        public_only = False,
+        editable=False,
+        public_only=False,
+        ids: Optional[TList[str]] = None,
     ) -> QuerySet[SpaceDescription]:
         filters = Q()
 
@@ -67,6 +69,8 @@ class SpaceQueries(ObjectType):
             filters &= Q(source__in=editable_sources(user))
         if public_only:
             filters &= Q(source__is_public=True)
+        if ids:
+            filters &= Q(id__in=ids)
 
         return SpaceDescriptionType.get_queryset(SpaceDescription.objects, info).filter(
             filters

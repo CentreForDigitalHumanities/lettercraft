@@ -1,5 +1,11 @@
 import { Component, Input } from "@angular/core";
-import { PaginationResult } from "../../utils/base-pagination-result";
+import { Observable } from "rxjs";
+
+export interface Paginated {
+    pageSize: number;
+    totalSize$: Observable<number>;
+    page: number;
+}
 
 @Component({
     templateUrl: './paginator.component.html',
@@ -7,6 +13,5 @@ import { PaginationResult } from "../../utils/base-pagination-result";
     standalone: false,
 })
 export class PaginatorComponent {
-    // This component does not need to know the type of the data it paginates.
-    @Input({ required: true }) pageResult!: PaginationResult<unknown>;
+    @Input({ required: true }) pageResult!: Paginated;
 }
