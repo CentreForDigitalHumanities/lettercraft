@@ -22,7 +22,8 @@ const TAB_METADATA: TabMetadata[] = [
     { type: SearchFocus.Sources, title: 'Sources', icon: dataIcons.source },
     { type: SearchFocus.Episodes, title: 'Episodes', icon: dataIcons.episode },
     { type: SearchFocus.Agents, title: 'Agents', icon: dataIcons.person },
-    { type: SearchFocus.Items, title: 'Letters/Gifts', icon: dataIcons.letter },
+    { type: SearchFocus.Letters, title: 'Letters', icon: dataIcons.letter },
+    { type: SearchFocus.Gifts, title: 'Gifts', icon: dataIcons.gift },
     { type: SearchFocus.Locations, title: 'Locations', icon: dataIcons.location }
 ];
 
@@ -92,7 +93,8 @@ export class BrowseComponent {
                 [SearchFocus.Sources, data.sourceCount],
                 [SearchFocus.Episodes, data.episodeCount],
                 [SearchFocus.Agents, data.agentCount],
-                [SearchFocus.Items, data.letterCount + data.giftCount],
+                [SearchFocus.Letters, data.letterCount],
+                [SearchFocus.Gifts, data.giftCount],
                 [SearchFocus.Locations, data.locationCount]
             ]);
         }),
@@ -107,7 +109,8 @@ export class BrowseComponent {
                 [SearchFocus.Sources, this.transformSources(data)],
                 [SearchFocus.Episodes, this.transformEpisodes(data)],
                 [SearchFocus.Agents, this.transformAgents(data)],
-                [SearchFocus.Items, this.transformItems(data)],
+                [SearchFocus.Letters, this.transformLetters(data)],
+                [SearchFocus.Gifts, this.transformGifts(data)],
                 [SearchFocus.Locations, this.transformLocations(data)]
             ]);
         }),
@@ -149,13 +152,13 @@ export class BrowseComponent {
                 id: letter.id,
                 name: letter.name,
                 icon: dataIcons.letter,
-                link: `items/${letter.id}`
+                link: `letters/${letter.id}`
             })),
             gifts: episode.gifts.map(({ gift }) => ({
                 id: gift.id,
                 name: gift.name,
                 icon: dataIcons.gift,
-                link: `items/${gift.id}`
+                link: `gifts/${gift.id}`
             })),
             spaces: episode.spaces.map(({ space }) => ({
                 id: space.id,
@@ -183,28 +186,29 @@ export class BrowseComponent {
         }));
     }
 
-    private transformItems(results: QueriedResults): BrowseListItem[] {
-        const letterItems: BrowseListItem[] = results.letters.map(letter => ({
+    private transformLetters(results: QueriedResults): BrowseListItem[] {
+        return results.letters.map(letter => ({
             id: letter.id,
             name: letter.name,
             type: 'entity',
             description: letter.description,
             icon: dataIcons.letter,
-            link: `items/${letter.id}`,
+            link: `letters/${letter.id}`,
             occurrence: this.occurrenceData(letter),
         }));
 
-        const giftItems: BrowseListItem[] = results.gifts.map(gift => ({
+    }
+
+    private transformGifts(results: QueriedResults): BrowseListItem[] {
+        return results.gifts.map(gift => ({
             id: gift.id,
             name: gift.name,
             type: 'entity',
             description: gift.description,
             icon: dataIcons.gift,
-            link: `items/${gift.id}`,
+            link: `gifts/${gift.id}`,
             occurrence: this.occurrenceData(gift)
         }));
-
-        return letterItems.concat(giftItems);
     }
 
     private transformLocations(results: QueriedResults): BrowseListItem[] {
