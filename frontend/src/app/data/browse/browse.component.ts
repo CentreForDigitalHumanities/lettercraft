@@ -126,7 +126,6 @@ export class BrowseComponent {
         shareReplay(1)
     );
 
-
     public changeTabs(newNavId: SearchFocus): void {
         this.form.controls.searchFocus.setValue(newNavId);
     }
