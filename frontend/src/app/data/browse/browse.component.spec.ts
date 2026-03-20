@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowseComponent } from './browse.component';
 import { SearchService } from '@services/search.service';
 import {
