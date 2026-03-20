@@ -1,4 +1,4 @@
-import { map, filter, switchMap, combineLatest, Observable, BehaviorSubject, shareReplay } from "rxjs";
+import { map, filter, switchMap, BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { ApolloQueryResult } from "@apollo/client/core";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -16,8 +16,7 @@ export class PageResult<Data, TransformedData = Data> implements Paginated {
     page$ = new BehaviorSubject<number>(1);
 
     totalSize$ = this.collection$.pipe(
-        map((collection) => collection?.length ?? 0),
-        shareReplay(1)
+        map(collection => collection?.length ?? 0),
     );
 
     private ids$ = this.collection$.pipe(
@@ -27,12 +26,10 @@ export class PageResult<Data, TransformedData = Data> implements Paginated {
     public pageData$: Observable<TransformedData> = combineLatest([this.ids$, this.page$]).pipe(
         map(([ids, page]) => this.slicePage(ids, page)),
         filter(ids => !!ids.length),
-        switchMap(ids => this.pageQuery.watch({ ids }).valueChanges),
+        switchMap(ids => this.pageQuery.watch({ids}).valueChanges),
         filter(result => !result.loading && !!result.data),
-        map(result => this.transform(result.data)),
-        shareReplay(1)
+        map(result => this.transform(result.data))
     );
-
 
     constructor(
         public collection$: Observable<HasID[]>,
@@ -40,17 +37,16 @@ export class PageResult<Data, TransformedData = Data> implements Paginated {
         destroyRef: DestroyRef,
         private transformer?: (data: Data) => TransformedData
     ) {
-        // Reset the page when collection changes.
+        // reset the page when ids are updated
         collection$.pipe(
             takeUntilDestroyed(destroyRef),
         ).subscribe(() => this.page$.next(1));
-
     }
 
-    get page(): number { return this.page$.value; }
-    set page(value: number) { this.page$.next(value); }
+    get page(): number { return this.page$.value }
+    set page(value: number) { this.page$.next(value) }
 
-    private slicePage<U>(values: U[], page: number): U[] {
+    slicePage<T>(values: T[], page: number): T[] {
         const start = this.pageSize * (page - 1);
         const end = this.pageSize * page;
         return values.slice(start, end);
