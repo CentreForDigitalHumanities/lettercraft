@@ -1,5 +1,4 @@
 @let counts = counts$ | async;
-@let items = itemsByType$ | async;
 @let loading = searchLoading$ | async;
 
 <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
@@ -71,8 +70,8 @@
                                 </p>
                             </div>
                             } @else {
-                            @let tabItems = items?.get(tab.type);
-                            @if (!tabItems || tabItems.length === 0) {
+                            @let pageResult = pageResultsByType.get(tab.type);
+                            @if (pageResult && (pageResult.totalSize$ | async) === 0 && !loading) {
                             <div class="no-results text-center py-5">
                                 <lc-icon
                                     [icon]="actionIcons.search"
@@ -83,11 +82,13 @@
                                     No results found in this category
                                 </p>
                             </div>
-                            } @else {
+                            } @else if (pageResult) {
                             <div class="list-group">
-                                @for (item of tabItems; track item.id) {
+                                <lc-paginator [pageResult]="pageResult" />
+                                @for (item of pageResult.pageData$ | async; track item.id) {
                                 <lc-browse-list-item [listItem]="item" />
                                 }
+                                <lc-paginator [pageResult]="pageResult" />
                             </div>
                             } }
                         </div>

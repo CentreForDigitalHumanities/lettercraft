@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { dataIcons, actionIcons, statusIcons } from "@shared/icons";
 import { FormGroup, FormControl } from "@angular/forms";
 import { BrowseSearchQuery, SearchFocus, BrowseSearchGQL, EpisodeType, SourceType } from "generated/graphql";
@@ -7,6 +7,7 @@ import { SearchService } from "@services/search.service";
 import { BrowseListItem, EntityListItem } from "./search-item/browse-list-item.component";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
+import { InMemoryPageResult } from "../utils/in-memory-pagination";
 import _ from "underscore";
 
 
@@ -69,7 +70,8 @@ export class BrowseComponent {
 
     constructor(
         private searchQuery: BrowseSearchGQL,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private destroyRef: DestroyRef
     ) { }
 
     public searchResult$ = this.searchService.createSearch(
@@ -101,133 +103,135 @@ export class BrowseComponent {
         shareReplay(1)
     );
 
-    public itemsByType$ = this.searchResult$.pipe(
-        filter(results => !!results.data?.search),
-        map(results => {
-            const data = results.data!.search!;
-            return new Map<SearchFocus, BrowseListItem[]>([
-                [SearchFocus.Sources, this.transformSources(data)],
-                [SearchFocus.Episodes, this.transformEpisodes(data)],
-                [SearchFocus.Agents, this.transformAgents(data)],
-                [SearchFocus.Letters, this.transformLetters(data)],
-                [SearchFocus.Gifts, this.transformGifts(data)],
-                [SearchFocus.Locations, this.transformLocations(data)]
-            ]);
-        }),
-        shareReplay(1)
-    );
+    public pageResultsByType = new Map<SearchFocus, InMemoryPageResult<BrowseListItem>>([
+        [SearchFocus.Sources, this.toPageResult(result => transformSources(result))],
+        [SearchFocus.Episodes, this.toPageResult(result => transformEpisodes(result))],
+        [SearchFocus.Agents, this.toPageResult(result => transformAgents(result))],
+        [SearchFocus.Letters, this.toPageResult(result => transformLetters(result))],
+        [SearchFocus.Gifts, this.toPageResult(result => transformGifts(result))],
+        [SearchFocus.Locations, this.toPageResult(result => transformLocations(result))]
+    ]);
 
     public changeTabs(newNavId: SearchFocus): void {
         this.form.controls.searchFocus.setValue(newNavId);
     }
 
-    private transformSources(results: QueriedResults): BrowseListItem[] {
-        return results.sources.map(source => ({
-            id: source.id,
-            name: source.name,
-            type: 'source',
-            description: source.descriptionText,
-            numOfEpisodes: source.episodes.length,
-            icon: dataIcons.source,
-            link: `sources/${source.id}`,
-        }));
+    private toPageResult(transform: (results: QueriedResults) => BrowseListItem[]): InMemoryPageResult<BrowseListItem> {
+        const collection$ = this.searchResult$.pipe(
+            filter(results => !!results.data?.search),
+            map(results => transform(results.data!.search!)),
+            shareReplay(1)
+        );
+        return new InMemoryPageResult(collection$, this.destroyRef);
     }
+}
 
-    private transformEpisodes(results: QueriedResults): BrowseListItem[] {
-        return results.episodes.map(episode => ({
-            id: episode.id,
-            name: episode.name,
-            type: 'episode',
-            description: episode.summary,
-            icon: dataIcons.episode,
-            link: `episodes/${episode.id}`,
-            labels: episode.categories?.map(cat => cat.name) ?? [],
-            agents: episode.agents.map(({ agent }) => ({
-                id: agent.id,
-                name: agent.name,
-                icon: agentIcon(agent),
-                link: `agents/${agent.id}`
-            })),
-            letters: episode.letters.map(({ letter }) => ({
-                id: letter.id,
-                name: letter.name,
-                icon: dataIcons.letter,
-                link: `letters/${letter.id}`
-            })),
-            gifts: episode.gifts.map(({ gift }) => ({
-                id: gift.id,
-                name: gift.name,
-                icon: dataIcons.gift,
-                link: `gifts/${gift.id}`
-            })),
-            spaces: episode.spaces.map(({ space }) => ({
-                id: space.id,
-                name: space.name,
-                icon: locationIcon(space),
-                link: `locations/${space.id}`
-            })),
-            sourceLocation: {
-                book: episode.book,
-                chapter: episode.chapter,
-                page: episode.page
-            },
-        }));
-    }
+function transformSources(results: QueriedResults): BrowseListItem[] {
+    return results.sources.map(source => ({
+        id: source.id,
+        name: source.name,
+        type: 'source',
+        description: source.descriptionText,
+        numOfEpisodes: source.episodes.length,
+        icon: dataIcons.source,
+        link: `sources/${source.id}`,
+    }));
+}
 
-    private transformAgents(results: QueriedResults): BrowseListItem[] {
-        return results.agents.map(agent => ({
+function transformEpisodes(results: QueriedResults): BrowseListItem[] {
+    return results.episodes.map(episode => ({
+        id: episode.id,
+        name: episode.name,
+        type: 'episode',
+        description: episode.summary,
+        icon: dataIcons.episode,
+        link: `episodes/${episode.id}`,
+        labels: episode.categories?.map(cat => cat.name) ?? [],
+        agents: episode.agents.map(({ agent }) => ({
             id: agent.id,
             name: agent.name,
-            type: 'entity',
-            description: agent.description,
             icon: agentIcon(agent),
-            link: `agents/${agent.id}`,
-            occurrence: this.occurrenceData(agent),
-        }));
-    }
-
-    private transformLetters(results: QueriedResults): BrowseListItem[] {
-        return results.letters.map(letter => ({
+            link: `agents/${agent.id}`
+        })),
+        letters: episode.letters.map(({ letter }) => ({
             id: letter.id,
             name: letter.name,
-            type: 'entity',
-            description: letter.description,
             icon: dataIcons.letter,
-            link: `letters/${letter.id}`,
-            occurrence: this.occurrenceData(letter),
-        }));
-
-    }
-
-    private transformGifts(results: QueriedResults): BrowseListItem[] {
-        return results.gifts.map(gift => ({
+            link: `letters/${letter.id}`
+        })),
+        gifts: episode.gifts.map(({ gift }) => ({
             id: gift.id,
             name: gift.name,
-            type: 'entity',
-            description: gift.description,
             icon: dataIcons.gift,
-            link: `gifts/${gift.id}`,
-            occurrence: this.occurrenceData(gift)
-        }));
-    }
+            link: `gifts/${gift.id}`
+        })),
+        spaces: episode.spaces.map(({ space }) => ({
+            id: space.id,
+            name: space.name,
+            icon: locationIcon(space),
+            link: `locations/${space.id}`
+        })),
+        sourceLocation: {
+            book: episode.book,
+            chapter: episode.chapter,
+            page: episode.page
+        },
+    }));
+}
 
-    private transformLocations(results: QueriedResults): BrowseListItem[] {
-        return results.locations.map(location => ({
-            id: location.id,
-            name: location.name,
-            type: 'entity',
-            description: location.description,
-            icon: locationIcon(location),
-            link: `locations/${location.id}`,
-            occurrence: this.occurrenceData(location)
-        }));
-    }
+function transformAgents(results: QueriedResults): BrowseListItem[] {
+    return results.agents.map(agent => ({
+        id: agent.id,
+        name: agent.name,
+        type: 'entity',
+        description: agent.description,
+        icon: agentIcon(agent),
+        link: `agents/${agent.id}`,
+        occurrence: occurrenceData(agent),
+    }));
+}
 
-    private occurrenceData(result: { episodes: Pick<EpisodeType, 'id'>[]; source: Pick<SourceType, 'reference' | 'id'>; }): EntityListItem['occurrence'] {
-        return {
-            numOfEpisodes: result.episodes.length,
-            sourceName: result.source.reference,
-            sourceLink: `sources/${result.source.id}`
-        };
-    }
+function transformLetters(results: QueriedResults): BrowseListItem[] {
+    return results.letters.map(letter => ({
+        id: letter.id,
+        name: letter.name,
+        type: 'entity',
+        description: letter.description,
+        icon: dataIcons.letter,
+        link: `letters/${letter.id}`,
+        occurrence: occurrenceData(letter),
+    }));
+
+}
+
+function transformGifts(results: QueriedResults): BrowseListItem[] {
+    return results.gifts.map(gift => ({
+        id: gift.id,
+        name: gift.name,
+        type: 'entity',
+        description: gift.description,
+        icon: dataIcons.gift,
+        link: `gifts/${gift.id}`,
+        occurrence: occurrenceData(gift)
+    }));
+}
+
+function transformLocations(results: QueriedResults): BrowseListItem[] {
+    return results.locations.map(location => ({
+        id: location.id,
+        name: location.name,
+        type: 'entity',
+        description: location.description,
+        icon: locationIcon(location),
+        link: `locations/${location.id}`,
+        occurrence: occurrenceData(location)
+    }));
+}
+
+function occurrenceData(result: { episodes: Pick<EpisodeType, 'id'>[]; source: Pick<SourceType, 'reference' | 'id'>; }): EntityListItem['occurrence'] {
+    return {
+        numOfEpisodes: result.episodes.length,
+        sourceName: result.source.reference,
+        sourceLink: `sources/${result.source.id}`
+    };
 }

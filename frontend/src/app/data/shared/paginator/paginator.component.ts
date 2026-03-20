@@ -1,12 +1,12 @@
 import { Component, Input } from "@angular/core";
-import { PageResult } from "../../utils/pagination";
-
+import { PaginationResult } from "../../utils/base-pagination-result";
 
 @Component({
     templateUrl: './paginator.component.html',
     selector: 'lc-paginator',
     standalone: false,
 })
-export class PaginatorComponent<T> {
-    @Input({ required: true }) pageResult!: PageResult<T>;
+export class PaginatorComponent {
+    // This component does not need to know the type of the data it paginates.
+    @Input({ required: true }) pageResult!: PaginationResult<unknown>;
 }
