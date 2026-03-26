@@ -91,7 +91,7 @@ psycopg2==2.9.9
     # via -r requirements.in
 pycparser==2.22
     # via cffi
-pyjwt[crypto]==2.8.0
+pyjwt[crypto]==2.12.0
     # via django-allauth
 pytest==7.4.3
     # via
