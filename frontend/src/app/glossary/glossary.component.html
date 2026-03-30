@@ -1,55 +1,64 @@
-<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
-
-<h1 class="mt-5">Glossary</h1>
-
-<p class="my-3">
-    In studying narrative descriptions of epistolary communication, the Lettercraft team
-    has identified hundreds of Latin words that have something to do with letters and
-    their use. One substantial segment of this vocabulary refer to letters themselves;
-    others clusters refers to the people carrying them, and to accompanying gifts;
-    the largest and most fluid segment refers to the wider communicative process in which
-    letters functioned, including terms associated with the acts of writing, dictating,
-    signing, reading, carrying, speaking, gift-giving, negotiating and hosting.
-</p>
-
-<p class="my-3">
-    One of the aims of the Lettercraft project has been to map out this terminology so as
-    to gain a better understanding of its meaning and use. To this end, all entries in the
-    database contain a ‘designator’ field that gives the relevant Latin epistolary
-    terminology that appears in the passage concerned. These terms can be searched with
-    the search function. A full terminology list, with frequencies, can be downloaded for
-    individual texts and for the database at large.
-</p>
-
 <div class="row my-5">
     <div class="col-md">
-        <h2>Glossary</h2>
-        @for (section of glossary.sections; track section.title) {
-            <section class="my-4">
-                <h3>{{section.title}}</h3>
+        <div class="container-md">
+            <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
 
-                @for (item of section.items; track item.id) {
-                    <article class="my-4">
-                        <h4 class="h5">{{item.term}}</h4>
+            <h1 class="mt-5">Glossary</h1>
 
-                        <div [innerHTML]="item.content"></div>
-                    </article>
+            <p class="my-3">
+                In studying narrative descriptions of epistolary communication, the Lettercraft team
+                has identified hundreds of Latin words that have something to do with letters and
+                their use. One substantial segment of this vocabulary refer to letters themselves;
+                others clusters refers to the people carrying them, and to accompanying gifts;
+                the largest and most fluid segment refers to the wider communicative process in which
+                letters functioned, including terms associated with the acts of writing, dictating,
+                signing, reading, carrying, speaking, gift-giving, negotiating and hosting.
+            </p>
+
+            <p class="my-3">
+                One of the aims of the Lettercraft project has been to map out this terminology so as
+                to gain a better understanding of its meaning and use. To this end, all entries in the
+                database contain a ‘designator’ field that gives the relevant Latin epistolary
+                terminology that appears in the passage concerned. These terms can be searched with
+                the search function. A full terminology list, with frequencies, can be downloaded for
+                individual texts and for the database at large.
+            </p>
+
+            <div class="my-5">
+                @for (section of glossary.sections; track section.title) {
+                    <section class="my-4">
+                        <h2>{{section.title}}</h2>
+
+                        @for (item of section.items; track item.id) {
+                            <article class="p-3 my-2 rounded glossary-item"
+                                [id]="itemElementID(item.id)" tabindex="-1">
+                                <h4 class="h5 font-sans-serif">{{item.term}}</h4>
+                                <div [innerHTML]="item.content"></div>
+                            </article>
+                        }
+                    </section>
                 }
-            </section>
-        }
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
+    <aside class="col-md-3 p-4 index-container sticky-top">
         <h2>Index</h2>
 
-        @for (section of glossary.sections; track section.title) {
-            <h3>{{section.title}}</h3>
-            <ul>
-                @for (item of section.items; track item.id) {
-                    <li>
-                        {{item.term}}
-                    </li>
-                }
-            </ul>
-        }
-    </div>
+        <div class="index-body">
+            @for (section of glossary.sections; track section.title) {
+                <section class="my-3">
+                    <h3 class="h4">{{section.title}}</h3>
+                    <ul class="nav flex-column">
+                        @for (item of section.items; track item.id) {
+                            <li class="nav-item">
+                                <button class="nav-link p-0" (click)="focusItem(item.id)">
+                                    {{item.term}}
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+        </div>
+    </aside>
 </div>

@@ -198,6 +198,7 @@ const routes: Routes = [
         path: 'glossary',
         title: pageTitle('Glossary'),
         component: GlossaryComponent,
+        data: { fullSize: true }
     },
     {
         path: '',
