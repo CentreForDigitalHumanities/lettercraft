@@ -14,6 +14,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
 import { ContributorsModule } from './contributors/contributors.module';
+import { GlossaryModule } from './glossary/glossary.module';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { ContributorsModule } from './contributors/contributors.module';
         DataModule,
         CaseStudiesModule,
         ContributorsModule,
+        GlossaryModule,
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())]
 })
