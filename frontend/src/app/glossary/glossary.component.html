@@ -1,5 +1,5 @@
-<div class="row my-5">
-    <div class="col-md">
+<div class="row mx-0">
+    <div class="col-md py-5">
         <div class="container-md">
             <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
 
@@ -31,7 +31,9 @@
 
                         @for (item of section.items; track item.id) {
                             <article class="p-3 my-2 rounded glossary-item"
-                                [id]="itemElementID(item.id)" tabindex="-1">
+                                [id]="itemElementID(item.id)" tabindex="-1"
+                                [class.active]="hasFocus$(item.id) | async"
+                                (click)="focusItem(item.id)">
                                 <h4 class="h5 font-sans-serif">{{item.term}}</h4>
                                 <div [innerHTML]="item.content"></div>
                             </article>
@@ -41,17 +43,19 @@
             </div>
         </div>
     </div>
-    <aside class="col-md-3 p-4 index-container sticky-top">
+    <aside class="col-md-3 p-4 index-container sticky-top bg-light">
         <h2>Index</h2>
 
         <div class="index-body">
             @for (section of glossary.sections; track section.title) {
                 <section class="my-3">
                     <h3 class="h4">{{section.title}}</h3>
-                    <ul class="nav flex-column">
+                    <ul class="nav nav-pills flex-column">
                         @for (item of section.items; track item.id) {
                             <li class="nav-item">
-                                <button class="nav-link p-0" (click)="focusItem(item.id)">
+                                <button class="nav-link py-0 px-1"
+                                    (click)="focusItem(item.id)"
+                                    [class.active]="hasFocus$(item.id) | async">
                                     {{item.term}}
                                 </button>
                             </li>

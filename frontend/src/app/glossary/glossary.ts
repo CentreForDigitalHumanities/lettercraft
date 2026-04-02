@@ -13,11 +13,12 @@ export interface Glossary {
     sections: GlossarySection[]
 }
 
-function* exampleItems(): Generator<GlosssaryItem, void, void> {
+function* exampleItems(start: number): Generator<GlosssaryItem, void, void> {
     for (let i = 0; i < 30; i++) {
+        const id = i + start;
         yield {
-            id: i,
-            term: `example term ${i}`,
+            id,
+            term: `example term ${id}`,
             content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis felis at arcu vehicula posuere ac ac nisl. Donec accumsan purus quis tincidunt bibendum. Donec eleifend, ex eget sollicitudin fringilla, mauris tellus vulputate velit, a pellentesque lorem odio ut nunc. Donec tellus sapien, porta non blandit nec, pulvinar id massa. Vivamus odio risus, lacinia a nisi ut, vehicula rhoncus diam. Duis in pulvinar augue. Sed mauris dui, tempor sit amet ultricies a, egestas ac magna. Donec mollis sollicitudin mollis.'
         }
     }
@@ -67,15 +68,15 @@ also indicate a (spoken) message conveyed by legates or messengers (e.g. Greg. H
         },
         {
             title: 'Gifts',
-            items: [...exampleItems()],
+            items: [...exampleItems(3)],
         },
         {
             title: 'Messengers',
-            items: [...exampleItems()],
+            items: [...exampleItems(33)],
         },
         {
             title: 'Actions',
-            items: [...exampleItems()],
+            items: [...exampleItems(63)],
         }
     ],
 };
