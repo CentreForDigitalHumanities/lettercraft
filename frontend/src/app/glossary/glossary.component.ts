@@ -1,9 +1,12 @@
-import { AfterViewInit, Component, DestroyRef, ElementRef } from '@angular/core';
-import { GLOSSARY } from './glossary';
+import { AfterViewInit, Component, DestroyRef, ElementRef, OnInit } from '@angular/core';
+import { APIGlossaryItem, parseGlossary } from './glossary';
 import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
-import { BehaviorSubject, filter, map, Subject } from 'rxjs';
+import { BehaviorSubject, filter, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import _ from 'underscore';
+import { Request } from '../user/Request';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
     selector: 'lc-glossary',
@@ -11,8 +14,14 @@ import _ from 'underscore';
     styleUrl: './glossary.component.scss',
     standalone: false,
 })
-export class GlossaryComponent implements AfterViewInit {
-    glossary = GLOSSARY;
+export class GlossaryComponent implements OnInit, AfterViewInit {
+
+    itemsRequest = new Request<null, APIGlossaryItem[]>(
+        this.http, '/api/glossary/item/', 'get'
+    );
+    glossary$ = this.itemsRequest.success$.pipe(
+        map(parseGlossary),
+    );
 
     breadcrumbs: Breadcrumb[] = [
         { link: '/', label: 'Lettercraft' },
@@ -22,9 +31,14 @@ export class GlossaryComponent implements AfterViewInit {
     focus$ = new BehaviorSubject<number | null>(null);
 
     constructor(
+        private http: HttpClient,
         private el: ElementRef<HTMLElement>,
         private destroy: DestroyRef
     ) {}
+
+    ngOnInit() {
+        this.itemsRequest.subject.next(null);
+    }
 
     ngAfterViewInit(): void {
         this.focus$.pipe(
