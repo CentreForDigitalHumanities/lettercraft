@@ -16,7 +16,7 @@ beautifulsoup4==4.12.2
     # via django-livereload-server
 dj-rest-auth==6.0.0
     # via -r requirements.in
-django==4.2.29
+django==4.2.30
     # via
     #   -r requirements.in
     #   dj-rest-auth
