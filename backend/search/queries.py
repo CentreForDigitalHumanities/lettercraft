@@ -44,7 +44,8 @@ class SearchFocus(Enum):
     SOURCES = "SOURCES"
     EPISODES = "EPISODES"
     AGENTS = "AGENTS"
-    ITEMS = "ITEMS"
+    LETTERS = "LETTERS"
+    GIFTS = "GIFTS"
     LOCATIONS = "LOCATIONS"
 
 
@@ -78,70 +79,58 @@ class SearchQueries(ObjectType):
                 ).qs
             return queryset
 
-        source_qs = apply_filter(
-            SourceQueries.resolve_sources(None, info, public_only=True, editable=False),
-            SourceFilter,
-        ).distinct()
-        episode_qs = apply_filter(
-            EventQueries.resolve_episodes(None, info, public_only=True, editable=False),
-            EpisodeFilter,
-        ).distinct()
-        agent_qs = apply_filter(
-            PersonQueries.resolve_agent_descriptions(
-                None, info, public_only=True, editable=False
-            ),
-            AgentDescriptionFilter,
-        ).distinct()
-        letter_qs = apply_filter(
-            LetterQueries.resolve_letter_descriptions(
-                None, info, public_only=True, editable=False
-            ),
-            LetterDescriptionFilter,
-        ).distinct()
-        gift_qs = apply_filter(
-            LetterQueries.resolve_gift_descriptions(
-                None, info, public_only=True, editable=False
-            ),
-            GiftDescriptionFilter,
-        ).distinct()
-        location_qs = apply_filter(
-            SpaceQueries.resolve_space_descriptions(
-                None, info, public_only=True, editable=False
-            ),
-            SpaceDescriptionFilter,
-        ).distinct()
+        common_params = {
+            "parent": None,
+            "info": info,
+            "public_only": True,
+            "editable": False,
+        }
 
-        sources = []
-        episodes = []
-        agents = []
-        letters = []
-        gifts = []
-        locations = []
+        search_config = {
+            SearchFocus.SOURCES: {
+                "queryset": SourceQueries.resolve_sources(**common_params),
+                "filter_class": SourceFilter,
+                "result_key": "sources",
+                "count_key": "source_count",
+            },
+            SearchFocus.EPISODES: {
+                "queryset": EventQueries.resolve_episodes(**common_params),
+                "filter_class": EpisodeFilter,
+                "result_key": "episodes",
+                "count_key": "episode_count",
+            },
+            SearchFocus.AGENTS: {
+                "queryset": PersonQueries.resolve_agent_descriptions(**common_params),
+                "filter_class": AgentDescriptionFilter,
+                "result_key": "agents",
+                "count_key": "agent_count",
+            },
+            SearchFocus.LETTERS: {
+                "queryset": LetterQueries.resolve_letter_descriptions(**common_params),
+                "filter_class": LetterDescriptionFilter,
+                "result_key": "letters",
+                "count_key": "letter_count",
+            },
+            SearchFocus.GIFTS: {
+                "queryset": LetterQueries.resolve_gift_descriptions(**common_params),
+                "filter_class": GiftDescriptionFilter,
+                "result_key": "gifts",
+                "count_key": "gift_count",
+            },
+            SearchFocus.LOCATIONS: {
+                "queryset": SpaceQueries.resolve_space_descriptions(**common_params),
+                "filter_class": SpaceDescriptionFilter,
+                "result_key": "locations",
+                "count_key": "location_count",
+            },
+        }
 
-        match search_focus:
-            case SearchFocus.SOURCES:
-                sources = source_qs
-            case SearchFocus.EPISODES:
-                episodes = episode_qs
-            case SearchFocus.AGENTS:
-                agents = agent_qs
-            case SearchFocus.ITEMS:
-                letters = letter_qs
-                gifts = gift_qs
-            case SearchFocus.LOCATIONS:
-                locations = location_qs
+        counts = {}
+        results = {}
 
-        return SearchResultsType(
-            source_count=source_qs.count(),
-            episode_count=episode_qs.count(),
-            agent_count=agent_qs.count(),
-            letter_count=letter_qs.count(),
-            gift_count=gift_qs.count(),
-            location_count=location_qs.count(),
-            sources=sources,
-            episodes=episodes,
-            agents=agents,
-            letters=letters,
-            gifts=gifts,
-            locations=locations,
-        )
+        for focus, config in search_config.items():
+            qs = apply_filter(config["queryset"], config["filter_class"])
+            counts[config["count_key"]] = qs.count()
+            results[config["result_key"]] = qs if focus == search_focus else []
+
+        return SearchResultsType(**counts, **results)

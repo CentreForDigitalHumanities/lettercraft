@@ -52,7 +52,7 @@ class SourceQueries(ObjectType):
 
     @staticmethod
     def resolve_sources(
-        root: None,
+        parent: None,
         info: ResolveInfo,
         editable=False,
         public_only=False,

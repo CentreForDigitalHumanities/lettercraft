@@ -194,8 +194,8 @@ describe('BrowseComponent', () => {
                 expect(counts.get(SearchFocus.Sources)).toBe(1);
                 expect(counts.get(SearchFocus.Episodes)).toBe(1);
                 expect(counts.get(SearchFocus.Agents)).toBe(1);
-                // letterCount + giftCount
-                expect(counts.get(SearchFocus.Items)).toBe(2);
+                expect(counts.get(SearchFocus.Letters)).toBe(1);
+                expect(counts.get(SearchFocus.Gifts)).toBe(1);
                 expect(counts.get(SearchFocus.Locations)).toBe(1);
                 done();
             });
@@ -242,13 +242,13 @@ describe('BrowseComponent', () => {
                         id: '4',
                         name: 'Letter 1',
                         icon: dataIcons.letter,
-                        link: 'items/4'
+                        link: 'letters/4'
                     }],
                     gifts: [{
                         id: '5',
                         name: 'Gift 1',
                         icon: dataIcons.gift,
-                        link: 'items/5'
+                        link: 'gifts/5'
                     }],
                     spaces: [{
                         id: '6',
@@ -287,11 +287,11 @@ describe('BrowseComponent', () => {
             });
         });
 
-        it('should transform letters and gifts into items', (done) => {
+        it('should transform letters correctly', (done) => {
             component.itemsByType$.subscribe(items => {
-                const allItems = items.get(SearchFocus.Items)!;
-                expect(allItems.length).toBe(2);
-                expect(allItems[0]).toEqual({
+                const letters = items.get(SearchFocus.Letters)!;
+                expect(letters.length).toBe(1);
+                expect(letters[0]).toEqual({
                     id: '4',
                     name: 'Test Letter',
                     description: 'Letter description',
@@ -302,9 +302,17 @@ describe('BrowseComponent', () => {
                         sourceLink: 'sources/1'
                     },
                     icon: dataIcons.letter,
-                    link: 'items/4'
+                    link: 'letters/4'
                 });
-                expect(allItems[1]).toEqual({
+                done();
+            });
+        });
+
+        it('should transform gifts correctly', (done) => {
+            component.itemsByType$.subscribe(items => {
+                const gifts = items.get(SearchFocus.Gifts)!;
+                expect(gifts.length).toBe(1);
+                expect(gifts[0]).toEqual({
                     id: '5',
                     name: 'Test Gift',
                     description: 'Gift description',
@@ -315,11 +323,12 @@ describe('BrowseComponent', () => {
                         sourceLink: 'sources/1'
                     },
                     icon: dataIcons.gift,
-                    link: 'items/5'
+                    link: 'gifts/5'
                 });
                 done();
             });
         });
+
 
         it('should transform locations correctly', (done) => {
             component.itemsByType$.subscribe(items => {
