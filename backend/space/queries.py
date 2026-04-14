@@ -56,8 +56,8 @@ class SpaceQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
-        editable=False,
-        public_only=False,
+        editable = False,
+        public_only = False,
         ids: Optional[TList[str]] = None,
     ) -> QuerySet[SpaceDescription]:
         filters = Q()

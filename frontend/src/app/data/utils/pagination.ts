@@ -38,7 +38,7 @@ export class PageResult<Data, TransformedData = Data> implements Paginated {
         private transformer?: (data: Data) => TransformedData
     ) {
         // reset the page when ids are updated
-        collection$.pipe(
+        this.collection$.pipe(
             takeUntilDestroyed(destroyRef),
         ).subscribe(() => this.page$.next(1));
     }

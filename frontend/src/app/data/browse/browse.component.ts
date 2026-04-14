@@ -77,7 +77,7 @@ export class BrowseComponent {
     public searchValue$ = this.form.valueChanges.pipe(
         startWith(null),
         mergeWith(this.formSubmit$),
-        throttleTime(500, asyncScheduler, { leading: true, trailing: true }),
+        throttleTime(500, asyncScheduler, {leading: true, trailing: true}),
         map(() => this.form.getRawValue()),
         distinctUntilChanged(_.isEqual),
         shareReplay(1),

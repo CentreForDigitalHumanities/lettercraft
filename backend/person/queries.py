@@ -54,8 +54,8 @@ class PersonQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable: bool = False,
-        public_only=False,
+        editable = False,
+        public_only = False,
         ids: Optional[TList[str]] = None,
     ) -> QuerySet[AgentDescription]:
         filters = Q()

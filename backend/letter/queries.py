@@ -89,8 +89,8 @@ class LetterQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable=False,
-        public_only=False,
+        editable = False,
+        public_only = False,
         ids: Optional[TList[str]] = None,
     ) -> QuerySet[LetterDescription]:
         filters = Q()
@@ -141,8 +141,8 @@ class LetterQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable=False,
-        public_only=False,
+        editable = False,
+        public_only = False,
         ids: Optional[TList[str]] = None,
     ) -> QuerySet[GiftDescription]:
         filters = Q()
