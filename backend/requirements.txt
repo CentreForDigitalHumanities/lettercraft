@@ -111,7 +111,7 @@ text-unidecode==1.3
     # via graphene-django
 tornado==6.5.5
     # via django-livereload-server
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   django-revproxy
     #   requests
