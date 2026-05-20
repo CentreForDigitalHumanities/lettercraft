@@ -25,6 +25,7 @@ class SpaceQueries(ObjectType):
         required=True,
         source_id=ID(),
         editable=Boolean(),
+        public_only=Boolean(),
     )
     regions = List(NonNull(RegionType), required=True)
     settlements = List(NonNull(SettlementType), required=True)
@@ -54,7 +55,8 @@ class SpaceQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
         source_id: Optional[str] = None,
-        editable: bool = False,
+        editable = False,
+        public_only = False,
     ) -> QuerySet[SpaceDescription]:
         filters = Q()
 
@@ -63,6 +65,8 @@ class SpaceQueries(ObjectType):
         if editable:
             user = info.context.user
             filters &= Q(source__in=editable_sources(user))
+        if public_only:
+            filters &= Q(source__is_public=True)
 
         return SpaceDescriptionType.get_queryset(SpaceDescription.objects, info).filter(
             filters

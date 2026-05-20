@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { ViewCaseStudiesGQL, ViewCaseStudiesQuery } from 'generated/graphql';
-import { map } from 'rxjs';
+import { Component, input } from '@angular/core';
+import { ViewCaseStudiesQuery } from 'generated/graphql';
+
+type CaseStudy = ViewCaseStudiesQuery['caseStudies'][number];
 
 @Component({
     selector: 'lc-case-studies-list',
@@ -9,16 +10,10 @@ import { map } from 'rxjs';
     standalone: false
 })
 export class CaseStudiesListComponent {
-    data$ = this.query.watch().valueChanges.pipe(
-        map(result => result.data),
-    );
+    data = input.required<CaseStudy[]>()
+    activeID = input<string | null | undefined>();
 
-    constructor(
-        private query: ViewCaseStudiesGQL
-    ) {
-    }
-
-    authorNames(item: ViewCaseStudiesQuery['caseStudies'][number]) {
+    authorNames(item: CaseStudy): string {
         const names = item.authors.map(author => author.fullName);
         const formatter = new Intl.ListFormat('en', {style: 'long', type: 'conjunction'});
         return formatter.format(names);

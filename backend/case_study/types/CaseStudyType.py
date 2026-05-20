@@ -8,6 +8,15 @@ from case_study.models import CaseStudy
 class CaseStudyType(DjangoObjectType):
     class Meta:
         model = CaseStudy
+        fields = [
+            "id",
+            "name",
+            "description",
+            "authors",
+            "date",
+            "content",
+            "sources",
+        ]
 
     @classmethod
     def get_queryset(

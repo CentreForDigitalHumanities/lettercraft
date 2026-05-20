@@ -17,6 +17,9 @@
           "style": "scss"
         }
       },
+      "i18n": {
+        "sourceLocale": "en-GB"
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "lc",
@@ -50,8 +53,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",

@@ -20,8 +20,8 @@
   "dependencies": {
     "@angular/animations": "^19.2.16",
     "@angular/common": "^19.2.16",
-    "@angular/compiler": "^19.2.18",
-    "@angular/core": "^19.2.18",
+    "@angular/compiler": "^19.2.20",
+    "@angular/core": "^19.2.20",
     "@angular/forms": "^19.2.16",
     "@angular/platform-browser": "^19.2.16",
     "@angular/platform-browser-dynamic": "^19.2.16",
@@ -39,7 +39,7 @@
     "graphql": "^16",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "underscore": "^1.13.6",
+    "underscore": "^1.13.8",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
@@ -69,6 +69,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~5.5.4",
-    "vite": "^6.4.1"
+    "vite": "^6.4.2"
   }
 }

@@ -3,7 +3,7 @@ import { ApolloQueryResult } from "@apollo/client/core";
 import { DestroyRef } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-interface HasID { id: string }
+export interface HasID { id: string }
 
 interface PageQueryGQL<Data> {
     watch: (variables: {ids: string[]}) =>

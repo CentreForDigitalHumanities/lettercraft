@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.db.models import Model
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
@@ -135,11 +136,7 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_episode_categories(self, fake: Faker, *args, **kwargs):
-        fake.unique.clear()
-        EpisodeCategory.objects.create(
-            name=fake.unique.word(),
-            description=fake.text(),
-        )
+        self._create_category(fake, EpisodeCategory, label_field="name")
 
     @track_progress
     def _create_episodes(self, fake: Faker, options, total, model):
@@ -200,6 +197,11 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
+        episode_categories = list(
+            EpisodeCategory.objects.all().order_by("?")[: random.randint(0, 5)]
+        )
+        episode.categories.set(episode_categories)
+
         # Collect all contributors from related descriptions
         all_contributors = [
             contributor
@@ -243,6 +245,7 @@ class Command(BaseCommand):
 
         agent_description = AgentDescription.objects.create(
             name=name,
+            description=fake.text(),
             source=source,
             is_group=is_group,
         )
@@ -253,15 +256,35 @@ class Command(BaseCommand):
 
         agent_description.contributors.set(contributors)
 
-    @track_progress
-    def _create_gift_categories(self, fake: Faker, *args, **kwargs):
-        fake.unique.clear()
-        GiftCategory.objects.create(label=fake.unique.word(), description=fake.text())
+    def _create_category(
+        self, fake: Faker, Model: type[Model], label_field="label"
+    ) -> None:
+        existing_labels = set(Model.objects.values_list(label_field, flat=True))
+
+        attempts = 0
+        max_attempts = 100
+
+        while attempts < max_attempts:
+            label = fake.word()
+            if label not in existing_labels:
+                Model.objects.create(**{label_field: label}, description=fake.text())
+                return
+
+            attempts += 1
+
+        self.stdout.write(
+            self.style.WARNING(
+                f"Could not create unique {Model.__name__} after {max_attempts} attempts"
+            )
+        )
 
     @track_progress
-    def _create_letter_categories(self, fake: Faker, *args, **kwargs):
-        fake.unique.clear()
-        LetterCategory.objects.create(label=fake.unique.word(), description=fake.text())
+    def _create_gift_categories(self, fake: Faker, *args, total: int, **kwargs):
+        self._create_category(fake, GiftCategory)
+
+    @track_progress
+    def _create_letter_categories(self, fake: Faker, *args, total: int, **kwargs):
+        self._create_category(fake, LetterCategory)
 
     @track_progress
     def _create_letter_descriptions(self, fake: Faker, *args, **kwargs):
@@ -275,6 +298,7 @@ class Command(BaseCommand):
         letter_description = LetterDescription.objects.create(
             source=source,
             name=f"Letter about {subject}",
+            description=fake.text(),
         )
         letter_description.categories.set(categories)
 

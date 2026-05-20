@@ -1,40 +1,39 @@
-<ng-container *ngIf="data$ | async as data">
-    <ng-container *ngIf="data.caseStudy as caseStudy">
-        <lc-breadcrumb [breadcrumbs]="breadCrumbs(caseStudy)" />
+@let caseStudy = data();
 
-        <h1 class="mt-4">{{caseStudy.name}}</h1>
+@if (caseStudy) {
+    <h2 id="case-study-title" tabindex="-1">{{caseStudy.name}}</h2>
 
-        <p class="lead" *ngIf="caseStudy.authors.length">
-            By
-            <ng-container *ngFor="let author of caseStudy.authors; last as last">
-                <a [routerLink]="['/contributors', author.id]" class="link-dark"
-                    >{{author.fullName}}</a><ng-container *ngIf="!last">, </ng-container>
-            </ng-container>
+    <p class="float-end">
+        {{caseStudy.date | date:'longDate'}}
+    </p>
+
+    <p class="lead" *ngIf="caseStudy.authors.length">
+        By
+        <ng-container *ngFor="let author of caseStudy.authors" class="inline-list">
+            <a [routerLink]="['/contributors', author.id]"
+                class="inline-list-item link-dark link-offset-1"
+                >{{author.fullName}}</a>
+        </ng-container>
+    </p>
+
+
+    @if (caseStudy.sources.length) {
+        <p class="fst-italic"><span class="fs-4 fst-normal">☞</span> Browse in the database:
+            <span *ngFor="let source of caseStudy.sources"
+                class="fst-normal inline-list">
+                <span class="inline-list-item">
+                    <a [routerLink]="['/data/sources', source.id]"
+                        class="icon-link ms-1">
+                        <lc-icon [icon]="dataIcons.source" />
+                        {{source.name}}
+                    </a>
+                </span>
+            </span>
         </p>
+    }
 
-        <p class="text-secondary">
-            {{caseStudy.date | date}}
-        </p>
+    <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
+        class="mt-4 mx-auto font-serif lh-medium extra-header-spacing"
+    ></div>
+}
 
-        <div class="card bg-light" *ngIf="caseStudy.sources.length">
-            <div class="card-body">
-                <p class="card-text">
-                    This is a case study based on
-                    <span *ngFor="let source of caseStudy.sources; last as last">
-                        <a [routerLink]="['/data/sources', source.id]"
-                            class="icon-link ms-1">
-                            <lc-icon [icon]="dataIcons.source" />
-                            {{source.name}}
-                        </a>
-                        <span *ngIf="!last">, </span>
-                    </span>
-                </p>
-            </div>
-        </div>
-
-        <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
-            class="mt-5 col-md-8 mx-auto font-serif lh-medium extra-header-spacing"
-        ></div>
-
-    </ng-container>
-</ng-container>

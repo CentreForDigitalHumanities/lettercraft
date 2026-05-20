@@ -1,24 +1,23 @@
-<h1>Case studies</h1>
-
-<div *ngIf="data$ | async as data" class="my-4">
-    <div *ngFor="let item of data.caseStudies">
-        <div class="card my-3">
-            <div class="card-body">
-                <div class="row">
-                    <h2 class="col card-title h5">
-                        <a [routerLink]="[item.id]" class="stretched-link">{{item.name}}</a>
-                        <br>
-                    </h2>
-                    <p class="col-auto card-text text-secondary">
-                        {{item.date | date}}
-                    </p>
+<div *ngIf="data() as data" class="my-4">
+    @if (data.length) {
+        <ul class="list-unstyled">
+            <li *ngFor="let item of data">
+                @let active = item.id === activeID();
+                <div class="card my-3"
+                    [class.text-bg-light]="active" [class.border-secondary]="active">
+                    <div class="card-body">
+                        <p class="col card-title h6">
+                            <a [routerLink]="['/case-studies', item.id]"
+                                class="stretched-link link-underline link-underline-opacity-0"
+                                [attr.aria-current]="active ? 'page' : 'false'">{{item.name}}</a>
+                            <br>
+                        </p>
+                        <p class="card-text fw-light">{{authorNames(item)}}</p>
+                    </div>
                 </div>
-                <p class="card-text">{{authorNames(item)}}</p>
-            </div>
-        </div>
-    </div>
-
-    <div *ngIf="!data.caseStudies.length">
+            </li>
+        </ul>
+    } @else {
         <p>No case studies have been published yet.</p>
-    </div>
+    }
 </div>

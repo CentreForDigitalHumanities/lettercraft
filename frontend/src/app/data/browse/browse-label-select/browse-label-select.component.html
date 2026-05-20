@@ -1,0 +1,82 @@
+@let labelIds = selectedLabelIds();
+<div
+    class="label-filter-wrapper d-flex align-items-center mt-3"
+>
+    <div ngbDropdown class="w-100" autoClose="outside">
+        <button
+            type="button"
+            class="btn btn-outline-secondary label-dropdown-button w-100 d-flex justify-content-between align-items-center py-1 px-2 position-relative"
+            id="labelDropdown"
+            ngbDropdownToggle
+        >
+            @if (labelIds.length === 0) {
+            <span class="placeholder-text">Select labels...</span>
+            } @else {
+            <div class="d-flex flex-wrap gap-1 me-2">
+                @for (labelId of labelIds; track labelId) {
+                <span class="btn-tag text-bg-burntorange border-radius">
+                    <button
+                        type="button"
+                        class="btn remove-label-button border-0 btn-burntorange bg-transparent p-0 m-0 lh-sm"
+                        [attr.aria-label]="
+                            'Remove label ' + getLabelName(labelId)
+                        "
+                        (click)="removeLabel($event, labelId)"
+                    >
+                        <lc-icon [icon]="actionIcons.remove" class="me-1" />
+                    </button>
+                    {{ getLabelName(labelId) }}
+                </span>
+                }
+            </div>
+            } @if (labelIds.length > 0) {
+            <button
+                type="button"
+                class="btn clear-labels-button border-0 py-1 px-2 position-absolute bg-transparent top-50"
+                (click)="clearLabels()"
+                aria-label="Clear all labels"
+            >
+                <lc-icon [icon]="actionIcons.delete" />
+            </button>
+            }
+        </button>
+        <div
+            ngbDropdownMenu
+            aria-labelledby="labelDropdown"
+            class="label-dropdown-menu p-1"
+        >
+            <div class="dropdown-header-text py-1 px-3 text-secondary mb-2
+                border-bottom">
+                Select one or more labels from the list below...
+            </div>
+            @for (label of allLabels(); track label.id) {
+            <button
+                ngbDropdownItem
+                type="button"
+                class="label-dropdown-item d-flex align-items-center"
+                [attr.aria-pressed]="isLabelSelected(label.id)"
+                (click)="toggleLabel(label.id)"
+            >
+                <span
+                    class="btn btn-tag me-2 border-radius py-2 px-3"
+                    [class]="
+                        isLabelSelected(label.id)
+                            ? 'btn-burntorange'
+                            : 'btn-light'
+                    "
+                >
+                    <lc-icon
+                        [icon]="
+                            isLabelSelected(label.id)
+                                ? 'check-square'
+                                : 'square'
+                        "
+                        class="me-1"
+                    />
+                    {{ label.name }}
+                </span>
+            </button>
+            }
+        </div>
+    </div>
+</div>
