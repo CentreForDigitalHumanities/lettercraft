@@ -29,9 +29,7 @@ def _add_source(data: Dict, document: DocumentObject) -> None:
     document.add_heading(data["name"])
 
     if contributors := data["contributors"]:
-        document.add_paragraph(
-            f"Contributors: {", ".join(contributors)}"
-        )
+        _add_key_value_paragraph("contributors", ", ".join(contributors), document)
 
     if description := data["description"]:
         document.add_paragraph(description)
@@ -46,35 +44,37 @@ def _add_source(data: Dict, document: DocumentObject) -> None:
 
     for key in ["letters", "gifts", "locations"]:
         document.add_heading(key.capitalize(), level=2)
-        for agent in data[key]:
-            _add_entity(agent, document)
+        for entity in data[key]:
+            _add_entity(entity, document)
 
 
 def _add_episode(data: Dict, source_data: Dict, document: DocumentObject) -> None:
     document.add_heading(data["name"], level=3)
 
     if source_ref := _episode_source_ref(data["source_reference"]):
-        document.add_paragraph(source_ref)
+        p = document.add_paragraph()
+        run = p.add_run(source_ref)
+        run.italic = True
 
     if summary := data["summary"]:
         document.add_paragraph(summary)
 
     if labels := data["labels"]:
-        document.add_paragraph(
-            f"Labels: {", ".join(labels)}"
-        )
+        _add_key_value_paragraph("labels", ", ".join(labels), document)
 
     if designators := data["designators"]:
-        document.add_paragraph(
-            f"Designators: {", ".join(designators)}",
-        )
+        _add_key_value_paragraph("designators", ", ".join(designators), document)
 
     for key in ["agents", "letters", "gifts", "locations"]:
         if entities := _episode_entity_names(data, source_data, key):
-            document.add_paragraph()
-            document.add_paragraph(
-                f"{key}: {entities}".capitalize()
-            )
+            _add_key_value_paragraph(key, entities, document)
+
+
+def _add_key_value_paragraph(key: str, value: str, document: DocumentObject):
+    p = document.add_paragraph()
+    head = p.add_run(key.capitalize() + ":")
+    head.bold = True
+    p.add_run(" " + value)
 
 
 def _episode_source_ref(data: Dict) -> str:
