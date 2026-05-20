@@ -13,15 +13,18 @@ def save_docx(sources: QuerySet[Source], out: TextIOWrapper) -> None:
     data = json_data(sources)
 
     document = Document()
-    _add_preamble(document)
+    _add_preamble(data["metadata"], document)
     for source in data['sources']:
         _add_source(source, document)
 
     document.save(out)
 
 
-def _add_preamble(document: DocumentObject) -> None:
-    document.add_heading("Lettercraft data")
+def _add_preamble(data: Dict, document: DocumentObject) -> None:
+    document.add_heading(f"Lettercraft data")
+    document.add_paragraph(
+        f"Exported from {data["url"]} on {data["date"]}"
+    )
 
 
 def _add_source(data: Dict, document: DocumentObject) -> None:
