@@ -8,4 +8,7 @@ class DownloadJSONView(APIView):
     def get(self, request, *args, **kwargs):
         sources = Source.objects.filter(is_public=True)
         data = json_data(sources)
-        return JsonResponse(data)
+        filename = "lettercraft-data.json"
+        return JsonResponse(data, headers={
+            "Content-disposition": f"attachment; filename=\"{filename}\"",
+        })
