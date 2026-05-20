@@ -10,7 +10,7 @@ from person.models import AgentDescription
 from letter.models import LetterDescription, GiftDescription
 from space.models import SpaceDescription
 from case_study.models import CaseStudy
-from user.serializers import picture_url
+from user.utils import picture_url
 
 
 class UserType(DjangoObjectType):
