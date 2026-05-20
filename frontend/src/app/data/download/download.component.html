@@ -1,7 +1,7 @@
 <button class="btn btn-primary" (click)="open()">Download data</button>
 
 <ng-template #downloadModal>
-    <lc-base-modal (dismiss)="close()">
+    <lc-base-modal (dismiss)="close()" [showFooter]="false">
         <ng-container modal-header>
             <h4 ngbAutofocus tabindex="-1">Download data</h4>
         </ng-container>
