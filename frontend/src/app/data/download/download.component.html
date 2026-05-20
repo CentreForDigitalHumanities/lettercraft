@@ -1,1 +1,27 @@
-<a href="/api/download/download">Download data</a>
+<button class="btn btn-primary" (click)="open()">Download data</button>
+
+<ng-template #downloadModal>
+    <lc-base-modal (dismiss)="close()">
+        <ng-container modal-header>
+            <h4 ngbAutofocus tabindex="-1">Download data</h4>
+        </ng-container>
+        <div modal-content>
+            <p>
+                You can download all data from the Lettercraft project for your own
+                analysis. This includes all sources and data on epistolary episodes.
+            </p>
+
+            <p>
+                The data is available as a JSON file, which is suitable for programming
+                languages like Python or R. In the future, we plan to offer
+                other formats as well.
+            </p>
+
+            <p>
+                <a href="/api/download/download" class="btn btn-primary">
+                    Download data (JSON)
+                </a>
+            </p>
+        </div>
+    </lc-base-modal>
+</ng-template>
