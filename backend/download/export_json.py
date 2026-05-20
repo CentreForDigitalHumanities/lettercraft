@@ -16,10 +16,14 @@ from user.models import User
 from source.utils import source_contributor_ids
 
 def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
+    data = json_data(sources)
+    json.dump(data, f, indent=2)
+
+
+def json_data(sources: QuerySet[Source]) -> Dict:
     data = _serialize(sources)
     cleaned = _clean_serialised_data(data)
-    json.dump(cleaned, f, indent=2)
-
+    return cleaned
 
 def _serialize(sources: QuerySet[Source]) -> Dict:
     return {
