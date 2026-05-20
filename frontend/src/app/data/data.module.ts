@@ -13,6 +13,7 @@ import { PaginatorComponent } from './shared/paginator/paginator.component';
 import { BrowseComponent } from './browse/browse.component';
 import { BrowseListItemComponent } from './browse/search-item/browse-list-item.component';
 import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-label-select.component';
+import { DownloadComponent } from './download/download.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-
         BrowseComponent,
         BrowseLabelSelectComponent,
         BrowseListItemComponent,
+        DownloadComponent,
     ],
     imports: [
         SharedModule,
