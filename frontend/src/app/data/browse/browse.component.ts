@@ -1,16 +1,24 @@
-import { Component } from "@angular/core";
+import { Component, DestroyRef } from "@angular/core";
 import { dataIcons, actionIcons, statusIcons } from "@shared/icons";
 import { FormGroup, FormControl } from "@angular/forms";
-import { BrowseSearchQuery, SearchFocus, BrowseSearchGQL, EpisodeType, SourceType } from "generated/graphql";
+import {
+    SearchFocus, BrowseSearchGQL, EpisodeType, SourceType,
+    BrowseSourcesPageGQL, BrowseEpisodesPageGQL, BrowseAgentsPageGQL,
+    BrowseLettersPageGQL, BrowseGiftsPageGQL, BrowseLocationsPageGQL,
+    BrowseSourcesPageQuery, BrowseEpisodesPageQuery, BrowseAgentsPageQuery,
+    BrowseLettersPageQuery, BrowseGiftsPageQuery, BrowseLocationsPageQuery,
+    BrowseSearchQuery
+} from "generated/graphql";
 import { Subject, startWith, mergeWith, throttleTime, asyncScheduler, map, distinctUntilChanged, shareReplay, filter } from "rxjs";
-import { SearchService } from "@services/search.service";
+import { SearchService, SearchState } from "@services/search.service";
 import { BrowseListItem, EntityListItem } from "./search-item/browse-list-item.component";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
+import { HasID, PageQueryGQL, PageResult } from "../utils/pagination";
 import _ from "underscore";
 
 
-type QueriedResults = NonNullable<BrowseSearchQuery['search']>;
+type QueriedResults = NonNullable<NonNullable<SearchState<BrowseSearchQuery>['data']>['search']>;
 
 interface TabMetadata {
     type: SearchFocus;
@@ -26,6 +34,14 @@ const TAB_METADATA: TabMetadata[] = [
     { type: SearchFocus.Gifts, title: 'Gifts', icon: dataIcons.gift },
     { type: SearchFocus.Locations, title: 'Locations', icon: dataIcons.location }
 ];
+
+type BrowsePageResult =
+    | PageResult<BrowseSourcesPageQuery, BrowseListItem[]>
+    | PageResult<BrowseEpisodesPageQuery, BrowseListItem[]>
+    | PageResult<BrowseAgentsPageQuery, BrowseListItem[]>
+    | PageResult<BrowseLettersPageQuery, BrowseListItem[]>
+    | PageResult<BrowseGiftsPageQuery, BrowseListItem[]>
+    | PageResult<BrowseLocationsPageQuery, BrowseListItem[]>;
 
 @Component({
     selector: 'lc-browse',
@@ -69,7 +85,14 @@ export class BrowseComponent {
 
     constructor(
         private searchQuery: BrowseSearchGQL,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private destroyRef: DestroyRef,
+        private sourcesPageQuery: BrowseSourcesPageGQL,
+        private episodesPageQuery: BrowseEpisodesPageGQL,
+        private agentsPageQuery: BrowseAgentsPageGQL,
+        private lettersPageQuery: BrowseLettersPageGQL,
+        private giftsPageQuery: BrowseGiftsPageGQL,
+        private locationsPageQuery: BrowseLocationsPageGQL,
     ) { }
 
     public searchResult$ = this.searchService.createSearch(
@@ -85,10 +108,13 @@ export class BrowseComponent {
         map(result => result.loading)
     );
 
-    public counts$ = this.searchResult$.pipe(
+    private searchData$ = this.searchResult$.pipe(
         filter(results => !!results.data?.search),
-        map(results => {
-            const data = results.data!.search!;
+        map(results => results.data!.search!),
+    );
+
+    public counts$ = this.searchData$.pipe(
+        map(data => {
             return new Map<SearchFocus, number>([
                 [SearchFocus.Sources, data.sourceCount],
                 [SearchFocus.Episodes, data.episodeCount],
@@ -101,28 +127,32 @@ export class BrowseComponent {
         shareReplay(1)
     );
 
-    public itemsByType$ = this.searchResult$.pipe(
-        filter(results => !!results.data?.search),
-        map(results => {
-            const data = results.data!.search!;
-            return new Map<SearchFocus, BrowseListItem[]>([
-                [SearchFocus.Sources, this.transformSources(data)],
-                [SearchFocus.Episodes, this.transformEpisodes(data)],
-                [SearchFocus.Agents, this.transformAgents(data)],
-                [SearchFocus.Letters, this.transformLetters(data)],
-                [SearchFocus.Gifts, this.transformGifts(data)],
-                [SearchFocus.Locations, this.transformLocations(data)]
-            ]);
-        }),
-        shareReplay(1)
-    );
-
     public changeTabs(newNavId: SearchFocus): void {
         this.form.controls.searchFocus.setValue(newNavId);
     }
 
-    private transformSources(results: QueriedResults): BrowseListItem[] {
-        return results.sources.map(source => ({
+    public pageResultsByType = new Map<SearchFocus, BrowsePageResult>([
+        [SearchFocus.Sources, this.createPageResult(data => data.sources, this.sourcesPageQuery, this.transformSources.bind(this))],
+        [SearchFocus.Episodes, this.createPageResult(data => data.episodes, this.episodesPageQuery, this.transformEpisodes.bind(this))],
+        [SearchFocus.Agents, this.createPageResult(data => data.agents, this.agentsPageQuery, this.transformAgents.bind(this))],
+        [SearchFocus.Letters, this.createPageResult(data => data.letters, this.lettersPageQuery, this.transformLetters.bind(this))],
+        [SearchFocus.Gifts, this.createPageResult(data => data.gifts, this.giftsPageQuery, this.transformGifts.bind(this))],
+        [SearchFocus.Locations, this.createPageResult(data => data.locations, this.locationsPageQuery, this.transformLocations.bind(this))]
+    ]);
+
+    private createPageResult<QueryData>(
+        unpack: (data: QueriedResults) => HasID[],
+        pageQuery: PageQueryGQL<QueryData>,
+        transform: (data: QueryData) => BrowseListItem[]
+    ): PageResult<QueryData, BrowseListItem[]> {
+        const objects$ = this.searchData$.pipe(
+            map(data => unpack(data)),
+        );
+        return new PageResult(objects$, pageQuery, this.destroyRef, transform);
+    }
+
+    private transformSources(data: BrowseSourcesPageQuery): BrowseListItem[] {
+        return data.sources.map(source => ({
             id: source.id,
             name: source.name,
             type: 'source',
@@ -133,8 +163,8 @@ export class BrowseComponent {
         }));
     }
 
-    private transformEpisodes(results: QueriedResults): BrowseListItem[] {
-        return results.episodes.map(episode => ({
+    private transformEpisodes(data: BrowseEpisodesPageQuery): BrowseListItem[] {
+        return data.episodes.map(episode => ({
             id: episode.id,
             name: episode.name,
             type: 'episode',
@@ -174,8 +204,8 @@ export class BrowseComponent {
         }));
     }
 
-    private transformAgents(results: QueriedResults): BrowseListItem[] {
-        return results.agents.map(agent => ({
+    private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
+        return data.agentDescriptions.map(agent => ({
             id: agent.id,
             name: agent.name,
             type: 'entity',
@@ -186,8 +216,8 @@ export class BrowseComponent {
         }));
     }
 
-    private transformLetters(results: QueriedResults): BrowseListItem[] {
-        return results.letters.map(letter => ({
+    private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
+        return data.letterDescriptions.map(letter => ({
             id: letter.id,
             name: letter.name,
             type: 'entity',
@@ -199,8 +229,8 @@ export class BrowseComponent {
 
     }
 
-    private transformGifts(results: QueriedResults): BrowseListItem[] {
-        return results.gifts.map(gift => ({
+    private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
+        return data.giftDescriptions.map(gift => ({
             id: gift.id,
             name: gift.name,
             type: 'entity',
@@ -211,8 +241,8 @@ export class BrowseComponent {
         }));
     }
 
-    private transformLocations(results: QueriedResults): BrowseListItem[] {
-        return results.locations.map(location => ({
+    private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
+        return data.spaceDescriptions.map(location => ({
             id: location.id,
             name: location.name,
             type: 'entity',
