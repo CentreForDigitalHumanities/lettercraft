@@ -1,5 +1,3 @@
-@use "../../../../src/lc_theme" as theme;
-
 .search-form {
     max-width: 700px;
 }
@@ -9,12 +7,15 @@
     transition: all 0.3s ease;
 
     &:hover {
-        border-bottom-color: theme.$gray-400;
-        color: theme.$gray-700;
+        border-bottom-color: var(--bs-tertiary-color);
+    }
+
+    &:not(.active) {
+        color: var(--bs-secondary) !important;
     }
 
     &.active {
-        color: map-get(theme.$lc-colors, primary);
-        border-bottom-color: map-get(theme.$lc-colors, primary);
+        color: var(--bs-primary);
+        border-bottom-color: var(--bs-primary);
     }
 }
