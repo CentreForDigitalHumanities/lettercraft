@@ -1,12 +1,9 @@
 from typing import Dict
 from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
-from django.urls import reverse
+from user.utils import picture_url
 
 from user.models import User
-
-def picture_url(user: User):
-    return reverse("user picture", kwargs={"id": user.pk})
 
 class ProfilePictureField(serializers.URLField):
     def to_representation(self, value):
