@@ -56,7 +56,7 @@ const mockEpisodesPageData: BrowseEpisodesPageQuery = {
             page: "10",
             source: {
                 id: '1',
-                reference: 'REF-1'
+                name: 'REF-1'
             },
             categories: [{
                 id: 'cat1',
@@ -81,7 +81,7 @@ const mockAgentsPageData: BrowseAgentsPageQuery = {
             episodes: [{ id: '2' }],
             source: {
                 id: '1',
-                reference: 'REF-1'
+                name: 'REF-1'
             }
         }
     ]
@@ -96,7 +96,7 @@ const mockLettersPageData: BrowseLettersPageQuery = {
             episodes: [{ id: '2' }],
             source: {
                 id: '1',
-                reference: 'REF-1'
+                name: 'REF-1'
             }
         }
     ]
@@ -111,7 +111,7 @@ const mockGiftsPageData: BrowseGiftsPageQuery = {
             episodes: [{ id: '2' }],
             source: {
                 id: '1',
-                reference: 'REF-1'
+                name: 'REF-1'
             }
         }
     ]
@@ -127,7 +127,7 @@ const mockLocationsPageData: BrowseLocationsPageQuery = {
             episodes: [{ id: '2' }],
             source: {
                 id: '1',
-                reference: 'REF-1'
+                name: 'REF-1'
             }
         }
     ]
@@ -289,6 +289,10 @@ describe('BrowseComponent', () => {
                     icon: dataIcons.episode,
                     link: 'episodes/2',
                     labels: ['Category1'],
+                    source: {
+                        id: '1',
+                        name: 'REF-1'
+                    },
                     agents: [{
                         id: '3',
                         name: 'Agent 1',
@@ -334,10 +338,10 @@ describe('BrowseComponent', () => {
                     type: 'entity',
                     icon: dataIcons.personIdentified,
                     link: 'agents/3',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     }
                 });
                 done();
@@ -353,10 +357,10 @@ describe('BrowseComponent', () => {
                     name: 'Test Letter',
                     description: 'Letter description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.letter,
                     link: 'letters/4'
@@ -374,10 +378,10 @@ describe('BrowseComponent', () => {
                     name: 'Test Gift',
                     description: 'Gift description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.gift,
                     link: 'gifts/5'
@@ -396,10 +400,10 @@ describe('BrowseComponent', () => {
                     name: 'Test Location',
                     description: 'Location description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.location,
                     link: 'locations/6'
@@ -419,7 +423,7 @@ describe('BrowseComponent', () => {
                     isGroup: false,
                     identified: true,
                     episodes: [{ id: '1' }, { id: '2' }],
-                    source: { id: '1', reference: 'REF-1' }
+                    source: { id: '1', name: 'REF-1' }
                 }]
             };
 
@@ -435,9 +439,9 @@ describe('BrowseComponent', () => {
             const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
             agentsPageResult.pageData$.subscribe(agents => {
                 const entityAgents = agents as EntityListItem[];
-                expect(entityAgents[0].occurrence.numOfEpisodes).toBe(2);
-                expect(entityAgents[0].occurrence.sourceName).toBe('REF-1');
-                expect(entityAgents[0].occurrence.sourceLink).toBe('sources/1');
+                expect(entityAgents[0].numOfEpisodes).toBe(2);
+                expect(entityAgents[0].source.name).toBe('REF-1');
+                expect(entityAgents[0].source.id).toBe('1');
                 done();
             });
         });
@@ -446,9 +450,9 @@ describe('BrowseComponent', () => {
             const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
             agentsPageResult.pageData$.subscribe(agents => {
                 const entityAgents = agents as EntityListItem[];
-                expect(entityAgents[0].occurrence.numOfEpisodes).toBe(1);
-                expect(entityAgents[0].occurrence.sourceName).toBe('REF-1');
-                expect(entityAgents[0].occurrence.sourceLink).toBe('sources/1');
+                expect(entityAgents[0].numOfEpisodes).toBe(1);
+                expect(entityAgents[0].source.name).toBe('REF-1');
+                expect(entityAgents[0].source.id).toBe('1');
                 done();
             });
         });
@@ -464,7 +468,7 @@ describe('BrowseComponent', () => {
                     isGroup: true,
                     identified: false,
                     episodes: [{ id: '2' }],
-                    source: { id: '1', reference: 'REF-1' },
+                    source: { id: '1', name: 'REF-1' },
                 }]
             };
 
@@ -480,11 +484,7 @@ describe('BrowseComponent', () => {
             agentsPageResult.pageData$.subscribe(agents => {
                 const entityAgents = agents as EntityListItem[];
                 expect(entityAgents[0].icon).toBe(dataIcons.group);
-                expect(entityAgents[0].occurrence).toEqual({
-                    numOfEpisodes: 1,
-                    sourceName: 'REF-1',
-                    sourceLink: 'sources/1'
-                });
+                expect(entityAgents[0].numOfEpisodes).toBe(1);
                 done();
             });
         });
