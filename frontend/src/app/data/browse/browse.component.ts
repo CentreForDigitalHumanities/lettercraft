@@ -2,7 +2,7 @@ import { Component, DestroyRef } from "@angular/core";
 import { dataIcons, actionIcons, statusIcons } from "@shared/icons";
 import { FormGroup, FormControl } from "@angular/forms";
 import {
-    SearchFocus, BrowseSearchGQL, EpisodeType, SourceType,
+    SearchFocus, BrowseSearchGQL,
     BrowseSourcesPageGQL, BrowseEpisodesPageGQL, BrowseAgentsPageGQL,
     BrowseLettersPageGQL, BrowseGiftsPageGQL, BrowseLocationsPageGQL,
     BrowseSourcesPageQuery, BrowseEpisodesPageQuery, BrowseAgentsPageQuery,
@@ -11,7 +11,7 @@ import {
 } from "generated/graphql";
 import { Subject, startWith, mergeWith, throttleTime, asyncScheduler, map, distinctUntilChanged, shareReplay, filter } from "rxjs";
 import { SearchService, SearchState } from "@services/search.service";
-import { BrowseListItem, EntityListItem } from "./search-item/browse-list-item.component";
+import { BrowseListItem } from "./search-item/browse-list-item.component";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
 import { HasID, PageQueryGQL, PageResult } from "../utils/pagination";
@@ -205,56 +205,41 @@ export class BrowseComponent {
         }));
     }
 
-    private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-        return data.agentDescriptions.map(agent => ({
-            id: agent.id,
-            name: agent.name,
+    private transformEntities<Items extends
+        BrowseAgentsPageQuery['agentDescriptions'] |
+        BrowseLettersPageQuery['letterDescriptions'] |
+        BrowseGiftsPageQuery['giftDescriptions'] |
+        BrowseLocationsPageQuery['spaceDescriptions']
+    >(entities: Items, icon: (e: Items[number]) => string, path: string): BrowseListItem[] {
+        return entities.map(entity => ({
+            id: entity.id,
+            name: entity.name,
             type: 'entity',
-            description: agent.description,
-            icon: agentIcon(agent),
-            link: `agents/${agent.id}`,
-            numOfEpisodes: agent.episodes.length,
-            source: agent.source,
+            description: entity.description,
+            icon: icon(entity),
+            link: `${path}/${entity.id}`,
+            numOfEpisodes: entity.episodes.length,
+            source: entity.source,
         }));
+    }
+
+    private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
+        return this.transformEntities(data.agentDescriptions, agentIcon, 'agents');
     }
 
     private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
-        return data.letterDescriptions.map(letter => ({
-            id: letter.id,
-            name: letter.name,
-            type: 'entity',
-            description: letter.description,
-            icon: dataIcons.letter,
-            link: `letters/${letter.id}`,
-            numOfEpisodes: letter.episodes.length,
-            source: letter.source,
-        }));
-
+        return this.transformEntities(
+            data.letterDescriptions, _.constant(dataIcons.letter), 'letters'
+        );
     }
 
     private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
-        return data.giftDescriptions.map(gift => ({
-            id: gift.id,
-            name: gift.name,
-            type: 'entity',
-            description: gift.description,
-            icon: dataIcons.gift,
-            link: `gifts/${gift.id}`,
-            numOfEpisodes: gift.episodes.length,
-            source: gift.source,
-        }));
+        return this.transformEntities(
+            data.giftDescriptions, _.constant(dataIcons.gift), 'gifts'
+        );
     }
 
     private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
-        return data.spaceDescriptions.map(location => ({
-            id: location.id,
-            name: location.name,
-            type: 'entity',
-            description: location.description,
-            icon: locationIcon(location),
-            link: `locations/${location.id}`,
-            numOfEpisodes: location.episodes.length,
-            source: location.source,
-        }));
+        return this.transformEntities(data.spaceDescriptions, locationIcon, 'locations');
     }
 }
