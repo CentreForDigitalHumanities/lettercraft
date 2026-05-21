@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DownloadComponent } from './download.component';
+import { SharedTestingModule } from '@shared/shared-testing.module';
 
 describe('DownloadComponent', () => {
     let component: DownloadComponent;
@@ -8,7 +9,8 @@ describe('DownloadComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [DownloadComponent]
+            declarations: [DownloadComponent],
+            imports: [SharedTestingModule],
         })
             .compileComponents();
 
