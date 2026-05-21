@@ -18,9 +18,9 @@ KEYWORDS = ["digital humanities", "medieval studies"]
 LICENSE = "CC-BY-4.0"
 
 
-def export_cff(out: TextIOWrapper):
+def save_cff(out: TextIOWrapper):
     data = citation_data()
-    yaml.dump(data)
+    yaml.dump(data, out)
 
 
 def citation_data() -> Dict:
@@ -38,7 +38,8 @@ def citation_data() -> Dict:
 
 
 def _authors_data() -> List[Dict]:
-    contributors = User.objects.filter(public_role__exists=True).order_by('last_name')
+    contributors = User.objects.filter(
+        profile__role__isnull=False).order_by("profile__role", "last_name")
     return [_author_data(user) for user in contributors]
 
 
