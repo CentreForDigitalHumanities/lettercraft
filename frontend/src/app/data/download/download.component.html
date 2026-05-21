@@ -1,4 +1,7 @@
-<button class="btn btn-primary" (click)="open()">Download data</button>
+<button class="btn btn-primary" (click)="open()">
+    <lc-icon [icon]="icons.download" class="me-1" />
+    Download data
+</button>
 
 <ng-template #downloadModal>
     <lc-base-modal (dismiss)="close()" [showFooter]="false">
@@ -19,6 +22,7 @@
 
             <p>
                 <a href="/api/download/download" class="btn btn-primary">
+                    <lc-icon [icon]="icons.download" class="me-1" />
                     Download data (JSON)
                 </a>
             </p>

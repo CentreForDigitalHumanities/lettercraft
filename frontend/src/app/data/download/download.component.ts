@@ -1,5 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { actionIcons } from '@shared/icons';
 
 @Component({
     selector: 'lc-download',
@@ -11,6 +12,8 @@ export class DownloadComponent {
     @ViewChild('downloadModal') modalTemplate?: TemplateRef<HTMLElement>;
 
     modal: NgbModalRef | null = null;
+
+    icons = actionIcons;
 
     constructor(
         private modalService: NgbModal,
