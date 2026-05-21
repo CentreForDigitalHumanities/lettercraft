@@ -9,7 +9,11 @@
     <div class="card-body">
         <p class="block">
             @if (item.description) {
-            <span>{{ item.description }}</span>
+                @if (item.type == 'source') {
+                    <div class="source-description" [innerHTML]="item.description"></div>
+                } @else {
+                    <p>{{ item.description }}</p>
+                }
             } @else {
             <i>No description available.</i>
             }
