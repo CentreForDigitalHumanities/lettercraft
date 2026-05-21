@@ -1,8 +1,9 @@
 import json
 import re
+from jsonschema import validate
 
 from source.models import Source
-from download.export_json import save_json
+from download.export_json import save_json, json_data, data_json_schema
 
 
 def test_export_json(tmp_path, source: Source, episode, episode_2, episode_attribution):
@@ -29,3 +30,11 @@ def test_export_json(tmp_path, source: Source, episode, episode_2, episode_attri
     assert len(source_data['letters']) == 1
     assert re.match(r'letters/\d+$', source_data['letters'][0]['id'])
     assert source_data['letters'][0]['name']
+
+
+def test_export_json_schema(source: Source, episode, episode_2, episode_attribution):
+    schema = data_json_schema()
+    qs = Source.objects.filter(pk=source.pk)
+    data = json_data(qs)
+    validate(data, schema)
+

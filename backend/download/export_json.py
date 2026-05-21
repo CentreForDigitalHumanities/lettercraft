@@ -3,6 +3,7 @@ import json
 import re
 from io import TextIOWrapper
 from datetime import date
+import os
 
 from django.db.models import QuerySet, Value, CharField
 from django.db.models.functions import Concat, JSONObject, NullIf
@@ -17,8 +18,11 @@ from space.models import SpaceDescription
 from user.models import User
 from source.utils import source_contributor_ids
 
+_here = os.path.abspath(os.path.dirname(__file__))
+
 DATE_FORMAT = "%d-%m-%Y"
 SITE_URL = "https://" + settings.HOST
+SCHEMA_PATH = os.path.join(_here, "data.schema.json")
 
 
 def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
@@ -172,3 +176,8 @@ def _clean_serialised_data(data: Any) -> Any:
     if isinstance(data, str):
         return data or None
     return data
+
+
+def data_json_schema():
+    with open(SCHEMA_PATH) as f:
+        return json.load(f)
