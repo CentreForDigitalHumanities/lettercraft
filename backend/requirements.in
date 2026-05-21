@@ -16,3 +16,4 @@ Pillow
 django-prose-editor[sanitize]
 requests
 python-docx
+jsonschema

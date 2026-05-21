@@ -1,0 +1,197 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "description": "Data export from Lettercraft application",
+    "properties": {
+        "sources": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "medieval_title": {
+                        "type": ["string", "null"]
+                    },
+                    "reference": {
+                        "type": ["string", "null"]
+                    },
+                    "description": {
+                        "type": ["string", "null"]
+                    },
+                    "episodes": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "summary": {
+                                    "type": ["string", "null"]
+                                },
+                                "designators": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "source_reference": {
+                                    "type": "object",
+                                    "properties": {
+                                        "book": {
+                                            "type": ["string", "null"]
+                                        },
+                                        "page": {
+                                            "type": ["string", "null"]
+                                        },
+                                        "chapter": {
+                                            "type": ["string", "null"]
+                                        }
+                                    },
+                                    "required": ["book", "page", "chapter"]
+                                },
+                                "labels": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "agents": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "letters": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "gifts": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "locations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id", "name", "summary", "designators",
+                                "source_reference", "labels", "agents", "letters",
+                                "gifts", "locations"
+                            ]
+                        }
+                    },
+                    "agents": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "is_group": {
+                                    "type": "boolean"
+                                },
+                                "description": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "required": ["id", "name", "is_group", "description"]
+                        }
+                    },
+                    "letters": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "required": ["id", "name", "description"]
+                        }
+                    },
+                    "gifts": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "required": ["id", "name", "description"]
+                        }
+                    },
+                    "locations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "required": ["id", "name", "description"]
+                        }
+                    }
+                },
+                "required": [
+                    "id", "name", "medieval_title", "reference", "description",
+                    "contributors", "episodes", "agents", "letters", "gifts", "locations"
+                ]
+            }
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "date": {
+                    "description": "Date of the export, in DD-MM-YYYY format",
+                    "type": "string",
+                    "pattern": "^[0-9]{2}-[0-9]{2}-[0-9]{4}$"
+                }
+            },
+            "required": ["url", "date"]
+        }
+    },
+    "required": ["sources", "metadata"]
+}
