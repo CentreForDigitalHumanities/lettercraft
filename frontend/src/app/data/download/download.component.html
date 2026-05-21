@@ -12,18 +12,30 @@
             <p>
                 You can download all data from the Lettercraft project for your own
                 analysis. This includes all sources and data on epistolary episodes.
+                You can download the data as a JSON file or a DOCX file.
             </p>
 
             <p>
-                The data is available as a JSON file, which is suitable for programming
-                languages like Python or R. In the future, we plan to offer
-                other formats as well.
+                The JSON file is most suitable for quantitative analysis, for instance
+                with programming languages like Python or R.
             </p>
 
             <p>
-                <a href="/api/download/download" class="btn btn-primary">
+                <a href="/api/download/download-json" class="btn btn-primary">
                     <lc-icon [icon]="icons.download" class="me-1" />
                     Download data (JSON)
+                </a>
+            </p>
+
+            <p>
+                The DOCX file is most suitable if you want to read or annotate the
+                data in programs like Microsoft Word or Nvivo.
+            </p>
+
+            <p>
+                <a href="/api/download/download-docx" class="btn btn-primary">
+                    <lc-icon [icon]="icons.download" class="me-1" />
+                    Download data (DOCX)
                 </a>
             </p>
         </div>

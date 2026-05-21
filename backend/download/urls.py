@@ -1,6 +1,7 @@
 from django.urls import path
-from download.views import DownloadJSONView
+from download.views import DownloadJSONView, DownloadDocxView
 
 urlpatterns = [
-    path("download", DownloadJSONView.as_view()),
+    path("download-json", DownloadJSONView.as_view()),
+    path("download-docx", DownloadDocxView.as_view()),
 ]
