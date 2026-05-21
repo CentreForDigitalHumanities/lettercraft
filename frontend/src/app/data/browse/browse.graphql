@@ -49,7 +49,7 @@ query BrowseEpisodesPage($ids: [String!]) {
         page
         source {
             id
-            reference
+            name
         }
         categories {
             id
@@ -101,7 +101,7 @@ query BrowseAgentsPage($ids: [String!]) {
         }
         source {
             id
-            reference
+            name
         }
     }
 }
@@ -116,7 +116,7 @@ query BrowseLettersPage($ids: [String!]) {
         }
         source {
             id
-            reference
+            name
         }
     }
 }
@@ -131,7 +131,7 @@ query BrowseGiftsPage($ids: [String!]) {
         }
         source {
             id
-            reference
+            name
         }
     }
 }
@@ -147,7 +147,7 @@ query BrowseLocationsPage($ids: [String!]) {
         }
         source {
             id
-            reference
+            name
         }
     }
 }

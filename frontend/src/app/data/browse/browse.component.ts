@@ -171,6 +171,7 @@ export class BrowseComponent {
             description: episode.summary,
             icon: dataIcons.episode,
             link: `episodes/${episode.id}`,
+            source: episode.source,
             labels: episode.categories?.map(cat => cat.name) ?? [],
             agents: episode.agents.map(({ agent }) => ({
                 id: agent.id,
@@ -212,7 +213,8 @@ export class BrowseComponent {
             description: agent.description,
             icon: agentIcon(agent),
             link: `agents/${agent.id}`,
-            occurrence: this.occurrenceData(agent),
+            numOfEpisodes: agent.episodes.length,
+            source: agent.source,
         }));
     }
 
@@ -224,7 +226,8 @@ export class BrowseComponent {
             description: letter.description,
             icon: dataIcons.letter,
             link: `letters/${letter.id}`,
-            occurrence: this.occurrenceData(letter),
+            numOfEpisodes: letter.episodes.length,
+            source: letter.source,
         }));
 
     }
@@ -237,7 +240,8 @@ export class BrowseComponent {
             description: gift.description,
             icon: dataIcons.gift,
             link: `gifts/${gift.id}`,
-            occurrence: this.occurrenceData(gift)
+            numOfEpisodes: gift.episodes.length,
+            source: gift.source,
         }));
     }
 
@@ -249,15 +253,8 @@ export class BrowseComponent {
             description: location.description,
             icon: locationIcon(location),
             link: `locations/${location.id}`,
-            occurrence: this.occurrenceData(location)
+            numOfEpisodes: location.episodes.length,
+            source: location.source,
         }));
-    }
-
-    private occurrenceData(result: { episodes: Pick<EpisodeType, 'id'>[]; source: Pick<SourceType, 'reference' | 'id'>; }): EntityListItem['occurrence'] {
-        return {
-            numOfEpisodes: result.episodes.length,
-            sourceName: result.source.reference,
-            sourceLink: `sources/${result.source.id}`
-        };
     }
 }

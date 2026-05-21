@@ -2,6 +2,7 @@ import { Component, input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
 import { EpisodeType } from 'generated/graphql';
 
+
 interface ListItemEntity {
     id: string;
     name: string;
@@ -17,6 +18,11 @@ interface BaseListItem {
     link: string;
 }
 
+interface ListItemSource {
+    id: string;
+    name: string;
+}
+
 interface EpisodeListItem extends BaseListItem {
     type: 'episode';
     labels: string[];
@@ -24,6 +30,7 @@ interface EpisodeListItem extends BaseListItem {
     letters: ListItemEntity[];
     gifts: ListItemEntity[];
     spaces: ListItemEntity[];
+    source: ListItemSource,
     sourceLocation: {
         book: string;
         chapter: string;
@@ -38,11 +45,8 @@ interface SourceListItem extends BaseListItem {
 
 export interface EntityListItem extends BaseListItem {
     type: 'entity';
-    occurrence: {
-        numOfEpisodes: number;
-        sourceName: string;
-        sourceLink: string;
-    };
+    numOfEpisodes: number;
+    source: ListItemSource,
 }
 
 export type BrowseListItem = EpisodeListItem | EntityListItem | SourceListItem;
