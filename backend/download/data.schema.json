@@ -18,9 +18,11 @@
                         "type": ["string", "null"]
                     },
                     "reference": {
+                        "description": "Citation for the source text, in HTML format",
                         "type": ["string", "null"]
                     },
                     "description": {
+                        "description": "Description of the source text, in HTML format",
                         "type": ["string", "null"]
                     },
                     "episodes": {
@@ -38,12 +40,14 @@
                                     "type": ["string", "null"]
                                 },
                                 "designators": {
+                                    "description": "Latin terminology used in the episode",
                                     "type": "array",
                                     "items": {
                                         "type": "string"
                                     }
                                 },
                                 "source_reference": {
+                                    "description": "Location of the episode within the source text",
                                     "type": "object",
                                     "properties": {
                                         "book": {
@@ -59,6 +63,7 @@
                                     "required": ["book", "page", "chapter"]
                                 },
                                 "labels": {
+                                    "description": "Annotated labels for the episode",
                                     "type": "array",
                                     "items": {
                                         "type": "string"
@@ -188,6 +193,10 @@
                     "description": "Date of the export, in DD-MM-YYYY format",
                     "type": "string",
                     "pattern": "^[0-9]{2}-[0-9]{2}-[0-9]{4}$"
+                },
+                "version": {
+                    "description": "Label for this version of the dataset",
+                    "type": "string"
                 }
             },
             "required": ["url", "date"]

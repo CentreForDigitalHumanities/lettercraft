@@ -37,11 +37,13 @@ def json_data(sources: QuerySet[Source], label: Optional[str] = None) -> Dict:
 
 def _metadata(label: Optional[str] = None) -> Dict:
     timestamp = date.today().strftime(DATE_FORMAT)
-    return {
+    metadata = {
         "url": SITE_URL,
         "date": timestamp,
-        "version": label,
     }
+    if label:
+        metadata["version"] = label
+    return metadata
 
 
 def _serialize(sources: QuerySet[Source]) -> Dict:
