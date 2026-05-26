@@ -1,4 +1,4 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 import json
 import re
 from io import TextIOWrapper
@@ -25,24 +25,31 @@ SITE_URL = "https://" + settings.HOST
 SCHEMA_PATH = os.path.join(_here, "data.schema.json")
 
 
-def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
-    data = json_data(sources)
+def save_json(
+    sources: QuerySet[Source], f: TextIOWrapper, label: Optional[str] = None
+) -> None:
+    data = json_data(sources, label=label)
     json.dump(data, f, indent=2)
 
 
-def json_data(sources: QuerySet[Source]) -> Dict:
-    data = _serialize(sources)
-    cleaned = _clean_serialised_data(data)
-    return cleaned
+def json_data(sources: QuerySet[Source], label: Optional[str] = None) -> Dict:
+    data = _clean_serialised_data(_serialize(sources))
+    data["metadata"] = _metadata(label=label)
+    return data
 
-def _serialize(sources: QuerySet[Source]) -> Dict:
+
+def _metadata(label: Optional[str] = None) -> Dict:
     timestamp = date.today().strftime(DATE_FORMAT)
     return {
+        "url": SITE_URL,
+        "date": timestamp,
+        "version": label,
+    }
+
+
+def _serialize(sources: QuerySet[Source]) -> Dict:
+    return {
         "sources": [_serialize_source(source) for source in sources],
-        "metadata": {
-            "url": SITE_URL,
-            "date": timestamp,
-        }
     }
 
 
