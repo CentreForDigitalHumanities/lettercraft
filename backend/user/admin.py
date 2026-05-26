@@ -9,6 +9,11 @@ class UserProfileInline(admin.StackedInline):
 
 @admin.register(models.User)
 class UserAdmin(auth_admin.UserAdmin):
+    fieldsets = list(auth_admin.UserAdmin.fieldsets)
+    fieldsets[1] = (
+        "Personal info",
+        {"fields": ("first_name", "last_name_prefix", "last_name", "email")}
+    )
     list_display = ['username', 'full_name', 'is_staff', 'public_role']
     inlines = [UserProfileInline]
 
