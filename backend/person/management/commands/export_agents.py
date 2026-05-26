@@ -8,8 +8,10 @@ from person.models import AgentDescription
 class Command(BaseCommand):
     help = """
     Export agent data to CSV.
+
     This is primarily intended to clean up agent names and assign historical agents
-    in other software.
+    in other software. After updating the CSV file, use the import_agents command to
+    import it.
     """
 
     def add_arguments(self, parser):
@@ -28,7 +30,7 @@ class Command(BaseCommand):
             ('source_name', 'source.name'),
             ('historical_person', lambda o: o.describes.first().name if o.describes.exists() else '')
         ]
-        with open(path, 'w') as outfile:
+        with open(path, 'w', newline="") as outfile:
             fieldnames = [col for col, _ in export_fields]
             writer = csv.DictWriter(outfile, fieldnames)
             writer.writeheader()
