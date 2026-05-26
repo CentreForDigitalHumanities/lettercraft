@@ -25,10 +25,7 @@ SITE_URL = "https://" + settings.HOST
 SCHEMA_PATH = os.path.join(_here, "data.schema.json")
 
 
-def save_json(
-    sources: QuerySet[Source], f: TextIOWrapper, label: Optional[str] = None
-) -> None:
-    data = json_data(sources, label=label)
+def save_json(data: Dict, f: TextIOWrapper) -> None:
     json.dump(data, f, indent=2)
 
 

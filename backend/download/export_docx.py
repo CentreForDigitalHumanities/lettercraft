@@ -1,17 +1,11 @@
 from io import TextIOWrapper
 from typing import Dict
 
-from django.db.models import QuerySet
 from docx import Document
 from docx.document import Document as DocumentObject
 
-from source.models import Source
-from download.export_json import json_data
 
-
-def save_docx(sources: QuerySet[Source], out: TextIOWrapper) -> None:
-    data = json_data(sources)
-
+def save_docx(data: Dict, out: TextIOWrapper) -> None:
     document = Document()
     _add_preamble(data["metadata"], document)
     for source in data['sources']:

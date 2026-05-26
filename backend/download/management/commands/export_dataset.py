@@ -6,7 +6,7 @@ from typing import Optional
 from django.conf import settings
 
 from source.models import Source
-from download.export_json import save_json, SCHEMA_PATH
+from download.export_json import json_data, save_json, SCHEMA_PATH
 from download.export_docx import save_docx
 from download.export_cff import save_cff
 
@@ -34,15 +34,16 @@ class Command(BaseCommand):
 
     def write_data(self, dir: Path, label: Optional[str] = None) -> None:
         sources = Source.objects.filter(is_public=True)
+        data = json_data(sources, label=label)
 
         with open(dir / "data.json", "w") as f:
-            save_json(sources, f, label=label)
+            save_json(data, f,)
 
         shutil.copyfile(SCHEMA_PATH, dir / "data.schema.json")
 
         with open(dir / "data.docx", "wb") as f:
-            save_docx(sources, f)
+            save_docx(data, f)
 
         with open(dir / "CITATION.cff", "w") as f:
-            save_cff(f)
+            save_cff(data, f)
 
