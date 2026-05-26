@@ -40,5 +40,3 @@ frontend/src/environments/version.ts
 
 # Generated files
 frontend/generated/
-
-data-export/
