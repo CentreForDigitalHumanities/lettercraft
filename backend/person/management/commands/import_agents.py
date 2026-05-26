@@ -13,8 +13,14 @@ class Cancelled(Exception):
 class Command(BaseCommand):
     help = """
     Import agent data from CSV.
-    The CSV format should be the same as the export_agents output. Source data
-    is included in the output file for clarity but will be ignored here.
+
+    The CSV format should be the same as the export_agents output. The export/import
+    workflow is intended to correct or enrich metadata for existing agents. The import
+    cannot be used to create or remove agents; all agents in the file must match
+    an existing agent in the database. Agents that are in the database but not in the
+    CSV data, will be left as-is.
+
+    Source data is included in the output file as context, but will be ignored here.
     """
 
     def add_arguments(self, parser):
