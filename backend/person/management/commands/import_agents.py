@@ -41,9 +41,7 @@ class Command(BaseCommand):
 
                     for row in reader:
                         total += 1
-
                         agent = AgentDescription.objects.get(id=row['id'])
-
                         agent_updated = self._is_updated(agent, row)
 
                         if agent_updated:
@@ -60,9 +58,9 @@ class Command(BaseCommand):
                 print('Action cancelled. Database transactions rolled back.')
 
     def _is_updated(self, agent: AgentDescription, row: Dict):
-        return row['name'] or \
+        return row['name'] != row['name'] or \
             agent.description != row['description'] or \
-            agent.describes.exists() and agent.describes.first().name != row['historical_person'] or \
+            (agent.describes.exists() and agent.describes.first().name != row['historical_person']) or \
             (not agent.describes.exists()) and row['historical_person']
 
     def _update(self, agent: AgentDescription, row: Dict):
