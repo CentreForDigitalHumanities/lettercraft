@@ -11,6 +11,7 @@ from download.export_docx import save_docx
 from download.export_cff import save_cff
 
 EXPORT_DIR = settings.MEDIA_ROOT
+README_PATH = Path(os.path.dirname(__file__)) / "../../data-readme.md"
 
 class Command(BaseCommand):
     help = """
@@ -35,6 +36,8 @@ class Command(BaseCommand):
     def write_data(self, dir: Path, label: Optional[str] = None) -> None:
         sources = Source.objects.filter(is_public=True)
         data = json_data(sources, label=label)
+
+        shutil.copyfile(README_PATH, dir / "README.md")
 
         with open(dir / "data.json", "w") as f:
             save_json(data, f,)
