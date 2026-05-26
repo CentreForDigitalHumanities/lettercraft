@@ -9,6 +9,7 @@ def test_user_details(user_client, user_data):
         "username": user_data["username"],
         "email": user_data["email"],
         "first_name": user_data["first_name"],
+        "last_name_prefix": "",
         "last_name": user_data["last_name"],
         "is_staff": False,
         "is_contributor": False,

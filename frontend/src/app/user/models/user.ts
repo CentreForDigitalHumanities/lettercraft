@@ -3,6 +3,7 @@ export interface UserResponse {
     username: string;
     email: string;
     first_name: string;
+    last_name_prefix: string;
     last_name: string;
     is_staff: boolean;
     is_contributor: boolean;
@@ -17,6 +18,7 @@ export class User {
         public username: string,
         public email: string,
         public firstName: string,
+        public lastNamePrefix: string,
         public lastName: string,
         public isStaff: boolean,
         public isContributor: boolean,
@@ -61,7 +63,7 @@ export interface KeyInfo {
 // Dj-rest-auth does not let you update your email address, but we need it to request the password reset form.
 export type UserSettings = Pick<
     User,
-    "id" | "email" | "firstName" | "lastName" | "description" | "publicRole"
+    "id" | "email" | "firstName" | "lastNamePrefix" | "lastName" | "description" | "publicRole"
 > & {
     username?: string;
 };
