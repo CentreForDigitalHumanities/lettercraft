@@ -3,34 +3,33 @@ Module to generate a CITATION.cff file for the data export.
 """
 
 from typing import Dict, List
-from datetime import date
+from datetime import datetime
 from io import TextIOWrapper
 
-from django.conf import settings
 import yaml
 
+from download.export_json import DATE_FORMAT as json_date_format
 from user.models import User
 
 DATE_FORMAT = "%Y-%m-%d"
-SITE_URL = "https://" + settings.HOST
 ABSTRACT = """This dataset is created as part of the Lettercraft project and describes epistolary communication in early Medieval literature."""
 KEYWORDS = ["digital humanities", "medieval studies"]
 LICENSE = "CC-BY-4.0"
 
 
-def save_cff(out: TextIOWrapper):
-    data = citation_data()
+def save_cff(data: Dict, out: TextIOWrapper):
+    data = citation_data(data)
     yaml.dump(data, out)
 
 
-def citation_data() -> Dict:
-    timestamp = date.today().strftime(DATE_FORMAT)
+def citation_data(data) -> Dict:
+    timestamp = datetime.strptime(data["metadata"]["date"], json_date_format).strftime(DATE_FORMAT)
     return {
         "cff-version": "1.2.0",
         "title": "Lettercraft dataset",
         "authors": _authors_data(),
         "date-released": timestamp,
-        "url": SITE_URL,
+        "url": data["metadata"]["url"],
         "abstract": ABSTRACT,
         "keywords": KEYWORDS,
         "licence": LICENSE,
