@@ -9,6 +9,10 @@ query ViewAgent($id: ID!) {
     source {
         id
         name
+        descriptionText
+        episodes {
+            id
+        }
     }
     episodes {
         id
@@ -18,6 +22,51 @@ query ViewAgent($id: ID!) {
         episode {
             id
             name
+            summary
+            book
+            chapter
+            page
+            source {
+                id
+                name
+            }
+            categories {
+                id
+                name
+            }
+            designators
+            agents {
+                id
+                agent {
+                    id
+                    name
+                    isGroup
+                    identified
+                }
+            }
+            gifts {
+                id
+                gift {
+                    id
+                    name
+                }
+            }
+            letters {
+                id
+                letter {
+                    id
+                    name
+                }
+            }
+            spaces {
+                id
+                space {
+                    id
+                    name
+                    hasIdentifiableFeatures
+                }
+            }
+
         }
     }
     gender {
