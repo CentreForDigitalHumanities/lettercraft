@@ -1,7 +1,17 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
-import { SearchFocus } from 'generated/graphql';
 import { BehaviorSubject } from 'rxjs';
+
+
+export enum SearchFocus {
+    Sources = "SOURCES",
+    Episodes = "EPISODES",
+    Agents = "AGENTS",
+    Letters = "LETTERS",
+    Gifts = "GIFTS",
+    Locations = "LOCATIONS",
+}
+
 
 export interface TabMetadata {
     type: SearchFocus;
@@ -37,5 +47,24 @@ export interface TabData {
 export class BrowseTabsComponent {
     tabs = input.required<SearchFocus[]>();
     data = input.required<TabData | null>();
+
     focus$ = new BehaviorSubject<SearchFocus>(SearchFocus.Sources);
+
+    tabMetadata = TAB_METADATA;
+
+    counts = computed(() => {
+        const data = this.data();
+        return new Map<SearchFocus, number | undefined>([
+            [SearchFocus.Sources, data?.sources?.length],
+            [SearchFocus.Episodes, data?.episodes?.length],
+            [SearchFocus.Agents, data?.agents?.length],
+            [SearchFocus.Letters, data?.letters?.length],
+            [SearchFocus.Gifts, data?.gifts?.length],
+            [SearchFocus.Locations, data?.locations?.length],
+        ]);
+    });
+
+    public changeTabs(newNavId: SearchFocus): void {
+        this.focus$.next(newNavId);
+    }
 }
