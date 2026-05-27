@@ -1,6 +1,6 @@
 import { dataIcons } from "@shared/icons";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
-import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery } from "generated/graphql";
+import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
 
 interface ListItemEntity {
     id: string;
@@ -63,7 +63,9 @@ export const transformSource = (source: BrowseSourcesPageQuery['sources'][number
 });
 
 
-export const transformEpisode = (episode: BrowseEpisodesPageQuery['episodes'][number]): BrowseListItem => ({
+export const transformEpisode = (
+    episode: BrowseEpisodesPageQuery['episodes'][number] | ViewSourceEpisodesPageQuery['episodes'][number]
+): BrowseListItem => ({
     id: episode.id,
     name: episode.name,
     type: 'episode',

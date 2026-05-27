@@ -27,6 +27,11 @@ query ViewSourceEpisodesPage($ids: [String!]) {
         id
         name
         summary
+        source {
+            id
+            name
+        }
+        designators
         categories {
             id
             name

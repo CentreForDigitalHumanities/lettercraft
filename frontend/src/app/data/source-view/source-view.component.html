@@ -44,7 +44,7 @@
 
             <ng-container *ngIf="episodesPageResult.pageData$ | async as pageData">
                 @for (episode of pageData.episodes; track episode.id) {
-                    <!-- <lc-browse-list-item [listItem]="episode"/> -->
+                    <lc-browse-list-item [listItem]="transformEpisode(episode)"/>
                 }
             </ng-container>
 

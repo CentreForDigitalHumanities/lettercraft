@@ -6,6 +6,7 @@ import { ViewSourceEpisodesPageGQL, ViewSourceGQL } from 'generated/graphql';
 import { map, Observable, switchMap, filter } from 'rxjs';
 import { sourceBreadcrumbs } from '../utils/breadcrumbs';
 import { PageResult } from '../utils/pagination';
+import { transformEpisode } from '../browse/search-item/browse-list-item';
 
 @Component({
     selector: 'lc-source-view',
@@ -28,6 +29,7 @@ export class SourceViewComponent {
     locationIcon = locationIcon;
 
     makeBreadcrumbs = sourceBreadcrumbs;
+    transformEpisode = transformEpisode;
 
     episodesCollection$ = this.data$.pipe(
         filter(data => !!data.source),
