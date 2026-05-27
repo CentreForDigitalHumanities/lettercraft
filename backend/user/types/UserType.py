@@ -26,6 +26,7 @@ class UserType(DjangoObjectType):
         fields = [
             "id",
             "first_name",
+            "last_name_prefix",
             "last_name",
         ]
 
@@ -51,7 +52,7 @@ class UserType(DjangoObjectType):
             sources_from_contributions(SpaceDescription),
         )
 
-        return Source.objects.filter(id__in=source_ids)
+        return Source.objects.filter(id__in=source_ids, is_public=True)
 
     @staticmethod
     def resolve_description(parent: User, info: ResolveInfo) -> str:

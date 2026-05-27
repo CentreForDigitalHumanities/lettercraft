@@ -15,6 +15,12 @@ class User(django_auth_models.AbstractUser):
     class Meta:
         db_table = "auth_user"
 
+    last_name_prefix = models.CharField(
+        max_length=64,
+        default="",
+        help_text="Tussenvoegsel for Dutch localised names"
+    )
+
     @property
     def is_contributor(self) -> bool:
         """
@@ -38,14 +44,16 @@ class User(django_auth_models.AbstractUser):
         editable_source_ids = [source.pk for source in editable_sources(self)]
         return self.is_superuser or source.pk in editable_source_ids
 
+
     @property
     def full_name(self) -> str:
-        if self.first_name and self.last_name:
-            return f"{self.first_name} {self.last_name}"
-        elif self.first_name or self.last_name:
-            return self.first_name or self.last_name
+        parts = [self.first_name, self.last_name_prefix, self.last_name]
+        present = list(filter(None, parts))
+        if any(present):
+            return " ".join(present)
         else:
-            return "nameless contributor"
+            return "anonymous contributor"
+
 
     @property
     def public_role(self) -> 'ContributorRole':
