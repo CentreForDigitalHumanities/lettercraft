@@ -6,6 +6,7 @@ import { locationIcon } from '@shared/icons-utils';
 import { ViewLocationGQL, ViewLocationQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
 
 @Component({
     selector: 'lc-location-view',
@@ -25,6 +26,9 @@ export class LocationViewComponent {
     dataIcons = dataIcons;
     actionIcons = actionIcons;
     locationIcon = locationIcon;
+
+    transformSource = transformSource;
+    transformEpisode = transformEpisode;
 
     constructor(
         private route: ActivatedRoute,

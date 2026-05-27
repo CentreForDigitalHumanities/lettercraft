@@ -1,6 +1,6 @@
 import { dataIcons } from "@shared/icons";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
-import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, ViewAgentQuery, ViewEpisodeQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
+import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, ViewAgentQuery, ViewEpisodeQuery, ViewLocationQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
 import _ from "underscore";
 
 interface ListItemEntity {
@@ -52,11 +52,12 @@ export interface EntityListItem extends BaseListItem {
 
 export type BrowseListItem = EpisodeListItem | EntityListItem | SourceListItem;
 
+type SourceData = BrowseSourcesPageQuery['sources'][number] |
+        NonNullable<ViewEpisodeQuery['episode']>['source'] |
+        NonNullable<ViewAgentQuery['agentDescription']>['source'] |
+        NonNullable<ViewLocationQuery['spaceDescription']>['source'];
 
-export const transformSource = (
-    source: BrowseSourcesPageQuery['sources'][number] |
-        NonNullable<ViewEpisodeQuery['episode']>['source']
-): BrowseListItem => ({
+export const transformSource = (source: SourceData): BrowseListItem => ({
     id: source.id,
     name: source.name,
     type: 'source',
@@ -69,7 +70,8 @@ export const transformSource = (
 
 type EpisodeData =  BrowseEpisodesPageQuery['episodes'][number] |
     ViewSourceEpisodesPageQuery['episodes'][number] |
-    NonNullable<ViewAgentQuery['agentDescription']>['episodes'][number]['episode'];
+    NonNullable<ViewAgentQuery['agentDescription']>['episodes'][number]['episode'] |
+    NonNullable<ViewLocationQuery['spaceDescription']>['episodes'][number]['episode'];
 
 export const transformEpisode = (episode: EpisodeData): BrowseListItem => ({
     id: episode.id,
