@@ -11,6 +11,7 @@ query DataEntrySourceDetail($id: ID!) {
                 id
                 name
             }
+            designators
             book
             chapter
             contributors {
