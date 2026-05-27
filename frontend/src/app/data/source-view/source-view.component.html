@@ -1,5 +1,5 @@
 <ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.source as source; else noEpisode">
+    <ng-container *ngIf="data.source as source; else noSource">
         <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(source)" />
         <a
             *ngIf="source.editable"
@@ -52,7 +52,7 @@
         </section>
     </ng-container>
 
-    <ng-template #noEpisode>
+    <ng-template #noSource>
         <lc-not-found entity="episode" [id]="id$ | async" />
     </ng-template>
 </ng-container>

@@ -28,7 +28,8 @@
 
     <div class="py-4">
         <div class="container-fluid">
-            <ul
+            <lc-browse-tabs [tabs]="searchTabs" [data]="searchData$ | async" />
+            <!-- <ul
                 ngbNav
                 #nav="ngbNav"
                 [(activeId)]="form.controls.searchFocus.value"
@@ -96,7 +97,7 @@
                 </li>
                 }
             </ul>
-            <div [ngbNavOutlet]="nav"></div>
+            <div [ngbNavOutlet]="nav"></div> -->
         </div>
     </div>
 </div>

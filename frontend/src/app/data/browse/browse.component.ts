@@ -85,6 +85,15 @@ export class BrowseComponent {
         shareReplay(1),
     );
 
+    searchTabs = [
+        SearchFocus.Sources,
+        SearchFocus.Episodes,
+        SearchFocus.Agents,
+        SearchFocus.Letters,
+        SearchFocus.Gifts,
+        SearchFocus.Locations,
+    ];
+
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService,
@@ -110,7 +119,7 @@ export class BrowseComponent {
         map(result => result.loading)
     );
 
-    private searchData$ = this.searchResult$.pipe(
+    searchData$ = this.searchResult$.pipe(
         filter(results => !!results.data?.search),
         map(results => results.data!.search!),
     );
