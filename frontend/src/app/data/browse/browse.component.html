@@ -25,7 +25,21 @@
 
     <div class="py-4">
         <div class="container-fluid">
-            <lc-browse-tabs [tabs]="searchTabs" [data]="searchData$ | async" />
+            @if (searchError$ | async) {
+                <div class="error-message text-center py-5">
+                    <lc-icon
+                        [icon]="statusIcons.error"
+                        class="text-danger mb-3"
+                        size="3x"
+                    />
+                    <p class="text-danger">
+                        An error occurred while fetching results.
+                        Please try again.
+                    </p>
+                </div>
+            } @else {
+                <lc-browse-tabs [tabs]="searchTabs" [data]="searchData$ | async" />
+            }
         </div>
     </div>
 </div>

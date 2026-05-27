@@ -11,9 +11,6 @@ import _ from "underscore";
 import { TabMetadata, SearchFocus } from "../browse-tabs/browse-tabs.component";
 
 
-// type QueriedResults = NonNullable<NonNullable<SearchState<BrowseSearchQuery>['data']>['search']>;
-
-
 const TAB_METADATA: TabMetadata[] = [
     { type: SearchFocus.Sources, title: 'Sources', icon: dataIcons.source },
     { type: SearchFocus.Episodes, title: 'Episodes', icon: dataIcons.episode },
@@ -23,13 +20,6 @@ const TAB_METADATA: TabMetadata[] = [
     { type: SearchFocus.Locations, title: 'Locations', icon: dataIcons.location }
 ];
 
-// type BrowsePageResult =
-//     | PageResult<BrowseSourcesPageQuery, BrowseListItem[]>
-//     | PageResult<BrowseEpisodesPageQuery, BrowseListItem[]>
-//     | PageResult<BrowseAgentsPageQuery, BrowseListItem[]>
-//     | PageResult<BrowseLettersPageQuery, BrowseListItem[]>
-//     | PageResult<BrowseGiftsPageQuery, BrowseListItem[]>
-//     | PageResult<BrowseLocationsPageQuery, BrowseListItem[]>;
 
 @Component({
     selector: 'lc-browse',
@@ -79,7 +69,6 @@ export class BrowseComponent {
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService,
-        // private destroyRef: DestroyRef,
     ) { }
 
     public searchResult$ = this.searchService.createSearch(
@@ -99,52 +88,4 @@ export class BrowseComponent {
         filter(results => !!results.data?.search),
         map(results => results.data!.search!),
     );
-
-    // public pageResultsByType = new Map<SearchFocus, BrowsePageResult>([
-    //     [SearchFocus.Sources, this.createPageResult(data => data.sources, this.sourcesPageQuery, this.transformSources.bind(this))],
-    //     [SearchFocus.Episodes, this.createPageResult(data => data.episodes, this.episodesPageQuery, this.transformEpisodes.bind(this))],
-    //     [SearchFocus.Agents, this.createPageResult(data => data.agents, this.agentsPageQuery, this.transformAgents.bind(this))],
-    //     [SearchFocus.Letters, this.createPageResult(data => data.letters, this.lettersPageQuery, this.transformLetters.bind(this))],
-    //     [SearchFocus.Gifts, this.createPageResult(data => data.gifts, this.giftsPageQuery, this.transformGifts.bind(this))],
-    //     [SearchFocus.Locations, this.createPageResult(data => data.locations, this.locationsPageQuery, this.transformLocations.bind(this))]
-    // ]);
-
-    // private createPageResult<QueryData>(
-    //     unpack: (data: QueriedResults) => HasID[],
-    //     pageQuery: PageQueryGQL<QueryData>,
-    //     transform: (data: QueryData) => BrowseListItem[]
-    // ): PageResult<QueryData, BrowseListItem[]> {
-    //     const objects$ = this.searchData$.pipe(
-    //         map(data => unpack(data)),
-    //     );
-    //     return new PageResult(objects$, pageQuery, this.destroyRef, transform);
-    // }
-
-    // private transformSources(data: BrowseSourcesPageQuery): BrowseListItem[] {
-    //     return data.sources.map(transformSource);
-    // }
-
-    // private transformEpisodes(data: BrowseEpisodesPageQuery): BrowseListItem[] {
-    //     return data.episodes.map(transformEpisode);
-    // }
-
-    // private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-    //     return this.transformEntities(data.agentDescriptions, agentIcon, 'agents');
-    // }
-
-    // private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-    //     return data.agentDescriptions.map(transformAgent);
-    // }
-
-    // private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
-    //     return data.letterDescriptions.map(transformLetter);
-    // }
-
-    // private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
-    //     return data.giftDescriptions.map(transformGift);
-    // }
-
-    // private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
-    //     return data.spaceDescriptions.map(transformLocation);
-    // }
 }

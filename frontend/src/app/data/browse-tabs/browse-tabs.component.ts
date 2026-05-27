@@ -1,6 +1,12 @@
-import { Component, computed, input } from '@angular/core';
-import { dataIcons } from '@shared/icons';
-import { BehaviorSubject } from 'rxjs';
+import { Component, computed, DestroyRef, input } from '@angular/core';
+import { actionIcons, dataIcons } from '@shared/icons';
+import { BehaviorSubject, filter, map } from 'rxjs';
+import { HasID, PageQueryGQL, PageResult } from '../utils/pagination';
+import { BrowseAgentsPageGQL, BrowseAgentsPageQuery, BrowseEpisodesPageGQL, BrowseEpisodesPageQuery, BrowseGiftsPageGQL, BrowseGiftsPageQuery, BrowseLettersPageGQL, BrowseLettersPageQuery, BrowseLocationsPageGQL, BrowseLocationsPageQuery, BrowseSearchQuery, BrowseSourcesPageGQL, BrowseSourcesPageQuery } from 'generated/graphql';
+import { BrowseListItem, transformEntity, transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
+import { agentIcon, locationIcon } from '@shared/icons-utils';
+import _ from 'underscore';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 
 export enum SearchFocus {
@@ -38,6 +44,15 @@ export interface TabData {
     locations?: { id: string }[];
 }
 
+type BrowsePageResult =
+    | PageResult<BrowseSourcesPageQuery, BrowseListItem[]>
+    | PageResult<BrowseEpisodesPageQuery, BrowseListItem[]>
+    | PageResult<BrowseAgentsPageQuery, BrowseListItem[]>
+    | PageResult<BrowseLettersPageQuery, BrowseListItem[]>
+    | PageResult<BrowseGiftsPageQuery, BrowseListItem[]>
+    | PageResult<BrowseLocationsPageQuery, BrowseListItem[]>;
+
+
 @Component({
     selector: 'lc-browse-tabs',
     standalone: false,
@@ -52,6 +67,8 @@ export class BrowseTabsComponent {
 
     tabMetadata = TAB_METADATA;
 
+    actionIcons = actionIcons;
+
     counts = computed(() => {
         const data = this.data();
         return new Map<SearchFocus, number | undefined>([
@@ -63,8 +80,79 @@ export class BrowseTabsComponent {
             [SearchFocus.Locations, data?.locations?.length],
         ]);
     });
+    loading = computed(() => !this.data());
+
+    constructor(
+        private destroyRef: DestroyRef,
+        private sourcesPageQuery: BrowseSourcesPageGQL,
+        private episodesPageQuery: BrowseEpisodesPageGQL,
+        private agentsPageQuery: BrowseAgentsPageGQL,
+        private lettersPageQuery: BrowseLettersPageGQL,
+        private giftsPageQuery: BrowseGiftsPageGQL,
+        private locationsPageQuery: BrowseLocationsPageGQL,
+    ) {}
 
     public changeTabs(newNavId: SearchFocus): void {
         this.focus$.next(newNavId);
     }
+
+    public pageResultsByType = new Map<SearchFocus, BrowsePageResult>([
+        [SearchFocus.Sources, this.createPageResult(data => data.sources, this.sourcesPageQuery, this.transformSources.bind(this))],
+        [SearchFocus.Episodes, this.createPageResult(data => data.episodes, this.episodesPageQuery, this.transformEpisodes.bind(this))],
+        [SearchFocus.Agents, this.createPageResult(data => data.agents, this.agentsPageQuery, this.transformAgents.bind(this))],
+        [SearchFocus.Letters, this.createPageResult(data => data.letters, this.lettersPageQuery, this.transformLetters.bind(this))],
+        [SearchFocus.Gifts, this.createPageResult(data => data.gifts, this.giftsPageQuery, this.transformGifts.bind(this))],
+        [SearchFocus.Locations, this.createPageResult(data => data.locations, this.locationsPageQuery, this.transformLocations.bind(this))]
+    ]);
+
+
+    private createPageResult<QueryData>(
+        unpack: (data: TabData) => HasID[] | undefined,
+        pageQuery: PageQueryGQL<QueryData>,
+        transform: (data: QueryData) => BrowseListItem[]
+    ): PageResult<QueryData, BrowseListItem[]> {
+        const objects$ = toObservable(this.data).pipe(
+            filter(data => !!data),
+            map(data => unpack(data) ?? []),
+        );
+        return new PageResult(objects$, pageQuery, this.destroyRef, transform);
+    }
+
+    private transformSources(data: BrowseSourcesPageQuery): BrowseListItem[] {
+        return data.sources.map(transformSource);
+    }
+
+    private transformEpisodes(data: BrowseEpisodesPageQuery): BrowseListItem[] {
+        return data.episodes.map(transformEpisode);
+    }
+
+    private transformEntities<Items extends
+        BrowseAgentsPageQuery['agentDescriptions'] |
+        BrowseLettersPageQuery['letterDescriptions'] |
+        BrowseGiftsPageQuery['giftDescriptions'] |
+        BrowseLocationsPageQuery['spaceDescriptions']
+    >(entities: Items, icon: (e: Items[number]) => string, path: string): BrowseListItem[] {
+        return entities.map(entity => transformEntity(entity, icon, path));
+    }
+
+    private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
+        return this.transformEntities(data.agentDescriptions, agentIcon, 'agents');
+    }
+
+    private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
+        return this.transformEntities(
+            data.letterDescriptions, _.constant(dataIcons.letter), 'letters'
+        );
+    }
+
+    private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
+        return this.transformEntities(
+            data.giftDescriptions, _.constant(dataIcons.gift), 'gifts'
+        );
+    }
+
+    private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
+        return this.transformEntities(data.spaceDescriptions, locationIcon, 'locations');
+    }
+
 }
