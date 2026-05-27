@@ -59,7 +59,7 @@ export const transformSource = (source: BrowseSourcesPageQuery['sources'][number
     description: source.descriptionText,
     numOfEpisodes: source.episodes.length,
     icon: dataIcons.source,
-    link: `sources/${source.id}`,
+    link: `/data/sources/${source.id}`,
 });
 
 
@@ -71,7 +71,7 @@ export const transformEpisode = (
     type: 'episode',
     description: episode.summary,
     icon: dataIcons.episode,
-    link: `episodes/${episode.id}`,
+    link: `/data/episodes/${episode.id}`,
     source: episode.source,
     categories: episode.categories ?? [],
     designators: episode.designators,
@@ -79,25 +79,25 @@ export const transformEpisode = (
         id: agent.id,
         name: agent.name,
         icon: agentIcon(agent),
-        link: `agents/${agent.id}`
+        link: `/data/agents/${agent.id}`
     })),
     letters: episode.letters.map(({ letter }) => ({
         id: letter.id,
         name: letter.name,
         icon: dataIcons.letter,
-        link: `letters/${letter.id}`
+        link: `/data/letters/${letter.id}`
     })),
     gifts: episode.gifts.map(({ gift }) => ({
         id: gift.id,
         name: gift.name,
         icon: dataIcons.gift,
-        link: `gifts/${gift.id}`
+        link: `/data/gifts/${gift.id}`
     })),
     spaces: episode.spaces.map(({ space }) => ({
         id: space.id,
         name: space.name,
         icon: locationIcon(space),
-        link: `locations/${space.id}`
+        link: `/data/locations/${space.id}`
     })),
     sourceLocation: {
         book: episode.book,
@@ -117,7 +117,7 @@ export const transformEntity = <Item extends
     type: 'entity',
     description: entity.description,
     icon: icon(entity),
-    link: `${path}/${entity.id}`,
+    link: `/data/${path}/${entity.id}`,
     numOfEpisodes: entity.episodes.length,
     source: entity.source,
 });
