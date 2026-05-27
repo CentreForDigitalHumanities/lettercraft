@@ -110,12 +110,20 @@ export const transformEpisode = (
     },
 });
 
-export const transformEntity = <Item extends
-    BrowseAgentsPageQuery['agentDescriptions'][number] |
+
+type EntityData = BrowseAgentsPageQuery['agentDescriptions'][number] |
     BrowseLettersPageQuery['letterDescriptions'][number] |
     BrowseGiftsPageQuery['giftDescriptions'][number] |
-    BrowseLocationsPageQuery['spaceDescriptions'][number]
->(entity: Item, icon: (e: Item) => string, path: string): BrowseListItem => ({
+    BrowseLocationsPageQuery['spaceDescriptions'][number] |
+    NonNullable<ViewEpisodeQuery['episode']>['agents'][number]['agent'] |
+    NonNullable<ViewEpisodeQuery['episode']>['letters'][number]['letter'] |
+    NonNullable<ViewEpisodeQuery['episode']>['gifts'][number]['gift'] |
+    NonNullable<ViewEpisodeQuery['episode']>['spaces'][number]['space'];
+
+
+export const transformEntity = <Item extends EntityData>(
+    entity: Item, icon: (e: Item) => string, path: string
+): BrowseListItem => ({
     id: entity.id,
     name: entity.name,
     type: 'entity',
@@ -123,5 +131,5 @@ export const transformEntity = <Item extends
     icon: icon(entity),
     link: `/data/${path}/${entity.id}`,
     numOfEpisodes: entity.episodes.length,
-    source: entity.source,
+    source: _.get(entity, 'source') as ListItemSource | undefined,
 });

@@ -94,19 +94,44 @@
 
         <h2 class="mt-5">Agents</h2>
 
-        <p>This episode involves the following agents:</p>
-        <lc-episode-links [data]="episode.agents" />
+        <div class="my-4">
+            @for (link of episode.agents; track link.id) {
+                <lc-browse-list-item [listItem]="transformAgentLink(link)" />
+            } @empty {
+                <p><i>None.</i></p>
+            }
+        </div>
 
-        <h2 class="mt-5">Objects</h2>
+        <h2 class="mt-5">Letters</h2>
 
-        <p>This episode involves the following epistolary objects:</p>
+        <div class="my-4">
+            @for (link of episode.letters; track link.id) {
+                <lc-browse-list-item [listItem]="transformLetterLink(link)" />
+            } @empty {
+                <p><i>None.</i></p>
+            }
+        </div>
 
-        <lc-episode-links [data]="episodeObjects(episode)" />
+        <h2 class="mt-5">Gifts</h2>
+
+        <div class="my-4">
+            @for (link of episode.gifts; track link.id) {
+                <lc-browse-list-item [listItem]="transformGiftLink(link)" />
+            } @empty {
+                <p><i>None.</i></p>
+            }
+        </div>
+
 
         <h2 class="mt-5">Locations</h2>
 
-        <p>This episode involves the following locations:</p>
-        <lc-episode-links [data]="episode.spaces" />
+        <div class="my-4">
+            @for (link of episode.spaces; track link.id) {
+                <lc-browse-list-item [listItem]="transformLocationLink(link)" />
+            } @empty {
+                <p><i>None.</i></p>
+            }
+        </div>
     </ng-container>
 
     <ng-template #noEpisode>

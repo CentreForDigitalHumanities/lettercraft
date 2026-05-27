@@ -32,8 +32,13 @@ query ViewEpisode($id: ID!) {
         agent {
             id
             name
+            description
             isGroup
             identified
+            episodes {
+                id
+            }
+
         }
     }
     spaces {
@@ -45,6 +50,10 @@ query ViewEpisode($id: ID!) {
             id
             name
             hasIdentifiableFeatures
+            description
+            episodes {
+                id
+            }
         }
     }
     letters {
@@ -55,6 +64,10 @@ query ViewEpisode($id: ID!) {
         letter {
             id
             name
+            description
+            episodes {
+                id
+            }
         }
     }
     gifts {
@@ -65,6 +78,10 @@ query ViewEpisode($id: ID!) {
         gift {
             id
             name
+            description
+            episodes {
+                id
+            }
         }
     }
   }
