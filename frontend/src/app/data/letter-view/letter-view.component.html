@@ -15,22 +15,30 @@
 
         <lc-contributors [contributors]="letter.contributors" />
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Source text</h2>
 
-            <p>
-                {{letter.name}} is a letter in
-                <a [routerLink]="['/data/sources', letter.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{letter.source.name}}
-                </a>.
-                <ng-container *ngIf="letter.episodes.length">
-                    It appears in the following epistolary episodes:
-                </ng-container>
-            </p>
-
-            <lc-episode-links [data]="letter.episodes" />
+            <div class="my-4">
+                <lc-browse-list-item [listItem]="transformSource(letter.source)" />
+            </div>
         </section>
+
+        <section class="mt-5">
+            <h2>Epistolary episodes</h2>
+
+            @if (letter.episodes.length) {
+                <p>This letter appears in {{letter.episodes.length}} epistolary episodes:</p>
+
+                <div class="my-4">
+                    @for (link of letter.episodes; track link.id) {
+                        <lc-browse-list-item [listItem]="transformEpisode(link.episode)" />
+                    }
+                </div>
+            } @else {
+                This agent does not appear in any epistolary episodes.
+            }
+        </section>
+
     </ng-container>
 
     <ng-template #noLetter>
