@@ -1,6 +1,6 @@
-import { Component, computed, DestroyRef, input } from '@angular/core';
+import { Component, computed, DestroyRef, input, SimpleChanges } from '@angular/core';
 import { actionIcons, dataIcons } from '@shared/icons';
-import { BehaviorSubject, filter, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, merge } from 'rxjs';
 import { HasID, PageQueryGQL, PageResult } from '../utils/pagination';
 import { BrowseAgentsPageGQL, BrowseAgentsPageQuery, BrowseEpisodesPageGQL, BrowseEpisodesPageQuery, BrowseGiftsPageGQL, BrowseGiftsPageQuery, BrowseLettersPageGQL, BrowseLettersPageQuery, BrowseLocationsPageGQL, BrowseLocationsPageQuery, BrowseSearchQuery, BrowseSourcesPageGQL, BrowseSourcesPageQuery } from 'generated/graphql';
 import { BrowseListItem, transformEntity, transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
@@ -62,6 +62,7 @@ type BrowsePageResult =
 export class BrowseTabsComponent {
     tabs = input.required<SearchFocus[]>();
     data = input.required<TabData | null>();
+    hideSource = input<boolean>(false);
 
     focus$ = new BehaviorSubject<SearchFocus>(SearchFocus.Sources);
 
@@ -82,6 +83,12 @@ export class BrowseTabsComponent {
     });
     loading = computed(() => !this.data());
 
+    filterItem = computed<(i: BrowseListItem) => BrowseListItem>(() =>
+        this.hideSource() ?
+        ((item: BrowseListItem) => _.omit(item, 'source') as any)
+        : _.identity
+    );
+
     constructor(
         private destroyRef: DestroyRef,
         private sourcesPageQuery: BrowseSourcesPageGQL,
@@ -91,6 +98,12 @@ export class BrowseTabsComponent {
         private giftsPageQuery: BrowseGiftsPageGQL,
         private locationsPageQuery: BrowseLocationsPageGQL,
     ) {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['tabs']) {
+            this.focus$.next(_.first(this.tabs()) ?? SearchFocus.Sources);
+        }
+    }
 
     public changeTabs(newNavId: SearchFocus): void {
         this.focus$.next(newNavId);
@@ -154,5 +167,4 @@ export class BrowseTabsComponent {
     private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
         return this.transformEntities(data.spaceDescriptions, locationIcon, 'locations');
     }
-
 }
