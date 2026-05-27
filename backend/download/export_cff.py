@@ -43,7 +43,9 @@ def _authors_data() -> List[Dict]:
 
 
 def _author_data(user: User) -> Dict:
-    return {
+    data = {
         "family-names": user.last_name,
+        "name-particle": user.last_name_prefix,
         "given-names": user.first_name,
     }
+    return { key: value for key, value in data.items() if value }
