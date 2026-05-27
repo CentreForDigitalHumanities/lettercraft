@@ -2,56 +2,7 @@ import { Component, input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
 import { EpisodeType } from 'generated/graphql';
 import _ from 'underscore';
-
-
-interface ListItemEntity {
-    id: string;
-    name: string;
-    icon: string;
-    link: string;
-}
-
-interface BaseListItem {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    link: string;
-}
-
-interface ListItemSource {
-    id: string;
-    name: string;
-}
-
-interface EpisodeListItem extends BaseListItem {
-    type: 'episode';
-    labels: string[];
-    designators: string[];
-    agents: ListItemEntity[];
-    letters: ListItemEntity[];
-    gifts: ListItemEntity[];
-    spaces: ListItemEntity[];
-    source: ListItemSource,
-    sourceLocation: {
-        book: string;
-        chapter: string;
-        page: string;
-    };
-}
-
-interface SourceListItem extends BaseListItem {
-    type: 'source';
-    numOfEpisodes: number;
-}
-
-export interface EntityListItem extends BaseListItem {
-    type: 'entity';
-    numOfEpisodes: number;
-    source: ListItemSource,
-}
-
-export type BrowseListItem = EpisodeListItem | EntityListItem | SourceListItem;
+import { BrowseListItem } from './browse-list-item';
 
 @Component({
     selector: 'lc-browse-list-item',
@@ -67,7 +18,7 @@ export class BrowseListItemComponent {
     hasBody(item: BrowseListItem): boolean {
         if (item.type == 'episode') {
             const values = [
-                item.description, item.labels, item.agents, item.letters,
+                item.description, item.categories, item.agents, item.letters,
                 item.gifts, item.spaces
             ];
             return _.any(values, i => i.length > 0);

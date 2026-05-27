@@ -56,12 +56,12 @@
                     </p>
                 }
 
-                @if (item.labels.length > 0) {
+                @if (item.categories.length > 0) {
                     <ul class="block inline-list no-delimiter">
-                        @for (label of item.labels; track label) {
+                        @for (cat of item.categories; track $index) {
                         <li class="inline-list-item">
                             <span class="badge rounded-pill text-bg-burntorange">
-                                {{ label }}
+                                {{ cat.name }}
                             </span>
                         </li>
                         }

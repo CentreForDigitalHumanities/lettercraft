@@ -43,10 +43,9 @@
             <lc-paginator [pageResult]="episodesPageResult" />
 
             <ng-container *ngIf="episodesPageResult.pageData$ | async as pageData">
-                <lc-episode-preview
-                    *ngFor="let episode of pageData.episodes"
-                    [episode]="episode"
-                />
+                @for (episode of pageData.episodes; track episode.id) {
+                    <!-- <lc-browse-list-item [listItem]="episode"/> -->
+                }
             </ng-container>
 
             <lc-paginator [pageResult]="episodesPageResult" />
