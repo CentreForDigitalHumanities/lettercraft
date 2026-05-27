@@ -6,6 +6,10 @@ query ViewEpisode($id: ID!) {
     source {
         id
         name
+        descriptionText
+        episodes {
+            id
+        }
     }
     book
     chapter

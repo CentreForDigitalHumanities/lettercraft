@@ -29,17 +29,11 @@
 
         <h2 class="mt-5">Source text</h2>
 
+        <div class="my-4">
+            <lc-browse-list-item [listItem]="transformSource(episode.source)" />
+        </div>
+
         <dl>
-            <dt>Source text</dt>
-            <dd class="ms-4">
-                <a
-                    [routerLink]="['/data/sources', episode.source.id]"
-                    class="icon-link"
-                >
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{ episode.source.name }}</a
-                >
-            </dd>
             <dt>Location in text</dt>
             <dd class="ms-4">
                 <span class="inline-list">
