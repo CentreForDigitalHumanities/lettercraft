@@ -32,108 +32,109 @@
         }
     </hgroup>
 
-    <div class="card-body">
-        @if (item.description) {
-            <p class="block">
-                @if (item.type == 'source') {
-                    <div class="source-description" [innerHTML]="item.description"></div>
-                } @else {
-                    <p>{{ item.description }}</p>
-                }
-            </p>
-        }
-
-        @if (item.type === 'episode') {
-            @if (item.labels.length > 0) {
-                <ul class="block inline-list no-delimiter">
-                    @for (label of item.labels; track label) {
-                    <li class="inline-list-item">
-                        <span class="badge rounded-pill text-bg-burntorange">
-                            {{ label }}
-                        </span>
-                    </li>
+    @if (hasBody(item)) {
+        <div class="card-body">
+            @if (item.description) {
+                <p class="block">
+                    @if (item.type == 'source') {
+                        <div class="source-description" [innerHTML]="item.description"></div>
+                    } @else {
+                        <p>{{ item.description }}</p>
                     }
-                </ul>
+                </p>
             }
 
-            <dl class="block">
-                @if (item.agents.length > 0) {
-                    <dt>Agents</dt>
-                    <dd class="ms-4">
-                        <ul class="inline-list">
-                            @for (agentLink of item.agents; track agentLink.id) {
-                            <li class="inline-list-item">
-                                <a [routerLink]="[agentLink.link]" class="icon-link">
-                                    <lc-icon [icon]="agentLink.icon" />
-                                    {{ agentLink.name }}
-                                </a>
-                            </li>
-                            }
-                        </ul>
-                    </dd>
+            @if (item.type === 'episode') {
+                @if (item.labels.length > 0) {
+                    <ul class="block inline-list no-delimiter">
+                        @for (label of item.labels; track label) {
+                        <li class="inline-list-item">
+                            <span class="badge rounded-pill text-bg-burntorange">
+                                {{ label }}
+                            </span>
+                        </li>
+                        }
+                    </ul>
                 }
+                <dl class="block">
+                    @if (item.agents.length > 0) {
+                        <dt>Agents</dt>
+                        <dd class="ms-4">
+                            <ul class="inline-list">
+                                @for (agentLink of item.agents; track agentLink.id) {
+                                <li class="inline-list-item">
+                                    <a [routerLink]="[agentLink.link]" class="icon-link">
+                                        <lc-icon [icon]="agentLink.icon" />
+                                        {{ agentLink.name }}
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-                @if (item.letters.length > 0) {
-                    <dt>Letters</dt>
-                    <dd class="ms-4">
-                        <ul class="inline-list">
-                            @for (letter of item.letters; track letter.id) {
-                            <li class="inline-list-item">
-                                <a [routerLink]="letter.link" class="icon-link">
-                                    <lc-icon [icon]="letter.icon" />
-                                    {{ letter.name }}
-                                </a>
-                            </li>
-                            }
-                        </ul>
-                    </dd>
-                }
+                    @if (item.letters.length > 0) {
+                        <dt>Letters</dt>
+                        <dd class="ms-4">
+                            <ul class="inline-list">
+                                @for (letter of item.letters; track letter.id) {
+                                <li class="inline-list-item">
+                                    <a [routerLink]="letter.link" class="icon-link">
+                                        <lc-icon [icon]="letter.icon" />
+                                        {{ letter.name }}
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-                @if (item.gifts.length > 0) {
-                    <dt>Gifts</dt>
-                    <dd class="ms-4">
-                        <ul class="inline-list">
-                            @for (gift of item.gifts; track gift.id) {
-                            <li class="inline-list-item">
-                                <a [routerLink]="gift.link" class="icon-link">
-                                    <lc-icon [icon]="gift.icon" />
-                                    {{ gift.name }}
-                                </a>
-                            </li>
-                            }
-                        </ul>
-                    </dd>
-                }
+                    @if (item.gifts.length > 0) {
+                        <dt>Gifts</dt>
+                        <dd class="ms-4">
+                            <ul class="inline-list">
+                                @for (gift of item.gifts; track gift.id) {
+                                <li class="inline-list-item">
+                                    <a [routerLink]="gift.link" class="icon-link">
+                                        <lc-icon [icon]="gift.icon" />
+                                        {{ gift.name }}
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </dd>
+                    }
 
-                @if (item.spaces.length > 0) {
-                    <dt>Locations</dt>
-                    <dd class="ms-4">
-                        <ul class="inline-list">
-                            @for (space of item.spaces; track space.id) {
-                            <li class="inline-list-item">
-                                <a [routerLink]="space.link" class="icon-link">
-                                    <lc-icon [icon]="space.icon" />
-                                    {{ space.name }}
-                                </a>
-                            </li>
-                            }
-                        </ul>
-                    </dd>
-                }
-            </dl>
-        } @else {
-            <p class="block">
-                <small class="text-body-secondary">
-                    @if (item.type === 'entity') {
-                    Occurs in
-                    {{ item.numOfEpisodes }} episode{{
-                        item.numOfEpisodes != 1 ? "s" : ""
-                    }}. } @else if (item.type === 'source') { Contains
-                    {{ item.numOfEpisodes }} episode{{
-                        item.numOfEpisodes != 1 ? "s" : ""
-                    }}. }
-                </small>
-            </p>
-        }
-    </div>
+                    @if (item.spaces.length > 0) {
+                        <dt>Locations</dt>
+                        <dd class="ms-4">
+                            <ul class="inline-list">
+                                @for (space of item.spaces; track space.id) {
+                                <li class="inline-list-item">
+                                    <a [routerLink]="space.link" class="icon-link">
+                                        <lc-icon [icon]="space.icon" />
+                                        {{ space.name }}
+                                    </a>
+                                </li>
+                                }
+                            </ul>
+                        </dd>
+                    }
+                </dl>
+            } @else {
+                <p class="block">
+                    <small class="text-body-secondary">
+                        @if (item.type === 'entity') {
+                        Occurs in
+                        {{ item.numOfEpisodes }} episode{{
+                            item.numOfEpisodes != 1 ? "s" : ""
+                        }}. } @else if (item.type === 'source') { Contains
+                        {{ item.numOfEpisodes }} episode{{
+                            item.numOfEpisodes != 1 ? "s" : ""
+                        }}. }
+                    </small>
+                </p>
+            }
+        </div>
+    }
 </section>
