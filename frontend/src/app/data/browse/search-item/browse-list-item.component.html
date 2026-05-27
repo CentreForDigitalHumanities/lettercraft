@@ -7,12 +7,15 @@
                 {{ item.name }}
             </a>
         </h3>
-        @if (item.type == 'episode' || item.type == 'entity') {
+        @if (item.type == 'episode' || (item.type == 'entity' && item.source)) {
             <p class="mt-2 mb-0">
-                <lc-icon [icon]="dataIcons.source" class="me-2" />
-                <i>{{item.source.name}}</i>
+                @if (item.source) {
+                    <lc-icon [icon]="dataIcons.source" class="me-2" />
+                    <i>{{item.source.name}}</i>
+                }
                 @if (item.type == 'episode' && (item.sourceLocation.book || item.sourceLocation.chapter || item.sourceLocation.page)) {
-                    - <small><span class="inline-list">
+                    @if (item.source) { - }
+                    <small><span class="inline-list">
                         @if (item.sourceLocation.book) {
                         <span class="inline-list-item"
                             >book {{ item.sourceLocation.book }}</span

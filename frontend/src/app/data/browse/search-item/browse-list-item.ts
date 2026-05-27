@@ -1,6 +1,7 @@
 import { dataIcons } from "@shared/icons";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
 import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
+import _ from "underscore";
 
 interface ListItemEntity {
     id: string;
@@ -30,7 +31,7 @@ interface EpisodeListItem extends BaseListItem {
     letters: ListItemEntity[];
     gifts: ListItemEntity[];
     spaces: ListItemEntity[];
-    source: ListItemSource,
+    source?: ListItemSource,
     sourceLocation: {
         book: string;
         chapter: string;
@@ -46,7 +47,7 @@ interface SourceListItem extends BaseListItem {
 export interface EntityListItem extends BaseListItem {
     type: 'entity';
     numOfEpisodes: number;
-    source: ListItemSource,
+    source?: ListItemSource,
 }
 
 export type BrowseListItem = EpisodeListItem | EntityListItem | SourceListItem;
@@ -72,7 +73,7 @@ export const transformEpisode = (
     description: episode.summary,
     icon: dataIcons.episode,
     link: `/data/episodes/${episode.id}`,
-    source: episode.source,
+    source: _.get(episode, 'source') as ListItemSource | undefined,
     categories: episode.categories ?? [],
     designators: episode.designators,
     agents: episode.agents.map(({ agent }) => ({
