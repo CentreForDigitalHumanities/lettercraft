@@ -45,6 +45,17 @@
             }
 
             @if (item.type === 'episode') {
+                @if (item.designators.length) {
+                    <p>
+                        <b>Designators: </b>
+                        <span class="inline-list">
+                            @for (d of item.designators; track $index) {
+                                <i class="inline-list-item">{{d}}</i>
+                            }
+                        </span>
+                    </p>
+                }
+
                 @if (item.labels.length > 0) {
                     <ul class="block inline-list no-delimiter">
                         @for (label of item.labels; track label) {

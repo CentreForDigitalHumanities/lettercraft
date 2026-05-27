@@ -55,6 +55,7 @@ query BrowseEpisodesPage($ids: [String!]) {
             id
             name
         }
+        designators
         agents {
             id
             agent {

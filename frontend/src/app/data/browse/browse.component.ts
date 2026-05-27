@@ -173,6 +173,7 @@ export class BrowseComponent {
             link: `episodes/${episode.id}`,
             source: episode.source,
             labels: episode.categories?.map(cat => cat.name) ?? [],
+            designators: episode.designators,
             agents: episode.agents.map(({ agent }) => ({
                 id: agent.id,
                 name: agent.name,
