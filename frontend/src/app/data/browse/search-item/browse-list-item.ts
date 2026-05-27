@@ -25,7 +25,7 @@ interface ListItemSource {
 
 interface EpisodeListItem extends BaseListItem {
     type: 'episode';
-    categories: { name: string }[];
+    categories: { id: string, name: string }[];
     designators: string[];
     agents: ListItemEntity[];
     letters: ListItemEntity[];

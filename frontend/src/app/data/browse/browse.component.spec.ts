@@ -13,7 +13,7 @@ import { dataIcons } from '@shared/icons';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { DataModule } from '../data.module';
-import { EntityListItem } from './search-item/browse-list-item.component';
+import { EntityListItem } from './search-item/browse-list-item';
 
 const mockSearchData: BrowseSearchQuery = {
     search: {
@@ -62,6 +62,7 @@ const mockEpisodesPageData: BrowseEpisodesPageQuery = {
                 id: 'cat1',
                 name: 'Category1'
             }],
+            designators: [],
             agents: [{ id: 'ea1', agent: { id: '3', name: 'Agent 1', isGroup: false, identified: true } }],
             letters: [{ id: 'el1', letter: { id: '4', name: 'Letter 1' } }],
             gifts: [{ id: 'eg1', gift: { id: '5', name: 'Gift 1' } }],
@@ -270,7 +271,7 @@ describe('BrowseComponent', () => {
                     description: 'Test description',
                     type: 'source',
                     icon: dataIcons.source,
-                    link: 'sources/1',
+                    link: '/data/sources/1',
                     numOfEpisodes: 1,
                 });
                 done();
@@ -287,8 +288,9 @@ describe('BrowseComponent', () => {
                     description: 'Test summary',
                     type: 'episode',
                     icon: dataIcons.episode,
-                    link: 'episodes/2',
-                    labels: ['Category1'],
+                    link: '/data/episodes/2',
+                    categories: [{ id: 'cat1', name: 'Category1' }],
+                    designators: [],
                     source: {
                         id: '1',
                         name: 'REF-1'
@@ -297,25 +299,25 @@ describe('BrowseComponent', () => {
                         id: '3',
                         name: 'Agent 1',
                         icon: dataIcons.personIdentified,
-                        link: 'agents/3'
+                        link: '/data/agents/3'
                     }],
                     letters: [{
                         id: '4',
                         name: 'Letter 1',
                         icon: dataIcons.letter,
-                        link: 'letters/4'
+                        link: '/data/letters/4'
                     }],
                     gifts: [{
                         id: '5',
                         name: 'Gift 1',
                         icon: dataIcons.gift,
-                        link: 'gifts/5'
+                        link: '/data/gifts/5'
                     }],
                     spaces: [{
                         id: '6',
                         name: 'Location 1',
                         icon: dataIcons.location,
-                        link: 'locations/6'
+                        link: '/data/locations/6'
                     }],
                     sourceLocation: {
                         book: "1",
@@ -337,7 +339,7 @@ describe('BrowseComponent', () => {
                     description: 'Agent description',
                     type: 'entity',
                     icon: dataIcons.personIdentified,
-                    link: 'agents/3',
+                    link: '/data/agents/3',
                     numOfEpisodes: 1,
                     source: {
                         name: 'REF-1',
@@ -363,7 +365,7 @@ describe('BrowseComponent', () => {
                         id: '1'
                     },
                     icon: dataIcons.letter,
-                    link: 'letters/4'
+                    link: '/data/letters/4'
                 });
                 done();
             });
@@ -384,7 +386,7 @@ describe('BrowseComponent', () => {
                         id: '1'
                     },
                     icon: dataIcons.gift,
-                    link: 'gifts/5'
+                    link: '/data/gifts/5'
                 });
                 done();
             });
@@ -406,7 +408,7 @@ describe('BrowseComponent', () => {
                         id: '1'
                     },
                     icon: dataIcons.location,
-                    link: 'locations/6'
+                    link: '/data/locations/6'
                 });
                 done();
             });
@@ -440,8 +442,8 @@ describe('BrowseComponent', () => {
             agentsPageResult.pageData$.subscribe(agents => {
                 const entityAgents = agents as EntityListItem[];
                 expect(entityAgents[0].numOfEpisodes).toBe(2);
-                expect(entityAgents[0].source.name).toBe('REF-1');
-                expect(entityAgents[0].source.id).toBe('1');
+                expect(entityAgents[0].source?.name).toBe('REF-1');
+                expect(entityAgents[0].source?.id).toBe('1');
                 done();
             });
         });
@@ -451,8 +453,8 @@ describe('BrowseComponent', () => {
             agentsPageResult.pageData$.subscribe(agents => {
                 const entityAgents = agents as EntityListItem[];
                 expect(entityAgents[0].numOfEpisodes).toBe(1);
-                expect(entityAgents[0].source.name).toBe('REF-1');
-                expect(entityAgents[0].source.id).toBe('1');
+                expect(entityAgents[0].source?.name).toBe('REF-1');
+                expect(entityAgents[0].source?.id).toBe('1');
                 done();
             });
         });
