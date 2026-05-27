@@ -15,6 +15,18 @@ query ViewSource($id: ID!) {
         episodes {
             id
         }
+        agents {
+            id
+        }
+        letters {
+            id
+        }
+        gifts {
+            id
+        }
+        spaces {
+            id
+        }
         contributors {
             id
             fullName

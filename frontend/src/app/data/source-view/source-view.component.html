@@ -37,18 +37,8 @@
             </div>
         </section>
 
-        <section class="mt-5 mb-5">
-            <h2 class="mb-4">Epistolary episodes</h2>
-
-            <lc-paginator [pageResult]="episodesPageResult" />
-
-            <ng-container *ngIf="episodesPageResult.pageData$ | async as pageData">
-                @for (episode of pageData.episodes; track episode.id) {
-                    <lc-browse-list-item [listItem]="transformEpisode(episode)"/>
-                }
-            </ng-container>
-
-            <lc-paginator [pageResult]="episodesPageResult" />
+        <section class="my-5">
+            <lc-browse-tabs [tabs]="browseTabs" [data]="tabData$ | async" />
         </section>
     </ng-container>
 
