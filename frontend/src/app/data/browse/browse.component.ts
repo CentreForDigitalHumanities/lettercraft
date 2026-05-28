@@ -159,32 +159,27 @@ export class BrowseComponent {
         return data.episodes.map(transformEpisode);
     }
 
-    private transformEntities<Items extends
-        BrowseAgentsPageQuery['agentDescriptions'] |
-        BrowseLettersPageQuery['letterDescriptions'] |
-        BrowseGiftsPageQuery['giftDescriptions'] |
-        BrowseLocationsPageQuery['spaceDescriptions']
-    >(entities: Items, icon: (e: Items[number]) => string, path: string): BrowseListItem[] {
-        return entities.map(entity => transformEntity(entity, icon, path));
-    }
-
     private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-        return this.transformEntities(data.agentDescriptions, agentIcon, 'agents');
+        return data.agentDescriptions.map(
+            agent => transformEntity(agent, agentIcon, 'agents')
+        );
     }
 
     private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
-        return this.transformEntities(
-            data.letterDescriptions, _.constant(dataIcons.letter), 'letters'
+        return data.letterDescriptions.map(
+            letter => transformEntity(letter, _.constant(dataIcons.letter), 'letters')
         );
     }
 
     private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
-        return this.transformEntities(
-            data.giftDescriptions, _.constant(dataIcons.gift), 'gifts'
+        return data.giftDescriptions.map(
+            gift => transformEntity(gift, _.constant(dataIcons.gift), 'gifts')
         );
     }
 
     private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
-        return this.transformEntities(data.spaceDescriptions, locationIcon, 'locations');
+        return data.spaceDescriptions.map(
+            location => transformEntity(location, locationIcon, 'locations')
+        );
     }
 }
