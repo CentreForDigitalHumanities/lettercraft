@@ -27,6 +27,7 @@ describe("EpisodePreviewComponent", () => {
             letters: [],
             spaces: [],
             categories: [],
+            designators: [],
         }
         fixture.detectChanges();
     });

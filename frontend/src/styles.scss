@@ -76,3 +76,7 @@ figure {
     border-radius: 6rem;
     object-fit: cover;
 }
+
+.card .card-header:last-child {
+    border-bottom: none;
+}
