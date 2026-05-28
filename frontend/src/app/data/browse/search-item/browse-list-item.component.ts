@@ -16,14 +16,14 @@ export class BrowseListItemComponent {
     public dataIcons = dataIcons;
 
     hasBody(item: BrowseListItem): boolean {
-        if (item.type == 'episode') {
-            const values = [
-                item.description, item.categories, item.agents, item.letters,
-                item.gifts, item.spaces
-            ];
-            return _.any(values, i => i.length > 0);
+        if (item.type !== 'episode') {
+            return true;
         }
-        return true;
+        const values = [
+            item.description, item.categories, item.agents, item.letters,
+            item.gifts, item.spaces
+        ];
+        return _.any(values, i => i.length > 0);
     }
 
     public hasSourceLocation(episode: Pick<EpisodeType, 'book' | 'chapter' | 'page'>): boolean {

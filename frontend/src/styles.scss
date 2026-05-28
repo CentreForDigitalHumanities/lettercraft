@@ -77,6 +77,6 @@ figure {
     object-fit: cover;
 }
 
-.card :last-child.card-header {
+.card .card-header:last-child {
     border-bottom: none;
 }
