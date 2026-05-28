@@ -1,15 +1,28 @@
 @let item = listItem();
 <section class="card mb-4">
-    <h3 class="card-header position-relative h5 py-3">
-        <a class="icon-link stretched-link text-decoration-none" [routerLink]="[item.link]">
-            <lc-icon [icon]="item.icon" />
-            {{ item.name }}
-        </a>
-    </h3>
+    <hgroup class="card-header py-3 position-relative ">
+        <h3 class="h5 mb-0">
+            <a class="icon-link stretched-link text-decoration-none" [routerLink]="[item.link]">
+                <lc-icon [icon]="item.icon" />
+                {{ item.name }}
+            </a>
+        </h3>
+        @if (item.type == 'episode' || item.type == 'entity') {
+            <p class="mt-2 mb-0">
+                <lc-icon [icon]="dataIcons.source" class="me-2" />
+                <i>{{item.source.name}}</i>
+            </p>
+        }
+    </hgroup>
+
     <div class="card-body">
         <p class="block">
             @if (item.description) {
-            <span>{{ item.description }}</span>
+                @if (item.type == 'source') {
+                    <div class="source-description" [innerHTML]="item.description"></div>
+                } @else {
+                    <p>{{ item.description }}</p>
+                }
             } @else {
             <i>No description available.</i>
             }
@@ -103,18 +116,13 @@
         } @else {
         <p class="block">
             <small class="text-body-secondary">
-                @if (item.type === 'entity') { Occurs in
-                {{ item.occurrence.numOfEpisodes }} episode{{
-                    item.occurrence.numOfEpisodes > 1 ? "s" : ""
-                }}
-                in
-                <lc-icon [icon]="dataIcons.source" class="me-1" />
-                <a [routerLink]="item.occurrence.sourceLink">{{
-                    item.occurrence.sourceName
-                }}</a
-                >. } @else if (item.type === 'source') { Contains
+                @if (item.type === 'entity') {
+                Occurs in
                 {{ item.numOfEpisodes }} episode{{
-                    item.numOfEpisodes > 1 ? "s" : ""
+                    item.numOfEpisodes != 1 ? "s" : ""
+                }}. } @else if (item.type === 'source') { Contains
+                {{ item.numOfEpisodes }} episode{{
+                    item.numOfEpisodes != 1 ? "s" : ""
                 }}. }
             </small>
         </p>
