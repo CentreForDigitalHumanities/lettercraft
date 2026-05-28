@@ -1,6 +1,6 @@
 import { dataIcons } from "@shared/icons";
 import { agentIcon, locationIcon } from "@shared/icons-utils";
-import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, ViewAgentQuery, ViewEpisodeQuery, ViewGiftQuery, ViewLetterQuery, ViewLocationQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
+import { BrowseAgentsPageQuery, BrowseEpisodesPageQuery, BrowseGiftsPageQuery, BrowseLettersPageQuery, BrowseLocationsPageQuery, BrowseSourcesPageQuery, Entity, ViewAgentQuery, ViewEpisodeQuery, ViewGiftQuery, ViewLetterQuery, ViewLocationQuery, ViewSourceEpisodesPageQuery } from "generated/graphql";
 import _ from "underscore";
 
 interface ListItemEntity {
@@ -141,3 +141,13 @@ export const transformEntity = <Item extends EntityData>(
     numOfEpisodes: entity.episodes.length,
     source: _.get(entity, 'source') as ListItemSource | undefined,
 });
+
+
+export const transformAgent: (e: EntityData) => BrowseListItem =
+    _.partial(transformEntity as any, _, agentIcon, 'agents');
+export const transformLetter: (e: EntityData) => BrowseListItem =
+    _.partial(transformEntity as any, _, _.constant(dataIcons.letter), 'letters');
+export const transformGift: (e: EntityData) => BrowseListItem =
+    _.partial(transformEntity as any, _, _.constant(dataIcons.gift), 'gifts');
+export const transformLocation: (e: EntityData) => BrowseListItem =
+    _.partial(transformEntity as any, _, locationIcon, 'locations');

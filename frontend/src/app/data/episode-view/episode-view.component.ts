@@ -6,7 +6,7 @@ import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
-import { BrowseListItem, transformEntity, transformSource } from '../browse/search-item/browse-list-item';
+import { transformAgent, transformGift, transformLetter, transformLocation, transformSource } from '../browse/search-item/browse-list-item';
 import _ from 'underscore';
 
 type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
@@ -34,6 +34,10 @@ export class EpisodeViewComponent {
     locationIcon = locationIcon;
 
     transformSource = transformSource;
+    transformAgent = transformAgent;
+    transformLetter = transformLetter;
+    transformGift = transformGift;
+    transformLocation = transformLocation;
 
     constructor(
         private route: ActivatedRoute,
@@ -49,21 +53,5 @@ export class EpisodeViewComponent {
 
     episodeObjects(episode: ViewEpisodeQuery["episode"]): EpisodeObject[] {
         return episode ? [...episode.letters, ...episode.gifts] : [];
-    }
-
-    transformAgentLink(link: NonNullable<ViewEpisodeQuery['episode']>['agents'][number]): BrowseListItem {
-        return transformEntity(link.agent, agentIcon, 'agents');
-    }
-
-    transformLetterLink(link: NonNullable<ViewEpisodeQuery['episode']>['letters'][number]): BrowseListItem {
-        return transformEntity(link.letter, _.constant(dataIcons.letter), 'letters');
-    }
-
-    transformGiftLink(link: NonNullable<ViewEpisodeQuery['episode']>['gifts'][number]): BrowseListItem {
-        return transformEntity(link.gift, _.constant(dataIcons.gift), 'gifts');
-    }
-
-    transformLocationLink(link: NonNullable<ViewEpisodeQuery['episode']>['spaces'][number]): BrowseListItem {
-        return transformEntity(link.space, locationIcon, 'locations');
     }
 }

@@ -96,7 +96,7 @@
 
         <div class="my-4">
             @for (link of episode.agents; track link.id) {
-                <lc-browse-list-item [listItem]="transformAgentLink(link)" />
+                <lc-browse-list-item [listItem]="transformAgent(link.agent)" />
             } @empty {
                 <p><i>None.</i></p>
             }
@@ -106,7 +106,7 @@
 
         <div class="my-4">
             @for (link of episode.letters; track link.id) {
-                <lc-browse-list-item [listItem]="transformLetterLink(link)" />
+                <lc-browse-list-item [listItem]="transformLetter(link.letter)" />
             } @empty {
                 <p><i>None.</i></p>
             }
@@ -116,7 +116,7 @@
 
         <div class="my-4">
             @for (link of episode.gifts; track link.id) {
-                <lc-browse-list-item [listItem]="transformGiftLink(link)" />
+                <lc-browse-list-item [listItem]="transformGift(link.gift)" />
             } @empty {
                 <p><i>None.</i></p>
             }
@@ -127,7 +127,7 @@
 
         <div class="my-4">
             @for (link of episode.spaces; track link.id) {
-                <lc-browse-list-item [listItem]="transformLocationLink(link)" />
+                <lc-browse-list-item [listItem]="transformLocation(link.space)" />
             } @empty {
                 <p><i>None.</i></p>
             }
