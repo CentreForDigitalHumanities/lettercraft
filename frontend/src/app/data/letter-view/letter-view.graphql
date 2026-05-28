@@ -62,9 +62,6 @@ query ViewLetter($id: ID!) {
                 }
             }
         }
-        sourceMention
-        designators
-        note
     }
     contributors {
         id

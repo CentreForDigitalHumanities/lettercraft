@@ -14,9 +14,6 @@ query ViewGift($id: ID!) {
     }
     episodes {
         id
-        sourceMention
-        designators
-        note
         episode {
             id
             name

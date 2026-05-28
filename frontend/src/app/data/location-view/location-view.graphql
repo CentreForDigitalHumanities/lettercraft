@@ -62,9 +62,6 @@ query ViewLocation($id: ID!) {
             }
         }
       }
-      designators
-      note
-      sourceMention
     }
     contributors {
       id
