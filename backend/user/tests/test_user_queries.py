@@ -42,6 +42,12 @@ def test_user_contributions_query(
     result = graphql_client.execute(query, context=anonymous_request)
     assert len(result["data"]["userDescription"]["contributedSources"]) == 1
 
+    source.is_public = False
+    source.save()
+
+    result = graphql_client.execute(query, context=anonymous_request)
+    assert len(result["data"]["userDescription"]["contributedSources"]) == 0
+
 
 def test_roles_query(
     graphql_client, user, user_has_contributor_role, anonymous_request

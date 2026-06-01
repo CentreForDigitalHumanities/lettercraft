@@ -1,98 +1,28 @@
-import { ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowseComponent } from './browse.component';
 import { SearchService } from '@services/search.service';
-import { BrowseSearchGQL, BrowseSearchQuery, SearchFocus } from 'generated/graphql';
+import {
+    BrowseSearchGQL, BrowseSearchQuery, SearchFocus,
+    BrowseSourcesPageGQL, BrowseEpisodesPageGQL, BrowseAgentsPageGQL,
+    BrowseLettersPageGQL, BrowseGiftsPageGQL, BrowseLocationsPageGQL,
+    BrowseSourcesPageQuery, BrowseEpisodesPageQuery, BrowseAgentsPageQuery,
+    BrowseLettersPageQuery, BrowseGiftsPageQuery, BrowseLocationsPageQuery
+} from 'generated/graphql';
 import { of } from 'rxjs';
 import { dataIcons } from '@shared/icons';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { DataModule } from '../data.module';
-import { EntityListItem } from './search-item/browse-list-item.component';
+import { EntityListItem } from './search-item/browse-list-item';
 
 const mockSearchData: BrowseSearchQuery = {
     search: {
-        sources: [
-            {
-                id: '1',
-                name: 'Test Source',
-                descriptionText: 'Test description',
-                reference: 'REF-1',
-                episodes: [{ id: '2' }],
-            }
-        ],
-        episodes: [
-            {
-                id: '2',
-                name: 'Test Episode',
-                summary: 'Test summary',
-                source: {
-                    id: '1',
-                    reference: 'REF-1'
-                },
-                book: "1",
-                chapter: "2",
-                page: "10",
-                categories: [{
-                    id: 'cat1',
-                    name: 'Category1'
-                }],
-                agents: [{ id: 'ea1', agent: { id: '3', name: 'Agent 1', isGroup: false, identified: true } }],
-                letters: [{ id: 'el1', letter: { id: '4', name: 'Letter 1' } }],
-                gifts: [{ id: 'eg1', gift: { id: '5', name: 'Gift 1' } }],
-                spaces: [{ id: 'es1', space: { id: '6', name: 'Location 1', hasIdentifiableFeatures: false } }],
-            }
-        ],
-        agents: [
-            {
-                id: '3',
-                name: 'Test Agent',
-                description: 'Agent description',
-                isGroup: false,
-                identified: true,
-                episodes: [{ id: '2' }],
-                source: {
-                    id: '1',
-                    reference: 'REF-1'
-                }
-            }
-        ],
-        letters: [
-            {
-                id: '4',
-                name: 'Test Letter',
-                description: 'Letter description',
-                episodes: [{ id: '2' }],
-                source: {
-                    id: '1',
-                    reference: 'REF-1'
-                }
-            }
-        ],
-        gifts: [
-            {
-                id: '5',
-                name: 'Test Gift',
-                description: 'Gift description',
-                episodes: [{ id: '2' }],
-                source: {
-                    id: '1',
-                    reference: 'REF-1'
-                }
-            }
-        ],
-        locations: [
-            {
-                id: '6',
-                name: 'Test Location',
-                description: 'Location description',
-                hasIdentifiableFeatures: false,
-                episodes: [{ id: '2' }],
-                source: {
-                    id: '1',
-                    reference: 'REF-1'
-                }
-            }
-        ],
+        sources: [{ id: '1' }],
+        episodes: [{ id: '2' }],
+        agents: [{ id: '3' }],
+        letters: [{ id: '4' }],
+        gifts: [{ id: '5' }],
+        locations: [{ id: '6' }],
         sourceCount: 1,
         episodeCount: 1,
         agentCount: 1,
@@ -103,22 +33,142 @@ const mockSearchData: BrowseSearchQuery = {
 };
 
 
+const mockSourcesPageData: BrowseSourcesPageQuery = {
+    sources: [
+        {
+            id: '1',
+            name: 'Test Source',
+            descriptionText: 'Test description',
+            reference: 'REF-1',
+            episodes: [{ id: '2' }],
+        }
+    ]
+};
+
+const mockEpisodesPageData: BrowseEpisodesPageQuery = {
+    episodes: [
+        {
+            id: '2',
+            name: 'Test Episode',
+            summary: 'Test summary',
+            book: "1",
+            chapter: "2",
+            page: "10",
+            source: {
+                id: '1',
+                name: 'REF-1'
+            },
+            categories: [{
+                id: 'cat1',
+                name: 'Category1'
+            }],
+            designators: [],
+            agents: [{ id: 'ea1', agent: { id: '3', name: 'Agent 1', isGroup: false, identified: true } }],
+            letters: [{ id: 'el1', letter: { id: '4', name: 'Letter 1' } }],
+            gifts: [{ id: 'eg1', gift: { id: '5', name: 'Gift 1' } }],
+            spaces: [{ id: 'es1', space: { id: '6', name: 'Location 1', hasIdentifiableFeatures: false } }],
+        }
+    ]
+};
+
+const mockAgentsPageData: BrowseAgentsPageQuery = {
+    agentDescriptions: [
+        {
+            id: '3',
+            name: 'Test Agent',
+            description: 'Agent description',
+            isGroup: false,
+            identified: true,
+            episodes: [{ id: '2' }],
+            source: {
+                id: '1',
+                name: 'REF-1'
+            }
+        }
+    ]
+};
+
+const mockLettersPageData: BrowseLettersPageQuery = {
+    letterDescriptions: [
+        {
+            id: '4',
+            name: 'Test Letter',
+            description: 'Letter description',
+            episodes: [{ id: '2' }],
+            source: {
+                id: '1',
+                name: 'REF-1'
+            }
+        }
+    ]
+};
+
+const mockGiftsPageData: BrowseGiftsPageQuery = {
+    giftDescriptions: [
+        {
+            id: '5',
+            name: 'Test Gift',
+            description: 'Gift description',
+            episodes: [{ id: '2' }],
+            source: {
+                id: '1',
+                name: 'REF-1'
+            }
+        }
+    ]
+};
+
+const mockLocationsPageData: BrowseLocationsPageQuery = {
+    spaceDescriptions: [
+        {
+            id: '6',
+            name: 'Test Location',
+            description: 'Location description',
+            hasIdentifiableFeatures: false,
+            episodes: [{ id: '2' }],
+            source: {
+                id: '1',
+                name: 'REF-1'
+            }
+        }
+    ]
+};
+
+
 describe('BrowseComponent', () => {
     let component: BrowseComponent;
     let fixture: ComponentFixture<BrowseComponent>;
     let mockSearchService: jasmine.SpyObj<SearchService>;
     let mockSearchQuery: jasmine.SpyObj<BrowseSearchGQL>;
+    let mockSourcesPageQuery: jasmine.SpyObj<BrowseSourcesPageGQL>;
+    let mockEpisodesPageQuery: jasmine.SpyObj<BrowseEpisodesPageGQL>;
+    let mockAgentsPageQuery: jasmine.SpyObj<BrowseAgentsPageGQL>;
+    let mockLettersPageQuery: jasmine.SpyObj<BrowseLettersPageGQL>;
+    let mockGiftsPageQuery: jasmine.SpyObj<BrowseGiftsPageGQL>;
+    let mockLocationsPageQuery: jasmine.SpyObj<BrowseLocationsPageGQL>;
     let element: HTMLElement;
 
     beforeEach(async () => {
         mockSearchService = jasmine.createSpyObj('SearchService', ['createSearch']);
         mockSearchQuery = jasmine.createSpyObj('BrowseSearchGQL', ['watch']);
+        mockSourcesPageQuery = jasmine.createSpyObj('BrowseSourcesPageGQL', ['watch']);
+        mockEpisodesPageQuery = jasmine.createSpyObj('BrowseEpisodesPageGQL', ['watch']);
+        mockAgentsPageQuery = jasmine.createSpyObj('BrowseAgentsPageGQL', ['watch']);
+        mockLettersPageQuery = jasmine.createSpyObj('BrowseLettersPageGQL', ['watch']);
+        mockGiftsPageQuery = jasmine.createSpyObj('BrowseGiftsPageGQL', ['watch']);
+        mockLocationsPageQuery = jasmine.createSpyObj('BrowseLocationsPageGQL', ['watch']);
 
         await TestBed.configureTestingModule({
             imports: [DataModule, SharedTestingModule, NgbNavModule],
             providers: [
                 { provide: SearchService, useValue: mockSearchService },
-                { provide: BrowseSearchGQL, useValue: mockSearchQuery }
+                { provide: BrowseSearchGQL, useValue: mockSearchQuery },
+                { provide: BrowseSourcesPageGQL, useValue: mockSourcesPageQuery },
+                { provide: BrowseEpisodesPageGQL, useValue: mockEpisodesPageQuery },
+                { provide: BrowseAgentsPageGQL, useValue: mockAgentsPageQuery },
+                { provide: BrowseLettersPageGQL, useValue: mockLettersPageQuery },
+                { provide: BrowseGiftsPageGQL, useValue: mockGiftsPageQuery },
+                { provide: BrowseLocationsPageGQL, useValue: mockLocationsPageQuery }
             ]
         }).compileComponents();
 
@@ -133,6 +183,14 @@ describe('BrowseComponent', () => {
                 searchFocus: SearchFocus.Sources
             }
         }));
+
+        // Setup page query mocks
+        mockSourcesPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockSourcesPageData, error: undefined } as any) } as any);
+        mockEpisodesPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockEpisodesPageData, error: undefined } as any) } as any);
+        mockAgentsPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockAgentsPageData, error: undefined } as any) } as any);
+        mockLettersPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockLettersPageData, error: undefined } as any) } as any);
+        mockGiftsPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockGiftsPageData, error: undefined } as any) } as any);
+        mockLocationsPageQuery.watch.and.returnValue({ valueChanges: of({ loading: false, data: mockLocationsPageData, error: undefined } as any) } as any);
 
         fixture = TestBed.createComponent(BrowseComponent);
         component = fixture.componentInstance;
@@ -202,10 +260,10 @@ describe('BrowseComponent', () => {
         });
     });
 
-    describe('itemsByType$ observable', () => {
+    describe('pageResultsByType', () => {
         it('should transform sources correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const sources = items.get(SearchFocus.Sources)!;
+            const sourcesPageResult = component.pageResultsByType.get(SearchFocus.Sources)!;
+            sourcesPageResult.pageData$.subscribe(sources => {
                 expect(sources.length).toBe(1);
                 expect(sources[0]).toEqual({
                     id: '1',
@@ -213,7 +271,7 @@ describe('BrowseComponent', () => {
                     description: 'Test description',
                     type: 'source',
                     icon: dataIcons.source,
-                    link: 'sources/1',
+                    link: '/data/sources/1',
                     numOfEpisodes: 1,
                 });
                 done();
@@ -221,8 +279,8 @@ describe('BrowseComponent', () => {
         });
 
         it('should transform episodes correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const episodes = items.get(SearchFocus.Episodes)!;
+            const episodesPageResult = component.pageResultsByType.get(SearchFocus.Episodes)!;
+            episodesPageResult.pageData$.subscribe(episodes => {
                 expect(episodes.length).toBe(1);
                 expect(episodes[0]).toEqual({
                     id: '2',
@@ -230,31 +288,36 @@ describe('BrowseComponent', () => {
                     description: 'Test summary',
                     type: 'episode',
                     icon: dataIcons.episode,
-                    link: 'episodes/2',
-                    labels: ['Category1'],
+                    link: '/data/episodes/2',
+                    categories: [{ id: 'cat1', name: 'Category1' }],
+                    designators: [],
+                    source: {
+                        id: '1',
+                        name: 'REF-1'
+                    },
                     agents: [{
                         id: '3',
                         name: 'Agent 1',
                         icon: dataIcons.personIdentified,
-                        link: 'agents/3'
+                        link: '/data/agents/3'
                     }],
                     letters: [{
                         id: '4',
                         name: 'Letter 1',
                         icon: dataIcons.letter,
-                        link: 'letters/4'
+                        link: '/data/letters/4'
                     }],
                     gifts: [{
                         id: '5',
                         name: 'Gift 1',
                         icon: dataIcons.gift,
-                        link: 'gifts/5'
+                        link: '/data/gifts/5'
                     }],
                     spaces: [{
                         id: '6',
                         name: 'Location 1',
                         icon: dataIcons.location,
-                        link: 'locations/6'
+                        link: '/data/locations/6'
                     }],
                     sourceLocation: {
                         book: "1",
@@ -267,8 +330,8 @@ describe('BrowseComponent', () => {
         });
 
         it('should transform agents correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)!;
+            const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
+            agentsPageResult.pageData$.subscribe(agents => {
                 expect(agents.length).toBe(1);
                 expect(agents[0]).toEqual({
                     id: '3',
@@ -276,11 +339,11 @@ describe('BrowseComponent', () => {
                     description: 'Agent description',
                     type: 'entity',
                     icon: dataIcons.personIdentified,
-                    link: 'agents/3',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    link: '/data/agents/3',
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     }
                 });
                 done();
@@ -288,42 +351,42 @@ describe('BrowseComponent', () => {
         });
 
         it('should transform letters correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const letters = items.get(SearchFocus.Letters)!;
+            const lettersPageResult = component.pageResultsByType.get(SearchFocus.Letters)!;
+            lettersPageResult.pageData$.subscribe(letters => {
                 expect(letters.length).toBe(1);
                 expect(letters[0]).toEqual({
                     id: '4',
                     name: 'Test Letter',
                     description: 'Letter description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.letter,
-                    link: 'letters/4'
+                    link: '/data/letters/4'
                 });
                 done();
             });
         });
 
         it('should transform gifts correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const gifts = items.get(SearchFocus.Gifts)!;
+            const giftsPageResult = component.pageResultsByType.get(SearchFocus.Gifts)!;
+            giftsPageResult.pageData$.subscribe(gifts => {
                 expect(gifts.length).toBe(1);
                 expect(gifts[0]).toEqual({
                     id: '5',
                     name: 'Test Gift',
                     description: 'Gift description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.gift,
-                    link: 'gifts/5'
+                    link: '/data/gifts/5'
                 });
                 done();
             });
@@ -331,21 +394,21 @@ describe('BrowseComponent', () => {
 
 
         it('should transform locations correctly', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const locations = items.get(SearchFocus.Locations)!;
+            const locationsPageResult = component.pageResultsByType.get(SearchFocus.Locations)!;
+            locationsPageResult.pageData$.subscribe(locations => {
                 expect(locations.length).toBe(1);
                 expect(locations[0]).toEqual({
                     id: '6',
                     name: 'Test Location',
                     description: 'Location description',
                     type: 'entity',
-                    occurrence: {
-                        numOfEpisodes: 1,
-                        sourceName: 'REF-1',
-                        sourceLink: 'sources/1'
+                    numOfEpisodes: 1,
+                    source: {
+                        name: 'REF-1',
+                        id: '1'
                     },
                     icon: dataIcons.location,
-                    link: 'locations/6'
+                    link: '/data/locations/6'
                 });
                 done();
             });
@@ -354,51 +417,44 @@ describe('BrowseComponent', () => {
 
     describe('occurrence data', () => {
         it('should create occurrence data for entities with multiple episodes', (done) => {
-            const multiEpisodeData: BrowseSearchQuery = {
-                search: {
-                    ...mockSearchData.search!,
-                    agents: [{
-                        id: '3',
-                        name: 'Test Agent',
-                        description: 'Agent description',
-                        isGroup: false,
-                        identified: true,
-                        episodes: [{ id: '1' }, { id: '2' }],
-                        source: { id: '1', reference: 'REF-1' }
-                    }]
-                }
+            const multiEpisodeAgentData: BrowseAgentsPageQuery = {
+                agentDescriptions: [{
+                    id: '3',
+                    name: 'Test Agent',
+                    description: 'Agent description',
+                    isGroup: false,
+                    identified: true,
+                    episodes: [{ id: '1' }, { id: '2' }],
+                    source: { id: '1', name: 'REF-1' }
+                }]
             };
 
-            mockSearchService.createSearch.and.returnValue(of({
-                loading: false,
-                data: multiEpisodeData,
-                error: null,
-                searchInput: {
-                    searchTerm: '',
-                    labelIds: [],
-                    searchFocus: SearchFocus.Agents
-                }
-            }));
+            mockAgentsPageQuery.watch.and.returnValue({
+                valueChanges: of({ loading: false, data: multiEpisodeAgentData, error: undefined } as any)
+            } as any);
 
             // Recreate component to apply new mock
             fixture = TestBed.createComponent(BrowseComponent);
             component = fixture.componentInstance;
+            fixture.detectChanges();
 
-            component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
-                expect(agents[0].occurrence.numOfEpisodes).toBe(2);
-                expect(agents[0].occurrence.sourceName).toBe('REF-1');
-                expect(agents[0].occurrence.sourceLink).toBe('sources/1');
+            const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
+            agentsPageResult.pageData$.subscribe(agents => {
+                const entityAgents = agents as EntityListItem[];
+                expect(entityAgents[0].numOfEpisodes).toBe(2);
+                expect(entityAgents[0].source?.name).toBe('REF-1');
+                expect(entityAgents[0].source?.id).toBe('1');
                 done();
             });
         });
 
         it('should create occurrence data for entities with one episode', (done) => {
-            component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
-                expect(agents[0].occurrence.numOfEpisodes).toBe(1);
-                expect(agents[0].occurrence.sourceName).toBe('REF-1');
-                expect(agents[0].occurrence.sourceLink).toBe('sources/1');
+            const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
+            agentsPageResult.pageData$.subscribe(agents => {
+                const entityAgents = agents as EntityListItem[];
+                expect(entityAgents[0].numOfEpisodes).toBe(1);
+                expect(entityAgents[0].source?.name).toBe('REF-1');
+                expect(entityAgents[0].source?.id).toBe('1');
                 done();
             });
         });
@@ -406,42 +462,31 @@ describe('BrowseComponent', () => {
 
     describe('group vs individual agents', () => {
         it('should use group icon for group agents', (done) => {
-            const groupAgentData: BrowseSearchQuery = {
-                search: {
-                    ...mockSearchData.search!,
-                    agents: [{
-                        id: '3',
-                        name: 'Test Group',
-                        description: 'Group description',
-                        isGroup: true,
-                        identified: false,
-                        episodes: [{ id: '2' }],
-                        source: { id: '1', reference: 'REF-1' },
-                    }]
-                }
+            const groupAgentData: BrowseAgentsPageQuery = {
+                agentDescriptions: [{
+                    id: '3',
+                    name: 'Test Group',
+                    description: 'Group description',
+                    isGroup: true,
+                    identified: false,
+                    episodes: [{ id: '2' }],
+                    source: { id: '1', name: 'REF-1' },
+                }]
             };
 
-            mockSearchService.createSearch.and.returnValue(of({
-                loading: false,
-                data: groupAgentData,
-                error: null,
-                searchInput: {
-                    searchTerm: '',
-                    labelIds: [],
-                    searchFocus: SearchFocus.Agents
-                }
-            }));
+            mockAgentsPageQuery.watch.and.returnValue({
+                valueChanges: of({ loading: false, data: groupAgentData, error: undefined } as any)
+            } as any);
 
             fixture = TestBed.createComponent(BrowseComponent);
             component = fixture.componentInstance;
-            component.itemsByType$.subscribe(items => {
-                const agents = items.get(SearchFocus.Agents)! as EntityListItem[];
-                expect(agents[0].icon).toBe(dataIcons.group);
-                expect(agents[0].occurrence).toEqual({
-                    numOfEpisodes: 1,
-                    sourceName: 'REF-1',
-                    sourceLink: 'sources/1'
-                });
+            fixture.detectChanges();
+
+            const agentsPageResult = component.pageResultsByType.get(SearchFocus.Agents)!;
+            agentsPageResult.pageData$.subscribe(agents => {
+                const entityAgents = agents as EntityListItem[];
+                expect(entityAgents[0].icon).toBe(dataIcons.group);
+                expect(entityAgents[0].numOfEpisodes).toBe(1);
                 done();
             });
         });

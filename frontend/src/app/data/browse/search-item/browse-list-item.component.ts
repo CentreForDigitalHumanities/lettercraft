@@ -1,51 +1,8 @@
 import { Component, input } from '@angular/core';
 import { dataIcons } from '@shared/icons';
 import { EpisodeType } from 'generated/graphql';
-
-interface ListItemEntity {
-    id: string;
-    name: string;
-    icon: string;
-    link: string;
-}
-
-interface BaseListItem {
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    link: string;
-}
-
-interface EpisodeListItem extends BaseListItem {
-    type: 'episode';
-    labels: string[];
-    agents: ListItemEntity[];
-    letters: ListItemEntity[];
-    gifts: ListItemEntity[];
-    spaces: ListItemEntity[];
-    sourceLocation: {
-        book: string;
-        chapter: string;
-        page: string;
-    };
-}
-
-interface SourceListItem extends BaseListItem {
-    type: 'source';
-    numOfEpisodes: number;
-}
-
-export interface EntityListItem extends BaseListItem {
-    type: 'entity';
-    occurrence: {
-        numOfEpisodes: number;
-        sourceName: string;
-        sourceLink: string;
-    };
-}
-
-export type BrowseListItem = EpisodeListItem | EntityListItem | SourceListItem;
+import _ from 'underscore';
+import { BrowseListItem } from './browse-list-item';
 
 @Component({
     selector: 'lc-browse-list-item',
@@ -57,6 +14,17 @@ export class BrowseListItemComponent {
     public readonly listItem = input.required<BrowseListItem>();
 
     public dataIcons = dataIcons;
+
+    hasBody(item: BrowseListItem): boolean {
+        if (item.type !== 'episode') {
+            return true;
+        }
+        const values = [
+            item.description, item.categories, item.agents, item.letters,
+            item.gifts, item.spaces
+        ];
+        return _.any(values, i => i.length > 0);
+    }
 
     public hasSourceLocation(episode: Pick<EpisodeType, 'book' | 'chapter' | 'page'>): boolean {
         return !!(episode.book || episode.chapter || episode.page);

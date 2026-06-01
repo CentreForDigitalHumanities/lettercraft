@@ -8,110 +8,147 @@ query BrowseSearch($searchFocus: SearchFocus!, $searchTerm: String! $labelIds: [
         locationCount
         sources {
             id
-            name
-            descriptionText
-            reference
-            episodes {
-                id
-            }
         }
         episodes {
             id
-            name
-            summary
-            book
-            chapter
-            page
-            source {
-                id
-                reference
-            }
-            categories {
-                id
-                name
-            }
-            agents {
-                id
-                agent {
-                    id
-                    name
-                    isGroup
-                    identified
-                }
-            }
-            gifts {
-                id
-                gift {
-                    id
-                    name
-                }
-            }
-            letters {
-                id
-                letter {
-                    id
-                    name
-                }
-            }
-            spaces {
-                id
-                space {
-                    id
-                    name
-                    hasIdentifiableFeatures
-                }
-            }
         }
         agents {
             id
-            name
-            description
-            isGroup
-            identified
-            episodes {
-                id
-            }
-            source {
-                id
-                reference
-            }
         }
         letters {
             id
+        }
+        gifts {
+            id
+        }
+        locations {
+            id
+        }
+    }
+}
+
+query BrowseSourcesPage($ids: [String!]) {
+    sources(ids: $ids) {
+        id
+        name
+        descriptionText
+        reference
+        episodes {
+            id
+        }
+    }
+}
+
+query BrowseEpisodesPage($ids: [String!]) {
+    episodes(ids: $ids) {
+        id
+        name
+        summary
+        book
+        chapter
+        page
+        source {
+            id
             name
-            description
-            episodes {
+        }
+        categories {
+            id
+            name
+        }
+        designators
+        agents {
+            id
+            agent {
                 id
-            }
-            source {
-                id
-                reference
+                name
+                isGroup
+                identified
             }
         }
         gifts {
             id
-            name
-            description
-            episodes {
+            gift {
                 id
-            }
-            source {
-                id
-                reference
+                name
             }
         }
-        locations {
+        letters {
+            id
+            letter {
+                id
+                name
+            }
+        }
+        spaces {
+            id
+            space {
+                id
+                name
+                hasIdentifiableFeatures
+            }
+        }
+    }
+}
+
+query BrowseAgentsPage($ids: [String!]) {
+    agentDescriptions(ids: $ids) {
+        id
+        name
+        description
+        isGroup
+        identified
+        episodes {
+            id
+        }
+        source {
             id
             name
-            description
-            hasIdentifiableFeatures
-            episodes {
-                id
-            }
-            source {
-                id
-                reference
-            }
+        }
+    }
+}
+
+query BrowseLettersPage($ids: [String!]) {
+    letterDescriptions(ids: $ids) {
+        id
+        name
+        description
+        episodes {
+            id
+        }
+        source {
+            id
+            name
+        }
+    }
+}
+
+query BrowseGiftsPage($ids: [String!]) {
+    giftDescriptions(ids: $ids) {
+        id
+        name
+        description
+        episodes {
+            id
+        }
+        source {
+            id
+            name
+        }
+    }
+}
+
+query BrowseLocationsPage($ids: [String!]) {
+    spaceDescriptions(ids: $ids) {
+        id
+        name
+        description
+        hasIdentifiableFeatures
+        episodes {
+            id
+        }
+        source {
+            id
+            name
         }
     }
 }

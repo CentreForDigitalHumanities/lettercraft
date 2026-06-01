@@ -1,7 +1,7 @@
-from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean
+from graphene import ID, Field, List, NonNull, ObjectType, ResolveInfo, Boolean, String
 from django.db.models import QuerySet, Q
 from django.contrib.auth.models import AnonymousUser
-from typing import Optional
+from typing import Optional, List as TList
 
 from person.models import AgentDescription, HistoricalPerson
 from person.types.HistoricalPersonType import HistoricalPersonType
@@ -25,6 +25,7 @@ class PersonQueries(ObjectType):
         source_id=ID(),
         editable=Boolean(),
         public_only=Boolean(),
+        ids=List(NonNull(String)),
     )
     historical_persons = List(NonNull(HistoricalPersonType), required=True)
 
@@ -53,8 +54,9 @@ class PersonQueries(ObjectType):
         info: ResolveInfo,
         episode_id: Optional[str] = None,
         source_id: Optional[str] = None,
-        editable: bool = False,
+        editable = False,
         public_only = False,
+        ids: Optional[TList[str]] = None,
     ) -> QuerySet[AgentDescription]:
         filters = Q()
         if episode_id:
@@ -66,6 +68,8 @@ class PersonQueries(ObjectType):
             filters &= Q(source__in=editable_sources(user))
         if public_only:
             filters &= Q(source__is_public=True)
+        if ids:
+            filters &= Q(id__in=ids)
 
         return AgentDescriptionType.get_queryset(AgentDescription.objects, info).filter(
             filters
