@@ -7,6 +7,13 @@ export interface APIGlossaryItem {
     description: string,
 }
 
+export interface APIGlossaryReference {
+    id: number,
+    name: string,
+    category: number,
+    reference: string,
+}
+
 export interface GlosssaryItem {
     id: number,
     term: string,
@@ -28,11 +35,38 @@ const sectionTitles: [number, string][] = [
     [3, 'Messengers'],
     [4, 'Actions'],
 
-]
+];
 
 export const parseGlossary = (data: APIGlossaryItem[]): Glossary => {
     const sectionData = _.groupBy(data, 'category');
     const sections: GlossarySection[] = sectionTitles.map(([key, title]) => ({
+        title,
+        items: sectionData[key],
+    }));
+    return { sections };
+};
+
+const refSectionTitles: [number, string][] = [
+    [1, 'Primary sources'],
+    [2, 'Dictionaries & reference works'],
+    [3, 'Secondary literature'],
+
+];
+
+export interface References {
+    sections: {
+        title: string,
+        items: {
+            id: number,
+            name: string,
+            reference: string,
+        }[]
+    }[],
+};
+
+export const parseReferences = (data: APIGlossaryReference[]): References => {
+    const sectionData = _.groupBy(data, 'category');
+    const sections = refSectionTitles.map(([key, title]) => ({
         title,
         items: sectionData[key],
     }));

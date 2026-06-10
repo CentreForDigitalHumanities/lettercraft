@@ -1,4 +1,5 @@
 @let glossary = glossary$ | async;
+@let references = references$ | async;
 
 <div class="row mx-0">
     <div class="col-md py-5">
@@ -39,25 +40,48 @@
                 publications.
             </p>
 
-            @if (glossary) {
-                <div class="my-5">
+            <div class="my-5">
+                @if (glossary) {
+                    @let context = 'glossary';
                     @for (section of glossary.sections; track section.title) {
                         <section class="my-4">
                             <h2>{{section.title}}</h2>
 
                             @for (item of section.items; track item.id) {
                                 <article class="p-3 my-2 rounded glossary-item"
-                                    [id]="itemElementID(item.id)" tabindex="-1"
-                                    [class.active]="hasFocus$(item.id) | async"
-                                    (click)="focusItem(item.id)">
+                                    [id]="itemElementID(context, item.id)" tabindex="-1"
+                                    [class.active]="hasFocus$(context, item.id) | async"
+                                    (click)="focusItem(context, item.id)">
                                     <h4 class="h5 font-sans-serif">{{item.term}}</h4>
                                     <div [innerHTML]="item.description"></div>
                                 </article>
                             }
                         </section>
                     }
-                </div>
-            }
+                }
+                @if (references) {
+                    @let context = 'references';
+                    <section class="my-4">
+                        <h2>References</h2>
+
+                        @for (section of references.sections; track section.title) {
+                            <section class="my-4">
+                                <h3 class="h4">{{section.title}}</h3>
+                                @for (item of section.items; track item.id) {
+                                    <div class="pt-3 px-3 my-2 glossary-item rounded"
+                                        [innerHTML]="item.reference"
+                                        [id]="itemElementID(context, item.id)"
+                                        tabindex="-1"
+                                        [class.active]="hasFocus$(context, item.id) | async"
+                                        (click)="focusItem(context, item.id)"
+                                        >
+                                    </div>
+                                }
+                            </section>
+                        }
+                    </section>
+                }
+            </div>
         </div>
     </div>
     <aside class="col-md-3 p-4 index-container sticky-top bg-light">
@@ -72,8 +96,8 @@
                             @for (item of section.items; track item.id) {
                                 <li class="nav-item">
                                     <button class="nav-link py-0 px-1"
-                                        (click)="focusItem(item.id)"
-                                        [class.active]="hasFocus$(item.id) | async">
+                                        (click)="focusItem('glossary', item.id)"
+                                        [class.active]="hasFocus$('glossary', item.id) | async">
                                         {{item.term}}
                                     </button>
                                 </li>
@@ -81,6 +105,27 @@
                         </ul>
                     </section>
                 }
+            }
+            @if (references) {
+                <section class="my-3">
+                    <h3 class="h4">References</h3>
+                    @for (section of references.sections; track section.title) {
+                        <section class="my-3">
+                            <h4 class="h6">{{section.title}}</h4>
+                            <ul class="nav nav-pills flex-column">
+                                @for (item of section.items; track item.id) {
+                                    <li class="nav-item">
+                                        <button class="nav-link py-0 px-1"
+                                            (click)="focusItem('references', item.id)"
+                                            [class.active]="hasFocus$('references', item.id) | async">
+                                            {{item.name}}
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        </section>
+                    }
+                </section>
             }
         </div>
     </aside>
