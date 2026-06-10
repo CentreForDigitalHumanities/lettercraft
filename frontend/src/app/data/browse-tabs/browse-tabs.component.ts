@@ -1,10 +1,9 @@
 import { Component, computed, DestroyRef, input, SimpleChanges } from '@angular/core';
 import { actionIcons, dataIcons } from '@shared/icons';
-import { BehaviorSubject, combineLatest, filter, map, merge } from 'rxjs';
+import { BehaviorSubject, filter, map } from 'rxjs';
 import { HasID, PageQueryGQL, PageResult } from '../utils/pagination';
-import { BrowseAgentsPageGQL, BrowseAgentsPageQuery, BrowseEpisodesPageGQL, BrowseEpisodesPageQuery, BrowseGiftsPageGQL, BrowseGiftsPageQuery, BrowseLettersPageGQL, BrowseLettersPageQuery, BrowseLocationsPageGQL, BrowseLocationsPageQuery, BrowseSearchQuery, BrowseSourcesPageGQL, BrowseSourcesPageQuery } from 'generated/graphql';
-import { BrowseListItem, transformEntity, transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
-import { agentIcon, locationIcon } from '@shared/icons-utils';
+import { BrowseAgentsPageGQL, BrowseAgentsPageQuery, BrowseEpisodesPageGQL, BrowseEpisodesPageQuery, BrowseGiftsPageGQL, BrowseGiftsPageQuery, BrowseLettersPageGQL, BrowseLettersPageQuery, BrowseLocationsPageGQL, BrowseLocationsPageQuery, BrowseSourcesPageGQL, BrowseSourcesPageQuery } from 'generated/graphql';
+import { BrowseListItem, transformAgent, transformEpisode, transformGift, transformLetter, transformLocation, transformSource } from '../browse/search-item/browse-list-item';
 import _ from 'underscore';
 import { toObservable } from '@angular/core/rxjs-interop';
 
@@ -118,7 +117,6 @@ export class BrowseTabsComponent {
         [SearchFocus.Locations, this.createPageResult(data => data.locations, this.locationsPageQuery, this.transformLocations.bind(this))]
     ]);
 
-
     private createPageResult<QueryData>(
         unpack: (data: TabData) => HasID[] | undefined,
         pageQuery: PageQueryGQL<QueryData>,
@@ -139,32 +137,19 @@ export class BrowseTabsComponent {
         return data.episodes.map(transformEpisode);
     }
 
-    private transformEntities<Items extends
-        BrowseAgentsPageQuery['agentDescriptions'] |
-        BrowseLettersPageQuery['letterDescriptions'] |
-        BrowseGiftsPageQuery['giftDescriptions'] |
-        BrowseLocationsPageQuery['spaceDescriptions']
-    >(entities: Items, icon: (e: Items[number]) => string, path: string): BrowseListItem[] {
-        return entities.map(entity => transformEntity(entity, icon, path));
-    }
-
     private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-        return this.transformEntities(data.agentDescriptions, agentIcon, 'agents');
+        return data.agentDescriptions.map(transformAgent);
     }
 
     private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
-        return this.transformEntities(
-            data.letterDescriptions, _.constant(dataIcons.letter), 'letters'
-        );
+        return data.letterDescriptions.map(transformLetter);
     }
 
     private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
-        return this.transformEntities(
-            data.giftDescriptions, _.constant(dataIcons.gift), 'gifts'
-        );
+        return data.giftDescriptions.map(transformGift);
     }
 
     private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
-        return this.transformEntities(data.spaceDescriptions, locationIcon, 'locations');
+        return data.spaceDescriptions.map(transformLocation);
     }
 }
