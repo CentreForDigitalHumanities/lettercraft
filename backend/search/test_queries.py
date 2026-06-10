@@ -79,8 +79,8 @@ def test_search_items_letters_and_gifts(
     graphql_client, letter_description, anonymous_request
 ):
     query = """
-	query Search($focus: SearchFocus!, $term: String!, $labelIds: [ID!]!) {
-		search(searchFocus: $focus, searchTerm: $term, labelIds: $labelIds) {
+	query Search($term: String!, $labelIds: [ID!]!) {
+		search(searchTerm: $term, labelIds: $labelIds) {
 			letters { name }
 			gifts { id }
 		}
