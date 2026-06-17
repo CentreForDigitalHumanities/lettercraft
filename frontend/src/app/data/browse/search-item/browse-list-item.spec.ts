@@ -51,7 +51,7 @@ describe('transformEpisode', () => {
             agents: [{ id: '1', agent: { id: '3', name: 'Agent 1', isGroup: false, identified: true } }],
             letters: [{ id: '1', letter: { id: '4', name: 'Letter 1' } }],
             gifts: [{ id: '1', gift: { id: '5', name: 'Gift 1' } }],
-            spaces: [{ id: '1', space: { id: '6', name: 'Location 1', hasIdentifiableFeatures: false } }],
+            locations: [{ id: '1', location: { id: '6', name: 'Location 1', hasIdentifiableFeatures: false } }],
         }
     });
 
@@ -87,7 +87,7 @@ describe('transformEpisode', () => {
                 icon: dataIcons.gift,
                 link: '/data/gifts/5'
             }],
-            spaces: [{
+            locations: [{
                 id: '6',
                 name: 'Location 1',
                 icon: dataIcons.location,
