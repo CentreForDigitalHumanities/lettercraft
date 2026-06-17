@@ -35,7 +35,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
     agents = List(
         NonNull("event.types.EpisodeAgentType.EpisodeAgentType"), required=True
     )
-    spaces = List(NonNull("event.types.EpisodeSpaceType.EpisodeSpaceType"), required=True)
+    locations = List(NonNull("event.types.EpisodeSpaceType.EpisodeSpaceType"), required=True)
     letters = List(NonNull("event.types.EpisodeLetterType.EpisodeLetterType"), required=True)
     gifts = List(NonNull("event.types.EpisodeGiftType.EpisodeGiftType"), required=True)
 
@@ -48,7 +48,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "designators",
             "gifts",
             "letters",
-            "spaces",
+            "locations",
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
         filterset_class = EpisodeFilter
@@ -60,7 +60,7 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
         return EpisodeAgent.objects.filter(episode=parent)
 
     @staticmethod
-    def resolve_spaces(
+    def resolve_locations(
         parent: Episode, info: ResolveInfo
     ) -> QuerySet[EpisodeSpace]:
         return EpisodeSpace.objects.filter(episode=parent)

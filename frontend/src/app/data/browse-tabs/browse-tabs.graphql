@@ -51,9 +51,9 @@ query BrowseEpisodesPage($ids: [String!]) {
                 name
             }
         }
-        spaces {
+        locations {
             id
-            space {
+            location {
                 id
                 name
                 hasIdentifiableFeatures

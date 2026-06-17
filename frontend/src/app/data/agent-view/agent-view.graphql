@@ -55,9 +55,9 @@ query ViewAgent($id: ID!) {
                     name
                 }
             }
-            spaces {
+            locations {
                 id
-                space {
+                location {
                     id
                     name
                     hasIdentifiableFeatures

@@ -119,15 +119,15 @@
                         </dd>
                     }
 
-                    @if (item.spaces.length > 0) {
+                    @if (item.locations.length > 0) {
                         <dt>Locations</dt>
                         <dd class="ms-4">
                             <ul class="inline-list">
-                                @for (space of item.spaces; track space.id) {
+                                @for (location of item.locations; track location.id) {
                                 <li class="inline-list-item">
-                                    <a [routerLink]="space.link" class="icon-link">
-                                        <lc-icon [icon]="space.icon" />
-                                        {{ space.name }}
+                                    <a [routerLink]="location.link" class="icon-link">
+                                        <lc-icon [icon]="location.icon" />
+                                        {{ location.name }}
                                     </a>
                                 </li>
                                 }

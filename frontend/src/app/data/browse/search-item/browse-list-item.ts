@@ -30,7 +30,7 @@ interface EpisodeListItem extends BaseListItem {
     agents: ListItemEntity[];
     letters: ListItemEntity[];
     gifts: ListItemEntity[];
-    spaces: ListItemEntity[];
+    locations: ListItemEntity[];
     source?: ListItemSource,
     sourceLocation: {
         book: string;
@@ -105,11 +105,11 @@ export const transformEpisode = (episode: EpisodeData): BrowseListItem => ({
         icon: dataIcons.gift,
         link: `/data/gifts/${gift.id}`
     })),
-    spaces: episode.spaces.map(({ space }) => ({
-        id: space.id,
-        name: space.name,
-        icon: locationIcon(space),
-        link: `/data/locations/${space.id}`
+    locations: episode.locations.map(({ location }) => ({
+        id: location.id,
+        name: location.name,
+        icon: locationIcon(location),
+        link: `/data/locations/${location.id}`
     })),
     sourceLocation: {
         book: episode.book,
@@ -126,7 +126,7 @@ type EntityData = BrowseAgentsPageQuery['agentDescriptions'][number] |
     NonNullable<ViewEpisodeQuery['episode']>['agents'][number]['agent'] |
     NonNullable<ViewEpisodeQuery['episode']>['letters'][number]['letter'] |
     NonNullable<ViewEpisodeQuery['episode']>['gifts'][number]['gift'] |
-    NonNullable<ViewEpisodeQuery['episode']>['spaces'][number]['space'];
+    NonNullable<ViewEpisodeQuery['episode']>['locations'][number]['location'];
 
 
 export const transformEntity = <Item extends EntityData>(
