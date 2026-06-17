@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GlossaryComponent } from './glossary.component';
+import { SharedTestingModule } from '@shared/shared-testing.module';
 
 describe('GlossaryComponent', () => {
     let component: GlossaryComponent;
@@ -8,7 +9,8 @@ describe('GlossaryComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [GlossaryComponent]
+            imports: [SharedTestingModule],
+            declarations: [GlossaryComponent]
         })
             .compileComponents();
 
