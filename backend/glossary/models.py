@@ -38,7 +38,7 @@ class GlossaryReference(models.Model):
         ordering = ['category', 'name']
 
     name = models.CharField(
-        help_text="name for admin overview and alphabetical sorting; not visible to users",
+        help_text="name used in the index (and for citations)",
         max_length=256,
         blank=True,
     )
