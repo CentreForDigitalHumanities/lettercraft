@@ -12,6 +12,7 @@ import { BrowseComponent } from './browse/browse.component';
 import { BrowseListItemComponent } from './browse/search-item/browse-list-item.component';
 import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-label-select.component';
 import { BrowseTabsComponent } from './browse-tabs/browse-tabs.component';
+import { DownloadComponent } from './download/download.component';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { BrowseTabsComponent } from './browse-tabs/browse-tabs.component';
         BrowseLabelSelectComponent,
         BrowseListItemComponent,
         BrowseTabsComponent,
+        DownloadComponent,
     ],
     imports: [
         SharedModule,

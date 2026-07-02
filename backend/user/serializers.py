@@ -23,6 +23,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             "username",
             "email",
             "first_name",
+            "last_name_prefix",
             "last_name",
             "is_staff",
             "is_contributor",

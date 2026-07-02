@@ -114,7 +114,7 @@ class SourceType(DjangoObjectType):
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
         user_ids = source_contributor_ids(parent)
-        return User.objects.filter(id__in=user_ids)
+        return User.objects.filter(id__in=user_ids).order_by("last_name")
 
     @staticmethod
     def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:
