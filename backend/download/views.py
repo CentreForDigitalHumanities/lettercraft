@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from django.http.response import JsonResponse
+from source.models import Source
 
-# Create your views here.
+from download.export_json import json_data
+
+class DownloadJSONView(APIView):
+    def get(self, request, *args, **kwargs):
+        sources = Source.objects.filter(is_public=True)
+        data = json_data(sources)
+        filename = "lettercraft-data.json"
+        return JsonResponse(data, headers={
+            "Content-disposition": f"attachment; filename=\"{filename}\"",
+        })

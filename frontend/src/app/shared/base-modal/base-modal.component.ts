@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 export class BaseModalComponent {
     @Input() title = "Lettercraft";
+    @Input() showFooter: boolean = true;
     @Output() dismiss = new EventEmitter<void>();
 
     dismissModal(): void {

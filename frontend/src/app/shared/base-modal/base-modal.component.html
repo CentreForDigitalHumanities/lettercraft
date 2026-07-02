@@ -10,6 +10,6 @@
 <section class="modal-body">
     <ng-content select="[modal-content]" />
 </section>
-<footer class="modal-footer">
+<footer class="modal-footer" [hidden]="!showFooter">
     <ng-content select="[modal-footer]" />
 </footer>
