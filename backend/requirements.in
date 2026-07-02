@@ -15,3 +15,4 @@ django-filter
 Pillow
 django-prose-editor[sanitize]
 requests
+python-docx

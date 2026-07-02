@@ -2,10 +2,12 @@ from typing import Dict, List, Any
 import json
 import re
 from io import TextIOWrapper
+from datetime import date
 
 from django.db.models import QuerySet, Value, CharField
 from django.db.models.functions import Concat, JSONObject, NullIf
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.conf import settings
 
 from source.models import Source
 from person.models import AgentDescription
@@ -14,6 +16,10 @@ from letter.models import LetterDescription, GiftDescription
 from space.models import SpaceDescription
 from user.models import User
 from source.utils import source_contributor_ids
+
+DATE_FORMAT = "%d-%m-%Y"
+SITE_URL = "https://" + settings.HOST
+
 
 def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
     data = json_data(sources)
@@ -26,9 +32,15 @@ def json_data(sources: QuerySet[Source]) -> Dict:
     return cleaned
 
 def _serialize(sources: QuerySet[Source]) -> Dict:
+    timestamp = date.today().strftime(DATE_FORMAT)
     return {
-        'sources': [_serialize_source(source) for source in sources]
+        "sources": [_serialize_source(source) for source in sources],
+        "metadata": {
+            "url": SITE_URL,
+            "date": timestamp,
+        }
     }
+
 
 def _serialize_source(source: Source) -> Dict:
     agents = _serialize_agents(AgentDescription.objects.filter(source=source))
