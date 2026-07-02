@@ -3,7 +3,7 @@ import argparse
 from io import TextIOWrapper
 
 from source.models import Source
-from download.export_json import save_json
+from download.export_docx import save_docx
 
 class Command(BaseCommand):
     help = '''
@@ -12,10 +12,14 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            'out',
-            type=argparse.FileType('w'),
+            "out",
+            type=argparse.FileType("wb"),
         )
 
     def handle(self, out: TextIOWrapper, *args, **kwargs):
         sources = Source.objects.filter(is_public=True)
-        save_json(sources, out)
+
+        save_docx(sources, out)
+        self.stdout.write(self.style.SUCCESS(
+            f"DOCX file saved at {out.name}"
+        ))
