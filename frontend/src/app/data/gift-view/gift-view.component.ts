@@ -5,6 +5,7 @@ import { actionIcons, dataIcons } from '@shared/icons';
 import { ViewGiftGQL, ViewGiftQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
 
 @Component({
     selector: 'lc-gift-view',
@@ -23,6 +24,9 @@ export class GiftViewComponent {
 
     dataIcons = dataIcons;
     actionIcons = actionIcons;
+
+    transformSource = transformSource;
+    transformEpisode = transformEpisode;
 
     constructor(
         private route: ActivatedRoute,
