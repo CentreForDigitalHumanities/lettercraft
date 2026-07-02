@@ -19,9 +19,9 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.2.16",
-    "@angular/common": "^20.3.25",
-    "@angular/compiler": "^20.3.25",
-    "@angular/core": "^20.3.25",
+    "@angular/common": "^19.2.16",
+    "@angular/compiler": "^19.2.20",
+    "@angular/core": "^19.2.20",
     "@angular/forms": "^19.2.16",
     "@angular/platform-browser": "^19.2.16",
     "@angular/platform-browser-dynamic": "^19.2.16",
