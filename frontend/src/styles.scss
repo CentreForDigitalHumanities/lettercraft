@@ -60,7 +60,11 @@ figure {
 }
 
 .font-serif {
-    font-family: serif;
+    font-family: lc_theme.$lc_serif;
+}
+
+.font-sans-serif {
+    font-family: lc_theme.$lc_sans_serif;
 }
 
 .extra-header-spacing {
