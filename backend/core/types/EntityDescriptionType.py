@@ -43,7 +43,7 @@ class EntityDescriptionType(NamedType, AbstractDjangoObjectType):
     def resolve_contributors(
         parent: EntityDescription, info: ResolveInfo
     ) -> QuerySet[User]:
-        return parent.contributors.filter(profile__role__isnull=False)
+        return parent.contributors.filter(profile__role__isnull=False).order_by("last_name")
 
     @staticmethod
     def resolve_editable(parent: EntityDescription, info: ResolveInfo) -> bool:

@@ -6,6 +6,8 @@ import { agentIcon, locationIcon } from '@shared/icons-utils';
 import { ViewEpisodeGQL, ViewEpisodeQuery } from 'generated/graphql';
 import { map, Observable, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { transformAgent, transformGift, transformLetter, transformLocation, transformSource } from '../browse/search-item/browse-list-item';
+import _ from 'underscore';
 
 type QueriedEpisode = NonNullable<ViewEpisodeQuery["episode"]>;
 
@@ -30,6 +32,12 @@ export class EpisodeViewComponent {
     actionIcons = actionIcons;
     agentIcon = agentIcon;
     locationIcon = locationIcon;
+
+    transformSource = transformSource;
+    transformAgent = transformAgent;
+    transformLetter = transformLetter;
+    transformGift = transformGift;
+    transformLocation = transformLocation;
 
     constructor(
         private route: ActivatedRoute,

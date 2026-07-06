@@ -28,7 +28,7 @@ class UserQueries(ObjectType):
         parent: None,
         info: ResolveInfo,
     ) -> QuerySet[User]:
-        return UserType.get_queryset(User.objects, info)
+        return UserType.get_queryset(User.objects, info).order_by("last_name")
 
     @staticmethod
     def resolve_contributor_roles(

@@ -26,4 +26,4 @@ class ContributorRoleType(DjangoObjectType):
     def resolve_users(
         parent: ContributorRole, info: ResolveInfo
     ) -> QuerySet[User]:
-        return User.objects.filter(profile__role=parent)
+        return User.objects.filter(profile__role=parent).order_by("last_name")

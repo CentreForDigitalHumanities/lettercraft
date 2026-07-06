@@ -11,9 +11,11 @@ import {
 } from "generated/graphql";
 import { Subject, startWith, mergeWith, throttleTime, asyncScheduler, map, distinctUntilChanged, shareReplay, filter } from "rxjs";
 import { SearchService, SearchState } from "@services/search.service";
-import { BrowseListItem, transformEntity, transformEpisode, transformSource } from "./search-item/browse-list-item";
+import {
+    BrowseListItem, transformAgent, transformEpisode, transformGift, transformLetter,
+    transformLocation, transformSource
+} from "./search-item/browse-list-item";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
-import { agentIcon, locationIcon } from "@shared/icons-utils";
 import { HasID, PageQueryGQL, PageResult } from "../utils/pagination";
 import _ from "underscore";
 
@@ -160,26 +162,18 @@ export class BrowseComponent {
     }
 
     private transformAgents(data: BrowseAgentsPageQuery): BrowseListItem[] {
-        return data.agentDescriptions.map(
-            agent => transformEntity(agent, agentIcon, 'agents')
-        );
+        return data.agentDescriptions.map(transformAgent);
     }
 
     private transformLetters(data: BrowseLettersPageQuery): BrowseListItem[] {
-        return data.letterDescriptions.map(
-            letter => transformEntity(letter, _.constant(dataIcons.letter), 'letters')
-        );
+        return data.letterDescriptions.map(transformLetter);
     }
 
     private transformGifts(data: BrowseGiftsPageQuery): BrowseListItem[] {
-        return data.giftDescriptions.map(
-            gift => transformEntity(gift, _.constant(dataIcons.gift), 'gifts')
-        );
+        return data.giftDescriptions.map(transformGift);
     }
 
     private transformLocations(data: BrowseLocationsPageQuery): BrowseListItem[] {
-        return data.spaceDescriptions.map(
-            location => transformEntity(location, locationIcon, 'locations')
-        );
+        return data.spaceDescriptions.map(transformLocation);
     }
 }

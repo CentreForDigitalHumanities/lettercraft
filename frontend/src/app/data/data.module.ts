@@ -6,12 +6,12 @@ import { EpisodeViewComponent } from './episode-view/episode-view.component';
 import { LocationViewComponent } from './location-view/location-view.component';
 import { LetterViewComponent } from './letter-view/letter-view.component';
 import { GiftViewComponent } from './gift-view/gift-view.component';
-import { EpisodeLinksComponent } from './shared/episode-links/episode-links.component';
 import { ObjectPageHeaderComponent } from './shared/object-page-header/object-page-header.component';
 import { PaginatorComponent } from './shared/paginator/paginator.component';
 import { BrowseComponent } from './browse/browse.component';
 import { BrowseListItemComponent } from './browse/search-item/browse-list-item.component';
 import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-label-select.component';
+import { DownloadComponent } from './download/download.component';
 
 @NgModule({
     declarations: [
@@ -21,12 +21,12 @@ import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-
         LocationViewComponent,
         LetterViewComponent,
         GiftViewComponent,
-        EpisodeLinksComponent,
         ObjectPageHeaderComponent,
         PaginatorComponent,
         BrowseComponent,
         BrowseLabelSelectComponent,
         BrowseListItemComponent,
+        DownloadComponent,
     ],
     imports: [
         SharedModule,

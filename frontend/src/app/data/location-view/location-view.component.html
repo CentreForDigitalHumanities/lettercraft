@@ -12,18 +12,28 @@
 
         <lc-contributors [contributors]="location.contributors" />
 
-        <section class="mt-4 mb-5">
+        <section class="mt-5">
             <h2>Source text</h2>
 
-            <p>
-                {{location.name}} is a location in
-                <a [routerLink]="['/data/sources', location.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{ location.source.name }}
-                </a>. It features in the following episodes:
-            </p>
+            <div class="my-4">
+                <lc-browse-list-item [listItem]="transformSource(location.source)" />
+            </div>
+        </section>
 
-            <lc-episode-links [data]="location.episodes" />
+        <section class="mt-5">
+            <h2>Epistolary episodes</h2>
+
+            @if (location.episodes.length) {
+                <p>This location appears in {{location.episodes.length}} epistolary episodes:</p>
+
+                <div class="my-4">
+                    @for (link of location.episodes; track link.id) {
+                        <lc-browse-list-item [listItem]="transformEpisode(link.episode)" />
+                    }
+                </div>
+            } @else {
+                This location does not appear in any epistolary episodes.
+            }
         </section>
 
         <section class="mb-5">

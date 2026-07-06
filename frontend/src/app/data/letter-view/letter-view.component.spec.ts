@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LetterViewComponent } from './letter-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
-import { EpisodeLinksComponent } from '../shared/episode-links/episode-links.component';
+import { BrowseListItemComponent } from '../browse/search-item/browse-list-item.component';
 
 describe('LetterViewComponent', () => {
     let component: LetterViewComponent;
@@ -14,7 +14,7 @@ describe('LetterViewComponent', () => {
             declarations: [
                 LetterViewComponent,
                 ObjectPageHeaderComponent,
-                EpisodeLinksComponent,
+                BrowseListItemComponent,
             ],
             imports: [SharedTestingModule],
         });

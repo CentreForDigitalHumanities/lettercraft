@@ -12,6 +12,7 @@ import {
 } from 'generated/graphql';
 import { Observable, map, switchMap } from 'rxjs';
 import { entityDescriptionBreadcrumbs } from '../utils/breadcrumbs';
+import { transformEpisode, transformSource } from '../browse/search-item/browse-list-item';
 
 @Component({
     selector: 'lc-agent-view',
@@ -35,6 +36,9 @@ export class AgentViewComponent {
     Certainty = Certainty;
     SourceMention = SourceMention;
     Gender = Gender;
+
+    transformSource = transformSource;
+    transformEpisode = transformEpisode;
 
     constructor(
         private route: ActivatedRoute,
