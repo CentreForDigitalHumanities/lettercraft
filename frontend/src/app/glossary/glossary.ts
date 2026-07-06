@@ -14,7 +14,7 @@ export interface APIGlossaryReference {
     reference: string,
 }
 
-export interface GlosssaryItem {
+export interface GlossaryItem {
     id: number,
     term: string,
     description: string,
@@ -22,7 +22,7 @@ export interface GlosssaryItem {
 
 export interface GlossarySection {
     title: string,
-    items: GlosssaryItem[]
+    items: GlossaryItem[]
 }
 
 export interface Glossary {
