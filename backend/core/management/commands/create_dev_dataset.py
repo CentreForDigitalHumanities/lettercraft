@@ -185,12 +185,12 @@ class Command(BaseCommand):
                 designators=fake.words(nb=3, unique=True),
             )
 
-        episode_spaces = list(
+        episode_locations = list(
             SpaceDescription.objects.filter(source=source).order_by("?")[
                 : random.randint(0, 20)
             ]
         )
-        for space in episode_spaces:
+        for space in episode_locations:
             EpisodeSpace.objects.create(
                 episode=episode,
                 space=space,
@@ -209,7 +209,7 @@ class Command(BaseCommand):
                 episode_agents,
                 episode_gifts,
                 episode_letters,
-                episode_spaces,
+                episode_locations,
             ]
             for description in description_list
             for contributor in description.contributors.all()

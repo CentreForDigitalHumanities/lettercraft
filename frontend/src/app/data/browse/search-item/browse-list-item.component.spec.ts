@@ -9,6 +9,7 @@ describe('BrowseListItemComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
+            declarations: [BrowseListItemComponent],
             imports: [SharedTestingModule]
         })
             .compileComponents();

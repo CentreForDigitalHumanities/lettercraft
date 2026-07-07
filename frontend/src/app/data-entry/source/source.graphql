@@ -39,8 +39,8 @@ query DataEntrySourceDetail($id: ID!) {
                     name
                 }
             }
-            spaces {
-                space {
+            locations {
+                location {
                     id
                     name
                     hasIdentifiableFeatures

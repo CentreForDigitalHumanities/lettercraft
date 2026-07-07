@@ -126,8 +126,8 @@
         <h2 class="mt-5">Locations</h2>
 
         <div class="my-4">
-            @for (link of episode.spaces; track link.id) {
-                <lc-browse-list-item [listItem]="transformLocation(link.space)" />
+            @for (link of episode.locations; track link.id) {
+                <lc-browse-list-item [listItem]="transformLocation(link.location)" />
             } @empty {
                 <p><i>None.</i></p>
             }

@@ -76,7 +76,7 @@ export class AgentDescriptionFormComponent implements OnDestroy {
             map(result => result.agentDescription?.isGroup || false),
         );
         this.locations$ = this.data$.pipe(
-            map(data => data.agentDescription?.source.spaces),
+            map(data => data.agentDescription?.source.locations),
             filter(_.negate(_.isUndefined)),
             shareReplay(1),
         );
