@@ -37,6 +37,7 @@ describe("User utils", () => {
                 username: "testuser",
                 email: "test@example.com",
                 first_name: "Test",
+                last_name_prefix: '',
                 last_name: "User",
                 is_staff: true,
                 is_contributor: true,

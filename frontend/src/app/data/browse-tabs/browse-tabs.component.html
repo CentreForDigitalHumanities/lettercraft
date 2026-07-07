@@ -1,0 +1,53 @@
+<ul ngbNav #nav="ngbNav"
+    [activeId]="focus$ | async" (activeIdChange)="changeTabs($event)"
+    class="mb-4 d-flex align-items-center">
+    @for (tab of tabMetadata; track tab.type) {
+        @if (tabs().includes(tab.type)) {
+            <li [ngbNavItem]="tab.type">
+                <button ngbNavLink class="nav-link py-2 px-4">
+                    <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
+                    <span>{{ tab.title }}</span>
+                    @if (counts().get(tab.type) !== undefined) {
+                        <span class="badge text-bg-secondary ms-2">{{
+                            counts().get(tab.type)
+                        }}</span>
+                    }
+                </button>
+                <ng-template ngbNavContent>
+                    <div class="py-2">
+                        @if (loading()) {
+                            <div class="loading-spinner text-center py-5">
+                                <p class="text-muted mt-3">
+                                    Loading results...
+                                </p>
+                            </div>
+                        } @else {
+                            @let pageResult = pageResultsByType.get(tab.type);
+                            @if (pageResult && (pageResult.totalSize$ | async) === 0) {
+                                <div class="no-results text-center py-5">
+                                    <lc-icon
+                                        [icon]="actionIcons.search"
+                                        class="text-muted mb-3"
+                                        size="3x"
+                                    />
+                                    <p class="text-muted">
+                                        No results found in this category
+                                    </p>
+                                </div>
+                            } @else if (pageResult) {
+                                <div class="list-group">
+                                    <lc-paginator [pageResult]="pageResult" />
+                                    @for (item of pageResult.pageData$ | async; track item.id) {
+                                        <lc-browse-list-item [listItem]="filterItem()(item)" />
+                                    }
+                                    <lc-paginator [pageResult]="pageResult" />
+                                </div>
+                            }
+                        }
+                    </div>
+                </ng-template>
+            </li>
+        }
+    }
+</ul>
+<div [ngbNavOutlet]="nav"></div>

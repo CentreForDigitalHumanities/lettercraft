@@ -22,6 +22,7 @@ export const actionIcons = {
     down: 'arrow-down',
     view: 'eye',
     search: 'search',
+    download: 'download'
 };
 
 export const authIcons = {

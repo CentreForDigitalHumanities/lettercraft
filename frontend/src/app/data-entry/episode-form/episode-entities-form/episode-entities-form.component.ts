@@ -18,7 +18,7 @@ import { ToastService } from "@services/toast.service";
 import { ApolloCache } from "@apollo/client/core";
 import { FormControl } from "@angular/forms";
 
-type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'spaces';
+type EntityPropertyName = 'agents' | 'gifts' | 'letters' | 'locations';
 type EntityTypeName = 'AgentDescriptionType' | 'GiftDescriptionType' | 'LetterDescriptionType' | 'SpaceDescriptionType';
 
 let nextID = 0;
@@ -104,7 +104,7 @@ export class EpisodeEntitiesFormComponent implements OnChanges, OnDestroy {
             [Entity.Agent]: 'agents',
             [Entity.Gift]: 'gifts',
             [Entity.Letter]: 'letters',
-            [Entity.Space]: 'spaces',
+            [Entity.Space]: 'locations',
         };
         return keys[this.entityType];
     }

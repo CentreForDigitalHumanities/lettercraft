@@ -71,18 +71,18 @@
             </dd>
 
             <dt>Locations</dt>
-            <dd *ngIf="episode.spaces.length > 0; else noValue" class="ms-4">
+            <dd *ngIf="episode.locations.length > 0; else noValue" class="ms-4">
                 <ul class="inline-list">
                     <li
-                        *ngFor="let link of episode.spaces"
+                        *ngFor="let link of episode.locations"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/', 'data-entry', 'locations', link.space.id]"
+                            [routerLink]="['/', 'data-entry', 'locations', link.location.id]"
                             class="icon-link"
                         >
-                            <lc-icon [icon]="locationIcon(link.space)" />
-                            {{ link.space.name }}
+                            <lc-icon [icon]="locationIcon(link.location)" />
+                            {{ link.location.name }}
                         </a>
                     </li>
                 </ul>

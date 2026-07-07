@@ -47,6 +47,9 @@ export class UserSettingsComponent implements OnInit {
         firstName: new FormControl<string>("", {
             nonNullable: true,
         }),
+        lastNamePrefix: new FormControl<string>("", {
+            nonNullable: true,
+        }),
         lastName: new FormControl<string>("", {
             nonNullable: true,
         }),

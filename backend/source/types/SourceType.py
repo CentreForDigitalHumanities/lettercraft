@@ -57,7 +57,7 @@ class SourceType(DjangoObjectType):
     agents = List(NonNull(AgentDescriptionType), required=True)
     gifts = List(NonNull(GiftDescriptionType), required=True)
     letters = List(NonNull(LetterDescriptionType), required=True)
-    spaces = List(NonNull(SpaceDescriptionType), required=True)
+    locations = List(NonNull(SpaceDescriptionType), required=True)
     editable = Boolean(required=True)
     contributors = List(NonNull(UserType), required=True)
 
@@ -101,7 +101,7 @@ class SourceType(DjangoObjectType):
     resolve_agents = _entity_resolver(AgentDescription, AgentDescriptionType)
     resolve_gifts = _entity_resolver(GiftDescription, GiftDescriptionType)
     resolve_letters = _entity_resolver(LetterDescription, LetterDescriptionType)
-    resolve_spaces = _entity_resolver(SpaceDescription, SpaceDescriptionType)
+    resolve_locations = _entity_resolver(SpaceDescription, SpaceDescriptionType)
 
     @staticmethod
     def resolve_num_of_episodes(parent: Source, info: ResolveInfo) -> int:
@@ -114,7 +114,7 @@ class SourceType(DjangoObjectType):
     @staticmethod
     def resolve_contributors(parent: Source, info: ResolveInfo) -> QuerySet[User]:
         user_ids = source_contributor_ids(parent)
-        return User.objects.filter(id__in=user_ids)
+        return User.objects.filter(id__in=user_ids).order_by("last_name")
 
     @staticmethod
     def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:

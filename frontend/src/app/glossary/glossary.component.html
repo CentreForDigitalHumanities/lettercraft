@@ -1,0 +1,132 @@
+@let glossary = glossary$ | async;
+@let references = references$ | async;
+
+<div class="row mx-0">
+    <div class="col-md py-5">
+        <div class="container-md">
+            <lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+            <h1 class="mt-5">Glossary</h1>
+
+            <p class="my-3">
+                In studying narrative descriptions of epistolary communication, the
+                Lettercraft team has identified dozens of Latin words that have something
+                to do with letters and their use. One substantial segment of this
+                vocabulary refer to letters themselves; other clusters refer to the
+                people carrying them, and to accompanying gifts; the potentially largest
+                and most fluid segment refers to the wider communicative process in which
+                letters functioned, including terms associated with the acts of writing,
+                dictating, signing, reading, carrying, speaking, gift-giving, negotiating
+                and hosting.
+            </p>
+
+            <p class="my-3">
+                One of the aims of the Lettercraft project has been to map
+                out this terminology so as to gain a better understanding of its meaning
+                and use. To this end, all entries in the database contain a ‘designator’
+                field that gives the relevant Latin epistolary terminology that appears
+                in the passage concerned. These terms can be searched with the search
+                function. A full terminology list, with frequencies, can be downloaded
+                for individual texts and for the database at large.
+            </p>
+            <p class="my-3">
+                To help navigate this part of the database, we have created a glossary
+                of the most important terms one might encounter. Each entry gives the
+                key meanings of the term from antiquity up to the Merovingian period and
+                gives attestations in the Merovingian narrative corpus. For further
+                context, entries might refer to a broad range of ancient and medieval
+                sources as well as modern scholarship. The bibliography at the end offers
+                a full list of relevant primary sources, dictionaries, and modern
+                publications.
+            </p>
+
+            <div class="my-5">
+                @if (glossary) {
+                    @let context = 'glossary';
+                    @for (section of glossary.sections; track section.title) {
+                        <section class="my-4">
+                            <h2>{{section.title}}</h2>
+
+                            @for (item of section.items; track item.id) {
+                                <article class="p-3 my-2 rounded glossary-item"
+                                    [id]="itemElementID(context, item.id)" tabindex="-1"
+                                    [class.active]="hasFocus$(context, item.id) | async"
+                                    (click)="focusItem(context, item.id)">
+                                    <h4 class="h5 font-sans-serif">{{item.term}}</h4>
+                                    <div [innerHTML]="item.description"></div>
+                                </article>
+                            }
+                        </section>
+                    }
+                }
+                @if (references) {
+                    @let context = 'references';
+                    <section class="my-4">
+                        <h2>References</h2>
+
+                        @for (section of references.sections; track section.title) {
+                            <section class="my-4">
+                                <h3 class="h4">{{section.title}}</h3>
+                                @for (item of section.items; track item.id) {
+                                    <div class="pt-3 px-3 my-2 glossary-item rounded"
+                                        [innerHTML]="item.reference"
+                                        [id]="itemElementID(context, item.id)"
+                                        tabindex="-1"
+                                        [class.active]="hasFocus$(context, item.id) | async"
+                                        (click)="focusItem(context, item.id)"
+                                        >
+                                    </div>
+                                }
+                            </section>
+                        }
+                    </section>
+                }
+            </div>
+        </div>
+    </div>
+    <aside class="col-md-3 p-4 index-container sticky-top bg-light">
+        <h2>Index</h2>
+
+        <div class="index-body">
+            @if (glossary) {
+                @for (section of glossary.sections; track section.title) {
+                    <section class="my-3">
+                        <h3 class="h4">{{section.title}}</h3>
+                        <ul class="nav nav-pills flex-column">
+                            @for (item of section.items; track item.id) {
+                                <li class="nav-item">
+                                    <button class="nav-link py-0 px-1"
+                                        (click)="focusItem('glossary', item.id)"
+                                        [class.active]="hasFocus$('glossary', item.id) | async">
+                                        {{item.term}}
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    </section>
+                }
+            }
+            @if (references) {
+                <section class="my-3">
+                    <h3 class="h4">References</h3>
+                    @for (section of references.sections; track section.title) {
+                        <section class="my-3">
+                            <h4 class="h6">{{section.title}}</h4>
+                            <ul class="nav nav-pills flex-column">
+                                @for (item of section.items; track item.id) {
+                                    <li class="nav-item">
+                                        <button class="nav-link py-0 px-1"
+                                            (click)="focusItem('references', item.id)"
+                                            [class.active]="hasFocus$('references', item.id) | async">
+                                            {{item.name}}
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        </section>
+                    }
+                </section>
+            }
+        </div>
+    </aside>
+</div>

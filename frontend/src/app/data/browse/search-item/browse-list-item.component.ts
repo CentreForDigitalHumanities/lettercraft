@@ -21,7 +21,7 @@ export class BrowseListItemComponent {
         }
         const values = [
             item.description, item.categories, item.agents, item.letters,
-            item.gifts, item.spaces
+            item.gifts, item.locations
         ];
         return _.any(values, i => i.length > 0);
     }
