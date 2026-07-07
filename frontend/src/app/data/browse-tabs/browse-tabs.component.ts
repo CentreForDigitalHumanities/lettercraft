@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, input, SimpleChanges } from '@angular/core';
+import { Component, computed, DestroyRef, effect, input } from '@angular/core';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { BehaviorSubject, filter, map } from 'rxjs';
 import { HasID, PageQueryGQL, PageResult } from '../utils/pagination';
@@ -17,6 +17,14 @@ export enum SearchFocus {
     Locations = "LOCATIONS",
 }
 
+const allTabs = [
+    SearchFocus.Sources,
+    SearchFocus.Episodes,
+    SearchFocus.Agents,
+    SearchFocus.Letters,
+    SearchFocus.Gifts,
+    SearchFocus.Locations
+];
 
 export interface TabMetadata {
     type: SearchFocus;
@@ -59,9 +67,15 @@ type BrowsePageResult =
     styleUrl: './browse-tabs.component.scss'
 })
 export class BrowseTabsComponent {
-    tabs = input.required<SearchFocus[]>();
     data = input.required<TabData | null>();
     hideSource = input<boolean>(false);
+    tabs = computed<SearchFocus[]>(() => {
+        if (this.hideSource()) {
+            return allTabs.slice(1);
+        } else {
+            return allTabs;
+        }
+    });
 
     focus$ = new BehaviorSubject<SearchFocus>(SearchFocus.Sources);
 
@@ -96,12 +110,10 @@ export class BrowseTabsComponent {
         private lettersPageQuery: BrowseLettersPageGQL,
         private giftsPageQuery: BrowseGiftsPageGQL,
         private locationsPageQuery: BrowseLocationsPageGQL,
-    ) {}
-
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes['tabs']) {
+    ) {
+        effect(() => {
             this.focus$.next(_.first(this.tabs()) ?? SearchFocus.Sources);
-        }
+        })
     }
 
     public changeTabs(newNavId: SearchFocus): void {

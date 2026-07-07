@@ -1,13 +1,12 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon, locationIcon } from '@shared/icons-utils';
-import { ViewSourceEpisodesPageGQL, ViewSourceGQL } from 'generated/graphql';
+import { ViewSourceGQL } from 'generated/graphql';
 import { map, Observable, switchMap, filter } from 'rxjs';
 import { sourceBreadcrumbs } from '../utils/breadcrumbs';
-import { PageResult } from '../utils/pagination';
 import { transformEpisode } from '../browse/search-item/browse-list-item';
-import { SearchFocus, TabData } from '../browse-tabs/browse-tabs.component';
+import { TabData } from '../browse-tabs/browse-tabs.component';
 
 @Component({
     selector: 'lc-source-view',
@@ -36,11 +35,6 @@ export class SourceViewComponent {
         map(data => data.source),
         filter(source => !!source),
     );
-
-    browseTabs: SearchFocus[] = [
-        SearchFocus.Episodes, SearchFocus.Agents, SearchFocus.Letters,
-        SearchFocus.Gifts, SearchFocus.Locations,
-    ];
 
     constructor(
         private route: ActivatedRoute,

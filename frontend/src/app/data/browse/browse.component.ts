@@ -8,17 +8,6 @@ import { Subject, startWith, mergeWith, throttleTime, asyncScheduler, map, disti
 import { SearchService } from "@services/search.service";
 import { Breadcrumb } from "@shared/breadcrumb/breadcrumb.component";
 import _ from "underscore";
-import { TabMetadata, SearchFocus } from "../browse-tabs/browse-tabs.component";
-
-
-const TAB_METADATA: TabMetadata[] = [
-    { type: SearchFocus.Sources, title: 'Sources', icon: dataIcons.source },
-    { type: SearchFocus.Episodes, title: 'Episodes', icon: dataIcons.episode },
-    { type: SearchFocus.Agents, title: 'Agents', icon: dataIcons.person },
-    { type: SearchFocus.Letters, title: 'Letters', icon: dataIcons.letter },
-    { type: SearchFocus.Gifts, title: 'Gifts', icon: dataIcons.gift },
-    { type: SearchFocus.Locations, title: 'Locations', icon: dataIcons.location }
-];
 
 
 @Component({
@@ -28,7 +17,6 @@ const TAB_METADATA: TabMetadata[] = [
     standalone: false,
 })
 export class BrowseComponent {
-    public readonly tabMetadata = TAB_METADATA;
     public readonly actionIcons = actionIcons;
     public readonly statusIcons = statusIcons;
 
@@ -56,15 +44,6 @@ export class BrowseComponent {
         distinctUntilChanged(_.isEqual),
         shareReplay(1),
     );
-
-    searchTabs = [
-        SearchFocus.Sources,
-        SearchFocus.Episodes,
-        SearchFocus.Agents,
-        SearchFocus.Letters,
-        SearchFocus.Gifts,
-        SearchFocus.Locations,
-    ];
 
     constructor(
         private searchQuery: BrowseSearchGQL,

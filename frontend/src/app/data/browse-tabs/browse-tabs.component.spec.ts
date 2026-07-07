@@ -19,10 +19,13 @@ describe('BrowseTabsComponent', () => {
 
         fixture = TestBed.createComponent(BrowseTabsComponent);
         component = fixture.componentInstance;
-        fixture.componentRef.setInput('tabs', [SearchFocus.Episodes, SearchFocus.Agents]);
+        fixture.componentRef.setInput('hideSource', true);
         let data: TabData = {
             episodes: [{id: '1'}, {id: '2'}],
             agents: [{id: '1'}],
+            letters: [],
+            gifts: [],
+            locations: [],
         };
         fixture.componentRef.setInput('data', data);
         fixture.detectChanges();
@@ -38,9 +41,9 @@ describe('BrowseTabsComponent', () => {
             expect(counts.get(SearchFocus.Sources)).toBe(undefined);
             expect(counts.get(SearchFocus.Episodes)).toBe(2);
             expect(counts.get(SearchFocus.Agents)).toBe(1);
-            expect(counts.get(SearchFocus.Letters)).toBe(undefined);
-            expect(counts.get(SearchFocus.Gifts)).toBe(undefined);
-            expect(counts.get(SearchFocus.Locations)).toBe(undefined);
+            expect(counts.get(SearchFocus.Letters)).toBe(0);
+            expect(counts.get(SearchFocus.Gifts)).toBe(0);
+            expect(counts.get(SearchFocus.Locations)).toBe(0);
         });
     });
 });

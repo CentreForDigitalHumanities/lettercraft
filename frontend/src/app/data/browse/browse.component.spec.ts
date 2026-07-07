@@ -5,8 +5,6 @@ import {
     BrowseSearchGQL, BrowseSearchQuery,
     BrowseSourcesPageGQL, BrowseEpisodesPageGQL, BrowseAgentsPageGQL,
     BrowseLettersPageGQL, BrowseGiftsPageGQL, BrowseLocationsPageGQL,
-    BrowseSourcesPageQuery, BrowseEpisodesPageQuery, BrowseAgentsPageQuery,
-    BrowseLettersPageQuery, BrowseGiftsPageQuery, BrowseLocationsPageQuery
 } from 'generated/graphql';
 import { of } from 'rxjs';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
