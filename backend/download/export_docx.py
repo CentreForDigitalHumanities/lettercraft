@@ -1,6 +1,8 @@
 from io import TextIOWrapper
 from typing import Dict
 
+from django.utils.html import strip_tags
+
 from docx import Document
 from docx.document import Document as DocumentObject
 
@@ -25,11 +27,14 @@ def _add_source(data: Dict, document: DocumentObject) -> None:
     document.add_page_break()
     document.add_heading(data["name"])
 
+    if reference := data['reference']:
+        document.add_paragraph(strip_tags(reference))
+
     if contributors := data["contributors"]:
         _add_key_value_paragraph("contributors", ", ".join(contributors), document)
 
     if description := data["description"]:
-        document.add_paragraph(description)
+        document.add_paragraph(strip_tags(description))
 
     document.add_heading("Episodes", level=2)
     for episode in data["episodes"]:

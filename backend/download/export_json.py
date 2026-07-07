@@ -97,11 +97,8 @@ def _serialize_episodes(episodes: QuerySet[Episode]) -> List[Dict]:
     return list(values)
 
 
-def _serialize_contributors(users: QuerySet[User]) -> List[Dict]:
-    values = users.annotate(
-        name=Concat('first_name', Value(' '), 'last_name')
-    ).values('name')
-    return [value['name'] for value in values]
+def _serialize_contributors(users: QuerySet[User]) -> List[str]:
+    return [user.full_name for user in users]
 
 
 def _serialize_agents(agents: QuerySet[AgentDescription]) -> List[Dict]:
