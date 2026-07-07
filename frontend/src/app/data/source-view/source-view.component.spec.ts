@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SourceViewComponent } from './source-view.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
 import { ObjectPageHeaderComponent } from '../shared/object-page-header/object-page-header.component';
+import { BrowseTabsComponent } from '../browse-tabs/browse-tabs.component';
+import { BrowseListItemComponent } from '../browse/search-item/browse-list-item.component';
 
 describe('SourceViewComponent', () => {
     let component: SourceViewComponent;
@@ -13,6 +15,8 @@ describe('SourceViewComponent', () => {
             declarations: [
                 SourceViewComponent,
                 ObjectPageHeaderComponent,
+                BrowseTabsComponent,
+                BrowseListItemComponent,
             ],
             imports: [SharedTestingModule],
         });

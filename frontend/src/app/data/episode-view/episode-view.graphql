@@ -38,9 +38,9 @@ query ViewEpisode($id: ID!) {
 
         }
     }
-    spaces {
+    locations {
         id
-        space {
+        location {
             id
             name
             hasIdentifiableFeatures

@@ -15,6 +15,18 @@ query ViewSource($id: ID!) {
         episodes {
             id
         }
+        agents {
+            id
+        }
+        letters {
+            id
+        }
+        gifts {
+            id
+        }
+        locations {
+            id
+        }
         contributors {
             id
             fullName
@@ -62,9 +74,9 @@ query ViewSourceEpisodesPage($ids: [String!]) {
                 name
             }
         }
-        spaces {
+        locations {
             id
-            space {
+            location {
                 id
                 name
                 hasIdentifiableFeatures

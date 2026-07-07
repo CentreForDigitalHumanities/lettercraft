@@ -53,9 +53,9 @@ query ViewLetter($id: ID!) {
                     name
                 }
             }
-            spaces {
+            locations {
                 id
-                space {
+                location {
                     id
                     name
                     hasIdentifiableFeatures

@@ -1,0 +1,17 @@
+.nav-link {
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+
+    &:hover {
+        border-bottom-color: var(--bs-tertiary-color);
+    }
+
+    &:not(.active) {
+        color: var(--bs-secondary) !important;
+    }
+
+    &.active {
+        color: var(--bs-primary);
+        border-bottom-color: var(--bs-primary);
+    }
+}
