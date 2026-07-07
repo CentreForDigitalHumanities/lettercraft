@@ -5,14 +5,12 @@ name: Unit tests
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches:
       - 'develop'
       - 'main'
-      - 'feature/**'
-      - 'bugfix/**'
-      - 'hotfix/**'
-      - 'release/**'
+
 
 jobs:
   test-back:

@@ -18,6 +18,7 @@ class User(django_auth_models.AbstractUser):
     last_name_prefix = models.CharField(
         max_length=64,
         default="",
+        blank=True,
         help_text="Tussenvoegsel for Dutch localised names"
     )
 

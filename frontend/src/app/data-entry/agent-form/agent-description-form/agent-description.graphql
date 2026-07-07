@@ -18,7 +18,7 @@ query DataEntryAgentDescription($id: ID!) {
     }
     source {
         id
-        spaces {
+        locations {
             id
             name
         }

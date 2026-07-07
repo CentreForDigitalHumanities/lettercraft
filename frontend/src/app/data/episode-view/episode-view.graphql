@@ -6,6 +6,10 @@ query ViewEpisode($id: ID!) {
     source {
         id
         name
+        descriptionText
+        episodes {
+            id
+        }
     }
     book
     chapter
@@ -22,45 +26,50 @@ query ViewEpisode($id: ID!) {
     }
     agents {
         id
-        sourceMention
-        note
-        designators
         agent {
             id
             name
+            description
             isGroup
             identified
+            episodes {
+                id
+            }
+
         }
     }
-    spaces {
+    locations {
         id
-        sourceMention
-        note
-        designators
-        space {
+        location {
             id
             name
             hasIdentifiableFeatures
+            description
+            episodes {
+                id
+            }
         }
     }
     letters {
         id
-        sourceMention
-        note
-        designators
         letter {
             id
             name
+            description
+            episodes {
+                id
+            }
         }
     }
     gifts {
         id
-        sourceMention
-        note
-        designators
         gift {
             id
             name
+            description
+            episodes {
+                id
+            }
         }
     }
   }

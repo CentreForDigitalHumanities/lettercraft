@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "django_filters",
     "django_prose_editor",
     "search",
+    "glossary",
 ]
 
 MIDDLEWARE = [

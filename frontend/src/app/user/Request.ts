@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Observable, OperatorFunction, Subject, catchError, filter, map, merge, of, share, startWith, switchMap, throttleTime } from "rxjs";
+import { Observable, OperatorFunction, ReplaySubject, catchError, filter, map, merge, of, share, startWith, switchMap, throttleTime } from "rxjs";
 
 
 export type HttpVerb = 'get' | 'put' | 'post' | 'patch' | 'delete';
@@ -19,7 +19,7 @@ export type RequestError = { error: Record<string, string | string[]>; };
  * @template Result The type of the request result.
  */
 export class Request<Input, Result extends object | never> {
-    public subject: Subject<Input>;
+    public subject: ReplaySubject<Input>;
     public result$: Observable<Result | RequestError>;
     public error$: Observable<RequestError>;
     public success$: Observable<Result>;
@@ -36,7 +36,7 @@ export class Request<Input, Result extends object | never> {
         private route: string,
         private verb: HttpVerb
     ) {
-        this.subject = new Subject<Input>();
+        this.subject = new ReplaySubject<Input>(1);
 
         // Catches errors and returns them as a RequestError object.
         const catchToError: OperatorFunction<Result, Result | RequestError> = catchError(error => of<RequestError>({ error: error.error }));

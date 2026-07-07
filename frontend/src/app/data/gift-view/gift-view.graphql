@@ -7,15 +7,60 @@ query ViewGift($id: ID!) {
     source {
         id
         name
+        descriptionText
+        episodes {
+            id
+        }
     }
     episodes {
         id
-        sourceMention
-        designators
-        note
         episode {
             id
             name
+            summary
+            designators
+            categories {
+                id
+                name
+            }
+            book
+            chapter
+            contributors {
+                id
+                fullName
+            }
+            page
+            agents {
+                id
+                agent {
+                    id
+                    name
+                    isGroup
+                    identified
+                }
+            }
+            gifts {
+                id
+                gift {
+                    id
+                    name
+                }
+            }
+            letters {
+                id
+                letter {
+                    id
+                    name
+                }
+            }
+            locations {
+                id
+                location {
+                    id
+                    name
+                    hasIdentifiableFeatures
+                }
+            }
         }
     }
     contributors {

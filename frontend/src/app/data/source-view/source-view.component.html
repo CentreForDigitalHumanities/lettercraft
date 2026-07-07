@@ -1,5 +1,5 @@
 <ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.source as source; else noEpisode">
+    <ng-container *ngIf="data.source as source; else noSource">
         <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(source)" />
         <a
             *ngIf="source.editable"
@@ -37,23 +37,13 @@
             </div>
         </section>
 
-        <section class="mt-5 mb-5">
-            <h2 class="mb-4">Epistolary episodes</h2>
-
-            <lc-paginator [pageResult]="episodesPageResult" />
-
-            <ng-container *ngIf="episodesPageResult.pageData$ | async as pageData">
-                <lc-episode-preview
-                    *ngFor="let episode of pageData.episodes"
-                    [episode]="episode"
-                />
-            </ng-container>
-
-            <lc-paginator [pageResult]="episodesPageResult" />
+        <section class="my-5">
+            <lc-browse-tabs [data]="tabData$ | async"
+                [hideSource]="true" />
         </section>
     </ng-container>
 
-    <ng-template #noEpisode>
+    <ng-template #noSource>
         <lc-not-found entity="episode" [id]="id$ | async" />
     </ng-template>
 </ng-container>

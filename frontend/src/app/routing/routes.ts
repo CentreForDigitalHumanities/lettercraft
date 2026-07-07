@@ -32,6 +32,7 @@ import { ContributorComponent } from '../contributors/contributor/contributor.co
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
 import { BrowseComponent } from '../data/browse/browse.component';
 import { CaseStudiesComponent } from '../case-studies/case-studies.component';
+import { GlossaryComponent } from '../glossary/glossary.component';
 
 
 const routes: Routes = [
@@ -192,6 +193,12 @@ const routes: Routes = [
                 redirectTo: 'sources'
             }
         ]
+    },
+    {
+        path: 'glossary',
+        title: pageTitle('Glossary'),
+        component: GlossaryComponent,
+        data: { fullSize: true }
     },
     {
         path: '',

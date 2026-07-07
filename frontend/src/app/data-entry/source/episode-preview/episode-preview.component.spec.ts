@@ -25,8 +25,9 @@ describe("EpisodePreviewComponent", () => {
             contributors: [],
             gifts: [],
             letters: [],
-            spaces: [],
+            locations: [],
             categories: [],
+            designators: [],
         }
         fixture.detectChanges();
     });

@@ -15,7 +15,7 @@ query DataEntryEpisodeEntities($id: ID!) {
         id
         name
       }
-      spaces {
+      locations {
         id
         name
       }
@@ -41,7 +41,7 @@ query DataEntryEpisodeEntities($id: ID!) {
             name
         }
     }
-    spaces {
+    locations {
         id
         entity {
             id

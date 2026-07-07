@@ -42,8 +42,18 @@
             </li>
         </ul>
         <dl>
+            <dt>Designators</dt>
+            <dd *ngIf="episode.designators.length > 0; else noValue" class="ms-4">
+                <ul class="inline-list">
+                    <li
+                        *ngFor="let designator of episode.designators"
+                        class="inline-list-item"
+                    >{{ designator }}</li>
+                </ul>
+            </dd>
+
             <dt>Agents</dt>
-            <dd *ngIf="episode.agents.length > 0; else noAgents" class="ms-4">
+            <dd *ngIf="episode.agents.length > 0; else noValue" class="ms-4">
                 <ul class="inline-list">
                     <li
                         *ngFor="let link of episode.agents"
@@ -59,36 +69,30 @@
                     </li>
                 </ul>
             </dd>
-            <ng-template #noAgents>
-                <dd class="ms-4">No agents have been added.</dd>
-            </ng-template>
 
             <dt>Locations</dt>
-            <dd *ngIf="episode.spaces.length > 0; else noSpaces" class="ms-4">
+            <dd *ngIf="episode.locations.length > 0; else noValue" class="ms-4">
                 <ul class="inline-list">
                     <li
-                        *ngFor="let link of episode.spaces"
+                        *ngFor="let link of episode.locations"
                         class="inline-list-item"
                     >
                         <a
-                            [routerLink]="['/', 'data-entry', 'locations', link.space.id]"
+                            [routerLink]="['/', 'data-entry', 'locations', link.location.id]"
                             class="icon-link"
                         >
-                            <lc-icon [icon]="locationIcon(link.space)" />
-                            {{ link.space.name }}
+                            <lc-icon [icon]="locationIcon(link.location)" />
+                            {{ link.location.name }}
                         </a>
                     </li>
                 </ul>
             </dd>
-            <ng-template #noSpaces>
-                <dd class="ms-4">No locations have been added.</dd>
-            </ng-template>
 
             <dt>Objects</dt>
             <dd
                 *ngIf="
                     episode.gifts.length > 0 || episode.letters.length > 0;
-                    else noObjects
+                    else noValue
                 "
                 class="ms-4"
             >
@@ -119,10 +123,11 @@
                     </li>
                 </ul>
             </dd>
-            <ng-template #noObjects>
-                <dd class="ms-4">No objects have been added.</dd>
+            <ng-template #noValue>
+                <dd class="ms-4"><i>None</i></dd>
             </ng-template>
         </dl>
+
         <div class="d-flex justify-content-end">
             <lc-contributors [contributors]="episode.contributors" />
         </div>

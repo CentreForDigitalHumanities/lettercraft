@@ -14,22 +14,30 @@
 
         <lc-contributors [contributors]="gift.contributors" />
 
-        <section class="mb-5">
+        <section class="mt-5">
             <h2>Source text</h2>
 
-            <p>
-                {{gift.name}} is a gift described in
-                <a [routerLink]="['/data/sources', gift.source.id]" class="icon-link">
-                    <lc-icon [icon]="dataIcons.source" />
-                    {{gift.source.name}}
-                </a>.
-                <ng-container *ngIf="gift.episodes.length">
-                    It appears in the following epistolary episodes:
-                </ng-container>
-            </p>
-
-            <lc-episode-links [data]="gift.episodes" />
+            <div class="my-4">
+                <lc-browse-list-item [listItem]="transformSource(gift.source)" />
+            </div>
         </section>
+
+        <section class="mt-5">
+            <h2>Epistolary episodes</h2>
+
+            @if (gift.episodes.length) {
+                <p>This gift appears in {{gift.episodes.length}} epistolary episodes:</p>
+
+                <div class="my-4">
+                    @for (link of gift.episodes; track link.id) {
+                        <lc-browse-list-item [listItem]="transformEpisode(link.episode)" />
+                    }
+                </div>
+            } @else {
+                This gift does not appear in any epistolary episodes.
+            }
+        </section>
+
     </ng-container>
 
     <ng-template #noGift>
