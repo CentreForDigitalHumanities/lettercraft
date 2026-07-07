@@ -48,7 +48,6 @@ class EpisodeType(EntityDescriptionType, DjangoObjectType):
             "designators",
             "gifts",
             "letters",
-            "locations",
         ] + EntityDescriptionType.fields()
         interfaces = EntityDescriptionType._meta.interfaces
         filterset_class = EpisodeFilter

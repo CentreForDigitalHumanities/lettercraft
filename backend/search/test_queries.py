@@ -16,8 +16,6 @@ def test_search_sources_without_term(
         query, variable_values=variables, context=anonymous_request
     )
 
-    print(result)
-
     assert len(result["data"]["search"]["sources"]) == 2
     assert any(s["name"] == source.name for s in result["data"]["search"]["sources"])
 

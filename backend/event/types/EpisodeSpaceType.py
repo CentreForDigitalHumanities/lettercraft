@@ -16,7 +16,6 @@ class EpisodeSpaceType(DescriptionFieldType, DjangoObjectType):
         fields = [
             "id",
             "episode",
-            "location",
         ] + DescriptionFieldType.fields()
         interfaces = (EpisodeEntityLink,)
 
