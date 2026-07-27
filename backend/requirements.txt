@@ -77,7 +77,7 @@ nh3==0.2.21
     # via django-prose-editor
 packaging==23.2
     # via pytest
-pillow==12.2.0
+pillow==12.3.0
     # via -r requirements.in
 pluggy==1.6.0
     # via pytest
