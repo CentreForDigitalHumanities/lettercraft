@@ -1,8 +1,9 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 import json
 import re
 from io import TextIOWrapper
 from datetime import date
+import os
 
 from django.db.models import QuerySet, Value, CharField
 from django.db.models.functions import Concat, JSONObject, NullIf
@@ -17,28 +18,37 @@ from space.models import SpaceDescription
 from user.models import User
 from source.utils import source_contributor_ids
 
+_here = os.path.abspath(os.path.dirname(__file__))
+
 DATE_FORMAT = "%d-%m-%Y"
 SITE_URL = "https://" + settings.HOST
+SCHEMA_PATH = os.path.join(_here, "data.schema.json")
 
 
-def save_json(sources: QuerySet[Source], f: TextIOWrapper) -> None:
-    data = json_data(sources)
+def save_json(data: Dict, f: TextIOWrapper) -> None:
     json.dump(data, f, indent=2)
 
 
-def json_data(sources: QuerySet[Source]) -> Dict:
-    data = _serialize(sources)
-    cleaned = _clean_serialised_data(data)
-    return cleaned
+def json_data(sources: QuerySet[Source], label: Optional[str] = None) -> Dict:
+    data = _clean_serialised_data(_serialize(sources))
+    data["metadata"] = _metadata(label=label)
+    return data
+
+
+def _metadata(label: Optional[str] = None) -> Dict:
+    timestamp = date.today().strftime(DATE_FORMAT)
+    metadata = {
+        "url": SITE_URL,
+        "date": timestamp,
+    }
+    if label:
+        metadata["version"] = label
+    return metadata
+
 
 def _serialize(sources: QuerySet[Source]) -> Dict:
-    timestamp = date.today().strftime(DATE_FORMAT)
     return {
         "sources": [_serialize_source(source) for source in sources],
-        "metadata": {
-            "url": SITE_URL,
-            "date": timestamp,
-        }
     }
 
 
@@ -87,11 +97,8 @@ def _serialize_episodes(episodes: QuerySet[Episode]) -> List[Dict]:
     return list(values)
 
 
-def _serialize_contributors(users: QuerySet[User]) -> List[Dict]:
-    values = users.annotate(
-        name=Concat('first_name', Value(' '), 'last_name')
-    ).values('name')
-    return [value['name'] for value in values]
+def _serialize_contributors(users: QuerySet[User]) -> List[str]:
+    return [user.full_name for user in users]
 
 
 def _serialize_agents(agents: QuerySet[AgentDescription]) -> List[Dict]:
@@ -172,3 +179,8 @@ def _clean_serialised_data(data: Any) -> Any:
     if isinstance(data, str):
         return data or None
     return data
+
+
+def data_json_schema():
+    with open(SCHEMA_PATH) as f:
+        return json.load(f)

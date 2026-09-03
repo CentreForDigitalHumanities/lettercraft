@@ -1,17 +1,13 @@
 from io import TextIOWrapper
 from typing import Dict
 
-from django.db.models import QuerySet
+from django.utils.html import strip_tags
+
 from docx import Document
 from docx.document import Document as DocumentObject
 
-from source.models import Source
-from download.export_json import json_data
 
-
-def save_docx(sources: QuerySet[Source], out: TextIOWrapper) -> None:
-    data = json_data(sources)
-
+def save_docx(data: Dict, out: TextIOWrapper) -> None:
     document = Document()
     _add_preamble(data["metadata"], document)
     for source in data['sources']:
@@ -31,11 +27,14 @@ def _add_source(data: Dict, document: DocumentObject) -> None:
     document.add_page_break()
     document.add_heading(data["name"])
 
+    if reference := data['reference']:
+        document.add_paragraph(strip_tags(reference))
+
     if contributors := data["contributors"]:
         _add_key_value_paragraph("contributors", ", ".join(contributors), document)
 
     if description := data["description"]:
-        document.add_paragraph(description)
+        document.add_paragraph(strip_tags(description))
 
     document.add_heading("Episodes", level=2)
     for episode in data["episodes"]:
