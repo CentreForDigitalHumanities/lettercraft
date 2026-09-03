@@ -32,7 +32,7 @@ describe("ContributorsComponent", () => {
         const compiled = fixture.nativeElement;
         const element: HTMLElement = compiled.querySelector(".contributors");
         self.expect(element).toBeDefined();
-        self.expect(element.textContent).toBe("No contributors");
+        self.expect(element.textContent.trim()).toBe("No contributors");
     });
 
     it("should render one contributor", () => {

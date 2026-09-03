@@ -5,16 +5,17 @@
 <p>Select a source to begin</p>
 
 <ul class="list-group">
-    <li *ngFor="let source of sources$ | async; trackBy: identify"
-       class="list-group-item list-group-item-action">
-        <div class="d-flex align-items-center">
-            <a [routerLink]="[source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
-            <small class="text-body-secondary ms-2">
-                ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other {{{ source.numOfEpisodes}} episodes}})
-            </small>
-        </div>
-        <p class="mb-1">
-            <em>{{ source.medievalTitle }}</em>.
-        </p>
-    </li>
+    @for (source of sources$ | async; track identify($index, source)) {
+        <li class="list-group-item list-group-item-action">
+            <div class="d-flex align-items-center">
+                <a [routerLink]="[source.id]" class="mb-1 h5 stretched-link">{{ source.name }}</a>
+                <small class="text-body-secondary ms-2">
+                    ({source.numOfEpisodes, plural, =0 {No episodes} =1 {1 episode} other { {{ source.numOfEpisodes}} episodes}})
+                </small>
+            </div>
+            <p class="mb-1">
+                <em>{{ source.medievalTitle }}</em>.
+            </p>
+        </li>
+    }
 </ul>

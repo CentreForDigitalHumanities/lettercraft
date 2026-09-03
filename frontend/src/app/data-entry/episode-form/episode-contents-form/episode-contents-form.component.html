@@ -19,13 +19,15 @@
         <lc-designators-control [formControl]="form.controls.designators" />
     </fieldset>
 
-    <fieldset *ngIf="episodeCategories$ | async as episodeCategories">
-        <legend>Labels</legend>
-        <p class="form-text">
-            Pick one or more labels that describe this episode.
-        </p>
+    @if (episodeCategories$ | async; as episodeCategories) {
+        <fieldset>
+            <legend>Labels</legend>
+            <p class="form-text">
+                Pick one or more labels that describe this episode.
+            </p>
 
-        <lc-label-select [labels]="episodeCategories"
-            [formControl]="form.controls.categories" />
-    </fieldset>
+            <lc-label-select [labels]="episodeCategories"
+                [formControl]="form.controls.categories" />
+        </fieldset>
+    }
 </form>

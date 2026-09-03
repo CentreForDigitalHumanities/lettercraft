@@ -2,21 +2,14 @@
     <label for="search" class="mb-2">{{ labelText }}</label>
     <div class="input-group">
         <span class="input-group-text" role="status">
-            <div
-                *ngIf="loading$ | async; else notLoading"
-                class="spinner-border spinner-border-sm"
-            >
-                <span class="visually-hidden">{{ searchText }}</span>
-            </div>
-            <ng-template #notLoading>
+            @if (loading$ | async) {
+                <div class="spinner-border spinner-border-sm">
+                    <span class="visually-hidden">{{ searchText }}</span>
+                </div>
+            } @else {
                 <lc-icon [icon]="actionIcons.search" />
-            </ng-template>
+            }
         </span>
-        <input
-            id="search"
-            type="search"
-            class="form-control"
-            [formControl]="searchControl"
-        />
+        <input id="search" type="search" class="form-control" [formControl]="searchControl" />
     </div>
 </form>

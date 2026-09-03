@@ -1,33 +1,38 @@
-<div *ngIf="visibleOptions() as options" ngbDropdown>
-    <button
-        class="btn btn-primary"
-        id="labels-menu"
-        type="button"
-        ngbDropdownToggle
-    >
-        {{ placeholderEmpty }}
-    </button>
-    <div aria-labelledby="labels-menu" ngbDropdownMenu>
-        <ng-container *ngIf="options.length > 0; else noOptions">
-            <button
-                *ngFor="
-                    let option of options;
-                    let i = index;
-                    trackBy: trackById
-                "
-                (click)="selectOption(option)"
-                [disabled]="selectedOptions().includes(option.value)"
-                class="d-inline-flex align-items-center"
-                ngbDropdownItem
-            >
-                <fa-icon *ngIf="option.icon" [icon]="option.icon" class="me-2" aria-hidden="true" />
-                <p class="m-0 text-wrap">{{ option.dropdownLabel ?? option.label }} <span *ngIf="option.description" class="text-muted small">({{option.description}})</span></p>
-            </button>
-        </ng-container>
-        <ng-template #noOptions>
-            <button ngbDropdownItem disabled>
-                {{ noAvailableOptions }}
-            </button>
-        </ng-template>
+@if (visibleOptions(); as options) {
+    <div ngbDropdown>
+        <button
+            class="btn btn-primary"
+            id="labels-menu"
+            type="button"
+            ngbDropdownToggle
+        >
+            {{ placeholderEmpty }}
+        </button>
+        <div aria-labelledby="labels-menu" ngbDropdownMenu>
+            @if (options.length > 0) {
+                @for (option of options; track trackById(i, option); let i = $index) {
+                    <button
+                        (click)="selectOption(option)"
+                        [disabled]="selectedOptions().includes(option.value)"
+                        class="d-inline-flex align-items-center"
+                        ngbDropdownItem
+                    >
+                        @if (option.icon) {
+                            <fa-icon [icon]="option.icon" class="me-2" aria-hidden="true" />
+                        }
+                        <p class="m-0 text-wrap">
+                            {{ option.dropdownLabel ?? option.label }}
+                            @if (option.description) {
+                                <span class="text-muted small">({{option.description}})</span>
+                            }
+                        </p>
+                    </button>
+                }
+            } @else {
+                <button ngbDropdownItem disabled>
+                    {{ noAvailableOptions }}
+                </button>
+            }
+        </div>
     </div>
-</div>
+}

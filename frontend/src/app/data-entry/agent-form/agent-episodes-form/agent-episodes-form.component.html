@@ -1,23 +1,24 @@
-<ng-container *ngIf="data$ | async as data">
-    <ng-container *ngIf="data.agentDescription">
+@if (data$ | async; as data) {
+    @if (data.agentDescription) {
         <p>This agent is involved in the following episodes:</p>
         <ul class="list-unstyled vstack gap-4">
-            <li *ngFor="let item of data.agentDescription.episodes">
-                <lc-episode-link-form [entityType]="entityType"
-                        [entityID]="data.agentDescription.id"
-                        [episodeID]="item.episode.id">
-                    <button removeControl class="btn btn-danger"
-                        [attr.aria-label]="'remove episode: ' + item.episode.name"
-                        ngbTooltip="remove this episode"
-                        (click)="removeEpisode$.next(item.episode.id)">
-                        <lc-icon [icon]="actionIcons.remove" />
-                    </button>
-                </lc-episode-link-form>
-            </li>
+            @for (item of data.agentDescription.episodes; track item.id) {
+                <li>
+                    <lc-episode-link-form [entityType]="entityType"
+                            [entityID]="data.agentDescription.id"
+                            [episodeID]="item.episode.id">
+                        <button removeControl class="btn btn-danger"
+                            [attr.aria-label]="'remove episode: ' + item.episode.name"
+                            ngbTooltip="remove this episode"
+                            (click)="removeEpisode$.next(item.episode.id)">
+                            <lc-icon [icon]="actionIcons.remove" />
+                        </button>
+                    </lc-episode-link-form>
+                </li>
+            }
         </ul>
-    </ng-container>
-</ng-container>
-
+    }
+}
 
 <div class="mt-4 mb-4">
     <div ngbDropdown>
@@ -27,10 +28,12 @@
             Add episode
         </button>
         <div ngbDropdownMenu aria-labelledby="episode-dropdown-trigger">
-            <button *ngFor="let episode of (availableEpisodes$ | async)"
-                ngbDropdownItem (click)="addEpisode$.next(episode.id); dropdownToggle.focus()">
-                {{episode.name}}
-            </button>
+            @for (episode of (availableEpisodes$ | async); track episode.id) {
+                <button
+                    ngbDropdownItem (click)="addEpisode$.next(episode.id); dropdownToggle.focus()">
+                    {{episode.name}}
+                </button>
+            }
             <button ngbDropdownItem disabled>
                 <lc-icon [icon]="actionIcons.create" />
                 Create new episode
