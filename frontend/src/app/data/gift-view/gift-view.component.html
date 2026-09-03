@@ -1,17 +1,15 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.giftDescription as gift; else noGift">
-        <a
-            *ngIf="gift.editable"
-            class="float-end btn btn-light"
-            [routerLink]="['/data-entry/gifts', gift.id]"
-        >
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this gift
-        </a>
+    @if (data.giftDescription; as gift) {
+        @if (gift.editable) {
+            <a class="float-end btn btn-light"
+                [routerLink]="['/data-entry/gifts', gift.id]">
+                <lc-icon [icon]="actionIcons.edit" />
+                Edit this gift
+            </a>
+        }
         <lc-object-page-header [object]="gift" [icon]="dataIcons.gift" />
-
         <lc-contributors [contributors]="gift.contributors" />
 
         <section class="mt-5">
@@ -37,16 +35,13 @@
                 This gift does not appear in any epistolary episodes.
             }
         </section>
-
-    </ng-container>
-
-    <ng-template #noGift>
+    } @else {
         <lc-not-found entity="gift" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}
+
+

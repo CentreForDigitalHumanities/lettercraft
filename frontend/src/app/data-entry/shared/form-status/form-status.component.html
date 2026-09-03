@@ -1,4 +1,6 @@
-<p role="status" *ngIf="status$ | async as status" [className]="classes[status]">
-    <lc-icon [icon]="statusIcons[status]" />
-    {{messages[status]}}
-</p>
+@if (status$ | async; as status) {
+    <p role="status" [className]="classes[status]">
+        <lc-icon [icon]="statusIcons[status]" />
+        {{messages[status]}}
+    </p>
+}

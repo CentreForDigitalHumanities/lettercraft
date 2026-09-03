@@ -1,15 +1,14 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)"></lc-breadcrumb>
 
-    <ng-container *ngIf="data.agentDescription as agent; else noAgent">
-        <a
-            *ngIf="agent.source.isPublic"
-            class="float-end btn btn-light"
-            [routerLink]="['/data/agents', agent.id]"
-        >
-            <lc-icon [icon]="actionIcons.view" />
-            View on public interface
-        </a>
+    @if (data.agentDescription; as agent) {
+        @if (agent.source.isPublic) {
+            <a class="float-end btn btn-light" [routerLink]="['/data/agents', agent.id]">
+                <lc-icon [icon]="actionIcons.view" />
+                View on public interface
+            </a>
+        }
+
         <h1 class="mb-4">
             <lc-icon [icon]="agentIcon(agent)" />
             {{ agent.name }}
@@ -17,21 +16,17 @@
         </h1>
 
         <p class="lead mb-4">
-            <span *ngIf="agent.description; else noDescription">
+            @if (agent.description) {
                 {{ agent.description }}
-            </span>
-            <ng-template #noDescription>
+            } @else {
                 <i>(No description)</i>
-            </ng-template>
+            }
         </p>
 
         <lc-form-status [status$]="status$" />
 
         <div class="hstack">
-            <lc-delete-agent
-                class="ms-auto"
-                [navigateOnDelete]="sourceLink(data)"
-            />
+            <lc-delete-agent class="ms-auto" [navigateOnDelete]="sourceLink(data)" />
         </div>
 
         <h2>Identification</h2>
@@ -47,15 +42,11 @@
         <h2>Historical context</h2>
 
         <lc-agent-historical-person-form />
-    </ng-container>
-
-    <ng-template #noAgent>
+    } @else {
         <lc-not-found entity="agent" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}

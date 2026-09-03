@@ -1,15 +1,14 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.episode as episode; else noEpisode">
-        <a
-            *ngIf="episode.source.isPublic"
-            class="float-end btn btn-light"
-            [routerLink]="['/data/episodes', episode.id]"
-        >
-            <lc-icon [icon]="actionIcons.view" />
-            View on public interface
-        </a>
+    @if (data.episode; as episode) {
+        @if (episode.source.isPublic) {
+            <a class="float-end btn btn-light"
+                [routerLink]="['/data/episodes', episode.id]">
+                <lc-icon [icon]="actionIcons.view" />
+                View on public interface
+            </a>
+        }
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.episode" />
             <span class="ms-2">{{ episode.name }}</span>
@@ -46,15 +45,13 @@
 
         <h2 class="subform-header">Gifts</h2>
         <lc-episode-entities-form [entityType]="Entity.Gift" />
-    </ng-container>
-
-    <ng-template #noEpisode>
+    } @else {
         <lc-not-found entity="episode" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}
+
+
