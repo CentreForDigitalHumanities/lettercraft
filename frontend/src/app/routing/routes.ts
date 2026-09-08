@@ -33,6 +33,7 @@ import { ContributorsListComponent } from '../contributors/contributors-list/con
 import { BrowseComponent } from '../data/browse/browse.component';
 import { CaseStudiesComponent } from '../case-studies/case-studies.component';
 import { GlossaryComponent } from '../glossary/glossary.component';
+import { PrinciplesComponent } from '../about/principles/principles.component';
 
 
 const routes: Routes = [
@@ -199,6 +200,11 @@ const routes: Routes = [
         title: pageTitle('Glossary'),
         component: GlossaryComponent,
         data: { fullSize: true }
+    },
+    {
+        path: 'principles',
+        title: pageTitle('Principles'),
+        component: PrinciplesComponent,
     },
     {
         path: '',
