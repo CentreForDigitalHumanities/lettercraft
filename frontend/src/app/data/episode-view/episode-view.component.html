@@ -1,28 +1,20 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.episode as episode; else noEpisode">
-        <a
-            *ngIf="episode.editable"
-            class="float-end btn btn-light"
-            [routerLink]="['/data-entry/episodes', episode.id]"
-        >
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this episode
-        </a>
-
-
+    @if (data.episode; as episode) {
+        @if (episode.editable) {
+            <a class="float-end btn btn-light" [routerLink]="['/data-entry/episodes', episode.id]">
+                <lc-icon [icon]="actionIcons.edit" />
+                Edit this episode
+            </a>
+        }
         <lc-object-page-header [object]="episode" [icon]="dataIcons.episode" />
 
         <p>
             "{{ episode.name }}" is an epistolary episode in
-            <a
-                [routerLink]="['/data/sources', episode.source.id]"
-                class="icon-link"
-            >
+            <a [routerLink]="['/data/sources', episode.source.id]" class="icon-link">
                 <lc-icon [icon]="dataIcons.source" />
-                {{ episode.source.name }}</a
-            >.
+                {{ episode.source.name }}</a>.
         </p>
 
         <lc-contributors [contributors]="episode.contributors" />
@@ -37,19 +29,19 @@
             <dt>Location in text</dt>
             <dd class="ms-4">
                 <span class="inline-list">
-                    <span *ngIf="episode.book" class="inline-list-item"
-                        >book {{ episode.book }}</span
-                    >
-                    <span *ngIf="episode.chapter" class="inline-list-item"
-                        >chapter {{ episode.chapter }}</span
-                    >
-                    <span *ngIf="episode.page" class="inline-list-item"
-                        >page {{ episode.page }}</span
-                    >
+                    @if (episode.book) {
+                        <span class="inline-list-item">book {{ episode.book }}</span>
+                    }
+                    @if (episode.chapter) {
+                        <span class="inline-list-item">chapter {{ episode.chapter }}</span>
+                    }
+                    @if (episode.page) {
+                        <span class="inline-list-item">page {{ episode.page }}</span>
+                    }
                 </span>
-                <i *ngIf="!(episode.book || episode.chapter || episode.page)">
-                    Location not specified.
-                </i>
+                @if (!(episode.book || episode.chapter || episode.page)) {
+                    <i>Location not specified.</i>
+                }
             </dd>
         </dl>
 
@@ -63,31 +55,29 @@
 
             <dt>Designators</dt>
             <dd class="ms-4">
-                <ul
-                    class="inline-list"
-                    *ngIf="episode.designators.length; else noDesignators"
-                >
-                    <li
-                        *ngFor="let designator of episode.designators"
-                        class="inline-list-item"
-                    >
-                        {{ designator }}
-                    </li>
-                </ul>
-                <ng-template #noDesignators>None.</ng-template>
+                @if (episode.designators.length) {
+                    <ul class="inline-list">
+                        @for (designator of episode.designators; track $index) {
+                            <li class="inline-list-item">
+                                {{ designator }}
+                            </li>
+                        }
+                    </ul>
+                } @else {
+                    None.
+                }
             </dd>
 
             <dt>Labels</dt>
             <dd class="ms-4">
                 <ul class="inline-list no-delimiter">
-                    <li
-                        *ngFor="let category of episode.categories"
-                        class="inline-list-item"
-                    >
-                        <span class="badge rounded-pill text-bg-burntorange">
-                            {{ category.name }}
-                        </span>
-                    </li>
+                    @for (category of episode.categories; track category.id) {
+                        <li class="inline-list-item">
+                            <span class="badge rounded-pill text-bg-burntorange">
+                                {{ category.name }}
+                            </span>
+                        </li>
+                    }
                 </ul>
             </dd>
         </dl>
@@ -132,15 +122,11 @@
                 <p><i>None.</i></p>
             }
         </div>
-    </ng-container>
-
-    <ng-template #noEpisode>
+    } @else {
         <lc-not-found entity="episode" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}

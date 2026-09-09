@@ -2,9 +2,8 @@ import { TestBed } from "@angular/core/testing";
 import { SearchService, SearchState } from "./search.service";
 import { Subject, throwError } from "rxjs";
 import { ApolloQueryResult } from "@apollo/client/core";
-import { Query as ApolloAngularQuery } from "apollo-angular/query";
+import { Query as ApolloAngularQuery, QueryRef } from "apollo-angular";
 import { BrowseSearchQuery, BrowseSearchQueryVariables } from "generated/graphql";
-import { QueryRef } from "apollo-angular";
 
 describe("SearchService", () => {
     let service: SearchService;

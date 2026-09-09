@@ -30,9 +30,11 @@
             >
                 Create
                 <span role="status">
-                    <div *ngIf="loading$ | async" class="spinner-border spinner-border-sm">
-                        <span class="visually-hidden">(loading)</span>
-                    </div>
+                    @if (loading$ | async) {
+                        <div class="spinner-border spinner-border-sm">
+                            <span class="visually-hidden">(loading)</span>
+                        </div>
+                    }
                 </span>
             </button>
             <button

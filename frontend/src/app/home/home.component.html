@@ -74,13 +74,15 @@
                             Explore the Database
                         </h2>
                         <div class="row g-3 justify-content-center">
-                            <div class="col-md-6 col-lg-4" *ngFor="let link of links">
-                                <a class="btn btn-primary btn-lg w-100 py-3" [href]="link.href"
-                                    [class.disabled]="!link.href" [attr.aria-disabled]="!link.href">
-                                    <lc-icon [icon]="link.icon" class="me-2" />
-                                    {{ link.label }}
-                                </a>
-                            </div>
+                            @for (link of links; track link.label) {
+                                <div class="col-md-6 col-lg-4">
+                                    <a class="btn btn-primary btn-lg w-100 py-3" [href]="link.href"
+                                        [class.disabled]="!link.href" [attr.aria-disabled]="!link.href">
+                                        <lc-icon [icon]="link.icon" class="me-2" />
+                                        {{ link.label }}
+                                    </a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

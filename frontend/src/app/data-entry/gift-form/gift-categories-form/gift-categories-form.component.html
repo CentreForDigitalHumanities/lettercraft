@@ -1,13 +1,15 @@
-<form *ngIf="giftCategories$ | async as giftCategories">
-    <div class="form-group">
-        <p class="form-text">
-            Select one or more categories that apply to this letter.
-        </p>
-        <lc-single-multi-select
-            [formControl]="form.controls.categories"
-            [options]="giftCategories"
-            [multiple]="true"
-            placeholder="Select gift categories"
-        />
-    </div>
-</form>
+@if (giftCategories$ | async; as giftCategories) {
+    <form>
+        <div class="form-group">
+            <p class="form-text">
+                Select one or more categories that apply to this letter.
+            </p>
+            <lc-single-multi-select
+                [formControl]="form.controls.categories"
+                [options]="giftCategories"
+                [multiple]="true"
+                placeholder="Select gift categories"
+            />
+        </div>
+    </form>
+}
