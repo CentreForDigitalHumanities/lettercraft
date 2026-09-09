@@ -1,15 +1,13 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="getBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.source as source; else noSource">
-        <a
-            *ngIf="source.isPublic"
-            class="float-end btn btn-light"
-            [routerLink]="['/data/sources', source.id]"
-        >
-            <lc-icon [icon]="actionIcons.view" />
-            View on public interface
-        </a>
+    @if (data.source; as source) {
+        @if (source.isPublic) {
+            <a class="float-end btn btn-light" [routerLink]="['/data/sources', source.id]">
+                <lc-icon [icon]="actionIcons.view" />
+                View on public interface
+            </a>
+        }
 
         <h1 class="mb-4">
             <lc-icon [icon]="dataIcons.source" />
@@ -28,85 +26,57 @@
 
         <div class="mb-4">
             <div class="btn-group mb-4">
-                <button
-                    class="btn btn-primary"
-                    (click)="openNewEpisodeModal(newEpisodeModal)"
-                >
+                <button class="btn btn-primary" (click)="openNewEpisodeModal(newEpisodeModal)">
                     <lc-icon [icon]="actionIcons.create" />
                     Add a new episode
                 </button>
             </div>
-            <lc-episode-preview
-                *ngFor="
-                    let episode of source.episodes;
-                    trackBy: identify;
-                    first as isFirst;
-                    last as isLast
-                "
-                [episode]="episode"
-                [isFirst]="isFirst"
-                [isLast]="isLast"
-                (changeEpisodeOrder)="
-                    reorderEpisodes(source.episodes, episode.id, $event)
-                "
-            />
+            @for (episode of source.episodes; track identify($index, episode); let isFirst = $first; let isLast = $last) {
+                <lc-episode-preview [episode]="episode" [isFirst]="isFirst"
+                    [isLast]="isLast"
+                    (changeEpisodeOrder)="reorderEpisodes(source.episodes, episode.id, $event)" />
+            }
         </div>
-        <div *ngIf="source.episodes.length >= 5" class="btn-group">
-            <button
-                class="btn btn-primary"
-                (click)="openNewEpisodeModal(newEpisodeModal)"
-            >
-                <lc-icon [icon]="actionIcons.create" />
-                Add a new episode
-            </button>
-        </div>
-    </ng-container>
-
-    <ng-template #noSource>
+        @if (source.episodes.length >= 5) {
+            <div class="btn-group">
+                <button class="btn btn-primary" (click)="openNewEpisodeModal(newEpisodeModal)">
+                    <lc-icon [icon]="actionIcons.create" />
+                    Add a new episode
+                </button>
+            </div>
+        }
+    } @else {
         <lc-not-found entity="source" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}
 
 <ng-template #newEpisodeModal>
-    <lc-base-modal (dismiss)="closeModal()" *ngIf="(data$ | async)?.source as source">
-        <ng-container modal-header>
-            <h4 ngbAutofocus>Create new episode</h4>
-        </ng-container>
-        <ng-container modal-content>
-            <lc-new-episode-form
-                #newEpisodeForm
-                [sourceId]="source.id"
-                (mutationStarted)="mutationInProgress = true"
-                (episodeCreated)="closeAndNavigate($event)"
-            ></lc-new-episode-form>
-        </ng-container>
-        <ng-container modal-footer>
-            <button
-                type="button"
-                class="btn btn-primary"
-                (click)="newEpisodeForm.submit()"
-            >
-                Create
-                <div
-                    *ngIf="mutationInProgress"
-                    class="spinner-border spinner-border-sm"
-                >
-                    <span class="visually-hidden">Creating new episode...</span>
-                </div>
-            </button>
-            <button
-                type="button"
-                class="btn btn-secondary"
-                (click)="closeModal()"
-            >
-                Cancel
-            </button>
-        </ng-container>
-    </lc-base-modal>
+    @if ((data$ | async)?.source; as source) {
+        <lc-base-modal (dismiss)="closeModal()">
+            <ng-container modal-header>
+                <h4 ngbAutofocus>Create new episode</h4>
+            </ng-container>
+            <ng-container modal-content>
+                <lc-new-episode-form #newEpisodeForm [sourceId]="source.id" (mutationStarted)="mutationInProgress = true"
+                    (episodeCreated)="closeAndNavigate($event)"></lc-new-episode-form>
+            </ng-container>
+            <ng-container modal-footer>
+                <button type="button" class="btn btn-primary" (click)="newEpisodeForm.submit()">
+                    Create
+                    @if (mutationInProgress) {
+                        <div class="spinner-border spinner-border-sm">
+                            <span class="visually-hidden">Creating new episode...</span>
+                        </div>
+                    }
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                    Cancel
+                </button>
+            </ng-container>
+        </lc-base-modal>
+    }
 </ng-template>
