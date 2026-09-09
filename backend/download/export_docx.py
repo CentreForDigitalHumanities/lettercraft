@@ -8,6 +8,14 @@ from docx.document import Document as DocumentObject
 
 
 def save_docx(data: Dict, out: TextIOWrapper) -> None:
+    '''
+    Export data to a docx file.
+
+    Parameters:
+        data: serialised application data; this is the output of
+            `download.export_json.json_data`
+        out: output buffer
+    '''
     document = Document()
     _add_preamble(data["metadata"], document)
     for source in data['sources']:

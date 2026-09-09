@@ -26,10 +26,25 @@ SCHEMA_PATH = os.path.join(_here, "data.schema.json")
 
 
 def save_json(data: Dict, f: TextIOWrapper) -> None:
+    '''
+    Export application data to a JSON file.
+
+    Parameters:
+        data: Serialised application data; this is the output of `json_data`
+        f: Output buffer
+    '''
     json.dump(data, f, indent=2)
 
 
 def json_data(sources: QuerySet[Source], label: Optional[str] = None) -> Dict:
+    '''
+    Serialise application data to a JSON-ready dictionary.
+
+    Parameters:
+        sources: Queryset of Sources; controls what subset of the data is serialised.
+        label: Optional label to include in the metadata to identify this export (e.g.
+            version number)
+    '''
     data = _clean_serialised_data(_serialize(sources))
     data["metadata"] = _metadata(label=label)
     return data

@@ -40,7 +40,7 @@ class Command(BaseCommand):
         shutil.copyfile(README_PATH, dir / "README.md")
 
         with open(dir / "data.json", "w") as f:
-            save_json(data, f,)
+            save_json(data, f)
 
         shutil.copyfile(SCHEMA_PATH, dir / "data.schema.json")
 
