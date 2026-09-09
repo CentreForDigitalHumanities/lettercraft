@@ -13,7 +13,7 @@
         <lc-contributors [contributors]="source.contributors" />
 
         @if (source.descriptionText || source.image || source.reference) {
-            <section class="mt-5 mb-5">
+            <section class="mt-5 mb-4">
                 <h2 class="mb-4">About this source</h2>
 
                 <div class="clearfix">
@@ -38,6 +38,25 @@
                     </div>
                 }
             </section>
+        }
+
+        @if (source.caseStudies.length) {
+            <p class="fst-italic"><span class="fs-4 fst-normal">☞</span> View
+                <ng-container [ngPlural]="source.caseStudies.length">
+                    <ng-template ngPluralCase="1">case study</ng-template>
+                    <ng-template ngPluralCase="other">case studies</ng-template>
+                </ng-container>:
+                @for (caseStudy of source.caseStudies; track caseStudy.id) {
+                    <span class="fst-normal inline-list">
+                        <span class="inline-list-item">
+                            <a [routerLink]="['/case-studies', caseStudy.id]"
+                                class="link-offset-1 ms-1">
+                                {{caseStudy.name}}
+                            </a>
+                        </span>
+                    </span>
+                }
+            </p>
         }
 
         <section class="my-5">
