@@ -1,49 +1,58 @@
-<ng-container *ngIf="data$ | async as data; else loading">
-    <ng-container *ngIf="data.userDescription as user">
-        <lc-breadcrumb [breadcrumbs]="breadcrumbs(user)" />
+@if (data$ | async; as data) {
 
-        <div class="mb-4">
-            <h1>{{user.fullName}}</h1>
+@if (data.userDescription; as user) {
+    <lc-breadcrumb [breadcrumbs]="breadcrumbs(user)" />
 
-            <p class="lead">{{user.publicRole | sentenceCase }}</p>
-        </div>
+    <div class="mb-4">
+        <h1>{{user.fullName}}</h1>
 
-        <div class="clearfix">
-            <ng-container *ngIf="user.picture">
-                <img [src]="user.picture" alt="profile picture of {{user.fullName}}"
-                    class="float-end ms-5 me-4 mb-4 profile-picture">
-            </ng-container>
+        <p class="lead">{{user.publicRole | sentenceCase }}</p>
+    </div>
 
-            <div *ngIf="user.description" class="preserve-white-space mb-4"
-                >{{user.description}}</div>
-        </div>
+    <div class="clearfix">
+        @if (user.picture) {
+            <img [src]="user.picture" alt="profile picture of {{user.fullName}}"
+                class="float-end ms-5 me-4 mb-4 profile-picture">
+        }
 
-        <section *ngIf="user.caseStudies.length" class="mb-4">
+        @if (user.description) {
+            <div class="preserve-white-space mb-4">{{user.description}}</div>
+        }
+    </div>
+
+    @if (user.caseStudies.length) {
+        <section class="mb-4">
             <h2>Case studies</h2>
 
             <ul>
-                <li *ngFor="let caseStudy of user.caseStudies">
-                    <a [routerLink]="['case-studies', caseStudy.id]">{{caseStudy.name}}</a>
-                </li>
+                @for (caseStudy of user.caseStudies; track caseStudy.id) {
+                    <li>
+                        <a [routerLink]="['case-studies', caseStudy.id]">{{caseStudy.name}}</a>
+                    </li>
+                }
             </ul>
         </section>
+    }
 
-        <section *ngIf="user.contributedSources.length" class="mb-4">
+    @if (user.contributedSources.length) {
+        <section class="mb-4">
             <h2>Database contributions</h2>
 
             <p>{{user.fullName}} has worked on the following source texts:</p>
 
             <ul>
-                <li *ngFor="let source of user.contributedSources">
-                    <a [routerLink]="['/data/sources', source.id]">{{source.name}}</a>
-                </li>
+                @for (source of user.contributedSources; track source.id) {
+                    <li>
+                        <a [routerLink]="['/data/sources', source.id]">{{source.name}}</a>
+                    </li>
+                }
             </ul>
         </section>
-    </ng-container>
-</ng-container>
+    }
 
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -64,7 +63,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
             cookieName: "csrftoken",
             headerName: "X-CSRFToken",
         })),
-        provideAnimations(),
     ]
 })
 export class SharedModule { }

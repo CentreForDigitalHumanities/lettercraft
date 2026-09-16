@@ -7,33 +7,34 @@
         {{caseStudy.date | date:'longDate'}}
     </p>
 
-    <p class="lead" *ngIf="caseStudy.authors.length">
-        By
-        <ng-container *ngFor="let author of caseStudy.authors" class="inline-list">
-            <a [routerLink]="['/contributors', author.id]"
-                class="inline-list-item link-dark link-offset-1"
-                >{{author.fullName}}</a>
-        </ng-container>
-    </p>
+    @if (caseStudy.authors.length) {
+        <p class="lead">
+            By
+            @for (author of caseStudy.authors; track author.id) {
+            <ng-container class="inline-list">
+                <a [routerLink]="['/contributors', author.id]"
+                    class="inline-list-item link-dark link-offset-1">{{author.fullName}}</a>
+            </ng-container>
+            }
+        </p>
+    }
 
 
     @if (caseStudy.sources.length) {
         <p class="fst-italic"><span class="fs-4 fst-normal">☞</span> Browse in the database:
-            <span *ngFor="let source of caseStudy.sources"
-                class="fst-normal inline-list">
-                <span class="inline-list-item">
-                    <a [routerLink]="['/data/sources', source.id]"
-                        class="icon-link ms-1">
-                        <lc-icon [icon]="dataIcons.source" />
-                        {{source.name}}
-                    </a>
+            @for (source of caseStudy.sources; track source.id) {
+                <span class="fst-normal inline-list">
+                    <span class="inline-list-item">
+                        <a [routerLink]="['/data/sources', source.id]" class="icon-link ms-1">
+                            <lc-icon [icon]="dataIcons.source" />
+                            {{source.name}}
+                        </a>
+                    </span>
                 </span>
-            </span>
+            }
         </p>
     }
 
     <div lcFootnotes [innerHTML]="sanitizedContent(caseStudy)"
-        class="mt-4 mx-auto font-serif lh-medium extra-header-spacing"
-    ></div>
+        class="mt-4 mx-auto font-serif lh-medium extra-header-spacing"></div>
 }
-

@@ -3,11 +3,12 @@
         Select one or more structures by which the text identifies or contextualises the location.
     </p>
 
-    <lc-single-multi-select
-        *ngIf="structureOptions$ | async as options"
-        [formControl]="form.controls.structures"
-        [options]="options"
-        [placeholder]="'Select a structure...'"
-        [multiple]="true"
-    />
+    @if (structureOptions$ | async; as options) {
+        <lc-single-multi-select
+            [formControl]="form.controls.structures"
+            [options]="options"
+            [placeholder]="'Select a structure...'"
+            [multiple]="true"
+        />
+    }
 </form>
