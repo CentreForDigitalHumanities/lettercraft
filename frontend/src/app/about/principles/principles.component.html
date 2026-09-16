@@ -39,7 +39,7 @@
     lettercraft in Merovingian histories and saint-lives.
 </p>
 <p>
-    The project proceeds along two complementary pathways.
+    The project proceeds along three complementary pathways.
     First, it has established an <em>index of Merovingian epistolary terminology</em> that
     is sensitive to all (textual and non-textual) aspects of lettercraft.
     This index can be consulted in the <a [routerLink]="['/glossary']">glossary</a>
@@ -56,6 +56,23 @@
     communication took place, the diverse individuals and groups who participated in it,
     and the actions they performed. This dataset can be explored in the
     <a [routerLink]="['/data']">browse</a> interface.
+</p>
+<p>
+    Finally, the project has developed a number of case studies, focusing on the use of
+    letters in particular Merovingian texts.
+    Larger case studies have been published as peer-reviewed articles or book-chapters.
+    The full list can be consulted under ‘Output’.
+    <!-- TODO: add page + link here -->
+    The website also contains a series of shorter 1500-2000 word
+    <a [routerLink]="['/case-studies']">contributions</a>
+    by project members and graduate students who joined the project as research apprentices.
+    Originally conceived as blog posts, these contributions serve as a gateway into the
+    Merovingian corpus and its idiosyncrasies, highlighting certain epistolary practices
+    (secret letters),
+    narrative patterns
+    (<a href="https://lettercraft.hum.uu.nl/case-studies/6">saints hiding from mailmen</a>),
+    or research puzzles
+    (<a href="https://lettercraft.hum.uu.nl/case-studies/5">St Odilia’s scarlet ball</a>).
 </p>
 
 <h2 class="mt-4">Corpus</h2>
@@ -87,9 +104,11 @@
     narratives are (partly) situated in the Merovingian kingdoms (e.g. Stephen of Ripon’s
     <a href="https://lettercraft.hum.uu.nl/data/sources/45"><i>Vita Wilfrithi</i></a>,
     Bede’s <i>Historia ecclesiastica</i>).
+    <!-- TODO: add link when available -->
     Furthermore, project-members and student apprentices have occasionally used the
     database infrastructure to pursue study of early medieval texts not directly
-    associated with the Merovingian world (e.g. Eugippius’ <i>Vita Severini</i>).
+    associated with the Merovingian world (e.g. Eugippius’
+    <a href="https://lettercraft.hum.uu.nl/data/sources/63"><i>Vita Severini</i></a>).
     We have included these texts in the Lettercraft dataset as they offer valuable data of
     themselves as well as relevant points of comparison.
 </p>
@@ -138,6 +157,21 @@
 </ol>
 
 <p>
+    Epistolary communication tends to perpetuate itself:
+    letters trigger a response letter, gifts solicit a counter-gift, messengers delivering
+    an oral message are sent back with a reply.
+    Demarcating when one epistolary episode ends and another begins is thus a matter of
+    interpretation.
+    As a general rule, we have aimed to strike a balance between narrative coherence and
+    analytical feasibility.
+    Typically, a narrative story involving a letter and a response will be logged as one
+    episode.
+    However, if the chain of communication becomes too drawn out or complex, or if the
+    response takes place much later in the story, we will split the communication chain
+    over several episodes.
+</p>
+
+<p>
     Epistolary episodes are displayed with a fixed set of data fields.
     This includes a summary of the episode, a list of labels drawing attention to
     noteworthy narrative features (e.g. secret communication, female correspondent), and
@@ -156,11 +190,21 @@
     Each text lists the project members and student apprentices involved in the annotation
     process.
     Typically, a text would first be analysed using
-    <a href="https://about.brepolis.net/" target="_blank">Brepols’ full-text database search-tool</a>
-    to map out relevant epistolary terminology.
-    The Latin texts would then be read through and analysed in their entirety, aided, were
-    possible, by modern translations.
+    <a href="https://brepolis.net/" target="_blank">Brepols’ full-text database search-tool</a>:
+    annotators would use a working version of the Lettercraft glossary to search for
+    occurrences of relevant epistolary terminology.
+    Texts would be searched for Latin terms related to letters, messengers, gifts, and
+    actions of sending, receiving and transmitting.
+    After establishing a provisional list of relevant episodes for a text, annotators
+    would read through the latin texts in their entirety, aided, were
+    possible, by modern academic translations.
     The database entries were composed by filling in a digital annotation form developed
     by the Centre for Digital Humanities at Utrecht University.
     No generative AI was used to fill in the database forms.
+    Annotators would reports on their work in weekly project meetings. This ensured
+    consistency between annotators and offered a platform to discuss complex and dubious
+    episodes.
+    It also enabled the annotation rules to be finetuned as more data was processed.
+    All entries were checked and edited by a senior project member before they were
+    published.
 </p>
