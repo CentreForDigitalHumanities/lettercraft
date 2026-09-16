@@ -26,14 +26,13 @@ import { EpisodeViewComponent } from '../data/episode-view/episode-view.componen
 import { LocationViewComponent } from '../data/location-view/location-view.component';
 import { LetterViewComponent } from '../data/letter-view/letter-view.component';
 import { GiftViewComponent } from '../data/gift-view/gift-view.component';
-import { CaseStudiesListComponent } from '../case-studies/case-studies-list/case-studies-list.component';
-import { CaseStudyViewComponent } from '../case-studies/case-study-view/case-study-view.component';
 import { ContributorComponent } from '../contributors/contributor/contributor.component';
 import { ContributorsListComponent } from '../contributors/contributors-list/contributors-list.component';
 import { BrowseComponent } from '../data/browse/browse.component';
 import { CaseStudiesComponent } from '../case-studies/case-studies.component';
 import { GlossaryComponent } from '../glossary/glossary.component';
 import { PrinciplesComponent } from '../about/principles/principles.component';
+import { OutputComponent } from '../about/output/output.component';
 
 
 const routes: Routes = [
@@ -205,6 +204,11 @@ const routes: Routes = [
         path: 'principles',
         title: pageTitle('Principles'),
         component: PrinciplesComponent,
+    },
+    {
+        path: 'output',
+        title: pageTitle('Output'),
+        component: OutputComponent,
     },
     {
         path: '',
