@@ -1,21 +1,13 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
-
-    <ng-container *ngIf="data.agentDescription as agent; else noAgent">
-        <a
-            *ngIf="agent.editable"
-            class="float-end btn btn-light"
-            [routerLink]="['/data-entry/agents', agent.id]"
-        >
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this agent
-        </a>
-
-        <lc-object-page-header
-            [object]="data.agentDescription"
-            [icon]="agentIcon(data.agentDescription)"
-        />
-
+    @if (data.agentDescription; as agent) {
+        @if (agent.editable) {
+            <a class="float-end btn btn-light" [routerLink]="['/data-entry/agents', agent.id]">
+                <lc-icon [icon]="actionIcons.edit" />
+                Edit this agent
+            </a>
+        }
+        <lc-object-page-header [object]="data.agentDescription" [icon]="agentIcon(data.agentDescription)" />
         <lc-contributors [contributors]="agent.contributors" />
 
         <section class="mt-5">
@@ -27,16 +19,22 @@
                     {{ agent.isGroup ? 'Group' : 'Individual' }}
                 </dd>
 
-                <dt *ngIf="agent.gender">Gender</dt>
-                <dd *ngIf="agent.gender as gender" class="ms-4">
-                    <p>
-                        {{gender.gender | lowercase}}
-                        ({{gender.sourceMention | lowercase}})
-                    </p>
-                    <p *ngIf="gender.note">
-                        <small><i>Note: {{gender.note}} </i></small>
-                    </p>
-                </dd>
+                @if (agent.gender) {
+                    <dt>Gender</dt>
+                }
+                @if (agent.gender; as gender) {
+                    <dd class="ms-4">
+                        <p>
+                            {{gender.gender | lowercase}}
+                            ({{gender.sourceMention | lowercase}})
+                        </p>
+                        @if (gender.note) {
+                            <p>
+                                <small><i>Note: {{gender.note}} </i></small>
+                            </p>
+                        }
+                    </dd>
+                }
             </dl>
         </section>
 
@@ -67,53 +65,56 @@
         <section class="mt-5">
             <h2>Historical context</h2>
 
-            <ng-container *ngIf="agent.personReferences.length; else noReferences">
-                <ng-container *ngIf="agent.isGroup; else singularReference">
+            @if (agent.personReferences.length) {
+                @if (agent.isGroup) {
                     <p>
                         This group includes the following historical figures:
                     </p>
                     <ul>
-                        <li *ngFor="let ref of agent.personReferences">
-                            <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
-                            <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">(somewhat certain)</ng-container>
-                            <ng-container *ngIf="ref.certainty === Certainty.Uncertain">(uncertain)</ng-container>
-                            <ng-container *ngIf="ref.note">; <i>Note: {{ref.note}}</i></ng-container>
-                        </li>
+                        @for (ref of agent.personReferences; track ref.id) {
+                            <li>
+                                <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
+                                @if (ref.certainty === Certainty.SomewhatCertain) {
+                                    (somewhat certain)
+                                }
+                                @if (ref.certainty === Certainty.Uncertain) {
+                                    (uncertain)
+                                }
+                                @if (ref.note) {
+                                    ; <i>Note: {{ref.note}}</i>
+                                }
+                            </li>
+                        }
                     </ul>
-                </ng-container>
-                <ng-template #singularReference>
-                    <ng-container *ngIf="agent.personReferences[0] as ref">
+                } @else {
+                    @if (agent.personReferences[0]; as ref) {
                         <p>
                             This agent is a representation of
                             <a [routerLink]="['/data/historical-figures', ref.person.id]">
                                 {{ref.person.name}}</a>
-                            <ng-container *ngIf="ref.certainty === Certainty.SomewhatCertain">
+                            @if (ref.certainty === Certainty.SomewhatCertain) {
                                 (somewhat certain)
-                            </ng-container>
-                            <ng-container *ngIf="ref.certainty === Certainty.Uncertain">
+                            }
+                            @if (ref.certainty === Certainty.Uncertain) {
                                 (uncertain)
-                            </ng-container>.
-                            <i *ngIf="ref.note">Note: {{ref.note}}</i>
+                            }.
+                            @if (ref.note) {
+                                <i>Note: {{ref.note}}</i>
+                            }
                         </p>
-                    </ng-container>
-                </ng-template>
-            </ng-container>
-
-            <ng-template #noReferences>
+                    }
+                }
+            } @else {
                 <p><i>
                     This agent is not linked to any historic figures in the database.
                 </i></p>
-            </ng-template>
+            }
         </section>
-    </ng-container>
-
-    <ng-template #noAgent>
+    } @else {
         <lc-not-found entity="agent" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}

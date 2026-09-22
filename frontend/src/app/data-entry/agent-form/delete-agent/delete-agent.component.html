@@ -1,4 +1,6 @@
-<button class="btn btn-danger" *ngIf="id$ | async as id" (click)="openConfirm(id)">
-    <lc-icon [icon]="actionIcons.delete"></lc-icon>
-    Delete agent
-</button>
+@if (id$ | async; as id) {
+    <button class="btn btn-danger" (click)="openConfirm(id)">
+        <lc-icon [icon]="actionIcons.delete"></lc-icon>
+        Delete agent
+    </button>
+}

@@ -3,11 +3,12 @@
         Select one or more settlements by which the text identifies or contextualises the location.
     </p>
 
-    <lc-single-multi-select
-        *ngIf="settlementOptions$ | async as options"
-        [formControl]="form.controls.settlements"
-        [options]="options"
-        [placeholder]="'Select a settlement...'"
-        [multiple]="true"
-    />
+    @if (settlementOptions$ | async; as options) {
+        <lc-single-multi-select
+            [formControl]="form.controls.settlements"
+            [options]="options"
+            [placeholder]="'Select a settlement...'"
+            [multiple]="true"
+        />
+    }
 </form>

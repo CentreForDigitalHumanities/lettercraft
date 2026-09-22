@@ -1,4 +1,4 @@
-Django>=4.0.1,<5
+Django>=5.2.16,<6
 djangorestframework
 django-livereload-server
 django-revproxy>=0.10.0
@@ -16,3 +16,5 @@ Pillow
 django-prose-editor[sanitize]
 requests
 python-docx
+jsonschema
+PyYAML

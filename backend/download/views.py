@@ -20,6 +20,7 @@ class DownloadDocxView(APIView):
     def get(self, request, *args, **kwargs):
         sources = Source.objects.filter(is_public=True)
         buffer = io.BytesIO()
-        save_docx(sources, buffer)
+        data = json_data(sources)
+        save_docx(data, buffer)
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True, filename="lettercraft-data.docx")

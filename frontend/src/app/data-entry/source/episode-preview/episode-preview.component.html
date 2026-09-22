@@ -6,126 +6,122 @@
                 &nbsp;
                 {{ episode.name }}
                 <br />
-                <small *ngIf="episode.book || episode.chapter || episode.page" class="inline-list">
-                    <span *ngIf="episode.book" class="inline-list-item">book {{ episode.book }}</span>
-                    <span *ngIf="episode.chapter" class="inline-list-item">chapter {{ episode.chapter }}</span>
-                    <span *ngIf="episode.page" class="inline-list-item">page {{ episode.page }}</span>
-                </small>
+                @if (episode.book || episode.chapter || episode.page) {
+                    <small class="inline-list">
+                        @if (episode.book) {
+                            <span class="inline-list-item">book {{ episode.book }}</span>
+                        }
+                        @if (episode.chapter) {
+                            <span class="inline-list-item">chapter {{ episode.chapter }}</span>
+                        }
+                        @if (episode.page) {
+                            <span class="inline-list-item">page {{ episode.page }}</span>
+                        }
+                    </small>
+                }
             </div>
             <div class="button-group-wrapper">
-                <lc-order-button-group
-                    entityName="episode"
-                    [upDisabled]="isFirst"
-                    [downDisabled]="isLast"
-                    (changeOrder)="changeEpisodeOrder.emit($event)"
-                />
-                <lc-action-button-group
-                    [editLink]="['/', 'data-entry', 'episodes', episode.id]"
-                    (deleteAction)="onClickDelete(episode.id)"
-                    [showButtonText]="false"
-                />
+                <lc-order-button-group entityName="episode" [upDisabled]="isFirst" [downDisabled]="isLast"
+                    (changeOrder)="changeEpisodeOrder.emit($event)" />
+                <lc-action-button-group [editLink]="['/', 'data-entry', 'episodes', episode.id]"
+                    (deleteAction)="onClickDelete(episode.id)" [showButtonText]="false" />
             </div>
         </div>
     </div>
     <div class="card-body">
         <p>
-            <span *ngIf="episode.summary; else noSummary">{{episode.summary}}</span>
-            <ng-template #noSummary><i>(No summary added.)</i></ng-template>
+            @if (episode.summary) {
+                {{episode.summary}}
+            } @else {
+                <i>(No summary added.)</i>
+            }
         </p>
 
         <ul class="inline-list no-delimiter">
-            <li *ngFor="let category of episode.categories"
-                class="inline-list-item">
-                <span class="badge rounded-pill text-bg-burntorange">
-                    {{category.name}}
-                </span>
-            </li>
+            @for (category of episode.categories; track category.id) {
+                <li class="inline-list-item">
+                    <span class="badge rounded-pill text-bg-burntorange">
+                        {{category.name}}
+                    </span>
+                </li>
+            }
         </ul>
+
         <dl>
             <dt>Designators</dt>
-            <dd *ngIf="episode.designators.length > 0; else noValue" class="ms-4">
-                <ul class="inline-list">
-                    <li
-                        *ngFor="let designator of episode.designators"
-                        class="inline-list-item"
-                    >{{ designator }}</li>
-                </ul>
-            </dd>
+            @if (episode.designators.length > 0) {
+                <dd class="ms-4">
+                    <ul class="inline-list">
+                        @for (designator of episode.designators; track $index) {
+                            <li class="inline-list-item">{{ designator }}</li>
+                        }
+                    </ul>
+                </dd>
+            } @else {
+                <dd class="ms-4"><i>None</i></dd>
+            }
 
             <dt>Agents</dt>
-            <dd *ngIf="episode.agents.length > 0; else noValue" class="ms-4">
-                <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.agents"
-                        class="inline-list-item"
-                    >
-                        <a
-                            [routerLink]="['/', 'data-entry', 'agents', link.agent.id]"
-                            class="icon-link"
-                        >
-                            <lc-icon [icon]="agentIcon(link.agent)" />
-                            {{ link.agent.name }}
-                        </a>
-                    </li>
-                </ul>
-            </dd>
+            @if (episode.agents.length > 0) {
+                <dd class="ms-4">
+                    <ul class="inline-list">
+                        @for (link of episode.agents; track link) {
+                            <li class="inline-list-item">
+                                <a [routerLink]="['/', 'data-entry', 'agents', link.agent.id]" class="icon-link">
+                                    <lc-icon [icon]="agentIcon(link.agent)" />
+                                    {{ link.agent.name }}
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </dd>
+            } @else {
+                <dd class="ms-4"><i>None</i></dd>
+            }
 
             <dt>Locations</dt>
-            <dd *ngIf="episode.locations.length > 0; else noValue" class="ms-4">
-                <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.locations"
-                        class="inline-list-item"
-                    >
-                        <a
-                            [routerLink]="['/', 'data-entry', 'locations', link.location.id]"
-                            class="icon-link"
-                        >
-                            <lc-icon [icon]="locationIcon(link.location)" />
-                            {{ link.location.name }}
-                        </a>
-                    </li>
-                </ul>
-            </dd>
+            @if (episode.locations.length > 0) {
+                <dd class="ms-4">
+                    <ul class="inline-list">
+                        @for (link of episode.locations; track link) {
+                            <li class="inline-list-item">
+                                <a [routerLink]="['/', 'data-entry', 'locations', link.location.id]" class="icon-link">
+                                    <lc-icon [icon]="locationIcon(link.location)" />
+                                    {{ link.location.name }}
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </dd>
+            } @else {
+                <dd class="ms-4"><i>None</i></dd>
+            }
 
             <dt>Objects</dt>
-            <dd
-                *ngIf="
-                    episode.gifts.length > 0 || episode.letters.length > 0;
-                    else noValue
-                "
-                class="ms-4"
-            >
-                <ul class="inline-list">
-                    <li
-                        *ngFor="let link of episode.gifts"
-                        class="inline-list-item"
-                    >
-                        <a
-                            [routerLink]="['/', 'data-entry', 'gifts', link.gift.id]"
-                            class="icon-link"
-                        >
-                            <lc-icon [icon]="dataIcons.gift" />
-                            {{ link.gift.name }}
-                        </a>
-                    </li>
-                    <li
-                        *ngFor="let link of episode.letters"
-                        class="inline-list-item"
-                    >
-                        <a
-                            [routerLink]="['/data-entry', 'letters', link.letter.id]"
-                            class="icon-link"
-                        >
-                            <lc-icon [icon]="dataIcons.letter" />
-                            {{ link.letter.name }}
-                        </a>
-                    </li>
-                </ul>
-            </dd>
-            <ng-template #noValue>
+            @if (episode.gifts.length > 0 || episode.letters.length > 0) {
+                <dd class="ms-4">
+                    <ul class="inline-list">
+                        @for (link of episode.gifts; track link) {
+                            <li class="inline-list-item">
+                                <a [routerLink]="['/', 'data-entry', 'gifts', link.gift.id]" class="icon-link">
+                                    <lc-icon [icon]="dataIcons.gift" />
+                                    {{ link.gift.name }}
+                                </a>
+                            </li>
+                        }
+                        @for (link of episode.letters; track link) {
+                            <li class="inline-list-item">
+                                <a [routerLink]="['/data-entry', 'letters', link.letter.id]" class="icon-link">
+                                    <lc-icon [icon]="dataIcons.letter" />
+                                    {{ link.letter.name }}
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </dd>
+            } @else {
                 <dd class="ms-4"><i>None</i></dd>
-            </ng-template>
+            }
         </dl>
 
         <div class="d-flex justify-content-end">

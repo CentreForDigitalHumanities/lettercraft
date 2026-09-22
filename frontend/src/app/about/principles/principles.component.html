@@ -1,0 +1,209 @@
+<lc-breadcrumb [breadcrumbs]="breadcrumbs" />
+
+<div class="my-4">
+    <h1>Principles</h1>
+</div>
+
+<p>
+    This page describes the guiding principles for the Lettercraft project. We cover
+    the focus of the project, the selection of data, and the annotation process.
+</p>
+
+<h2 class="mt-4">Lettercraft</h2>
+
+<p>
+    How did early medieval societies use the letter and who were among its users?
+    The Lettercraft project approaches the early medieval letter as a performative medium,
+    whose communicative potential was defined principally by non-textual features: its
+    materiality, its ability to be publicly read out and talked over, and its potential
+    quickly to reach wide and diverse audiences.
+</p>
+<p>
+    The project submits that the letter was a far more inclusive medium than is commonly
+    assumed on the basis of its textual qualities.
+    Literacy or social status were not required to participate in what the project calls
+    <em>lettercraft</em>, i.e. the various performative actions (e.g. listening, speaking,
+    negotiating, gossiping) that along with writing and reading made up epistolary
+    communication.
+    The project aims to show, moreover, that due to its public nature and social range,
+    the letter was an essential tool of community-building and conflict-resolution in
+    medieval society.
+    As long as it was properly performed, a single letter could persuade an entire
+    community.
+</p>
+<p>
+    The project studies the performative potential of the letter in the context of the
+    Merovingian Kingdoms, 476-751 CE, whose communicative networks covered much of Europe.
+    Innovatively, it relies not on the surviving letter-collections, which showcase the
+    literary exploits of elite ecclesiastical men, but rather on descriptions of
+    lettercraft in Merovingian histories and saint-lives.
+</p>
+<p>
+    The project proceeds along three complementary pathways.
+    First, it has established an <em>index of Merovingian epistolary terminology</em> that
+    is sensitive to all (textual and non-textual) aspects of lettercraft.
+    This index can be consulted in the <a [routerLink]="['/glossary']">glossary</a>
+    provided on this webpage.
+</p>
+<p>
+    Second, the project is developing a <em>new open access dataset</em> of Merovingian
+    epistolary communication, which records descriptions of letter-use documented in
+    Merovingian narrative sources.
+    Significantly, it is a dataset not of letters and their textual contents, but of the
+    non-textual ‘metadata’ surrounding the epistolary process, including references to
+    participants, delivery, performance, gift-giving, materiality, and audience.
+    This enables users to analyse the social contexts in which early medieval epistolary
+    communication took place, the diverse individuals and groups who participated in it,
+    and the actions they performed. This dataset can be explored in the
+    <a [routerLink]="['/data']">browse</a> interface.
+</p>
+<p>
+    Finally, the project has developed a number of case studies, focusing on the use of
+    letters in particular Merovingian texts.
+    Larger case studies have been published as peer-reviewed articles or book-chapters.
+    The full list can be consulted under <a [routerLink]="['/output']">Output</a>.
+    The website also contains a series of shorter 1500-2000 word
+    <a [routerLink]="['/case-studies']">contributions</a>
+    by project members and graduate students who joined the project as research apprentices.
+    Originally conceived as blog posts, these contributions serve as a gateway into the
+    Merovingian corpus and its idiosyncrasies, highlighting certain epistolary practices
+    (secret letters),
+    narrative patterns
+    (<a href="https://lettercraft.hum.uu.nl/case-studies/6">saints hiding from mailmen</a>),
+    or research puzzles
+    (<a href="https://lettercraft.hum.uu.nl/case-studies/5">St Odilia’s scarlet ball</a>).
+</p>
+
+<h2 class="mt-4">Corpus</h2>
+
+<p>
+    The project’s principal source are the eight volumes of Merovingian narrative text
+    edited by Bruno Krusch and Wilhelm Levison for the Monumenta Germaniae Historica under
+    the header
+    <a href="https://www.dmgh.de/ss_rer_merov.htm" target="_blank">
+        <i>Scriptores rerum Merovingicarum</i>
+    </a>
+    (1885-1951), complemented with a smaller corpus of Merovingian texts not edited in
+    this collection.
+    NB: the annotation of this corpus is still ongoing.
+    A full list of texts presently included in the data is available on the
+    <a [routerLink]="['/data']">browse</a> page.
+    Specific information on date, authorship, editions and translations is given with each
+    individual text.
+</p>
+<p>
+    In terms of provenance, most of the texts in the database can be said to have
+    originated in the Frankish kingdoms under Merovingian rule in the period 450-750, but
+    we have followed the MGH editions in not keeping to a strict chronological or
+    geographical demarcation.
+    The dataset thus includes texts from later times, especially the Carolingian period
+    (e.g. Walafrid’s
+    <a href="https://lettercraft.hum.uu.nl/data/sources/42"><i>Vita Galli</i></a>
+    ), and texts from neighbouring regions whose
+    narratives are (partly) situated in the Merovingian kingdoms (e.g. Stephen of Ripon’s
+    <a href="https://lettercraft.hum.uu.nl/data/sources/45"><i>Vita Wilfrithi</i></a>,
+    Bede’s <i>Historia ecclesiastica</i>).
+    <!-- TODO: add link when available -->
+    Furthermore, project-members and student apprentices have occasionally used the
+    database infrastructure to pursue study of early medieval texts not directly
+    associated with the Merovingian world (e.g. Eugippius’
+    <a href="https://lettercraft.hum.uu.nl/data/sources/63"><i>Vita Severini</i></a>).
+    We have included these texts in the Lettercraft dataset as they offer valuable data of
+    themselves as well as relevant points of comparison.
+</p>
+
+<h2  class="mt-4">Data & data structure</h2>
+
+<p>
+    The dataset consists of narrative descriptions of epistolary communication.
+    Some descriptions recount historical events.
+    Others are partly or entirely fictional.
+    All were composed retrospectively and from a particular political or literary agenda.
+    The data collected in the database should thus be characterised as narrative rather
+    than historical.
+</p>
+
+<p>
+    The data is organised per source text.
+    Within a text, the principal unit of analysis is the <i>epistolary episode</i>, a
+    narrative segment in which some form of epistolary communication takes place.
+    In order for an epistolary episode to have been incorporated in the database, one of
+    four criteria was met:
+</p>
+
+<ol>
+    <li>
+        The passage contains an explicit reference to a letter, typically expressed by the
+        use of a relevant Latin term for letter as mapped out in the glossary.
+    </li>
+    <li>
+        The passage suggests or implies the use of a letter, typically expressed by the
+        use of a relevant Latin verb for sending, receiving, ordering, summoning, or
+        inviting, as listed in the glossary.
+    </li>
+    <li>
+        The passage contains an explicit reference to a messenger or legate, typically
+        expressed  by the use of a relevant Latin term for messenger as mapped out in the
+        glossary.
+    </li>
+    <li>
+        The passage explicitly refers to ‘something’ being sent, delivered or received,
+        typically expressed by the use of a relevant Latin verb for sending or receiving
+        as listed in the glossary. NB: this covers both material things (e.g. letters,
+        gifts, other objects and  written documents) and certain immaterial communications
+        (e.g. an oral message, a vision)
+    </li>
+</ol>
+
+<p>
+    Epistolary communication tends to perpetuate itself:
+    letters trigger a response letter, gifts solicit a counter-gift, messengers delivering
+    an oral message are sent back with a reply.
+    Demarcating when one epistolary episode ends and another begins is thus a matter of
+    interpretation.
+    As a general rule, we have aimed to strike a balance between narrative coherence and
+    analytical feasibility.
+    Typically, a narrative story involving a letter and a response will be logged as one
+    episode.
+    However, if the chain of communication becomes too drawn out or complex, or if the
+    response takes place much later in the story, we will split the communication chain
+    over several episodes.
+</p>
+
+<p>
+    Epistolary episodes are displayed with a fixed set of data fields.
+    This includes a summary of the episode, a list of labels drawing attention to
+    noteworthy narrative features (e.g. secret communication, female correspondent), and
+    a list of so-called designators, i.e. relevant Latin terms used to describe the
+    epistolary process.
+    Furthermore, each episode gives a list of the narrative agents, letters, gifts, and
+    locations that are featured across the episode.
+    The browse interface allows users to search the corpus for keywords, as well as for
+    specific designators, agents, letters, gifts and locations.
+</p>
+
+<h2 class="mt-4">Data collection</h2>
+
+<p>
+    The data was collected and annotated by hand.
+    Each text lists the project members and student apprentices involved in the annotation
+    process.
+    Typically, a text would first be analysed using
+    <a href="https://brepolis.net/" target="_blank">Brepols’ full-text database search-tool</a>:
+    annotators would use a working version of the Lettercraft glossary to search for
+    occurrences of relevant epistolary terminology.
+    Texts would be searched for Latin terms related to letters, messengers, gifts, and
+    actions of sending, receiving and transmitting.
+    After establishing a provisional list of relevant episodes for a text, annotators
+    would read through the latin texts in their entirety, aided, were
+    possible, by modern academic translations.
+    The database entries were composed by filling in a digital annotation form developed
+    by the Centre for Digital Humanities at Utrecht University.
+    No generative AI was used to fill in the database forms.
+    Annotators would reports on their work in weekly project meetings. This ensured
+    consistency between annotators and offered a platform to discuss complex and dubious
+    episodes.
+    It also enabled the annotation rules to be finetuned as more data was processed.
+    All entries were checked and edited by a senior project member before they were
+    published.
+</p>

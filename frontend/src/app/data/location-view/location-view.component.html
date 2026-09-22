@@ -1,12 +1,14 @@
-<ng-container *ngIf="data$ | async as data; else loading">
+@if (data$ | async; as data) {
     <lc-breadcrumb [breadcrumbs]="makeBreadcrumbs(data)" />
 
-    <ng-container *ngIf="data.spaceDescription as location; else noLocation">
-        <a class="float-end btn btn-light" *ngIf="location.editable"
-            [routerLink]="['/data-entry/locations', location.id]">
-            <lc-icon [icon]="actionIcons.edit" />
-            Edit this location
-        </a>
+    @if (data.spaceDescription; as location) {
+        @if (location.editable) {
+            <a class="float-end btn btn-light"
+                [routerLink]="['/data-entry/locations', location.id]">
+                <lc-icon [icon]="actionIcons.edit" />
+                Edit this location
+            </a>
+        }
 
         <lc-object-page-header [object]="location" [icon]="locationIcon(location)" />
 
@@ -44,45 +46,55 @@
             <dl>
                 <dt>Regions</dt>
                 <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.regionFields.length; else noItems">
-                        <li *ngFor="let region of location.regionFields" class="inline-list-item">
-                            {{region.region.name}}
-                        </li>
-                    </ul>
+                    @if (location.regionFields.length) {
+                        <ul class="inline-list">
+                            @for (region of location.regionFields; track region.id) {
+                                <li class="inline-list-item">
+                                    {{region.region.name}}
+                                </li>
+                            }
+                        </ul>
+                    } @else {
+                        <i>None</i>
+                    }
                 </dd>
 
                 <dt>Settlements</dt>
                 <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.settlementFields.length; else noItems">
-                        <li *ngFor="let settlement of location.settlementFields" class="inline-list-item">
-                            {{settlement.settlement.name}}
-                        </li>
-                    </ul>
+                    @if (location.settlementFields.length) {
+                        <ul class="inline-list">
+                            @for (settlement of location.settlementFields; track settlement.id) {
+                                <li class="inline-list-item">
+                                    {{settlement.settlement.name}}
+                                </li>
+                            }
+                        </ul>
+                    } @else {
+                        <i>None</i>
+                    }
                 </dd>
 
                 <dt>Structures</dt>
                 <dd class="ms-4">
-                    <ul class="inline-list" *ngIf="location.structureFields.length; else noItems">
-                        <li *ngFor="let structure of location.structureFields" class="inline-list-item">
-                            {{structure.structure.name}}
-                        </li>
-                    </ul>
+                    @if (location.structureFields.length) {
+                        <ul class="inline-list">
+                            @for (structure of location.structureFields; track structure.id) {
+                                <li class="inline-list-item">
+                                    {{structure.structure.name}}
+                                </li>
+                            }
+                        </ul>
+                    } @else {
+                        <i>None</i>
+                    }
                 </dd>
-
-                <ng-template #noItems>
-                    <i>None</i>
-                </ng-template>
             </dl>
         </section>
-    </ng-container>
-
-    <ng-template #noLocation>
+    } @else {
         <lc-not-found entity="location" [id]="id$ | async" />
-    </ng-template>
-</ng-container>
-
-<ng-template #loading>
+    }
+} @else {
     <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div>
-</ng-template>
+}
