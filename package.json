@@ -36,8 +36,5 @@
         "start-back-p": "cd backend && python manage.py runserver --settings production --insecure --pythonpath ..",
         "start-p": "yarn static-p && yarn watch-front-p & yarn start-back-p",
         "stop-back": "kill $(lsof -t -i:8000)"
-    },
-    "devDependencies": {
-        "@angular/cli": ">=15 <16"
     }
 }
