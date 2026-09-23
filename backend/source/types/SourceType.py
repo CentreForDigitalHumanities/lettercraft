@@ -21,6 +21,8 @@ from space.types.SpaceDescriptionType import SpaceDescriptionType
 from user.models import User
 from user.types.UserType import UserType
 from user.permissions import can_edit_source, visible_condition
+from case_study.models import CaseStudy
+from case_study.types.CaseStudyType import CaseStudyType
 
 from source.types.SourceImageType import SourceImageType
 from graphql_app.utils import CharInFilter, search_filter
@@ -60,6 +62,7 @@ class SourceType(DjangoObjectType):
     locations = List(NonNull(SpaceDescriptionType), required=True)
     editable = Boolean(required=True)
     contributors = List(NonNull(UserType), required=True)
+    case_studies = List(NonNull(CaseStudyType), required=True)
 
 
     class Meta:
@@ -120,3 +123,10 @@ class SourceType(DjangoObjectType):
     def resolve_image(parent: Source, info: ResolveInfo) -> Optional[SourceImage]:
         if parent.images.exists():
             return parent.images.first()
+
+    @staticmethod
+    def resolve_case_studies(parent: Source, info: ResolveInfo) -> QuerySet[CaseStudy]:
+        related = CaseStudy.objects.filter(sources=parent)
+        return CaseStudyType.get_queryset(related, info)
+
+

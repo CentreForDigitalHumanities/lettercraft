@@ -31,6 +31,10 @@ query ViewSource($id: ID!) {
             id
             fullName
         }
+        caseStudies {
+            id
+            name
+        }
     }
 }
 
