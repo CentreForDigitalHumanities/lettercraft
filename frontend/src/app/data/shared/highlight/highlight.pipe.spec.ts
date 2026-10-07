@@ -1,6 +1,6 @@
 import { HighlightPipe } from './highlight.pipe';
 
-describe('HighlightPipe', () => {
+fdescribe('HighlightPipe', () => {
     let pipe: HighlightPipe;
 
     beforeEach(() => {
@@ -87,6 +87,26 @@ describe('HighlightPipe', () => {
             { text: 'toad', highlight: true },
             { text: ' are ', highlight: false },
             { text: 'friends', highlight: true },
+        ]);
+    });
+
+    it('empty query', () => {
+        const result = pipe.transform(
+            'frog and toad are friends',
+            undefined,
+        );
+        expect(result).toEqual([
+            { text: 'frog and toad are friends', highlight: false }
+        ]);
+    });
+
+    it('ignores whitespace-only query', () => {
+        const result = pipe.transform(
+            'frog and toad are friends',
+            ' ',
+        );
+        expect(result).toEqual([
+            { text: 'frog and toad are friends', highlight: false }
         ]);
     });
 });

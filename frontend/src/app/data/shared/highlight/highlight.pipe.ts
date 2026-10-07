@@ -17,9 +17,10 @@ interface HighlightRange {
 export class HighlightPipe implements PipeTransform {
 
     transform(value: string, query?: string): Segment[] {
-        if (!query) {
+        if (!query || !query.trim()) {
             return this.toSegments(value, []);
         }
+
         const matches = this.findMatches(value, query);
         const ranges = this.matchRanges(matches);
         return this.toSegments(value, ranges);
