@@ -66,4 +66,27 @@ describe('HighlightPipe', () => {
             { text: ' are friends', highlight: false },
         ]);
     });
+
+    it('escapes regex queries', () => {
+        const result = pipe.transform(
+            'frog and toad are friends',
+            '.*',
+        );
+        expect(result).toEqual([
+            { text: 'frog and toad are friends', highlight: false },
+        ]);
+    });
+
+    it('handles overlapping matches', () => {
+        const result = pipe.transform(
+            'frog and toad are friends',
+            'friend toad friends',
+        );
+        expect(result).toEqual([
+            { text: 'frog and ', highlight: false },
+            { text: 'toad', highlight: true },
+            { text: ' are ', highlight: false },
+            { text: 'friends', highlight: true },
+        ]);
+    });
 });
