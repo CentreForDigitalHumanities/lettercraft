@@ -1,5 +1,9 @@
 @let segments = text() | highlight:query();
 @for (segment of segments; track $index) {
-    @if (segment.highlight) {<mark ngPreserveWhitespaces>{{segment.text}}</mark>}
-    @else {<ng-container ngPreserveWhitespaces>{{segment.text}}</ng-container>}
+    @if (segment.highlight) {
+        <mark class="search-highlight" ngPreserveWhitespaces>{{segment.text}}</mark>
+    }
+    @else {
+        <ng-container ngPreserveWhitespaces>{{segment.text}}</ng-container>
+    }
 }

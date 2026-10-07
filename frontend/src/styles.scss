@@ -87,6 +87,8 @@ figure {
 
 // search highlights
 
-::highlight(search-highlight) {
+mark.search-highlight, ::highlight(search-highlight) {
+    padding: 0;
+	color: var(--bs-highlight-color);
     background-color: var(--bs-highlight-bg);
 }
