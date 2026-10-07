@@ -40,7 +40,8 @@
             @if (item.description) {
                 <div class="block">
                     @if (item.type == 'source') {
-                        <div class="source-description" [innerHTML]="item.description"></div>
+                        <div class="source-description" [innerHTML]="item.description"
+                            lcShowHighlight [query]="query()"></div>
                     } @else {
                         @let paragraphs = item.description | paragraph;
                         @for (par of paragraphs; track $index) {

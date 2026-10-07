@@ -16,6 +16,7 @@ import { DownloadComponent } from './download/download.component';
 import { SearchBarComponent } from './shared/search-bar/search-bar.component';
 import { HighlightTextComponent } from './shared/highlight-text/highlight-text.component';
 import { ParagraphPipe } from './shared/paragraph/paragraph.pipe';
+import { ShowHighlightDirective } from './shared/show-highlight/show-highlight.directive';
 
 @NgModule({
     declarations: [
@@ -35,10 +36,11 @@ import { ParagraphPipe } from './shared/paragraph/paragraph.pipe';
         SearchBarComponent,
     ],
     imports: [
-        SharedModule,
-        HighlightTextComponent,
-        ParagraphPipe,
-    ],
+    SharedModule,
+    HighlightTextComponent,
+    ParagraphPipe,
+    ShowHighlightDirective
+],
     exports: [
         AgentViewComponent,
         SourceViewComponent,

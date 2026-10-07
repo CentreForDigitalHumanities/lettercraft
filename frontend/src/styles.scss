@@ -84,3 +84,9 @@ figure {
 .card .card-header:last-child {
     border-bottom: none;
 }
+
+// search highlights
+
+::highlight(search-highlight) {
+    background-color: var(--bs-highlight-bg);
+}
