@@ -4,7 +4,7 @@
         <h3 class="h5 mb-0">
             <a class="icon-link stretched-link text-decoration-none" [routerLink]="[item.link]">
                 <lc-icon [icon]="item.icon" />
-                {{ item.name }}
+                <lc-highlight-text [segments]="item.name | highlight:query()" />
             </a>
         </h3>
         @if (item.type == 'episode' || (item.type == 'entity' && item.source)) {
@@ -42,7 +42,10 @@
                     @if (item.type == 'source') {
                         <div class="source-description" [innerHTML]="item.description"></div>
                     } @else {
-                        <p>{{ item.description }}</p>
+                        @let paragraphs = item.description | paragraph;
+                        @for (par of paragraphs; track $index) {
+                            <p><lc-highlight-text [segments]="par | highlight:query()" /></p>
+                        }
                     }
                 </p>
             }

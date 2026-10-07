@@ -45,6 +45,10 @@ export class BrowseComponent {
         shareReplay(1),
     );
 
+    public query$ = this.searchValue$.pipe(
+        map(value => value.searchTerm),
+    );
+
     constructor(
         private searchQuery: BrowseSearchGQL,
         private searchService: SearchService,

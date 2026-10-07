@@ -38,7 +38,8 @@
                                 <div class="list-group">
                                     <lc-paginator [pageResult]="pageResult" />
                                     @for (item of pageResult.pageData$ | async; track item.id) {
-                                        <lc-browse-list-item [listItem]="filterItem()(item)" />
+                                        <lc-browse-list-item [listItem]="filterItem()(item)"
+                                            [query]="query()" />
                                     }
                                     <lc-paginator [pageResult]="pageResult" />
                                 </div>

@@ -12,6 +12,7 @@ import { BrowseListItem } from './browse-list-item';
 })
 export class BrowseListItemComponent {
     public readonly listItem = input.required<BrowseListItem>();
+    public query = input<string>();
 
     public dataIcons = dataIcons;
 
