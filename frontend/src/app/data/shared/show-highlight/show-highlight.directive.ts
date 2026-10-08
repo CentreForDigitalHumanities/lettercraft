@@ -1,6 +1,6 @@
 import { Directive, effect, ElementRef, inject, input, OnDestroy } from '@angular/core';
-import { HighlightPipe } from '../highlight/highlight.pipe';
 import { HighlightService } from '@services/highlight.service';
+import { getRanges } from '../../utils/highlight';
 
 @Directive({
     selector: '[lcShowHighlight]',
@@ -9,7 +9,6 @@ export class ShowHighlightDirective implements OnDestroy {
     query = input<string>();
 
     private elementRef: ElementRef<HTMLElement> = inject(ElementRef);
-    private highlighter: HighlightPipe = new HighlightPipe();
     private highlightService = inject(HighlightService);
     private ranges: Range[] = [];
 
@@ -37,7 +36,7 @@ export class ShowHighlightDirective implements OnDestroy {
         if (node.nodeType === Node.TEXT_NODE && node.textContent) {
 
             const text = node.textContent;
-            const matches = this.highlighter.getRanges(text, query);
+            const matches = getRanges(text, query);
             if (matches.length) {
                 matches.forEach(match => {
                     const range = new Range();

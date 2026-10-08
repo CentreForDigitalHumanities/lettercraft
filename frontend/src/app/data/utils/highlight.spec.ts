@@ -1,14 +1,10 @@
-import { HighlightPipe } from './highlight.pipe';
+import { highlightSegments } from "./highlight";
 
-fdescribe('HighlightPipe', () => {
-    let pipe: HighlightPipe;
 
-    beforeEach(() => {
-        pipe = new HighlightPipe();
-    });
+describe('highlightSegments', () => {
 
     it('handles no matches', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             'snail',
         );
@@ -18,7 +14,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('highlights query match', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             'toad',
         );
@@ -30,7 +26,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('is not case-sensitive', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'Frog and Toad are Friends',
             'toad',
         );
@@ -42,7 +38,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('highlights multiple matches', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'toad and toad are friends',
             'toad',
         );
@@ -55,7 +51,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('highlights multi-word queries', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             'toad frog',
         );
@@ -68,7 +64,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('escapes regex queries', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             '.*',
         );
@@ -78,7 +74,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('handles overlapping matches', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             'friend toad friends',
         );
@@ -91,7 +87,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('empty query', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             undefined,
         );
@@ -101,7 +97,7 @@ fdescribe('HighlightPipe', () => {
     });
 
     it('ignores whitespace-only query', () => {
-        const result = pipe.transform(
+        const result = highlightSegments(
             'frog and toad are friends',
             ' ',
         );
