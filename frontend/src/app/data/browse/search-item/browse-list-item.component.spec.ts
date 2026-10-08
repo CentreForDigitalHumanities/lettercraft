@@ -10,8 +10,8 @@ describe('BrowseListItemComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [BrowseListItemComponent, TextHighlightComponent],
-            imports: [SharedTestingModule]
+            declarations: [BrowseListItemComponent],
+            imports: [SharedTestingModule, TextHighlightComponent]
         })
             .compileComponents();
 

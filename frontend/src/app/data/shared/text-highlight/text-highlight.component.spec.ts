@@ -13,11 +13,8 @@ describe('TextHighlightComponent', () => {
             .compileComponents();
 
         fixture = TestBed.createComponent(TextHighlightComponent);
-        fixture.componentRef.setInput('segments', [
-            { text: 'frog and ', highlight: false },
-            { text: 'toad', highlight: true },
-            { text: ' are friends', highlight: false },
-        ]);
+        fixture.componentRef.setInput('text', 'frog and toad are friends');
+        fixture.componentRef.setInput('query', 'toad');
         fixture.detectChanges();
         component = fixture.componentInstance;
         fixture.detectChanges();
