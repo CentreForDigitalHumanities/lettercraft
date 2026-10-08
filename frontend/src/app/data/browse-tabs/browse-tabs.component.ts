@@ -67,6 +67,7 @@ type BrowsePageResult =
     styleUrl: './browse-tabs.component.scss'
 })
 export class BrowseTabsComponent {
+    query = input<string>();
     data = input.required<TabData | null>();
     hideSource = input<boolean>(false);
     tabs = computed<SearchFocus[]>(() => {

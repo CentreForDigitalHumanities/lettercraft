@@ -1,0 +1,8 @@
+@for (segment of segments(); track $index) {
+    @if (segment.highlight) {
+        <mark class="search-highlight" ngPreserveWhitespaces>{{segment.text}}</mark>
+    }
+    @else {
+        <ng-container ngPreserveWhitespaces>{{segment.text}}</ng-container>
+    }
+}
