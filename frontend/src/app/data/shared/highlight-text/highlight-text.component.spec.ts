@@ -17,7 +17,8 @@ describe('HighlightTextComponent', () => {
             { text: 'frog and ', highlight: false },
             { text: 'toad', highlight: true },
             { text: ' are friends', highlight: false },
-        ])
+        ]);
+        fixture.detectChanges();
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
