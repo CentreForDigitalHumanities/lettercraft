@@ -15,7 +15,6 @@ import { BrowseTabsComponent } from './browse-tabs/browse-tabs.component';
 import { DownloadComponent } from './download/download.component';
 import { SearchBarComponent } from './shared/search-bar/search-bar.component';
 import { TextHighlightComponent } from './shared/text-highlight/text-highlight.component';
-import { ParagraphPipe } from './shared/paragraph/paragraph.pipe';
 import { DeepHighlightDirective } from './shared/deep-highlight/deep-highlight.directive';
 
 @NgModule({
@@ -38,7 +37,6 @@ import { DeepHighlightDirective } from './shared/deep-highlight/deep-highlight.d
     imports: [
         SharedModule,
         DeepHighlightDirective,
-        ParagraphPipe,
         TextHighlightComponent,
     ],
     exports: [

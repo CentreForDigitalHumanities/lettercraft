@@ -43,7 +43,7 @@
                         <div class="source-description" [innerHTML]="item.description"
                             lcDeepHighlight [query]="query()"></div>
                     } @else {
-                        @let paragraphs = item.description | paragraph;
+                        @let paragraphs = splitParagraphs(item.description);
                         @for (par of paragraphs; track $index) {
                             <p><lc-text-highlight [text]="par" [query]="query()" /></p>
                         }

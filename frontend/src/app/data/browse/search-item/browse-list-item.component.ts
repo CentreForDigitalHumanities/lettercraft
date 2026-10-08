@@ -30,4 +30,8 @@ export class BrowseListItemComponent {
     public hasSourceLocation(episode: Pick<EpisodeType, 'book' | 'chapter' | 'page'>): boolean {
         return !!(episode.book || episode.chapter || episode.page);
     }
+
+    splitParagraphs(value: string) {
+        return value.split(/\n+/)
+    }
 }
