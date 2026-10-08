@@ -4,7 +4,7 @@
         <h3 class="h5 mb-0">
             <a class="icon-link stretched-link text-decoration-none" [routerLink]="[item.link]">
                 <lc-icon [icon]="item.icon" />
-                <lc-highlight-text [text]="item.name" [query]="query()" />
+                <lc-text-highlight [text]="item.name" [query]="query()" />
             </a>
         </h3>
         @if (item.type == 'episode' || (item.type == 'entity' && item.source)) {
@@ -41,11 +41,11 @@
                 <div class="block">
                     @if (item.type == 'source') {
                         <div class="source-description" [innerHTML]="item.description"
-                            lcShowHighlight [query]="query()"></div>
+                            lcDeepHighlight [query]="query()"></div>
                     } @else {
                         @let paragraphs = item.description | paragraph;
                         @for (par of paragraphs; track $index) {
-                            <p><lc-highlight-text [text]="par" [query]="query()" /></p>
+                            <p><lc-text-highlight [text]="par" [query]="query()" /></p>
                         }
                     }
                 </div>

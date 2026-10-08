@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BrowseListItemComponent } from './browse-list-item.component';
 import { SharedTestingModule } from '@shared/shared-testing.module';
-import { HighlightTextComponent } from '../../shared/highlight-text/highlight-text.component';
+import { TextHighlightComponent } from '../../shared/text-highlight/text-highlight.component';
 
 describe('BrowseListItemComponent', () => {
     let component: BrowseListItemComponent;
@@ -10,7 +10,7 @@ describe('BrowseListItemComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [BrowseListItemComponent, HighlightTextComponent],
+            declarations: [BrowseListItemComponent, TextHighlightComponent],
             imports: [SharedTestingModule]
         })
             .compileComponents();

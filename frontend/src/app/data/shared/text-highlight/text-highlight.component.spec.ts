@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HighlightTextComponent } from './highlight-text.component';
+import { TextHighlightComponent } from './text-highlight.component';
 
-describe('HighlightTextComponent', () => {
-    let component: HighlightTextComponent;
-    let fixture: ComponentFixture<HighlightTextComponent>;
+describe('TextHighlightComponent', () => {
+    let component: TextHighlightComponent;
+    let fixture: ComponentFixture<TextHighlightComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [HighlightTextComponent]
+            imports: [TextHighlightComponent]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(HighlightTextComponent);
+        fixture = TestBed.createComponent(TextHighlightComponent);
         fixture.componentRef.setInput('segments', [
             { text: 'frog and ', highlight: false },
             { text: 'toad', highlight: true },

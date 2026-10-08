@@ -1,5 +1,5 @@
 import { Component, signal, viewChild } from '@angular/core';
-import { ShowHighlightDirective } from './show-highlight.directive';
+import { DeepHighlightDirective } from './deep-highlight.directive';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HighlightService } from '@services/highlight.service';
 import _ from 'underscore';
@@ -7,20 +7,20 @@ import _ from 'underscore';
 
 @Component({
     template: `
-    <div lcShowHighlight [query]="query()">
+    <div lcDeepHighlight [query]="query()">
         <p>This is an <i>example</i> for testing.</p>
         <p>This is another <i>test</i> paragraph.</p>
     </div>
     `,
-    imports: [ShowHighlightDirective],
+    imports: [DeepHighlightDirective],
     providers: [HighlightService],
 })
 class HighlightTestComponent {
     query = signal<string>('');
-    directive = viewChild(ShowHighlightDirective);
+    directive = viewChild(DeepHighlightDirective);
 }
 
-fdescribe('ShowHighlightDirective', () => {
+describe('DeepHighlightDirective', () => {
     let fixture: ComponentFixture<HighlightTestComponent>;
     let component: HighlightTestComponent;
 

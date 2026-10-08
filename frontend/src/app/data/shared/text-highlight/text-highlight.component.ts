@@ -2,12 +2,12 @@ import { Component, computed, input } from '@angular/core';
 import { highlightSegments } from '../../utils/highlight';
 
 @Component({
-    selector: 'lc-highlight-text',
+    selector: 'lc-text-highlight',
     imports: [],
-    templateUrl: './highlight-text.component.html',
-    styleUrl: './highlight-text.component.scss',
+    templateUrl: './text-highlight.component.html',
+    styleUrl: './text-highlight.component.scss',
 })
-export class HighlightTextComponent {
+export class TextHighlightComponent {
     text = input.required<string>();
     query = input<string>();
 

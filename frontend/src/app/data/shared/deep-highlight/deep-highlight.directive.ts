@@ -3,9 +3,9 @@ import { HighlightService } from '@services/highlight.service';
 import { getRanges } from '../../utils/highlight';
 
 @Directive({
-    selector: '[lcShowHighlight]',
+    selector: '[lcDeepHighlight]',
 })
-export class ShowHighlightDirective implements OnDestroy {
+export class DeepHighlightDirective implements OnDestroy {
     query = input<string>();
 
     private elementRef: ElementRef<HTMLElement> = inject(ElementRef);
