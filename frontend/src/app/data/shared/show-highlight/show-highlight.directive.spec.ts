@@ -1,8 +1,46 @@
+import { Component, signal, viewChild } from '@angular/core';
 import { ShowHighlightDirective } from './show-highlight.directive';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HighlightService } from '@services/highlight.service';
+import _ from 'underscore';
 
-describe('ShowHighlightDirective', () => {
-  it('should create an instance', () => {
-    const directive = new ShowHighlightDirective();
-    expect(directive).toBeTruthy();
-  });
+
+@Component({
+    template: `
+    <div lcShowHighlight [query]="query()">
+        <p>This is an <i>example</i> for testing.</p>
+        <p>This is another <i>test</i> paragraph.</p>
+    </div>
+    `,
+    imports: [ShowHighlightDirective],
+    providers: [HighlightService],
+})
+class HighlightTestComponent {
+    query = signal<string>('');
+    directive = viewChild(ShowHighlightDirective);
+}
+
+fdescribe('ShowHighlightDirective', () => {
+    let fixture: ComponentFixture<HighlightTestComponent>;
+    let component: HighlightTestComponent;
+
+    beforeEach(async () => {
+        fixture = TestBed.createComponent(HighlightTestComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('creates an instance', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('updates highlight ranges', () => {
+        component.query.set('test');
+        fixture.detectChanges();
+        const highlight = (CSS.highlights as unknown as any).entries().next().value;
+        expect(highlight).toBeTruthy();
+        const first = highlight.entries().next().value;
+        expect(first).toBeTruthy();
+        const second = highlight.entries().next().value;
+        expect(second).toBeTruthy();
+    });
 });

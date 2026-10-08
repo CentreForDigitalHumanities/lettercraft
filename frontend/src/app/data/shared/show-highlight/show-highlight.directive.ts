@@ -16,38 +16,59 @@ export class ShowHighlightDirective implements OnDestroy {
         effect(() => this.makeHighlights(this.query()));
     }
 
+
     ngOnDestroy(): void {
         this.clearHighlights();
     }
 
+
     makeHighlights(query?: string) {
         this.clearHighlights();
-        const el = this.elementRef.nativeElement;
-        this.addHighlightRanges(el, query);
+        if (query) {
+            const el = this.elementRef.nativeElement;
+            const ranges = this.nodeHighlightRanges(el, query);
+            this.ranges = this.ranges.concat(ranges);
+        }
         this.highlightService.add(...this.ranges);
     }
+
 
     clearHighlights() {
         this.highlightService.remove(...this.ranges);
         this.ranges = [];
     }
 
-    private addHighlightRanges(node: Node, query?: string) {
-        if (node.nodeType === Node.TEXT_NODE && node.textContent) {
 
+    private nodeHighlightRanges(node: Node, query: string): Range[] {
+        let ranges: Range[] = [];
+        ranges = ranges.concat(this.nodeTextHighlightRanges(node, query));
+        ranges = ranges.concat(this.nodeChildHighlightRanges(node, query));
+        return ranges;
+    }
+
+
+    private nodeTextHighlightRanges(node: Node, query: string): Range[] {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent) {
             const text = node.textContent;
             const matches = getRanges(text, query);
-            if (matches.length) {
-                matches.forEach(match => {
-                    const range = new Range();
-                    range.setStart(node, match.start);
-                    range.setEnd(node, match.end);
-                    this.ranges.push(range);
-                });
-            }
+            return matches.map(match => {
+                const range = new Range();
+                range.setStart(node, match.start);
+                range.setEnd(node, match.end);
+                return range;
+            });
         }
+        return [];
+    }
+
+    private nodeChildHighlightRanges(node: Node, query: string): Range[] {
         if (node.hasChildNodes()) {
-            node.childNodes.forEach(child => this.addHighlightRanges(child, query));
+            let ranges: Range[] = [];
+            node.childNodes.forEach(child =>
+                ranges = ranges.concat(this.nodeHighlightRanges(child, query))
+            );
+            return ranges;
         }
+        return [];
     }
 }
