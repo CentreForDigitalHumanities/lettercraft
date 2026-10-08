@@ -1,6 +1,9 @@
 import { Component, computed, input } from '@angular/core';
 import { highlightSegments } from '../../utils/highlight';
 
+/**
+ * Renders text with query highlighting.
+ */
 @Component({
     selector: 'lc-text-highlight',
     imports: [],

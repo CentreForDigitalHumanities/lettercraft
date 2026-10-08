@@ -2,6 +2,11 @@ import { Directive, effect, ElementRef, inject, input, OnDestroy } from '@angula
 import { HighlightService } from '@services/highlight.service';
 import { getRanges } from '../../utils/highlight';
 
+/**
+ * Recursively highlights the inner HTML of the element.
+ *
+ * If the element contains only flat text, use the TextHighlightComponent instead.
+ */
 @Directive({
     selector: '[lcDeepHighlight]',
 })
