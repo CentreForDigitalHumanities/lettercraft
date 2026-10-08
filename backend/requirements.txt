@@ -137,7 +137,7 @@ typing-extensions==4.15.0
     # via
     #   python-docx
     #   referencing
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   django-revproxy
     #   requests
