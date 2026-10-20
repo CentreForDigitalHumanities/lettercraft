@@ -1,6 +1,5 @@
-from graphene import InputObjectType, Int, String
+from graphene import InputObjectType, String
 
 
 class FieldInputType(InputObjectType):
-    certainty = String()
     note = String()

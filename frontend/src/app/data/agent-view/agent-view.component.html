@@ -74,12 +74,6 @@
                         @for (ref of agent.personReferences; track ref.id) {
                             <li>
                                 <a [routerLink]="['/data/historical-figures', ref.person.id]">{{ref.person.name}}</a>
-                                @if (ref.certainty === Certainty.SomewhatCertain) {
-                                    (somewhat certain)
-                                }
-                                @if (ref.certainty === Certainty.Uncertain) {
-                                    (uncertain)
-                                }
                                 @if (ref.note) {
                                     ; <i>Note: {{ref.note}}</i>
                                 }
@@ -92,12 +86,6 @@
                             This agent is a representation of
                             <a [routerLink]="['/data/historical-figures', ref.person.id]">
                                 {{ref.person.name}}</a>
-                            @if (ref.certainty === Certainty.SomewhatCertain) {
-                                (somewhat certain)
-                            }
-                            @if (ref.certainty === Certainty.Uncertain) {
-                                (uncertain)
-                            }.
                             @if (ref.note) {
                                 <i>Note: {{ref.note}}</i>
                             }
