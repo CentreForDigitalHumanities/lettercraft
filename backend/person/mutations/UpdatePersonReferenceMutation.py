@@ -14,12 +14,10 @@ from person.models import (
 )
 from graphql_app.LettercraftMutation import LettercraftMutation
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
-from core.models import Certainty
 from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 
 class UpdatePersonReferenceInput(InputObjectType):
     id = ID(required=True)
-    certainty = Enum.from_enum(Certainty)()
     note = String()
 
 

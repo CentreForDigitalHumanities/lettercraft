@@ -48,7 +48,6 @@ class Command(BaseCommand):
         the core.Field abstract class.
         """
         return {
-            "certainty": random.choice([0, 1, 2]),
             "note": fake.text(),
         }
 
