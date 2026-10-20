@@ -12,7 +12,7 @@ from space.models import SpaceDescription
 
 class HistoricalPerson(HistoricalEntity, models.Model):
     """
-    A historical figure, which may be referenced in narrative sources or preserved letters
+    A historical figure, which may be referenced in narrative sources
     """
 
     pass

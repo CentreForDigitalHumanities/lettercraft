@@ -40,34 +40,3 @@ class LetterDescription(EntityDescription, models.Model):
         help_text="categories assigned to the letter",
         related_name="letters",
     )
-
-
-class PreservedLetter(HistoricalEntity, models.Model):
-    """
-    A letter that has been preserved
-    """
-
-    persons_involved = models.ManyToManyField(
-        to=HistoricalPerson,
-        through="PreservedLetterRole",
-        blank=True,
-        help_text="historical figures related to the letter",
-    )
-
-
-class PreservedLetterRole(Field, models.Model):
-    """
-    Relationship between a preserved letter and a historical figure
-    """
-
-    letter = models.ForeignKey(
-        to=PreservedLetter,
-        on_delete=models.CASCADE,
-    )
-    person = models.ForeignKey(
-        to=HistoricalPerson,
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self) -> str:
-        return f"role of {self.person} in {self.letter}"
