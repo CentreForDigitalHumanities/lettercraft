@@ -19,7 +19,6 @@ from person.models import (
     HistoricalPerson,
 )
 from letter.models import (
-    GiftCategory,
     LetterCategory,
     GiftDescription,
     LetterDescription,
@@ -98,7 +97,6 @@ class Command(BaseCommand):
             self._create_letter_descriptions(
                 fake, options, total=200, model=LetterDescription
             )
-            self._create_gift_categories(fake, options, total=10, model=GiftCategory)
             self._create_gift_descriptions(
                 fake, options, total=150, model=GiftDescription
             )
@@ -260,9 +258,6 @@ class Command(BaseCommand):
             )
         )
 
-    @track_progress
-    def _create_gift_categories(self, fake: Faker, *args, total: int, **kwargs):
-        self._create_category(fake, GiftCategory)
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, total: int, **kwargs):
@@ -292,14 +287,11 @@ class Command(BaseCommand):
     def _create_gift_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
-        categories = get_random_model_objects(GiftCategory, min_amount=0, max_amount=3)
-
         gift_description = GiftDescription.objects.create(
             source=source,
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             description=fake.text(),
         )
-        gift_description.categories.set(categories)
 
         contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 

@@ -3,29 +3,9 @@ from . import models
 from core import admin as core_admin
 
 
-@admin.register(models.GiftCategory)
-class GiftCategoryAdmin(admin.ModelAdmin):
-    fields = ["label", "description"]
-    verbose_name = "gift category"
-    verbose_name_plural = "gift categories"
-
-
 @admin.register(models.GiftDescription)
 class GiftDescriptionAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
-    filter_horizontal = ["categories"]
-
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super().get_fieldsets(request, obj)
-        fieldsets.append(
-            (
-                "Gift categories",
-                {
-                    "description": "Categories assigned to the gift",
-                    "fields": ["categories"],
-                },
-            )
-        )
-        return fieldsets
+    pass
 
 
 @admin.register(models.LetterCategory)
