@@ -14,7 +14,7 @@ export class HomeComponent {
         {
             label: 'Principles',
             icon: 'file-text',
-            href: undefined,
+            href: '/principles',
         },
         {
             label: 'Source texts',

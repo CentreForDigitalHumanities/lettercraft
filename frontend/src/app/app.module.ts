@@ -15,6 +15,7 @@ import { DataModule } from './data/data.module';
 import { CaseStudiesModule } from './case-studies/case-studies.module';
 import { ContributorsModule } from './contributors/contributors.module';
 import { GlossaryModule } from './glossary/glossary.module';
+import { AboutModule } from './about/about-module';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { GlossaryModule } from './glossary/glossary.module';
         CaseStudiesModule,
         ContributorsModule,
         GlossaryModule,
+        AboutModule,
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())]
 })
