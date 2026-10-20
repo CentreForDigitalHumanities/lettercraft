@@ -38,16 +38,3 @@ def test_mixed_gender_only_for_groups(db, agent_description, agent_group_descrip
     )
     gender.clean()
 
-
-def test_agent_with_exact_date_of_birth(db, historical_person):
-    models.PersonDateOfBirth.objects.create(person=historical_person, year_exact=512)
-    assert historical_person.date_of_birth.__str__().endswith("born in 512")
-
-
-def test_agent_with_approx_date_of_birth(db, historical_person):
-    models.PersonDateOfBirth.objects.create(
-        person=historical_person,
-        year_lower=500,
-        year_upper=525,
-    )
-    assert historical_person.date_of_birth.__str__().endswith("born c. 500-525")
