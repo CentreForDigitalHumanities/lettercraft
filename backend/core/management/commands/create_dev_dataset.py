@@ -51,23 +51,6 @@ class Command(BaseCommand):
             "note": fake.text(),
         }
 
-    def fake_date_value(self, fake):
-        """
-        Provides fake values for models inheriting
-        the core.LettercraftDate abstract class.
-        """
-        exact_date = random.choice([True, False])
-        if exact_date is True:
-            return {
-                "year_exact": random.randint(400, 800),
-            }
-
-        lower_bound = random.randint(400, 799)
-
-        return {
-            "year_lower": lower_bound,
-            "year_upper": random.randint(lower_bound, 800),
-        }
 
     def handle(self, *args, **options):
         if not settings.DEBUG and not options["force"]:
