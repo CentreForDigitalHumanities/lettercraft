@@ -8,32 +8,11 @@ from core.models import (
 from person.models import HistoricalPerson
 
 
-class GiftCategory(models.Model):
-    """
-    A type of gift (e.g. "silver cup", "hairshirt")
-    """
-
-    label = models.CharField(max_length=200, blank=False, null=False, unique=True)
-    description = models.TextField(blank=True, null=False)
-
-    class Meta:
-        verbose_name = "gift category"
-        verbose_name_plural = "gift categories"
-
-    def __str__(self):
-        return self.label
-
 
 class GiftDescription(EntityDescription, models.Model):
     """
     A gift described in an narrative source text
     """
-    categories = models.ManyToManyField(
-        to=GiftCategory,
-        blank=True,
-        help_text="categories assigned to the gift",
-        related_name="gifts",
-    )
 
 
 class LetterCategory(models.Model):
