@@ -3,7 +3,7 @@ from django.db.models import Model
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Source, SourceWrittenDate
+from source.models import Source
 
 from event.models import (
     Episode,
@@ -338,19 +338,13 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_sources(self, fake: Faker, *args, **kwargs):
-        source = Source.objects.create(
+        Source.objects.create(
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             medieval_title=fake.sentence(),
             reference=fake.sentence(),
             description_text=fake.text(),
             is_public=random.choice([True, False]),
         )
-
-        if random.choice([True, False]):
-            SourceWrittenDate.objects.create(
-                source=source,
-                **self.fake_date_value(fake),
-            )
 
     @track_progress
     def _create_contributor_groups(self, fake: Faker, *args, **kwargs):
