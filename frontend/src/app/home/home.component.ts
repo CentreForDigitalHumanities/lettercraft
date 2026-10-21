@@ -34,7 +34,7 @@ export class HomeComponent {
         {
             label: 'Case studies',
             icon: 'journal-text',
-            href: 'https://lettercraft.sites.uu.nl/category/blog/'
+            href: '/case-studies'
         },
         {
             label: 'Contributors',
