@@ -1,6 +1,5 @@
 from graphene import ID, Boolean, InputObjectType, List, NonNull, ResolveInfo
 from django.core.exceptions import ObjectDoesNotExist
-from core.types.input.DescriptionFieldInputType import DescriptionFieldInputType
 from core.types.input.EntityDescriptionInputType import EntityDescriptionInputType
 from letter.models import LetterDescription
 from graphql_app.LettercraftMutation import LettercraftMutation
@@ -8,14 +7,11 @@ from user.permissions import can_edit_source, SOURCE_NOT_PERMITTED_MSG
 from graphql_app.types.LettercraftErrorType import LettercraftErrorType
 
 
-class LetterCategorisationInput(DescriptionFieldInputType, InputObjectType):
-    id = ID()
-    category = ID(required=True)
 
 
 class UpdateLetterInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
-    categorisations = List(NonNull(LetterCategorisationInput))
+    categories = List(NonNull(ID))
 
 
 class UpdateLetterMutation(LettercraftMutation):

@@ -4,12 +4,10 @@ from django.contrib.auth.models import AnonymousUser
 from typing import Optional, Union, List as TList
 
 from letter.models import (
-    GiftCategory,
     GiftDescription,
     LetterCategory,
     LetterDescription,
 )
-from letter.types.GiftCategoryType import GiftCategoryType
 from letter.types.LetterCategoryType import LetterCategoryType
 from letter.types.GiftDescriptionType import GiftDescriptionType
 from letter.types.LetterDescriptionType import LetterDescriptionType
@@ -57,11 +55,6 @@ class LetterQueries(ObjectType):
         editable=Boolean(),
         public_only=Boolean(),
         ids=List(NonNull(String)),
-    )
-
-    gift_categories = List(
-        NonNull(GiftCategoryType),
-        required=True,
     )
 
     @staticmethod
@@ -160,9 +153,3 @@ class LetterQueries(ObjectType):
         return GiftDescriptionType.get_queryset(GiftDescription.objects, info).filter(
             filters
         )
-
-    @staticmethod
-    def resolve_gift_categories(
-        parent: None, info: ResolveInfo
-    ) -> QuerySet[GiftCategory]:
-        return GiftCategoryType.get_queryset(GiftCategory.objects, info).all()

@@ -3,7 +3,7 @@ from django.db.models import Model
 from django.conf import settings
 from django.core.management.base import CommandError, BaseCommand
 from faker import Faker
-from source.models import Source, SourceWrittenDate
+from source.models import Source
 
 from event.models import (
     Episode,
@@ -19,7 +19,6 @@ from person.models import (
     HistoricalPerson,
 )
 from letter.models import (
-    GiftCategory,
     LetterCategory,
     GiftDescription,
     LetterDescription,
@@ -48,27 +47,9 @@ class Command(BaseCommand):
         the core.Field abstract class.
         """
         return {
-            "certainty": random.choice([0, 1, 2]),
             "note": fake.text(),
         }
 
-    def fake_date_value(self, fake):
-        """
-        Provides fake values for models inheriting
-        the core.LettercraftDate abstract class.
-        """
-        exact_date = random.choice([True, False])
-        if exact_date is True:
-            return {
-                "year_exact": random.randint(400, 800),
-            }
-
-        lower_bound = random.randint(400, 799)
-
-        return {
-            "year_lower": lower_bound,
-            "year_upper": random.randint(lower_bound, 800),
-        }
 
     def handle(self, *args, **options):
         if not settings.DEBUG and not options["force"]:
@@ -116,7 +97,6 @@ class Command(BaseCommand):
             self._create_letter_descriptions(
                 fake, options, total=200, model=LetterDescription
             )
-            self._create_gift_categories(fake, options, total=10, model=GiftCategory)
             self._create_gift_descriptions(
                 fake, options, total=150, model=GiftDescription
             )
@@ -278,9 +258,6 @@ class Command(BaseCommand):
             )
         )
 
-    @track_progress
-    def _create_gift_categories(self, fake: Faker, *args, total: int, **kwargs):
-        self._create_category(fake, GiftCategory)
 
     @track_progress
     def _create_letter_categories(self, fake: Faker, *args, total: int, **kwargs):
@@ -310,14 +287,11 @@ class Command(BaseCommand):
     def _create_gift_descriptions(self, fake: Faker, *args, **kwargs):
         source = get_random_model_object(Source)
 
-        categories = get_random_model_objects(GiftCategory, min_amount=0, max_amount=3)
-
         gift_description = GiftDescription.objects.create(
             source=source,
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             description=fake.text(),
         )
-        gift_description.categories.set(categories)
 
         contributors = get_random_model_objects(User, min_amount=3, max_amount=5)
 
@@ -339,19 +313,13 @@ class Command(BaseCommand):
 
     @track_progress
     def _create_sources(self, fake: Faker, *args, **kwargs):
-        source = Source.objects.create(
+        Source.objects.create(
             name=fake.sentence(nb_words=5, variable_nb_words=True),
             medieval_title=fake.sentence(),
             reference=fake.sentence(),
             description_text=fake.text(),
             is_public=random.choice([True, False]),
         )
-
-        if random.choice([True, False]):
-            SourceWrittenDate.objects.create(
-                source=source,
-                **self.fake_date_value(fake),
-            )
 
     @track_progress
     def _create_contributor_groups(self, fake: Faker, *args, **kwargs):
