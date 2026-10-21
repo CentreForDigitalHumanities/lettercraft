@@ -13,8 +13,6 @@ from letter.types.GiftDescriptionType import GiftDescriptionType
 from person.models import AgentDescription
 from person.types.AgentDescriptionType import AgentDescriptionType
 from source.models import Source, SourceImage
-from source.types.SourceContentsDateType import SourceContentsDateType
-from source.types.SourceWrittenDateType import SourceWrittenDateType
 from source.types.SourceImageType import SourceImageType
 from space.models import SpaceDescription
 from space.types.SpaceDescriptionType import SpaceDescriptionType
@@ -53,9 +51,7 @@ class SourceFilter(FilterSet):
 class SourceType(DjangoObjectType):
     episodes = List(NonNull(EpisodeType), required=True)
     num_of_episodes = Int(required=True)
-    written_date = Field(SourceWrittenDateType)
     image = Field(SourceImageType)
-    contents_date = Field(SourceContentsDateType)
     agents = List(NonNull(AgentDescriptionType), required=True)
     gifts = List(NonNull(GiftDescriptionType), required=True)
     letters = List(NonNull(LetterDescriptionType), required=True)

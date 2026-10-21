@@ -1,8 +1,6 @@
 from django.db import models
 from django_prose_editor.fields import ProseEditorField
 
-from core.models import LettercraftDate
-
 
 class Source(models.Model):
     """
@@ -82,35 +80,3 @@ class SourceImage(models.Model):
         },
         sanitize=True,
     )
-
-
-class SourceWrittenDate(LettercraftDate):
-    """
-    Specifies the date (or date range) when a source was written.
-    """
-
-    source = models.OneToOneField(
-        Source,
-        on_delete=models.CASCADE,
-        related_name="written_date",
-        help_text="The source that was written at this date",
-    )
-
-    def __str__(self) -> str:
-        return f"{self.source} was written in {self.display_date}"
-
-
-class SourceContentsDate(LettercraftDate):
-    """
-    Specifies the date (or date range) when the events described in a source took place.
-    """
-
-    source = models.OneToOneField(
-        Source,
-        on_delete=models.CASCADE,
-        related_name="contents_date",
-        help_text="The source whose events took place at this date",
-    )
-
-    def __str__(self) -> str:
-        return f"The events of {self.source} take place in {self.display_date}"

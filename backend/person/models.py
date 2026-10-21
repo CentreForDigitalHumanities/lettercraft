@@ -2,7 +2,6 @@ from django.db import models
 from django.forms import ValidationError
 from core.models import (
     Field,
-    LettercraftDate,
     HistoricalEntity,
     EntityDescription,
     DescriptionField,
@@ -13,40 +12,10 @@ from space.models import SpaceDescription
 
 class HistoricalPerson(HistoricalEntity, models.Model):
     """
-    A historical figure, which may be referenced in narrative sources or preserved letters
+    A historical figure, which may be referenced in narrative sources
     """
 
     pass
-
-
-class PersonDateOfBirth(Field, LettercraftDate, models.Model):
-    person = models.OneToOneField(
-        to=HistoricalPerson,
-        on_delete=models.CASCADE,
-        related_name="date_of_birth",
-        help_text="date on which this person was born",
-    )
-
-    def __str__(self):
-        if self.year_exact:
-            return f"{self.person} born in {self.year_exact}"
-        else:
-            return f"{self.person} born c. {self.year_lower}-{self.year_upper}"
-
-
-class PersonDateOfDeath(Field, LettercraftDate, models.Model):
-    person = models.OneToOneField(
-        to=HistoricalPerson,
-        on_delete=models.CASCADE,
-        related_name="date_of_death",
-        help_text="date on which this person died",
-    )
-
-    def __str__(self):
-        if self.year_exact:
-            return f"{self.person} died in {self.year_exact}"
-        else:
-            return f"{self.person} died c. {self.year_lower}-{self.year_upper}"
 
 
 class PersonReference(Field, models.Model):

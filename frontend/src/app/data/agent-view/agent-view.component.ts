@@ -4,7 +4,6 @@ import { Breadcrumb } from '@shared/breadcrumb/breadcrumb.component';
 import { actionIcons, dataIcons } from '@shared/icons';
 import { agentIcon } from '@shared/icons-utils';
 import {
-    Certainty,
     Gender,
     SourceMention,
     ViewAgentGQL,
@@ -33,7 +32,6 @@ export class AgentViewComponent {
     dataIcons = dataIcons;
     actionIcons = actionIcons;
 
-    Certainty = Certainty;
     SourceMention = SourceMention;
     Gender = Gender;
 

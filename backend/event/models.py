@@ -162,18 +162,3 @@ class EpisodeSpace(EpisodeEntity, models.Model):
         to=SpaceDescription,
         on_delete=models.CASCADE,
     )
-
-
-class Series(Named, models.Model):
-    """
-    A set of connected "episodes".
-    """
-
-    episodes = models.ManyToManyField(
-        to=Episode,
-        blank=True,
-        help_text="Episodes that make up this series",
-    )
-
-    class Meta:
-        verbose_name_plural = "series"

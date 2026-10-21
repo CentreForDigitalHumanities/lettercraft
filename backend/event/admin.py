@@ -105,8 +105,3 @@ class EpisodeAdmin(core_admin.EntityDescriptionAdmin, admin.ModelAdmin):
             filename='designators.csv',
             as_attachment=True
         )
-
-
-@admin.register(models.Series)
-class SeriesAdmin(admin.ModelAdmin):
-    filter_horizontal = ["episodes"]

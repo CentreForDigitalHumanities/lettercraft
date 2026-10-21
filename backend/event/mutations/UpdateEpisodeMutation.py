@@ -12,6 +12,7 @@ class UpdateEpisodeInput(EntityDescriptionInputType, InputObjectType):
     id = ID(required=True)
     summary = String()
     designators = List(NonNull(String))
+    categories = List(NonNull(ID))
 
 
 class UpdateEpisodeMutation(LettercraftMutation):

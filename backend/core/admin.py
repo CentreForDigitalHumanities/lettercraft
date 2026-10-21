@@ -25,7 +25,7 @@ contributions_fieldset = ("Contributors", {"fields": ["contributors"]})
 
 date_fields = ["year_lower", "year_upper", "year_exact"]
 
-field_fields = ["certainty", "note"]
+field_fields = ["note"]
 
 description_field_fields = [
     "source_mention",

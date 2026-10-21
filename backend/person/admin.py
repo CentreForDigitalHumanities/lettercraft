@@ -8,18 +8,6 @@ from . import models
 from core import admin as core_admin
 
 
-class PersonDateOfBirthAdmin(admin.StackedInline):
-    model = models.PersonDateOfBirth
-    fields = core_admin.date_fields + core_admin.field_fields
-    extra = 0
-
-
-class PersonDateOfDeathAdmin(admin.StackedInline):
-    model = models.PersonDateOfDeath
-    fields = core_admin.date_fields + core_admin.field_fields
-    extra = 0
-
-
 class PersonReferenceAdmin(admin.StackedInline):
     model = models.PersonReference
     fields = ["person", "description"] + core_admin.field_fields
@@ -37,8 +25,6 @@ class HistoricalPersonAdmin(admin.ModelAdmin):
         core_admin.contributions_fieldset,
     ]
     inlines = [
-        PersonDateOfBirthAdmin,
-        PersonDateOfDeathAdmin,
         PersonReferenceAdmin,
     ]
 
