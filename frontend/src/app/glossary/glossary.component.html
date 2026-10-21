@@ -10,76 +10,103 @@
 
             <p class="my-3">
                 In studying narrative descriptions of epistolary communication, the
-                Lettercraft team has identified dozens of Latin words that have something
-                to do with letters and their use. One substantial segment of this
-                vocabulary refer to letters themselves; other clusters refer to the
-                people carrying them, and to accompanying gifts; the potentially largest
-                and most fluid segment refers to the wider communicative process in which
-                letters functioned, including terms associated with the acts of writing,
-                dictating, signing, reading, carrying, speaking, gift-giving, negotiating
-                and hosting.
-            </p>
-
-            <p class="my-3">
-                One of the aims of the Lettercraft project has been to map
-                out this terminology so as to gain a better understanding of its meaning
-                and use. To this end, all entries in the database contain a ‘designator’
-                field that gives the relevant Latin epistolary terminology that appears
-                in the passage concerned. These terms can be searched with the search
-                function. A full terminology list, with frequencies, can be downloaded
-                for individual texts and for the database at large.
+                Lettercraft team has identified a large number of Latin words that have
+                omething to do with letters and their use.
+                One substantial segment of this vocabulary refer to letters themselves.
+                Other clusters refer to the people carrying them, to accompanying gifts,
+                and to the wider communicative process in which letters functioned.
+                One of the aims of the Lettercraft project has been to map out this
+                terminology so as to gain a better understanding of its meaning and use.
+                To this end, all episodes in the database contain a ‘designator’ field
+                that gives relevant Latin epistolary terminology that appears in the
+                passage concerned.
+                These terms can be searched with the search function.
+                A full terminology list, with frequencies, can be downloaded for
+                individual texts and for the database at large.
             </p>
             <p class="my-3">
-                To help navigate this part of the database, we have created a glossary
-                of the most important terms one might encounter. Each entry gives the
-                key meanings of the term from antiquity up to the Merovingian period and
-                gives attestations in the Merovingian narrative corpus. For further
-                context, entries might refer to a broad range of ancient and medieval
-                sources as well as modern scholarship. The bibliography at the end offers
-                a full list of relevant primary sources, dictionaries, and modern
-                publications.
+                To help navigate this part of the database, we have created a glossary of
+                the most important terms one might encounter.
+                We have divided the glossary in four segments: (1) Letters, (2) Gifts,
+                (3) Messengers, and (4) Actions.
+                The first three segments consist of nouns, the last segment of verbs.
+                For nouns, entries typically give the nominative and genitive singular
+                forms, with the gender specified between brackets, e.g. <i>ēdictum, ī</i>
+                (n.).
+                Plural forms are given instead if the noun occurs mostly in the plural,
+                e.g. <i>apicēs, um</i> (m., pl.).
+                For verbs, we give the present infinitive, followed by the first person
+                singular present, the first person singular perfect, and the supine, e.g.
+                invītāre (<i>invītō</i>, <i>invītāvī</i>, <i>invītātum</i>).
+                NB: we give the infinitive first, rather than the first person present as
+                is customary in Latin dictionaries, because the infinitive form is logged
+                in the database.
+                To aid pronunciation and scansion, we added macrons (ā, ē) to long vowels,
+                following the marking used in the <i>Oxford Latin Dictionary</i>.
+                For the sake of legibility, use of macrons is generally restricted to the
+                lemma header; they are not given in the rest of the entry unless to
+                distinguish certain grammatical forms.
+            </p>
+            <p class="my-3">
+                Each entry gives the principal meanings of the term from Antiquity up to
+                the Merovingian period, followed by selected attestations from texts in
+                the database.
+                For further context, entries might also include references to other
+                ancient and medieval sources, and to relevant modern scholarship.
+                For the letter-, gift- and messenger-sections, it has proven insightful
+                to compare the Merovingian narrative corpus to letters, formularies, and
+                legal texts from the period, as these bring to light different patterns
+                of usage.
+                The verb section, by contrast, is limited to examples from the Merovingian
+                narrative corpus.
+                The bibliography at the end offers a full list of the primary sources,
+                dictionaries, and modern publications cited in this glossary.
+            </p>
+            <p class="my-3">
+                Lastly, a caveat. Given the many documents, objects, agents and actions
+                involved in Merovingian epistolary communication, the glossary cannot
+                claim to be an exhaustive overview of Merovingian epistolary terminology.
+                That list would be near-endless.
+                As it stands, we have tried to be comprehensive for the Latin terms for
+                letter, at least where their use in the Merovingian world is concerned,
+                while giving the most frequently attested terms for gifts, messengers and
+                actions.
             </p>
 
             <div class="my-5">
                 @if (glossary) {
-                    @let context = 'glossary';
-                    @for (section of glossary.sections; track section.title) {
-                        <section class="my-4">
-                            <h2>{{section.title}}</h2>
+                @let context = 'glossary';
+                @for (section of glossary.sections; track section.title) {
+                <section class="my-4">
+                    <h2>{{section.title}}</h2>
 
-                            @for (item of section.items; track item.id) {
-                                <article class="p-3 my-2 rounded glossary-item"
-                                    [id]="itemElementID(context, item.id)" tabindex="-1"
-                                    [class.active]="hasFocus$(context, item.id) | async"
-                                    (click)="focusItem(context, item.id)">
-                                    <h4 class="h5 font-sans-serif">{{item.term}}</h4>
-                                    <div [innerHTML]="item.description"></div>
-                                </article>
-                            }
-                        </section>
+                    @for (item of section.items; track item.id) {
+                    <article class="p-3 my-2 rounded glossary-item" [id]="itemElementID(context, item.id)" tabindex="-1"
+                        [class.active]="hasFocus$(context, item.id) | async" (click)="focusItem(context, item.id)">
+                        <h4 class="h5 font-sans-serif">{{item.term}}</h4>
+                        <div [innerHTML]="item.description"></div>
+                    </article>
                     }
+                </section>
+                }
                 }
                 @if (references) {
-                    @let context = 'references';
-                    <section class="my-4">
-                        <h2>References</h2>
+                @let context = 'references';
+                <section class="my-4">
+                    <h2>References</h2>
 
-                        @for (section of references.sections; track section.title) {
-                            <section class="my-4">
-                                <h3 class="h4">{{section.title}}</h3>
-                                @for (item of section.items; track item.id) {
-                                    <div class="pt-3 px-3 my-2 glossary-item rounded"
-                                        [innerHTML]="item.reference"
-                                        [id]="itemElementID(context, item.id)"
-                                        tabindex="-1"
-                                        [class.active]="hasFocus$(context, item.id) | async"
-                                        (click)="focusItem(context, item.id)"
-                                        >
-                                    </div>
-                                }
-                            </section>
+                    @for (section of references.sections; track section.title) {
+                    <section class="my-4">
+                        <h3 class="h4">{{section.title}}</h3>
+                        @for (item of section.items; track item.id) {
+                        <div class="pt-3 px-3 my-2 glossary-item rounded" [innerHTML]="item.reference"
+                            [id]="itemElementID(context, item.id)" tabindex="-1"
+                            [class.active]="hasFocus$(context, item.id) | async" (click)="focusItem(context, item.id)">
+                        </div>
                         }
                     </section>
+                    }
+                </section>
                 }
             </div>
         </div>
@@ -89,43 +116,41 @@
 
         <div class="index-body">
             @if (glossary) {
-                @for (section of glossary.sections; track section.title) {
-                    <section class="my-3">
-                        <h3 class="h4">{{section.title}}</h3>
-                        <ul class="nav nav-pills flex-column">
-                            @for (item of section.items; track item.id) {
-                                <li class="nav-item">
-                                    <button class="nav-link py-0 px-1"
-                                        (click)="focusItem('glossary', item.id)"
-                                        [class.active]="hasFocus$('glossary', item.id) | async">
-                                        {{item.term}}
-                                    </button>
-                                </li>
-                            }
-                        </ul>
-                    </section>
-                }
+            @for (section of glossary.sections; track section.title) {
+            <section class="my-3">
+                <h3 class="h4">{{section.title}}</h3>
+                <ul class="nav nav-pills flex-column">
+                    @for (item of section.items; track item.id) {
+                    <li class="nav-item">
+                        <button class="nav-link py-0 px-1" (click)="focusItem('glossary', item.id)"
+                            [class.active]="hasFocus$('glossary', item.id) | async">
+                            {{item.term}}
+                        </button>
+                    </li>
+                    }
+                </ul>
+            </section>
+            }
             }
             @if (references) {
+            <section class="my-3">
+                <h3 class="h4">References</h3>
+                @for (section of references.sections; track section.title) {
                 <section class="my-3">
-                    <h3 class="h4">References</h3>
-                    @for (section of references.sections; track section.title) {
-                        <section class="my-3">
-                            <h4 class="h6">{{section.title}}</h4>
-                            <ul class="nav nav-pills flex-column">
-                                @for (item of section.items; track item.id) {
-                                    <li class="nav-item">
-                                        <button class="nav-link py-0 px-1"
-                                            (click)="focusItem('references', item.id)"
-                                            [class.active]="hasFocus$('references', item.id) | async">
-                                            {{item.name}}
-                                        </button>
-                                    </li>
-                                }
-                            </ul>
-                        </section>
-                    }
+                    <h4 class="h6">{{section.title}}</h4>
+                    <ul class="nav nav-pills flex-column">
+                        @for (item of section.items; track item.id) {
+                        <li class="nav-item">
+                            <button class="nav-link py-0 px-1" (click)="focusItem('references', item.id)"
+                                [class.active]="hasFocus$('references', item.id) | async">
+                                {{item.name}}
+                            </button>
+                        </li>
+                        }
+                    </ul>
                 </section>
+                }
+            </section>
             }
         </div>
     </aside>
