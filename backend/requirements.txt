@@ -62,7 +62,7 @@ graphene==3.3
     #   graphene-django
 graphene-django==3.2.2
     # via -r requirements.in
-graphql-core==3.2.3
+graphql-core==3.2.12
     # via
     #   graphene
     #   graphene-django
