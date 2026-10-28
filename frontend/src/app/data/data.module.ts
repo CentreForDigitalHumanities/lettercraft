@@ -14,6 +14,8 @@ import { BrowseLabelSelectComponent } from './browse/browse-label-select/browse-
 import { BrowseTabsComponent } from './browse-tabs/browse-tabs.component';
 import { DownloadComponent } from './download/download.component';
 import { SearchBarComponent } from './shared/search-bar/search-bar.component';
+import { TextHighlightComponent } from './shared/text-highlight/text-highlight.component';
+import { DeepHighlightDirective } from './shared/deep-highlight/deep-highlight.directive';
 
 @NgModule({
     declarations: [
@@ -34,6 +36,8 @@ import { SearchBarComponent } from './shared/search-bar/search-bar.component';
     ],
     imports: [
         SharedModule,
+        DeepHighlightDirective,
+        TextHighlightComponent,
     ],
     exports: [
         AgentViewComponent,

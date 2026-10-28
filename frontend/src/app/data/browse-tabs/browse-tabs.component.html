@@ -7,9 +7,11 @@
                 <button ngbNavLink class="nav-link py-2 px-4">
                     <lc-icon class="me-2" [icon]="tab.icon"></lc-icon>
                     <span>{{ tab.title }}</span>
-                    @if (counts().get(tab.type) !== undefined) {
-                        <span class="badge text-bg-secondary ms-2">{{
-                            counts().get(tab.type)
+                    @let count = counts().get(tab.type);
+                    @if (count !== undefined) {
+                        <span class="badge text-bg-secondary ms-2"
+                            [class.bg-opacity-50]="count == 0">{{
+                            count
                         }}</span>
                     }
                 </button>
@@ -38,7 +40,8 @@
                                 <div class="list-group">
                                     <lc-paginator [pageResult]="pageResult" />
                                     @for (item of pageResult.pageData$ | async; track item.id) {
-                                        <lc-browse-list-item [listItem]="filterItem()(item)" />
+                                        <lc-browse-list-item [listItem]="filterItem()(item)"
+                                            [query]="query()" />
                                     }
                                     <lc-paginator [pageResult]="pageResult" />
                                 </div>

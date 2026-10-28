@@ -12,6 +12,7 @@ import { BrowseListItem } from './browse-list-item';
 })
 export class BrowseListItemComponent {
     public readonly listItem = input.required<BrowseListItem>();
+    public query = input<string>();
 
     public dataIcons = dataIcons;
 
@@ -28,5 +29,9 @@ export class BrowseListItemComponent {
 
     public hasSourceLocation(episode: Pick<EpisodeType, 'book' | 'chapter' | 'page'>): boolean {
         return !!(episode.book || episode.chapter || episode.page);
+    }
+
+    splitParagraphs(value: string) {
+        return value.split(/\n+/)
     }
 }

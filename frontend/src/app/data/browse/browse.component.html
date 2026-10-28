@@ -52,7 +52,8 @@
                     </p>
                 </div>
             } @else {
-                <lc-browse-tabs [data]="searchData$ | async" />
+                <lc-browse-tabs [data]="searchData$ | async"
+                    [query]="query$ | async" />
             }
         </div>
     </div>
