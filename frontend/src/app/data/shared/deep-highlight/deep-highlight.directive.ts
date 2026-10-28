@@ -31,7 +31,7 @@ export class DeepHighlightDirective implements OnDestroy {
         this.clearHighlights();
         if (query) {
             const el = this.elementRef.nativeElement;
-            const ranges = this.nodeHighlightRanges(el, query);
+            const ranges = [... this.nodeHighlightRanges(el, query)];
             this.ranges = this.ranges.concat(ranges);
         }
         this.highlightService.add(...this.ranges);
@@ -44,13 +44,12 @@ export class DeepHighlightDirective implements OnDestroy {
     }
 
 
-    private nodeHighlightRanges(node: Node, query: string): Range[] {
-        let ranges: Range[] = [];
-        ranges = ranges.concat(this.nodeTextHighlightRanges(node, query));
-        ranges = ranges.concat(this.nodeChildHighlightRanges(node, query));
-        return ranges;
+    private *nodeHighlightRanges(node: Node, query: string): Generator<Range> {
+        yield* this.nodeTextHighlightRanges(node, query);
+        for (let child of Array.from(node.childNodes)) {
+            yield* this.nodeHighlightRanges(child, query);
+        }
     }
-
 
     private nodeTextHighlightRanges(node: Node, query: string): Range[] {
         if (node.nodeType === Node.TEXT_NODE && node.textContent) {
@@ -62,17 +61,6 @@ export class DeepHighlightDirective implements OnDestroy {
                 range.setEnd(node, match.end);
                 return range;
             });
-        }
-        return [];
-    }
-
-    private nodeChildHighlightRanges(node: Node, query: string): Range[] {
-        if (node.hasChildNodes()) {
-            let ranges: Range[] = [];
-            node.childNodes.forEach(child =>
-                ranges = ranges.concat(this.nodeHighlightRanges(child, query))
-            );
-            return ranges;
         }
         return [];
     }
